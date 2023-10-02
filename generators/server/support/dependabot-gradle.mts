@@ -25,5 +25,5 @@ type LibsToml = {
 // eslint-disable-next-line import/prefer-default-export
 export function getGradleLibsVersionsProperties(libsVersionsContent: string): Record<string, string> {
   const parsed = parse(libsVersionsContent) as LibsToml;
-  return Object.fromEntries(Object.entries(parsed.plugins).map(([dependecyName, dependency]) => [dependecyName, dependency.version]));
+  return Object.fromEntries(Object.entries(parsed.plugins).map(([dependencyName, dependency]) => [dependencyName, dependency.version]));
 }

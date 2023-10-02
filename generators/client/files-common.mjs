@@ -16,17 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientSrcTemplatesBlock } from './support/files.mjs';
+import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.mjs';
+import { clientFrameworkTypes } from '../../jdl/index.js';
+
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 export const files = {
   common: [
     {
-      templates: ['.eslintignore', 'README.md.jhi.client'],
+      templates: ['README.md.jhi.client', '.prettierignore.jhi.client'],
     },
-    {
+    clientRootTemplatesBlock({
+      templates: ['.eslintignore'],
+    }),
+    clientRootTemplatesBlock({
       condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
       templates: ['webpack/webpack.microfrontend.js.jhi'],
-    },
+    }),
     {
       ...clientSrcTemplatesBlock(),
       templates: [
@@ -75,6 +81,10 @@ export const files = {
 };
 
 export async function writeFiles({ application }) {
+  if (![ANGULAR, REACT, VUE].includes(application.clientFramework)) {
+    return;
+  }
+
   await this.writeFiles({
     sections: files,
     context: application,

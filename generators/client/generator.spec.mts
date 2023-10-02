@@ -24,7 +24,7 @@ import { expect } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers, checkEnforcements } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, checkEnforcements, result } from '../../test/support/index.mjs';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { GENERATOR_CLIENT } from '../generator-list.mjs';
 
@@ -136,6 +136,44 @@ describe(`generator - ${generator}`, () => {
       it('should compose with jhipster:cypress', () => {
         assert(runResult.mockedGenerators['jhipster:cypress'].calledOnce);
       });
+    });
+  });
+
+  describe('with microservices', () => {
+    const mockedComposedGenerators = [
+      'jhipster:common',
+      'jhipster:languages',
+      'jhipster:cypress',
+      'jhipster:angular',
+      'jhipster:react',
+      'jhipster:vue',
+    ];
+    const options = { applicationType: 'microservice' };
+    before(async () => {
+      await helpers
+        .run(generatorFile)
+        .withJHipsterConfig(options)
+        .withSkipWritingPriorities()
+        .withMockedGenerators(mockedComposedGenerators);
+    });
+
+    it('should compose with jhipster:common', () => {
+      assert(result.mockedGenerators['jhipster:common'].calledOnce);
+    });
+    it('should compose with jhipster:languages', () => {
+      assert(result.mockedGenerators['jhipster:languages'].notCalled);
+    });
+    it('should compose with jhipster:cypress', () => {
+      assert(result.mockedGenerators['jhipster:cypress'].notCalled);
+    });
+    it('should compose with jhipster:angular', () => {
+      assert(result.mockedGenerators['jhipster:angular'].notCalled);
+    });
+    it('should compose with jhipster:react', () => {
+      assert(result.mockedGenerators['jhipster:react'].notCalled);
+    });
+    it('should compose with jhipster:vue', () => {
+      assert(result.mockedGenerators['jhipster:vue'].notCalled);
     });
   });
 });

@@ -13,7 +13,7 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 import Generator from './index.mjs';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_VUE } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -70,6 +70,8 @@ describe(`generator - ${clientFramework}`, () => {
   });
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
+    const { clientRootDir = '' } = sampleConfig;
+
     describe(name, () => {
       let runResult;
 
@@ -90,32 +92,21 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"clientFramework": "${clientFramework}"`));
       });
       it('should not contain version placeholders at package.json', () => {
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_COMMON/);
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_REACT/);
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_VUE/);
-      });
-
-      describe('skipJhipsterDependencies', () => {
-        const { skipJhipsterDependencies } = sampleConfig;
-        const skipJhipsterDependenciesTitle = skipJhipsterDependencies
-          ? 'should not add generator-jhipster to package.json'
-          : 'should add generator-jhipster to package.json';
-        it(skipJhipsterDependenciesTitle, () => {
-          const assertion = (...args) =>
-            skipJhipsterDependencies ? runResult.assertNoFileContent(...args) : runResult.assertFileContent(...args);
-          assertion('package.json', 'generator-jhipster');
-        });
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_COMMON/);
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_REACT/);
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi, clientSrcDir = CLIENT_MAIN_SRC_DIR, clientTestDir = CLIENT_TEST_SRC_DIR } = sampleConfig;
+        const { applicationType, withAdminUi } = sampleConfig;
+        const clientSrcDir = `${clientRootDir}${CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
           const assertion = (...args) => (generateAdminUi ? runResult.assertFile(...args) : runResult.assertNoFile(...args));
-          assertion(clientAdminFiles(clientSrcDir, clientTestDir));
+          assertion(clientAdminFiles(clientSrcDir));
         });
 
         if (applicationType !== 'microservice') {

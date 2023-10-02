@@ -38,7 +38,8 @@
             "clientConfigServer": "Serwer konfiguracyjny mikroserwisów",
             "hystrix": "Hystrix",
   <%_ if (serviceDiscoveryConsul) { _%>
-            "consul": "Consul",
+            "consul": "Consul",<% } else if (reactive) { %>
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",
   <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
@@ -46,8 +47,8 @@
 <%_ } _%>
             "diskSpace": "Przestrzeń dyskowa",
             "mail": "Email",
-            "livenessState": "Liveness state",
-            "readinessState": "Readiness state",
+            "livenessState": "Stan żywotności",
+            "readinessState": "Stan gotowości",
             "ping": "Application"<% if (searchEngineElasticsearch) { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseTypeSql && !reactive) { %>,
             "db": "Baza danych"<% } %><% if (databaseTypeSql && reactive) { %>,
@@ -64,6 +65,9 @@
         "status": {
             "UNKNOWN": "NIEZNANY",
             "UP": "DOSTĘPNA",
+<%_ if (clientFrameworkAngular) { _%>
+            "OUT_OF_SERVICE": "WYŁĄCZONE Z UŻYTKU",
+<%_ } _%>
             "DOWN": "NIEDOSTĘPNA"
         }
     }

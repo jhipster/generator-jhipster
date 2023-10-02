@@ -38,9 +38,9 @@ describe('generator - app - composing', () => {
         const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
         assert(ClientGenerator.calledOnce);
       });
-      it('should compose with languages generator', () => {
+      it('should not compose with languages generator', () => {
         const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-        assert(LanguagesGenerator.calledOnce);
+        assert.equal(LanguagesGenerator.callCount, 0);
       });
       it('should not compose with entities generator', () => {
         const MockedGenerator = runResult.mockedGenerators['jhipster:entities'];
@@ -83,9 +83,9 @@ describe('generator - app - composing', () => {
         const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
         assert.equal(ClientGenerator.callCount, 0);
       });
-      it('should compose with languages generator', () => {
+      it('should not compose with languages generator', () => {
         const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-        assert(LanguagesGenerator.calledOnce);
+        assert.equal(LanguagesGenerator.callCount, 0);
       });
       it('should not compose with entities generator', () => {
         const MockedGenerator = runResult.mockedGenerators['jhipster:entities'];

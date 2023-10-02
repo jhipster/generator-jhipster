@@ -27,15 +27,22 @@ const command: JHipsterCommandDefinition = {
     },
   },
   options: {
+    enableTranslation: {
+      description: 'Enable translation',
+      type: Boolean,
+      required: false,
+      scope: 'storage',
+    },
+    language: {
+      alias: 'l',
+      description: 'Language to be added to application (existing languages are not removed)',
+      type: Array,
+    },
     nativeLanguage: {
       alias: 'n',
       description: 'Set application native language',
       type: String,
       required: false,
-    },
-    regenerate: {
-      description: 'Regenerate languages files',
-      type: Boolean,
     },
   },
 };

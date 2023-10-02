@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
+import { javaMainPackageTemplatesBlock } from '../server/support/index.mjs';
 
 export const entityFiles = {
   dbChangelog: [
@@ -45,15 +45,13 @@ export const entityFiles = {
   ],
   server: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_couchbase'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.spring_data_couchbase'],
     },
     {
       condition: generator => !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['repository/_EntityClass_Repository.java'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['repository/_entityClass_Repository.java'],
     },
   ],
 };

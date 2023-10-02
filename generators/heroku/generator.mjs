@@ -43,7 +43,6 @@ import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
-import { buildApplication } from '../server/internal/index.mjs';
 import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
 import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
@@ -629,7 +628,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       makeScriptExecutable() {
         if (this.abort) return;
         if (this.useOkta) {
@@ -644,7 +643,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
-      productionBuild: runAsync(function () {
+      async productionBuild() {
         if (this.abort) return;
 
         if (this.herokuSkipBuild || this.herokuDeployType === 'git') {
@@ -652,23 +651,11 @@ export default class HerokuGenerator extends BaseGenerator {
           return;
         }
 
-        const done = this.async();
         this.log.log(chalk.bold('\nBuilding application'));
 
-        const child = buildApplication(this.buildTool, 'prod', false, err => {
-          if (err) {
-            this.abort = true;
-            this.log.error(err);
-          }
-          done();
-        });
-
-        this.buildCmd = child.buildCmd;
-
-        child.stdout.on('data', data => {
-          process.stdout.write(data.toString());
-        });
-      }),
+        // Use npm script so blueprints just need to override it.
+        await this.spawnCommand('npm run java:jar:prod', { stdio: 'inherit' });
+      },
 
       async productionDeploy() {
         if (this.abort) return;
@@ -889,7 +876,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.END]() {

@@ -54,6 +54,9 @@ export default class extends BaseGenerator {
           },
         });
       },
+      async jhipsterInfo() {
+        await this.composeWithJHipster('info');
+      },
     });
   }
 }

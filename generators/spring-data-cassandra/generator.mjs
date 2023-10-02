@@ -25,9 +25,12 @@ import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from '
 
 export default class CassandraGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_DATA_CASSANDRA);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 

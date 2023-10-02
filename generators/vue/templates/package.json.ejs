@@ -94,12 +94,6 @@
     "@vue/tsconfig": null,
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "flush-promises": null,
     "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
     "numeral": "<%= nodeDependencies['numeral'] %>",
@@ -143,8 +137,8 @@
 <%_ } %>
     "lint": "eslint . --ext .ts,.vue ",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
-    "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "start": "<%= clientPackageManager %> run webapp:dev --",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start --",

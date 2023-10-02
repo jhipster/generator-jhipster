@@ -37,7 +37,7 @@ const proxyConfig = require('./proxy.conf');
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= clientSrcDir %>i18n'), {
+  const languagesHash = await hashElement(path.resolve(__dirname, '<%= this.relativeDir(clientRootDir + 'webpack/', clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -107,8 +107,8 @@ module.exports = async (config, options, targetOptions) => {
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',
         openAnalyzer: false,
-        // Webpack statistics in target folder
-        reportFilename: '../stats.html',
+        // Webpack statistics in temporary folder
+        reportFilename: '<%- this.relativeDir(clientDistDir, temporaryDir) %>stats.html',
       })
     );
   }
@@ -125,7 +125,7 @@ module.exports = async (config, options, targetOptions) => {
       from: path.join(path.dirname(require.resolve('axios/package.json')), 'dist/axios.min.js'),
       to: 'swagger-ui/',
     },
-    { from: './<%= clientSrcDir %>swagger-ui/', to: 'swagger-ui/' },
+    { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
     // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
   ];
 

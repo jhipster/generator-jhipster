@@ -25,7 +25,7 @@ import { SpringBootApplication } from '../server/types.mjs';
 const files: WriteFileSection<Generator, SpringBootApplication> = {
   websocketFiles: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [
         'config/WebsocketConfiguration.java',

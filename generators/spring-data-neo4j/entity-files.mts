@@ -17,16 +17,14 @@
  * limitations under the License.
  */
 import Generator from './generator.mjs';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
+import { javaMainPackageTemplatesBlock } from '../server/support/index.mjs';
 
 export const entityFiles = {
   server: [
     {
       condition: generator => generator.databaseTypeNeo4j,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_neo4j'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.spring_data_neo4j'],
     },
   ],
 };

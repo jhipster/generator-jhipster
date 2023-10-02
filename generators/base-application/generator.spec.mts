@@ -194,6 +194,11 @@ describe(`generator - ${generator}`, () => {
         source: expect.any(Object),
       };
 
+      const applicationDefaultsArg = {
+        ...applicationArg,
+        applicationDefaults: expect.any(Function),
+      };
+
       const entityConfiguringArg = {
         ...applicationArg,
         entityStorage: expect.any(Object),
@@ -230,6 +235,7 @@ describe(`generator - ${generator}`, () => {
       expect(prompting).toBeCalledWith(controlArg);
       expect(configuring).toBeCalledWith(controlArg);
       expect(composing).toBeCalledWith(controlArg);
+      expect(loading).toBeCalledWith(applicationDefaultsArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
@@ -271,7 +277,7 @@ describe(`generator - ${generator}`, () => {
       expect(install).toBeCalledWith(applicationArg);
       expect(end).toBeCalledWith(applicationArg);
 
-      expect(preparing).toBeCalledWith(applicationSourceArg);
+      expect(preparing).toBeCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
       expect(postWriting).toBeCalledWith(applicationSourceArg);
     });
   });
@@ -423,6 +429,11 @@ describe(`generator - ${generator}`, () => {
         source: expect.any(Object),
       };
 
+      const applicationDefaultsArg = {
+        ...applicationArg,
+        applicationDefaults: expect.any(Function),
+      };
+
       const entityConfiguringArg = {
         ...applicationArg,
         entityStorage: expect.any(Object),
@@ -468,6 +479,7 @@ describe(`generator - ${generator}`, () => {
       expect(prompting).toBeCalledWith(controlArg);
       expect(configuring).toBeCalledWith(controlArg);
       expect(composing).toBeCalledWith(controlArg);
+      expect(loading).toBeCalledWith(applicationDefaultsArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
@@ -510,7 +522,7 @@ describe(`generator - ${generator}`, () => {
       expect(install).toBeCalledWith(applicationArg);
       expect(end).toBeCalledWith(applicationArg);
 
-      expect(preparing).toBeCalledWith(applicationSourceArg);
+      expect(preparing).toBeCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
       expect(postWriting).toBeCalledWith(applicationSourceArg);
     });
   });

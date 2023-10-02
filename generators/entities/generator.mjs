@@ -37,6 +37,12 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
         this.parseJHipsterArguments(command.arguments);
         if (!this.entities || this.entities.length === 0) {
           this.entities = this.getExistingEntityNames();
+        } else {
+          for (const entity of this.entities) {
+            if (!this.jhipsterConfig.entities.includes(entity)) {
+              this.jhipsterConfig.entities.push(entity);
+            }
+          }
         }
         if (this.entities) {
           this.log.verboseInfo('Generating entities', ...this.entities);

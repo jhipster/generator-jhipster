@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -23,407 +17,407 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "clientRoot/.eslintignore": {
     "stateCleared": "modified",
   },
-  "package.json": {
+  "clientRoot/.eslintrc.json": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
-  "src/404.html": {
+  "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "src/WEB-INF/web.xml": {
+  "clientRoot/postcss.config.js": {
     "stateCleared": "modified",
   },
-  "src/app/_bootstrap-variables.scss": {
+  "clientRoot/src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/app/app.scss": {
+  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/app/app.tsx": {
+  "clientRoot/src/main/webapp/app/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/app/config/axios-interceptor.spec.ts": {
+  "clientRoot/src/main/webapp/app/app.scss": {
     "stateCleared": "modified",
   },
-  "src/app/config/axios-interceptor.ts": {
+  "clientRoot/src/main/webapp/app/app.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/config/constants.ts": {
+  "clientRoot/src/main/webapp/app/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/dayjs.ts": {
+  "clientRoot/src/main/webapp/app/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/error-middleware.ts": {
+  "clientRoot/src/main/webapp/app/config/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/icon-loader.ts": {
+  "clientRoot/src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/logger-middleware.ts": {
+  "clientRoot/src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/notification-middleware.spec.ts": {
+  "clientRoot/src/main/webapp/app/config/icon-loader.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/notification-middleware.ts": {
+  "clientRoot/src/main/webapp/app/config/logger-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/store.ts": {
+  "clientRoot/src/main/webapp/app/config/notification-middleware.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
+  "clientRoot/src/main/webapp/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
+  "clientRoot/src/main/webapp/app/config/store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/menu.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-delete-dialog.tsx": {
+  "clientRoot/src/main/webapp/app/entities/menu.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-detail.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.reducer.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/reducers.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/routes.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/reducers.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-delete-dialog.tsx": {
+  "clientRoot/src/main/webapp/app/entities/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-detail.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.reducer.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/administration.reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/administration.reducer.ts": {
+  "clientRoot/src/main/webapp/app/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/docs/docs.scss": {
+  "clientRoot/src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/docs/docs.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/administration.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/gateway/gateway.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/index.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/home/home.scss": {
+  "clientRoot/src/main/webapp/app/modules/administration/gateway/gateway.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/home/home.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/login-modal.tsx": {
+  "clientRoot/src/main/webapp/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/login.tsx": {
+  "clientRoot/src/main/webapp/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/logout.tsx": {
+  "clientRoot/src/main/webapp/app/modules/login/login-modal.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/routes.tsx": {
+  "clientRoot/src/main/webapp/app/modules/login/login.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/setup-tests.ts": {
+  "clientRoot/src/main/webapp/app/modules/login/logout.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/DurationFormat.tsx": {
+  "clientRoot/src/main/webapp/app/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/auth/private-route.spec.tsx": {
+  "clientRoot/src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/auth/private-route.tsx": {
+  "clientRoot/src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary-routes.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary-routes.tsx": {
+  "clientRoot/src/main/webapp/app/shared/auth/private-route.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary-routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/page-not-found.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/footer/footer.scss": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/footer/footer.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/page-not-found.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header-components.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.scss": {
+  "clientRoot/src/main/webapp/app/shared/layout/footer/footer.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/account.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/account.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/admin.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/account.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/entities.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/account.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/admin.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/menu-components.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/entities.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/menu-item.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/password/password-strength-bar.scss": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/menu-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/password/password-strength-bar.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/entity-with-custom-id.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/microservice.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/simple.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/user.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/application-profile.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/application-profile.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/authentication.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/application-profile.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/authentication.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/application-profile.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/authentication.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/reducer.utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/authentication.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/date-utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/entity-utils.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/reducer.utils.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/entity-utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/date-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/pagination.constants.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/entity-utils.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/typings.d.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/entity-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/content/css/loading.css": {
+  "clientRoot/src/main/webapp/app/shared/util/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/main/webapp/app/typings.d.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/logo-jhipster.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/favicon.ico": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/index.html": {
+  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "src/manifest.webapp": {
+  "clientRoot/src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
-  "src/robots.txt": {
+  "clientRoot/src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/main/webapp/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/index.html": {
+  "clientRoot/src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "clientRoot/src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
+  "clientRoot/tsconfig.json": {
     "stateCleared": "modified",
   },
-  "webpack/logo-jhipster.png": {
+  "clientRoot/tsconfig.test.json": {
     "stateCleared": "modified",
   },
-  "webpack/utils.js": {
+  "clientRoot/webpack/environment.js": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.common.js": {
+  "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.dev.js": {
+  "clientRoot/webpack/utils.js": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.prod.js": {
+  "clientRoot/webpack/webpack.common.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.dev.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -439,433 +433,861 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "clientRoot/.eslintignore": {
     "stateCleared": "modified",
   },
-  "package.json": {
+  "clientRoot/.eslintrc.json": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
-  "src/404.html": {
+  "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "src/WEB-INF/web.xml": {
+  "clientRoot/postcss.config.js": {
     "stateCleared": "modified",
   },
-  "src/app/_bootstrap-variables.scss": {
+  "clientRoot/src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/app/app.scss": {
+  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/app/app.tsx": {
+  "clientRoot/src/main/webapp/app/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/app/config/axios-interceptor.spec.ts": {
+  "clientRoot/src/main/webapp/app/app.scss": {
     "stateCleared": "modified",
   },
-  "src/app/config/axios-interceptor.ts": {
+  "clientRoot/src/main/webapp/app/app.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/config/constants.ts": {
+  "clientRoot/src/main/webapp/app/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/dayjs.ts": {
+  "clientRoot/src/main/webapp/app/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/error-middleware.ts": {
+  "clientRoot/src/main/webapp/app/config/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/icon-loader.ts": {
+  "clientRoot/src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/logger-middleware.ts": {
+  "clientRoot/src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/notification-middleware.spec.ts": {
+  "clientRoot/src/main/webapp/app/config/icon-loader.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/notification-middleware.ts": {
+  "clientRoot/src/main/webapp/app/config/logger-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/store.ts": {
+  "clientRoot/src/main/webapp/app/config/notification-middleware.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/translation.ts": {
+  "clientRoot/src/main/webapp/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
+  "clientRoot/src/main/webapp/app/config/store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
+  "clientRoot/src/main/webapp/app/config/translation.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/menu.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-delete-dialog.tsx": {
+  "clientRoot/src/main/webapp/app/entities/menu.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-detail.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.reducer.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/reducers.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/routes.tsx": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/reducers.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-delete-dialog.tsx": {
+  "clientRoot/src/main/webapp/app/entities/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-detail.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.reducer.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/index.tsx": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/administration.reducer.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/administration.reducer.ts": {
+  "clientRoot/src/main/webapp/app/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/configuration/configuration.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/docs/docs.scss": {
+  "clientRoot/src/main/webapp/app/modules/administration/administration.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/docs/docs.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/configuration/configuration.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/gateway/gateway.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/health/health-modal.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/health/health.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/gateway/gateway.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/index.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/health/health-modal.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/logs/logs.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/health/health.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/metrics/metrics.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/home/home.scss": {
+  "clientRoot/src/main/webapp/app/modules/administration/logs/logs.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/home/home.tsx": {
+  "clientRoot/src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/login-redirect.tsx": {
+  "clientRoot/src/main/webapp/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/logout.tsx": {
+  "clientRoot/src/main/webapp/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/routes.tsx": {
+  "clientRoot/src/main/webapp/app/modules/login/login-redirect.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/setup-tests.ts": {
+  "clientRoot/src/main/webapp/app/modules/login/logout.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/DurationFormat.tsx": {
+  "clientRoot/src/main/webapp/app/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/auth/private-route.spec.tsx": {
+  "clientRoot/src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/auth/private-route.tsx": {
+  "clientRoot/src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary-routes.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary-routes.tsx": {
+  "clientRoot/src/main/webapp/app/shared/auth/private-route.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary-routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/page-not-found.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/footer/footer.scss": {
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/footer/footer.tsx": {
+  "clientRoot/src/main/webapp/app/shared/error/page-not-found.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header-components.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.scss": {
+  "clientRoot/src/main/webapp/app/shared/layout/footer/footer.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/account.spec.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/account.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/admin.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/account.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/entities.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/account.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/admin.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/locale.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/entities.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/menu-components.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/menu-item.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/locale.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/password/password-strength-bar.scss": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/menu-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/password/password-strength-bar.tsx": {
+  "clientRoot/src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/entity-with-custom-id.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/microservice.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/simple.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/user.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/application-profile.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/application-profile.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/authentication.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/application-profile.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/authentication.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/application-profile.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/authentication.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/locale.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/authentication.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/locale.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/reducer.utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/locale.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/user-management.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/locale.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/user-management.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/reducer.utils.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/date-utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/user-management.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/entity-utils.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/reducers/user-management.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/entity-utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/date-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/pagination.constants.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/entity-utils.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/url-utils.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/entity-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/app/typings.d.ts": {
+  "clientRoot/src/main/webapp/app/shared/util/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/content/css/loading.css": {
+  "clientRoot/src/main/webapp/app/shared/util/url-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/main/webapp/app/typings.d.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/logo-jhipster.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/favicon.ico": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/index.html": {
+  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "src/manifest.webapp": {
+  "clientRoot/src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
-  "src/robots.txt": {
+  "clientRoot/src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/main/webapp/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/index.html": {
+  "clientRoot/src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "clientRoot/src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
+  "clientRoot/tsconfig.json": {
     "stateCleared": "modified",
   },
-  "webpack/logo-jhipster.png": {
+  "clientRoot/tsconfig.test.json": {
     "stateCleared": "modified",
   },
-  "webpack/utils.js": {
+  "clientRoot/webpack/environment.js": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.common.js": {
+  "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.dev.js": {
+  "clientRoot/webpack/utils.js": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.prod.js": {
+  "clientRoot/webpack/webpack.common.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.dev.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match generated files snapshot 1`] = `
+{
+  ".jhipster/EntityWithCustomId.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/.eslintignore": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/.eslintrc.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/jest.conf.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/postcss.config.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/404.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/_bootstrap-variables.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/axios-interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/axios-interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/dayjs.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/error-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/icon-loader.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/logger-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/notification-middleware.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/notification-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/config/store.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/menu.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-detail.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/reducers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/routes.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-detail.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-reducer.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/main.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/administration/administration.reducer.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/administration/docs/docs.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/administration/docs/docs.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/administration/index.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/home/home.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/home/home.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/login/login-modal.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/login/login.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/modules/login/logout.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/routes.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/setup-tests.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/DurationFormat.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/auth/private-route.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/auth/private-route.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary-routes.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/error/error-boundary.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/error/error-loading.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/error/page-not-found.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/footer/footer.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/footer/footer.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/header/header-components.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/header/header.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/account.spec.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/account.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/admin.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/entities.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/menu-components.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/microservice.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/simple.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/user.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/reducers/application-profile.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/reducers/application-profile.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/reducers/authentication.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/reducers/authentication.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/reducers/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/reducers/reducer.utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/util/date-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/util/entity-utils.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/util/entity-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/util/pagination.constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/typings.d.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/css/loading.css": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/favicon.ico": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/index.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/manifest.webapp": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/robots.txt": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/swagger-ui/index.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/tsconfig.test.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/environment.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/utils.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.common.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.dev.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.microfrontend.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.prod.js": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match generated files snapshot 1`] = `
 {
   ".eslintignore": {
     "stateCleared": "modified",
@@ -897,364 +1319,382 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "postcss.config.js": {
     "stateCleared": "modified",
   },
-  "src/404.html": {
+  "src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/WEB-INF/web.xml": {
+  "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/app/_bootstrap-variables.scss": {
+  "src/main/webapp/app/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/app/app.scss": {
+  "src/main/webapp/app/app.scss": {
     "stateCleared": "modified",
   },
-  "src/app/app.tsx": {
+  "src/main/webapp/app/app.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/config/axios-interceptor.spec.ts": {
+  "src/main/webapp/app/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/axios-interceptor.ts": {
+  "src/main/webapp/app/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/constants.ts": {
+  "src/main/webapp/app/config/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/dayjs.ts": {
+  "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/error-middleware.ts": {
+  "src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/icon-loader.ts": {
+  "src/main/webapp/app/config/icon-loader.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/logger-middleware.ts": {
+  "src/main/webapp/app/config/logger-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/notification-middleware.spec.ts": {
+  "src/main/webapp/app/config/notification-middleware.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/notification-middleware.ts": {
+  "src/main/webapp/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/app/config/store.ts": {
+  "src/main/webapp/app/config/store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
+  "src/main/webapp/app/config/translation.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/index.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/menu.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/index.tsx": {
+  "src/main/webapp/app/entities/menu.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-delete-dialog.tsx": {
+  "src/main/webapp/app/entities/microservice/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-detail.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-reducer.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.reducer.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/reducers.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/routes.tsx": {
+  "src/main/webapp/app/entities/reducers.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/index.tsx": {
+  "src/main/webapp/app/entities/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-delete-dialog.tsx": {
+  "src/main/webapp/app/entities/simple/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-detail.tsx": {
+  "src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-reducer.spec.ts": {
+  "src/main/webapp/app/entities/simple/simple-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.tsx": {
+  "src/main/webapp/app/entities/simple/simple-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.reducer.ts": {
+  "src/main/webapp/app/entities/simple/simple-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.tsx": {
+  "src/main/webapp/app/entities/simple/simple.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/index.tsx": {
+  "src/main/webapp/app/entities/simple/simple.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/main.tsx": {
+  "src/main/webapp/app/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/administration.reducer.spec.ts": {
+  "src/main/webapp/app/main.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/administration.reducer.ts": {
+  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/docs/docs.scss": {
+  "src/main/webapp/app/modules/administration/administration.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/docs/docs.tsx": {
+  "src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
-  "src/app/modules/administration/index.tsx": {
+  "src/main/webapp/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/home/home.scss": {
+  "src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/home/home.tsx": {
+  "src/main/webapp/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/login-modal.tsx": {
+  "src/main/webapp/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/login.tsx": {
+  "src/main/webapp/app/modules/login/login-redirect.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/modules/login/logout.tsx": {
+  "src/main/webapp/app/modules/login/logout.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/routes.tsx": {
+  "src/main/webapp/app/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/setup-tests.ts": {
+  "src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/DurationFormat.tsx": {
+  "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/auth/private-route.spec.tsx": {
+  "src/main/webapp/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/auth/private-route.tsx": {
+  "src/main/webapp/app/shared/auth/private-route.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary-routes.spec.tsx": {
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary-routes.tsx": {
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary.spec.tsx": {
+  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-boundary.tsx": {
+  "src/main/webapp/app/shared/error/error-boundary.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/error-loading.tsx": {
+  "src/main/webapp/app/shared/error/error-loading.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/error/page-not-found.tsx": {
+  "src/main/webapp/app/shared/error/page-not-found.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/footer/footer.scss": {
+  "src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/footer/footer.tsx": {
+  "src/main/webapp/app/shared/layout/footer/footer.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header-components.tsx": {
+  "src/main/webapp/app/shared/layout/header/header-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.scss": {
+  "src/main/webapp/app/shared/layout/header/header.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.spec.tsx": {
+  "src/main/webapp/app/shared/layout/header/header.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/header/header.tsx": {
+  "src/main/webapp/app/shared/layout/header/header.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/account.spec.tsx": {
+  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/account.tsx": {
+  "src/main/webapp/app/shared/layout/menus/account.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/admin.tsx": {
+  "src/main/webapp/app/shared/layout/menus/admin.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/entities.tsx": {
+  "src/main/webapp/app/shared/layout/menus/entities.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/index.ts": {
+  "src/main/webapp/app/shared/layout/menus/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/menu-components.tsx": {
+  "src/main/webapp/app/shared/layout/menus/locale.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/menus/menu-item.tsx": {
+  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/password/password-strength-bar.scss": {
+  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/layout/password/password-strength-bar.tsx": {
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/entity-with-custom-id.model.ts": {
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/microservice.model.ts": {
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/simple.model.ts": {
+  "src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/user.model.ts": {
+  "src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/application-profile.spec.ts": {
+  "src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/application-profile.ts": {
+  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/authentication.spec.ts": {
+  "src/main/webapp/app/shared/reducers/application-profile.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/authentication.ts": {
+  "src/main/webapp/app/shared/reducers/authentication.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/index.ts": {
+  "src/main/webapp/app/shared/reducers/authentication.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/reducers/reducer.utils.ts": {
+  "src/main/webapp/app/shared/reducers/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/date-utils.ts": {
+  "src/main/webapp/app/shared/reducers/locale.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/entity-utils.spec.ts": {
+  "src/main/webapp/app/shared/reducers/locale.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/entity-utils.ts": {
+  "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/util/pagination.constants.ts": {
+  "src/main/webapp/app/shared/reducers/user-management.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/typings.d.ts": {
+  "src/main/webapp/app/shared/reducers/user-management.ts": {
     "stateCleared": "modified",
   },
-  "src/content/css/loading.css": {
+  "src/main/webapp/app/shared/util/date-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0.svg": {
+  "src/main/webapp/app/shared/util/entity-utils.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-192.png": {
+  "src/main/webapp/app/shared/util/entity-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-256.png": {
+  "src/main/webapp/app/shared/util/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-384.png": {
+  "src/main/webapp/app/shared/util/url-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-512.png": {
+  "src/main/webapp/app/typings.d.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1.svg": {
+  "src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2.svg": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3.svg": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/logo-jhipster.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/favicon.ico": {
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "src/index.html": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/manifest.webapp": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/robots.txt": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/dist/images/throbber.gif": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/index.html": {
+  "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
@@ -1287,7 +1727,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
 }
 `;
 
-exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match generated files snapshot 1`] = `
 {
   ".eslintignore": {
     "stateCleared": "modified",
@@ -1319,894 +1759,454 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "postcss.config.js": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/404.html": {
+  "src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/WEB-INF/web.xml": {
+  "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/_bootstrap-variables.scss": {
+  "src/main/webapp/app/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/app.scss": {
+  "src/main/webapp/app/app.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/app.tsx": {
+  "src/main/webapp/app/app.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/axios-interceptor.spec.ts": {
+  "src/main/webapp/app/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/axios-interceptor.ts": {
+  "src/main/webapp/app/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/constants.ts": {
+  "src/main/webapp/app/config/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/dayjs.ts": {
+  "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/error-middleware.ts": {
+  "src/main/webapp/app/config/error-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/icon-loader.ts": {
+  "src/main/webapp/app/config/icon-loader.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/logger-middleware.ts": {
+  "src/main/webapp/app/config/logger-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/notification-middleware.spec.ts": {
+  "src/main/webapp/app/config/notification-middleware.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/notification-middleware.ts": {
+  "src/main/webapp/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/store.ts": {
+  "src/main/webapp/app/config/store.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/config/translation.ts": {
+  "src/main/webapp/app/config/translation.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/index.tsx": {
+  "src/main/webapp/app/entities/entity-with-custom-id/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/menu.tsx": {
+  "src/main/webapp/app/entities/menu.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/index.tsx": {
+  "src/main/webapp/app/entities/microservice/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-delete-dialog.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-detail.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-reducer.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-update.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.reducer.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.tsx": {
+  "src/main/webapp/app/entities/microservice/microservice.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/reducers.ts": {
+  "src/main/webapp/app/entities/reducers.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/routes.tsx": {
+  "src/main/webapp/app/entities/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/index.tsx": {
+  "src/main/webapp/app/entities/simple/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-delete-dialog.tsx": {
+  "src/main/webapp/app/entities/simple/simple-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-detail.tsx": {
+  "src/main/webapp/app/entities/simple/simple-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-reducer.spec.ts": {
+  "src/main/webapp/app/entities/simple/simple-reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-update.tsx": {
+  "src/main/webapp/app/entities/simple/simple-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.reducer.ts": {
+  "src/main/webapp/app/entities/simple/simple.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.tsx": {
+  "src/main/webapp/app/entities/simple/simple.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/index.tsx": {
+  "src/main/webapp/app/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/main.tsx": {
+  "src/main/webapp/app/modules/account/activate/activate.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/administration/administration.reducer.spec.ts": {
+  "src/main/webapp/app/modules/account/activate/activate.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/administration/administration.reducer.ts": {
+  "src/main/webapp/app/modules/account/activate/activate.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/administration/docs/docs.scss": {
+  "src/main/webapp/app/modules/account/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/administration/docs/docs.tsx": {
+  "src/main/webapp/app/modules/account/password-reset/finish/password-reset-finish.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/administration/index.tsx": {
+  "src/main/webapp/app/modules/account/password-reset/init/password-reset-init.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/home/home.scss": {
+  "src/main/webapp/app/modules/account/password-reset/password-reset.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/home/home.tsx": {
+  "src/main/webapp/app/modules/account/password/password.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/login/login-redirect.tsx": {
+  "src/main/webapp/app/modules/account/password/password.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/modules/login/logout.tsx": {
+  "src/main/webapp/app/modules/account/password/password.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/routes.tsx": {
+  "src/main/webapp/app/modules/account/register/register.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/setup-tests.ts": {
+  "src/main/webapp/app/modules/account/register/register.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/DurationFormat.tsx": {
+  "src/main/webapp/app/modules/account/register/register.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/auth/private-route.spec.tsx": {
+  "src/main/webapp/app/modules/account/settings/settings.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/auth/private-route.tsx": {
+  "src/main/webapp/app/modules/account/settings/settings.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/error-boundary-routes.spec.tsx": {
+  "src/main/webapp/app/modules/account/settings/settings.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/error-boundary-routes.tsx": {
+  "src/main/webapp/app/modules/administration/administration.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/error-boundary.spec.tsx": {
+  "src/main/webapp/app/modules/administration/administration.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/error-boundary.tsx": {
+  "src/main/webapp/app/modules/administration/configuration/configuration.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/error-loading.tsx": {
+  "src/main/webapp/app/modules/administration/docs/docs.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/error/page-not-found.tsx": {
+  "src/main/webapp/app/modules/administration/docs/docs.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/footer/footer.scss": {
+  "src/main/webapp/app/modules/administration/health/health-modal.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/footer/footer.tsx": {
+  "src/main/webapp/app/modules/administration/health/health.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/header/header-components.tsx": {
+  "src/main/webapp/app/modules/administration/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/header/header.scss": {
+  "src/main/webapp/app/modules/administration/logs/logs.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/header/header.spec.tsx": {
+  "src/main/webapp/app/modules/administration/metrics/metrics.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/header/header.tsx": {
+  "src/main/webapp/app/modules/administration/user-management/index.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/account.spec.tsx": {
+  "src/main/webapp/app/modules/administration/user-management/user-management-delete-dialog.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/account.tsx": {
+  "src/main/webapp/app/modules/administration/user-management/user-management-detail.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/admin.tsx": {
+  "src/main/webapp/app/modules/administration/user-management/user-management-update.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/entities.tsx": {
+  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/index.ts": {
+  "src/main/webapp/app/modules/administration/user-management/user-management.reducer.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/locale.tsx": {
+  "src/main/webapp/app/modules/administration/user-management/user-management.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/menu-components.tsx": {
+  "src/main/webapp/app/modules/home/home.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/menus/menu-item.tsx": {
+  "src/main/webapp/app/modules/home/home.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/password/password-strength-bar.scss": {
+  "src/main/webapp/app/modules/login/login-modal.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/layout/password/password-strength-bar.tsx": {
+  "src/main/webapp/app/modules/login/login.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": {
+  "src/main/webapp/app/modules/login/logout.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/microservice.model.ts": {
+  "src/main/webapp/app/routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/simple.model.ts": {
+  "src/main/webapp/app/setup-tests.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/user.model.ts": {
+  "src/main/webapp/app/shared/DurationFormat.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/application-profile.spec.ts": {
+  "src/main/webapp/app/shared/auth/private-route.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/application-profile.ts": {
+  "src/main/webapp/app/shared/auth/private-route.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/authentication.spec.ts": {
+  "src/main/webapp/app/shared/error/error-boundary-routes.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/authentication.ts": {
+  "src/main/webapp/app/shared/error/error-boundary-routes.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/index.ts": {
+  "src/main/webapp/app/shared/error/error-boundary.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/locale.spec.ts": {
+  "src/main/webapp/app/shared/error/error-boundary.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/locale.ts": {
+  "src/main/webapp/app/shared/error/page-not-found.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/reducer.utils.ts": {
+  "src/main/webapp/app/shared/layout/footer/footer.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/user-management.spec.ts": {
+  "src/main/webapp/app/shared/layout/footer/footer.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/reducers/user-management.ts": {
+  "src/main/webapp/app/shared/layout/header/header-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/util/date-utils.ts": {
+  "src/main/webapp/app/shared/layout/header/header.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/util/entity-utils.spec.ts": {
+  "src/main/webapp/app/shared/layout/header/header.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/util/entity-utils.ts": {
+  "src/main/webapp/app/shared/layout/header/header.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/util/pagination.constants.ts": {
+  "src/main/webapp/app/shared/layout/menus/account.spec.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/util/url-utils.ts": {
+  "src/main/webapp/app/shared/layout/menus/account.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/typings.d.ts": {
+  "src/main/webapp/app/shared/layout/menus/admin.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/css/loading.css": {
+  "src/main/webapp/app/shared/layout/menus/entities.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0.svg": {
+  "src/main/webapp/app/shared/layout/menus/index.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-192.png": {
+  "src/main/webapp/app/shared/layout/menus/locale.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-256.png": {
+  "src/main/webapp/app/shared/layout/menus/menu-components.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-384.png": {
+  "src/main/webapp/app/shared/layout/menus/menu-item.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-512.png": {
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.scss": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1.svg": {
+  "src/main/webapp/app/shared/layout/password/password-strength-bar.tsx": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-192.png": {
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-256.png": {
+  "src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-384.png": {
+  "src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-512.png": {
+  "src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2.svg": {
+  "src/main/webapp/app/shared/reducers/application-profile.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-192.png": {
+  "src/main/webapp/app/shared/reducers/application-profile.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-256.png": {
+  "src/main/webapp/app/shared/reducers/authentication.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-384.png": {
+  "src/main/webapp/app/shared/reducers/authentication.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-512.png": {
+  "src/main/webapp/app/shared/reducers/index.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3.svg": {
+  "src/main/webapp/app/shared/reducers/locale.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-192.png": {
+  "src/main/webapp/app/shared/reducers/locale.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-256.png": {
+  "src/main/webapp/app/shared/reducers/reducer.utils.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-384.png": {
+  "src/main/webapp/app/shared/util/date-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-512.png": {
+  "src/main/webapp/app/shared/util/entity-utils.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/logo-jhipster.png": {
+  "src/main/webapp/app/shared/util/entity-utils.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/favicon.ico": {
+  "src/main/webapp/app/shared/util/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/index.html": {
+  "src/main/webapp/app/typings.d.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/manifest.webapp": {
+  "src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/robots.txt": {
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/swagger-ui/dist/images/throbber.gif": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/swagger-ui/index.html": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "tsconfig.test.json": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "webpack/environment.js": {
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "webpack/logo-jhipster.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "webpack/utils.js": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.common.js": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.dev.js": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.microfrontend.js": {
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.prod.js": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-}
-`;
-
-exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true) should match generated files snapshot 1`] = `
-{
-  ".eslintignore": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  ".eslintrc.json": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  ".jhipster/EntityWithCustomId.json": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  ".jhipster/Microservice.json": {
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  ".jhipster/Simple.json": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  ".jhipster/SkipClient.json": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "package.json": {
+  "src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/404.html": {
+  "src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/WEB-INF/web.xml": {
+  "src/main/webapp/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/_bootstrap-variables.scss": {
+  "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/app.scss": {
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/app.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/axios-interceptor.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/axios-interceptor.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/constants.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/dayjs.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/error-middleware.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/icon-loader.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/logger-middleware.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/notification-middleware.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/notification-middleware.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/store.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/config/translation.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-delete-dialog.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-detail.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/menu.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-delete-dialog.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-detail.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-update.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/reducers.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/routes.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-delete-dialog.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-detail.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-update.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/activate/activate.reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/activate/activate.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/activate/activate.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/password-reset/finish/password-reset-finish.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/password-reset/init/password-reset-init.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/password-reset/password-reset.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/password/password.reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/password/password.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/password/password.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/register/register.reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/register/register.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/register/register.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/settings/settings.reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/settings/settings.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/account/settings/settings.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/administration.reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/administration.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/configuration/configuration.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/docs/docs.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/docs/docs.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/health/health-modal.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/health/health.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/logs/logs.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/metrics/metrics.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/index.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/user-management-delete-dialog.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/user-management-detail.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/user-management-update.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/user-management.reducer.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/user-management.reducer.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/administration/user-management/user-management.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/home/home.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/home/home.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/login/login-modal.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/login/login.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/modules/login/logout.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/routes.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/setup-tests.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/DurationFormat.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/auth/private-route.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/auth/private-route.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/error/error-boundary-routes.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/error/error-boundary-routes.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/error/error-boundary.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/error/error-boundary.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/error/page-not-found.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/footer/footer.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/footer/footer.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/header/header-components.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/header/header.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/header/header.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/header/header.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/account.spec.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/account.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/admin.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/entities.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/locale.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/menu-components.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/menus/menu-item.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/password/password-strength-bar.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/layout/password/password-strength-bar.tsx": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/microservice.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/simple.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/application-profile.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/application-profile.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/authentication.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/authentication.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/locale.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/locale.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/reducers/reducer.utils.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/util/date-utils.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/util/entity-utils.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/util/entity-utils.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/util/pagination.constants.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/typings.d.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/css/loading.css": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/favicon.ico": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/index.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/manifest.webapp": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/swagger-ui/index.html": {
+  "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
@@ -3070,12 +3070,11 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
 
 exports[`generator - react samples matrix should match snapshot 1`] = `
 {
-  "gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true)": {
+  "gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true)": {
     "applicationType": "gateway",
     "authenticationType": "jwt",
     "clientFramework": "react",
-    "clientSrcDir": "src/",
-    "clientTestDir": "test/",
+    "clientRootDir": "clientRoot/",
     "enableTranslation": false,
     "languages": [
       "fr",
@@ -3087,12 +3086,11 @@ exports[`generator - react samples matrix should match snapshot 1`] = `
     "websocket": true,
     "withAdminUi": false,
   },
-  "gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true)": {
+  "gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true)": {
     "applicationType": "gateway",
     "authenticationType": "oauth2",
     "clientFramework": "react",
-    "clientSrcDir": "src/",
-    "clientTestDir": "test/",
+    "clientRootDir": "clientRoot/",
     "enableTranslation": true,
     "languages": [
       "fr",
@@ -3103,12 +3101,11 @@ exports[`generator - react samples matrix should match snapshot 1`] = `
     "websocket": true,
     "withAdminUi": true,
   },
-  "microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false)": {
+  "microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false)": {
     "applicationType": "microservice",
     "authenticationType": "jwt",
     "clientFramework": "react",
-    "clientSrcDir": "src/",
-    "clientTestDir": "test/",
+    "clientRootDir": "clientRoot/",
     "enableTranslation": false,
     "languages": [
       "fr",
@@ -3120,12 +3117,11 @@ exports[`generator - react samples matrix should match snapshot 1`] = `
     "websocket": false,
     "withAdminUi": false,
   },
-  "microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false)": {
+  "microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false)": {
     "applicationType": "microservice",
     "authenticationType": "oauth2",
     "clientFramework": "react",
-    "clientSrcDir": "src/main/webapp2/",
-    "clientTestDir": "src/test/javascript2/",
+    "clientRootDir": "",
     "enableTranslation": true,
     "languages": [
       "fr",
@@ -3136,12 +3132,11 @@ exports[`generator - react samples matrix should match snapshot 1`] = `
     "websocket": false,
     "withAdminUi": true,
   },
-  "monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true)": {
+  "monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true)": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "clientFramework": "react",
-    "clientSrcDir": "src/main/webapp2/",
-    "clientTestDir": "src/test/javascript2/",
+    "clientRootDir": "",
     "enableTranslation": true,
     "languages": [
       "fr",
@@ -3157,7 +3152,7 @@ exports[`generator - react samples matrix should match snapshot 1`] = `
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "clientFramework": "react",
-    "clientSrcDir": undefined,
+    "clientRootDir": undefined,
     "enableTranslation": false,
     "languages": [
       "fr",
@@ -3172,7 +3167,7 @@ exports[`generator - react samples matrix should match snapshot 1`] = `
     "applicationType": "monolith",
     "authenticationType": "session",
     "clientFramework": "react",
-    "clientSrcDir": undefined,
+    "clientRootDir": undefined,
     "enableTranslation": false,
     "languages": [
       "fr",

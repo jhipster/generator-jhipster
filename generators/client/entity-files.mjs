@@ -19,7 +19,7 @@
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { getEnumInfo } from '../base-application/support/index.mjs';
 
-async function addEnumerationFiles({ application, entity }) {
+export async function addEnumerationFiles({ application, entity }) {
   for (const field of entity.fields) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;
@@ -39,13 +39,5 @@ async function addEnumerationFiles({ application, entity }) {
         context: enumInfo,
       });
     }
-  }
-}
-
-// eslint-disable-next-line import/prefer-default-export
-export async function writeEnumerationFiles({ application, entities }) {
-  if (!application.webappEnumerationsDir) return;
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
-    await addEnumerationFiles.call(this, { application, entity });
   }
 }

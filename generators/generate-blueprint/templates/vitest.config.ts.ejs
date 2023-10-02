@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     threads: false,
     hookTimeout: 15000,
-    exclude: [...defaultExclude, '**/templates/**', '**/resources/**'],
+    exclude: [...defaultExclude.filter(val => val !== '**/cypress/**'), '**/templates/**', '**/resources/**'],
   },
 });
