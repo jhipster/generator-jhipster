@@ -169,7 +169,7 @@
     "@types/glob": "npm:noist@1.0.0",
     "@types/minimatch": "npm:noist@1.0.0",
     "@types/mocha": "10.0.2",
-    "@types/node": "18.18.1",
+    "@types/node": "18.18.3",
     "@types/sinon-chai": "3.2.10",
     "chai": "4.3.10",
     "chokidar": "3.5.3",
