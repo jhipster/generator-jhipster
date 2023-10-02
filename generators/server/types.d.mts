@@ -74,6 +74,7 @@ export type SpringBootApplication = JavaApplication &
   SearchEngine &
   DatabaseTypeApplication &
   MessageBrokerApplicationType & {
+    javaVersion: string;
     dockerContainers: Record<string, string>;
 
     enableSwaggerCodegen: boolean;
