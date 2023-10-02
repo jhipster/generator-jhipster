@@ -20,10 +20,10 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   video: false,
-  fixturesFolder: '<%= cypressDir %>fixtures',
-  screenshotsFolder: '<%= cypressTemporaryDir %>screenshots',
-  downloadsFolder: '<%= cypressTemporaryDir %>downloads',
-  videosFolder: '<%= cypressTemporaryDir %>videos',
+  fixturesFolder: '<%= this.relativeDir(clientRootDir, cypressDir) %>fixtures',
+  screenshotsFolder: '<%= this.relativeDir(clientRootDir, cypressTemporaryDir) %>screenshots',
+  downloadsFolder: '<%= this.relativeDir(clientRootDir, cypressTemporaryDir) %>downloads',
+  videosFolder: '<%= this.relativeDir(clientRootDir, cypressTemporaryDir) %>videos',
   chromeWebSecurity: true,
   viewportWidth: 1200,
   viewportHeight: 720,
@@ -45,11 +45,12 @@ export default defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     async setupNodeEvents(on, config) {
-      return (await import('./<%= cypressDir %>plugins/index')).default(on, config);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return (await import('./<%= this.relativeDir(clientRootDir, cypressDir) %>plugins/index')).default(on, config);
     },
     baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
-    specPattern: '<%= cypressDir %>e2e/**/*.cy.ts',
-    supportFile: '<%= cypressDir %>support/index.ts',
+    specPattern: '<%= this.relativeDir(clientRootDir, cypressDir) %>e2e/**/*.cy.ts',
+    supportFile: '<%= this.relativeDir(clientRootDir, cypressDir) %>support/index.ts',
     experimentalRunAllSpecs: true,
   },
 });

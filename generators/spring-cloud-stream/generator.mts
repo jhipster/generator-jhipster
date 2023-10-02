@@ -24,9 +24,12 @@ import writeFilesTask from './files.mjs';
 
 export default class KafkaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_CLOUD_STREAM);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     }
   }
 

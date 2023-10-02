@@ -23,37 +23,39 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode, loadStoredAppOptions } from './support/index.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
-import { askForApplicationType, askForInsightOptIn } from './prompts.mjs';
+import { askForInsightOptIn } from './prompts.mjs';
 import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
   GENERATOR_CLIENT,
-  GENERATOR_PAGE,
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
 } from '../generator-list.mjs';
 
-import { applicationTypes, applicationOptions, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { applicationTypes, applicationOptions } from '../../jdl/jhipster/index.mjs';
 import command from './command.mjs';
 
 const { MICROSERVICE } = applicationTypes;
-const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
+  command = command;
+
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     }
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       validateNode() {
         if (this.skipChecks) {
           return;
@@ -67,7 +69,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
         }
       },
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(this.command);
       },
 
       validate() {
@@ -75,7 +77,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           throw new Error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -83,10 +85,13 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       askForInsightOptIn,
-      askForApplicationType,
-    };
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
@@ -97,18 +102,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return {
       setup() {
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          this.jhipsterConfig.skipClient =
-            this.jhipsterConfig.skipClient ||
-            !this.jhipsterConfig.clientFramework ||
-            this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
-          this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
-        } else {
-          this.jhipsterConfig.skipClient = this.jhipsterConfig.skipClient || this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
-        }
-
-        if (this.jhipsterConfig.skipClient) {
-          this.jhipsterConfig.clientFramework = CLIENT_FRAMEWORK_NO;
         }
       },
       fixConfig() {
@@ -129,49 +123,32 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
        * Composing with others generators, must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
        *
-       * Generators `server`, `client`, `common`, `languages` depends on each other.
-       * We are composing in the same task so every priority are executed in parallel.
-       * - compose (app) -> initializing (common) -> initializing (server) -> ...
-       *
-       * When composing in different tasks the result would be:
+       * Composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
+       *
+       * This behaviour allows a more consistent blueprint support.
        */
-      async compose() {
-        const { enableTranslation, skipServer, clientFramework } = this.jhipsterConfigWithDefaults;
+      async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON);
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES, {
-            generatorOptions: { regenerate: true },
-          });
-        }
-        if (!skipServer) {
+      },
+      async composeServer() {
+        if (!this.jhipsterConfigWithDefaults.skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER);
         }
-        if (clientFramework !== CLIENT_FRAMEWORK_NO) {
+      },
+      async composeClient() {
+        if (!this.jhipsterConfigWithDefaults.skipClient) {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
-
       /**
        * At this point every other generator should already be configured, so, enforce defaults fallback.
        */
       saveConfigWithDefaults() {
-        this._validateAppConfiguration();
-      },
-
-      async composePages() {
-        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
-        await Promise.all(
-          this.jhipsterConfig.pages.map(page => {
-            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, {
-              generatorArgs: [page.name],
-              generatorOptions: {
-                skipInstall: true,
-                page,
-              },
-            });
-          }),
-        );
+        const config = this.jhipsterConfigWithDefaults;
+        if (config.entitySuffix === config.dtoSuffix) {
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+        }
       },
     });
   }
@@ -204,11 +181,5 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  _validateAppConfiguration(config = this.jhipsterConfigWithDefaults) {
-    if (config.entitySuffix === config.dtoSuffix) {
-      throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-    }
   }
 }

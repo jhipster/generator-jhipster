@@ -19,8 +19,6 @@
 /* eslint-disable consistent-return */
 import fs from 'fs';
 import chalk from 'chalk';
-import shelljs from 'shelljs';
-import runAsync from 'run-async';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
@@ -62,7 +60,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
         this.log.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -74,23 +72,19 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
       checkDocker,
       checkKubernetes,
       checkHelm,
-      checkKnative: runAsync(function () {
+      async checkKnative() {
         if (this.skipChecks) return;
-        const done = this.async();
-        shelljs.exec(
-          'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\\.[8-9]{1,3}\\.[0-9]*',
-          { silent: true },
-          (code, stdout, stderr) => {
-            if (stderr || code !== 0) {
-              this.log.warn(
-                'Knative 0.8.* or later is not installed on your computer.\n' +
-                  'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
-              );
-            }
-            done();
-          },
-        );
-      }),
+        try {
+          await this.spawnCommand(
+            'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\\.[8-9]{1,3}\\.[0-9]*',
+          );
+        } catch (error) {
+          this.log.warn(
+            'Knative 0.8.* or later is not installed on your computer.\n' +
+              'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
+          );
+        }
+      },
       loadConfig,
       localInit() {
         this.deploymentApplicationType = 'microservice';
@@ -98,7 +92,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
       },
       setupKubernetesConstants,
       setupHelmConstants,
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {

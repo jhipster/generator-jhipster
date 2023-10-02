@@ -4,9 +4,12 @@ import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkType
 import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
+import { loadConfig, loadDerivedConfig } from '../../../lib/internal/index.mjs';
+import serverCommand from '../../server/command.mjs';
+import { packageJson } from '../../../lib/index.mjs';
 
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CASSANDRA, NO: NO_DATABASE } = databaseTypes;
 
@@ -77,15 +80,16 @@ export const loadAppConfig = ({
   application: any;
   useVersionPlaceholders?: boolean;
 }) => {
+  loadConfig(serverCommand.configs, { config, application });
+
   if (useVersionPlaceholders) {
     application.nodeVersion = 'NODE_VERSION';
   } else {
     application.nodeVersion = NODE_VERSION;
   }
 
-  application.jhipsterVersion = config.jhipsterVersion;
+  application.jhipsterVersion = useVersionPlaceholders ? 'JHIPSTER_VERSION' : config.jhipsterVersion ?? packageJson.version;
   application.baseName = config.baseName;
-  application.applicationType = config.applicationType;
   application.reactive = config.reactive;
   application.jhiPrefix = config.jhiPrefix;
   application.skipFakeData = config.skipFakeData;
@@ -127,11 +131,9 @@ export const loadAppConfig = ({
  * @param {Object} dest - destination context to use default is context
  */
 export const loadDerivedAppConfig = ({ application }: { application: any }) => {
+  loadDerivedConfig(serverCommand.configs, { application });
   application.jhiPrefixCapitalized = _.upperFirst(application.jhiPrefix);
   application.jhiPrefixDashed = _.kebabCase(application.jhiPrefix);
-  application.applicationTypeGateway = application.applicationType === GATEWAY;
-  application.applicationTypeMonolith = application.applicationType === MONOLITH;
-  application.applicationTypeMicroservice = application.applicationType === MICROSERVICE;
 
   // Application name modified, using each technology's conventions
   if (application.baseName) {

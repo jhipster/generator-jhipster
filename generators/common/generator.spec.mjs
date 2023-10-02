@@ -53,6 +53,10 @@ describe(`generator - ${generator}`, () => {
       it('should succeed', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
+
+      it('should add generator-jhipster to package.json', () => {
+        runResult.assertFileContent('package.json', 'generator-jhipster');
+      });
     });
     describe('Custom prettier', () => {
       before(async () => {

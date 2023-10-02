@@ -33,7 +33,7 @@ import {
   prepareRelationship,
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
-import { DOCKER_DIR } from '../generator-constants.mjs';
+import { JAVA_DOCKER_DIR } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
@@ -114,16 +114,18 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
+      prepareApplication({ application, applicationDefaults }) {
         loadDerivedAppConfig({ application });
 
-        application.nodePackageManager = 'npm';
-        application.dockerServicesDir = DOCKER_DIR;
+        applicationDefaults({
+          nodePackageManager: 'npm',
+          dockerServicesDir: JAVA_DOCKER_DIR,
+        });
 
-        // TODO v8 drop the following variables
-        const anyApplication = application as any;
-
-        anyApplication.clientPackageManager = application.nodePackageManager;
+        applicationDefaults({
+          // TODO drop clientPackageManager
+          clientPackageManager: application.nodePackageManager,
+        });
       },
     });
   }
@@ -278,7 +280,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get default() {
     return this.asDefaultTaskGroup({
       task({ application }) {
-        const isPackageJson = file => file.path === this.destinationPath('package.json');
+        const packageJsonFiles = [this.destinationPath('package.json')];
+        if (application.clientRootDir) {
+          packageJsonFiles.push(this.destinationPath(`${application.clientRootDir}package.json`));
+        }
+        const isPackageJson = file => packageJsonFiles.includes(file.path);
         const populateNullValues = dependencies => {
           if (!dependencies) return;
           for (const key of Object.keys(dependencies)) {

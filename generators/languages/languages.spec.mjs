@@ -125,7 +125,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'], baseName: 'jhipster' })
-          .withOptions({ ignoreNeedlesError: true }),
+          .withOptions({ commandName: 'languages', ignoreNeedlesError: true }),
       );
       noLanguageFiles('fr');
     });
@@ -134,7 +134,7 @@ describe('generator - languages', () => {
         helpers
           .run(generatorPath)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
-          .withOptions({ ignoreNeedlesError: true, skipPrompts: true, baseName: 'jhipster' }),
+          .withOptions({ commandName: 'languages', ignoreNeedlesError: true }),
       );
       noLanguageFiles('fr');
       noLanguageFiles('en');
@@ -256,6 +256,9 @@ describe('generator - languages', () => {
           .create('jhipster:languages')
           .withAnswers({
             languages: ['fr', 'de'],
+          })
+          .withOptions({
+            commandName: 'languages',
           })
           .run();
       });

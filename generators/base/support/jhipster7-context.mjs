@@ -14,6 +14,10 @@ const deprecatedProperties = {
     replacement: 'nodeDependencies.npm',
     get: ({ data }) => data.nodeDependencies.npm,
   },
+  JHIPSTER_DEPENDENCIES_VERSION: {
+    replacement: 'jhipsterDependenciesVersion',
+    get: ({ data }) => data.jhipsterDependenciesVersion,
+  },
   DOCKER_DIR: {
     replacement: 'dockerServicesDir',
     get: ({ data }) => data.dockerServicesDir,
@@ -67,8 +71,8 @@ const deprecatedProperties = {
     get: ({ data }) => data.anyFieldHasDocumentation,
   },
   fieldsContainBigDecimal: {
-    replacement: 'anyFieldIsDuration',
-    get: ({ data }) => data.anyFieldIsDuration,
+    replacement: 'anyFieldIsBigDecimal',
+    get: ({ data }) => data.anyFieldIsBigDecimal,
   },
   fieldsContainBlob: {
     replacement: 'anyFieldIsBlobDerived',
@@ -79,8 +83,8 @@ const deprecatedProperties = {
     get: ({ data }) => data.anyFieldIsDateDerived,
   },
   fieldsContainDuration: {
-    replacement: 'anyFieldIsBigDecimal',
-    get: ({ data }) => data.anyFieldIsBigDecimal,
+    replacement: 'anyFieldIsDuration',
+    get: ({ data }) => data.anyFieldIsDuration,
   },
   fieldsContainInstant: {
     replacement: 'anyFieldIsInstant',
@@ -129,6 +133,30 @@ const deprecatedProperties = {
   enableLiquibase: {
     replacement: 'databaseMigrationLiquibase',
     get: ({ data }) => data.databaseMigrationLiquibase,
+  },
+  databaseTypePostgres: {
+    replacement: 'prodDatabaseTypePostgresql',
+    get: ({ data }) => data.prodDatabaseTypePostgresql,
+  },
+  prodDatabaseTypePostgres: {
+    replacement: 'prodDatabaseTypePostgresql',
+    get: ({ data }) => data.prodDatabaseTypePostgresql,
+  },
+  databaseTypeMariadb: {
+    replacement: 'prodDatabaseTypeMariadb',
+    get: ({ data }) => data.prodDatabaseTypeMariadb,
+  },
+  databaseTypeMysql: {
+    replacement: 'prodDatabaseTypeMysql',
+    get: ({ data }) => data.prodDatabaseTypeMysql,
+  },
+  databaseTypeOracle: {
+    replacement: 'prodDatabaseTypeOracle',
+    get: ({ data }) => data.prodDatabaseTypeOracle,
+  },
+  databaseTypeMssql: {
+    replacement: 'prodDatabaseTypeMssql',
+    get: ({ data }) => data.prodDatabaseTypeMssql,
   },
 };
 

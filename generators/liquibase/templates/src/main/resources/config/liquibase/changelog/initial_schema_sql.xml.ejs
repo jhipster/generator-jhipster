@@ -161,7 +161,7 @@ _%>
                   separator=";"
                   tableName="<%= user.entityTableName %>"
                   usePreparedStatements="true">
-    <%_ if (prodDatabaseTypePostgres) { _%>
+    <%_ if (prodDatabaseTypePostgresql) { _%>
             <column name="id" type="<%= idField.loadColumnType %>"/>
     <%_ } _%>
             <column name="activated" type="boolean"/>

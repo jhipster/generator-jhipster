@@ -22,7 +22,7 @@ import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/sup
 export const cassandraFiles = {
   serverFiles: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/DatabaseConfiguration.java'],
     },
@@ -51,7 +51,7 @@ export const cassandraFiles = {
   ],
   serverTestFw: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'CassandraKeyspaceIT.java',

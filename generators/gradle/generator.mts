@@ -37,8 +37,11 @@ import {
 export default class GradleGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
       await this.composeWithBlueprints(GENERATOR_GRADLE);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     }
   }
 

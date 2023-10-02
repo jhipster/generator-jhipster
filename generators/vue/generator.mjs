@@ -43,22 +43,14 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 export default class VueGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_VUE);
     }
-  }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        await this.composeWithJHipster(GENERATOR_LANGUAGES);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+    }
   }
 
   get loading() {
@@ -88,7 +80,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
         application.clientSrcDirRelativeToClientTestDir = `${relative(application.clientSpecDir, application.clientWebappDir)}/`;
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.common.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,

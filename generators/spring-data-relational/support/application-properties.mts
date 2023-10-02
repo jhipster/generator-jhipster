@@ -28,7 +28,7 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.prodDatabaseTypeMssql = application.prodDatabaseType === MSSQL;
   application.prodDatabaseTypeMysql = application.prodDatabaseType === MYSQL;
   application.prodDatabaseTypeOracle = application.prodDatabaseType === ORACLE;
-  application.prodDatabaseTypePostgres = application.prodDatabaseType === POSTGRESQL;
+  application.prodDatabaseTypePostgresql = application.prodDatabaseType === POSTGRESQL;
 
   application.devDatabaseTypeH2Disk = application.devDatabaseType === H2_DISK;
   application.devDatabaseTypeH2Memory = application.devDatabaseType === H2_MEMORY;
@@ -38,7 +38,8 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.devDatabaseTypeMssql = application.prodDatabaseTypeMssql && !application.devDatabaseTypeH2Any;
   application.devDatabaseTypeMysql = application.prodDatabaseTypeMysql && !application.devDatabaseTypeH2Any;
   application.devDatabaseTypeOracle = application.prodDatabaseTypeOracle && !application.devDatabaseTypeH2Any;
-  application.devDatabaseTypePostgres = application.prodDatabaseTypePostgres && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypePostgresql = application.prodDatabaseTypePostgresql && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypePostgres = application.devDatabaseTypePostgresql; // Deprecated
 
   if (!application.databaseTypeSql) {
     return;

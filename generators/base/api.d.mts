@@ -1,5 +1,5 @@
 import type { BaseOptions, BaseFeatures, ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import { SetOptional } from 'type-fest';
+import type { SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.mjs';
 
 export type ApplicationWithConfig = {
@@ -108,7 +108,7 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
       /** @deprecated, use destinationFile instead */
       renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
       /** transforms (files processing) to be applied */
-      transform?: (() => string)[];
+      transform?: boolean | (() => string)[];
       /** binary files skips ejs render, ejs extension and file transform */
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
@@ -127,7 +127,7 @@ export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
   /** condition to enable to write the block */
   condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
-  transform?: (() => string)[];
+  transform?: boolean | (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
@@ -172,15 +172,37 @@ export type ValidationResult = {
   error?: string | string[];
 };
 
+export type PromptSpec = {
+  type: 'input' | 'list' | 'confirm' | 'checkbox';
+  message: string | ((any) => string);
+  when?: boolean | ((any) => boolean);
+  default?: any | ((any) => any);
+  filter?: any | ((any) => any);
+  transformer?: any | ((any) => any);
+};
+
+export type ConfigSpec = {
+  description?: string;
+  choices?: string[] | { value: string; name: string }[];
+
+  cli?: SetOptional<CliOptionSpec, 'name'>;
+  argument?: SetOptional<ArgumentSpec, 'name'>;
+  prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
+  scope?: 'storage' | 'blueprint' | 'generator';
+};
+
 export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'>;
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
+export type JHipsterConfigs = Record<string, ConfigSpec>;
+
 export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
-  options: JHipsterOptions;
+  options?: JHipsterOptions;
+  configs?: JHipsterConfigs;
   /**
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']

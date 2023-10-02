@@ -16,46 +16,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import shelljs from 'shelljs';
 import chalk from 'chalk';
-import runAsync from 'run-async';
 
 /**
  * Check that Docker exists.
+ * @this {import('../../base-core/index.mjs').default}
  */
-export const checkDocker = runAsync(function () {
+export const checkDocker = async function () {
   if (this.abort || this.skipChecks) return;
-  const done = this.async();
+  const ret = await this.spawnCommand('docker -v', { reject: false, stdio: 'pipe' });
+  if (ret.exitCode !== 0) {
+    this.log.error(
+      chalk.red(
+        `Docker version 1.10.0 or later is not installed on your computer.
+         Read http://docs.docker.com/engine/installation/#installation
+`,
+      ),
+    );
+    throw new Error();
+  }
 
-  shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
-    if (stderr) {
-      this.log.error(
-        chalk.red(
-          'Docker version 1.10.0 or later is not installed on your computer.\n' +
-            '         Read http://docs.docker.com/engine/installation/#installation\n',
-        ),
-      );
-      this.abort = true;
-    } else {
-      const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-      const dockerVersionMajor = dockerVersion.split('.')[0];
-      const dockerVersionMinor = dockerVersion.split('.')[1];
-      if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-        this.log.error(
-          chalk.red(
-            `Docker version 1.10.0 or later is not installed on your computer.
-                                 Docker version found: ${dockerVersion}
-                                 Read http://docs.docker.com/engine/installation/#installation`,
-          ),
-        );
-        this.abort = true;
-      } else {
-        this.log.verboseInfo('Docker is installed');
-      }
-    }
-    done();
-  });
-});
+  const dockerVersion = ret.stdout.split(' ')[2].replace(/,/g, '');
+  const dockerVersionMajor = dockerVersion.split('.')[0];
+  const dockerVersionMinor = dockerVersion.split('.')[1];
+  if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
+    this.log.error(
+      chalk.red(
+        `Docker version 1.10.0 or later is not installed on your computer.
+                               Docker version found: ${dockerVersion}
+                               Read http://docs.docker.com/engine/installation/#installation`,
+      ),
+    );
+    throw new Error();
+  } else {
+    this.log.verboseInfo('Docker is installed');
+  }
+};
 
 /**
  * This is the Generator base class.

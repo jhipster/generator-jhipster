@@ -1,8 +1,5 @@
-import { clientFrameworkTypes } from '../../../jdl/index.js';
 import { getFrontendAppName } from '../../base/support/basename.mjs';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../../generator-constants.mjs';
-
-const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 /**
  * Load client configs into application.
@@ -14,19 +11,15 @@ export const loadClientConfig = ({ config, application }: { config: any; applica
   (application as any).clientThemeVariant = config.clientThemeVariant;
   (application as any).devServerPort = config.devServerPort;
 
-  (application as any).clientSrcDir = config.clientSrcDir ?? CLIENT_MAIN_SRC_DIR;
-  (application as any).clientTestDir = config.clientTestDir ?? CLIENT_TEST_SRC_DIR;
+  (application as any).clientRootDir = config.clientRootDir ?? '';
+  (application as any).clientSrcDir = config.clientSrcDir ?? `${application.clientRootDir}${CLIENT_MAIN_SRC_DIR}`;
+  (application as any).clientTestDir = config.clientTestDir ?? `${application.clientRootDir}${CLIENT_TEST_SRC_DIR}`;
 };
 
 /**
  * Load client derived properties.
  */
 export const loadDerivedClientConfig = ({ application }: { application: any }) => {
-  application.clientFrameworkAngular = application.clientFramework === ANGULAR;
-  application.clientFrameworkReact = application.clientFramework === REACT;
-  application.clientFrameworkVue = application.clientFramework === VUE;
-  application.clientFrameworkNo = !application.clientFramework || application.clientFramework === CLIENT_FRAMEWORK_NO;
-  application.clientFrameworkAny = !application.clientFrameworkNo;
   if ((application as any).microfrontend === undefined) {
     if ((application as any).applicationTypeMicroservice) {
       (application as any).microfrontend = application.clientFrameworkAny;

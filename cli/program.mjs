@@ -98,6 +98,7 @@ const addCommandGeneratorOptions = async (command, generatorMeta, { root, bluepr
   const generatorModule = await generatorMeta.importModule();
   if (generatorModule.command) {
     command.addJHipsterOptions(generatorModule.command.options, blueprintOptionDescription);
+    command.addJHipsterConfigs(generatorModule.command.configs, blueprintOptionDescription);
   }
   try {
     if (root || !generatorModule.command || generatorModule.command.loadGeneratorOptions) {
@@ -152,6 +153,7 @@ export const createProgram = ({ executableName = CLI_NAME, executableVersion } =
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       .addJHipsterOptions(command.options)
+      .addJHipsterConfigs(command.configs)
   );
 };
 

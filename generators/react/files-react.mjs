@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
 
 export const files = {
   common: [
-    {
+    clientRootTemplatesBlock({
       templates: [
         'package.json',
         '.eslintrc.json',
@@ -34,12 +34,12 @@ export const files = {
         'webpack/utils.js',
         'webpack/logo-jhipster.png',
       ],
-    },
+    }),
   ],
   sass: [
-    {
+    clientRootTemplatesBlock({
       templates: ['postcss.config.js'],
-    },
+    }),
   ],
   reactApp: [
     {
@@ -245,10 +245,10 @@ export const files = {
     },
   ],
   microfrontend: [
-    {
+    clientRootTemplatesBlock({
       condition: generator => generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js.jhi.react'],
-    },
+    }),
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationTemplatesBlock(),

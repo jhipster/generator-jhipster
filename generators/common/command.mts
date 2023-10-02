@@ -25,8 +25,8 @@ const command: JHipsterCommandDefinition = {
       type: Number,
       scope: 'storage',
     },
-    withAdminUi: {
-      description: 'Generate administrative user interface',
+    skipCommitHook: {
+      description: 'Skip adding husky commit hooks',
       type: Boolean,
       scope: 'storage',
     },

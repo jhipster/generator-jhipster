@@ -99,12 +99,6 @@
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "jest": "<%= nodeDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
     "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
@@ -138,8 +132,8 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
     "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",

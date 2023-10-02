@@ -146,7 +146,7 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
           !newRelationships.some(newRelationship => relationshipEquals(newRelationship, oldRelationship)),
       );
 
-      // calcualte relationships that only need a foreign key recreation from the ones that are added
+      // calculate relationships that only need a foreign key recreation from the ones that are added
       // we need both the added and the removed ones here
       const relationshipsToRecreateForeignKeysOnly = addedRelationships
         .filter(addedRelationship =>

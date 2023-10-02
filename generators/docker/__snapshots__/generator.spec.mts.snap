@@ -473,14 +473,14 @@ services:
     extends:
       file: ./mssql.yml
       service: mssql
-  memcached:
-    extends:
-      file: ./memcached.yml
-      service: memcached
   keycloak:
     extends:
       file: ./keycloak.yml
       service: keycloak
+  memcached:
+    extends:
+      file: ./memcached.yml
+      service: memcached
 ",
     "stateCleared": "modified",
   },
@@ -602,6 +602,10 @@ services:
     extends:
       file: ./keycloak.yml
       service: keycloak
+  pulsar:
+    extends:
+      file: ./pulsar.yml
+      service: pulsar
   consul:
     extends:
       file: ./consul.yml
@@ -610,10 +614,6 @@ services:
     extends:
       file: ./consul.yml
       service: consul-config-loader
-  pulsar:
-    extends:
-      file: ./pulsar.yml
-      service: pulsar
 ",
     "stateCleared": "modified",
   },
@@ -1088,6 +1088,10 @@ services:
     extends:
       file: ./keycloak.yml
       service: keycloak
+  pulsar:
+    extends:
+      file: ./pulsar.yml
+      service: pulsar
   consul:
     extends:
       file: ./consul.yml
@@ -1096,10 +1100,6 @@ services:
     extends:
       file: ./consul.yml
       service: consul-config-loader
-  pulsar:
-    extends:
-      file: ./pulsar.yml
-      service: pulsar
 ",
     "stateCleared": "modified",
   },
@@ -1216,14 +1216,14 @@ services:
     extends:
       file: ./mysql.yml
       service: mysql
-  redis:
-    extends:
-      file: ./redis.yml
-      service: redis
   pulsar:
     extends:
       file: ./pulsar.yml
       service: pulsar
+  redis:
+    extends:
+      file: ./redis.yml
+      service: redis
 ",
     "stateCleared": "modified",
   },

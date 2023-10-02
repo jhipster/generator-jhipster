@@ -17,36 +17,34 @@
  * limitations under the License.
  */
 import { clientApplicationTemplatesBlock } from '../client/support/files.mjs';
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 
 export const entityFiles = {
   client: [
-    {
-      ...clientApplicationTemplatesBlock('shared/model/'),
-      path: `${CLIENT_MAIN_SRC_DIR}app/entities/_entityFolder/`,
-      templates: ['_entityModel.model.ts'],
-    },
+    clientApplicationTemplatesBlock({
+      relativePath: 'shared/model/',
+      templates: ['_entityModel_.model.ts'],
+    }),
     {
       condition: generator => !generator.embedded,
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'entities/_entityFolder/_entityFile-details.vue',
-        'entities/_entityFolder/_entityFile-details.component.ts',
-        'entities/_entityFolder/_entityFile-details.component.spec.ts',
-        'entities/_entityFolder/_entityFile.vue',
-        'entities/_entityFolder/_entityFile.component.ts',
-        'entities/_entityFolder/_entityFile.component.spec.ts',
-        'entities/_entityFolder/_entityFile.service.ts',
-        'entities/_entityFolder/_entityFile.service.spec.ts',
+        'entities/_entityFolder_/_entityFile_-details.vue',
+        'entities/_entityFolder_/_entityFile_-details.component.ts',
+        'entities/_entityFolder_/_entityFile_-details.component.spec.ts',
+        'entities/_entityFolder_/_entityFile_.vue',
+        'entities/_entityFolder_/_entityFile_.component.ts',
+        'entities/_entityFolder_/_entityFile_.component.spec.ts',
+        'entities/_entityFolder_/_entityFile_.service.ts',
+        'entities/_entityFolder_/_entityFile_.service.spec.ts',
       ],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'entities/_entityFolder/_entityFile-update.vue',
-        'entities/_entityFolder/_entityFile-update.component.ts',
-        'entities/_entityFolder/_entityFile-update.component.spec.ts',
+        'entities/_entityFolder_/_entityFile_-update.vue',
+        'entities/_entityFolder_/_entityFile_-update.component.ts',
+        'entities/_entityFolder_/_entityFile_-update.component.spec.ts',
       ],
     },
   ],

@@ -65,8 +65,8 @@ describe(`generator - ${generator}`, () => {
         .withGenerators([
           [
             class extends MavenGenerator {
-              get [MavenGenerator.PREPARING]() {
-                return super.preparing;
+              constructor(args, options, features) {
+                super(args, options, { ...features, sbsBlueprint: true });
               }
 
               get [MavenGenerator.POST_WRITING]() {

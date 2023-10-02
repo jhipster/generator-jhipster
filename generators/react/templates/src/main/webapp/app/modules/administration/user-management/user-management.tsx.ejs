@@ -38,11 +38,11 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 export const UserManagement = () => {
   const dispatch = useAppDispatch();
 
-  const location = useLocation();
+  const pageLocation = useLocation();
   const navigate = useNavigate();
 
   const [pagination, setPagination] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(location, ITEMS_PER_PAGE, 'id'), location.search)
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search)
   );
 
   const getUsersFromProps = () => {
@@ -54,8 +54,8 @@ export const UserManagement = () => {
       })
     );
     const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
-    if (location.search !== endURL) {
-      navigate(`${location.pathname}${endURL}`);
+    if (pageLocation.search !== endURL) {
+      navigate(`${pageLocation.pathname}${endURL}`);
     }
   };
 
@@ -64,7 +64,7 @@ export const UserManagement = () => {
   }, [pagination.activePage, pagination.order, pagination.sort]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(pageLocation.search);
     const page = params.get('page');
     const sortParam = params.get(SORT);
     if (page && sortParam) {
@@ -76,7 +76,7 @@ export const UserManagement = () => {
         order: sortSplit[1]
       });
     }
-  }, [location.search]);
+  }, [pageLocation.search]);
 
   const sort = p => () =>
     setPagination({

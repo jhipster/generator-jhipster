@@ -23,7 +23,7 @@ FROM mariadb:11.1.2
 FROM mongo:7.0.1
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:7.2.0
+FROM couchbase/server:7.2.2
 LABEL ALIAS=couchbase
 
 FROM cassandra:3.11.14
@@ -49,10 +49,10 @@ LABEL ALIAS=zookeeper
 FROM apachepulsar/pulsar:3.0.1
 LABEL ALIAS=pulsar
 
-FROM sonarqube:10.2.0-community
+FROM sonarqube:10.2.1-community
 LABEL ALIAS=sonar
 
-FROM docker.io/bitnami/consul:1.16.1
+FROM docker.io/bitnami/consul:1.16.2
 LABEL ALIAS=consul
 
 FROM prom/prometheus:v2.47.0
@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:10.1.1
+FROM grafana/grafana:10.1.4
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
