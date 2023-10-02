@@ -20,7 +20,9 @@ import chalk from 'chalk';
 import _ from 'lodash';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 
-const { kebabCase } = _;
+const { kebabCase, intersection } = _;
+
+const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values);
 
 const command: JHipsterCommandDefinition = {
   options: {},
@@ -77,18 +79,16 @@ const command: JHipsterCommandDefinition = {
     },
     insideDocker: {
       prompt: {
-        // when: this.pipeline === 'jenkins',
-        // when: this.pipeline === 'gitlab',
+        when: includesValue('ciCd', ['jenkins', 'gitlab']),
         type: 'confirm',
         message: 'Would you like to perform the build in a Docker container ?',
-        // message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container) ?',
         default: false,
       },
       scope: 'generator',
     },
     sendBuildToGitlab: {
       prompt: {
-        // when: this.pipeline === 'jenkins',
+        when: includesValue('ciCd', ['jenkins']),
         type: 'confirm',
         message: 'Would you like to send build status to GitLab ?',
         default: false,
@@ -97,7 +97,7 @@ const command: JHipsterCommandDefinition = {
     },
     artifactorySnapshotsId: {
       prompt: {
-        // when: response => response.ciCdIntegrations.includes('deploy'),
+        when: includesValue('ciCdIntegrations', ['deploy']),
         type: 'input',
         message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
       },
@@ -106,7 +106,7 @@ const command: JHipsterCommandDefinition = {
     },
     artifactorySnapshotsUrl: {
       prompt: {
-        // when: response => response.ciCdIntegrations.includes('deploy'),
+        when: includesValue('ciCdIntegrations', ['deploy']),
         type: 'input',
         message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
       },
@@ -115,7 +115,7 @@ const command: JHipsterCommandDefinition = {
     },
     artifactoryReleasesId: {
       prompt: {
-        // when: response => response.ciCdIntegrations.includes('deploy'),
+        when: includesValue('ciCdIntegrations', ['deploy']),
         type: 'input',
         message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
       },
@@ -124,7 +124,7 @@ const command: JHipsterCommandDefinition = {
     },
     artifactoryReleasesUrl: {
       prompt: {
-        // when: response => response.ciCdIntegrations.includes('deploy'),
+        when: includesValue('ciCdIntegrations', ['deploy']),
         type: 'input',
         message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
       },
@@ -133,7 +133,7 @@ const command: JHipsterCommandDefinition = {
     },
     sonarName: {
       prompt: {
-        // when: response => this.pipeline === 'jenkins' && response.ciCdIntegrations.includes('sonar'),
+        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['ciCdIntegrations'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
       },
@@ -142,7 +142,7 @@ const command: JHipsterCommandDefinition = {
     },
     sonarUrl: {
       prompt: {
-        // when: response => this.pipeline !== 'jenkins' && response.ciCdIntegrations.includes('sonar'),
+        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['ciCdIntegrations'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
       },
@@ -151,7 +151,7 @@ const command: JHipsterCommandDefinition = {
     },
     sonarOrga: {
       prompt: {
-        // when: response => this.pipeline !== 'jenkins' && response.ciCdIntegrations.includes('sonar'),
+        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['ciCdIntegrations'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
       },
@@ -159,7 +159,7 @@ const command: JHipsterCommandDefinition = {
     },
     dockerImage: {
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
-        // when: response => this.pipeline === 'github' && response.ciCdIntegrations.includes('publishDocker'),
+        when: answers => includesValue('ciCd', ['github'])(answers) && includesValue('ciCdIntegrations', ['publishDocker'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Docker*')}: what is the name of the image ?`,
         default: () => `jhipster/${config.dasherizedBaseName}`,
@@ -168,10 +168,9 @@ const command: JHipsterCommandDefinition = {
     },
     herokuAppName: {
       prompt: {
-        // when: response => response.ciCdIntegrations.includes('heroku'),
+        when: includesValue('ciCdIntegrations', ['heroku']),
         type: 'input',
         message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
-        // default: `${this.herokuAppName}`,
       },
       scope: 'generator',
       default: config => kebabCase(config.jhipsterConfigWithDefaults.baseName),
