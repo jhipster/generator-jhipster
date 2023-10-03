@@ -37,7 +37,7 @@
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.18.2",
     "@typescript-eslint/eslint-plugin": "6.7.4",
-    "@typescript-eslint/parser": "6.7.3",
+    "@typescript-eslint/parser": "6.7.4",
     "autoprefixer": "10.4.16",
     "browser-sync": "2.29.3",
     "browser-sync-webpack-plugin": "2.3.0",
