@@ -290,7 +290,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     }
 
     Object.entries(options ?? {})
-      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]))
+      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]) as any)
       .forEach(([optionName, optionDesc]) => {
         if (!optionDesc?.type || !optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
         let optionValue;
@@ -314,6 +314,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
           } else {
             throw new Error(`Scope ${optionDesc.scope} not supported`);
           }
+        } else if (optionDesc.default && optionDesc.scope === 'generator' && this[optionName] === undefined) {
+          this[optionName] = optionDesc.default;
         }
       });
   }

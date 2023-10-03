@@ -159,10 +159,13 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
     }
 );
 
+export type JHispterChoices = string[] | { value: string; name: string }[];
+
 export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
+  choices?: JHispterChoices;
 };
 
 export type ValidationResult = {
@@ -185,7 +188,7 @@ export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope
 
 export type ConfigSpec = {
   description?: string;
-  choices?: string[] | { value: string; name: string }[];
+  choices?: JHispterChoices;
 
   cli?: SetOptional<CliOptionSpec, 'name'>;
   argument?: JHipsterArgumentConfig;

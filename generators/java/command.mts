@@ -28,6 +28,25 @@ const command: JHipsterCommandDefinition = {
     packageInfoFile: {
       description: 'write package-info.java file for every package',
       type: Boolean,
+      default: true,
+      scope: 'generator',
+      hide: true,
+    },
+    generateEntities: {
+      type: Boolean,
+      default: true,
+      scope: 'generator',
+      hide: true,
+    },
+    useJakartaValidation: {
+      type: Boolean,
+      default: true,
+      scope: 'generator',
+      hide: true,
+    },
+    generateEnums: {
+      type: Boolean,
+      default: true,
       scope: 'generator',
       hide: true,
     },
