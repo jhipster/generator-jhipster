@@ -21,6 +21,7 @@ import _ from 'lodash';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 import {
+  JAVA_VERSION,
   MAIN_DIR,
   SERVER_MAIN_RES_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -66,6 +67,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
+        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.backendType = this.jhipsterConfig.backendType ?? 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
