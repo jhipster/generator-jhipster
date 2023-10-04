@@ -184,12 +184,8 @@ paginate Operation, JobHistory, Employee with infinite-scroll
 
 service TheLabel, Employee, Department, Region with serviceClass
 service BankAccount, Location, Country with serviceImpl
-secure all except Country, Region with roles {
+secure all with roles {
   ROLE_ADMIN allows (get, put, post, delete)
   ROLE_USER allows (get, put, post, delete)
-}
-secure Country,Region with roles {
-  ROLE_ADMIN allows (get, put, post, delete)
-  ROLE_USER allows ()
 }
 
