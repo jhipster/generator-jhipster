@@ -81,7 +81,7 @@ entity Job {
 
 /**
  * The Employee entity.
- * Second line in javadoc.
+ * Second line in documentation.
  */
 entity Employee {
   /**

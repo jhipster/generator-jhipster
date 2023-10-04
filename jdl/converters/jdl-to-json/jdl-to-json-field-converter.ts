@@ -62,13 +62,13 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
     };
     const comment = formatComment(jdlField.comment);
     if (comment) {
-      fieldData.javadoc = comment;
+      fieldData.documentation = comment;
     }
     if (jdlObject.hasEnum(jdlField.type)) {
       fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType).getValuesAsString();
       const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType).comment;
       if (fieldTypeComment) {
-        fieldData.fieldTypeJavadoc = fieldTypeComment;
+        fieldData.fieldTypeDocumentation = fieldTypeComment;
       }
       const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType).getValueJavadocs();
       if (fieldValuesJavadocs && Object.keys(fieldValuesJavadocs).length > 0) {

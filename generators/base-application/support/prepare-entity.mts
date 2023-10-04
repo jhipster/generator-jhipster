@@ -519,7 +519,7 @@ export function preparePostEntityCommonDerivedProperties(entity: Entity) {
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
   // TODO move to server generator
-  entity.anyFieldHasDocumentation = entity.fields.some(({ javadoc }) => javadoc);
+  entity.anyFieldHasDocumentation = entity.fields.some(({ documentation }) => documentation);
 
   entity.anyFieldIsZonedDateTime = fieldsType.includes(ZONED_DATE_TIME);
   entity.anyFieldIsInstant = fieldsType.includes(INSTANT);

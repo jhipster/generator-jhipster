@@ -13,7 +13,7 @@
       "relationshipValidateRules": "required",
       "relationshipName": "employee",
       "otherEntityName": "employee",
-      "javadoc": "A relationship",
+      "documentation": "A relationship",
       "otherEntityRelationshipName": "department"
     },
     {

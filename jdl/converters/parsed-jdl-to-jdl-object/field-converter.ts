@@ -37,8 +37,8 @@ export function convertField(field): JDLField {
     name,
     type: field.type,
   });
-  if (field.javadoc) {
-    jdlField.comment = formatComment(field.javadoc);
+  if (field.documentation) {
+    jdlField.comment = formatComment(field.documentation);
   }
   return jdlField;
 }

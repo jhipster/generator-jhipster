@@ -91,7 +91,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
       convertedRelationship.relationshipValidateRules = REQUIRED;
     }
     if (relationshipToConvert.commentInFrom) {
-      convertedRelationship.javadoc = relationshipToConvert.commentInFrom;
+      convertedRelationship.documentation = relationshipToConvert.commentInFrom;
     }
     const splitField: any = extractField(relationshipToConvert.injectedFieldInFrom);
     convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
@@ -122,7 +122,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
       convertedRelationship.relationshipValidateRules = REQUIRED;
     }
     if (relationshipToConvert.commentInTo) {
-      convertedRelationship.javadoc = relationshipToConvert.commentInTo;
+      convertedRelationship.documentation = relationshipToConvert.commentInTo;
     }
     const splitField: any = extractField(relationshipToConvert.injectedFieldInTo);
     convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);

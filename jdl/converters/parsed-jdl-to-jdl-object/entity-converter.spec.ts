@@ -36,7 +36,7 @@ describe('jdl - EntityConverter', () => {
           [
             {
               name: 'A',
-              javadoc: '/** No comment */',
+              documentation: '/** No comment */',
             },
             {
               name: 'B',

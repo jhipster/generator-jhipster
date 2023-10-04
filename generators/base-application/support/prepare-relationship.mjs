@@ -261,7 +261,13 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
     relationship,
     owned: relationship.ownerSide,
     collection,
-    doc: relationship.javaDoc,
+    doc: relationship.documentation,
+    get propertyJavadoc() {
+      return relationship.relationshipJavadoc;
+    },
+    get propertyApiDescription() {
+      return relationship.relationshipApiDescription;
+    },
     name,
     nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
     get type() {
