@@ -32,7 +32,7 @@ class JSONEntity {
    *        - entityName, the entity name (mandatory)
    *        - fields, a field iterable
    *        - relationships, a relationship iterable
-   *        - javadoc,
+   *        - documentation,
    *        - entityTableName, defaults to the snake-cased entity name,
    *        - dto, defaults to 'no',
    *        - pagination, defaults to 'no',
@@ -51,7 +51,7 @@ class JSONEntity {
     this.name = merged.name;
     this.fields = merged.fields;
     this.relationships = merged.relationships;
-    this.javadoc = merged.javadoc;
+    this.documentation = merged.documentation;
     this.entityTableName = merged.entityTableName;
     this.dto = merged.dto;
     this.pagination = merged.pagination;

@@ -8,7 +8,7 @@ describe('base-application - support - enum', () => {
 
       before(() => {
         const clientRootFolder = 'root';
-        const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeJavadoc: 'enum comment' };
+        const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeDocumentation: 'enum comment' };
         enumInfo = getEnumInfo(field, clientRootFolder);
       });
 

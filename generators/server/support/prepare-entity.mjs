@@ -24,6 +24,7 @@ import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js'
 import { normalizePathEnd } from '../../base/support/index.mjs';
 import { hibernateSnakeCase } from './string.mjs';
 import { getDatabaseTypeData } from './database.mjs';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.mjs';
 
 const { ELASTICSEARCH } = searchEngineTypes;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
@@ -43,6 +44,11 @@ export default function prepareEntity(entity) {
   entity.entityAbsolutePackage = entityAbsolutePackage;
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
+
+  if (entity.documentation) {
+    entity.entityJavadoc = formatDocAsJavaDoc(entity.documentation);
+    entity.entityApiDescription = formatDocAsApiDescription(entity.documentation);
+  }
 
   if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entity.jhiPrefix) {
     entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;
@@ -90,7 +96,7 @@ export function preparePostEntityServerDerivedProperties(entity) {
   entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
 
   entity.importApiModelProperty =
-    entity.relationships.some(relationship => relationship.javadoc) || entity.fields.some(field => field.javadoc);
+    entity.relationships.some(relationship => relationship.documentation) || entity.fields.some(field => field.documentation);
 
   entity.uniqueEnums = {};
 

@@ -305,12 +305,12 @@ _%>
            <%- include('react_validators'); %>
         />
   <%_ } _%>
-  <%_ if (field.javadoc) { _%>
+  <%_ if (field.documentation) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">
     <%_ if (enableTranslation) { _%>
             <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
     <%_ } else { _%>
-            <%= field.javadoc %>
+            <%= field.documentation %>
     <%_ } _%>
           </UncontrolledTooltip>
   <%_ } _%>

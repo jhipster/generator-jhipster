@@ -29,8 +29,6 @@ import {
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
-  formatDocAsApiDescription,
-  formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generateKeyStore,
@@ -1006,39 +1004,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       entityTableName = `${jhiTablePrefix}_${entityTableName}`;
     }
     return entityTableName;
-  }
-
-  /**
-   * @private
-   * Format As Field Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns field javadoc
-   */
-  formatAsFieldJavadoc(text) {
-    return formatDocAsJavaDoc(text, 4);
-  }
-
-  /**
-   * @private
-   * Format As Api Description
-   *
-   * @param {string} text - text to format
-   * @returns formatted api description
-   */
-  formatAsApiDescription(text) {
-    return formatDocAsApiDescription(text);
-  }
-
-  /**
-   * @private
-   * Format As Class Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns class javadoc
-   */
-  formatAsClassJavadoc(text) {
-    return formatDocAsJavaDoc(text, 0);
   }
 
   /**

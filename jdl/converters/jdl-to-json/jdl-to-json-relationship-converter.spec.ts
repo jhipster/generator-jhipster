@@ -293,7 +293,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           jestExpect(relationshipsForA).toMatchInlineSnapshot(`
             [
               {
-                "javadoc": "A to B",
+                "documentation": "A to B",
                 "otherEntityName": "b",
                 "otherEntityRelationshipName": "a",
                 "relationshipName": "b",
@@ -305,7 +305,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           jestExpect(relationshipsForB).toMatchInlineSnapshot(`
             [
               {
-                "javadoc": "A to B but in the destination",
+                "documentation": "A to B but in the destination",
                 "otherEntityName": "a",
                 "otherEntityRelationshipName": "b",
                 "relationshipName": "a",

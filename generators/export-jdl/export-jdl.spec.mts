@@ -20,7 +20,7 @@ const files = {
       {
         fieldName: 'countryId',
         fieldType: 'Long',
-        javadoc: 'The country Id',
+        documentation: 'The country Id',
       },
       {
         fieldName: 'countryName',
@@ -106,7 +106,7 @@ const files = {
       },
       {
         fieldName: 'firstName',
-        javadoc: 'The firstname attribute.',
+        documentation: 'The firstname attribute.',
         fieldType: 'String',
       },
       {
@@ -138,7 +138,7 @@ const files = {
       },
     ],
     changelogDate: '20160926083805',
-    javadoc: 'The Employee entity.',
+    documentation: 'The Employee entity.',
     entityTableName: 'emp',
     dto: 'mapstruct',
     pagination: 'infinite-scroll',

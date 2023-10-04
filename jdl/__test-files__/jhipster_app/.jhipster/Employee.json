@@ -3,7 +3,7 @@
     {
       "relationshipName": "department",
       "otherEntityName": "department",
-      "javadoc": "Another side of the same relationship",
+      "documentation": "Another side of the same relationship",
       "relationshipType": "many-to-one",
       "otherEntityField": "foo"
     },
@@ -27,7 +27,7 @@
     },
     {
       "fieldName": "firstName",
-      "javadoc": "The firstname attribute.",
+      "documentation": "The firstname attribute.",
       "fieldType": "String"
     },
     {
@@ -59,7 +59,7 @@
     }
   ],
   "changelogDate": "20160926083805",
-  "javadoc": "The Employee entity.",
+  "documentation": "The Employee entity.",
   "jpaMetamodelFiltering": true,
   "entityTableName": "emp",
   "dto": "mapstruct",

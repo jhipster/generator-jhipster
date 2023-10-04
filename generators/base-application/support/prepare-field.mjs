@@ -375,7 +375,13 @@ export function fieldToReference(entity, field, pathPrefix = []) {
     field,
     multiple: false,
     owned: true,
-    doc: field.javadoc,
+    doc: field.documentation,
+    get propertyJavadoc() {
+      return field.fieldJavadoc;
+    },
+    get propertyApiDescription() {
+      return field.fieldApiDescription;
+    },
     label: field.fieldNameHumanized,
     name: field.fieldName,
     type: field.fieldType,
