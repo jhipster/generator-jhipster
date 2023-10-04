@@ -68,7 +68,7 @@ describe('jdl - JHipsterEntityExporter', () => {
               ],
               relationships: [],
               changelogDate: '42',
-              javadoc: '',
+              documentation: '',
               entityTableName: 'a',
               dto: NO_DTO,
               pagination: NO_PAGINATION,
@@ -127,7 +127,7 @@ describe('jdl - JHipsterEntityExporter', () => {
               ],
               relationships: [],
               changelogDate: '42',
-              javadoc: '',
+              documentation: '',
               entityTableName: 'a',
               dto: NO_DTO,
               pagination: NO_PAGINATION,
@@ -152,6 +152,7 @@ describe('jdl - JHipsterEntityExporter', () => {
   {
     "applications": [],
     "changelogDate": "42",
+    "documentation": "",
     "dto": "no",
     "entityTableName": "a",
     "fields": [
@@ -162,7 +163,6 @@ describe('jdl - JHipsterEntityExporter', () => {
       },
     ],
     "fluentMethods": true,
-    "javadoc": "",
     "jpaMetamodelFiltering": false,
     "name": "A",
     "pagination": "no",

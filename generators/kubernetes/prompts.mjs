@@ -131,10 +131,8 @@ export async function askForIngressDomain() {
   } else if (istio) {
     // If it's Istio, and no previous domain is configured, try to determine the default value
     try {
-      if (!this.skipChecks) {
-        const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
-        defaultValue = `${istioIngressIp}.nip.io`;
-      }
+      const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
+      defaultValue = `${istioIngressIp}.nip.io`;
     } catch (ex) {
       istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
     }

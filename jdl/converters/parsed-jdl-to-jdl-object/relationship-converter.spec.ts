@@ -40,13 +40,13 @@ describe('jdl - RelationshipConverter', () => {
                   name: 'Source',
                   injectedField: 'destination',
                   required: true,
-                  javadoc: '/**\n * Required\n */',
+                  documentation: '/**\n * Required\n */',
                 },
                 to: {
                   name: 'Destination',
                   injectedField: 'source',
                   required: false,
-                  javadoc: '/**\n * Not required\n */',
+                  documentation: '/**\n * Not required\n */',
                 },
                 cardinality: 'one-to-many',
                 options: {
@@ -101,12 +101,12 @@ describe('jdl - RelationshipConverter', () => {
                 from: {
                   name: 'Source',
                   required: true,
-                  javadoc: '/**\n * Required\n */',
+                  documentation: '/**\n * Required\n */',
                 },
                 to: {
                   name: 'Destination',
                   required: false,
-                  javadoc: '/**\n * Not required\n */',
+                  documentation: '/**\n * Not required\n */',
                 },
                 cardinality: 'one-to-many',
                 options: {

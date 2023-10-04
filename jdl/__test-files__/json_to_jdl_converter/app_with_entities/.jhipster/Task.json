@@ -24,6 +24,6 @@
   "dto": "no",
   "pagination": "no",
   "service": "no",
-  "javadoc": "",
+  "documentation": "",
   "entityTableName": "task"
 }

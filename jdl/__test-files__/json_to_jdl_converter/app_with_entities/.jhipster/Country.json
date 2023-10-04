@@ -21,6 +21,6 @@
   "dto": "no",
   "pagination": "pager",
   "service": "no",
-  "javadoc": "",
+  "documentation": "",
   "entityTableName": "country"
 }

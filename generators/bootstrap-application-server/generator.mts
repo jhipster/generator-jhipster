@@ -41,6 +41,7 @@ import {
   hibernateSnakeCase,
   loadServerConfig,
   loadDerivedServerConfig,
+  prepareRelationship,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
@@ -181,6 +182,18 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.preparingEachEntityField;
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        prepareRelationship({ entity, relationship });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {
