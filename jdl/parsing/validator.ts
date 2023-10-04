@@ -521,6 +521,18 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
     });
   }
 
+  rolePropList(context) {
+    super.rolePropList(context);
+    if (context.NAME && context.NAME.length > 0) {
+      context.NAME.forEach(nameToken => {
+        const propValue = nameToken.image;
+        if (propValue) {
+          this.checkNameSyntax(propValue, ENUM_PROP_VALUE_PATTERN, 'role property value');
+        }
+      });
+    }
+  }
+
   entityList(context) {
     super.entityList(context);
     if (context.NAME) {

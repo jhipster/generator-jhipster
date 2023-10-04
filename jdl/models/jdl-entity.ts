@@ -20,11 +20,14 @@
 import { merge } from '../utils/object-utils.js';
 import getTableNameFromEntityName from '../jhipster/entity-table-name-creator.js';
 import JDLField from './jdl-field.js';
+import { JDLSecure } from './index.mjs';
+import { IJDLSecure } from './jdl-secure.js';
 
 export default class JDLEntity {
   name: any;
   tableName: any;
   fields: Record<string, JDLField>;
+  secure?: IJDLSecure;
   comment: any;
 
   constructor(args) {
@@ -36,6 +39,11 @@ export default class JDLEntity {
     this.tableName = merged.tableName || merged.name;
     this.fields = merged.fields;
     this.comment = merged.comment;
+    if (merged.secure) {
+      this.secure = merged.secure;
+    } else {
+      delete this.secure;
+    }
   }
 
   /**
@@ -51,6 +59,10 @@ export default class JDLEntity {
       throw new Error("Can't add nil field to the JDL entity.");
     }
     this.fields[field.name] = field;
+  }
+
+  addSecure(secure: IJDLSecure) {
+    this.secure = new JDLSecure(secure);
   }
 
   forEachField(functionToApply: (field: JDLField, index: number, array: JDLField[]) => void) {

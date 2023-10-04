@@ -52,6 +52,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       enums: [],
       options: {},
       useOptions: [],
+      secure: [],
     };
 
     if (context.constantDeclaration) {
@@ -79,6 +80,9 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
 
     if (context.enumDeclaration) {
       ast.enums = context.enumDeclaration.map(this.visit, this);
+    }
+    if (context.secureDeclaration) {
+      ast.secure = context.secureDeclaration.map(this.visit, this);
     }
 
     if (context.unaryOptionDeclaration) {
@@ -161,6 +165,150 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       body,
       javadoc,
     };
+  }
+
+  secureDeclaration(context) {
+    // extract list of entities
+    const contextName = 'secureEntityList';
+
+    if (!context[contextName]) {
+      return {};
+    }
+
+    const { entityNames, excludedNames } = this.visit(context.secureEntityList);
+    let securityType = '';
+    let roles = [];
+    let privileges = [];
+    let organizationalSecurity = { resource: null };
+    let parentPrivileges = { parent: null, field: null };
+    let relPrivileges = { fromEntity: null, fromField: null, toEntity: null, toField: null };
+
+    if (context.rolesSecurity) {
+      securityType = 'roles';
+      roles = this.visit(context.rolesSecurity);
+    }
+
+    if (context.privilegesSecurity) {
+      securityType = 'privileges';
+      privileges = this.visit(context.privilegesSecurity);
+    }
+
+    if (context.organizationalSecurity) {
+      securityType = 'organizationalSecurity';
+      organizationalSecurity = this.visit(context.organizationalSecurity);
+    }
+
+    if (context.parentPrivilegesSecurity) {
+      securityType = 'parentPrivileges';
+      parentPrivileges = this.visit(context.parentPrivilegesSecurity);
+    }
+
+    if (context.relPrivilegesSecurity) {
+      securityType = 'relPrivileges';
+      relPrivileges = this.visit(context.relPrivilegesSecurity);
+    }
+
+    return {
+      entityNames,
+      excludedNames,
+      securityType,
+      roles,
+      privileges,
+      parentPrivileges,
+      relPrivileges,
+      organizationalSecurity,
+    };
+  }
+
+  rolesSecurity(context) {
+    // return _.map(context.roleDefinition, element => this.visit(element));
+    return context.roleDefinition.map(element => this.visit(element));
+  }
+
+  privilegesSecurity(context) {
+    // return _.map(context.privDefinition, element => this.visit(element));
+    return context.privDefinition.map(element => this.visit(element));
+  }
+
+  organizationalSecurity(context) {
+    const res = context.NAME[0].image;
+    return { resource: res };
+  }
+
+  resourceDefinition(context) {
+    const res = context.NAME[0].image;
+    return { resource: res };
+  }
+
+  parentPrivilegesSecurity(context) {
+    // return _.map(context.parentPriveleges, element => this.visit(element));
+
+    const ent1 = context.parentPrivileges[0].children.NAME[0].image;
+    const fld = context.parentPrivileges[0].children.NAME[1].image;
+
+    return { parent: ent1, field: fld };
+  }
+
+  relPrivilegesSecurity(context) {
+    return this.relPrivileges(context.relPrivileges[0].children);
+  }
+
+  roleDefinition(context) {
+    const role = context.NAME[0].image;
+    let actionList = [];
+    if (context.rolePropList) {
+      // actionList = context.enumPropList[0].children.NAME.map(nameToken => nameToken.image);
+      if (context.rolePropList[0].children.NAME) {
+        actionList = context.rolePropList[0].children.NAME.map(nameToken => nameToken.image.toUpperCase());
+      }
+    }
+
+    return { role, actionList };
+  }
+
+  privDefinition(context) {
+    const action = context.NAME[0].image.toLowerCase();
+    let privList = [];
+    if (context.rolePropList) {
+      // privList = context.enumPropList[0].children.NAME.map(nameToken => nameToken.image);
+      privList = context.rolePropList[0].children.NAME.map(nameToken => nameToken.image);
+    }
+
+    return { action, privList };
+  }
+
+  parentPrivileges(context) {
+    const ent1 = context.NAME[0].image;
+    const fld = context.NAME[1].image;
+
+    return { parent: ent1, field: fld };
+  }
+
+  relPrivileges(context) {
+    const ent1 = context.NAME[0].image;
+    const fld1 = context.NAME[1].image;
+    const ent2 = context.NAME[2].image;
+    const fld2 = context.NAME[3].image;
+
+    return { fromEntity: ent1, fromField: fld1, toEntity: ent2, toField: fld2 };
+  }
+
+  secureEntityList(context) {
+    let entityList: any[] = [];
+    if (context.NAME) {
+      entityList = context.NAME.map(nameToken => nameToken.image);
+    }
+
+    const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
+    // if (context.ALL || context.STAR) {
+    if (context.STAR || entityOnlyListContainsAll) {
+      entityList = ['*'];
+    }
+    let exclusionList: any[] = [];
+    if (context.exclusion) {
+      exclusionList = context.exclusion[0].children.NAME.map(nameToken => nameToken.image);
+    }
+    return { entityNames: deduplicate(entityList), excludedNames: deduplicate(exclusionList) };
   }
 
   annotationDeclaration(context) {
@@ -370,6 +518,23 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     }
     if (context.enumPropValueWithQuotes) {
       prop.value = context.enumPropValueWithQuotes[0].image.replace(/"/g, '');
+    }
+    return prop;
+  }
+
+  rolePropList(context) {
+    return context.roleProp.map(this.visit, this);
+  }
+
+  roleProp(context) {
+    const prop: any = {
+      key: context.rolePropKey[0].image,
+    };
+    if (context.rolePropValue) {
+      prop.value = context.rolePropValue[0].image;
+    }
+    if (context.enumPropValueWithQuotes) {
+      prop.value = context.rolePropValueWithQuotes[0].image.replace(/"/g, '');
     }
     return prop;
   }

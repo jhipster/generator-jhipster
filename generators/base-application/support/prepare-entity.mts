@@ -21,9 +21,9 @@ import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.mjs';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.mjs';
-import { createFaker, parseChangelog, stringHashCode, upperFirstCamelCase, getMicroserviceAppName } from '../../base/support/index.mjs';
+import { createFaker, getMicroserviceAppName, parseChangelog, stringHashCode, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { fieldToReference } from './prepare-field.mjs';
-import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
+import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.mjs';
 import {
   applicationTypes,
   authenticationTypes,
@@ -36,6 +36,7 @@ import {
 import { fieldIsEnum } from './field-utils.mjs';
 
 import { Entity } from '../types/index.mjs';
+import { JDLSecurityType } from '../../../jdl/models/jdl-security-type.js';
 
 const { sortedUniq, intersection } = _;
 
@@ -260,8 +261,211 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     return Object.fromEntries(fieldEntries);
   };
   _derivedProperties(entityWithConfig);
+  defineEntitySecurity(entityWithConfig);
 
   return entityWithConfig;
+}
+
+/**
+ * Resets the security settings for the given entity.
+ *
+ * @param {any} entityWithConfig - The entity with its security configuration.
+ * @return {void} - Returns nothing.
+ */
+function resetSecurity(entityWithConfig: any) {
+  entityWithConfig.hasSecurity = false;
+  entityWithConfig.hasRolesSecurity = false;
+  entityWithConfig.hasOrganizationalSecurity = false;
+  entityWithConfig.hasPrivilegeSecurity = false;
+  entityWithConfig.hasRelationSecurity = false;
+  entityWithConfig.hasParentSecurity = false;
+}
+
+/**
+ * Defines role based security for an entity.
+ *
+ * @param {any} entityWithConfig - The entity with security configuration.
+ */
+function defineRoleBasedSecurity(entityWithConfig: any) {
+  entityWithConfig.hasSecurity = true;
+  entityWithConfig.hasRolesSecurity = true;
+  const allRoles: any[] = [];
+  const allowedRolesAsString: any = { get: [], put: [], post: [], delete: [] };
+  const allowedRoles: any = { get: [], put: [], post: [], delete: [] };
+  for (let i = 0; i < entityWithConfig.secure.roles.length; i++) {
+    const role = `"${entityWithConfig.secure.roles[i].role}"`;
+    allRoles.push(entityWithConfig.secure.roles[i].role);
+    for (let j = 0; j < entityWithConfig.secure.roles[i].actionList.length; j++) {
+      const action = _.lowerCase(entityWithConfig.secure.roles[i].actionList[j]);
+      if (!allowedRolesAsString[action].includes(role)) {
+        allowedRolesAsString[action].push(role);
+        allowedRoles[action].push(entityWithConfig.secure.roles[i].role);
+      }
+    }
+  }
+  const forbiddenRoles: any = {};
+  forbiddenRoles.get = allRoles.filter(item => allowedRoles.get.indexOf(item) < 0);
+  forbiddenRoles.put = allRoles.filter(item => allowedRoles.put.indexOf(item) < 0);
+  forbiddenRoles.post = allRoles.filter(item => allowedRoles.post.indexOf(item) < 0);
+  forbiddenRoles.delete = allRoles.filter(item => allowedRoles.delete.indexOf(item) < 0);
+  entityWithConfig.security.roles = {
+    get: allowedRolesAsString.get.length > 0 ? allowedRolesAsString.get.join(', ') : '"DUMMY_ROLE_NO_ACCESS"',
+    put: allowedRolesAsString.put.length > 0 ? allowedRolesAsString.put.join(', ') : '"DUMMY_ROLE_NO_ACCESS"',
+    post: allowedRolesAsString.post.length > 0 ? allowedRolesAsString.post.join(', ') : '"DUMMY_ROLE_NO_ACCESS"',
+    delete: allowedRolesAsString.delete.length > 0 ? allowedRolesAsString.delete.join(', ') : '"DUMMY_ROLE_NO_ACCESS"',
+  };
+  entityWithConfig.security.allowedRoles = {
+    get: [...allowedRoles.get],
+    put: [...allowedRoles.put],
+    post: [...allowedRoles.post],
+    delete: [...allowedRoles.delete],
+  };
+  entityWithConfig.security.forbiddenRoles = {
+    get: [...forbiddenRoles.get],
+    put: [...forbiddenRoles.put],
+    post: [...forbiddenRoles.post],
+    delete: [...forbiddenRoles.delete],
+  };
+}
+
+/**
+ * Defines privilege-based security for an entity with configuration.
+ *
+ * @param {Object} entityWithConfig - The entity with configuration.
+ * @return {void}
+ */
+function definePrivilegeBasedSecurity(entityWithConfig: any) {
+  entityWithConfig.hasSecurity = true;
+  entityWithConfig.hasPrivilegeSecurity = true;
+  const privileges = {};
+  for (let i = 0; i < entityWithConfig.secure.privileges.length; i++) {
+    const action = _.lowerCase(entityWithConfig.secure.privileges[i].action);
+    if (entityWithConfig.secure.privileges[i].privList.length > 0) {
+      privileges[action] = entityWithConfig.secure.privileges[i].privList
+        .map(x => `"${x}"`)
+        .join(', ')
+        .toUpperCase();
+    }
+  }
+  entityWithConfig.security.privileges = privileges;
+}
+
+/**
+ * Sets the organizational security for the given entity with configuration.
+ *
+ * @param {any} entityWithConfig - The entity object with configuration.
+ * @return {void}
+ */
+function defineOrganizationalSecurity(entityWithConfig: any) {
+  entityWithConfig.hasSecurity = true;
+  entityWithConfig.hasOrganizationalSecurity = true;
+  entityWithConfig.security.organizationalSecurity = entityWithConfig.secure.organizationalSecurity;
+}
+
+/**
+ * Defines parent based security for the given entity.
+ *
+ * @param {any} entityWithConfig - The entity object with configuration.
+ */
+function defineParentBasedSecurity(entityWithConfig: any) {
+  entityWithConfig.hasSecurity = true;
+  entityWithConfig.hasParentSecurity = true;
+  const parentPrivileges = entityWithConfig.secure.parentPrivileges;
+  entityWithConfig.security.parentPrivileges = parentPrivileges;
+  entityWithConfig.security.roles = {
+    get: 'ROLE_ADMIN',
+    put: 'ROLE_ADMIN',
+    post: 'ROLE_ADMIN',
+    delete: 'ROLE_ADMIN',
+  };
+  entityWithConfig.security.parentPrivileges.parentEntityClass = _.upperFirst(parentPrivileges.parent);
+  entityWithConfig.security.parentPrivileges.parentEntityName = parentPrivileges.parent;
+  entityWithConfig.security.parentPrivileges.parentEntityApiUrl = _.kebabCase(_.lowerFirst(pluralize(parentPrivileges.parent)));
+  entityWithConfig.security.parentPrivileges.parentEntityInstance = _.lowerFirst(parentPrivileges.parent);
+  entityWithConfig.security.parentPrivileges.parentInstanceName = _.lowerFirst(parentPrivileges.parent);
+  entityWithConfig.security.parentPrivileges.parentFieldNameUpper = _.upperFirst(parentPrivileges.field);
+  entityWithConfig.security.parentPrivileges.parentFieldName = parentPrivileges.field;
+}
+
+/**
+ * Sets up relational security for the given entity with configuration.
+ *
+ * @param {any} entityWithConfig - The entity with its security configuration.
+ * @return {void}
+ */
+function defineRelationalSecurity(entityWithConfig: any) {
+  entityWithConfig.hasSecurity = true;
+  entityWithConfig.hasRelationSecurity = true;
+  entityWithConfig.security.relPrivileges = entityWithConfig.secure.relPrivileges;
+}
+
+/**
+ * Retrieves the security type associated with the given entity configuration.
+ * @param {any} entityWithConfig - The entity with its configuration.
+ * @return {JDLSecurityType} - The security type of the entity. Returns JDLSecurityType.None if no security type is defined.
+ */
+function getSecurityType(entityWithConfig: any): JDLSecurityType {
+  return entityWithConfig.secure?.securityType || JDLSecurityType.None;
+}
+
+/**
+ * Checks if the given security type is of "None" type.
+ *
+ * @param {JDLSecurityType} securityType - The security type to be checked.
+ * @return {boolean} - True if the security type is "None", false otherwise.
+ */
+function isNoneSecurityType(securityType: JDLSecurityType): boolean {
+  return securityType === JDLSecurityType.None;
+}
+
+/**
+ * Assigns a security type to an entity object and initialize security object on the entity.
+ *
+ * @param {any} entityWithConfig - The entity object with configuration.
+ * @param {JDLSecurityType} securityType - The security type to assign.
+ * @return {void}
+ */
+function assignEntitySecurity(entityWithConfig: any, securityType: JDLSecurityType): void {
+  entityWithConfig.security = {
+    securityType,
+  };
+}
+
+/**
+ * Defines the security for the given entity. Security is defined through 'secure' property in the entity configuration.
+ *
+ * @param {Object} entityWithConfig - The entity with its configuration.
+ * @throws {Error} If the entity has an unknown security type.
+ */
+function defineEntitySecurity(entityWithConfig: any): void {
+  const securityType = getSecurityType(entityWithConfig);
+
+  if (isNoneSecurityType(securityType)) {
+    resetSecurity(entityWithConfig);
+    return;
+  }
+
+  assignEntitySecurity(entityWithConfig, securityType);
+
+  switch (securityType) {
+    case JDLSecurityType.Roles:
+      defineRoleBasedSecurity(entityWithConfig);
+      break;
+    case JDLSecurityType.Privileges:
+      definePrivilegeBasedSecurity(entityWithConfig);
+      break;
+    case JDLSecurityType.OrganizationalSecurity:
+      defineOrganizationalSecurity(entityWithConfig);
+      break;
+    case JDLSecurityType.ParentPrivileges:
+      defineParentBasedSecurity(entityWithConfig);
+      break;
+    case JDLSecurityType.RelPrivileges:
+      defineRelationalSecurity(entityWithConfig);
+      break;
+    default:
+      throw new Error(`Entity ${entityWithConfig.name()} has defined unknown security type: ${securityType}`);
+  }
 }
 
 export function derivedPrimaryKeyProperties(primaryKey) {

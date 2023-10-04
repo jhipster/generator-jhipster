@@ -21,6 +21,8 @@ import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';
 import RelationshipConverter from './jdl-to-json-relationship-converter.js';
 import OptionConverter from './jdl-to-json-option-converter.js';
+import SecureClauseConverter from './jdl-to-json-secure-converter.js';
+import { JDLSecurityType } from '../../models/jdl-security-type.js';
 
 let entities;
 let jdlObject;
@@ -47,6 +49,7 @@ export function convert(args: any = {}) {
   setBasicEntityInformation();
   setFields();
   setRelationships();
+  setSecureClause();
   setApplicationToEntities();
   const entitiesForEachApplication = getEntitiesForEachApplicationMap();
   setOptions(entitiesForEachApplication);
@@ -91,6 +94,15 @@ function setFields() {
   const convertedFields = FieldConverter.convert(jdlObject);
   convertedFields.forEach((entityFields, entityName) => {
     entities[entityName].addFields(entityFields);
+  });
+}
+
+function setSecureClause() {
+  const convertedSecure = SecureClauseConverter.convert(jdlObject.getEntities());
+  convertedSecure.forEach((entitySecure, entityName) => {
+    if (entitySecure && entitySecure.securityType !== JDLSecurityType.None) {
+      entities[entityName].secure = entitySecure;
+    }
   });
 }
 

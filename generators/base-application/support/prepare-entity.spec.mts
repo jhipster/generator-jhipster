@@ -22,6 +22,8 @@ import { formatDateForChangelog } from '../../base/support/index.mjs';
 import { prepareEntityPrimaryKeyForTemplates, entityDefaultConfig } from './prepare-entity.mjs';
 import BaseGenerator from '../../base/index.mjs';
 import { getConfigWithDefaults } from '../../../jdl/jhipster/index.mjs';
+import { prepareEntity } from './index.mjs';
+import { JDLSecurityType, PrivilegeActionType, RoleActionType } from '../../../jdl/models/jdl-security-type.js';
 
 describe('generator - base-application - support - prepareEntity', () => {
   const defaultGenerator = { jhipsterConfig: getConfigWithDefaults() };
@@ -295,6 +297,165 @@ describe('generator - base-application - support - prepareEntity', () => {
             setter: 'setOtherEntity3Uuid',
             getter: 'getOtherEntity3Uuid',
           });
+        });
+      });
+    });
+  });
+
+  describe('prepare entity security', () => {
+    describe('with no security', () => {
+      it('prepareEntity should not add security', () => {
+        const entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+        };
+        const result = prepareEntity(entity, defaultGenerator, 'testApp');
+        expect(result.security).to.be.undefined;
+        expect(result.hasSecurity).to.equal(false);
+        expect(result.hasRolesSecurity).to.equal(false);
+        expect(result.hasOrganizationalSecurity).to.equal(false);
+        expect(result.hasPrivilegeSecurity).to.equal(false);
+        expect(result.hasRelationSecurity).to.equal(false);
+        expect(result.hasParentSecurity).to.equal(false);
+      });
+
+      it('prepareEntity should add role based security', () => {
+        const entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+          secure: {
+            securityType: JDLSecurityType.Roles,
+            roles: [
+              { role: 'ROLE_ALLOWED', actionList: [RoleActionType.Post, RoleActionType.Put, RoleActionType.Get] },
+              { role: 'ROLE_FORBIDDEN', actionList: [RoleActionType.Get] },
+            ],
+          },
+        };
+        const result = prepareEntity(entity, defaultGenerator, 'testApp');
+        expect(result.security).to.exist;
+        expect(result.hasSecurity).to.equal(true);
+        expect(result.hasRolesSecurity).to.equal(true);
+        expect(result.security.securityType).to.equal(JDLSecurityType.Roles);
+        expect(result.security.roles).to.deep.equal({
+          get: '"ROLE_ALLOWED", "ROLE_FORBIDDEN"',
+          put: '"ROLE_ALLOWED"',
+          post: '"ROLE_ALLOWED"',
+          delete: '"DUMMY_ROLE_NO_ACCESS"',
+        });
+        expect(result.security.allowedRoles).to.exist;
+        expect(result.security.allowedRoles).to.deep.equal({
+          delete: [],
+          get: ['ROLE_ALLOWED', 'ROLE_FORBIDDEN'],
+          post: ['ROLE_ALLOWED'],
+          put: ['ROLE_ALLOWED'],
+        });
+        expect(result.security.forbiddenRoles).to.exist;
+        expect(result.security.forbiddenRoles).to.deep.equal({
+          delete: ['ROLE_ALLOWED', 'ROLE_FORBIDDEN'],
+          get: [],
+          post: ['ROLE_FORBIDDEN'],
+          put: ['ROLE_FORBIDDEN'],
+        });
+      });
+
+      it('prepareEntity should add privilege based security', () => {
+        const entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+          secure: {
+            securityType: JDLSecurityType.Privileges,
+            privileges: [{ action: PrivilegeActionType.Read, privList: ['Admin'] }],
+          },
+        };
+        const result = prepareEntity(entity, defaultGenerator, 'testApp');
+        expect(result.security).to.exist;
+        expect(result.hasSecurity).to.equal(true);
+        expect(result.hasPrivilegeSecurity).to.equal(true);
+        expect(result.security.securityType).to.equal(JDLSecurityType.Privileges);
+        expect(result.security.privileges).to.deep.equal({ read: '"ADMIN"' });
+      });
+
+      it('prepareEntity should add organizational security', () => {
+        const entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+          secure: {
+            securityType: JDLSecurityType.OrganizationalSecurity,
+            organizationalSecurity: { resource: 'TestResource' },
+          },
+        };
+        const result = prepareEntity(entity, defaultGenerator, 'testApp');
+        expect(result.security).to.exist;
+        expect(result.hasSecurity).to.equal(true);
+        expect(result.hasOrganizationalSecurity).to.equal(true);
+        expect(result.security.securityType).to.equal(JDLSecurityType.OrganizationalSecurity);
+        expect(result.security.organizationalSecurity).to.deep.equal({ resource: 'TestResource' });
+      });
+
+      it('prepareEntity should add parent based security', () => {
+        const entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+          secure: {
+            securityType: JDLSecurityType.ParentPrivileges,
+            parentPrivileges: { parent: 'TestParent', field: 'TestField' },
+          },
+        };
+        const result = prepareEntity(entity, defaultGenerator, 'testApp');
+        expect(result.security).to.exist;
+        expect(result.hasSecurity).to.equal(true);
+        expect(result.hasParentSecurity).to.equal(true);
+        expect(result.security.securityType).to.equal(JDLSecurityType.ParentPrivileges);
+        expect(result.security.parentPrivileges).to.deep.equal({
+          field: 'TestField',
+          parent: 'TestParent',
+          parentEntityApiUrl: 'test-parents',
+          parentEntityClass: 'TestParent',
+          parentEntityInstance: 'testParent',
+          parentEntityName: 'TestParent',
+          parentFieldName: 'TestField',
+          parentFieldNameUpper: 'TestField',
+          parentInstanceName: 'testParent',
+        });
+      });
+
+      it('prepareEntity should add relational based security', () => {
+        const entity = {
+          ...entityDefaultConfig,
+          name: 'Entity',
+          changelogDate: formatDateForChangelog(new Date()),
+          fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
+          secure: {
+            securityType: JDLSecurityType.RelPrivileges,
+            relPrivileges: {
+              fromEntity: 'FromEntity',
+              fromField: 'FromField',
+              toEntity: 'ToEntity',
+              toField: 'toField',
+            },
+            comment: 'comment',
+          },
+        };
+        const result = prepareEntity(entity, defaultGenerator, 'testApp');
+        expect(result.security).to.exist;
+        expect(result.hasSecurity).to.equal(true);
+        expect(result.hasRelationSecurity).to.equal(true);
+        expect(result.security.securityType).to.equal(JDLSecurityType.RelPrivileges);
+        expect(result.security.relPrivileges).to.deep.equal({
+          fromEntity: 'FromEntity',
+          fromField: 'FromField',
+          toEntity: 'ToEntity',
+          toField: 'toField',
         });
       });
     });

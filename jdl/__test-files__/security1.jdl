@@ -1,0 +1,6 @@
+entity A
+entity B
+entity C
+secure all with roles {
+    ROLE_ADMIN allows (get, post, put, delete)
+}

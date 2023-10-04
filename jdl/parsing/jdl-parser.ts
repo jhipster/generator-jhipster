@@ -55,6 +55,19 @@ export default class JDLParser extends CstParser {
     this.enumDeclaration();
     this.enumPropList();
     this.enumProp();
+    this.rolePropList();
+    this.roleProp();
+    this.secureDeclaration();
+    this.rolesSecurity();
+    this.privilegesSecurity();
+    this.organizationalSecurity();
+    this.parentPrivilegesSecurity();
+    this.relPrivilegesSecurity();
+    this.roleDefinition();
+    this.privDefinition();
+    this.parentPrivileges();
+    this.relPrivileges();
+    this.secureEntityList();
     this.entityList();
     this.exclusion();
     this.useOptionDeclaration();
@@ -87,6 +100,7 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.entityDeclaration) },
           { ALT: () => this.SUBRULE(this.relationDeclaration) },
           { ALT: () => this.SUBRULE(this.enumDeclaration) },
+          { ALT: () => this.SUBRULE(this.secureDeclaration) },
           { ALT: () => this.CONSUME(LexerTokens.JAVADOC) },
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
           { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
@@ -368,6 +382,171 @@ export default class JDLParser extends CstParser {
       this.OPTION2(() => {
         this.CONSUME1(LexerTokens.JAVADOC);
       });
+    });
+  }
+
+  secureDeclaration(): any {
+    this.RULE('secureDeclaration', () => {
+      this.CONSUME(LexerTokens.SECURE);
+      this.SUBRULE(this.secureEntityList);
+      this.OR([
+        { ALT: () => this.SUBRULE(this.rolesSecurity) },
+        { ALT: () => this.SUBRULE(this.privilegesSecurity) },
+        { ALT: () => this.SUBRULE(this.organizationalSecurity) },
+        { ALT: () => this.SUBRULE(this.parentPrivilegesSecurity) },
+        { ALT: () => this.SUBRULE(this.relPrivilegesSecurity) },
+      ]);
+    });
+  }
+
+  rolesSecurity(): any {
+    this.RULE('rolesSecurity', () => {
+      this.CONSUME(LexerTokens.ROLES);
+      this.CONSUME(LexerTokens.LCURLY);
+      this.MANY(() => {
+        this.SUBRULE(this.roleDefinition);
+        this.OPTION(() => {
+          this.CONSUME(LexerTokens.COMMA);
+        });
+      });
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+
+  privilegesSecurity(): any {
+    this.RULE('privilegesSecurity', () => {
+      this.CONSUME(LexerTokens.PRIVILEGES);
+      this.CONSUME(LexerTokens.LCURLY);
+      this.MANY(() => {
+        this.SUBRULE(this.privDefinition);
+        this.OPTION(() => {
+          this.CONSUME(LexerTokens.COMMA);
+        });
+      });
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+
+  organizationalSecurity(): any {
+    this.RULE('organizationalSecurity', () => {
+      this.CONSUME(LexerTokens.ORGANIZATIONAL_SECURITY);
+      this.CONSUME(LexerTokens.LCURLY);
+
+      this.OPTION(() => {
+        this.SUBRULE(this.comment);
+      });
+      this.CONSUME(LexerTokens.RESOURCE_NAME);
+      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+
+  parentPrivilegesSecurity(): any {
+    this.RULE('parentPrivilegesSecurity', () => {
+      this.CONSUME(LexerTokens.PARENT_PRIVILEGES);
+      this.CONSUME(LexerTokens.LCURLY);
+      this.SUBRULE(this.parentPrivileges);
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+
+  relPrivilegesSecurity(): any {
+    this.RULE('relPrivilegesSecurity', () => {
+      this.CONSUME(LexerTokens.REL_PRIVILEGES);
+      this.CONSUME(LexerTokens.LCURLY);
+      this.SUBRULE(this.relPrivileges);
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+
+  rolePropList(): any {
+    this.RULE('rolePropList', () => {
+      this.CONSUME(LexerTokens.LPAREN);
+      this.MANY_SEP({
+        SEP: LexerTokens.COMMA,
+        DEF: () => {
+          this.CONSUME(LexerTokens.NAME);
+        },
+      });
+      this.CONSUME(LexerTokens.RPAREN);
+    });
+  }
+
+  roleProp(): any {
+    this.RULE('roleProp', () => {
+      this.OPTION(() => {
+        this.OR([
+          { ALT: () => this.CONSUME2(LexerTokens.STRING, { LABEL: 'rolePropValueWithQuotes' }) },
+          { ALT: () => this.CONSUME3(LexerTokens.NAME, { LABEL: 'rolePropValue' }) },
+        ]);
+      });
+    });
+  }
+
+  roleDefinition(): any {
+    this.RULE('roleDefinition', () => {
+      this.OPTION(() => {
+        this.SUBRULE(this.comment);
+      });
+      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(LexerTokens.ALLOWS);
+      this.SUBRULE(this.rolePropList);
+    });
+  }
+
+  privDefinition(): any {
+    this.RULE('privDefinition', () => {
+      this.OPTION(() => {
+        this.SUBRULE(this.comment);
+      });
+      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(LexerTokens.REQUIRE_PRIVS);
+      this.SUBRULE(this.rolePropList);
+    });
+  }
+
+  parentPrivileges(): any {
+    this.RULE('parentPrivileges', () => {
+      this.OPTION(() => {
+        this.SUBRULE(this.comment);
+      });
+      this.CONSUME(LexerTokens.PARENT);
+      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(LexerTokens.FIELD);
+      this.CONSUME2(LexerTokens.NAME);
+    });
+  }
+
+  relPrivileges(): any {
+    this.RULE('relPrivileges', () => {
+      this.OPTION(() => {
+        this.SUBRULE(this.comment);
+      });
+      this.CONSUME(LexerTokens.FROM_ENTITY);
+      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(LexerTokens.FIELD);
+      this.CONSUME2(LexerTokens.NAME);
+      this.CONSUME(LexerTokens.TO_ENTITY);
+      this.CONSUME3(LexerTokens.NAME);
+      this.CONSUME2(LexerTokens.FIELD);
+      this.CONSUME4(LexerTokens.NAME);
+    });
+  }
+
+  secureEntityList(): any {
+    this.RULE('secureEntityList', () => {
+      this.MANY({
+        GATE: () => this.LA(2).tokenType === LexerTokens.COMMA,
+        DEF: () => {
+          this.CONSUME(LexerTokens.NAME);
+          this.CONSUME(LexerTokens.COMMA);
+        },
+      });
+      this.OR([{ ALT: () => this.CONSUME(LexerTokens.STAR) }, { ALT: () => this.CONSUME1(LexerTokens.NAME) }]);
+      this.OPTION(() => {
+        this.SUBRULE(this.exclusion);
+      });
+      this.CONSUME(LexerTokens.WITH);
     });
   }
 

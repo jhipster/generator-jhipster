@@ -19,3 +19,4 @@
 // eslint-disable-next-line import/prefer-default-export
 export { default as JDLEntity } from './jdl-entity.js';
 export { default as JDLEnum } from './jdl-enum.js';
+export { default as JDLSecure } from './jdl-secure.js';

@@ -673,5 +673,103 @@ relationship OneToOne {
         jestExpect(importState.exportedApplications[0]['generator-jhipster'].clientFramework).toBe(NO_CLIENT_FRAMEWORK);
       });
     });
+    context('when parsing entity with a secure definition', () => {
+      it('import entity with role security definition', () => {
+        const importState = createImporterFromContent(
+          `
+entity A
+
+secure A with roles {
+  ROLE_A allows (GET, Put, Post, delete)
+  ROLE_B allows (get)
+}
+`,
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
+        ).import();
+        jestExpect(importState.exportedEntities[0].secure.securityType).toBe('roles');
+        jestExpect(importState.exportedEntities[0].secure.roles.length).toBe(2);
+        jestExpect(importState.exportedEntities[0].secure.roles[0].role).toBe('ROLE_A');
+        jestExpect(importState.exportedEntities[0].secure.roles[0].actionList.length).toBe(4);
+        jestExpect(importState.exportedEntities[0].secure.roles[1].role).toBe('ROLE_B');
+        jestExpect(importState.exportedEntities[0].secure.roles[1].actionList.length).toBe(1);
+        jestExpect(importState.exportedEntities[0].secure.roles[1].actionList[0]).toBe('GET');
+      });
+
+      it('import entity with organizational security definition', () => {
+        const importState = createImporterFromContent(
+          `
+entity A
+
+secure A with organizationalSecurity {
+  resourceName RESNAME
+}
+`,
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
+        ).import();
+        jestExpect(importState.exportedEntities[0].secure.securityType).toBe('organizationalSecurity');
+        jestExpect(importState.exportedEntities[0].secure.organizationalSecurity.resource).toBe('RESNAME');
+      });
+
+      it('import entity with parent privilege security definition', () => {
+        const importState = createImporterFromContent(
+          `
+entity A
+entity B
+relationship ManyToOne { B {a required} to A}
+
+secure B with parentPrivileges {
+  parent A
+  field a
+}
+`,
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
+        ).import();
+        jestExpect(importState.exportedEntities[1].secure.securityType).toBe('parentPrivileges');
+        jestExpect(importState.exportedEntities[1].secure.parentPrivileges.parent).toBe('A');
+        jestExpect(importState.exportedEntities[1].secure.parentPrivileges.field).toBe('a');
+      });
+
+      it('import entity with relation privileges security definition', () => {
+        const importState = createImporterFromContent(
+          `
+entity A
+entity B
+relationship ManyToOne { B {a required} to A}
+relationship ManyToOne { B {c required} to C}
+entity C
+secure B with relPrivileges {
+  fromEntity A field a
+  toEntity C field c
+}
+`,
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
+        ).import();
+        jestExpect(importState.exportedEntities[1].secure.securityType).toBe('relPrivileges');
+        jestExpect(importState.exportedEntities[1].secure.relPrivileges.fromEntity).toBe('A');
+        jestExpect(importState.exportedEntities[1].secure.relPrivileges.fromField).toBe('a');
+        jestExpect(importState.exportedEntities[1].secure.relPrivileges.toEntity).toBe('C');
+        jestExpect(importState.exportedEntities[1].secure.relPrivileges.toField).toBe('c');
+      });
+
+      it('import entity with privileges security definition', () => {
+        const importState = createImporterFromContent(
+          `
+entity A
+
+secure A with privileges {
+    Read requirePrivs (A_ALL_R, A_OWN_R, A_ORG_R, A_USR_R)
+    Write requirePrivs (A_ALL_W)
+}
+`,
+          { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
+        ).import();
+        jestExpect(importState.exportedEntities[0].secure.securityType).toBe('privileges');
+        jestExpect(importState.exportedEntities[0].secure.privileges.length).toBe(2);
+        jestExpect(importState.exportedEntities[0].secure.privileges[0].action).toBe('read');
+        jestExpect(importState.exportedEntities[0].secure.privileges[0].privList.length).toBe(4);
+        jestExpect(importState.exportedEntities[0].secure.privileges[1].action).toBe('write');
+        jestExpect(importState.exportedEntities[0].secure.privileges[1].privList.length).toBe(1);
+      });
+    });
   });
 });

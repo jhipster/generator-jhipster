@@ -19,6 +19,8 @@
 
 import { merge } from '../utils/object-utils.js';
 import { upperFirst } from '../utils/string-utils.js';
+import JSONSecure from './json-secure.js';
+import { JDLSecurityType } from '../models/jdl-security-type.js';
 
 /**
  * The JSONEntity class represents a read-to-be exported to JSON entity.
@@ -75,6 +77,9 @@ class JSONEntity {
     if (merged.skipClient) {
       this.skipClient = merged.skipClient;
     }
+    if (args.secure && args.secure.securityType !== JDLSecurityType.None) {
+      this.secure = new JSONSecure(args.secure);
+    }
     this.applications = [];
   }
 
@@ -108,6 +113,14 @@ class JSONEntity {
     Object.keys(options).forEach(optionName => {
       this[optionName] = options[optionName];
     });
+  }
+
+  setSecure(secure: any) {
+    if (secure && secure.securityType) {
+      this.secure = new JSONSecure(secure);
+    } else {
+      this.secure = new JSONSecure({ securityType: JDLSecurityType.None });
+    }
   }
 }
 

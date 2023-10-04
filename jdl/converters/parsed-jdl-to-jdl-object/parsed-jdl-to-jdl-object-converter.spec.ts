@@ -1008,6 +1008,61 @@ skipClient D
           });
         });
       });
+      context('when parsing a JDL with secure entity definition', () => {
+        context('secure all entities', () => {
+          let jdlObject;
+
+          before(() => {
+            const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'security1.jdl')]);
+            jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+              parsedContent: input,
+              applicationType: MONOLITH,
+            });
+          });
+
+          it('should set it', () => {
+            expect(jdlObject.entities.A.secure.securityType).to.equal('roles');
+            expect(jdlObject.entities.B.secure.securityType).to.equal('roles');
+            expect(jdlObject.entities.C.secure.securityType).to.equal('roles');
+          });
+        });
+
+        context('secure all except C entities', () => {
+          let jdlObject;
+
+          before(() => {
+            const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'security2.jdl')]);
+            jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+              parsedContent: input,
+              applicationType: MONOLITH,
+            });
+          });
+
+          it('should set it', () => {
+            expect(jdlObject.entities.A.secure.securityType).to.equal('roles');
+            expect(jdlObject.entities.C.secure.securityType).to.equal('roles');
+            expect(jdlObject.entities.B.secure).to.be.undefined;
+          });
+        });
+
+        context('secure list of entities', () => {
+          let jdlObject;
+
+          before(() => {
+            const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'security3.jdl')]);
+            jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
+              parsedContent: input,
+              applicationType: MONOLITH,
+            });
+          });
+
+          it('should set it', () => {
+            expect(jdlObject.entities.A.secure.securityType).to.equal('roles');
+            expect(jdlObject.entities.B.secure.securityType).to.equal('roles');
+            expect(jdlObject.entities.C.secure.securityType).to.equal('roles');
+          });
+        });
+      });
     });
   });
 });

@@ -58,6 +58,7 @@ describe('jdl - UnaryOptions', () => {
   "readOnly",
   "filter",
   "embedded",
+  "secure",
 ]
 `);
       });

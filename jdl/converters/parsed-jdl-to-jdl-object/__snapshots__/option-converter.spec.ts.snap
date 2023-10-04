@@ -146,6 +146,20 @@ exports[`jdl - OptionConverter convertOptions when passing options such as searc
 ]
 `;
 
+exports[`jdl - OptionConverter convertOptions when passing options such as secure should convert it 1`] = `
+[
+  JDLUnaryOption {
+    "entityNames": Set {
+      "A",
+    },
+    "excludedNames": Set {
+      "B",
+    },
+    "name": "secure",
+  },
+]
+`;
+
 exports[`jdl - OptionConverter convertOptions when passing options such as service should convert it 1`] = `
 [
   JDLBinaryOption {

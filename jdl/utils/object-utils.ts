@@ -48,6 +48,20 @@ function removeEntriesWithUndefinedValue(entity: any) {
   });
 }
 
+function checkIfSecurityDiffers(firstEntity, secondEntity) {
+  if (firstEntity.security) {
+    if (!secondEntity.security) {
+      return true;
+    }
+  }
+  if (secondEntity.security) {
+    if (!firstEntity.security) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function areEntitiesEqual(firstEntity: any, secondEntity: any) {
   removeEntriesWithUndefinedValue(firstEntity);
   removeEntriesWithUndefinedValue(secondEntity);
@@ -56,15 +70,58 @@ export function areEntitiesEqual(firstEntity: any, secondEntity: any) {
     firstEntity.relationships.length !== secondEntity.relationships.length ||
     firstEntity.javadoc !== secondEntity.javadoc ||
     firstEntity.entityTableName !== secondEntity.entityTableName ||
-    Object.keys(firstEntity).length !== Object.keys(secondEntity).length
+    Object.keys(firstEntity).length !== Object.keys(secondEntity).length ||
+    checkIfSecurityDiffers(firstEntity, secondEntity)
   ) {
     return false;
   }
   return (
     areFieldsEqual(firstEntity.fields, secondEntity.fields) &&
     areRelationshipsEqual(firstEntity.relationships, secondEntity.relationships) &&
-    areOptionsTheSame(firstEntity, secondEntity)
+    areOptionsTheSame(firstEntity, secondEntity) &&
+    areSecurityOptionsAreTheSame(firstEntity, secondEntity)
   );
+}
+
+function areSecurityOptionsAreTheSame(firstEntity, secondEntity) {
+  let result = true;
+  if (firstEntity.secure && secondEntity.secure) {
+    result = firstEntity.secure.securityType === secondEntity.secure.securityType;
+    if (result) {
+      if (firstEntity.secure.securityType === 'roles') {
+        if (firstEntity.secure.roles && secondEntity.secure.roles) {
+          result = firstEntity.secure.roles.length === secondEntity.secure.roles.length;
+          if (result) {
+            for (let i = 0; i < firstEntity.secure.roles.length; i++) {
+              const role1 = firstEntity.secure.roles[i];
+              const role2 = secondEntity.secure.roles[i];
+              result = result && role1.role === role2.role;
+              if (result && role1.actionList && role2.actionList && role1.actionList.length === role2.actionList.length)
+                for (let j = 0; j < role1.actionList.length; j++) {
+                  result = result && role1.actionList[j] === role2.actionList[j];
+                }
+            }
+          }
+        }
+      } else if (firstEntity.secure.customSecurity && secondEntity.secure.customSecurity) {
+        result = firstEntity.secure.customSecurity.length === secondEntity.secure.customSecurity.length;
+        if (result) {
+          for (let i = 0; i < firstEntity.secure.customSecurity.length; i++) {
+            const item1 = firstEntity.secure.customSecurity[i];
+            const item2 = secondEntity.secure.customSecurity[i];
+            result = result && item1.action === item2.action;
+            if (result && item1.privList && item2.privList && item1.privList.length === item2.privList.length)
+              for (let j = 0; j < item1.privList.length; j++) {
+                result = result && item1.privList[j] === item2.privList[j];
+              }
+          }
+        }
+      }
+    }
+  } else {
+    return !firstEntity.secure && !secondEntity.secure;
+  }
+  return result;
 }
 
 function areFieldsEqual(firstFields: any[], secondFields: any[]) {

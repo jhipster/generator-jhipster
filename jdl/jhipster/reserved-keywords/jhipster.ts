@@ -36,4 +36,5 @@ export default [
   'PRINCIPAL',
   'ENTITY',
   'RESULT',
+  'SECURE',
 ];

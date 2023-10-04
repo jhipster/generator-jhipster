@@ -46,6 +46,7 @@ import JDLRelationship from '../../models/jdl-relationship.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import logger from '../../utils/objects/logger.js';
+import { JDLSecurityType, RoleActionType } from '../../models/jdl-security-type.js';
 
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
@@ -1597,6 +1598,37 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
               `);
             });
           });
+        });
+      });
+    });
+    context('with entity security options', () => {
+      let convertedEntity;
+
+      before(() => {
+        const jdlObject = new JDLObject();
+        const entityA = new JDLEntity({
+          name: 'A',
+          tableName: 'entity_a',
+          comment: 'The best entity',
+          secure: {
+            securityType: JDLSecurityType.Roles,
+            roles: [{ role: 'Test', actionList: [RoleActionType.Post, RoleActionType.Get] }],
+          },
+        });
+        jdlObject.addEntity(entityA);
+        const returnedMap: any = convert({
+          jdlObject,
+          applicationName: 'toto',
+          applicationType: MONOLITH,
+          databaseType: SQL,
+        });
+        convertedEntity = returnedMap.get('toto')[0];
+      });
+
+      it('should convert them', () => {
+        expect(convertedEntity.secure).to.deep.equal({
+          securityType: JDLSecurityType.Roles,
+          roles: [{ role: 'Test', actionList: [RoleActionType.Post, RoleActionType.Get] }],
         });
       });
     });

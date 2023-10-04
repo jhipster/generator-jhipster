@@ -21,6 +21,7 @@
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { jsonEntity as JSONEntity } from '../jhipster/index.mjs';
+import { JDLSecurityType, PrivilegeActionType, RoleActionType } from '../models/jdl-security-type.js';
 
 describe('jdl - JSONEntity', () => {
   describe('new', () => {
@@ -95,6 +96,36 @@ JSONEntity {
       });
 
       it('should use them', () => {
+        jestExpect(entity).toMatchInlineSnapshot(`
+JSONEntity {
+  "angularJSSuffix": "yes",
+  "applications": [],
+  "clientRootFolder": "oh",
+  "dto": "mapstruct",
+  "embedded": true,
+  "entityTableName": "titi",
+  "fields": [
+    42,
+  ],
+  "fluentMethods": true,
+  "javadoc": "",
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "nope",
+  "name": "Titi",
+  "pagination": "pagination",
+  "readOnly": true,
+  "relationships": [
+    42,
+    43,
+  ],
+  "service": "serviceClass",
+  "skipClient": true,
+  "skipServer": true,
+}
+`);
+      });
+
+      it('should use them with secure option', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
@@ -288,6 +319,88 @@ JSONEntity {
   "service": undefined,
 }
 `);
+      });
+    });
+  });
+  describe('setSecure', () => {
+    context('when adding secure on entity', () => {
+      let entity;
+
+      before(() => {
+        entity = new JSONEntity({
+          entityName: 'seco',
+        });
+      });
+
+      it('should add none securityType', () => {
+        entity.setSecure({ securityType: JDLSecurityType.None });
+        expect(entity.secure).to.exist;
+        expect(entity.secure.securityType).to.equal(JDLSecurityType.None);
+      });
+
+      it('should add roles securityType', () => {
+        const roleDef1 = {
+          role: 'test_role',
+          actionList: [RoleActionType.Put, RoleActionType.Post, RoleActionType.Get, RoleActionType.Delete],
+        };
+
+        entity.setSecure({ securityType: JDLSecurityType.Roles, roles: [roleDef1], comment: 'comment' });
+        expect(entity.secure.securityType).equal(JDLSecurityType.Roles);
+        expect(entity.secure.comment).equal('comment');
+        expect(entity.secure.roles).to.deep.equal([roleDef1]);
+      });
+
+      it('should add privileges securityType', () => {
+        const privDef1 = {
+          action: PrivilegeActionType.Read,
+          privList: ['PRIV1_R', 'PRIV2_R'],
+        };
+
+        entity.setSecure({ securityType: JDLSecurityType.Privileges, privileges: [privDef1], comment: 'comment' });
+        expect(entity.secure.securityType).equal(JDLSecurityType.Privileges);
+        expect(entity.secure.comment).equal('comment');
+        expect(entity.secure.privileges).to.deep.equal([privDef1]);
+      });
+
+      it('should add organizationalSecurity securityType', () => {
+        const organizationalSecurityDef1 = {
+          resource: 'resourceName',
+        };
+
+        entity.setSecure({
+          securityType: JDLSecurityType.OrganizationalSecurity,
+          organizationalSecurity: organizationalSecurityDef1,
+          comment: 'comment',
+        });
+        expect(entity.secure.securityType).equal(JDLSecurityType.OrganizationalSecurity);
+        expect(entity.secure.comment).equal('comment');
+        expect(entity.secure.organizationalSecurity).to.deep.equal(organizationalSecurityDef1);
+      });
+
+      it('should add parent privileges securityType', () => {
+        const parentPrivilegesDef1 = {
+          parent: 'Parent',
+          field: 'parentId',
+        };
+
+        entity.setSecure({ securityType: JDLSecurityType.ParentPrivileges, parentPrivileges: parentPrivilegesDef1, comment: 'comment' });
+        expect(entity.secure.securityType).equal(JDLSecurityType.ParentPrivileges);
+        expect(entity.secure.comment).equal('comment');
+        expect(entity.secure.parentPrivileges).to.deep.equal(parentPrivilegesDef1);
+      });
+
+      it('should add relational privileges securityType', () => {
+        const relPrivilegesDef1 = {
+          fromEntity: 'FromEntity',
+          fromField: 'FromField',
+          toEntity: 'ToEntity',
+          toField: 'toField',
+        };
+
+        entity.setSecure({ securityType: JDLSecurityType.RelPrivileges, relPrivileges: relPrivilegesDef1, comment: 'comment' });
+        expect(entity.secure.securityType).equal(JDLSecurityType.RelPrivileges);
+        expect(entity.secure.comment).equal('comment');
+        expect(entity.secure.relPrivileges).to.deep.equal(relPrivilegesDef1);
       });
     });
   });

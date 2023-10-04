@@ -106,6 +106,21 @@ createTokenFromConfig({ name: 'ENUM', pattern: 'enum' });
 // Relationship-related
 createTokenFromConfig({ name: 'RELATIONSHIP', pattern: 'relationship' });
 createTokenFromConfig({ name: 'BUILT_IN_ENTITY', pattern: BUILT_IN_ENTITY });
+// Security
+createTokenFromConfig({ name: 'SECURE', pattern: 'secure' });
+createTokenFromConfig({ name: 'ROLES', pattern: 'roles' });
+createTokenFromConfig({ name: 'CUSTOM_SECURITY', pattern: 'privilegesSecurity' });
+createTokenFromConfig({ name: 'ALLOWS', pattern: 'allows' });
+createTokenFromConfig({ name: 'REQUIRE_PRIVS', pattern: 'requirePrivs' });
+createTokenFromConfig({ name: 'PRIVILEGES', pattern: 'privileges' });
+createTokenFromConfig({ name: 'PARENT_PRIVILEGES', pattern: 'parentPrivileges' });
+createTokenFromConfig({ name: 'REL_PRIVILEGES', pattern: 'relPrivileges' });
+createTokenFromConfig({ name: 'ORGANIZATIONAL_SECURITY', pattern: 'organizationalSecurity' });
+createTokenFromConfig({ name: 'RESOURCE_NAME', pattern: 'resourceName' });
+createTokenFromConfig({ name: 'PARENT', pattern: 'parent' });
+createTokenFromConfig({ name: 'FROM_ENTITY', pattern: 'fromEntity' });
+createTokenFromConfig({ name: 'TO_ENTITY', pattern: 'toEntity' });
+createTokenFromConfig({ name: 'FIELD', pattern: 'field' });
 
 // Category For the relationship type key names
 RelationshipTypeTokens.tokens.forEach(token => {

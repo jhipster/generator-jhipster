@@ -68,11 +68,29 @@ export const restFiles = {
   ],
   restTestFiles: [
     {
-      condition: generator => !generator.embedded,
+      condition: generator => !generator.embedded && !generator.hasSecurity,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
           file: '_package_/_entityPackage_/web/rest/_entityClass_ResourceIT.java',
+          options: {
+            context: {
+              _,
+              chalkRed: chalk.red,
+              fs,
+              SERVER_TEST_SRC_DIR,
+            },
+          },
+          renameTo: generator => `${generator.entityAbsoluteFolder}/web/rest/${generator.entityClass}ResourceIT.java`,
+        },
+      ],
+    },
+    {
+      condition: generator => !generator.embedded && generator.hasRolesSecurity,
+      path: SERVER_TEST_SRC_DIR,
+      templates: [
+        {
+          file: '_package_/_entityPackage_/web/rest/_entityClass_secRoles_ResourceIT.java',
           options: {
             context: {
               _,

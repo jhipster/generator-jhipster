@@ -25,6 +25,7 @@ const Options: any = {
   READ_ONLY: 'readOnly',
   FILTER: 'filter',
   EMBEDDED: 'embedded',
+  SECURE: 'secure',
 };
 
 const optionNames = Object.values(Options);
