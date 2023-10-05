@@ -29,12 +29,6 @@ exports[`generator - server - support - needles generated project should match s
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
