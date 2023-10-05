@@ -355,7 +355,7 @@ export const baseServerFiles = {
       templates: ['pom.xml'],
     },
     {
-      condition: generator => generator.clientFrameworkAny,
+      condition: generator => generator.useNpmWrapper,
       transform: false,
       templates: ['npmw', 'npmw.cmd'],
     },
