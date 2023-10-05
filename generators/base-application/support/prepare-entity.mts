@@ -371,6 +371,9 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       get name() {
         return relationshipId.otherEntity.primaryKey.name;
       },
+      get hibernateSnakeCaseName() {
+        return hibernateSnakeCase(relationshipId.otherEntity.primaryKey.name);
+      },
       get nameCapitalized() {
         return relationshipId.otherEntity.primaryKey.nameCapitalized;
       },
