@@ -50,9 +50,10 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.prodJdbcDriver = prodDatabaseData.jdbcDriver;
   application.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? application.baseName;
   application.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
+  application.prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? application.baseName;
 
   const prodDatabaseOptions = {
-    databaseName: prodDatabaseData.defaultDatabaseName ?? application.baseName,
+    databaseName: application.prodDatabaseName,
     hostname: 'localhost',
   };
 
@@ -72,9 +73,10 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       application.devJdbcDriver = devDatabaseData.jdbcDriver;
       application.devDatabaseUsername = devDatabaseData.defaultUsername ?? application.baseName;
       application.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
+      application.devDatabaseName = devDatabaseData.defaultDatabaseName ?? application.baseName;
 
       const devDatabaseOptions = {
-        databaseName: devDatabaseData.defaultDatabaseName ?? application.lowercaseBaseName,
+        databaseName: application.devDatabaseName,
       };
       application.devJdbcUrl = getJdbcUrl(application.devDatabaseType, {
         ...devDatabaseOptions,
@@ -121,6 +123,7 @@ export default function prepareSqlApplicationProperties({ application }: { appli
     application.devJdbcDriver = application.prodJdbcDriver;
     application.devDatabaseUsername = application.prodDatabaseUsername;
     application.devDatabasePassword = application.prodDatabasePassword;
+    application.devDatabaseName = application.prodDatabaseName;
     application.devJdbcUrl = application.prodJdbcUrl;
     application.devLiquibaseUrl = application.prodLiquibaseUrl;
     if (application.reactive) {
