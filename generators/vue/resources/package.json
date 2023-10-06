@@ -51,7 +51,7 @@
     "rollup-plugin-copy": "3.5.0",
     "sass": "1.69.0",
     "sass-loader": "13.3.2",
-    "sinon": "16.0.0",
+    "sinon": "16.1.0",
     "terser-webpack-plugin": "5.3.9",
     "ts-loader": "9.4.4",
     "typescript": "5.2.2",
