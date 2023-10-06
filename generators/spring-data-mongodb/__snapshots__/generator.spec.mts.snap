@@ -44,6 +44,12 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -482,6 +488,12 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2258,6 +2270,12 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2734,6 +2752,12 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3055,6 +3079,12 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3461,6 +3491,12 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3839,6 +3875,12 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -4282,6 +4324,12 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {

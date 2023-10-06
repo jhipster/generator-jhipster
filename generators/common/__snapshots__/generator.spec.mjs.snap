@@ -34,7 +34,7 @@ trim_trailing_whitespace = false
 . "$(dirname "$0")/_/husky.sh"
 
 
-npx --no-install lint-staged
+"$(dirname "$0")/../npmw" exec --no-install lint-staged
 ",
     "stateCleared": "modified",
   },

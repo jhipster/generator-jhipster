@@ -60,21 +60,28 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
   Object.fromEntries(fields.map(field => [field, source[field]]));
 
 /**
- * Set application property with the return of the mutations property function or the property itself.
- * Applies for eache mutation object in order.
+ * Mutation properties accepts:
+ * - functions: receives the application and the return value is set at the application property.
+ * - non functions: application property will receive the property in case current value is undefined.
+ *
+ * Applies each mutation object in order.
  *
  * @example
  * // application = { prop: 'foo-bar', prop2: 'foo2' }
  * mutateApplication(
  *   application,
  *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
- *   { prop: ({ prop }) => prop + '-bar' },
+ *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
  * );
  */
-export const mutateApplication = (application, ...mutations) => {
+export const mutateApplication = (application: Record<string | number, any>, ...mutations: Record<string | number, any>[]) => {
   for (const mutation of mutations) {
     for (const [key, value] of Object.entries(mutation)) {
-      application[key] = typeof value === 'function' ? value(application) : value;
+      if (typeof value === 'function') {
+        application[key] = value(application);
+      } else if (application[key] === undefined) {
+        application[key] = value;
+      }
     }
   }
 };

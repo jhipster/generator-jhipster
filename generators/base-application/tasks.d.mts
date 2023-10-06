@@ -34,9 +34,21 @@ type ApplicationTaskParam<Definition extends GenericApplicationDefinition = Cont
 
 type ApplicationDefaultsTaskParam = {
   /**
-   * Set application defaults.
+   * Parameter properties accepts:
+   * - functions: receives the application and the return value is set at the application property.
+   * - non functions: application property will receive the property in case current value is undefined.
+   *
+   * Applies each object in order.
+   *
+   * @example
+   * // application = { prop: 'foo-bar', prop2: 'foo2' }
+   * applicationDefaults(
+   *   application,
+   *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
+   *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
+   * );
    */
-  applicationDefaults: (defaults: Record<any, any>) => void;
+  applicationDefaults: (...defaults: Record<any, any>) => void;
 };
 
 export type EntitiesTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {

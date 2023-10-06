@@ -44,6 +44,12 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.packag
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -488,6 +494,12 @@ exports[`generator - neo4j gateway-oauth2-maven-enableTranslation(false)-tech.jh
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2270,6 +2282,12 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2749,6 +2767,12 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3067,6 +3091,12 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3476,6 +3506,12 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3860,6 +3896,12 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -4306,6 +4348,12 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {

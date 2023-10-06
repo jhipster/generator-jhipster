@@ -50,6 +50,12 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -542,6 +548,12 @@ exports[`generator - elasticsearch gateway-oauth2-maven-enableTranslation(false)
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2591,6 +2603,12 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3121,6 +3139,12 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3514,6 +3538,12 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3998,6 +4028,12 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -4469,6 +4505,12 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -4990,6 +5032,12 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
