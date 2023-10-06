@@ -120,11 +120,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         applicationDefaults({
           nodePackageManager: 'npm',
           dockerServicesDir: JAVA_DOCKER_DIR,
-        });
-
-        applicationDefaults({
           // TODO drop clientPackageManager
-          clientPackageManager: application.nodePackageManager,
+          clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
         });
       },
     });

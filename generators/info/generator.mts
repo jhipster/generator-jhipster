@@ -34,7 +34,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
     super(args, options, {
       jhipsterBootstrap: false,
       storeJHipsterVersion: false,
-      customInstallTask: true,
+      customInstallTask: options.commandName === 'info' ? true : undefined,
       customCommitTask: true,
       ...features,
     });

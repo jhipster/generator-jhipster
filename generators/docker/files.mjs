@@ -118,10 +118,15 @@ export const dockerFiles = {
   applicationFiles: [
     {
       path: TEMPLATES_DOCKER_DIR,
+      condition: ctx => ctx.dockerServices.includes('app'),
+      renameTo,
+      templates: ['app.yml'],
+    },
+    {
+      path: TEMPLATES_DOCKER_DIR,
       condition: ctx => ctx.backendTypeJavaAny,
       renameTo,
       templates: [
-        'app.yml',
         'jhipster-control-center.yml',
         'monitoring.yml',
         'grafana/provisioning/dashboards/dashboard.yml',

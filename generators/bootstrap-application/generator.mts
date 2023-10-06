@@ -73,10 +73,16 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ application }) {
+      preparing({ application, applicationDefaults }) {
         if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
           (application as any).skipUserManagement = true;
         }
+
+        applicationDefaults({
+          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeSpringBoot,
+          documentationArchiveUrl: ({ jhipsterVersion }) =>
+            `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
+        });
 
         let prettierExtensions = 'md,json,yml,html';
         if (application.clientFrameworkAny) {
@@ -92,7 +98,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           prettierExtensions = `${prettierExtensions},java`;
         }
         application.prettierExtensions = prettierExtensions;
-        application.documentationArchiveUrl = `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${application.jhipsterVersion}`;
       },
     });
   }

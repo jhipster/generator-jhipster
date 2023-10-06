@@ -32,6 +32,25 @@ type ApplicationTaskParam<Definition extends GenericApplicationDefinition = Cont
   application: Definition['applicationType'] & { user: Definition['entityType'] };
 };
 
+type ApplicationDefaultsTaskParam = {
+  /**
+   * Parameter properties accepts:
+   * - functions: receives the application and the return value is set at the application property.
+   * - non functions: application property will receive the property in case current value is undefined.
+   *
+   * Applies each object in order.
+   *
+   * @example
+   * // application = { prop: 'foo-bar', prop2: 'foo2' }
+   * applicationDefaults(
+   *   application,
+   *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
+   *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
+   * );
+   */
+  applicationDefaults: (...defaults: Record<any, any>[]) => void;
+};
+
 export type EntitiesTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {
   entities: Definition['entityType'][];
 };
@@ -63,15 +82,9 @@ export type BaseApplicationGeneratorDefinition<
     GenericSourceTypeDefinition<Record<string, (...args: any[]) => any>>,
 > = BaseGeneratorDefinition<Definition> &
   // Add application to existing priorities
+  Record<'loadingTaskParam' | 'preparingTaskParam', ApplicationTaskParam<Definition> & ApplicationDefaultsTaskParam> &
   Record<
-    | 'loadingTaskParam'
-    | 'preparingTaskParam'
-    | 'defaultTaskParam'
-    | 'postWritingTaskParam'
-    | 'preConflictsTaskParam'
-    | 'installTaskParam'
-    | 'postInstallTaskParam'
-    | 'endTaskParam',
+    'defaultTaskParam' | 'postWritingTaskParam' | 'preConflictsTaskParam' | 'installTaskParam' | 'postInstallTaskParam' | 'endTaskParam',
     ApplicationTaskParam<Definition>
   > &
   Record<'writingTaskParam', ApplicationTaskParam<Definition> & { configChanges?: Record<string, { newValue: any; oldValue: any }> }> &

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.mjs';
@@ -31,8 +31,7 @@ import { ClientSourceType } from '../client/types.mjs';
 import { LanguageSourceType } from '../languages/types.js';
 import command from './command.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
-
-const { upperFirst, defaults } = _;
+import { mutateApplication } from '../base/support/config.mjs';
 
 const {
   LOADING,
@@ -125,7 +124,7 @@ export default class BaseApplicationGenerator<
       });
       if (this.options.applicationWithEntities.entities) {
         const entities = this.options.applicationWithEntities.entities.map(entity => {
-          const entityName = _.upperFirst(entity.name);
+          const entityName = upperFirst(entity.name);
           const file = this.getEntityConfigPath(entityName);
           this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
           return entityName;
@@ -370,7 +369,7 @@ export default class BaseApplicationGenerator<
     if ([PREPARING, LOADING].includes(priorityName)) {
       return {
         application,
-        applicationDefaults: data => defaults(application, data),
+        applicationDefaults: data => mutateApplication(application, data),
       };
     }
     if (LOADING_ENTITIES === priorityName) {
