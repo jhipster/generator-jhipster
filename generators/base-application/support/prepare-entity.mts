@@ -411,6 +411,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     entityWithConfig.primaryKey = {
       derived: false,
       name: primaryKeyName,
+      hibernateSnakeCaseName: hibernateSnakeCase(primaryKeyName),
       nameCapitalized: _.upperFirst(primaryKeyName),
       type: primaryKeyType,
       tsType: getTypescriptKeyType(primaryKeyType),
