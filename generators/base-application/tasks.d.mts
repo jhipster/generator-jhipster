@@ -32,6 +32,13 @@ type ApplicationTaskParam<Definition extends GenericApplicationDefinition = Cont
   application: Definition['applicationType'] & { user: Definition['entityType'] };
 };
 
+type ApplicationDefaultsTaskParam = {
+  /**
+   * Set application defaults.
+   */
+  applicationDefaults: (defaults: Record<any, any>) => void;
+};
+
 export type EntitiesTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {
   entities: Definition['entityType'][];
 };
@@ -63,15 +70,9 @@ export type BaseApplicationGeneratorDefinition<
     GenericSourceTypeDefinition<Record<string, (...args: any[]) => any>>,
 > = BaseGeneratorDefinition<Definition> &
   // Add application to existing priorities
+  Record<'loadingTaskParam' | 'preparingTaskParam', ApplicationTaskParam<Definition> & ApplicationDefaultsTaskParam> &
   Record<
-    | 'loadingTaskParam'
-    | 'preparingTaskParam'
-    | 'defaultTaskParam'
-    | 'postWritingTaskParam'
-    | 'preConflictsTaskParam'
-    | 'installTaskParam'
-    | 'postInstallTaskParam'
-    | 'endTaskParam',
+    'defaultTaskParam' | 'postWritingTaskParam' | 'preConflictsTaskParam' | 'installTaskParam' | 'postInstallTaskParam' | 'endTaskParam',
     ApplicationTaskParam<Definition>
   > &
   Record<'writingTaskParam', ApplicationTaskParam<Definition> & { configChanges?: Record<string, { newValue: any; oldValue: any }> }> &

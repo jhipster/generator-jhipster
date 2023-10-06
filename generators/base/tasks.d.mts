@@ -14,22 +14,12 @@ export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) =
 
 export type GenericTaskGroup<ThisType, Arg1Type = ControlTaskParam> = Record<string, GenericTask<ThisType, Arg1Type>>;
 
-type ApplicationDefaultsTaskParam = {
-  /**
-   * Set application defaults.
-   *
-   * @param any
-   * @returns
-   */
-  applicationDefaults: (any) => void;
-};
-
 export type BaseGeneratorDefinition<Definition extends GenericSourceTypeDefinition = GenericSourceTypeDefinition> = Record<
   | 'initializingTaskParam'
   | 'promptingTaskParam'
   | 'configuringTaskParam'
   | 'composingTaskParam'
-  | 'preparingTaskParam'
+  | 'loadingTaskParam'
   | 'defaultTaskParam'
   | 'writingTaskParam'
   | 'postWritingTaskParam'
@@ -40,5 +30,4 @@ export type BaseGeneratorDefinition<Definition extends GenericSourceTypeDefiniti
   ControlTaskParam
 > &
   Record<'postWritingTaskParam', SourceTaskParam<Definition>> &
-  Record<'loadingTaskParam', ControlTaskParam & ApplicationDefaultsTaskParam> &
-  Record<'preparingTaskParam', SourceTaskParam<Definition> & ApplicationDefaultsTaskParam>;
+  Record<'preparingTaskParam', SourceTaskParam<Definition>>;
