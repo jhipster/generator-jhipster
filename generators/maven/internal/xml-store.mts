@@ -19,7 +19,7 @@
 
 import assert from 'assert';
 import { XMLParser, XMLBuilder, XmlBuilderOptions, X2jOptions } from 'fast-xml-parser';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 const { merge } = _;
 

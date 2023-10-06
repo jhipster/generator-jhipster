@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { NODE_VERSION } from '../../generator-constants.mjs';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
 import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 import { clearFileState } from 'mem-fs-editor/state';

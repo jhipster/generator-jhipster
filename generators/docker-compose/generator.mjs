@@ -21,7 +21,7 @@ import pathjs from 'path';
 import chalk from 'chalk';
 import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { deploymentOptions, applicationOptions, serviceDiscoveryTypes } from '../jhipster/index.mjs';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';

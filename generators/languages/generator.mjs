@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';

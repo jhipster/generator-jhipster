@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import os from 'os';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
 import { moveToJavaPackageSrcDir, javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from './support/index.mjs';
