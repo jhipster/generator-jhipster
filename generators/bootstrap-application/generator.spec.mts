@@ -163,7 +163,8 @@ describe(`generator - ${generator}`, () => {
       it('should prepare User', () => {
         const entity = runResult.generator.sharedData.getEntitiesMap().User;
         expect(entity).toMatchInlineSnapshot(
-  expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 {
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
@@ -644,12 +645,14 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`);
+`,
+        );
       });
       it('should prepare EntityA', () => {
         const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
         expect(entity).toMatchInlineSnapshot(
-  expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 {
   "allReferences": Any<Array>,
   "anyFieldHasDocumentation": false,
@@ -907,7 +910,8 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`);
+`,
+        );
       });
     });
 
@@ -964,7 +968,8 @@ describe(`generator - ${generator}`, () => {
       it('should prepare EntityA', () => {
         const entity = runResult.generator.sharedData.getEntitiesMap().EntityA;
         expect(entity).toMatchInlineSnapshot(
-  expectedEntity(entity), `
+          expectedEntity(entity),
+          `
 {
   "allReferences": Any<Array>,
   "anyFieldHasDocumentation": false,
@@ -1222,7 +1227,8 @@ describe(`generator - ${generator}`, () => {
   "workaroundEntityCannotBeEmpty": false,
   "workaroundInstantReactiveMariaDB": false,
 }
-`);
+`,
+        );
       });
     });
   });
