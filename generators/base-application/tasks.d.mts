@@ -48,7 +48,7 @@ type ApplicationDefaultsTaskParam = {
    *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
    * );
    */
-  applicationDefaults: (...defaults: Record<any, any>) => void;
+  applicationDefaults: (...defaults: Record<any, any>[]) => void;
 };
 
 export type EntitiesTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {
