@@ -1,20 +1,25 @@
-import type { JHipsterConfigs } from '../../generators/base/api.mjs';
+import type { ConfigSpec, JHipsterConfigs, JHipsterOption } from '../../generators/base/api.mjs';
 import type CoreGenerator from '../../generators/base-core/index.mjs';
 import { upperFirstCamelCase } from '../../generators/base/support/string.mjs';
 
-export const convertConfigToOption = (name, config) => {
+export const convertConfigToOption = (name: string, config?: ConfigSpec): JHipsterOption | undefined => {
   if (!config?.cli?.type) return undefined;
-  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
+  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)) as any;
   return {
     name,
     description: config.description,
     choices,
-    scope: 'storage',
+    scope: config.scope ?? 'storage',
+    ...(config.prompt && typeof config.default !== 'function' ? {} : { default: config.default }),
     ...config.cli,
   };
 };
 
-export function loadConfig(this: CoreGenerator | void, configsDef: JHipsterConfigs | undefined, { application, config }) {
+export function loadConfig(
+  this: CoreGenerator | void,
+  configsDef: JHipsterConfigs | undefined,
+  { application, config }: { application: any; config?: any },
+) {
   if (configsDef) {
     for (const [name, def] of Object.entries(configsDef)) {
       let value = application[name];

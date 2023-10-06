@@ -80,7 +80,7 @@ _%>
   const required = field && field.fieldValidate && field.fieldValidationRequired;
   if (field) {
     if (field.fieldValidate ) { _%>
-    <%- include('../../_partials_entity_/field_validators', {field, reactive}); -%>
+    <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
     <%_ }
   } _%>
   <%_ if (reference.doc) { _%>
