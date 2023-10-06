@@ -1,4 +1,4 @@
-import { normalizePathEnd } from '../../base/support/index.mjs';
+import { mutateApplication, normalizePathEnd, pickFields } from '../../base/support/index.mjs';
 
 import {
   databaseTypes,
@@ -42,44 +42,44 @@ const NO_SEARCH_ENGINE = searchEngineTypes.NO;
  * all variables should be referred from config,
  */
 export const loadServerConfig = ({ config, application }: { config: any; application: any }) => {
-  application.packageName = config.packageName;
-  application.packageFolder = config.packageFolder && normalizePathEnd(config.packageFolder);
-  (application as any).serverPort = config.serverPort;
-
-  application.srcMainJava = SERVER_MAIN_SRC_DIR;
-  application.srcMainResources = SERVER_MAIN_RES_DIR;
-  application.srcMainWebapp = CLIENT_MAIN_SRC_DIR;
-  application.srcTestJava = SERVER_TEST_SRC_DIR;
-  application.srcTestResources = SERVER_TEST_RES_DIR;
-  application.srcTestJavascript = CLIENT_TEST_SRC_DIR;
-
-  application.buildTool = config.buildTool;
-
-  application.databaseType = config.databaseType;
-  application.databaseMigration = config.databaseMigration;
-  application.devDatabaseType = config.devDatabaseType;
-  application.prodDatabaseType = config.prodDatabaseType;
-  application.incrementalChangelog = config.incrementalChangelog;
-  application.reactive = config.reactive;
-  application.searchEngine = config.searchEngine;
-  (application as any).cacheProvider = config.cacheProvider;
-  (application as any).enableHibernateCache = config.enableHibernateCache;
-  (application as any).serviceDiscoveryType = config.serviceDiscoveryType;
-
-  application.enableSwaggerCodegen = config.enableSwaggerCodegen;
-  application.messageBroker = config.messageBroker;
-  (application as any).websocket = config.websocket;
-  application.embeddableLaunchScript = config.embeddableLaunchScript;
-
-  application.enableGradleEnterprise = config.enableGradleEnterprise;
-
-  if (config.gradleEnterpriseHost) {
-    if (config.gradleEnterpriseHost.startsWith('https://')) {
-      (application as any).gradleEnterpriseHost = config.gradleEnterpriseHost;
-    } else {
-      (application as any).gradleEnterpriseHost = `https://${config.gradleEnterpriseHost}`;
-    }
-  }
+  mutateApplication(
+    application,
+    {
+      srcMainJava: SERVER_MAIN_SRC_DIR,
+      srcMainResources: SERVER_MAIN_RES_DIR,
+      srcMainWebapp: CLIENT_MAIN_SRC_DIR,
+      srcTestJava: SERVER_TEST_SRC_DIR,
+      srcTestResources: SERVER_TEST_RES_DIR,
+      srcTestJavascript: CLIENT_TEST_SRC_DIR,
+    },
+    pickFields(config, [
+      'packageName',
+      'packageFolder',
+      'serverPort',
+      'buildTool',
+      'databaseType',
+      'databaseMigration',
+      'devDatabaseType',
+      'prodDatabaseType',
+      'incrementalChangelog',
+      'reactive',
+      'searchEngine',
+      'cacheProvider',
+      'enableHibernateCache',
+      'serviceDiscoveryType',
+      'enableSwaggerCodegen',
+      'messageBroker',
+      'websocket',
+      'embeddableLaunchScript',
+      'enableGradleEnterprise',
+      'gradleEnterpriseHost',
+    ]),
+    {
+      packageFolder: ({ packageFolder }) => (packageFolder ? normalizePathEnd(packageFolder) : packageFolder),
+      gradleEnterpriseHost: ({ gradleEnterpriseHost }) =>
+        !gradleEnterpriseHost || gradleEnterpriseHost.startsWith('https://') ? gradleEnterpriseHost : `https://${gradleEnterpriseHost}`,
+    },
+  );
 };
 
 /**
@@ -87,8 +87,7 @@ export const loadServerConfig = ({ config, application }: { config: any; applica
  * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
  */
 export const loadPlatformConfig = ({ config, application }: { config: any; application: PlatformApplication }) => {
-  application.serviceDiscoveryType = config.serviceDiscoveryType;
-  application.monitoring = config.monitoring;
+  mutateApplication(application, pickFields(config, ['serviceDiscoveryType', 'monitoring']));
 };
 
 export const loadDerivedServerAndPlatformProperties = ({ application }: { application: any }) => {
