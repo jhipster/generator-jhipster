@@ -245,6 +245,7 @@ public class SecurityConfiguration {
             )
             .formLogin(formLogin ->
                 formLogin
+                    .loginPage("/")
                     .loginProcessingUrl("/api/authentication")
                     .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
                     .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))

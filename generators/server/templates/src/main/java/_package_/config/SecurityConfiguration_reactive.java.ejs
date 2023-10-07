@@ -244,6 +244,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
             .formLogin(formLogin -> formLogin
+                .loginPage("/")
                 .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
                 .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
                 .authenticationSuccessHandler(this::onAuthenticationSuccess)
