@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import prompts from './prompts.mjs';

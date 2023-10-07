@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.mjs';
 import { hibernateSnakeCase } from '../server/support/string.mjs';

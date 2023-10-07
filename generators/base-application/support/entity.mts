@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { Entity } from '../../../jdl/converters/types.js';
 
 const { upperFirst } = _;

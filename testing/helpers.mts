@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { basename, join } from 'path';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';

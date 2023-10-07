@@ -18,7 +18,7 @@
  */
 import { extname } from 'path';
 import { QueuedAdapter } from '@yeoman/adapter';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 

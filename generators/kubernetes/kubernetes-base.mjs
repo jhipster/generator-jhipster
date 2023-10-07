@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import crypto from 'crypto';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
 import { loadFromYoRc } from '../base-workspaces/internal/docker-base.mjs';

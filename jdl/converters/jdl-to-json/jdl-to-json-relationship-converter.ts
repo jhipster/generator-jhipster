@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { relationshipOptions, validations } from '../../jhipster/index.mjs';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';

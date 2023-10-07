@@ -21,7 +21,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import ChildProcess from 'child_process';
 import util from 'util';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
 import runAsync from 'run-async';

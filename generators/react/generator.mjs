@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { isFilePending } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 

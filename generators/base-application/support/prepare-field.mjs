@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { fieldTypes, validations } from '../../../jdl/jhipster/index.mjs';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.mjs';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.mjs';

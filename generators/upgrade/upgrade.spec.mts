@@ -1,7 +1,7 @@
 import path, { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import fse from 'fs-extra';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { expect } from 'esmocha';
 
 import { execaCommandSync } from 'execa';

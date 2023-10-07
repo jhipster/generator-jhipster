@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { DockerfileParser } from 'dockerfile-ast';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 const { camelCase } = _;
 

@@ -18,7 +18,7 @@
  */
 import fs from 'fs';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import {
   reservedKeywords,
   databaseTypes,

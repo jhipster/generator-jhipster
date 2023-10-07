@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 /**
  * Returns an entity table name based on the passed entity name.

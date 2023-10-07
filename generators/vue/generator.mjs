@@ -18,7 +18,7 @@
  */
 import { relative } from 'path';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';

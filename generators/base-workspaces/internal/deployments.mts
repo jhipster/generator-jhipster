@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../jdl/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig, loadDerivedServerAndPlatformProperties } from '../../server/support/index.mjs';
 import type { GeneratorBaseCore } from '../../index.js';

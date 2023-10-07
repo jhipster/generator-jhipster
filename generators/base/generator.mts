@@ -20,7 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';

@@ -25,7 +25,7 @@ import assert from 'assert';
 import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';

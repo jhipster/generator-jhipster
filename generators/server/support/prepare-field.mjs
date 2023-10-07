@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
 import { getUXConstraintName } from './database.mjs';
