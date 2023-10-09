@@ -157,7 +157,7 @@
     "simple-git": "3.20.0",
     "type-fest": "4.3.3",
     "uuid": "9.0.1",
-    "winston": "3.10.0",
+    "winston": "3.11.0",
     "yaml": "2.3.2",
     "yeoman-environment": "4.0.0-beta.5",
     "yeoman-generator": "6.0.0-rc.5"
