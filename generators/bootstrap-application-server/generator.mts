@@ -19,7 +19,7 @@
 import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import {
   JAVA_VERSION,
   MAIN_DIR,
@@ -58,6 +58,14 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 

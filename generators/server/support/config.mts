@@ -113,17 +113,10 @@ export const loadDerivedPlatformConfig = ({ application }: { application: Platfo
  * @param {import('./bootstrap-application-server/types').SpringBootApplication} dest - destination context to use default is context
  */
 export const loadDerivedServerConfig = ({ application }: { application: any }) => {
-  if (!application.packageFolder) {
-    application.packageFolder = `${application.packageName.replace(/\./g, '/')}/`;
-  }
-
   application.prodDatabaseTypePostgresql = undefined;
   application.prodDatabaseTypeMssql = undefined;
   application.devDatabaseTypeH2Any = undefined;
   application.prodDatabaseTypeMariadb = undefined;
-
-  application.javaPackageSrcDir = normalizePathEnd(`${application.srcMainJava}${application.packageFolder}`);
-  application.javaPackageTestDir = normalizePathEnd(`${application.srcTestJava}${application.packageFolder}`);
 
   application.communicationSpringWebsocket = application.websocket === SPRING_WEBSOCKET;
 
@@ -146,10 +139,6 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
   application.buildToolMaven = application.buildTool === MAVEN;
   application.buildToolUnknown = !application.buildToolGradle && !application.buildToolMaven;
 
-  application.temporaryDir = application.temporaryDir ?? (application.buildToolGradle ? 'build/' : 'target/');
-  const buildDestinationDir = `${application.temporaryDir}${application.buildToolGradle ? 'resources/main/' : 'classes/'}`;
-  application.clientDistDir = application.clientDistDir ?? `${buildDestinationDir}${CLIENT_DIST_DIR}`;
-
   application.cacheProviderNo = !application.cacheProvider || application.cacheProvider === NO_CACHE;
   application.cacheProviderCaffeine = application.cacheProvider === CAFFEINE;
   application.cacheProviderEhcache = application.cacheProvider === EHCACHE;
@@ -171,9 +160,18 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
     ? application.databaseMigration === 'liquibase'
     : application.databaseType === SQL;
 
-  application.imperativeOrReactive = application.reactive ? 'reactive' : 'imperative';
+  mutateApplication(application, {
+    packageFolder: ({ packageName }) => `${packageName.replace(/\./g, '/')}/`,
+    javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
+    javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
 
-  application.authenticationUsesCsrf = [OAUTH2, SESSION].includes(application.authenticationType);
+    temporaryDir: ({ buildToolGradle }) => (buildToolGradle ? 'build/' : 'target/'),
+    clientDistDir: ({ temporaryDir, buildToolGradle }) =>
+      `${temporaryDir}${buildToolGradle ? 'resources/main/' : 'classes/'}${CLIENT_DIST_DIR}`,
+
+    authenticationUsesCsrf: ({ authenticationType }) => [OAUTH2, SESSION].includes(authenticationType),
+    imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
+  });
 
   if (application.databaseTypeSql) {
     prepareSqlApplicationProperties({ application });

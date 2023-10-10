@@ -130,12 +130,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
   // Public API method used by the getter and also by Blueprints
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
@@ -143,10 +143,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         );
       },
 
-      loadConfig({ application }) {
-        application.prettierTabWidth = this.jhipsterConfig.prettierTabWidth || 2;
+      loadConfig({ applicationDefaults }) {
+        applicationDefaults({
+          prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
+        });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
@@ -155,7 +157,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
@@ -168,7 +170,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         application.DOCUMENTATION_URL = JHIPSTER_DOCUMENTATION_URL;
         application.DOCUMENTATION_ARCHIVE_PATH = JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
