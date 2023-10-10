@@ -142,10 +142,6 @@ const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
- */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   jhipsterDependenciesVersion;
@@ -452,21 +448,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+        if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
+
         entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
 
-        const fixedEntityTableName = this._fixEntityTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          application.jhiTablePrefix,
-        );
+        const databaseType =
+          entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
+        const fixedEntityTableName = this._fixEntityTableName(entityConfig.entityTableName, databaseType, application.jhiTablePrefix);
         if (fixedEntityTableName !== entityConfig.entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
-        const validation = this._validateTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          entityConfig,
-        );
+        const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
         if (validation !== true) {
           throw new Error(validation);
         }

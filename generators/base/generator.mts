@@ -258,6 +258,24 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Priority API stub for blueprints.
    *
+   * Preparing should be used to generate derived properties.
+   */
+  get postPreparing(): GenericTaskGroup<this, Definition['preparingTaskParam']> {
+    return this.asPreparingTaskGroup({});
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asPostPreparingTaskGroup(
+    taskGroup: GenericTaskGroup<this, Definition['postPreparingTaskParam']>,
+  ): GenericTaskGroup<this, Definition['postPreparingTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
    * Default priority should used as misc customizations.
    */
   get default(): GenericTaskGroup<this, Definition['defaultTaskParam']> {
