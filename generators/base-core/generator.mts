@@ -58,8 +58,21 @@ import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.mjs';
 import { convertConfigToOption } from '../../lib/internal/index.mjs';
 
 const { merge, get, set } = _;
-const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
-  PRIORITY_NAMES;
+const {
+  INITIALIZING,
+  PROMPTING,
+  CONFIGURING,
+  COMPOSING,
+  LOADING,
+  PREPARING,
+  POST_PREPARING,
+  DEFAULT,
+  WRITING,
+  POST_WRITING,
+  INSTALL,
+  POST_INSTALL,
+  END,
+} = PRIORITY_NAMES;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -88,6 +101,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   static LOADING = asPriority(LOADING);
 
   static PREPARING = asPriority(PREPARING);
+
+  static POST_PREPARING = asPriority(POST_PREPARING);
 
   static DEFAULT = asPriority(DEFAULT);
 
@@ -218,7 +233,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    */
   getArgsForPriority(priorityName: string) {
     const control = this.sharedData.getControl();
-    if (priorityName === POST_WRITING || priorityName === PREPARING) {
+    if (priorityName === POST_WRITING || priorityName === PREPARING || priorityName === POST_PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
     }

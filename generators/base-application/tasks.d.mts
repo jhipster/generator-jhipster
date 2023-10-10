@@ -84,7 +84,13 @@ export type BaseApplicationGeneratorDefinition<
   // Add application to existing priorities
   Record<'loadingTaskParam' | 'preparingTaskParam', ApplicationTaskParam<Definition> & ApplicationDefaultsTaskParam> &
   Record<
-    'defaultTaskParam' | 'postWritingTaskParam' | 'preConflictsTaskParam' | 'installTaskParam' | 'postInstallTaskParam' | 'endTaskParam',
+    | 'postPreparingTaskParam'
+    | 'defaultTaskParam'
+    | 'postWritingTaskParam'
+    | 'preConflictsTaskParam'
+    | 'installTaskParam'
+    | 'postInstallTaskParam'
+    | 'endTaskParam',
     ApplicationTaskParam<Definition>
   > &
   Record<'writingTaskParam', ApplicationTaskParam<Definition> & { configChanges?: Record<string, { newValue: any; oldValue: any }> }> &

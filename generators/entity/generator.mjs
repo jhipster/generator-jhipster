@@ -45,45 +45,42 @@ const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator {
+  name;
+
   constructor(args, options, features) {
     super(args, options, { unique: 'argument', ...features });
   }
 
   async beforeQueue() {
-    this.parseJHipsterArguments(command.arguments);
-    const name = _.upperFirst(this.name).replace('.json', '');
-    this.entityStorage = this.getEntityConfig(name, true);
-    this.entityConfig = this.entityStorage.createProxy();
-
-    const configExisted = this.entityStorage.existed;
-    const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
-    const entityExisted = fs.existsSync(this.destinationPath(filename));
-
-    this.jhipsterConfig.entities = [...(this.jhipsterConfig.entities ?? []), name];
-    this.context = {
-      name,
-      filename,
-      configExisted,
-      entityExisted,
-      configurationFileExists: this.fs.exists(this.destinationPath(filename)),
-    };
-
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ENTITY, {
-        generatorOptions: {
-          entityExisted,
-          configExisted,
-          arguments: [name],
-        },
-      });
+      await this.composeWithBlueprints(GENERATOR_ENTITY);
     }
-
-    this._setupEntityOptions(this, this, this.context);
   }
 
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return {
+      parseOptions() {
+        this.parseJHipsterArguments(command.arguments);
+        const name = _.upperFirst(this.name).replace('.json', '');
+        this.entityStorage = this.getEntityConfig(name, true);
+        this.entityConfig = this.entityStorage.createProxy();
+
+        const configExisted = this.entityStorage.existed;
+        const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
+        const entityExisted = fs.existsSync(this.destinationPath(filename));
+
+        this.jhipsterConfig.entities = [...(this.jhipsterConfig.entities ?? []), name];
+        this.context = {
+          name,
+          filename,
+          configExisted,
+          entityExisted,
+          configurationFileExists: this.fs.exists(this.destinationPath(filename)),
+        };
+
+        this._setupEntityOptions(this, this, this.context);
+      },
       /* Use need microservice path to load the entity file */
       askForMicroserviceJson: prompts.askForMicroserviceJson,
 
@@ -216,8 +213,8 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  get prompting() {
-    return {
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
       /* ask question to user if s/he wants to update entity */
       askForUpdate: prompts.askForUpdate,
       askForFields: prompts.askForFields,
@@ -229,16 +226,16 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       askForFiltering: prompts.askForFiltering,
       askForReadOnly: prompts.askForReadOnly,
       askForPagination: prompts.askForPagination,
-    };
+    });
   }
 
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   // Public API method used by the getter and also by Blueprints
-  get composing() {
-    return this.asComposingTaskGroup({
+  get default() {
+    return this.asDefaultTaskGroup({
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
@@ -252,8 +249,8 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints

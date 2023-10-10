@@ -36,6 +36,7 @@ import { mutateApplication } from '../base/support/config.mjs';
 const {
   LOADING,
   PREPARING,
+  POST_PREPARING,
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
@@ -341,6 +342,7 @@ export default class BaseApplicationGenerator<
       ![
         LOADING,
         PREPARING,
+        POST_PREPARING,
 
         CONFIGURING_EACH_ENTITY,
         LOADING_ENTITIES,
