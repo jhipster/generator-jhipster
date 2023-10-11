@@ -92,9 +92,6 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -538,9 +535,6 @@ exports[`generator - mongodb gateway-oauth2-maven-enableTranslation(false)-tech.
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -939,9 +933,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1263,9 +1254,6 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
@@ -1592,9 +1580,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -1968,9 +1953,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2319,9 +2301,6 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2800,9 +2779,6 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3130,9 +3106,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -3542,9 +3515,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3926,9 +3896,6 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -4372,9 +4339,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {

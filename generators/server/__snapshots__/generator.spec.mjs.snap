@@ -59,9 +59,6 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -301,9 +298,6 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -541,9 +535,6 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
@@ -825,9 +816,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {

@@ -92,9 +92,6 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -571,9 +568,6 @@ exports[`generator - couchbase gateway-oauth2-maven-enableTranslation(false)-tec
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -993,9 +987,6 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1326,9 +1317,6 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
@@ -1670,9 +1658,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2067,9 +2052,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2445,9 +2427,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2947,9 +2926,6 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3298,9 +3274,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -3731,9 +3704,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -4148,9 +4118,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -4615,9 +4582,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/config/LoggingAspectConfiguration.java": {

@@ -192,5 +192,6 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
       this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }
+    this.removeFile(`${application.javaPackageSrcDir}config/LocaleConfiguration.java`);
   }
 }
