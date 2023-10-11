@@ -180,7 +180,7 @@
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-plugin-mocha": "10.2.0",
-    "eslint-plugin-prettier": "5.0.0",
+    "eslint-plugin-prettier": "5.0.1",
     "esmocha": "1.0.1",
     "fs-extra": "11.1.1",
     "jest-extended": "4.0.2",
