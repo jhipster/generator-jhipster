@@ -149,7 +149,7 @@
     "prettier": "3.0.3",
     "prettier-plugin-java": "2.3.1",
     "prettier-plugin-packagejson": "2.4.6",
-    "prettier-plugin-properties": "0.2.0",
+    "prettier-plugin-properties": "0.3.0",
     "progress": "2.0.3",
     "randexp": "0.5.3",
     "run-async": "3.0.0",
