@@ -343,7 +343,7 @@ _%>
             return false;
         }
 <%_ if (!embedded) { _%>
-        return <%= primaryKey.name %> != null && <%= primaryKey.name %>.equals(((<%= persistClass %>) o).getId());
+        return get<%= primaryKey.nameCapitalized %> != null && get<%= primaryKey.nameCapitalized %>.equals(((<%= persistClass %>) o).get<%= primaryKey.nameCapitalized %>());
 <%_ } else { _%>
         return false;
 <%_ } _%>
