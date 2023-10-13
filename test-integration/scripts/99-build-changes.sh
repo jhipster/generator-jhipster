@@ -94,6 +94,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/cucumber' \
   'generators/gatling' \
   'generators/gradle' \
+  'generators/java' \
   'generators/liquibase' \
   'generators/maven' \
   'generators/server' \
