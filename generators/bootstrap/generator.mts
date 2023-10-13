@@ -17,8 +17,10 @@
  * limitations under the License.
  */
 import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import prettier from 'prettier';
+import type { FileTransform, PipelineOptions } from 'mem-fs';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -97,11 +99,12 @@ export default class BootstrapGenerator extends BaseGenerator {
   get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
     return {
       queueTransform() {
-        this.queueMultistepTransform();
+        const multiStepTransform = createMultiStepTransform();
+        this.queueMultistepTransform(multiStepTransform);
 
         this.env.sharedFs.on('change', filePath => {
-          if (createMultiStepTransform().templateFileFs.isTemplate(filePath)) {
-            this.queueMultistepTransform();
+          if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
+            this.queueMultistepTransform(multiStepTransform);
           }
         });
       },
@@ -133,16 +136,17 @@ export default class BootstrapGenerator extends BaseGenerator {
   /**
    * Queue multi step templates transform
    */
-  queueMultistepTransform() {
+  queueMultistepTransform(multiStepTransform: ReturnType<typeof createMultiStepTransform>) {
     this.queueTask({
-      method: () => {
-        const multiStepTransform = createMultiStepTransform();
-        const filter = file => isFilePending(file) && multiStepTransform.templateFileFs.isTemplate(file.path);
-        return this.env.applyTransforms([multiStepTransform], {
-          name: 'applying multi-step templates',
-          streamOptions: { filter },
-        } as any);
-      },
+      method: () =>
+        this.pipeline(
+          {
+            name: 'applying multi-step templates',
+            filter: file => isFileStateModified(file) && multiStepTransform.templateFileFs.isTemplate(file.path),
+            refresh: true,
+          },
+          multiStepTransform,
+        ),
       taskName: MULTISTEP_TRANSFORM_QUEUE,
       queueName: MULTISTEP_TRANSFORM_QUEUE,
       once: true,
@@ -161,41 +165,52 @@ export default class BootstrapGenerator extends BaseGenerator {
   }
 
   async commitPrettierConfig() {
-    const filter = file => isFilePending(file) && isPrettierConfigFilePath(file.path);
-    await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
+    await this.commitSharedFs({
+      filter: file => isPrettierConfigFilePath(file.path),
+    });
     this.log.ok('committed prettier configuration files');
   }
 
   /**
    * Commits the MemFs to the disc.
-   * @param stream - files stream, defaults to this.sharedFs.stream().
    */
-  async commitSharedFs(stream = this.env.sharedFs.stream({ filter: isFilePending })) {
-    const { skipYoResolve } = this.options;
-    const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
+  async commitSharedFs(options: PipelineOptions<MemFsEditorFile> = {}) {
+    const skipYoResolveTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    if (this.options.skipYoResolve) {
+      skipYoResolveTransforms.push(createYoResolveTransform());
+    }
+
+    const prettierTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    if (!this.skipPrettier) {
+      const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
+      prettierTransforms.push(
+        createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
+        createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
+        await createPrettierTransform.call(this, {
+          ignoreErrors,
+          prettierPackageJson: true,
+          prettierJava: !this.jhipsterConfig.skipServer,
+          extensions: this.prettierExtensions.join(','),
+          prettierOptions: this.prettierOptions,
+        }),
+      );
+    }
+
+    const autoCrlfTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    if (this.jhipsterConfig.autoCrlf) {
+      autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
+    }
 
     const transformStreams = [
-      ...(skipYoResolve ? [] : [createYoResolveTransform()]),
+      ...skipYoResolveTransforms,
       forceYoFiles(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFilesTransform(),
-      ...(this.skipPrettier
-        ? []
-        : [
-            createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
-            createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
-            await createPrettierTransform.call(this, {
-              ignoreErrors,
-              prettierPackageJson: true,
-              prettierJava: !this.jhipsterConfig.skipServer,
-              extensions: this.prettierExtensions.join(','),
-              prettierOptions: this.prettierOptions,
-            }),
-          ]),
-      ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
+      ...prettierTransforms,
+      ...autoCrlfTransforms,
       createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),
     ];
 
-    await this.fs.commit(transformStreams, stream);
+    await this.fs.commit(options, ...transformStreams);
   }
 }

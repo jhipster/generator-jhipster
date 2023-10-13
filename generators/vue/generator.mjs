@@ -19,7 +19,7 @@
 import { relative } from 'path';
 import chalk from 'chalk';
 import * as _ from 'lodash-es';
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -117,16 +117,24 @@ export default class VueGenerator extends BaseApplicationGenerator {
       async queueTranslateTransform({ control, application }) {
         const { enableTranslation, clientSrcDir } = application;
         const { getWebappTranslation } = control;
-        this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
-          name: 'translating webapp',
-          streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
-        });
+        this.queueTransformStream(
+          {
+            name: 'translating vue application',
+            filter: file => isFileStateModified(file) && isTranslatedVueFile(file) && file.path.startsWith(this.destinationPath()),
+            refresh: false,
+          },
+          translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
+        );
         if (enableTranslation) {
           const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
-          this.queueTransformStream(transform, {
-            name: 'converting translations',
-            streamOptions: { filter: file => isFilePending(file) && isTranslationFile(file) },
-          });
+          this.queueTransformStream(
+            {
+              name: 'converting vue translations',
+              filter: file => isFileStateModified(file) && isTranslationFile(file) && file.path.startsWith(this.destinationPath()),
+              refresh: false,
+            },
+            transform,
+          );
         }
       },
     });

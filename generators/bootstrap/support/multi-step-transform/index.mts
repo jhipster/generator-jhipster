@@ -18,7 +18,7 @@
  */
 import { Duplex } from 'stream';
 import PQueue from 'p-queue';
-import { isFilePending } from 'mem-fs-editor/state';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import TemplateFileFs from './template-file-fs.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -27,25 +27,25 @@ export const createMultiStepTransform = () => {
   const templateFileFs = new TemplateFileFs({});
   const pendingFiles: string[] = [];
 
-  const duplex: Duplex & { templateFileFs: TemplateFileFs } = Duplex.from(async function* (source) {
+  const duplex: Duplex & { templateFileFs: TemplateFileFs } = Duplex.from(async function* (source: AsyncGenerator<MemFsEditorFile>) {
     for await (const file of source) {
-      if (file.contents && templateFileFs.isTemplate(file.path)) {
-        const templateFile = templateFileFs.add(file.path, file.contents.toString());
-        if (templateFile.rootTemplate) {
-          // If multi-step root, postpone.
-          twoStepTemplateQueue.add(() => {
-            if (pendingFiles.includes(templateFile.basePath)) {
-              return;
-            }
-            file.path = templateFile.basePath;
-            file.contents = Buffer.from(templateFile.render().concat('\n'));
-          });
-        } else {
-          delete file.state;
-        }
-      } else if (isFilePending(file)) {
-        pendingFiles.push(file.path);
+      if (!templateFileFs.isTemplate(file.path)) {
+        throw new Error(`File ${file.path} is not supported`);
       }
+      const templateFile = templateFileFs.add(file.path, file.contents!.toString());
+      if (templateFile.rootTemplate) {
+        // If multi-step root, postpone.
+        twoStepTemplateQueue.add(() => {
+          if (pendingFiles.includes(templateFile.basePath)) {
+            return;
+          }
+          file.path = templateFile.basePath;
+          file.contents = Buffer.from(templateFile.render().concat('\n'));
+        });
+      } else {
+        delete file.state;
+      }
+
       yield file;
     }
     await twoStepTemplateQueue.start().onIdle();

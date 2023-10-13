@@ -46,17 +46,17 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should generate entities containing jakarta', () => {
-      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', 'jakarta');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java', 'jakarta');
     });
 
     it('should generate javadocs', () => {
-      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', '* A Foo');
-      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', '* My Name');
-      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Bar.java.jhi', '* Custom Bar');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java', '* A Foo');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java', '* My Name');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Bar.java', '* Custom Bar');
     });
 
     it('should generate openapi @Schema', () => {
-      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Bar.java.jhi', '@Schema(description = "Custom Bar")');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Bar.java', '@Schema(description = "Custom Bar")');
     });
 
     it('should write enum files', () => {
@@ -92,7 +92,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should generate entities not containing jakarta', () => {
-      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', 'jakarta');
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java', 'jakarta');
     });
 
     it('should not write enum files', () => {
@@ -117,7 +117,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should not contain jakarta', () => {
-      result.assertNoFile('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi');
+      result.assertNoFile('src/main/java/com/mycompany/myapp/domain/Foo.java');
     });
 
     it('should not write enum files', () => {

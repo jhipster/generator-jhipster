@@ -22,6 +22,7 @@ import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
+import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import {
   addFakerToEntity,
@@ -299,8 +300,14 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
         };
         this.queueTransformStream(
+          {
+            name: 'updating package.json dependency versions',
+            filter: file => isFileStateModified(file) && isPackageJson(file) && file.path.startsWith(this.destinationPath()),
+            refresh: false,
+          },
           passthrough(file => {
-            if (file.contents && isPackageJson(file)) {
+            const contents = file.contents.toString();
+            if (contents.includes('null')) {
               const content = JSON.parse(file.contents.toString());
               populateNullValues(content.dependencies);
               populateNullValues(content.devDependencies);
@@ -308,10 +315,6 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
               file.contents = Buffer.from(`${JSON.stringify(content, null, 2)}\n`);
             }
           }),
-          {
-            name: 'updating package.json dependency versions',
-            streamOptions: { filter: isPackageJson },
-          },
         );
       },
     });

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
 import { writeFiles, prettierConfigFiles } from './files.mjs';
@@ -180,10 +180,15 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   get default() {
     return this.asDefaultTaskGroup({
       async formatSonarProperties() {
-        this.queueTransformStream(await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
-          name: 'prettifying sonar-project.properties',
-          streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('sonar-project.properties') },
-        });
+        this.queueTransformStream(
+          {
+            name: 'prettifying sonar-project.properties',
+            filter: file =>
+              isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && file.path.endsWith('sonar-project.properties'),
+            refresh: false,
+          },
+          await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }),
+        );
       },
     });
   }

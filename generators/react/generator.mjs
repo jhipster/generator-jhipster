@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import * as _ from 'lodash-es';
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -112,10 +112,14 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.asDefaultTaskGroup({
       queueTranslateTransform({ control, application }) {
         if (!application.enableTranslation) {
-          this.queueTransformStream(translateReactFilesTransform(control.getWebappTranslation), {
-            name: 'translating webapp',
-            streamOptions: { filter: file => isFilePending(file) && isTranslatedReactFile(file) },
-          });
+          this.queueTransformStream(
+            {
+              name: 'translating react application',
+              filter: file => isFileStateModified(file) && isTranslatedReactFile(file) && file.path.startsWith(this.destinationPath()),
+              refresh: false,
+            },
+            translateReactFilesTransform(control.getWebappTranslation),
+          );
         }
       },
     });

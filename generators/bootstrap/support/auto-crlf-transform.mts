@@ -20,7 +20,9 @@ import { stat } from 'fs/promises';
 import { createReadStream } from 'fs';
 import { transform } from 'p-transform';
 import { isBinaryFile } from 'isbinaryfile';
-import { type SimpleGit } from 'simple-git';
+import { simpleGit } from 'simple-git';
+import { isFileStateModified } from 'mem-fs-editor/state';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import { normalizeLineEndings } from '../../base/support/index.mjs';
 
 /**
@@ -47,31 +49,45 @@ export function detectCrLf(filePath: string): Promise<boolean> {
   });
 }
 
-const autoCrlfTransform = (git: SimpleGit) =>
-  transform(async (file: any) => {
-    if (!file.contents) {
+const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
+  const git = simpleGit({ baseDir }).env({
+    ...process.env,
+    LANG: 'en',
+  });
+
+  if (!(await git.checkIsRepo())) {
+    throw new Error(`${baseDir} is not inside a git repository`);
+  }
+
+  return transform(async (file: MemFsEditorFile) => {
+    if (!isFileStateModified(file) || !file.path.startsWith(baseDir)) {
       return file;
     }
-    if (await isBinaryFile(file.contents)) {
-      return file;
+
+    try {
+      const fstat = await stat(file.path);
+      if (fstat.isFile()) {
+        if (await isBinaryFile(file.contents!)) {
+          return file;
+        }
+
+        const attrs = Object.fromEntries(
+          (await git.raw('check-attr', 'binary', 'eol', '--', file.path))
+            .split(/\r\n|\r|\n/)
+            .map(attr => attr.split(':'))
+            .map(([_file, attr, value]) => [attr, value]),
+        );
+
+        if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf' && (await detectCrLf(file.path)))) {
+          file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), '\r\n'));
+        }
+      }
+    } catch {
+      // File doesn't exist.
     }
-    const fstat = await stat(file.path);
-    if (!fstat.isFile()) {
-      return file;
-    }
-    const attributes = Object.fromEntries(
-      (await git.raw('check-attr', 'binary', 'eol', '--', file.path))
-        .split(/\r\n|\r|\n/)
-        .map(attr => attr.split(':'))
-        .map(([_file, attr, value]) => [attr, value]),
-    );
-    if (attributes.binary === 'set' || attributes.eol === 'lf') {
-      return file;
-    }
-    if (attributes.eol === 'crlf' || (await detectCrLf(file.path))) {
-      file.contents = Buffer.from(normalizeLineEndings(file.contents.toString(), '\r\n'));
-    }
+
     return file;
   });
+};
 
 export default autoCrlfTransform;
