@@ -585,6 +585,7 @@ describe(`generator - ${generator}`, () => {
     "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -849,6 +850,7 @@ describe(`generator - ${generator}`, () => {
     "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -1165,6 +1167,7 @@ describe(`generator - ${generator}`, () => {
     "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,

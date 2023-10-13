@@ -17,11 +17,14 @@
  * limitations under the License.
  */
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.mjs';
+import { clientFrameworkTypes } from '../../jdl/index.js';
+
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 export const files = {
   common: [
     {
-      templates: ['README.md.jhi.client'],
+      templates: ['README.md.jhi.client', '.prettierignore.jhi.client'],
     },
     clientRootTemplatesBlock({
       templates: ['.eslintignore'],
@@ -78,6 +81,10 @@ export const files = {
 };
 
 export async function writeFiles({ application }) {
+  if (![ANGULAR, REACT, VUE].includes(application.clientFramework)) {
+    return;
+  }
+
   await this.writeFiles({
     sections: files,
     context: application,

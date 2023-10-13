@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { formatDocAsJavaDoc } from '../../server/support/doc.mjs';
 
 const doesTheEnumValueHaveACustomValue = enumValue => {
@@ -90,7 +90,7 @@ export const getEnumInfo = (field, clientRootFolder) => {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: field.fieldType,
-    javadoc: field.fieldTypeJavadoc && formatDocAsJavaDoc(field.fieldTypeJavadoc),
+    javadoc: field.fieldTypeDocumentation && formatDocAsJavaDoc(field.fieldTypeDocumentation),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.mjs';
@@ -31,12 +31,12 @@ import { ClientSourceType } from '../client/types.mjs';
 import { LanguageSourceType } from '../languages/types.js';
 import command from './command.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
-
-const { upperFirst } = _;
+import { mutateApplication } from '../base/support/config.mjs';
 
 const {
   LOADING,
   PREPARING,
+  POST_PREPARING,
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
@@ -125,7 +125,7 @@ export default class BaseApplicationGenerator<
       });
       if (this.options.applicationWithEntities.entities) {
         const entities = this.options.applicationWithEntities.entities.map(entity => {
-          const entityName = _.upperFirst(entity.name);
+          const entityName = upperFirst(entity.name);
           const file = this.getEntityConfigPath(entityName);
           this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
           return entityName;
@@ -342,6 +342,7 @@ export default class BaseApplicationGenerator<
       ![
         LOADING,
         PREPARING,
+        POST_PREPARING,
 
         CONFIGURING_EACH_ENTITY,
         LOADING_ENTITIES,
@@ -367,6 +368,12 @@ export default class BaseApplicationGenerator<
     }
     const application = this.sharedData.getApplication();
 
+    if ([PREPARING, LOADING].includes(priorityName)) {
+      return {
+        application,
+        applicationDefaults: data => mutateApplication(application, data),
+      };
+    }
     if (LOADING_ENTITIES === priorityName) {
       return {
         application,
@@ -399,7 +406,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to configure.
-   * This method doesn't filter entities. An filtered config can be changed at thie priority.
+   * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
   getEntitiesDataToConfigure() {

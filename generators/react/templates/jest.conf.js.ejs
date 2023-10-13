@@ -12,12 +12,12 @@ module.exports = {
   testEnvironmentOptions: {
     url: 'http://localhost/',
   },
-  cacheDirectory: '<rootDir>/<%= temporaryDir %>jest-cache',
-  coverageDirectory: '<rootDir>/<%= temporaryDir %>test-results/',
-  testMatch: ['<rootDir>/<%= clientSrcDir %>app/**/@(*.)@(spec.ts?(x))'],
+  cacheDirectory: '<rootDir>/<%= this.relativeDir(clientRootDir, temporaryDir) %>jest-cache',
+  coverageDirectory: '<rootDir>/<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/',
+  testMatch: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/**/@(*.)@(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   coveragePathIgnorePatterns: [
-    '<rootDir>/<%= clientTestDir %>'
+    '<rootDir>/<%= this.relativeDir(clientRootDir, clientTestDir) %>',
   ],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy',
@@ -25,13 +25,13 @@ module.exports = {
   }),
   reporters: [
     'default',
-    ['jest-junit', { outputDirectory: './<%= temporaryDir %>test-results/', outputName: 'TESTS-results-jest.xml' }],
-    ['jest-sonar', { outputDirectory: './<%= temporaryDir %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
+    ['jest-junit', { outputDirectory: './<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/', outputName: 'TESTS-results-jest.xml' }],
+    ['jest-sonar', { outputDirectory: './<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/'
   ],
-  setupFiles: ['<rootDir>/<%= clientSrcDir %>app/setup-tests.ts'],
+  setupFiles: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/setup-tests.ts'],
   globals: {
 <%_ if (enableTranslation) { _%>
     I18N_HASH: 'generated_hash',

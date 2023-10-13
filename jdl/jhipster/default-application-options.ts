@@ -105,7 +105,7 @@ export function getConfigForClientApplication(options: any = {}): any {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
-    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]);
+    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   }
   const clientFramework = options[CLIENT_FRAMEWORK];
   if (clientFramework !== NO_CLIENT_FRAMEWORK) {

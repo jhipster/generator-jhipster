@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 import crypto from 'crypto';
-import _ from 'lodash';
-import runAsync from 'run-async';
+import * as _ from 'lodash-es';
 
-import shelljs from 'shelljs';
 import { defaultKubernetesConfig } from './kubernetes-constants.mjs';
 import { loadFromYoRc } from '../base-workspaces/internal/docker-base.mjs';
 import {
@@ -50,39 +48,31 @@ const { INGRESS } = ServiceTypes;
 const { GKE, NGINX } = IngressTypes;
 const { K8S, HELM } = GeneratorTypes;
 
-export const checkKubernetes = runAsync(function () {
+export const checkKubernetes = async function () {
   if (this.skipChecks) return;
-  const done = this.async();
 
-  shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
-    if (stderr) {
-      this.log.warn(
-        'kubectl 1.2 or later is not installed on your computer.\n' +
-          'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n',
-      );
-    }
-    done();
-  });
-});
+  try {
+    await this.spawnCommand('kubectl version');
+  } catch {
+    this.log.warn(
+      'kubectl 1.2 or later is not installed on your computer.\n' +
+        'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n',
+    );
+  }
+};
 
-export const checkHelm = runAsync(function () {
+export const checkHelm = async function () {
   if (this.skipChecks) return;
-  const done = this.async();
 
-  shelljs.exec(
-    'helm version --client | grep -E "(v2\\.1[2-9]{1,2}\\.[0-9]{1,3})|(v3\\.[0-9]{1,2}\\.[0-9]{1,3})"',
-    { silent: true },
-    (code, stdout, stderr) => {
-      if (stderr || code !== 0) {
-        this.log.warn(
-          'helm 2.12.x or later is not installed on your computer.\n' +
-            'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
-        );
-      }
-      done();
-    },
-  );
-});
+  try {
+    await this.spawnCommand('helm version --client | grep -E "(v2\\.1[2-9]{1,2}\\.[0-9]{1,3})|(v3\\.[0-9]{1,2}\\.[0-9]{1,3})"');
+  } catch {
+    this.log.warn(
+      'helm 2.12.x or later is not installed on your computer.\n' +
+        'Make sure you have helm installed. Read https://github.com/helm/helm/\n',
+    );
+  }
+};
 
 export function loadConfig() {
   loadFromYoRc.call(this);

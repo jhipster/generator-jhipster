@@ -53,30 +53,30 @@ let config = defineConfig({
             `${require('swagger-ui-dist').getAbsoluteFSPath()}/*.{js,css,html,png}`,
             `!${require('swagger-ui-dist').getAbsoluteFSPath()}/**/index.html`,
             getFileFromRepo('axios/dist/axios.min.js'),
-            fileURLToPath(new URL('./<%- clientSrcDir %>swagger-ui/index.html', import.meta.url)),
+            fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url)),
           ],
-          dest: '<%= clientDistDir %>swagger-ui',
+          dest: '<%= this.relativeDir(clientRootDir, clientDistDir) %>swagger-ui',
         },
       ],
       hook: 'writeBundle',
     }),
   ],
-  root: fileURLToPath(new URL('./<%- clientSrcDir %>', import.meta.url)),
-  publicDir: fileURLToPath(new URL('./<%- clientDistDir %>public', import.meta.url)),
-  cacheDir: fileURLToPath(new URL('./<%- temporaryDir %>.vite-cache', import.meta.url)),
+  root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
+  publicDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
+  cacheDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
   build: {
     emptyOutDir: true,
-    outDir: fileURLToPath(new URL('./<%- clientDistDir %>', import.meta.url)),
+    outDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
     rollupOptions: {
       input: {
-        app: fileURLToPath(new URL('./<%- clientSrcDir %>index.html', import.meta.url)),
+        app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
       },
     },
   },
   resolve: {
     alias: {
       vue: '@vue/compat/dist/vue.esm-bundler.js',
-      '@': fileURLToPath(new URL('./<%- clientSrcDir %>app/', import.meta.url)),
+      '@': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
     },
   },
   define: {
@@ -132,8 +132,8 @@ config = mergeConfig(config, {
 <%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
       exposes: {
-        './entities-router': './<%= clientSrcDir %>app/router/entities',
-        './entities-menu': './<%= clientSrcDir %>app/entities/entities-menu.vue',
+        './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
+        './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
       },
 <%_ } _%>
       shared: {
@@ -148,19 +148,19 @@ config = mergeConfig(config, {
         'vue-router': {},
         pinia: {},
         '@/shared/security/authority': {
-          packagePath: './<%= clientSrcDir %>app/shared/security/authority',
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/security/authority',
 <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
 <%_ } _%>
         },
         '@/shared/alert/alert.service': {
-          packagePath: './<%= clientSrcDir %>app/shared/alert/alert.service',
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
 <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
 <%_ } _%>
         },
         '@/locale/translation.service': {
-          packagePath: './<%= clientSrcDir %>app/locale/translation.service',
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
 <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
 <%_ } _%>

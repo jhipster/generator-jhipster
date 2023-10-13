@@ -29,12 +29,17 @@ import { GenericSourceTypeDefinition } from '../base/tasks.mjs';
 import command from './command.mjs';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.mjs';
 import { matchMainJavaFiles } from './support/package-info-transform.mjs';
+import { entityServerFiles, enumFiles } from './entity-files.mjs';
+import { getEnumInfo } from '../base-application/support/index.mjs';
 
 export type ApplicationDefinition = GenericApplicationDefinition<JavaApplication>;
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition>;
 
 export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
-  packageInfoFile = true;
+  packageInfoFile!: boolean;
+  generateEntities!: boolean;
+  useJakartaValidation!: boolean;
+  generateEnums!: boolean;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -49,7 +54,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
 
       validateJava() {
@@ -116,6 +121,47 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      async writeServerFiles({ application, entities }) {
+        if (!this.generateEntities) return;
+
+        const { useJakartaValidation } = this;
+        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+          await this.writeFiles({
+            sections: entityServerFiles,
+            context: { ...application, ...entity, useJakartaValidation },
+          });
+        }
+      },
+
+      async writeEnumFiles({ application, entities }) {
+        if (!this.generateEnums || !this.generateEntities) return;
+
+        for (const entity of entities.filter(entity => !entity.skipServer)) {
+          for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
+            const enumInfo = {
+              ...getEnumInfo(field, (entity as any).clientRootFolder),
+              frontendAppName: (entity as any).frontendAppName,
+              packageName: application.packageName,
+              javaPackageSrcDir: application.javaPackageSrcDir,
+              entityJavaPackageFolder: (entity as any).entityJavaPackageFolder,
+              entityAbsolutePackage: (entity as any).entityAbsolutePackage || application.packageName,
+            };
+            await this.writeFiles({
+              sections: enumFiles,
+              context: enumInfo,
+            });
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   /**

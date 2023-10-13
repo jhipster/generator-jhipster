@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { fieldTypes, validations } from '../../../jdl/jhipster/index.mjs';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.mjs';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.mjs';
@@ -375,7 +375,13 @@ export function fieldToReference(entity, field, pathPrefix = []) {
     field,
     multiple: false,
     owned: true,
-    doc: field.javadoc,
+    doc: field.documentation,
+    get propertyJavadoc() {
+      return field.fieldJavadoc;
+    },
+    get propertyApiDescription() {
+      return field.fieldApiDescription;
+    },
     label: field.fieldNameHumanized,
     name: field.fieldName,
     type: field.fieldType,

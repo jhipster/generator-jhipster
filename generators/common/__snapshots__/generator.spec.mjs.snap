@@ -47,13 +47,9 @@ trim_trailing_whitespace = false
   },
   ".prettierignore": {
     "contents": "node_modules
-target
-build
 package-lock.json
 .git
-.mvn
-gradle
-.gradle
+target/
 ",
     "stateCleared": "modified",
   },
@@ -128,7 +124,7 @@ overrides:
   "package.json": {
     "contents": "{
   "devDependencies": {
-    "generator-jhipster": "<%= jhipsterVersion %>",
+    "generator-jhipster": "JHIPSTER_VERSION",
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION"
   },

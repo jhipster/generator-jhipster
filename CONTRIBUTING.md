@@ -224,7 +224,7 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 Since v8 `generator-jhipster` is written in typescript.
 To run it you need to compile to javascript or use a just-in-time compilation.
 
-#### Runnning jit executable
+#### Running jit executable
 
 The executable is located at `bin/jhipster.cjs`.
 You can alias it to `jhipster` command:
@@ -339,7 +339,7 @@ Daily builds samples are prefixed with `daily-`.
 #### Samples folder
 
 A common samples folder will be used if `--global` option is used like `jhipster generate-sample ng-default --global`.
-At first execution a prompt will ask for the samples folder, the choosen value will be reused at next executions.
+At first execution a prompt will ask for the samples folder, the chosen value will be reused at next executions.
 At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very used for quick looks.
 
 ### Testing samples

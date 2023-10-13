@@ -16,4 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './build-application.mjs';
+
+export default {
+  gradle: [
+    {
+      templates: ['.prettierignore.jhi.gradle', 'gradle/wrapper/gradle-wrapper.properties'],
+    },
+    {
+      transform: false,
+      templates: ['gradlew', 'gradlew.bat', 'gradle/wrapper/gradle-wrapper.jar'],
+    },
+  ],
+};

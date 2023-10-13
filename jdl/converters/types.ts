@@ -15,7 +15,7 @@ export type Relationship = {
 } & Record<string, any>;
 
 export type Entity = {
-  javadoc?: string;
+  documentation?: string;
   fields?: Field[];
   relationships?: Relationship[];
 } & Record<string, any>;

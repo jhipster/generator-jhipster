@@ -34,7 +34,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
     super(args, options, {
       jhipsterBootstrap: false,
       storeJHipsterVersion: false,
-      customInstallTask: true,
+      customInstallTask: options.commandName === 'info' ? true : undefined,
       customCommitTask: true,
       ...features,
     });
@@ -47,12 +47,8 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       },
 
       async checkJHipster() {
-        try {
-          const { stdout } = await this.spawnCommand('npm list generator-jhipster', { stdio: 'pipe' });
-          console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
-        } catch (error) {
-          console.log(`\n\`\`\`\n${(error as any).stdout}\`\`\`\n`);
-        }
+        const { stdout } = await this.spawnCommand('npm list generator-jhipster', { stdio: 'pipe', reject: false });
+        console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
       },
 
       displayConfiguration() {
@@ -121,7 +117,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
   async checkCommand(command: string, args: string[], printInfo = ({ stdout }: ExecaReturnValue<string>) => console.log(stdout)) {
     try {
-      printInfo(await this.spawnCommand(command, args, { stdio: 'pipe' }));
+      printInfo(await this.spawn(command, args, { stdio: 'pipe' }));
     } catch (_error) {
       console.log(chalk.red(`'${command}' command could not be found`));
     }

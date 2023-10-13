@@ -51,7 +51,7 @@ node {
 <%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
 <%= indent %>    }
     <%_ } _%>
-    <%_ if (cicdIntegrationsSnyk) { _%>
+    <%_ if (ciCdIntegrationsSnyk) { _%>
 <%= indent %>    stage('Install Snyk CLI') {
 <%= indent %>       sh """
 <%= indent %>           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -92,12 +92,12 @@ node {
 <%= indent %>    }
 
     <%_ } _%>
-    <%_ if (cicdIntegrationsHeroku) { _%>
+    <%_ if (ciCdIntegrationsHeroku) { _%>
 <%= indent %>    stage('package and deploy') {
 <%= indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./mvnw -ntp verify -P-webapp <% if (cicdIntegrationsDeploy) { %>deploy <% } %>-Pprod -DskipTests"
+<%= indent %>        sh "./mvnw -ntp verify -P-webapp <% if (ciCdIntegrationsDeploy) { %>deploy <% } %>-Pprod -DskipTests"
     <%_ } _%>
 <%= indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%= indent %>    }
@@ -115,7 +115,7 @@ node {
 <%= indent %>        sh "./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon"
 <%= indent %>    }
     <%_ } _%>
-    <%_ if (cicdIntegrationsSnyk) { _%>
+    <%_ if (ciCdIntegrationsSnyk) { _%>
 <%= indent %>    stage('Install Snyk CLI') {
 <%= indent %>       sh """
 <%= indent %>           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -156,14 +156,14 @@ node {
 <%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
 <%= indent %>    }
 
-    <%_ if (cicdIntegrationsHeroku) { _%>
+    <%_ if (ciCdIntegrationsHeroku) { _%>
 <%= indent %>    stage('deployment') {
 <%= indent %>        sh "./gradlew deployHeroku --no-daemon"
 <%= indent %>    }
 
      <%_ } _%>
 <%_ } _%>
-<%_ if (cicdIntegrationsSonar) { _%>
+<%_ if (ciCdIntegrationsSonar) { _%>
 <%= indent %>    stage('quality analysis') {
 <%= indent %>        withSonarQubeEnv('<%= sonarName %>') {
     <%_ if (buildToolMaven) { _%>
@@ -177,7 +177,7 @@ node {
 <%_ if (insideDocker) { _%>
 <%= gitLabIndent %>    }
 <%_ } _%>
-<%_ if (cicdIntegrationsPublishDocker) { _%>
+<%_ if (ciCdIntegrationsPublishDocker) { _%>
 
 <%= gitLabIndent %>    def dockerImage
 <%= gitLabIndent %>    stage('publish docker') {

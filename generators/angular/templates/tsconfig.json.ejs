@@ -18,8 +18,8 @@
 -%>
 {
   "compilerOptions": {
-    "baseUrl": "<%= clientSrcDir %>",
-    "outDir": "./<%= clientDistDir %>",
+    "baseUrl": "<%- this.relativeDir(clientRootDir, clientSrcDir) %>",
+    "outDir": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/root",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": true,

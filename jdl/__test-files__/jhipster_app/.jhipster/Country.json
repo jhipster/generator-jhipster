@@ -22,7 +22,7 @@
     {
       "fieldName": "countryId",
       "fieldType": "Long",
-      "javadoc": "The country Id"
+      "documentation": "The country Id"
     },
     {
       "fieldName": "countryName",

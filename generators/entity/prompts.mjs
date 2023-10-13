@@ -18,7 +18,7 @@
  */
 import fs from 'fs';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import {
   reservedKeywords,
   databaseTypes,
@@ -80,7 +80,7 @@ const getFieldNameUndercored = fields =>
   );
 
 function askForMicroserviceJson() {
-  const context = this.context;
+  const context = this.entityData;
   if (this.jhipsterConfig.applicationType !== GATEWAY || context.configExisted) {
     return undefined;
   }
@@ -120,7 +120,7 @@ function askForMicroserviceJson() {
 }
 
 function askForUpdate() {
-  const context = this.context;
+  const context = this.entityData;
   // ask only if running an existing entity without arg option --force or --regenerate
   const isForce = this.options.force || context.regenerate;
   context.updateEntity = 'regenerate'; // default if skipping questions by --force
@@ -163,7 +163,7 @@ function askForUpdate() {
 }
 
 function askForFields() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (this.options.defaults || (context.useConfigurationFile && context.updateEntity !== 'add')) {
     return undefined;
@@ -177,7 +177,7 @@ function askForFields() {
 }
 
 function askForFieldsToRemove() {
-  const context = this.context;
+  const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.fields.length === 0) {
     return undefined;
@@ -217,7 +217,7 @@ function askForFieldsToRemove() {
 }
 
 function askForRelationships() {
-  const context = this.context;
+  const context = this.entityData;
   if (this.options.defaults) {
     return undefined;
   }
@@ -233,7 +233,7 @@ function askForRelationships() {
 }
 
 function askForRelationsToRemove() {
-  const context = this.context;
+  const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
     return undefined;
@@ -279,7 +279,7 @@ function askForRelationsToRemove() {
 }
 
 function askForFiltering() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if server is skipped, or the backend is not sql, or no service requested
   if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
     return undefined;
@@ -308,7 +308,7 @@ function askForFiltering() {
 }
 
 function askForReadOnly() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile) {
     return undefined;
@@ -327,7 +327,7 @@ function askForReadOnly() {
 }
 
 function askForDTO() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped or if no service layer
   if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
     return undefined;
@@ -356,7 +356,7 @@ function askForDTO() {
 }
 
 function askForService() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped
   if (context.useConfigurationFile || context.skipServer) {
     return undefined;
@@ -389,7 +389,7 @@ function askForService() {
 }
 
 function askForPagination() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data are imported from a file
   if (context.useConfigurationFile) {
     return undefined;
@@ -429,7 +429,7 @@ function askForPagination() {
  * ask question for a field creation
  */
 function askForField() {
-  const context = this.context;
+  const context = this.entityData;
   this.log.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   const skipServer = context.skipServer;
   const databaseType = context.databaseType;
@@ -879,7 +879,7 @@ function askForField() {
  * ask question for a relationship creation
  */
 function askForRelationship() {
-  const context = this.context;
+  const context = this.entityData;
   const name = context.name;
   this.log.log(chalk.green('\nGenerating relationships to other entities\n'));
   const prompts = [
@@ -1072,7 +1072,7 @@ function askForRelationship() {
  * Show the entity and it's fields and relationships in console
  */
 function logFieldsAndRelationships() {
-  const context = this.context;
+  const context = this.entityData;
   if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
     this.log.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
   }

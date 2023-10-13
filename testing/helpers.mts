@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { basename, join } from 'path';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
@@ -103,6 +103,7 @@ export const createBlueprintFiles = (
 
 class JHipsterRunContext extends RunContext<GeneratorTestType> {
   public sharedSource!: Record<string, any>;
+  private sharedData!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
   private sharedControl!: Record<string, any>;
   private workspaceApplications: string[] = [];
@@ -200,25 +201,31 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
       },
     );
 
-    return this.onBeforePrepare(() => defineDefaults()).withSharedApplication({ sharedSource: this.sharedSource });
+    return this.onBeforePrepare(() => defineDefaults()).withSharedData({ sharedSource: this.sharedSource });
   }
 
   withControl(sharedControl: Record<string, any>): this {
-    this.sharedControl = {};
+    this.sharedControl = this.sharedControl ?? {};
     Object.assign(this.sharedControl, sharedControl);
-    return this.withSharedApplication({ control: this.sharedControl });
+    return this.withSharedData({ control: this.sharedControl });
   }
 
-  private withSharedApplication(sharedApplication: Record<string, any>): this {
-    if (!this.sharedApplication) {
+  withSharedApplication(sharedApplication: Record<string, any>): this {
+    this.sharedApplication = this.sharedApplication ?? {};
+    Object.assign(this.sharedApplication, sharedApplication);
+    return this.withSharedData({ sharedApplication: this.sharedApplication });
+  }
+
+  private withSharedData(sharedData: Record<string, any>): this {
+    if (!this.sharedData) {
       const applicationId = 'test-application';
-      this.sharedApplication = { ...sharedApplication };
-      set((this as any).envOptions, `sharedOptions.sharedData.applications.${applicationId}`, this.sharedApplication);
+      this.sharedData = { ...sharedData };
+      set((this as any).envOptions, `sharedOptions.sharedData.applications.${applicationId}`, this.sharedData);
       return this.withOptions({
         applicationId,
       });
     }
-    Object.assign(this.sharedApplication, sharedApplication);
+    Object.assign(this.sharedData, sharedData);
     return this;
   }
 

@@ -16,8 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as _ from 'lodash-es';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { type Control } from './types.mjs';
+
+const { defaults } = _;
 
 export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
   _storage: any;
@@ -28,15 +31,17 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     }
     // Backward compatibility sharedData
     this._storage = storage;
-    this._storage.sharedDeployment = this._storage.sharedDeployment || {};
-    this._storage.sharedWorkspaces = this._storage.sharedWorkspaces || {};
-    this._storage.sharedEntities = this._storage.sharedEntities || {};
-    this._storage.sharedApplication = this._storage.sharedApplication || {
-      nodeDependencies: {},
-    };
-    this._storage.sharedSource = this._storage.sharedSource || {};
-    this._storage.control = this._storage.control || initialControl;
-    this._storage.props = this._storage.props ?? { configOptions: {} };
+
+    defaults(this._storage, {
+      sharedDeployment: {},
+      sharedWorkspaces: {},
+      sharedEntities: {},
+      sharedApplication: {},
+      sharedSource: {},
+      control: initialControl,
+      props: {},
+    });
+    this._storage.sharedApplication.nodeDependencies = this._storage.sharedApplication.nodeDependencies ?? {};
   }
 
   getSource() {

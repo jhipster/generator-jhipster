@@ -28,15 +28,14 @@ export const files = {
   common: [
     clientRootTemplatesBlock({
       templates: [
+        '.eslintrc.json',
+        'angular.json',
+        'ngsw-config.json',
         'package.json',
         'tsconfig.json',
         'tsconfig.app.json',
         'tsconfig.spec.json',
         'jest.conf.js',
-        '.eslintrc.json',
-        'angular.json',
-        'ngsw-config.json',
-        'README.md.jhi.client.angular',
         'webpack/environment.js',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
@@ -399,6 +398,7 @@ export const files = {
         'admin/logs/logs.service.spec.ts',
         'admin/metrics/metrics.component.spec.ts',
         'admin/metrics/metrics.service.spec.ts',
+        'admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.spec.ts',
       ],
     },
     {

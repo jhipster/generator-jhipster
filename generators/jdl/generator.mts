@@ -18,10 +18,11 @@
  */
 import { extname } from 'path';
 import { QueuedAdapter } from '@yeoman/adapter';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
+import { readFile } from 'fs/promises';
 import BaseGenerator from '../base/index.mjs';
 import command from './command.mjs';
 import { downloadJdlFile } from '../../cli/download.mjs';
@@ -105,9 +106,14 @@ export default class JdlGenerator extends BaseGenerator {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
             this.jdlFiles.map(toJdlFile).map(async filename => {
-              if (!this.readDestination(filename)) {
+              try {
+                this.readDestination(filename);
+              } catch {
                 this.log.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
-                return downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
+                const downloadedFile = await downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
+                // The file has null content at mem-fs, update with actual content.
+                this.writeDestination(downloadedFile, (await readFile(downloadedFile)).toString());
+                return downloadedFile;
               }
               return filename;
             }),

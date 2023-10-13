@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.mjs';
@@ -371,6 +371,9 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       get name() {
         return relationshipId.otherEntity.primaryKey.name;
       },
+      get hibernateSnakeCaseName() {
+        return hibernateSnakeCase(relationshipId.otherEntity.primaryKey.name);
+      },
       get nameCapitalized() {
         return relationshipId.otherEntity.primaryKey.nameCapitalized;
       },
@@ -408,6 +411,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     entityWithConfig.primaryKey = {
       derived: false,
       name: primaryKeyName,
+      hibernateSnakeCaseName: hibernateSnakeCase(primaryKeyName),
       nameCapitalized: _.upperFirst(primaryKeyName),
       type: primaryKeyType,
       tsType: getTypescriptKeyType(primaryKeyType),
@@ -519,7 +523,7 @@ export function preparePostEntityCommonDerivedProperties(entity: Entity) {
   const fieldsType = sortedUniq(fields.map(({ fieldType }) => fieldType).filter(fieldType => !fieldIsEnum(fieldType)));
 
   // TODO move to server generator
-  entity.anyFieldHasDocumentation = entity.fields.some(({ javadoc }) => javadoc);
+  entity.anyFieldHasDocumentation = entity.fields.some(({ documentation }) => documentation);
 
   entity.anyFieldIsZonedDateTime = fieldsType.includes(ZONED_DATE_TIME);
   entity.anyFieldIsInstant = fieldsType.includes(INSTANT);
@@ -623,7 +627,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerReationships apis
+  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerRelationships apis
     ![CASSANDRA, COUCHBASE, NEO4J].includes(entity.databaseType) &&
     // Only sql and mongodb provides *WithEagerReationships apis for imperative implementation
     (entity.reactive || [SQL, MONGODB].includes(entity.databaseType)) &&

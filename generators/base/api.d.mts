@@ -108,7 +108,7 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
       /** @deprecated, use destinationFile instead */
       renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
       /** transforms (files processing) to be applied */
-      transform?: false | (() => string)[];
+      transform?: boolean | (() => string)[];
       /** binary files skips ejs render, ejs extension and file transform */
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
@@ -127,7 +127,7 @@ export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
   /** condition to enable to write the block */
   condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
-  transform?: false | (() => string)[];
+  transform?: boolean | (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
@@ -159,10 +159,13 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
     }
 );
 
+export type JHispterChoices = string[] | { value: string; name: string }[];
+
 export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
+  choices?: JHispterChoices;
 };
 
 export type ValidationResult = {
@@ -173,7 +176,7 @@ export type ValidationResult = {
 };
 
 export type PromptSpec = {
-  type: 'input' | 'list' | 'confirm';
+  type: 'input' | 'list' | 'confirm' | 'checkbox';
   message: string | ((any) => string);
   when?: boolean | ((any) => boolean);
   default?: any | ((any) => any);
@@ -181,17 +184,23 @@ export type PromptSpec = {
   transformer?: any | ((any) => any);
 };
 
+export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: 'storage' | 'blueprint' | 'generator' };
+
 export type ConfigSpec = {
   description?: string;
-  choices?: string[] | { value: string; name: string }[];
+  choices?: JHispterChoices;
 
   cli?: SetOptional<CliOptionSpec, 'name'>;
-  argument?: SetOptional<ArgumentSpec, 'name'>;
+  argument?: JHipsterArgumentConfig;
   prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
   scope?: 'storage' | 'blueprint' | 'generator';
+  /**
+   * The callback receives the generator as input for 'generator' scope.
+   * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
+   * The callback receives blueprintStorage contents as input for 'blueprint' scope.
+   */
+  default?: string | boolean | string[] | ((any) => string | boolean | string[]);
 };
-
-export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'>;
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 

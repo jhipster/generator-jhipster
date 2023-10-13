@@ -36,10 +36,10 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    './<%= clientSrcDir %>app/<%= microfrontend ? 'main' : 'index' %>'
+    './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/<%= microfrontend ? 'main' : 'index' %>'
   ],
   output: {
-    path: utils.root('<%= clientDistDir %>'),
+    path: utils.root('<%= this.relativeDir(clientRootDir, clientDistDir) %>'),
     filename: '[name].[contenthash:8].js',
     chunkFilename: '[name].[chunkhash:8].chunk.js'
   },
@@ -77,7 +77,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
   devServer: {
     hot: <%= !microfrontend %>,
     static: {
-      directory: './<%= clientDistDir %>',
+      directory: './<%= this.relativeDir(clientRootDir, clientDistDir) %>',
     },
     port: <%= devServerPort %>,
     proxy: [{

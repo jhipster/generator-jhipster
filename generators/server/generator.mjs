@@ -29,8 +29,6 @@ import {
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
-  formatDocAsApiDescription,
-  formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generateKeyStore,
@@ -144,10 +142,6 @@ const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
- */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   jhipsterDependenciesVersion;
@@ -319,7 +313,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
         application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
-        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
         application.javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS;
 
@@ -455,21 +448,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+        if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
+
         entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
 
-        const fixedEntityTableName = this._fixEntityTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          application.jhiTablePrefix,
-        );
+        const databaseType =
+          entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
+        const fixedEntityTableName = this._fixEntityTableName(entityConfig.entityTableName, databaseType, application.jhiTablePrefix);
         if (fixedEntityTableName !== entityConfig.entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
-        const validation = this._validateTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          entityConfig,
-        );
+        const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
         if (validation !== true) {
           throw new Error(validation);
         }
@@ -1007,39 +996,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       entityTableName = `${jhiTablePrefix}_${entityTableName}`;
     }
     return entityTableName;
-  }
-
-  /**
-   * @private
-   * Format As Field Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns field javadoc
-   */
-  formatAsFieldJavadoc(text) {
-    return formatDocAsJavaDoc(text, 4);
-  }
-
-  /**
-   * @private
-   * Format As Api Description
-   *
-   * @param {string} text - text to format
-   * @returns formatted api description
-   */
-  formatAsApiDescription(text) {
-    return formatDocAsApiDescription(text);
-  }
-
-  /**
-   * @private
-   * Format As Class Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns class javadoc
-   */
-  formatAsClassJavadoc(text) {
-    return formatDocAsJavaDoc(text, 0);
   }
 
   /**

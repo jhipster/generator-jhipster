@@ -25,11 +25,103 @@ describe(`generator - ${generator}`, () => {
 
   describe('with default config', () => {
     before(async () => {
-      await helpers.runJHipster(GENERATOR_JAVA).withJHipsterConfig();
+      await helpers.runJHipster(GENERATOR_JAVA).withJHipsterConfig({}, [
+        {
+          name: 'Foo',
+          fields: [
+            { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] },
+            { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH' },
+          ],
+        },
+      ]);
     });
 
     it('should match files snapshot', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should generate entities containing jakarta', () => {
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', 'jakarta');
+    });
+
+    it('should write enum files', () => {
+      result.assertFile('src/main/java/com/mycompany/myapp/domain/enumeration/MyEnum.java');
+      expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(2);
+    });
+
+    it('should have options defaults set', () => {
+      expect(result.generator.generateEntities).toBe(true);
+      expect(result.generator.generateEnums).toBe(true);
+      expect(result.generator.useJakartaValidation).toBe(true);
+    });
+  });
+
+  describe('with jakarta and enums disabled', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(GENERATOR_JAVA)
+        .withJHipsterConfig({}, [
+          {
+            name: 'Foo',
+            fields: [
+              { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] },
+              { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH' },
+            ],
+          },
+        ])
+        .withOptions({ useJakartaValidation: false, generateEnums: false });
+    });
+
+    it('should generate entities not containing jakarta', () => {
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', 'jakarta');
+    });
+
+    it('should not write enum files', () => {
+      expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(0);
+    });
+  });
+
+  describe('with entities disabled', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(GENERATOR_JAVA)
+        .withJHipsterConfig({}, [
+          {
+            name: 'Foo',
+            fields: [
+              { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] },
+              { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH' },
+            ],
+          },
+        ])
+        .withOptions({ generateEntities: false });
+    });
+
+    it('should not contain jakarta', () => {
+      result.assertNoFile('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi');
+    });
+
+    it('should not write enum files', () => {
+      expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(0);
+    });
+  });
+
+  describe('with custom properties values', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(GENERATOR_JAVA)
+        .withJHipsterConfig({})
+        .onGenerator(generator => {
+          generator.generateEntities = false;
+          generator.generateEnums = false;
+          generator.useJakartaValidation = false;
+        });
+    });
+
+    it('should not override custom values', () => {
+      expect(result.generator.generateEntities).toBe(false);
+      expect(result.generator.generateEnums).toBe(false);
+      expect(result.generator.useJakartaValidation).toBe(false);
     });
   });
 });

@@ -39,7 +39,7 @@ describe('jdl - EnumConverter', () => {
               { key: 'FRANCE', value: 'FRANCE' },
               { key: 'ITALY', value: 'ITALY' },
             ],
-            javadoc: 'A comment',
+            documentation: 'A comment',
           },
         ]);
       });

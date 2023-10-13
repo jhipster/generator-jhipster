@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { getDefaultAppName } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 

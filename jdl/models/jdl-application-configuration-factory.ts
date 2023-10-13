@@ -35,9 +35,6 @@ export default function createApplicationConfigurationFromObject(configurationOb
       logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
     }
-    if (!applicationDefinition.doesOptionValueExist(optionName, optionValue)) {
-      throw new Error(`Unknown value '${optionValue}' for option '${optionName}'.`);
-    }
     configuration.setOption(createJDLConfigurationOption(optionName, optionValue));
   });
   return configuration;

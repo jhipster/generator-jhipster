@@ -90,9 +90,9 @@ import <%= otherEntity.entityAbsoluteClass %>;
  * A <%= persistClass %>.
  */
 <%_ } else { _%>
-<%- this.formatAsClassJavadoc(javadoc) %>
+<%- entityJavadoc %>
   <%_ if (!dtoMapstruct) { _%>
-@Schema(description = "<%- this.formatAsApiDescription(javadoc) %>")
+@Schema(description = "<%- entityApiDescription %>")
   <%_ } _%>
 <%_ } _%>
 <&- fragments.annotationSection() -&>
@@ -112,10 +112,10 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 <&- fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection() -&>
 <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection()) { -&>
   <%_ if (typeof field.javadoc !== 'undefined') { _%>
-<%- this.formatAsFieldJavadoc(field.javadoc) %>
+<%- field.fieldJavadoc %>
   <%_ } _%>
   <%_ if (!dtoMapstruct && typeof field.javadoc !== 'undefined') { _%>
-    @Schema(description = "<%- this.formatAsApiDescription(field.javadoc) %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
+    @Schema(description = "<%- field.fieldApiDescription %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>AnnotationSection() -&>
     private <%= field.javaFieldType %> <%= field.fieldName %>;
@@ -133,9 +133,9 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships.filter(relationship => !relationship.embedded || relationship.otherEntity.embedded || relationship.ownerSide)) {
   if (typeof relationship.javadoc !== 'undefined') { _%>
-<%- this.formatAsFieldJavadoc(relationship.javadoc) %>
+<%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct) { _%>
-    @Schema(description = "<%- this.formatAsApiDescription(relationship.javadoc) %>")
+    @Schema(description = "<%- relationship.relationshipyApiDescription %>")
     <%_ } _%>
   <%_ } _%>
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>
