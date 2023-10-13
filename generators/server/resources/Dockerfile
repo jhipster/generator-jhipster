@@ -55,7 +55,7 @@ LABEL ALIAS=sonar
 FROM docker.io/bitnami/consul:1.16.2
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v2.47.1
+FROM prom/prometheus:v2.47.2
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.26.0
