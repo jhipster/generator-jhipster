@@ -113,7 +113,7 @@
     "@yeoman/conflicter": "1.1.0",
     "@yeoman/namespace": "1.0.0",
     "@yeoman/transform": "1.2.0",
-    "@yeoman/types": "1.0.1",
+    "@yeoman/types": "1.1.1",
     "axios": "1.5.1",
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
@@ -137,7 +137,7 @@
     "js-yaml": "4.1.0",
     "latest-version": "7.0.0",
     "lodash-es": "4.17.21",
-    "mem-fs": "3.0.0",
+    "mem-fs": "4.0.0",
     "mem-fs-editor": "10.0.3",
     "minimatch": "9.0.3",
     "normalize-path": "3.0.0",
@@ -159,7 +159,7 @@
     "uuid": "9.0.1",
     "winston": "3.11.0",
     "yaml": "2.3.3",
-    "yeoman-environment": "4.0.0-beta.5",
+    "yeoman-environment": "4.0.0-rc.0",
     "yeoman-generator": "6.0.1"
   },
   "devDependencies": {
@@ -194,10 +194,10 @@
     "sort-keys": "5.0.0",
     "typescript": "5.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "8.0.0"
+    "yeoman-test": "8.1.0"
   },
   "peerDependencies": {
-    "yeoman-test": "8.0.0"
+    "yeoman-test": "8.1.0"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
