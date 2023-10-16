@@ -13,7 +13,7 @@ bracketSameLine: false
 
 plugins:
   - prettier-plugin-packagejson
-<%_ if (!skipServer) { _%>
+<%_ if (backendTypeJavaAny) { _%>
   - prettier-plugin-java
   
 # java rules:

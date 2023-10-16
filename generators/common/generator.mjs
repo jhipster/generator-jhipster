@@ -234,8 +234,17 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           devDependencies: {
             husky: application.nodeDependencies.husky,
             'lint-staged': application.nodeDependencies['lint-staged'],
+            prettier: application.nodeDependencies.prettier,
+            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
           },
         });
+        if (application.backendTypeJavaAny) {
+          this.packageJson.merge({
+            devDependencies: {
+              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
+            },
+          });
+        }
       },
     });
   }
