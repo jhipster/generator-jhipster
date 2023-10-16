@@ -109,8 +109,8 @@ export default class InitGenerator extends BaseApplicationGenerator {
       addPrettierDependencies({ application }) {
         this.packageJson.merge({
           scripts: {
-            'prettier-check': 'prettier --check "{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
-            'prettier-format': 'prettier --write "{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+            'prettier-check': 'prettier --check "{,**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
           },
           devDependencies: {
             prettier: application.nodeDependencies.prettier,
