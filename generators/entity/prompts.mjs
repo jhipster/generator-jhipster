@@ -216,11 +216,8 @@ function askForFieldsToRemove() {
   });
 }
 
-function askForRelationships() {
+function askForRelationships(...args) {
   const context = this.entityData;
-  if (this.options.defaults) {
-    return undefined;
-  }
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
     return undefined;
@@ -229,7 +226,7 @@ function askForRelationships() {
     return undefined;
   }
 
-  return askForRelationship.call(this);
+  return askForRelationship.call(this, ...args);
 }
 
 function askForRelationsToRemove() {
@@ -743,40 +740,34 @@ async function askForField() {
 /**
  * ask question for a relationship creation
  */
-function askForRelationship() {
+async function askForRelationship(...args) {
+  const [{ application }] = args;
   const context = this.entityData;
   const name = context.name;
   this.log.log(chalk.green('\nGenerating relationships to other entities\n'));
-  const prompts = [
+  const addRelationshipAnswers = await this.prompt([
     {
       type: 'confirm',
       name: 'relationshipAdd',
       message: 'Do you want to add a relationship to another entity?',
       default: true,
     },
+  ]);
+
+  if (!addRelationshipAnswers.relationshipAdd) {
+    logFieldsAndRelationships.call(this);
+    this.log.log('\n');
+    return;
+  }
+
+  const answers = await this.prompt([
     {
-      when: response => response.relationshipAdd === true,
-      type: 'input',
+      type: 'list',
       name: 'otherEntityName',
-      validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-          return 'Your other entity name cannot contain special characters';
-        }
-        if (input === '') {
-          return 'Your other entity name cannot be empty';
-        }
-        if (isReservedTableName(input, 'JAVA')) {
-          return 'Your other entity name cannot contain a Java reserved keyword';
-        }
-        if (input.toLowerCase() === 'user' && context.applicationType === 'microservice') {
-          return "Your entity cannot have a relationship with User because it's a gateway entity";
-        }
-        return true;
-      },
-      message: 'What is the name of the other entity?',
+      message: 'What is the other entity?',
+      choices: () => [...this.getExistingEntityNames(), ...(application.generateBuiltInUserEntity ? ['User'] : [])],
     },
     {
-      when: response => response.relationshipAdd === true,
       type: 'input',
       name: 'relationshipName',
       validate: input => {
@@ -801,89 +792,63 @@ function askForRelationship() {
       default: response => _.lowerFirst(response.otherEntityName),
     },
     {
-      when: response => response.relationshipAdd === true,
       type: 'list',
       name: 'relationshipType',
       message: 'What is the type of the relationship?',
-      choices: response => {
-        const opts = [
-          {
-            value: 'many-to-one',
-            name: 'many-to-one',
-          },
-          {
-            value: 'many-to-many',
-            name: 'many-to-many',
-          },
-          {
-            value: 'one-to-one',
-            name: 'one-to-one',
-          },
-        ];
-        if (!this.isBuiltInUser(response.otherEntityName)) {
-          opts.unshift({
-            value: 'one-to-many',
-            name: 'one-to-many',
-          });
-        }
-        return opts;
-      },
+      choices: response => [
+        'many-to-one',
+        'many-to-many',
+        'one-to-one',
+        ...(this.isBuiltInUser(response.otherEntityName) ? [] : ['one-to-many']),
+      ],
       default: 0,
     },
     {
-      when: response =>
-        response.relationshipAdd === true &&
-        response.otherEntityName.toLowerCase() !== 'user' &&
-        (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'),
-      type: 'confirm',
-      name: 'ownerSide',
-      message: 'Is this entity the owner of the relationship?',
-      default: false,
-    },
-    {
-      when: response =>
-        context.databaseType === SQL &&
-        response.relationshipAdd === true &&
-        response.relationshipType === 'one-to-one' &&
-        (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'),
+      when: response => application.databaseType === SQL && response.relationshipType === 'one-to-one',
       type: 'confirm',
       name: 'id',
       message: 'Do you want to use JPA Derived Identifier - @MapsId?',
       default: false,
     },
     {
-      when: response =>
-        response.relationshipAdd === true &&
-        (response.relationshipType === 'one-to-many' ||
-          ((response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one') &&
-            !this.isBuiltInUser(response.otherEntityName))),
+      when: answers => {
+        if (this.isBuiltInUser(answers.otherEntityName)) {
+          answers.bidirectional = false;
+          return false;
+        }
+
+        if (!application.databaseTypeNeo4j && answers.relationshipType !== 'many-to-one') {
+          // Relationships requires bidirectional.
+          answers.bidirectional = true;
+          return false;
+        }
+
+        return true;
+      },
+      type: 'input',
+      name: 'bidirectional',
+      message: 'Do you want to generate a bidirectional relationship',
+      default: true,
+    },
+    {
+      when: response => response.bidirectional,
       type: 'input',
       name: 'otherEntityRelationshipName',
       message: 'What is the name of this relationship in the other entity?',
       default: () => _.lowerFirst(name),
     },
     {
-      when: response =>
-        response.relationshipAdd === true &&
-        response.otherEntityName.toLowerCase() !== 'user' &&
-        (response.relationshipType === 'many-to-one' ||
-          (response.relationshipType === 'many-to-many' && response.ownerSide === true) ||
-          (response.relationshipType === 'one-to-one' && response.ownerSide === true)),
       type: 'input',
       name: 'otherEntityField',
       message: response =>
         `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
-      default: 'id',
+      default: answers => (answers.otherEntityName === 'User' ? 'login' : 'id'),
     },
     {
       when: response =>
-        response.relationshipAdd === true &&
-        response.otherEntityName.toLowerCase() !== context.name.toLowerCase() &&
-        (response.relationshipType === 'many-to-one' ||
-          (response.relationshipType === 'many-to-many' &&
-            (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')) ||
-          (response.relationshipType === 'one-to-one' &&
-            (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'))),
+        (response.otherEntityName.toLowerCase() !== context.name.toLowerCase() && response.relationshipType === 'many-to-one') ||
+        response.relationshipType === 'many-to-many' ||
+        response.relationshipType === 'one-to-one',
       type: 'confirm',
       name: 'relationshipValidate',
       message: 'Do you want to add any validation rules to this relationship?',
@@ -902,35 +867,27 @@ function askForRelationship() {
       ],
       default: 0,
     },
-  ];
-  return this.prompt(prompts).then(props => {
-    if (props.relationshipAdd) {
-      const relationship = {
-        relationshipName: props.relationshipName,
-        otherEntityName: _.lowerFirst(props.otherEntityName),
-        relationshipType: props.relationshipType,
-        relationshipValidateRules: props.relationshipValidateRules,
-        otherEntityField: props.otherEntityField,
-        ownerSide: props.ownerSide,
-        id: props.id,
-        otherEntityRelationshipName: props.otherEntityRelationshipName,
-      };
+  ]);
 
-      if (props.otherEntityName.toLowerCase() === 'user') {
-        relationship.ownerSide = true;
-        relationship.otherEntityField = 'login';
-        relationship.otherEntityRelationshipName = _.lowerFirst(name);
-      }
+  const relationship = {
+    relationshipSide: 'left',
+    relationshipName: answers.relationshipName,
+    otherEntityName: _.lowerFirst(answers.otherEntityName),
+    relationshipType: answers.relationshipType,
+    relationshipValidateRules: answers.relationshipValidateRules,
+    otherEntityField: answers.otherEntityField,
+    ownerSide: answers.ownerSide,
+    id: answers.id,
+    otherEntityRelationshipName: answers.otherEntityRelationshipName,
+  };
 
-      this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
-    }
-    logFieldsAndRelationships.call(this);
-    if (props.relationshipAdd) {
-      return askForRelationship.call(this);
-    }
-    this.log.log('\n');
-    return undefined;
-  });
+  if (this.isBuiltInUser(answers.otherEntityName)) {
+    relationship.otherEntityRelationshipName = _.lowerFirst(name);
+  }
+
+  this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
+
+  await askForRelationship.call(this, ...args);
 }
 
 /**
@@ -990,7 +947,7 @@ function logFieldsAndRelationships() {
       if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
-      this.log.verboseInfo(
+      this.log.log(
         `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
           relationship.relationshipType,
         )} ${chalk.cyan(validationDetails.join(' '))}`,
