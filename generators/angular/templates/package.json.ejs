@@ -78,9 +78,6 @@
     "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
-<%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
-<%_ } _%>
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
@@ -105,8 +102,6 @@
     "jest-date-mock": "<%= nodeDependencies['jest-date-mock'] %>",
     "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
     "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
-    "prettier": "<%= nodeDependencies['prettier'] %>",
-    "prettier-plugin-packagejson": "<%= nodeDependencies['prettier-plugin-packagejson'] %>",
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
