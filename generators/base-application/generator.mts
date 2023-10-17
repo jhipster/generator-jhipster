@@ -31,7 +31,7 @@ import { ClientSourceType } from '../client/types.mjs';
 import { LanguageSourceType } from '../languages/types.js';
 import command from './command.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
-import { mutateApplication } from '../base/support/config.mjs';
+import { mutateData } from '../base/support/config.mjs';
 
 const {
   LOADING,
@@ -371,7 +371,7 @@ export default class BaseApplicationGenerator<
     if ([PREPARING, LOADING].includes(priorityName)) {
       return {
         application,
-        applicationDefaults: data => mutateApplication(application, data),
+        applicationDefaults: data => mutateData(application, data),
       };
     }
     if (LOADING_ENTITIES === priorityName) {

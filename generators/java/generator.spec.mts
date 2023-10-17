@@ -29,9 +29,14 @@ describe(`generator - ${generator}`, () => {
         {
           name: 'Foo',
           fields: [
-            { fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] },
-            { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH' },
+            { fieldName: 'name', documentation: 'My Name', fieldType: 'String', fieldValidateRules: ['required'] },
+            { fieldName: 'myEnum', fieldType: 'MyEnum', fieldValues: 'FRENCH,ENGLISH', fieldTypeDocumentation: 'Enum Doc' },
           ],
+        },
+        {
+          name: 'Bar',
+          documentation: 'Custom Bar',
+          fields: [{ fieldName: 'name2', fieldType: 'String', fieldValidateRules: ['required'] }],
         },
       ]);
     });
@@ -44,9 +49,23 @@ describe(`generator - ${generator}`, () => {
       result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', 'jakarta');
     });
 
+    it('should generate javadocs', () => {
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', '* A Foo');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Foo.java.jhi', '* My Name');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Bar.java.jhi', '* Custom Bar');
+    });
+
+    it('should generate openapi @Schema', () => {
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Bar.java.jhi', '@Schema(description = "Custom Bar")');
+    });
+
     it('should write enum files', () => {
       result.assertFile('src/main/java/com/mycompany/myapp/domain/enumeration/MyEnum.java');
       expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(2);
+    });
+
+    it('should generate enum javadoc', () => {
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/enumeration/MyEnum.java', '* Enum Doc');
     });
 
     it('should have options defaults set', () => {

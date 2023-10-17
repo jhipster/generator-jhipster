@@ -1,4 +1,4 @@
-import { mutateApplication, normalizePathEnd, pickFields } from '../../base/support/index.mjs';
+import { mutateData, normalizePathEnd, pickFields } from '../../base/support/index.mjs';
 
 import {
   databaseTypes,
@@ -42,7 +42,7 @@ const NO_SEARCH_ENGINE = searchEngineTypes.NO;
  * all variables should be referred from config,
  */
 export const loadServerConfig = ({ config, application }: { config: any; application: any }) => {
-  mutateApplication(
+  mutateData(
     application,
     {
       srcMainJava: SERVER_MAIN_SRC_DIR,
@@ -87,7 +87,7 @@ export const loadServerConfig = ({ config, application }: { config: any; applica
  * @param {import('./base-application/types.js').PlatformApplication} dest - destination context to use default is context
  */
 export const loadPlatformConfig = ({ config, application }: { config: any; application: PlatformApplication }) => {
-  mutateApplication(application, pickFields(config, ['serviceDiscoveryType', 'monitoring']));
+  mutateData(application, pickFields(config, ['serviceDiscoveryType', 'monitoring']));
 };
 
 export const loadDerivedServerAndPlatformProperties = ({ application }: { application: any }) => {
@@ -160,7 +160,7 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
     ? application.databaseMigration === 'liquibase'
     : application.databaseType === SQL;
 
-  mutateApplication(application, {
+  mutateData(application, {
     packageFolder: ({ packageName }) => `${packageName.replace(/\./g, '/')}/`,
     javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
     javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),

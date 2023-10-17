@@ -19,7 +19,7 @@
 package <%= entityAbsolutePackage %>.service.dto;
 
 import java.util.Objects;
-<%_ if (typeof javadoc !== 'undefined' || importApiModelProperty) { _%>
+<%_ if (entityApiDescription || importApiModelProperty) { _%>
 import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
 <%_ if (anyFieldIsInstant) { _%>
@@ -65,7 +65,7 @@ import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
 /**
  * A DTO for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity.
  */
-<%_ if (typeof javadoc !== 'undefined') { _%>
+<%_ if (entityApiDescription) { _%>
 @Schema(description = "<%- entityApiDescription %>")
 <%_ } _%>
 @SuppressWarnings("common-java:DuplicatedBlocks")

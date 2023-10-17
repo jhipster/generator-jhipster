@@ -54,7 +54,7 @@ package <%= entityAbsolutePackage %>.domain;
 <%_ if (relationshipsContainOtherSideIgnore) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <%_ } _%>
-<%_ if (!dtoMapstruct && (typeof javadoc !== 'undefined' || importApiModelProperty)) { _%>
+<%_ if (!dtoMapstruct && (entityApiDescription || importApiModelProperty)) { _%>
 import io.swagger.v3.oas.annotations.media.Schema;
 <%_ } _%>
 
@@ -85,15 +85,15 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 import <%= otherEntity.entityAbsoluteClass %>;
 <%_ } _%>
 
-<%_ if (typeof javadoc === 'undefined') { _%>
+<%_ if (entityJavadoc) { _%>
+<%- entityJavadoc %>
+<%_ } else { _%>
 /**
  * A <%= persistClass %>.
  */
-<%_ } else { _%>
-<%- entityJavadoc %>
-  <%_ if (!dtoMapstruct) { _%>
+<%_ } _%>
+<%_ if (!dtoMapstruct && entityApiDescription) { _%>
 @Schema(description = "<%- entityApiDescription %>")
-  <%_ } _%>
 <%_ } _%>
 <&- fragments.annotationSection() -&>
 @SuppressWarnings("common-java:DuplicatedBlocks")
@@ -111,10 +111,10 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_ for (const field of fields.filter(field => !field.javaInherited && !field.transient && (embedded || !field.id || !primaryKey.composite))) { _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection() -&>
 <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomDeclarationSection()) { -&>
-  <%_ if (typeof field.javadoc !== 'undefined') { _%>
+  <%_ if (field.fieldJavadoc) { _%>
 <%- field.fieldJavadoc %>
   <%_ } _%>
-  <%_ if (!dtoMapstruct && typeof field.javadoc !== 'undefined') { _%>
+  <%_ if (!dtoMapstruct && field.fieldApiDescription) { _%>
     @Schema(description = "<%- field.fieldApiDescription %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>AnnotationSection() -&>
@@ -132,9 +132,9 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_
 // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships.filter(relationship => !relationship.embedded || relationship.otherEntity.embedded || relationship.ownerSide)) {
-  if (typeof relationship.javadoc !== 'undefined') { _%>
+  if (typeof relationship.fieldApiDescription) { _%>
 <%- relationship.relationshipJavadoc %>
-    <%_ if (!dtoMapstruct) { _%>
+    <%_ if (!dtoMapstruct && relationship.relationshipyApiDescription) { _%>
     @Schema(description = "<%- relationship.relationshipyApiDescription %>")
     <%_ } _%>
   <%_ } _%>
