@@ -1,7 +1,7 @@
 import { camelCase, kebabCase, startCase, upperFirst } from 'lodash-es';
 import { NODE_VERSION } from '../../generator-constants.mjs';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
-import { getHipster, mutateApplication, pickFields, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { getHipster, mutateData, pickFields, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
 import { loadConfig, loadDerivedConfig } from '../../../lib/internal/index.mjs';
@@ -82,7 +82,7 @@ export const loadAppConfig = ({
 }) => {
   loadConfig(serverCommand.configs, { config, application });
 
-  mutateApplication(
+  mutateData(
     application,
     {
       nodeVersion: useVersionPlaceholders ? 'NODE_VERSION' : NODE_VERSION,
@@ -133,7 +133,7 @@ export const loadAppConfig = ({
 export const loadDerivedAppConfig = ({ application }: { application: any }) => {
   loadDerivedConfig(serverCommand.configs, { application });
 
-  mutateApplication(application, {
+  mutateData(application, {
     jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
     jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
 

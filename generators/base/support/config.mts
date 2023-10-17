@@ -68,19 +68,19 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
  *
  * @example
  * // application = { prop: 'foo-bar', prop2: 'foo2' }
- * mutateApplication(
- *   application,
+ * mutateData(
+ *   data,
  *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
  *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
  * );
  */
-export const mutateApplication = (application: Record<string | number, any>, ...mutations: Record<string | number, any>[]) => {
+export const mutateData = (context: Record<string | number, any>, ...mutations: Record<string | number, any>[]) => {
   for (const mutation of mutations) {
     for (const [key, value] of Object.entries(mutation)) {
       if (typeof value === 'function') {
-        application[key] = value(application);
-      } else if (application[key] === undefined) {
-        application[key] = value;
+        context[key] = value(context);
+      } else if (context[key] === undefined) {
+        context[key] = value;
       }
     }
   }

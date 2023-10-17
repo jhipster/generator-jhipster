@@ -21,7 +21,7 @@ import path from 'path';
 import { databaseTypes, searchEngineTypes } from '../../../jdl/jhipster/index.mjs';
 
 import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js';
-import { normalizePathEnd } from '../../base/support/index.mjs';
+import { mutateData, normalizePathEnd } from '../../base/support/index.mjs';
 import { hibernateSnakeCase } from './string.mjs';
 import { getDatabaseTypeData } from './database.mjs';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.mjs';
@@ -45,10 +45,10 @@ export default function prepareEntity(entity) {
   entity.entityAbsoluteFolder = entityAbsoluteFolder;
   entity.entityAbsoluteClass = `${entityAbsolutePackage}.domain.${persistClass}`;
 
-  if (entity.documentation) {
-    entity.entityJavadoc = formatDocAsJavaDoc(entity.documentation);
-    entity.entityApiDescription = formatDocAsApiDescription(entity.documentation);
-  }
+  mutateData(entity, {
+    entityJavadoc: ({ documentation }) => (documentation ? formatDocAsJavaDoc(documentation) : documentation),
+    entityApiDescription: ({ documentation }) => (documentation ? formatDocAsApiDescription(documentation) : documentation),
+  });
 
   if (isReservedTableName(entity.entityInstance, entity.prodDatabaseType ?? entity.databaseType) && entity.jhiPrefix) {
     entity.entityInstanceDbSafe = `${entity.jhiPrefix}${entity.entityClass}`;

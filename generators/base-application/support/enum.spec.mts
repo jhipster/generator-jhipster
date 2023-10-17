@@ -22,7 +22,7 @@ describe('base-application - support - enum', () => {
         assert.deepStrictEqual(enumInfo.enums, ['AAA', 'BBB']);
       });
       it('returns the enums comment', () => {
-        assert.deepStrictEqual(enumInfo.javadoc, '/**\n * enum comment\n */');
+        assert.deepStrictEqual(enumInfo.enumJavadoc, '/**\n * enum comment\n */');
       });
     });
     describe("when the enums don't have custom values", () => {

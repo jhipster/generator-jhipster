@@ -90,7 +90,7 @@ export const getEnumInfo = (field, clientRootFolder) => {
   const customValuesState = getCustomValuesState(enums);
   return {
     enumName: field.fieldType,
-    javadoc: field.fieldTypeDocumentation && formatDocAsJavaDoc(field.fieldTypeDocumentation),
+    enumJavadoc: field.fieldTypeDocumentation && formatDocAsJavaDoc(field.fieldTypeDocumentation),
     enumInstance: field.enumInstance,
     enums,
     ...customValuesState,
