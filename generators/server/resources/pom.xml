@@ -35,7 +35,7 @@
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
