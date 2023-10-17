@@ -428,22 +428,27 @@ function askForPagination() {
 /**
  * ask question for a field creation
  */
-function askForField() {
+async function askForField() {
   const context = this.entityData;
   this.log.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
-  const skipServer = context.skipServer;
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
   const possibleFiltering = databaseType === SQL && !context.reactive;
-  const prompts = [
+  const fieldAddAnswer = await this.prompt([
     {
       type: 'confirm',
       name: 'fieldAdd',
       message: 'Do you want to add a field to your entity?',
       default: true,
     },
+  ]);
+
+  if (!fieldAddAnswer.fieldAdd) {
+    logFieldsAndRelationships.call(this);
+    return;
+  }
+  const answers = await this.prompt([
     {
-      when: response => response.fieldAdd === true,
       type: 'input',
       name: 'fieldName',
       validate: input => {
@@ -474,67 +479,25 @@ function askForField() {
       message: 'What is the name of your field?',
     },
     {
-      when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)),
       type: 'list',
       name: 'fieldType',
       message: 'What is the type of your field?',
-      choices: [
-        {
-          value: STRING,
-          name: 'String',
-        },
-        {
-          value: INTEGER,
-          name: 'Integer',
-        },
-        {
-          value: LONG,
-          name: 'Long',
-        },
-        {
-          value: FLOAT,
-          name: 'Float',
-        },
-        {
-          value: DOUBLE,
-          name: 'Double',
-        },
-        {
-          value: BIG_DECIMAL,
-          name: 'BigDecimal',
-        },
-        {
-          value: LOCAL_DATE,
-          name: 'LocalDate',
-        },
-        {
-          value: INSTANT,
-          name: 'Instant',
-        },
-        {
-          value: ZONED_DATE_TIME,
-          name: 'ZonedDateTime',
-        },
-        {
-          value: DURATION,
-          name: 'Duration',
-        },
-        {
-          value: BOOLEAN,
-          name: 'Boolean',
-        },
-        {
-          value: ENUM,
-          name: 'Enumeration (Java enum type)',
-        },
-        {
-          value: UUID,
-          name: 'UUID',
-        },
-        {
-          value: BYTES,
-          name: '[BETA] Blob',
-        },
+      choices: () => [
+        { value: STRING, name: 'String' },
+        { value: INTEGER, name: 'Integer' },
+        { value: LONG, name: 'Long' },
+        { value: FLOAT, name: 'Float' },
+        { value: DOUBLE, name: 'Double' },
+        { value: BIG_DECIMAL, name: 'BigDecimal' },
+        { value: LOCAL_DATE, name: 'LocalDate' },
+        { value: INSTANT, name: 'Instant' },
+        { value: ZONED_DATE_TIME, name: 'ZonedDateTime' },
+        { value: DURATION, name: 'Duration' },
+        { value: BOOLEAN, name: 'Boolean' },
+        { value: ENUM, name: 'Enumeration (Java enum type)' },
+        { value: UUID, name: 'UUID' },
+        { value: UUID, name: 'UUID' },
+        ...(databaseType === CASSANDRA ? [{ value: BYTE_BUFFER, name: '[BETA] Blob' }] : [{ value: BYTES, name: '[BETA] Blob' }]),
       ],
       default: 0,
     },
@@ -609,117 +572,26 @@ function askForField() {
       },
     },
     {
-      when: response => response.fieldAdd === true && databaseType === CASSANDRA,
-      type: 'list',
-      name: 'fieldType',
-      message: 'What is the type of your field?',
-      choices: [
-        {
-          value: UUID,
-          name: 'UUID',
-        },
-        {
-          value: STRING,
-          name: 'String',
-        },
-        {
-          value: INTEGER,
-          name: 'Integer',
-        },
-        {
-          value: LONG,
-          name: 'Long',
-        },
-        {
-          value: FLOAT,
-          name: 'Float',
-        },
-        {
-          value: DOUBLE,
-          name: 'Double',
-        },
-        {
-          value: BIG_DECIMAL,
-          name: 'BigDecimal',
-        },
-        {
-          value: LOCAL_DATE,
-          name: 'LocalDate',
-        },
-        {
-          value: INSTANT,
-          name: 'Instant',
-        },
-        {
-          value: ZONED_DATE_TIME,
-          name: 'ZonedDateTime',
-        },
-        {
-          value: DURATION,
-          name: 'Duration',
-        },
-        {
-          value: ENUM,
-          name: 'Enumeration (Java enum type)',
-        },
-        {
-          value: BOOLEAN,
-          name: 'Boolean',
-        },
-        {
-          value: BYTE_BUFFER,
-          name: '[BETA] blob',
-        },
-      ],
-      default: 0,
-    },
-    {
-      when: response => response.fieldAdd === true && response.fieldType === BYTES,
+      when: response => response.fieldType === BYTES || response.fieldType === BYTE_BUFFER,
       type: 'list',
       name: 'fieldTypeBlobContent',
       message: 'What is the content of the Blob field?',
-      choices: [
-        {
-          value: IMAGE,
-          name: 'An image',
-        },
-        {
-          value: ANY,
-          name: 'A binary file',
-        },
-        {
-          value: TEXT,
-          name: 'A CLOB (Text field)',
-        },
+      choices: answers => [
+        { value: IMAGE, name: 'An image' },
+        { value: ANY, name: 'A binary file' },
+        ...(answers.fieldType === BYTES ? [{ value: TEXT, name: 'A CLOB (Text field)' }] : []),
       ],
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldType === BYTE_BUFFER,
-      type: 'list',
-      name: 'fieldTypeBlobContent',
-      message: 'What is the content of the Blob field?',
-      choices: [
-        {
-          value: IMAGE,
-          name: 'An image',
-        },
-        {
-          value: ANY,
-          name: 'A binary file',
-        },
-      ],
-      default: 0,
-    },
-    {
-      when: response => response.fieldAdd === true && response.fieldType !== BYTE_BUFFER,
+      when: response => response.fieldType !== BYTE_BUFFER,
       type: 'confirm',
       name: 'fieldValidate',
       message: 'Do you want to add validation rules to your field?',
       default: false,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true,
+      when: response => response.fieldValidate === true,
       type: 'checkbox',
       name: 'fieldValidateRules',
       message: 'Which validation rules do you want to add?',
@@ -768,7 +640,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
       type: 'input',
       name: 'fieldValidateRulesMinlength',
       validate: input => (inputIsNumber(input) ? true : 'Minimum length must be a positive number'),
@@ -776,7 +648,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
       type: 'input',
       name: 'fieldValidateRulesMaxlength',
       validate: input => (inputIsNumber(input) ? true : 'Maximum length must be a positive number'),
@@ -784,7 +656,7 @@ function askForField() {
       default: 20,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('min'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('min'),
       type: 'input',
       name: 'fieldValidateRulesMin',
       message: 'What is the minimum of your field?',
@@ -797,7 +669,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('max'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('max'),
       type: 'input',
       name: 'fieldValidateRulesMax',
       message: 'What is the maximum of your field?',
@@ -811,7 +683,6 @@ function askForField() {
     },
     {
       when: response =>
-        response.fieldAdd === true &&
         response.fieldValidate === true &&
         response.fieldValidateRules.includes(MINBYTES) &&
         response.fieldType === BYTES &&
@@ -824,7 +695,6 @@ function askForField() {
     },
     {
       when: response =>
-        response.fieldAdd === true &&
         response.fieldValidate === true &&
         response.fieldValidateRules.includes(MAXBYTES) &&
         response.fieldType === BYTES &&
@@ -836,43 +706,38 @@ function askForField() {
       default: 5000000,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('pattern'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('pattern'),
       type: 'input',
       name: 'fieldValidateRulesPattern',
       message: 'What is the regular expression pattern you want to apply on your field?',
       default: '^[a-zA-Z0-9]*$',
     },
-  ];
-  return this.prompt(prompts).then(props => {
-    if (props.fieldAdd) {
-      if (props.fieldIsEnum) {
-        props.fieldType = _.upperFirst(props.fieldType);
-        props.fieldValues = props.fieldValues.toUpperCase();
-      }
+  ]);
 
-      const field = {
-        fieldName: props.fieldName,
-        fieldType: props.enumType || props.fieldType,
-        fieldTypeBlobContent: props.fieldTypeBlobContent,
-        fieldValues: props.fieldValues,
-        fieldValidateRules: props.fieldValidateRules,
-        fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
-        fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
-        fieldValidateRulesPattern: props.fieldValidateRulesPattern,
-        fieldValidateRulesMin: props.fieldValidateRulesMin,
-        fieldValidateRulesMax: props.fieldValidateRulesMax,
-        fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
-        fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes,
-      };
+  if (answers.fieldIsEnum) {
+    answers.fieldType = _.upperFirst(answers.fieldType);
+    answers.fieldValues = answers.fieldValues.toUpperCase();
+  }
 
-      this.entityConfig.fields = this.entityConfig.fields.concat(field);
-    }
-    logFieldsAndRelationships.call(this);
-    if (props.fieldAdd) {
-      return askForField.call(this);
-    }
-    return undefined;
-  });
+  const field = {
+    fieldName: answers.fieldName,
+    fieldType: answers.enumType || answers.fieldType,
+    fieldTypeBlobContent: answers.fieldTypeBlobContent,
+    fieldValues: answers.fieldValues,
+    fieldValidateRules: answers.fieldValidateRules,
+    fieldValidateRulesMinlength: answers.fieldValidateRulesMinlength,
+    fieldValidateRulesMaxlength: answers.fieldValidateRulesMaxlength,
+    fieldValidateRulesPattern: answers.fieldValidateRulesPattern,
+    fieldValidateRulesMin: answers.fieldValidateRulesMin,
+    fieldValidateRulesMax: answers.fieldValidateRulesMax,
+    fieldValidateRulesMinbytes: answers.fieldValidateRulesMinbytes,
+    fieldValidateRulesMaxbytes: answers.fieldValidateRulesMaxbytes,
+  };
+
+  this.entityConfig.fields = this.entityConfig.fields.concat(field);
+
+  logFieldsAndRelationships.call(this);
+  await askForField.call(this);
 }
 
 /**
