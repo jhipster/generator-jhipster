@@ -102,9 +102,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           if (application.clientFrameworkVue) {
             prettierExtensions = `${prettierExtensions},vue`;
           }
-          if (application.clientFrameworkSvelte) {
-            prettierExtensions = `${prettierExtensions},svelte`;
-          }
         }
         if (!application.skipServer) {
           prettierExtensions = `${prettierExtensions},java`;
