@@ -92,6 +92,8 @@ overrides:
   "README.md": {
     "contents": "# jhipster
 
+This application was generated using JHipster JHIPSTER_VERSION, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION](https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION).
+
 
 ## Project Structure
 
