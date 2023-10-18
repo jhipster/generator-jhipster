@@ -24,7 +24,7 @@
         <micrometer-context-propagation.version>1.0.6</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
-        <typesafe.version>1.4.2</typesafe.version>
+        <typesafe.version>1.4.3</typesafe.version>
         <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
