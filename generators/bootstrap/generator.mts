@@ -18,6 +18,7 @@
  */
 import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
+import prettier from 'prettier';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -50,6 +51,8 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
+  prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
+  prettierOptions: prettier.Options = { plugins: [] };
 
   constructor(args: any, options: any, features: any) {
     super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
@@ -185,7 +188,8 @@ export default class BootstrapGenerator extends BaseGenerator {
               ignoreErrors,
               prettierPackageJson: true,
               prettierJava: !this.jhipsterConfig.skipServer,
-              extensions: PRETTIER_EXTENSIONS,
+              extensions: this.prettierExtensions.join(','),
+              prettierOptions: this.prettierOptions,
             }),
           ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),
