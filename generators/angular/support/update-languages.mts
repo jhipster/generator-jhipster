@@ -48,17 +48,18 @@ function updateLanguagesInConstantsTask(this: BaseGenerator, { application, cont
 }
 
 function updateLanguagesInWebpackTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
-  const { clientSrcDir, languages } = application;
+  const { clientSrcDir, clientRootDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'groupBy: [\n';
+  const srcRelativePath = this.relativeDir(clientRootDir, clientSrcDir);
   languages?.forEach(language => {
-    newContent += `                    { pattern: "./${clientSrcDir}i18n/${language}/*.json", fileName: "./i18n/${language}.json" },\n`;
+    newContent += `                    { pattern: "./${srcRelativePath}i18n/${language}/*.json", fileName: "./i18n/${language}.json" },\n`;
   });
   newContent +=
     '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
     '                ]';
 
-  this.editFile(`${application.clientRootDir}webpack/webpack.custom.js`, { ignoreNonExisting }, content =>
+  this.editFile(`${clientRootDir}webpack/webpack.custom.js`, { ignoreNonExisting }, content =>
     content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent),
   );
 }

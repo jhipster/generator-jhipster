@@ -24,7 +24,7 @@ jobs:
         name: "Gradle Wrapper Validation"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - uses: gradle/wrapper-validation-action@v1
 <%_ } _%>
     pipeline:
@@ -52,7 +52,7 @@ if (!databaseTypeNo && !skipServer ) { _%>
             GRADLE_ENTERPRISE_ACCESS_KEY: ${{secrets.GRADLE_ENTERPRISE_ACCESS_KEY}}
 <%_ } _%>
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
 <%_ if (!skipClient) { _%>
             - uses: actions/setup-node@v3
               with:
@@ -62,13 +62,13 @@ if (!skipServer) { _%>
             - uses: actions/setup-java@v3
               with:
                   distribution: 'temurin'
-                  java-version: <%= JAVA_VERSION %>
+                  java-version: <%= javaVersion %>
 <%_ }
 if (!skipClient) { _%>
             - name: Install node.js packages
               run: <%= clientPackageManager %> install
 <%_ } _%>
-<%_ if (cicdIntegrationsSnyk) { _%>
+<%_ if (ciCdIntegrationsSnyk) { _%>
             - name: Install Snyk CLI
               run: |
                   curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -98,7 +98,7 @@ if (!skipClient) { _%>
               run: <%= clientPackageManager %> run ci:frontend:test
     <%_ } _%>
 <%_ } _%>
-<%_ if (cicdIntegrationsSonar) { _%>
+<%_ if (ciCdIntegrationsSonar) { _%>
             - name: Analyze code with SonarQube
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -120,7 +120,7 @@ if (!skipClient) { _%>
 <%_ } else { _%>
               run: <%= clientPackageManager %> run build
 <%_ }
-if (cicdIntegrationsHeroku) { _%>
+if (ciCdIntegrationsHeroku) { _%>
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
@@ -136,7 +136,7 @@ if (cicdIntegrationsHeroku) { _%>
                       echo No HEROKU_API_KEY, skipping...
                   fi
 <%_ } _%>
-<%_ if (cicdIntegrationsPublishDocker) { _%>
+<%_ if (ciCdIntegrationsPublishDocker) { _%>
             - name: Build and publish docker image
               if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
               run: |
@@ -158,7 +158,7 @@ if (cicdIntegrationsHeroku) { _%>
             <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:run
     <%_ if(cypressTests) { _%>
             <%= commented %>  env:
-            <%= commented %>    CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
+            <%= commented %>    CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
             <%= commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
             <%= commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
     <%_ } _%>

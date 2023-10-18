@@ -25,7 +25,7 @@ import assert from 'assert';
 import { requireNamespace } from '@yeoman/namespace';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -57,9 +57,22 @@ import command from '../base/command.mjs';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.mjs';
 import { convertConfigToOption } from '../../lib/internal/index.mjs';
 
-const { merge } = _;
-const { INITIALIZING, PROMPTING, CONFIGURING, COMPOSING, LOADING, PREPARING, DEFAULT, WRITING, POST_WRITING, INSTALL, POST_INSTALL, END } =
-  PRIORITY_NAMES;
+const { merge, get, set } = _;
+const {
+  INITIALIZING,
+  PROMPTING,
+  CONFIGURING,
+  COMPOSING,
+  LOADING,
+  PREPARING,
+  POST_PREPARING,
+  DEFAULT,
+  WRITING,
+  POST_WRITING,
+  INSTALL,
+  POST_INSTALL,
+  END,
+} = PRIORITY_NAMES;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -88,6 +101,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   static LOADING = asPriority(LOADING);
 
   static PREPARING = asPriority(PREPARING);
+
+  static POST_PREPARING = asPriority(POST_PREPARING);
 
   static DEFAULT = asPriority(DEFAULT);
 
@@ -218,7 +233,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    */
   getArgsForPriority(priorityName: string) {
     const control = this.sharedData.getControl();
-    if (priorityName === POST_WRITING || priorityName === PREPARING) {
+    if (priorityName === POST_WRITING || priorityName === PREPARING || priorityName === POST_PREPARING) {
       const source = this.sharedData.getSource();
       return [{ control, source }];
     }
@@ -263,6 +278,20 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
     if (commandDef.arguments) {
       this.parseJHipsterArguments(commandDef.arguments);
+    } else if (commandDef.configs) {
+      this.parseJHipsterArguments(
+        Object.fromEntries(
+          Object.entries(commandDef.configs as Record<string, any>)
+            .filter(([_name, def]) => def.argument)
+            .map(([name, def]) => [
+              name,
+              {
+                description: def.description,
+                ...def.argument,
+              },
+            ]),
+        ) as any,
+      );
     }
     if (commandDef.options || commandDef.configs) {
       this.parseJHipsterOptions(commandDef.options, commandDef.configs);
@@ -276,7 +305,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     }
 
     Object.entries(options ?? {})
-      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]))
+      .concat(Object.entries(configs).map(([name, def]) => [name, convertConfigToOption(name, def)]) as any)
       .forEach(([optionName, optionDesc]) => {
         if (!optionDesc?.type || !optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
         let optionValue;
@@ -300,6 +329,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
           } else {
             throw new Error(`Scope ${optionDesc.scope} not supported`);
           }
+        } else if (optionDesc.default && optionDesc.scope === 'generator' && this[optionName] === undefined) {
+          this[optionName] = optionDesc.default;
         }
       });
   }
@@ -325,7 +356,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         }
         if (argument !== undefined) {
           const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
-          this[argumentName] = convertedValue;
+          if ((argumentDef.scope ?? 'generator') === 'generator') {
+            this[argumentName] = convertedValue;
+          } else if (argumentDef.scope === 'storage') {
+            this.config.set(argumentName, convertedValue);
+          } else if (argumentDef.scope === 'blueprint') {
+            this.blueprintStorage!.set(argumentName, convertedValue);
+          }
         }
       } else {
         if (argumentDef.required) {
@@ -353,6 +390,11 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
           }
         } else if (def.scope === 'blueprint') {
           storage = this.blueprintStorage;
+        } else if (def.scope === 'generator') {
+          storage = {
+            getPath: path => get(this, path),
+            setPath: (path, value) => set(this, path, value),
+          };
         }
         return {
           name,

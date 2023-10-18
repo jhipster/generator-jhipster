@@ -18,7 +18,7 @@
  */
 import { loadClientConfig, loadDerivedClientConfig, preparePostEntityClientDerivedProperties } from '../client/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_CLIENT } from '../generator-list.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
 import clientCommand from '../client/command.mjs';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.mjs';
@@ -33,6 +33,14 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 

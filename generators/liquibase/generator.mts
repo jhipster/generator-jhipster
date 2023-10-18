@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';

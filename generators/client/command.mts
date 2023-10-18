@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFrameworkTypes } from '../../jdl/index.js';

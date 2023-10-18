@@ -17,72 +17,20 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import _ from 'lodash';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import prompts from './prompts.mjs';
 import statistics from '../statistics.mjs';
-import { NODE_VERSION, SERVER_MAIN_RES_DIR, JAVA_VERSION } from '../generator-constants.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.mjs';
-import { buildToolTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
-import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
-import { loadDerivedServerConfig, loadServerConfig } from '../server/support/index.mjs';
+import command from './command.mjs';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/config-def.mjs';
 
-const { MAVEN, GRADLE } = buildToolTypes;
 const { REACT } = clientFrameworkTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../server/types.mjs').SpringBootApplication>}
- */
 export default class CiCdGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    // Automatically configure Travis
-    this.option('autoconfigure-travis', {
-      type: Boolean,
-      default: false,
-      description: 'Automatically configure Travis',
-    });
-
-    // Automatically configure Jenkins
-    this.option('autoconfigure-jenkins', {
-      type: Boolean,
-      default: false,
-      description: 'Automatically configure Jenkins',
-    });
-
-    // Automatically configure Gitlab
-    this.option('autoconfigure-gitlab', {
-      type: Boolean,
-      default: false,
-      description: 'Automatically configure Gitlab',
-    });
-
-    // Automatically configure Azure
-    this.option('autoconfigure-azure', {
-      type: Boolean,
-      default: false,
-      description: 'Automatically configure Azure',
-    });
-
-    // Automatically configure GitHub Actions
-    this.option('autoconfigure-github', {
-      type: Boolean,
-      default: false,
-      description: 'Automatically configure GitHub Actions',
-    });
-
-    // Automatically configure CircleCI
-    this.option('autoconfigure-circle', {
-      type: Boolean,
-      default: false,
-      description: 'Automatically configure CircleCI',
-    });
-  }
+  insideDocker;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -96,44 +44,15 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
       },
 
-      getSharedConfig() {
-        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
-        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
-
-        loadDerivedAppConfig({ application: this });
-        loadDerivedServerConfig({ application: this });
-      },
-
       getConfig() {
-        const configuration = this.config;
-        this.dasherizedBaseName = _.kebabCase(this.baseName);
-        this.herokuAppName = configuration.get('herokuAppName');
-        if (this.herokuAppName === undefined) {
-          this.herokuAppName = _.kebabCase(this.baseName);
-        }
-        this.autoconfigureTravis = this.options.autoconfigureTravis;
-        this.autoconfigureJenkins = this.options.autoconfigureJenkins;
-        this.autoconfigureGitlab = this.options.autoconfigureGitlab;
-        this.autoconfigureAzure = this.options.autoconfigureAzure;
-        this.autoconfigureGithub = this.options.autoconfigureGithub;
-        this.autoconfigureCircleCI = this.options.autoconfigureCircle;
-        this.abort = false;
+        this.parseJHipsterCommand(command);
       },
-
-      initConstants() {
-        this.NODE_VERSION = NODE_VERSION;
-      },
-
-      getConstants() {
-        this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
-        this.JAVA_VERSION = JAVA_VERSION;
-      },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -142,10 +61,11 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get prompting() {
-    return {
-      askPipeline: prompts.askPipeline,
-      askIntegrations: prompts.askIntegrations,
-    };
+    return this.asPromptingTaskGroup({
+      async prompting() {
+        await this.prompt(this.prepareQuestions(command.configs));
+      },
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
@@ -153,48 +73,10 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   }
 
   // Public API method used by the getter and also by Blueprints
-  get configuring() {
-    return {
-      insight() {
-        if (this.abort) return;
-        statistics.sendSubGenEvent('generator', GENERATOR_CI_CD);
-      },
-      setTemplateConstants() {
-        if (this.abort) return;
-        if (this.cicdIntegrations === undefined) {
-          this.cicdIntegrations = [];
-        }
-        this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
-        this.indent = this.insideDocker ? '    ' : '';
-        this.indent += this.gitLabIndent;
-        if (this.clientFramework === REACT) {
-          this.frontTestCommand = 'test-ci';
-        } else {
-          this.frontTestCommand = 'test';
-        }
-      },
-    };
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  _loadCiCdConfig(config = this.jhipsterConfigWithDefaults, dest = this) {
-    dest.cicdIntegrations = dest.cicdIntegrations || config.cicdIntegrations || [];
-    dest.cicdIntegrationsSnyk = dest.cicdIntegrations.includes('snyk');
-    dest.cicdIntegrationsSonar = dest.cicdIntegrations.includes('sonar');
-    dest.cicdIntegrationsHeroku = dest.cicdIntegrations.includes('heroku');
-    dest.cicdIntegrationsDeploy = dest.cicdIntegrations.includes('deploy');
-    dest.cicdIntegrationsPublishDocker = dest.cicdIntegrations.includes('publishDocker');
-    dest.cicdIntegrationsCypressDashboard = dest.cicdIntegrations.includes('cypressDashboard');
-  }
-
-  // Public API method used by the getter and also by Blueprints
   get loading() {
     return {
-      loadSharedConfig() {
-        this._loadCiCdConfig();
+      loadSharedConfig({ application }) {
+        loadConfig.call(this, command.configs, { application });
       },
     };
   }
@@ -203,67 +85,81 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      setTemplateConstants({ application }) {
+        loadDerivedConfig(command.configs, { application });
+
+        if (application.ciCdIntegrations === undefined) {
+          application.ciCdIntegrations = [];
+        }
+        application.gitLabIndent = application.sendBuildToGitlab ? '    ' : '';
+        application.indent = application.insideDocker ? '    ' : '';
+        application.indent += application.gitLabIndent;
+        if (application.clientFramework === REACT) {
+          application.frontTestCommand = 'test-ci';
+        } else {
+          application.frontTestCommand = 'test';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
+      insight() {
+        statistics.sendSubGenEvent('generator', GENERATOR_CI_CD);
+      },
       async writeFiles({ application }) {
-        Object.assign(this, application);
-        if (this.pipeline === 'jenkins') {
-          await this.writeFiles({
-            rootTemplatesPath: 'jenkins',
-            blocks: [
-              {
-                templates: [
-                  {
-                    sourceFile: 'Jenkinsfile',
-                    destinationFile: 'Jenkinsfile',
-                  },
-                  {
-                    sourceFile: 'jenkins.yml',
-                    destinationFile: `${application.dockerServicesDir}jenkins.yml`,
-                  },
-                  {
-                    sourceFile: 'idea.gdsl',
-                    destinationFile: `${application.srcMainResources}idea.gdsl`,
-                  },
-                ],
-              },
-            ],
-            context: this,
-          });
-        }
-        if (this.pipeline === 'gitlab') {
-          this.writeFile('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
-        }
-        if (this.pipeline === 'circle') {
-          this.writeFile('circle.yml.ejs', '.circleci/config.yml');
-        }
-        if (this.pipeline === 'travis') {
-          this.writeFile('travis.yml.ejs', '.travis.yml');
-        }
-        if (this.pipeline === 'azure') {
-          this.writeFile('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
-        }
-        if (this.pipeline === 'github') {
-          this.writeFile('github-actions.yml.ejs', '.github/workflows/main.yml');
-        }
+        await this.writeFiles({
+          blocks: [
+            {
+              condition: ctx => ctx.ciCdJenkins,
+              templates: [
+                {
+                  sourceFile: 'jenkins/Jenkinsfile',
+                  destinationFile: 'Jenkinsfile',
+                },
+                {
+                  sourceFile: 'jenkins/jenkins.yml',
+                  destinationFile: `${application.dockerServicesDir}jenkins.yml`,
+                },
+                {
+                  sourceFile: 'jenkins/idea.gdsl',
+                  destinationFile: `${application.srcMainResources}idea.gdsl`,
+                },
+              ],
+            },
+            {
+              condition: ctx => ctx.ciCdGitlab,
+              templates: ['.gitlab-ci.yml'],
+            },
+            {
+              condition: ctx => ctx.ciCdCircle,
+              templates: ['.circleci/config.yml'],
+            },
+            {
+              condition: ctx => ctx.ciCdTravis,
+              templates: ['.travis.yml'],
+            },
+            {
+              condition: ctx => ctx.ciCdAzure,
+              templates: ['azure-pipelines.yml'],
+            },
+            {
+              condition: ctx => ctx.ciCdGithub,
+              templates: ['.github/workflows/main.yml'],
+            },
+          ],
+          context: application,
+        });
 
-        if (this.cicdIntegrations.includes('deploy')) {
-          if (this.buildTool === MAVEN) {
-            this.addMavenDistributionManagement(
-              this.artifactorySnapshotsId,
-              this.artifactorySnapshotsUrl,
-              this.artifactoryReleasesId,
-              this.artifactoryReleasesUrl,
-            );
-          } else if (this.buildTool === GRADLE) {
-            // TODO: add support here
-            // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-            this.log.warn('No support for Artifactory yet, when using Gradle.\n');
-          }
-        }
-
-        if (this.cicdIntegrations.includes('publishDocker')) {
+        if (application.ciCdIntegrations.includes('publishDocker')) {
           this.writeFile('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
         }
       },
@@ -274,16 +170,29 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  /**
-   * @private
-   * Add a distributionManagement to the Maven build.
-   *
-   * @param {string} snapshotsId Snapshots Repository Id
-   * @param {string} snapshotsUrl Snapshots Repository Url
-   * @param {string} releasesId Repository Id
-   * @param {string} releasesUrl Repository Url
-   */
-  addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-    createPomStorage(this).addDistributionManagement({ snapshotsId, snapshotsUrl, releasesId, releasesUrl });
+  // Public API method used by the getter and also by Blueprints
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      postWriting({ application }) {
+        if (application.ciCdIntegrations.includes('deploy')) {
+          if (application.buildToolMaven) {
+            createPomStorage(this).addDistributionManagement({
+              releasesId: application.artifactoryReleasesId,
+              releasesUrl: application.artifactoryReleasesUrl,
+              snapshotsId: application.artifactorySnapshotsId,
+              snapshotsUrl: application.artifactorySnapshotsUrl,
+            });
+          } else if (application.buildToolGradle) {
+            // TODO: add support here
+            // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+            this.log.warn('No support for Artifactory yet, when using Gradle.\n');
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

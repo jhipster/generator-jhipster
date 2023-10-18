@@ -210,6 +210,7 @@ describe(`generator - ${generator}`, () => {
   "entityAngularName": "User",
   "entityAngularNamePlural": "Users",
   "entityApi": "",
+  "entityApiDescription": undefined,
   "entityApiUrl": "users",
   "entityClass": "User",
   "entityClassHumanized": "User",
@@ -223,6 +224,7 @@ describe(`generator - ${generator}`, () => {
   "entityInstanceDbSafe": "jhiUser",
   "entityInstancePlural": "users",
   "entityJavaPackageFolder": "",
+  "entityJavadoc": undefined,
   "entityModelFileName": "user",
   "entityNameCapitalized": "User",
   "entityNamePlural": "Users",
@@ -585,6 +587,7 @@ describe(`generator - ${generator}`, () => {
     "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -692,6 +695,7 @@ describe(`generator - ${generator}`, () => {
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
+  "entityApiDescription": undefined,
   "entityApiUrl": "entity-as",
   "entityClass": "EntityA",
   "entityClassHumanized": "Entity A",
@@ -705,6 +709,7 @@ describe(`generator - ${generator}`, () => {
   "entityInstanceDbSafe": "entityA",
   "entityInstancePlural": "entityAS",
   "entityJavaPackageFolder": "",
+  "entityJavadoc": undefined,
   "entityModelFileName": "entity-a",
   "entityNameCapitalized": "EntityA",
   "entityNamePlural": "EntityAS",
@@ -849,6 +854,7 @@ describe(`generator - ${generator}`, () => {
     "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -1008,6 +1014,7 @@ describe(`generator - ${generator}`, () => {
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
+  "entityApiDescription": undefined,
   "entityApiUrl": "entity-as",
   "entityClass": "EntityA",
   "entityClassHumanized": "Entity A",
@@ -1021,6 +1028,7 @@ describe(`generator - ${generator}`, () => {
   "entityInstanceDbSafe": "entityA",
   "entityInstancePlural": "entityAS",
   "entityJavaPackageFolder": "",
+  "entityJavadoc": undefined,
   "entityModelFileName": "entity-a",
   "entityNameCapitalized": "EntityA",
   "entityNamePlural": "EntityAS",
@@ -1165,6 +1173,7 @@ describe(`generator - ${generator}`, () => {
     "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,

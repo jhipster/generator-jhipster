@@ -43,8 +43,8 @@ export function convertRelationships(parsedRelationships, annotationToOptionConv
       injectedFieldInTo: parsedRelationship.to.injectedField,
       isInjectedFieldInFromRequired: parsedRelationship.from.required,
       isInjectedFieldInToRequired: parsedRelationship.to.required,
-      commentInFrom: formatComment(parsedRelationship.from.javadoc),
-      commentInTo: formatComment(parsedRelationship.to.javadoc),
+      commentInFrom: formatComment(parsedRelationship.from.documentation),
+      commentInTo: formatComment(parsedRelationship.to.documentation),
       options: {
         global: annotationToOptionConverter.call(undefined, parsedRelationship.options.global),
         source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable camelcase */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
@@ -59,6 +59,9 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       dockerServices({ application }) {
+        if (application.backendTypeSpringBoot) {
+          application.dockerServices.push('app');
+        }
         if (application.authenticationTypeOauth2) {
           application.dockerServices.push('keycloak');
         }

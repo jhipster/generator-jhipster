@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { createToken, ITokenConfig } from 'chevrotain';
 
 import { NAME, KEYWORD, namePattern } from './shared-tokens.js';

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { type BaseApplication } from '../base-application/types.mjs';
 import { type Control } from './types.mjs';
 

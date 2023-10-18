@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "16.2.7",
+    "@angular/common": "16.2.9",
     "@fortawesome/angular-fontawesome": "0.13.0",
     "@fortawesome/fontawesome-svg-core": "6.4.2",
     "@fortawesome/free-solid-svg-icons": "6.4.2",
@@ -21,15 +21,15 @@
     "@angular-builders/custom-webpack": "16.0.1",
     "@angular-builders/jest": "16.0.1",
     "@angular-eslint/eslint-plugin": "16.2.0",
-    "@angular/cli": "16.2.4",
+    "@angular/cli": "16.2.6",
     "@types/jest": "29.5.5",
-    "@types/node": "18.18.1",
-    "@typescript-eslint/eslint-plugin": "6.7.3",
+    "@types/node": "18.18.5",
+    "@typescript-eslint/eslint-plugin": "6.8.0",
     "browser-sync": "2.29.3",
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
     "copy-webpack-plugin": "11.0.0",
-    "eslint": "8.50.0",
+    "eslint": "8.51.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-webpack-plugin": "4.0.1",
     "folder-hash": "4.0.4",
@@ -43,9 +43,9 @@
     "rimraf": "5.0.5",
     "ts-jest": "29.1.1",
     "typescript": "5.1.6",
-    "webpack": "5.88.2",
+    "webpack": "5.89.0",
     "webpack-bundle-analyzer": "4.9.1",
-    "webpack-merge": "5.9.0",
+    "webpack-merge": "5.10.0",
     "webpack-notifier": "1.15.0"
   }
 }

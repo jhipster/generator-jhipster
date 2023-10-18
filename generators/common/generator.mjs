@@ -100,9 +100,42 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      migrateEntity({ entityConfig, entityStorage }) {
+        for (const field of entityConfig.fields) {
+          if (field.javadoc) {
+            field.documentation = field.javadoc;
+            delete field.javadoc;
+          }
+          if (field.fieldTypeJavadoc) {
+            field.fieldTypeDocumentation = field.fieldTypeJavadoc;
+            delete field.fieldTypeJavadoc;
+          }
+        }
+        for (const relationship of entityConfig.relationships) {
+          if (relationship.javadoc) {
+            relationship.documentation = relationship.javadoc;
+            delete relationship.javadoc;
+          }
+        }
+        if (entityConfig.javadoc) {
+          entityConfig.documentation = entityConfig.javadoc;
+          delete entityConfig.javadoc;
+        } else {
+          entityStorage.save();
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+  }
+
   // Public API method used by the getter and also by Blueprints
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
@@ -110,10 +143,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         );
       },
 
-      loadConfig({ application }) {
-        application.prettierTabWidth = this.jhipsterConfig.prettierTabWidth || 2;
+      loadConfig({ applicationDefaults }) {
+        applicationDefaults({
+          prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
+        });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
@@ -122,7 +157,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
@@ -135,7 +170,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         application.DOCUMENTATION_URL = JHIPSTER_DOCUMENTATION_URL;
         application.DOCUMENTATION_ARCHIVE_PATH = JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -199,8 +234,17 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           devDependencies: {
             husky: application.nodeDependencies.husky,
             'lint-staged': application.nodeDependencies['lint-staged'],
+            prettier: application.nodeDependencies.prettier,
+            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
           },
         });
+        if (application.backendTypeJavaAny) {
+          this.packageJson.merge({
+            devDependencies: {
+              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
+            },
+          });
+        }
       },
     });
   }

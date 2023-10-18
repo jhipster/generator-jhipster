@@ -137,9 +137,9 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       });
     }
 
-    let javadoc = null;
+    let documentation = null;
     if (context.JAVADOC) {
-      javadoc = trimComment(context.JAVADOC[0].image);
+      documentation = trimComment(context.JAVADOC[0].image);
     }
 
     const name = context.NAME[0].image;
@@ -159,7 +159,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       name,
       tableName,
       body,
-      javadoc,
+      documentation,
     };
   }
 
@@ -208,7 +208,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       // this.visit(context.type) is equivalent to this.visit(context.type[0])
       type: this.visit(context.type),
       validations,
-      javadoc: comment,
+      documentation: comment,
       annotations,
     };
   }
@@ -302,7 +302,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   relationshipSide(context) {
-    const javadoc = this.visit(context.comment);
+    const documentation = this.visit(context.comment);
     const name = context.NAME[0].image;
 
     const required = !!context.REQUIRED;
@@ -319,7 +319,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     const ast: any = {
       name,
       injectedField,
-      javadoc,
+      documentation,
       required,
     };
 
@@ -345,12 +345,12 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   enumDeclaration(context) {
     const name = context.NAME[0].image;
     const values = this.visit(context.enumPropList);
-    let javadoc = null;
+    let documentation = null;
     if (context.JAVADOC) {
-      javadoc = trimComment(context.JAVADOC[0].image);
+      documentation = trimComment(context.JAVADOC[0].image);
     }
 
-    return { name, values, javadoc };
+    return { name, values, documentation };
   }
 
   enumPropList(context) {

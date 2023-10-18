@@ -8,7 +8,7 @@ describe('base-application - support - enum', () => {
 
       before(() => {
         const clientRootFolder = 'root';
-        const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeJavadoc: 'enum comment' };
+        const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeDocumentation: 'enum comment' };
         enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
@@ -22,7 +22,7 @@ describe('base-application - support - enum', () => {
         assert.deepStrictEqual(enumInfo.enums, ['AAA', 'BBB']);
       });
       it('returns the enums comment', () => {
-        assert.deepStrictEqual(enumInfo.javadoc, '/**\n * enum comment\n */');
+        assert.deepStrictEqual(enumInfo.enumJavadoc, '/**\n * enum comment\n */');
       });
     });
     describe("when the enums don't have custom values", () => {

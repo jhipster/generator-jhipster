@@ -398,6 +398,7 @@ export const files = {
         'admin/logs/logs.service.spec.ts',
         'admin/metrics/metrics.component.spec.ts',
         'admin/metrics/metrics.service.spec.ts',
+        'admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.spec.ts',
       ],
     },
     {

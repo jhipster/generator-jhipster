@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { Relationship, Entity } from '../../../jdl/converters/types.js';
 import { ValidationResult } from '../../base/api.mjs';

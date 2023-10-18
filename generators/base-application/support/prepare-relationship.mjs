@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import pluralize from 'pluralize';
 
 import {
@@ -261,7 +261,13 @@ function relationshipToReference(entity, relationship, pathPrefix = []) {
     relationship,
     owned: relationship.ownerSide,
     collection,
-    doc: relationship.javaDoc,
+    doc: relationship.documentation,
+    get propertyJavadoc() {
+      return relationship.relationshipJavadoc;
+    },
+    get propertyApiDescription() {
+      return relationship.relationshipApiDescription;
+    },
     name,
     nameCapitalized: collection ? relationship.relationshipNameCapitalizedPlural : relationship.relationshipNameCapitalized,
     get type() {

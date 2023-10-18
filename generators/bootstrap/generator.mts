@@ -31,7 +31,7 @@ import {
   createRemoveUnusedImportsTransform,
 } from './support/index.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
-import { GENERATOR_UPGRADE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import command from './command.mjs';
@@ -55,12 +55,20 @@ export default class BootstrapGenerator extends BaseGenerator {
     super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
   }
 
-  beforeQueue() {
+  async beforeQueue() {
     loadStoredAppOptions.call(this);
 
     // Force npm override later if needed
     (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;
+
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
   }
 
   get initializing() {

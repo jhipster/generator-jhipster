@@ -19,23 +19,23 @@
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.3</jaxb-runtime.version>
         <junit-platform-launcher.version>1.10.0</junit-platform-launcher.version>
-        <liquibase.version>4.23.2</liquibase.version>
+        <liquibase.version>4.24.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <micrometer-context-propagation.version>1.0.5</micrometer-context-propagation.version>
+        <micrometer-context-propagation.version>1.0.6</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
-        <typesafe.version>1.4.2</typesafe.version>
+        <typesafe.version>1.4.3</typesafe.version>
         <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.12.4</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.14.0</frontend-maven-plugin.version>
-        <gatling-maven-plugin.version>4.5.0</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>4.6.0</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>6.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.3.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>

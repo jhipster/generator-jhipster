@@ -46,7 +46,7 @@ jobs:
             - run:
                 name: Install Node Modules
                 command: 'npm install'
-            <%_ if (cicdIntegrationsSnyk) { _%>
+            <%_ if (ciCdIntegrationsSnyk) { _%>
             - run:
                 name: Install Snyk CLI
                 command: |
@@ -90,13 +90,13 @@ jobs:
                 command: <%= clientPackageManager %> run ci:frontend:test
             <%_ } _%>
             <%_ if (buildToolMaven) { _%>
-                <%_ if (cicdIntegrationsHeroku) { _%>
+                <%_ if (ciCdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
                 command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
                 <%_ } _%>
             <%_ } else if (buildToolGradle) { _%>
-                <%_ if (cicdIntegrationsHeroku) { _%>
+                <%_ if (ciCdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
                 command: './gradlew deployHeroku --no-daemon'
@@ -115,7 +115,7 @@ jobs:
             <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:run
             <%_ if(cypressTests) { _%>
             <%= commented %>    environment:
-            <%= commented %>      CYPRESS_ENABLE_RECORD: <%= cicdIntegrationsCypressDashboard %>
+            <%= commented %>      CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
             <%_ } _%>
             <%= commented %>- run:
             <%= commented %>    name: 'E2E: Teardown'

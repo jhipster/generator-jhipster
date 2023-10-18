@@ -51,3 +51,37 @@ function filterValue(object: Record<string, any>, filterValue: (any) => boolean 
   }
   return clone;
 }
+
+/**
+ * Picks every field from source.
+ * A field with undefined value is returned for missing fields.
+ */
+export const pickFields = (source: Record<string | number, any>, fields: (string | number)[]) =>
+  Object.fromEntries(fields.map(field => [field, source[field]]));
+
+/**
+ * Mutation properties accepts:
+ * - functions: receives the application and the return value is set at the application property.
+ * - non functions: application property will receive the property in case current value is undefined.
+ *
+ * Applies each mutation object in order.
+ *
+ * @example
+ * // application = { prop: 'foo-bar', prop2: 'foo2' }
+ * mutateData(
+ *   data,
+ *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
+ *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
+ * );
+ */
+export const mutateData = (context: Record<string | number, any>, ...mutations: Record<string | number, any>[]) => {
+  for (const mutation of mutations) {
+    for (const [key, value] of Object.entries(mutation)) {
+      if (typeof value === 'function') {
+        context[key] = value(context);
+      } else if (context[key] === undefined) {
+        context[key] = value;
+      }
+    }
+  }
+};

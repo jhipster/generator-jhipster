@@ -66,7 +66,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing a JSON entity to JDL', () => {
-        it('should parse entity javadoc', () => {
+        it('should parse entity documentation', () => {
           expect(jdlObject.entities.Employee.comment).eq('The Employee entity.');
         });
         it('should parse tableName', () => {
@@ -76,7 +76,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           expect(jdlObject.entities.Country.fields.countryId.type).eq('Long');
           expect(jdlObject.entities.Country.fields.countryName.type).eq('String');
         });
-        it('should parse field javadoc', () => {
+        it('should parse field documentation', () => {
           expect(jdlObject.entities.Country.fields.countryId.comment).eq('The country Id');
           expect(jdlObject.entities.Country.fields.countryName.comment).to.be.undefined;
         });
