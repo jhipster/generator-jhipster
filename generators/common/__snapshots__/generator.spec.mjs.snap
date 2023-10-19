@@ -38,7 +38,7 @@ trim_trailing_whitespace = false
 ",
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": {
+  ".lintstagedrc.cjs": {
     "contents": "module.exports = {
   '{,**/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
 };

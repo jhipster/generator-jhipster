@@ -192,6 +192,11 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             this.removeFile('npmw.cmd');
           }
         }
+        if (this.isJhipsterVersionLessThan('8.0.0-rc.2')) {
+          if (!application.skipCommitHook) {
+            this.removeFile('.lintstagedrc.js');
+          }
+        }
       },
       writePrettierConfig({ application }) {
         return this.writeFiles({

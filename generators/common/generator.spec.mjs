@@ -73,7 +73,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('uses custom prettier formatting to js file', () => {
-        runResult.assertFileContent('.lintstagedrc.js', / {10}'{/);
+        runResult.assertFileContent('.lintstagedrc.cjs', / {10}'{/);
       });
     });
   });

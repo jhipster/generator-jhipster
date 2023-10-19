@@ -710,7 +710,7 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   ".jhipster/Foo.json": {
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": {
+  ".lintstagedrc.cjs": {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": {
