@@ -33,7 +33,7 @@
     "@types/node": "18.18.5",
     "@types/react": "18.2.29",
     "@types/react-dom": "18.2.14",
-    "@types/react-redux": "7.1.27",
+    "@types/react-redux": "7.1.28",
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.18.3",
     "@typescript-eslint/eslint-plugin": "6.8.0",
