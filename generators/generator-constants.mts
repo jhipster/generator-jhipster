@@ -111,4 +111,4 @@ export const SERVER_MAIN_SRC_DIR = `${MAIN_DIR}java/`;
 export const SERVER_MAIN_RES_DIR = `${MAIN_DIR}resources/`;
 export const SERVER_TEST_SRC_DIR = `${TEST_DIR}java/`;
 export const SERVER_TEST_RES_DIR = `${TEST_DIR}resources/`;
-export const PRETTIER_EXTENSIONS = 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java';
+export const PRETTIER_EXTENSIONS = 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,java';
