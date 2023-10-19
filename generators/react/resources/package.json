@@ -35,7 +35,7 @@
     "@types/react-dom": "18.2.13",
     "@types/react-redux": "7.1.27",
     "@types/redux": "3.6.31",
-    "@types/webpack-env": "1.18.2",
+    "@types/webpack-env": "1.18.3",
     "@typescript-eslint/eslint-plugin": "6.8.0",
     "@typescript-eslint/parser": "6.8.0",
     "autoprefixer": "10.4.16",
