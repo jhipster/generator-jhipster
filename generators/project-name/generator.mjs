@@ -131,7 +131,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
    * @returns Boolean
    */
   validateBaseName(input) {
-    if (!/^([\w-]*)$/.test(input)) {
+    if (!/^([\w]*)$/.test(input)) {
       return 'Your base name cannot contain special characters or a blank space';
     }
     if (/_/.test(input)) {
