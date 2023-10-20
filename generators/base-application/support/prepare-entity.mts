@@ -287,6 +287,10 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     if (idField) {
       idField.id = true;
     } else {
+      if (entityWithConfig.microserviceName) {
+        // TODO ignore warning for microfrontends.
+        generator.log.warn("Microservice entities should have a custom id to make sure gateway and microservice types won't conflict");
+      }
       idField = {
         fieldName: 'id',
         id: true,
