@@ -218,6 +218,7 @@ Options:
   --enable-translation                     Enable translation
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   -n, --native-language [value]            Set application native language
+  --regenerate-languages                   Regenerate languages
   --workspaces-folders <value...>          Folders to use as monorepository workspace
   --workspaces                             Generate workspaces for multiples applications
   -h, --help                               display help for command

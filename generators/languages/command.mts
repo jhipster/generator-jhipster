@@ -44,6 +44,11 @@ const command: JHipsterCommandDefinition = {
       type: String,
       required: false,
     },
+    regenerateLanguages: {
+      description: 'Regenerate languages',
+      type: Boolean,
+      scope: 'generator',
+    },
   },
 };
 
