@@ -48,7 +48,7 @@ const initialState: EntityState<I<%= entityReactName %>> = {
 
 const apiUrl = '<%= entityApi %>api/<%= entityApiUrl %>';
 <%_ if (searchEngineAny) { _%>
-const apiSearchUrl = '<%= entityApi %>api/_search/<%= entityApiUrl %>';
+const apiSearchUrl = '<%= entityApi %>api/<%= entityApiUrl %>/_search';
 <%_ } _%>
 
 // Actions
