@@ -8,39 +8,23 @@ Blueprints allows to add new features or change current features.
 jhipster generate-blueprint
 ```
 
-When creating blueprints it's cleaner to have the blueprint forwarding to a custom generator.
-Example [jOOQ Blueprint](https://github.com/jhipster/generator-jhipster-jooq/blob/ce48a06a2b031013383db01cc787bbe94aa2c683/generators/server/generator.mjs)
+When creating blueprints it's cleaner to have the blueprint forwarding to a custom generator and keep main generators like client/common/server with customizations.
+Example [jOOQ Blueprint](https://github.com/jhipster/generator-jhipster-jooq/blob/ce48a06a2b031013383db01cc787bbe94aa2c683/generators/server/generator.mjs#L21)
 
 ## Maintaining a Blueprint
 
 ### Upgrading to a new JHipster version
 
-#### Install a new `generator-jhipster` version
-
-Main branch will be used as example.
-Go to the blueprint folder and run:
-
-```
-npm install jhipster/generator-jhipster#main
-```
-
-If conflict happens you can try to recreate `node_modules` and `package-lock.json`.
-
-```
-rm -rf node_modules
-rm package-lock.json
-```
-
-#### Syncing the generated blueprint
+#### Upgrading and syncing the generated blueprint
 
 Each JHipster version brings updated dependencies.
 You should regenerate the blueprint to update dependencies.
 
 ```
-npx jhipster generate-blueprint
+npx --package generator-jhipster@x.x.x jhipster generate-blueprint
 ```
 
-When updating from a minor jhipster version, you probably will want to ignore (press i) to every generator and test conflict.
+When updating from a minor jhipster version, you probably will want to ignore (press s) to every generator and test conflict.
 Ignore (i option instead of s) will store the file at `.yo-resolve` so that following `generate-blueprint` executions will ignore those files by default.
 
 From time to time generate-blueprint may generate different code.
