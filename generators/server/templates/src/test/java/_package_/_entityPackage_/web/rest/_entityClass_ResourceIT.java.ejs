@@ -433,7 +433,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private static final String ENTITY_API_URL = "/api/<%= entityApiUrl %>";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%= primaryKey.name %>}";
 <%_ if (searchEngineAny) { _%>
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/<%= entityApiUrl %>";
+    private static final String ENTITY_SEARCH_API_URL = "/api/<%= entityApiUrl %>/_search";
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 

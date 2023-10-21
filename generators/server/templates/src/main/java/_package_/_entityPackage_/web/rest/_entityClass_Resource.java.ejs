@@ -432,7 +432,7 @@ public class <%= entityClass %>Resource {
 <%_ if (searchEngineAny) { _%>
 
     /**
-     * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding
+     * {@code SEARCH  /<%= entityApiUrl %>/_search?query=:query} : search for the <%= entityInstance %> corresponding
      * to the query.
      *
      * @param query the query of the <%= entityInstance %> search.
@@ -444,6 +444,6 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
      * @return the result of the search.
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../_partials_entity_/search_template', {viaService}); -%>
+    @GetMapping("/<%= entityApiUrl %>/_search")<%- include('../../_partials_entity_/search_template', {viaService}); -%>
 <%_ } _%>
 }
