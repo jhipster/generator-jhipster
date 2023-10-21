@@ -94,22 +94,11 @@
     "@vue/tsconfig": null,
     "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "flush-promises": null,
     "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
     "numeral": "<%= nodeDependencies['numeral'] %>",
     "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
     "postcss-url": "<%= nodeDependencies['postcss-url'] %>",
-    "prettier": "<%= nodeDependencies['prettier'] %>",
-<%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
-<%_ } _%>
-    "prettier-plugin-packagejson": "<%= nodeDependencies['prettier-plugin-packagejson'] %>",
 <%_ if (cypressTests) { _%>
     "cypress": "<%= nodeDependencies['cypress'] %>",
 <%_ } _%>
@@ -143,8 +132,8 @@
 <%_ } %>
     "lint": "eslint . --ext .ts,.vue ",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
-    "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "start": "<%= clientPackageManager %> run webapp:dev --",
     "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     "serve": "<%= clientPackageManager %> run start --",

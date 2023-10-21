@@ -29,13 +29,15 @@ import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../bas
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { replaceSensitiveConfig } from './support/utils.mjs';
 
+const isInfoCommand = commandName => commandName === 'info' || undefined;
+
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
       jhipsterBootstrap: false,
       storeJHipsterVersion: false,
-      customInstallTask: true,
-      customCommitTask: true,
+      customInstallTask: isInfoCommand(options.commandName),
+      customCommitTask: isInfoCommand(options.commandName),
       ...features,
     });
   }
@@ -47,12 +49,8 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       },
 
       async checkJHipster() {
-        try {
-          const { stdout } = await this.spawnCommand('npm list generator-jhipster', { stdio: 'pipe' });
-          console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
-        } catch (error) {
-          console.log(`\n\`\`\`\n${(error as any).stdout}\`\`\`\n`);
-        }
+        const { stdout } = await this.spawnCommand('npm list generator-jhipster', { stdio: 'pipe', reject: false });
+        console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
       },
 
       displayConfiguration() {
@@ -66,8 +64,9 @@ export default class InfoGenerator extends BaseApplicationGenerator {
           console.log('\n##### **JHipster configuration not found**\n');
         }
 
-        if (this.jhipsterConfig.packages && this.jhipsterConfig.packages.length > 0) {
-          for (const pkg of this.jhipsterConfig.packages) {
+        const packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        if (packages.length > 0) {
+          for (const pkg of packages) {
             const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
             if (yoRc) {
               const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
@@ -121,7 +120,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
   async checkCommand(command: string, args: string[], printInfo = ({ stdout }: ExecaReturnValue<string>) => console.log(stdout)) {
     try {
-      printInfo(await this.spawnCommand(command, args, { stdio: 'pipe' }));
+      printInfo(await this.spawn(command, args, { stdio: 'pipe' }));
     } catch (_error) {
       console.log(chalk.red(`'${command}' command could not be found`));
     }

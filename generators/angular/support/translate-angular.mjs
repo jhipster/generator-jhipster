@@ -44,8 +44,8 @@ function getTranslationValue(getWebappTranslation, key, data) {
  */
 function replaceTranslationKeysWithText(getWebappTranslation, content, regexSource, { keyIndex = 1, replacementIndex = 1, escape } = {}) {
   const regex = new RegExp(regexSource, 'g');
-  let match = regex.exec(content);
-  while (match !== null) {
+  const allMatches = content.matchAll(regex);
+  for (const match of allMatches) {
     // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
     const key = match[keyIndex];
     const target = match[replacementIndex];
@@ -54,7 +54,6 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
       translation = escape(translation, match);
     }
     content = content.replace(target, translation);
-    match = regex.exec(content);
   }
   return content;
 }
@@ -67,9 +66,14 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
  * @returns string with jsKey value replaced
  */
 function replaceJSTranslation(getWebappTranslation, content, jsKey) {
-  return replaceTranslationKeysWithText(getWebappTranslation, content, `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+)['|"]`, {
-    escape: (translation, match) => translation.replaceAll(match[0].slice(-1), `\\${match[0].slice(-1)}`),
-  });
+  return replaceTranslationKeysWithText(
+    getWebappTranslation,
+    content,
+    `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+\\.[a-zA-Z0-9.\\-_]+)['|"]`,
+    {
+      escape: (translation, match) => translation.replaceAll(match[0].slice(-1), `\\${match[0].slice(-1)}`),
+    },
+  );
 }
 
 /**
@@ -113,10 +117,9 @@ export const createTranslationReplacer = (getWebappTranslation, enableTranslatio
         content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
         content = replacePlaceholders(getWebappTranslation, content);
       }
-      content = htmlJhiTranslateReplacer(content);
-      content = htmlJhiTranslateStringifyReplacer(content);
     }
-    if (/\.ts$/.test(filePath)) {
+    // Translate html files and inline templates.
+    if (/(:?\.html|component\.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
     }

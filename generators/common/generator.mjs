@@ -37,27 +37,44 @@ import { loadStoredAppOptions } from '../app/support/index.mjs';
 const { REACT, ANGULAR } = clientFrameworkTypes;
 
 export default class CommonGenerator extends BaseApplicationGenerator {
+  command = command;
+
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_GIT);
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_COMMON);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_GIT);
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(this.command);
       },
     });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -83,9 +100,42 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      migrateEntity({ entityConfig, entityStorage }) {
+        for (const field of entityConfig.fields) {
+          if (field.javadoc) {
+            field.documentation = field.javadoc;
+            delete field.javadoc;
+          }
+          if (field.fieldTypeJavadoc) {
+            field.fieldTypeDocumentation = field.fieldTypeJavadoc;
+            delete field.fieldTypeJavadoc;
+          }
+        }
+        for (const relationship of entityConfig.relationships) {
+          if (relationship.javadoc) {
+            relationship.documentation = relationship.javadoc;
+            delete relationship.javadoc;
+          }
+        }
+        if (entityConfig.javadoc) {
+          entityConfig.documentation = entityConfig.javadoc;
+          delete entityConfig.javadoc;
+        } else {
+          entityStorage.save();
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+  }
+
   // Public API method used by the getter and also by Blueprints
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
@@ -93,10 +143,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         );
       },
 
-      loadConfig({ application }) {
-        application.prettierTabWidth = this.jhipsterConfig.prettierTabWidth || 2;
+      loadConfig({ applicationDefaults }) {
+        applicationDefaults({
+          prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
+        });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
@@ -105,7 +157,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
@@ -118,7 +170,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         application.DOCUMENTATION_URL = JHIPSTER_DOCUMENTATION_URL;
         application.DOCUMENTATION_ARCHIVE_PATH = JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -140,6 +192,11 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             this.removeFile('npmw.cmd');
           }
         }
+        if (this.isJhipsterVersionLessThan('8.0.0-rc.2')) {
+          if (!application.skipCommitHook) {
+            this.removeFile('.lintstagedrc.js');
+          }
+        }
       },
       writePrettierConfig({ application }) {
         return this.writeFiles({
@@ -157,6 +214,16 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addJHipsterDependencies({ application }) {
+        if (application.skipJhipsterDependencies) return;
+
+        this.packageJson.merge({
+          devDependencies: {
+            'generator-jhipster': application.jhipsterVersion,
+            ...Object.fromEntries(application.blueprints.map(blueprint => [blueprint.name, blueprint.version])),
+          },
+        });
+      },
       async formatSonarProperties() {
         this.queueTransformStream(await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
           name: 'prettifying sonar-project.properties',
@@ -172,8 +239,17 @@ export default class CommonGenerator extends BaseApplicationGenerator {
           devDependencies: {
             husky: application.nodeDependencies.husky,
             'lint-staged': application.nodeDependencies['lint-staged'],
+            prettier: application.nodeDependencies.prettier,
+            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
           },
         });
+        if (application.backendTypeJavaAny) {
+          this.packageJson.merge({
+            devDependencies: {
+              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
+            },
+          });
+        }
       },
     });
   }

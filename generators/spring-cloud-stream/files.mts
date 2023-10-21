@@ -28,14 +28,14 @@ export const kafkaFiles: WriteFileSection<any, any> = {
       templates: ['gradle/kafka.gradle'],
     },
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [data => `broker/KafkaConsumer_${data.imperativeOrReactive}.java`, 'broker/KafkaProducer.java'],
     },
   ],
   resources: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       to: moveToJavaPackageSrcDir,
       templates: [
         {
@@ -47,7 +47,7 @@ export const kafkaFiles: WriteFileSection<any, any> = {
   ],
   test: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'config/KafkaTestContainer.java',
@@ -56,7 +56,7 @@ export const kafkaFiles: WriteFileSection<any, any> = {
       ],
     },
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       to: moveToJavaPackageTestDir,
       templates: [
         {
@@ -77,7 +77,7 @@ export const pulsarFiles: WriteFileSection<any, any> = {
   ],
   test: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'broker/PulsarIT.java',

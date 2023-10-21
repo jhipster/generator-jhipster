@@ -8,33 +8,26 @@ exports[`generator - app help should print expected information 1`] = `
 Options:
   --auto-crlf                              Detect line endings
   --defaults                               Execute jhipster with default config
-  --application-type <value>               Application type to generate
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
-  --skip-commit-hook                       Skip adding husky commit hooks
-  --skip-user-management                   Skip the user management module during app generation
-  --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
-  --skip-fake-data                         Skip generation of fake data for development
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
-  --auth <value>                           Provide authentication type for the application when skipping server side generation
-  --db <value>                             Provide DB name for the application when skipping server side generation
   --blueprint <value...>                   DEPRECATED: Specify a generator blueprint to use for the sub generators
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
-  --incremental-changelog                  Creates incremental database changelogs
-  --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --ignore-errors                          Don't fail on prettier errors.
-  --enable-translation                     Enable translation
-  -l, --language <value...>                Language to be added to application (existing languages are not removed)
   --pk-type <value>                        Default primary key type (beta)
   --client-package-manager <value>         Force an unsupported client package manager
-  --microfrontend                          Force generation of experimental microfrontend support
   --test-frameworks <value...>             Test frameworks to be generated
   --skip-cache                             Do not remember prompt answers (default: false)
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
+  --auth <value>                           Provide authentication type for the application when skipping server side generation
+  --db <value>                             Provide DB name for the application when skipping server side generation
+  --incremental-changelog                  Creates incremental database changelogs
+  --skip-user-management                   Skip the user management module during app generation
+  --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --build <value>                          Provide build tool for the application when skipping server side generation
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
@@ -42,19 +35,30 @@ Options:
   --message-broker <value>                 message broker
   --reactive                               Generate a reactive backend
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
+  --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-db-changelog                      Skip the generation of database migrations
+  --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
+  --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --dev-database-type <value>              Development database
-  --client-framework <value>               Provide client framework for the application
-  --prettier-tab-width <value>             Default tab width for prettier
+  --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
+  --microfrontend                          Enable microfrontend support
+  --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
+  --client-root-dir <value>                Client root
+  --prettier-tab-width <value>             Default tab width for prettier
+  --skip-commit-hook                       Skip adding husky commit hooks
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
   --cypress-coverage                       Enable Cypress code coverage report generation
   --cypress-audit                          Enable cypress-audit/lighthouse report generation
+  --enable-translation                     Enable translation
+  -l, --language <value...>                Language to be added to application (existing languages are not removed)
+  -n, --native-language [value]            Set application native language
+  --regenerate-languages                   Regenerate languages
   -h, --help                               display help for command
 "
 `;
@@ -85,6 +89,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "addSpringMilestoneRepository": false,
   "angularLocaleId": "en",
   "applicationType": "monolith",
+  "applicationTypeAny": true,
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
@@ -94,6 +99,8 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "authenticationTypeSession": false,
   "authenticationUsesCsrf": false,
   "backendType": "Java",
+  "backendTypeJavaAny": true,
+  "backendTypeSpringBoot": true,
   "baseName": "jhipster",
   "blueprints": [],
   "buildTool": "maven",
@@ -119,8 +126,12 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
   "clientPackageManager": "npm",
+  "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
+  "clientTestFrameworks": undefined,
+  "clientTestFrameworksAny": true,
+  "clientTestFrameworksCypress": false,
   "clientTheme": "none",
   "clientThemeDark": false,
   "clientThemeLight": false,
@@ -144,6 +155,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "defaultEnvironment": "prod",
   "defaultPackaging": "jar",
   "devDatabaseExtraOptions": "",
+  "devDatabaseName": "jhipster",
   "devDatabasePassword": "",
   "devDatabaseType": "postgresql",
   "devDatabaseTypeH2Any": false,
@@ -154,6 +166,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": true,
+  "devDatabaseTypePostgresql": true,
   "devDatabaseUsername": "jhipster",
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "devJdbcDriver": "org.postgresql.Driver",
@@ -286,7 +299,12 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
+  "dockerServices": [
+    "app",
+    "postgresql",
+  ],
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -308,11 +326,19 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "generateBuiltInUserEntity": true,
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
+  "gradleEnterpriseHost": undefined,
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
   "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
+  "javaCompatibleVersions": [
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+  ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
     "awaitility": "'AWAITILITY-VERSION'",
@@ -375,13 +401,14 @@ exports[`generator - app with default config should match snapshot 1`] = `
   },
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaVersion": "JAVA_VERSION",
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": undefined,
+  "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
@@ -409,6 +436,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
@@ -544,13 +572,14 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabaseExtraOptions": "",
+  "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeMariadb": false,
   "prodDatabaseTypeMssql": false,
   "prodDatabaseTypeMysql": false,
   "prodDatabaseTypeOracle": false,
-  "prodDatabaseTypePostgres": true,
+  "prodDatabaseTypePostgresql": true,
   "prodDatabaseUsername": "jhipster",
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "prodJdbcDriver": "org.postgresql.Driver",
@@ -571,10 +600,10 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "serviceDiscoveryEureka": false,
   "serviceDiscoveryType": "no",
   "skipCheckLengthOfIdentifier": false,
-  "skipClient": false,
+  "skipClient": undefined,
   "skipCommitHook": undefined,
   "skipFakeData": false,
-  "skipJhipsterDependencies": false,
+  "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
   "srcMainDir": "src/main/",
@@ -591,6 +620,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
   "testResourceDir": "src/test/resources/",
   "upperFirstCamelCaseBaseName": "Jhipster",
+  "useNpmWrapper": true,
   "user": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
@@ -625,6 +655,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "addSpringMilestoneRepository": false,
   "angularLocaleId": "en",
   "applicationType": "gateway",
+  "applicationTypeAny": true,
   "applicationTypeGateway": true,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": false,
@@ -634,6 +665,8 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "authenticationTypeSession": false,
   "authenticationUsesCsrf": false,
   "backendType": "Java",
+  "backendTypeJavaAny": true,
+  "backendTypeSpringBoot": true,
   "baseName": "jhipster",
   "blueprints": [],
   "buildTool": "maven",
@@ -659,8 +692,12 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
   "clientPackageManager": "npm",
+  "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
+  "clientTestFrameworks": undefined,
+  "clientTestFrameworksAny": true,
+  "clientTestFrameworksCypress": false,
   "clientTheme": "none",
   "clientThemeDark": false,
   "clientThemeLight": false,
@@ -684,6 +721,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "defaultEnvironment": "prod",
   "defaultPackaging": "jar",
   "devDatabaseExtraOptions": "",
+  "devDatabaseName": "jhipster",
   "devDatabasePassword": "",
   "devDatabaseType": "postgresql",
   "devDatabaseTypeH2Any": false,
@@ -694,6 +732,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": true,
+  "devDatabaseTypePostgresql": true,
   "devDatabaseUsername": "jhipster",
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "devJdbcDriver": "org.postgresql.Driver",
@@ -826,7 +865,14 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
+  "dockerServices": [
+    "app",
+    "consul",
+    "zipkin",
+    "postgresql",
+  ],
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -848,11 +894,19 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "generateBuiltInUserEntity": true,
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
+  "gradleEnterpriseHost": undefined,
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
   "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "reactive",
   "incrementalChangelog": undefined,
+  "javaCompatibleVersions": [
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+  ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
     "awaitility": "'AWAITILITY-VERSION'",
@@ -915,13 +969,14 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   },
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaVersion": "JAVA_VERSION",
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": undefined,
+  "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -949,6 +1004,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
@@ -1084,13 +1140,14 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabaseExtraOptions": "",
+  "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeMariadb": false,
   "prodDatabaseTypeMssql": false,
   "prodDatabaseTypeMysql": false,
   "prodDatabaseTypeOracle": false,
-  "prodDatabaseTypePostgres": true,
+  "prodDatabaseTypePostgresql": true,
   "prodDatabaseUsername": "jhipster",
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "prodJdbcDriver": "org.postgresql.Driver",
@@ -1112,10 +1169,10 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "serviceDiscoveryEureka": false,
   "serviceDiscoveryType": "consul",
   "skipCheckLengthOfIdentifier": false,
-  "skipClient": false,
+  "skipClient": undefined,
   "skipCommitHook": undefined,
   "skipFakeData": false,
-  "skipJhipsterDependencies": false,
+  "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
   "srcMainDir": "src/main/",
@@ -1132,6 +1189,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
   "testResourceDir": "src/test/resources/",
   "upperFirstCamelCaseBaseName": "Jhipster",
+  "useNpmWrapper": true,
   "user": Any<Object>,
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
@@ -1165,6 +1223,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "VUE": "vue",
   "addSpringMilestoneRepository": false,
   "applicationType": "microservice",
+  "applicationTypeAny": true,
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": true,
   "applicationTypeMonolith": false,
@@ -1174,6 +1233,8 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "authenticationTypeSession": false,
   "authenticationUsesCsrf": false,
   "backendType": "Java",
+  "backendTypeJavaAny": true,
+  "backendTypeSpringBoot": true,
   "baseName": "jhipster",
   "blueprints": [],
   "buildTool": "maven",
@@ -1199,8 +1260,12 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,
   "clientPackageManager": "npm",
+  "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
+  "clientTestFrameworks": undefined,
+  "clientTestFrameworksAny": true,
+  "clientTestFrameworksCypress": false,
   "clientTheme": undefined,
   "clientThemeDark": false,
   "clientThemeLight": false,
@@ -1224,6 +1289,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "defaultEnvironment": "prod",
   "defaultPackaging": "jar",
   "devDatabaseExtraOptions": "",
+  "devDatabaseName": "jhipster",
   "devDatabasePassword": "",
   "devDatabaseType": "postgresql",
   "devDatabaseTypeH2Any": false,
@@ -1234,6 +1300,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgres": true,
+  "devDatabaseTypePostgresql": true,
   "devDatabaseUsername": "jhipster",
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "devJdbcDriver": "org.postgresql.Driver",
@@ -1366,7 +1433,15 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "zookeeperImage": "zookeeper-image-placeholder",
     "zookeeperTag": "zookeeper-tag-placeholder",
   },
+  "dockerServices": [
+    "app",
+    "consul",
+    "zipkin",
+    "hazelcast",
+    "postgresql",
+  ],
   "dockerServicesDir": "src/main/docker/",
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -1388,11 +1463,19 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "generateBuiltInUserEntity": false,
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
+  "gradleEnterpriseHost": undefined,
   "gradleVersion": "GRADLE_VERSION",
   "hipster": "jhipster_family_member_3",
   "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
+  "javaCompatibleVersions": [
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+  ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
     "awaitility": "'AWAITILITY-VERSION'",
@@ -1455,13 +1538,14 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   },
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaVersion": "JAVA_VERSION",
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhiTablePrefix": "jhi",
   "jhipsterDependenciesVersion": "JHIPSTER_DEPENDENCIES_VERSION",
   "jhipsterPackageJson": Any<Object>,
-  "jhipsterVersion": undefined,
+  "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
@@ -1489,6 +1573,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
       "rtl": false,
     },
   ],
+  "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
@@ -1569,13 +1654,14 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabaseExtraOptions": "",
+  "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeMariadb": false,
   "prodDatabaseTypeMssql": false,
   "prodDatabaseTypeMysql": false,
   "prodDatabaseTypeOracle": false,
-  "prodDatabaseTypePostgres": true,
+  "prodDatabaseTypePostgresql": true,
   "prodDatabaseUsername": "jhipster",
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "prodJdbcDriver": "org.postgresql.Driver",
@@ -1599,7 +1685,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "skipClient": true,
   "skipCommitHook": undefined,
   "skipFakeData": false,
-  "skipJhipsterDependencies": false,
+  "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": true,
   "srcMainDir": "src/main/",
@@ -1616,6 +1702,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "testJavaPackageDir": "src/test/java/com/mycompany/myapp/",
   "testResourceDir": "src/test/resources/",
   "upperFirstCamelCaseBaseName": "Jhipster",
+  "useNpmWrapper": false,
   "websocket": "no",
   "withAdminUi": false,
 }

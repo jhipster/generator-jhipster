@@ -44,13 +44,13 @@ export default class JDLEnum {
   }
 
   getValueJavadocs() {
-    const javadocs = {};
+    const documentations = {};
     this.values.forEach(jdlEnumValue => {
       if (jdlEnumValue.comment) {
-        javadocs[jdlEnumValue.name] = jdlEnumValue.comment;
+        documentations[jdlEnumValue.name] = jdlEnumValue.comment;
       }
     });
-    return javadocs;
+    return documentations;
   }
 
   toString() {

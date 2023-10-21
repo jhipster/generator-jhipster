@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 // Version of Java
@@ -25,19 +26,19 @@ export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = '18.17.1';
+export const NODE_VERSION = '18.18.2';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
 
 export const javaDependencies: Record<string, string> = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.1.3',
+  'spring-boot': '3.1.5',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
    */
-  hibernate: '6.2.7.Final',
+  hibernate: '6.2.13.Final',
   /*
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.
@@ -100,7 +101,8 @@ export const GENERATOR_JHIPSTER = 'generator-jhipster';
 export const YO_RC_FILE = '.yo-rc.json';
 
 export const JHIPSTER_CONFIG_DIR = '.jhipster';
-export const DOCKER_DIR = `${MAIN_DIR}docker/`;
+export const TEMPLATES_DOCKER_DIR = 'docker/';
+export const JAVA_DOCKER_DIR = `${MAIN_DIR}docker/`;
 export const LINE_LENGTH = 180;
 export const CLIENT_MAIN_SRC_DIR = `${MAIN_DIR}webapp/`;
 export const CLIENT_TEST_SRC_DIR = `${TEST_DIR}javascript/`;
@@ -109,4 +111,4 @@ export const SERVER_MAIN_SRC_DIR = `${MAIN_DIR}java/`;
 export const SERVER_MAIN_RES_DIR = `${MAIN_DIR}resources/`;
 export const SERVER_TEST_SRC_DIR = `${TEST_DIR}java/`;
 export const SERVER_TEST_RES_DIR = `${TEST_DIR}resources/`;
-export const PRETTIER_EXTENSIONS = 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,svelte,java';
+export const PRETTIER_EXTENSIONS = 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,java';

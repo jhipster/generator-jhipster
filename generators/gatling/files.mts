@@ -24,6 +24,9 @@ import { SpringBootApplication } from '../server/types.mjs';
 const gatlingFiles: WriteFileSection<Generator, SpringBootApplication> = {
   gatlingFiles: [
     {
+      templates: ['README.md.jhi.gatling'],
+    },
+    {
       path: TEST_DIR,
       templates: [
         // Create Gatling test files

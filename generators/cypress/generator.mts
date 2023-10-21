@@ -30,10 +30,13 @@ const { ANGULAR } = clientFrameworkTypes;
 
 export default class CypressGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CYPRESS);
+    }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 
@@ -182,7 +185,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       },
 
       configure({ application }) {
-        this.packageJson.merge({
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        clientPackageJson.merge({
           devDependencies: {
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
@@ -199,7 +203,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
-        this.packageJson.merge({
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        clientPackageJson.merge({
           devDependencies: {
             lighthouse: application.nodeDependencies.lighthouse,
             'cypress-audit': application.nodeDependencies['cypress-audit'],
@@ -216,7 +221,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       configureCoverage({ application, source }) {
         const { cypressCoverage, clientFrameworkAngular, dasherizedBaseName } = application;
         if (!cypressCoverage) return;
-        this.packageJson.merge({
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        clientPackageJson.merge({
           devDependencies: {
             '@cypress/code-coverage': application.nodeDependencies['@cypress/code-coverage'],
             'babel-loader': application.nodeDependencies['babel-loader'],
@@ -225,7 +231,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
-            'pree2e:cypress:coverage': 'npm run clean coverage && npm run ci:server:await',
+            'pree2e:cypress:coverage': 'npm run clean-coverage && npm run ci:server:await',
             'e2e:cypress:coverage': 'npm run e2e:cypress:headed',
             'poste2e:cypress:coverage': 'nyc report',
             'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',

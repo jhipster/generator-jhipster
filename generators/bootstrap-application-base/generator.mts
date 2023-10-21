@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import os from 'os';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
@@ -33,8 +33,8 @@ import {
   prepareRelationship,
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
-import { DOCKER_DIR } from '../generator-constants.mjs';
-import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
+import { JAVA_DOCKER_DIR } from '../generator-constants.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
@@ -53,6 +53,14 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
@@ -114,16 +122,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
+      prepareApplication({ application, applicationDefaults }) {
         loadDerivedAppConfig({ application });
 
-        application.nodePackageManager = 'npm';
-        application.dockerServicesDir = DOCKER_DIR;
-
-        // TODO v8 drop the following variables
-        const anyApplication = application as any;
-
-        anyApplication.clientPackageManager = application.nodePackageManager;
+        applicationDefaults({
+          nodePackageManager: 'npm',
+          dockerServicesDir: JAVA_DOCKER_DIR,
+          // TODO drop clientPackageManager
+          clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
+        });
       },
     });
   }
@@ -278,7 +285,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get default() {
     return this.asDefaultTaskGroup({
       task({ application }) {
-        const isPackageJson = file => file.path === this.destinationPath('package.json');
+        const packageJsonFiles = [this.destinationPath('package.json')];
+        if (application.clientRootDir) {
+          packageJsonFiles.push(this.destinationPath(`${application.clientRootDir}package.json`));
+        }
+        const isPackageJson = file => packageJsonFiles.includes(file.path);
         const populateNullValues = dependencies => {
           if (!dependencies) return;
           for (const key of Object.keys(dependencies)) {

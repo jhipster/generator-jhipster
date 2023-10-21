@@ -55,7 +55,7 @@ const getTsLoaderRule = env => {
 module.exports = async options => {
   const development = options.env === 'development';
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= clientSrcDir %>i18n'), {
+  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -67,7 +67,7 @@ return merge(
   cache: {
     // 1. Set cache type to filesystem
     type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '../<%= temporaryDir %>webpack'),
+    cacheDirectory: path.resolve(__dirname, '../<%= this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
     buildDependencies: {
       // 2. Add your config as buildDependency to get cache invalidation on config change
       config: [
@@ -95,7 +95,7 @@ return merge(
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./<%= clientSrcDir %>app')],
+        include: [utils.root('./<%= this.relativeDir(clientRootDir, clientSrcDir) %>app')],
         exclude: [utils.root('node_modules')]
       }
       /*
@@ -148,17 +148,17 @@ return merge(
           from: path.join(path.dirname(require.resolve('axios/package.json')), 'dist/axios.min.js'),
           to: 'swagger-ui/',
         },
-        { from: './<%= clientSrcDir %>swagger-ui/', to: 'swagger-ui/' },
+        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
 <%_ } _%>
-        { from: './<%= clientSrcDir %>content/', to: 'content/' },
-        { from: './<%= clientSrcDir %>favicon.ico', to: 'favicon.ico' },
-        { from: './<%= clientSrcDir %>manifest.webapp', to: 'manifest.webapp' },
+        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
+        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
+        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp', to: 'manifest.webapp' },
         // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-        { from: './<%= clientSrcDir %>robots.txt', to: 'robots.txt' }
+        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' }
       ],
     }),
     new HtmlWebpackPlugin({
-      template: './<%= clientSrcDir %>index.html',
+      template: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
       chunksSortMode: 'auto',
       inject: 'body',
       base: '/',

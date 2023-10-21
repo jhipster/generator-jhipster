@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
@@ -33,7 +33,6 @@ import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.mjs';
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.mjs';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
-import upgradeFilesTask from './upgrade-files-task.mjs';
 import command from './command.mjs';
 import { QUEUES } from '../base-application/priorities.mjs';
 
@@ -55,15 +54,26 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
    */
   languagesToApply;
   composedBlueprints;
+  languageCommand;
+  writeJavaLanguageFiles;
+  regenerateLanguages;
+
+  constructor(args, options, features) {
+    super(args, options, features);
+
+    this.languageCommand = this.options.commandName === 'languages';
+  }
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-
     if (!this.fromBlueprint) {
       this.supportedLanguages = supportedLanguages;
       this.composedBlueprints = await this.composeWithBlueprints('languages', {
         generatorArgs: this.options.languages,
       });
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 
@@ -123,7 +133,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       checkPrompts({ control }) {
         const { enableTranslation, languages } = this.jhipsterConfig;
-        const showPrompts = this.options.askAnswered || this.env.rootGenerator() === this;
+        const showPrompts = this.options.askAnswered || this.languageCommand;
         this.askForNativeLanguage = showPrompts || (!control.existingProject && !this.jhipsterConfig.nativeLanguage);
         this.askForMoreLanguages =
           enableTranslation !== false && (showPrompts || (!control.existingProject && (languages?.length ?? 0) < 1));
@@ -182,7 +192,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
         if (application.enableTranslation) {
-          if (this.options.regenerate) {
+          if (!this.languageCommand || this.regenerateLanguages) {
             this.languagesToApply = application.languages;
           } else {
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
@@ -238,8 +248,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get writing() {
-    return {
-      upgradeFilesTask,
+    return this.asWritingTaskGroup({
       async writeClientTranslations({ application }) {
         if (application.skipClient) return;
         const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
@@ -256,7 +265,12 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         );
       },
       async translateFile({ application }) {
-        if (!application.enableTranslation || application.skipServer) return;
+        if (
+          !application.enableTranslation ||
+          application.skipServer ||
+          (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles)
+        )
+          return;
         await Promise.all(
           this.languagesToApply.map(async lang => {
             const language = findLanguageForTag(lang);
@@ -289,7 +303,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           }),
         );
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -297,9 +311,9 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       ...writeEntityFiles(),
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
@@ -307,7 +321,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   }
 
   get postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
       write({ application, control }) {
         if (application.enableTranslation && !application.skipClient) {
           if (application.clientFrameworkAngular) {
@@ -320,11 +334,16 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             updateLanguagesInVue.call(this, { application, control });
           }
         }
-        if (application.enableTranslation && application.generateUserManagement && !application.skipServer) {
+        if (
+          application.enableTranslation &&
+          application.generateUserManagement &&
+          !application.skipServer &&
+          (application.backendTypeSpringBoot || this.writeJavaLanguageFiles)
+        ) {
           updateLanguagesInJava.call(this, { application, control });
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {

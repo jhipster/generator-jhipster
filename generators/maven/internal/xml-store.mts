@@ -19,7 +19,7 @@
 
 import assert from 'assert';
 import { XMLParser, XMLBuilder, XmlBuilderOptions, X2jOptions } from 'fast-xml-parser';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 const { merge } = _;
 
@@ -43,6 +43,7 @@ const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
 };
 
 export default class XmlStorage {
+  sortFile: boolean = true;
   protected readonly saveFile: (string) => void;
   protected readonly loadFile: () => string;
 
@@ -75,14 +76,16 @@ export default class XmlStorage {
     delete this._cachedStore;
   }
 
-  public save() {
-    this.sort();
+  public save(sort = this.sortFile) {
+    if (sort) {
+      this.sort();
+    }
     this.persist(false);
   }
 
   protected sort() {}
 
-  protected persist(sort = true) {
+  protected persist(sort = this.sortFile) {
     if (this._cachedStore) {
       if (sort) {
         this.sort();

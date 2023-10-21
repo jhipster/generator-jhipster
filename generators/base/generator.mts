@@ -20,7 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.mjs';
@@ -70,7 +70,11 @@ export default class JHipsterBaseBlueprintGenerator<
 
       if (this.getFeatures().checkBlueprint) {
         if (!this.jhipsterContext) {
-          throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints ionic')}`);
+          throw new Error(
+            `This is a JHipster blueprint and should be used only like ${chalk.yellow(
+              `jhipster --blueprints ${this.options.namespace.split(':')[0]}`,
+            )}`,
+          );
         }
       }
 
@@ -248,6 +252,24 @@ export default class JHipsterBaseBlueprintGenerator<
   asPreparingTaskGroup(
     taskGroup: GenericTaskGroup<this, Definition['preparingTaskParam']>,
   ): GenericTaskGroup<this, Definition['preparingTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * Preparing should be used to generate derived properties.
+   */
+  get postPreparing(): GenericTaskGroup<this, Definition['preparingTaskParam']> {
+    return this.asPreparingTaskGroup({});
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asPostPreparingTaskGroup(
+    taskGroup: GenericTaskGroup<this, Definition['postPreparingTaskParam']>,
+  ): GenericTaskGroup<this, Definition['postPreparingTaskParam']> {
     return taskGroup;
   }
 

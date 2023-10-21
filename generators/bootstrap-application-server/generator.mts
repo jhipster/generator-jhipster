@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import {
+  JAVA_VERSION,
   MAIN_DIR,
   SERVER_MAIN_RES_DIR,
   SERVER_MAIN_SRC_DIR,
@@ -40,6 +41,7 @@ import {
   hibernateSnakeCase,
   loadServerConfig,
   loadDerivedServerConfig,
+  prepareRelationship,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
@@ -47,6 +49,8 @@ import { GRADLE_VERSION } from '../gradle/constants.mjs';
 import { normalizePathEnd } from '../base/support/path.mjs';
 import { getFrontendAppName } from '../base/support/index.mjs';
 import { getMainClassName } from '../java/support/index.mjs';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.mjs';
+import serverCommand from '../server/command.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -54,16 +58,26 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 
   get loading() {
     return this.asLoadingTaskGroup({
       async loadApplication({ application }) {
+        loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
-        application.backendType = 'Java';
+        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.backendType = this.jhipsterConfig.backendType ?? 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
@@ -99,6 +113,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
+        loadDerivedConfig(serverCommand.configs, { application });
         loadDerivedServerConfig({ application });
       },
       prepareForTemplates({ application: app }) {
@@ -117,6 +132,9 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
+
+        application.backendTypeSpringBoot = application.backendType === 'Java';
+        application.backendTypeJavaAny = application.backendTypeJavaAny ?? application.backendTypeSpringBoot;
       },
     });
   }
@@ -172,6 +190,18 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.preparingEachEntityField;
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        prepareRelationship({ entity, relationship });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {

@@ -25,7 +25,7 @@ import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
 import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
-import { getDBCExtraOption } from './support/database-data.mjs';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.mjs';
 import {
   getCommonMavenDefinition,
   getDatabaseTypeMavenDefinition,
@@ -33,17 +33,18 @@ import {
   getImperativeMavenDefinition,
   getReactiveMavenDefinition,
 } from './internal/dependencies.mjs';
-import { hibernateSnakeCase } from '../server/support/string.mjs';
-import { getJdbcUrl, getR2dbcUrl } from './support/index.mjs';
 import command from './command.mjs';
 
 const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_DATA_RELATIONAL);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 
@@ -164,16 +165,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
-  }
-
-  /**
-   * @private
-   * get a table column name in JHipster preferred style.
-   *
-   * @param {string} value - table column name string
-   */
-  getColumnName(value) {
-    return hibernateSnakeCase(value);
   }
 
   /**

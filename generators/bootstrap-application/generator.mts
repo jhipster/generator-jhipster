@@ -26,12 +26,17 @@ import {
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
 } from '../base-application/support/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import {
+  GENERATOR_BOOTSTRAP_APPLICATION,
+  GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
+  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
+} from '../generator-list.mjs';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
 import { getDefaultAppName } from '../project-name/support/index.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
+import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.mjs';
 
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -48,6 +53,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
   }
@@ -72,19 +85,22 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ application }) {
+      preparing({ application, applicationDefaults }) {
         if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
           (application as any).skipUserManagement = true;
         }
+
+        applicationDefaults({
+          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeSpringBoot,
+          documentationArchiveUrl: ({ jhipsterVersion }) =>
+            `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
+        });
 
         let prettierExtensions = 'md,json,yml,html';
         if (application.clientFrameworkAny) {
           prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
           if (application.clientFrameworkVue) {
             prettierExtensions = `${prettierExtensions},vue`;
-          }
-          if (application.clientFrameworkSvelte) {
-            prettierExtensions = `${prettierExtensions},svelte`;
           }
         }
         if (!application.skipServer) {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.mjs';
 import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
@@ -70,9 +70,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     }
   }
 
@@ -92,6 +95,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
         application.liquibaseDefaultSchemaName = '';
+        // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
+        (application as any).liquibaseAddH2Properties =
+          (application as any).liquibaseAddH2Properties ?? (application as any).devDatabaseTypeH2Any;
       },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
@@ -332,6 +338,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               // eslint-disable-next-line no-template-curly-in-string
               version: '${liquibase.version}',
               additionalContent: mavenPlugin({
+                backendTypeSpringBoot: application.backendTypeSpringBoot,
                 reactive: application.reactive,
                 packageName: application.packageName,
                 srcMainResources: application.srcMainResources,
@@ -370,8 +377,10 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
         }
 
         if (applicationAny.databaseTypeNeo4j) {
+          if (applicationAny.backendTypeSpringBoot) {
+            source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
+          }
           source.addMavenDependency?.([
-            { groupId: 'org.springframework', artifactId: 'spring-jdbc' },
             {
               groupId: 'org.liquibase.ext',
               artifactId: 'liquibase-neo4j',

@@ -13,6 +13,7 @@ export type BaseApplication = {
   hipster: string;
   lowercaseBaseName: string;
   upperFirstCamelCaseBaseName: string;
+  documentationArchiveUrl: string;
 
   projectVersion: string;
   projectDescription: string;
@@ -92,6 +93,7 @@ export type CommonClientServerApplication = BaseApplication &
   SpringBootApplication &
   ClientApplication &
   ApplicationType & {
+    clientRootDir: string;
     clientSrcDir: string;
     clientTestDir?: string;
     clientDistDir?: string;
@@ -100,9 +102,12 @@ export type CommonClientServerApplication = BaseApplication &
 
     serverPort: number;
     backendType?: string;
+    backendTypeJavaAny?: boolean;
+    backendTypeSpringBoot?: boolean;
     temporaryDir?: string;
 
     dockerServicesDir?: string;
+    dockerServices?: string[];
     prettierExtensions?: string;
 
     generateUserManagement?: boolean;

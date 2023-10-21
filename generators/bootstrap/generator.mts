@@ -18,6 +18,7 @@
  */
 import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
+import prettier from 'prettier';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -28,13 +29,13 @@ import {
   isPrettierConfigFilePath,
   createSortConfigFilesTransform,
   createESLintTransform,
+  createRemoveUnusedImportsTransform,
 } from './support/index.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
-import { GENERATOR_UPGRADE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import command from './command.mjs';
-import { createRemoveUnusedImportsTransform } from './support/java-unused-imports-transform.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
@@ -50,17 +51,27 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
+  prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
+  prettierOptions: prettier.Options = { plugins: [] };
 
   constructor(args: any, options: any, features: any) {
     super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
   }
 
-  beforeQueue() {
+  async beforeQueue() {
     loadStoredAppOptions.call(this);
 
     // Force npm override later if needed
     (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;
+
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
   }
 
   get initializing() {
@@ -177,7 +188,8 @@ export default class BootstrapGenerator extends BaseGenerator {
               ignoreErrors,
               prettierPackageJson: true,
               prettierJava: !this.jhipsterConfig.skipServer,
-              extensions: PRETTIER_EXTENSIONS,
+              extensions: this.prettierExtensions.join(','),
+              prettierOptions: this.prettierOptions,
             }),
           ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),

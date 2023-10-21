@@ -18,10 +18,4 @@ describe('generators - server - jdl - messageBroker', () => {
       });
     });
   });
-  describe('with invalid value', () => {
-    it('should set expected value', () => {
-      const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} foo } }`);
-      expect(() => importer.import()).toThrow(/Unknown value 'foo' for option 'messageBroker'./);
-    });
-  });
 });

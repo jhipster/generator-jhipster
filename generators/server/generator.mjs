@@ -29,8 +29,6 @@ import {
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
-  formatDocAsApiDescription,
-  formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generateKeyStore,
@@ -144,54 +142,35 @@ const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
- */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
   fakeKeytool;
+  command = command;
 
-  async beforeQueue() {
-    loadStoredAppOptions.call(this);
-
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_COMMON);
-    await this.dependsOnJHipster(GENERATOR_JAVA);
-
+  async beforeQueue(useNpmWrapper = true) {
     if (!this.fromBlueprint) {
+      loadStoredAppOptions.call(this);
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
 
-    // Not using normal blueprints or this is a normal blueprint.
-    if ((!this.fromBlueprint && !this.delegateToBlueprint) || (this.fromBlueprint && this.sbsBlueprint)) {
-      this.setFeatures({
-        customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
-          const buildTool = this.jhipsterConfig.buildTool;
-          if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
-            return defaultInstallTask();
-          }
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnJHipster(GENERATOR_JAVA);
 
-          const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
-          try {
-            await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
-          } catch (error) {
-            this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
-          }
-          return true;
-        }.bind(this),
-      });
+      if (useNpmWrapper) {
+        this.useNpmWrapperInstallTask();
+      }
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(this.command);
       },
     });
   }
@@ -202,6 +181,10 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
       askForServerTestOpts,
       askForServerSideOpts,
       askForOptionalItems,
@@ -252,7 +235,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
 
-        // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
@@ -332,10 +314,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
+        application.javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
         }
@@ -368,7 +351,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         const SPRING_BOOT_VERSION = application.javaDependencies['spring-boot'];
         application.addSpringMilestoneRepository =
-          ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC');
+          (application.backendType ?? 'Java') === 'Java' &&
+          (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
@@ -464,21 +448,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+        if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
+
         entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
 
-        const fixedEntityTableName = this._fixEntityTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          application.jhiTablePrefix,
-        );
+        const databaseType =
+          entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
+        const fixedEntityTableName = this._fixEntityTableName(entityConfig.entityTableName, databaseType, application.jhiTablePrefix);
         if (fixedEntityTableName !== entityConfig.entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
-        const validation = this._validateTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          entityConfig,
-        );
+        const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
         if (validation !== true) {
           throw new Error(validation);
         }
@@ -970,6 +950,25 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
   }
 
+  useNpmWrapperInstallTask() {
+    this.setFeatures({
+      customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
+        const buildTool = this.jhipsterConfig.buildTool;
+        if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
+          return defaultInstallTask();
+        }
+
+        const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
+        try {
+          await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
+        } catch (error) {
+          this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
+        }
+        return true;
+      }.bind(this),
+    });
+  }
+
   _validateRelationship(entityName, relationship) {
     if (relationship.otherEntityName === undefined) {
       throw new Error(
@@ -997,39 +996,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       entityTableName = `${jhiTablePrefix}_${entityTableName}`;
     }
     return entityTableName;
-  }
-
-  /**
-   * @private
-   * Format As Field Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns field javadoc
-   */
-  formatAsFieldJavadoc(text) {
-    return formatDocAsJavaDoc(text, 4);
-  }
-
-  /**
-   * @private
-   * Format As Api Description
-   *
-   * @param {string} text - text to format
-   * @returns formatted api description
-   */
-  formatAsApiDescription(text) {
-    return formatDocAsApiDescription(text);
-  }
-
-  /**
-   * @private
-   * Format As Class Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns class javadoc
-   */
-  formatAsClassJavadoc(text) {
-    return formatDocAsJavaDoc(text, 0);
   }
 
   /**

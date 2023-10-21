@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import shelljs from 'shelljs';
 
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import { loadConfigs } from './docker-base.mjs';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../jdl/jhipster/index.mjs';
 import { convertSecretToBase64 } from '../../base/support/index.mjs';
@@ -118,15 +119,21 @@ async function askForPath() {
       name: 'directoryPath',
       message: messageAskForPath,
       default: this.directoryPath || '../',
-      validate: input => {
+      validate: async input => {
         const path = this.destinationPath(input);
-        if (shelljs.test('-d', path)) {
-          const appsFolders = getAppFolders.call(this, input, deploymentApplicationType);
+        try {
+          if (statSync(path).isDirectory) {
+            const appsFolders = getAppFolders.call(this, path, deploymentApplicationType);
 
-          if (appsFolders.length === 0) {
-            return deploymentApplicationType === MONOLITH ? `No monolith found in ${path}` : `No microservice or gateway found in ${path}`;
+            if (appsFolders.length === 0) {
+              return deploymentApplicationType === MONOLITH
+                ? `No monolith found in ${path}`
+                : `No microservice or gateway found in ${path}`;
+            }
+            return true;
           }
-          return true;
+        } catch {
+          // Ignore error
         }
         return `${path} is not a directory or doesn't exist`;
       },
@@ -141,7 +148,7 @@ async function askForPath() {
     this.directoryPath += '/';
   }
 
-  this.appsFolders = getAppFolders.call(this, this.directoryPath, deploymentApplicationType);
+  this.appsFolders = getAppFolders.call(this, this.destinationPath(this.directoryPath), deploymentApplicationType);
 
   // Removing registry from appsFolders, using reverse for loop
   for (let i = this.appsFolders.length - 1; i >= 0; i--) {
@@ -364,29 +371,33 @@ async function askForDockerPushCommand() {
  * @param deploymentApplicationType type of application being composed
  * @returns {Array} array of string representing app folders
  */
-export function getAppFolders(input, deploymentApplicationType) {
-  const destinationPath = this.destinationPath(input);
-  const files = shelljs.ls('-l', destinationPath);
+export function getAppFolders(directory, deploymentApplicationType) {
+  const files = readdirSync(directory);
   const appsFolders = [];
 
   files.forEach(file => {
-    if (file.isDirectory()) {
-      if (shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`)) {
-        try {
-          const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
-          if (
-            fileData['generator-jhipster'].baseName !== undefined &&
-            (deploymentApplicationType === undefined ||
-              deploymentApplicationType === fileData['generator-jhipster'].applicationType ||
-              (deploymentApplicationType === MICROSERVICE && fileData['generator-jhipster'].applicationType === GATEWAY))
-          ) {
-            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
+    try {
+      if (statSync(join(directory, file)).isDirectory()) {
+        const yoRcFile = join(directory, file, '.yo-rc.json');
+        if (statSync(yoRcFile).isFile()) {
+          try {
+            const fileData = JSON.parse(readFileSync(yoRcFile).toString());
+            if (
+              fileData['generator-jhipster'].baseName !== undefined &&
+              (deploymentApplicationType === undefined ||
+                deploymentApplicationType === (fileData['generator-jhipster'].applicationType ?? MONOLITH) ||
+                (deploymentApplicationType === MICROSERVICE && fileData['generator-jhipster'].applicationType === GATEWAY))
+            ) {
+              appsFolders.push(file.match(/([^/]*)\/*$/)[1]);
+            }
+          } catch (err) {
+            this.log.error(chalk.red(`${yoRcFile}: this .yo-rc.json can't be read`));
+            this.log.debug('Error:', err);
           }
-        } catch (err) {
-          this.log.error(chalk.red(`${file}: this .yo-rc.json can't be read`));
-          this.log.debug('Error:', err);
         }
       }
+    } catch {
+      // Not a file or directory
     }
   });
 

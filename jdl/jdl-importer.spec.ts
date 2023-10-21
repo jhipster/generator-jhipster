@@ -83,7 +83,7 @@ relationship OneToMany {
             return 1;
           })
           .map(exportedEntity => {
-            exportedEntity.javadoc = exportedEntity.javadoc || '';
+            exportedEntity.documentation = exportedEntity.documentation || '';
             return exportedEntity;
           });
       });

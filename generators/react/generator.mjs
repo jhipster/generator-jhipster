@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { isFilePending } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
@@ -46,25 +46,14 @@ const { REACT } = clientFrameworkTypes;
  */
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_REACT);
     }
-  }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        const { enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (!enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+    }
   }
 
   get loading() {
@@ -88,7 +77,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.common.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,

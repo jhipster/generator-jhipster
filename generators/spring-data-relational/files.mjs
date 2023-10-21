@@ -124,7 +124,7 @@ export const serverFiles = mergeSections(
   addSectionsCondition(mysqlFiles, context => context.prodDatabaseTypeMysql),
   addSectionsCondition(mariadbFiles, context => context.prodDatabaseTypeMariadb),
   addSectionsCondition(mssqlFiles, context => context.prodDatabaseTypeMssql),
-  addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgres),
+  addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgresql),
 );
 
 export default async function writeSqlFiles({ application }) {

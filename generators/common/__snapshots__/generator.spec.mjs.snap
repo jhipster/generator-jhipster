@@ -38,22 +38,18 @@ trim_trailing_whitespace = false
 ",
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": {
+  ".lintstagedrc.cjs": {
     "contents": "module.exports = {
-  '{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
+  '{,**/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
 };
 ",
     "stateCleared": "modified",
   },
   ".prettierignore": {
     "contents": "node_modules
-target
-build
 package-lock.json
 .git
-.mvn
-gradle
-.gradle
+target/
 ",
     "stateCleared": "modified",
   },
@@ -96,166 +92,31 @@ overrides:
   "README.md": {
     "contents": "# jhipster
 
-This application was generated using JHipster , you can find documentation and help at [https://www.jhipster.tech/documentation-archive/vundefined](https://www.jhipster.tech/documentation-archive/vundefined).
+This application was generated using JHipster JHIPSTER_VERSION, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION](https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION).
+
 
 ## Project Structure
 
-Node is required for generation and recommended for development. \`package.json\` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
-
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
-
-
-\`/src/*\` structure follows default Java structure.
-
-- \`.yo-rc.json\` - Yeoman configuration file
-JHipster configuration is stored in this file at \`generator-jhipster\` key. You may find \`generator-jhipster-*\` for specific blueprints configuration.
-- \`.yo-resolve\` (optional) - Yeoman conflict resolver
-Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match \`[pattern] [action]\` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if ommited) or force. Lines starting with \`#\` are considered comments and are ignored.
-- \`.jhipster/*.json\` - JHipster entity configuration files
-
-- \`npmw\` - wrapper to use locally installed npm.
-JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using \`./npmw\` instead of the traditional \`npm\` you can configure a Node-less environment to develop or test your application.
-- \`/src/main/docker\` - Docker configurations for the application and services that the application depends on
 
 ## Development
-
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-\`\`\`
-docker compose -f src/main/docker/jhipster-control-center.yml up
-\`\`\`
 
 
 
 ## Building for production
 
-### Packaging as jar
-
-To build the final jar and optimize the jhipster application for production, run:
-
-\`\`\`
-./mvnw -Pprod clean verify
-\`\`\`
-
-This will concatenate and minify the client CSS and JavaScript files. It will also modify \`index.html\` so it references these new files.
-To ensure everything worked, run:
-
-\`\`\`
-java -jar target/*.jar
-\`\`\`
-
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
-
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
-
-\`\`\`
-./mvnw -Pprod,war clean verify
-\`\`\`
-
 
 ## Testing
 
-To launch your application's tests, run:
-
-\`\`\`
-./mvnw verify
-\`\`\`
-
-
-For more information, refer to the [Running tests page][].
-
-### Code quality
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-\`\`\`
-docker compose -f src/main/docker/sonar.yml up -d
-\`\`\`
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-\`\`\`
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-\`\`\`
-
-If you need to re-run the Sonar phase, please be sure to specify at least the \`initialize\` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-\`\`\`
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-\`\`\`
-
-Additionally, Instead of passing \`sonar.password\` and \`sonar.login\` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-\`\`\`
-sonar.login=admin
-sonar.password=admin
-\`\`\`
-
-For more information, refer to the [Code quality page][].
-
-## Using Docker to simplify development (optional)
-
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-
-For example, to start a postgresql database in a docker container, run:
-
-\`\`\`
-docker compose -f src/main/docker/postgresql.yml up -d
-\`\`\`
-
-To stop it and remove the container, run:
-
-\`\`\`
-docker compose -f src/main/docker/postgresql.yml down
-\`\`\`
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a docker image of your app by running:
-
-\`\`\`
-npm run java:docker
-\`\`\`
-
-Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
-
-\`\`\`
-npm run java:docker:arm64
-\`\`\`
-
-Then run:
-
-\`\`\`
-docker compose -f src/main/docker/app.yml up -d
-\`\`\`
-
-When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental \`Use the new Virtualization framework\` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
-
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (\`jhipster docker-compose\`), which is able to generate docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 
 [JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster  archive]: https://www.jhipster.tech/documentation-archive/vundefined
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/vundefined/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/vundefined/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/vundefined/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/vundefined/running-tests/
-[Code quality page]: https://www.jhipster.tech/documentation-archive/vundefined/code-quality/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/vundefined/setting-up-ci/
+[JHipster JHIPSTER_VERSION archive]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION/development/
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION/setting-up-ci/
 
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/
@@ -264,12 +125,16 @@ To configure CI for your project, run the ci-cd sub-generator (\`jhipster ci-cd\
   },
   "package.json": {
     "contents": "{
+  "devDependencies": {
+    "generator-jhipster": "JHIPSTER_VERSION",
+    "husky": "HUSKY_VERSION",
+    "lint-staged": "LINT_STAGED_VERSION",
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
+    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION"
+  },
   "scripts": {
     "prepare": "husky install"
-  },
-  "devDependencies": {
-    "husky": "HUSKY_VERSION",
-    "lint-staged": "LINT_STAGED_VERSION"
   }
 }
 ",

@@ -104,6 +104,9 @@ export function getConfigForClientApplication(options: any = {}): any {
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
+  if (options[OptionNames.MICROFRONTEND] === undefined) {
+    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
+  }
   const clientFramework = options[CLIENT_FRAMEWORK];
   if (clientFramework !== NO_CLIENT_FRAMEWORK) {
     if (!options[CLIENT_THEME]) {
@@ -257,11 +260,9 @@ export function getServerConfigForMicroserviceApplication(customOptions: any = {
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
     [SERVICE_DISCOVERY_TYPE]: CONSUL,
     [SKIP_USER_MANAGEMENT]: true,
+    [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK,
     ...customOptions,
   };
-  if (options[SKIP_CLIENT] === undefined) {
-    options[SKIP_CLIENT] = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO_CLIENT_FRAMEWORK;
-  }
 
   options[WITH_ADMIN_UI] = false;
   return {

@@ -1,12 +1,15 @@
-import _ from 'lodash';
+import { camelCase, kebabCase, startCase, upperFirst } from 'lodash-es';
 import { NODE_VERSION } from '../../generator-constants.mjs';
 import { applicationTypes, authenticationTypes, databaseTypes, testFrameworkTypes } from '../../../jdl/index.js';
-import { getHipster, upperFirstCamelCase } from '../../base/support/index.mjs';
+import { getHipster, mutateData, pickFields, upperFirstCamelCase } from '../../base/support/index.mjs';
 import { getDBTypeFromDBValue } from '../../server/support/index.mjs';
 import detectLanguage from '../../languages/support/detect-language.mjs';
+import { loadConfig, loadDerivedConfig } from '../../../lib/internal/index.mjs';
+import serverCommand from '../../server/command.mjs';
+import { packageJson } from '../../../lib/index.mjs';
 
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CASSANDRA, NO: NO_DATABASE } = databaseTypes;
 
@@ -77,81 +80,84 @@ export const loadAppConfig = ({
   application: any;
   useVersionPlaceholders?: boolean;
 }) => {
-  if (useVersionPlaceholders) {
-    application.nodeVersion = 'NODE_VERSION';
-  } else {
-    application.nodeVersion = NODE_VERSION;
-  }
+  loadConfig(serverCommand.configs, { config, application });
 
-  application.jhipsterVersion = config.jhipsterVersion;
-  application.baseName = config.baseName;
-  application.applicationType = config.applicationType;
-  application.reactive = config.reactive;
-  application.jhiPrefix = config.jhiPrefix;
-  application.skipFakeData = config.skipFakeData;
-  application.entitySuffix = config.entitySuffix;
-  application.dtoSuffix = config.dtoSuffix;
-  application.skipCheckLengthOfIdentifier = config.skipCheckLengthOfIdentifier;
-  application.microfrontend = config.microfrontend;
-  application.microfrontends = config.microfrontends;
-
-  application.skipServer = config.skipServer;
-  application.skipCommitHook = config.skipCommitHook;
-  application.blueprints = config.blueprints || [];
-  application.skipClient = config.skipClient;
-  application.prettierJava = config.prettierJava;
-  application.pages = config.pages;
-  application.skipJhipsterDependencies = !!config.skipJhipsterDependencies;
-  application.withAdminUi = config.withAdminUi;
-  application.gatewayServerPort = config.gatewayServerPort;
-
-  application.capitalizedBaseName = config.capitalizedBaseName;
-  application.dasherizedBaseName = config.dasherizedBaseName;
-  application.humanizedBaseName = config.humanizedBaseName;
-  application.projectDescription = config.projectDescription;
-
-  application.testFrameworks = config.testFrameworks || [];
-
-  application.gatlingTests = application.testFrameworks.includes(GATLING);
-  application.cucumberTests = application.testFrameworks.includes(CUCUMBER);
-  application.cypressTests = application.testFrameworks.includes(CYPRESS);
-
-  application.authenticationType = config.authenticationType;
-  application.rememberMeKey = config.rememberMeKey;
-  application.jwtSecretKey = config.jwtSecretKey;
-  application.fakerSeed = config.fakerSeed;
-  application.skipUserManagement = config.skipUserManagement;
+  mutateData(
+    application,
+    {
+      nodeVersion: useVersionPlaceholders ? 'NODE_VERSION' : NODE_VERSION,
+      jhipsterVersion: useVersionPlaceholders ? 'JHIPSTER_VERSION' : undefined,
+    },
+    pickFields(config, [
+      'jhipsterVersion',
+      'baseName',
+      'reactive',
+      'jhiPrefix',
+      'skipFakeData',
+      'entitySuffix',
+      'dtoSuffix',
+      'skipCheckLengthOfIdentifier',
+      'microfrontend',
+      'microfrontends',
+      'skipServer',
+      'skipCommitHook',
+      'skipClient',
+      'prettierJava',
+      'pages',
+      'skipJhipsterDependencies',
+      'withAdminUi',
+      'gatewayServerPort',
+      'capitalizedBaseName',
+      'dasherizedBaseName',
+      'humanizedBaseName',
+      'projectDescription',
+      'authenticationType',
+      'rememberMeKey',
+      'jwtSecretKey',
+      'fakerSeed',
+      'skipUserManagement',
+      'blueprints',
+      'testFrameworks',
+    ]),
+    {
+      jhipsterVersion: packageJson.version,
+      blueprints: [],
+      testFrameworks: [],
+    },
+  );
 };
 
 /**
  * @param {Object} dest - destination context to use default is context
  */
 export const loadDerivedAppConfig = ({ application }: { application: any }) => {
-  application.jhiPrefixCapitalized = _.upperFirst(application.jhiPrefix);
-  application.jhiPrefixDashed = _.kebabCase(application.jhiPrefix);
-  application.applicationTypeGateway = application.applicationType === GATEWAY;
-  application.applicationTypeMonolith = application.applicationType === MONOLITH;
-  application.applicationTypeMicroservice = application.applicationType === MICROSERVICE;
+  loadDerivedConfig(serverCommand.configs, { application });
 
-  // Application name modified, using each technology's conventions
-  if (application.baseName) {
-    application.camelizedBaseName = _.camelCase(application.baseName);
-    application.hipster = getHipster(application.baseName);
-    application.capitalizedBaseName = application.capitalizedBaseName || _.upperFirst(application.baseName);
-    application.dasherizedBaseName = application.dasherizedBaseName || _.kebabCase(application.baseName);
-    application.lowercaseBaseName = application.baseName.toLowerCase();
-    application.upperFirstCamelCaseBaseName = upperFirstCamelCase(application.baseName);
-    application.humanizedBaseName =
-      application.humanizedBaseName || (application.baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(application.baseName));
-    application.projectDescription = application.projectDescription || `Description for ${application.baseName}`;
-    application.endpointPrefix = application.applicationTypeMicroservice ? `services/${application.lowercaseBaseName}` : '';
-  }
+  mutateData(application, {
+    jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
+    jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
+
+    camelizedBaseName: ({ baseName }) => camelCase(baseName),
+    hipster: ({ baseName }) => getHipster(baseName),
+    capitalizedBaseName: ({ baseName }) => upperFirst(baseName),
+    dasherizedBaseName: ({ baseName }) => kebabCase(baseName),
+    lowercaseBaseName: ({ baseName }) => baseName?.toLowerCase(),
+    upperFirstCamelCaseBaseName: ({ baseName }) => upperFirstCamelCase(baseName),
+    humanizedBaseName: ({ baseName }) => (baseName.toLowerCase() === 'jhipster' ? 'JHipster' : startCase(baseName)),
+
+    gatlingTests: ({ testFrameworks }) => testFrameworks?.includes(GATLING),
+    cucumberTests: ({ testFrameworks }) => testFrameworks?.includes(CUCUMBER),
+    cypressTests: ({ testFrameworks }) => testFrameworks?.includes(CYPRESS),
+
+    projectDescription: ({ projectDescription, baseName }) => projectDescription ?? `Description for ${baseName}`,
+    endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
+  });
 
   if (application.microfrontends && application.microfrontends.length > 0) {
     application.microfrontends.forEach(microfrontend => {
       const { baseName } = microfrontend;
       microfrontend.lowercaseBaseName = baseName.toLowerCase();
-      microfrontend.capitalizedBaseName = _.upperFirst(baseName);
+      microfrontend.capitalizedBaseName = upperFirst(baseName);
       microfrontend.endpointPrefix = `services/${microfrontend.lowercaseBaseName}`;
     });
   } else if (application.microfrontend) {

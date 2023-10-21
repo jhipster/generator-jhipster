@@ -52,13 +52,13 @@
             ,
             "<%= relationship.relationshipName %>": "<%= relationship.relationshipNameHumanized %>"
 <%_ } -%>
-<%_ const fieldsWithDoc = fields.filter(field => field.javadoc); -%>
+<%_ const fieldsWithDoc = fields.filter(field => field.documentation); -%>
 <%_ if (fieldsWithDoc.length > 0) { -%>
   <%_ const lastField = fieldsWithDoc[fieldsWithDoc.length - 1]; -%>
             ,
             "help": {
   <%_ for (const field of fieldsWithDoc) { _%>
-                "<%= field.fieldName %>": "<%= field.javadoc %>"<% if (field !== lastField) { %>,<% } %>
+                "<%= field.fieldName %>": "<%= field.documentation %>"<% if (field !== lastField) { %>,<% } %>
   <%_ } _%>
             }
 <%_ } _%>

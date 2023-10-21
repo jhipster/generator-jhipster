@@ -10,7 +10,7 @@ mysql:
   initializationFiles:
     grant.sql: |-
       grant all privileges on *.* to root@'%' identified by '' with grant option;
-<%_ } else if (app.prodDatabaseTypePostgres) { _%>
+<%_ } else if (app.prodDatabaseTypePostgresql) { _%>
 postgresql:
   enabled: true
   postgresqlUsername: <%= app.baseName.toLowerCase() %>

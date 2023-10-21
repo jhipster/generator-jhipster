@@ -22,18 +22,18 @@ import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/sup
 export const mongoDbFiles = {
   serverResource: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/DatabaseConfiguration.java'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/dbmigrations/InitialSetupMigration.java'],
     },
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/MongoDbTestContainer.java', 'config/EmbeddedMongo.java'],
     },

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { isFilePending } from 'mem-fs-editor/state';
 
@@ -54,22 +54,14 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   localEntities?: any[];
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ANGULAR);
     }
-  }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        await this.composeWithJHipster(GENERATOR_LANGUAGES);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+    }
   }
 
   get loading() {
@@ -130,7 +122,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         };
 
         source.addWebpackConfig = args => {
-          const webpackPath = 'webpack/webpack.custom.js';
+          const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
             webpackPath,

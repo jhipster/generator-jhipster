@@ -28,7 +28,7 @@
 import <%= generatorClass %>Generator from 'generator-jhipster/generators/<%= jhipsterGenerator %>';
 <%_ } _%>
 <%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
-import command from './command.mjs';
+import command from './command.<%- js ? '' : 'm' %>js';
 <%_ } _%>
 
 <%_ if (application.dynamic) { _%>
@@ -55,6 +55,10 @@ export default class extends <%= generatorClass %>Generator {
       // Dropped it once migration is done.
       jhipster7Migration: true,
     });
+  }
+
+  async beforeQueue() {
+    await super.beforeQueue();
   }
 
 <%_ } _%>
