@@ -56,6 +56,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   composedBlueprints;
   languageCommand;
   writeJavaLanguageFiles;
+  regenerateLanguages;
 
   constructor(args, options, features) {
     super(args, options, features);
@@ -191,7 +192,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
         if (application.enableTranslation) {
-          if (!this.languageCommand) {
+          if (!this.languageCommand || this.regenerateLanguages) {
             this.languagesToApply = application.languages;
           } else {
             this.languagesToApply = [...new Set(this.languagesToApply || [])];

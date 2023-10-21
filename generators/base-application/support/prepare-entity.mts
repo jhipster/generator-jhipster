@@ -21,7 +21,14 @@ import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.mjs';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.mjs';
-import { createFaker, parseChangelog, stringHashCode, upperFirstCamelCase, getMicroserviceAppName } from '../../base/support/index.mjs';
+import {
+  createFaker,
+  parseChangelog,
+  stringHashCode,
+  upperFirstCamelCase,
+  getMicroserviceAppName,
+  mutateData,
+} from '../../base/support/index.mjs';
 import { fieldToReference } from './prepare-field.mjs';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.mjs';
 import {
@@ -287,6 +294,10 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     if (idField) {
       idField.id = true;
     } else {
+      if (entityWithConfig.microserviceName) {
+        // TODO ignore warning for microfrontends.
+        generator.log.warn("Microservice entities should have a custom id to make sure gateway and microservice types won't conflict");
+      }
       idField = {
         fieldName: 'id',
         id: true,
@@ -616,14 +627,15 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
       relationship.relationshipEagerLoad = false;
       return;
     }
-    relationship.bagRelationship = relationship.ownerSide && relationship.collection;
-    if (relationship.relationshipEagerLoad === undefined) {
-      relationship.relationshipEagerLoad =
+
+    mutateData(relationship, {
+      bagRelationship: relationship.ownerSide && relationship.collection,
+      relationshipEagerLoad: () =>
         relationship.bagRelationship ||
         entity.eagerLoad ||
         // Fetch relationships if otherEntityField differs otherwise the id is enough
-        (relationship.ownerSide && relationship.otherEntity.primaryKey.name !== relationship.otherEntityField);
-    }
+        (relationship.ownerSide && relationship.otherEntity.primaryKey.name !== relationship.otherEntityField),
+    });
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
