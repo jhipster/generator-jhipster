@@ -630,11 +630,12 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
 
     mutateData(relationship, {
       bagRelationship: relationship.ownerSide && relationship.collection,
-      relationshipEagerLoad: () =>
-        relationship.bagRelationship ||
-        entity.eagerLoad ||
-        // Fetch relationships if otherEntityField differs otherwise the id is enough
-        (relationship.ownerSide && relationship.otherEntity.primaryKey.name !== relationship.otherEntityField),
+      relationshipEagerLoad: ({ relationshipEagerLoad, bagRelationship, ownerSide, otherEntity, otherEntityField }) =>
+        relationshipEagerLoad ??
+        (bagRelationship ||
+          entity.eagerLoad ||
+          // Fetch relationships if otherEntityField differs otherwise the id is enough
+          (ownerSide && otherEntity.primaryKey.name !== otherEntityField)),
     });
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
