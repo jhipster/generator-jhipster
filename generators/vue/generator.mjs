@@ -112,6 +112,30 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get default() {
+    return this.asDefaultTaskGroup({
+      async queueTranslateTransform({ control, application }) {
+        const { enableTranslation, clientSrcDir } = application;
+        const { getWebappTranslation } = control;
+        this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
+          name: 'translating webapp',
+          streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
+        });
+        if (enableTranslation) {
+          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
+          this.queueTransformStream(transform, {
+            name: 'converting translations',
+            streamOptions: { filter: file => isFilePending(file) && isTranslationFile(file) },
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupOldFilesTask,
@@ -128,21 +152,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
       cleanupEntitiesFiles,
       writeEntitiesFiles,
       writeEntityFiles,
-      async queueTranslateTransform({ control, application }) {
-        const { enableTranslation, clientSrcDir } = application;
-        const { getWebappTranslation } = control;
-        this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
-          name: 'translating webapp',
-          streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
-        });
-        if (enableTranslation) {
-          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
-          this.queueTransformStream(transform, {
-            name: 'converting translations',
-            streamOptions: { filter: file => isFilePending(file) && isTranslationFile(file) },
-          });
-        }
-      },
     });
   }
 
