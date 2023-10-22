@@ -21,7 +21,7 @@ Each JHipster version brings updated dependencies.
 You should regenerate the blueprint to update dependencies.
 
 ```
-npx --package generator-jhipster@x.x.x jhipster generate-blueprint
+npx --package generator-jhipster@latest jhipster generate-blueprint
 ```
 
 When updating from a minor jhipster version, you probably will want to ignore (press s) to every generator and test conflict.
