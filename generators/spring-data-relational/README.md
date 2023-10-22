@@ -52,6 +52,19 @@ entity Bar {}
 entity Department {}
 ```
 
+##### Translation variant
+
+Translation variant allows different translations for the entity whenever appliable.
+
+```jdl
+@EntityI18nVariant('female')
+@EntityClassHumanized("Empresa")
+@EntityClassPluralHumanized("Empresas")
+entity Company {}
+```
+
+`female` variant is supported by `pt-br` locale.
+
 ### Fields
 
 TODO add jdl and json examples
