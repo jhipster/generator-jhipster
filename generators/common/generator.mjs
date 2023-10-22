@@ -177,6 +177,21 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get default() {
+    return this.asDefaultTaskGroup({
+      async formatSonarProperties() {
+        this.queueTransformStream(await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
+          name: 'prettifying sonar-project.properties',
+          streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('sonar-project.properties') },
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+  }
+
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return {
@@ -222,12 +237,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             'generator-jhipster': application.jhipsterVersion,
             ...Object.fromEntries(application.blueprints.map(blueprint => [blueprint.name, blueprint.version])),
           },
-        });
-      },
-      async formatSonarProperties() {
-        this.queueTransformStream(await createPrettierTransform.call(this, { extensions: 'properties', prettierProperties: true }), {
-          name: 'prettifying sonar-project.properties',
-          streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('sonar-project.properties') },
         });
       },
       addCommitHookDependencies({ application }) {

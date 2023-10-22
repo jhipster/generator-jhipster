@@ -147,6 +147,12 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
+      queueTranslateTransform({ control, application }) {
+        this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation), {
+          name: 'translating webapp',
+          streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
+        });
+      },
     });
   }
 
@@ -158,12 +164,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
-      queueTranslateTransform({ control, application }) {
-        this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation), {
-          name: 'translating webapp',
-          streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
-        });
-      },
     });
   }
 
