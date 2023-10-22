@@ -34,6 +34,24 @@ entity Bar {}
 entity Department {}
 ```
 
+### Fields
+
+TODO add jdl and json examples
+
+#### Notable customizations
+
+##### Label
+
+TODO add humanized name example
+
+### Relationships
+
+#### Notable customizations
+
+##### Label
+
+TODO add humanized name example
+
 ## Customizing
 
 Customizing basics can be found at [Customizing](../app/README.md#customizing)
