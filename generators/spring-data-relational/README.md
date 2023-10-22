@@ -7,6 +7,22 @@ JHipster implementation allows you to override almost every aspect of the genera
 
 [SQL/spring-data-relational customizations](https://github.com/jhipster/generator-jhipster/blob/skip_ci-architecture/generators/spring-data-relational/README.md#sqlspring-data-relational-sub-generador)
 
+### Application
+
+JDL doesn't support annotations, customizations must be done through local blueprint.
+
+`.blueprint/app/generator.mjs` (to create a local blueprint follow https://www.jhipster.tech/modules/creating-a-blueprint/#local-blueprints):
+
+```js
+get [Generator.PREPARING]() {
+  return {
+    customize({ application }) {
+      application.baseNameHumanized = 'Custom application title';
+    },
+  };
+}
+```
+
 ### Entities
 
 Every annotation is loaded as entities properties and will be used at generation process.
@@ -56,7 +72,7 @@ TODO add humanized name example
 
 ##### Eager loading relationships
 
-Currently appliable to SQL/spring-data-relational with partial support at MongoDb/spring-data-mongodb.
+Appliable to SQL/spring-data-relational with partial support at MongoDb/spring-data-mongodb.
 Neo4j eager loads every relationship by default.
 
 JHipster UI uses only the id and `otherEntityFieldName` properties, by default only fields used by the UI will be fetched.
