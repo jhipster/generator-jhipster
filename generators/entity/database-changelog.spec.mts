@@ -1,6 +1,5 @@
-import { defaultHelpers as helpers, runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, runResult, getGenerator } from '../../test/support/index.mjs';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { getGenerator } from '../../test/support/index.mjs';
 import BaseApplicationGenerator from '../base-application/generator.mjs';
 
 class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {

@@ -88,12 +88,12 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
+  "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
   "entityTableName": "entity_a",
   "fields": [],
   "fluentMethods": undefined,
-  "javadoc": "The best entity",
   "jpaMetamodelFiltering": undefined,
   "name": "A",
   "pagination": undefined,

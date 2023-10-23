@@ -3,7 +3,7 @@ import { expect } from 'esmocha';
 import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
 import applicationTypes from '../../jdl/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.mjs';
-import { defaultHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, getGenerator, runResult } from '../../test/support/index.mjs';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
@@ -31,7 +31,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -67,7 +67,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -103,7 +103,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: '.',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -121,20 +121,19 @@ describe('generator - Docker Compose', () => {
   });
 
   describe('gateway and one microservice, without monitoring', () => {
-    let runResult;
     const chosenApps = ['01-gateway', '02-mysql'];
     before(async () => {
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })
@@ -170,7 +169,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -208,7 +207,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -246,7 +245,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
           monitoring: PROMETHEUS,
         })
@@ -285,7 +284,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -320,7 +319,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: ['04-mongo'],
         })
         .run();
@@ -355,7 +354,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -390,7 +389,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -422,7 +421,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -462,7 +461,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
         })
         .run();
@@ -497,7 +496,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MICROSERVICE,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: ['10-couchbase'],
         })
         .run();
@@ -532,7 +531,7 @@ describe('generator - Docker Compose', () => {
         .withAnswers({
           deploymentApplicationType: MONOLITH,
           directoryPath: './',
-          chosenApps,
+          appsFolders: chosenApps,
           clusteredDbApps: [],
           monitoring: NO_MONITORING,
         })

@@ -37,6 +37,12 @@ export const clientI18nFiles = {
       ],
     },
     {
+      condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
+      path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
+      renameTo: context => `${context.clientSrcDir}/i18n/${context.lang}/${context.lang}.js`,
+      templates: ['index.js'],
+    },
+    {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
       to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
       templates: ['activate.json', 'global.json', 'reset.json'],

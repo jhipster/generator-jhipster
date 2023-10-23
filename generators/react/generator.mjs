@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { isFilePending } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
@@ -35,6 +35,7 @@ import {
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.mjs';
 import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.mjs';
+import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -45,25 +46,14 @@ const { REACT } = clientFrameworkTypes;
  */
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_REACT);
     }
-  }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        const { enableTranslation } = this.jhipsterConfigWithDefaults;
-        if (!enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+    }
   }
 
   get loading() {
@@ -78,13 +68,26 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
+      prepareForTemplates({ application, source }) {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
+
+        source.addWebpackConfig = args => {
+          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+          this.editFile(
+            webpackPath,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-webpack-config',
+              contentToAdd: `,${args.config}`,
+            }),
+          );
+        };
       },
     });
   }
@@ -105,10 +108,8 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.preparingEachEntity));
   }
 
-  get writing() {
-    return {
-      cleanupOldFilesTask,
-      writeFiles,
+  get default() {
+    return this.asDefaultTaskGroup({
       queueTranslateTransform({ control, application }) {
         if (!application.enableTranslation) {
           this.queueTransformStream(translateReactFilesTransform(control.getWebappTranslation), {
@@ -117,6 +118,17 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           });
         }
       },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
+  get writing() {
+    return {
+      cleanupOldFilesTask,
+      writeFiles,
     };
   }
 
@@ -270,5 +282,13 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    */
   addAppSCSSStyle(style, comment) {
     this.needleApi.clientReact.addAppSCSSStyle(style, comment);
+  }
+
+  /**
+   * get the an upperFirst camelCase value.
+   * @param {string} value string to convert
+   */
+  upperFirstCamelCase(value) {
+    return upperFirstCamelCase(value);
   }
 }

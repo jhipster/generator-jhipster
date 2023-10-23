@@ -31,11 +31,10 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
   before(async () => {
     await helpers
       .run(getGenerator('client'))
-      .withJHipsterConfig()
-      .withOptions({
+      .withJHipsterConfig({
         skipServer: true,
-        db: 'postgresql',
-        auth: 'jwt',
+      })
+      .withOptions({
         blueprint: 'myblueprint',
       })
       .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']]);

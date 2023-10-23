@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import { extname } from 'path';
-import { existsSync } from 'fs';
 import { QueuedAdapter } from '@yeoman/adapter';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
+import { readFile } from 'fs/promises';
 import BaseGenerator from '../base/index.mjs';
 import command from './command.mjs';
 import { downloadJdlFile } from '../../cli/download.mjs';
@@ -58,7 +58,6 @@ export default class JdlGenerator extends BaseGenerator {
   ignoreApplication?: boolean;
   ignoreDeployments?: boolean;
   skipSampleRepository?: boolean;
-  forceNoFiltering?: boolean;
   force?: boolean;
   reproducible?: boolean;
   createEnvBuilder = EnvironmentBuilder.createDefaultBuilder;
@@ -78,11 +77,9 @@ export default class JdlGenerator extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadArguments() {
-        if ((this.env.rootGenerator() as any) === this) {
-          this.parseJHipsterArguments(command.arguments);
-          if (this.jdlFiles) {
-            this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
-          }
+        this.parseJHipsterArguments(command.arguments);
+        if (this.jdlFiles) {
+          this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
         }
       },
       loadOptions() {
@@ -109,9 +106,14 @@ export default class JdlGenerator extends BaseGenerator {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
             this.jdlFiles.map(toJdlFile).map(async filename => {
-              if (!existsSync(this.destinationPath(filename))) {
+              try {
+                this.readDestination(filename);
+              } catch {
                 this.log.warn(`File not found: ${filename}. Attempting download from jdl-samples repository`);
-                return downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
+                const downloadedFile = await downloadJdlFile(filename, { skipSampleRepository: this.skipSampleRepository });
+                // The file has null content at mem-fs, update with actual content.
+                this.writeDestination(downloadedFile, (await readFile(downloadedFile)).toString());
+                return downloadedFile;
               }
               return filename;
             }),
@@ -140,12 +142,10 @@ export default class JdlGenerator extends BaseGenerator {
       },
       async parseJDL() {
         const configuration = {
-          applicationName: this.options.baseName ?? this.existingProject ? this.jhipsterConfig.baseName : undefined,
-          databaseType: this.options.db ?? this.existingProject ? this.jhipsterConfigWithDefaults.prodDatabaseType : undefined,
+          applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
+          databaseType: this.options.db ?? (this.existingProject ? this.jhipsterConfigWithDefaults.prodDatabaseType : undefined),
           applicationType: this.options.applicationType,
           skipUserManagement: this.options.skipUserManagement,
-          forceNoFiltering: true,
-          skipFileGeneration: true,
         };
 
         const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration);
@@ -201,23 +201,21 @@ export default class JdlGenerator extends BaseGenerator {
           return;
         }
 
-        const generatorOptions: any = { reproducible: this.reproducible, force: this.force };
+        const generatorOptions: any = { defaults: true, reproducible: this.reproducible, force: this.force };
 
         if (this.ignoreApplication || this.applications.length === 0) {
           if (this.applications.length === 0) {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(GENERATOR_ENTITIES, {
-              generatorOptions: {
-                ...generatorOptions,
-                entities: entities.map(entity => entity.name),
-              },
+              generatorArgs: entities.map(entity => entity.name),
+              generatorOptions,
             });
           } else {
             for (const app of this.applications) {
               await this.composeWithJHipster(GENERATOR_ENTITIES, {
+                generatorArgs: app.entities.map(entity => entity.name),
                 generatorOptions: {
                   ...generatorOptions,
-                  entities: app.entities.map(entity => entity.name),
                   destinationRoot: app.folder ? this.destinationPath(app.folder) : undefined,
                 },
               });
@@ -285,6 +283,10 @@ export default class JdlGenerator extends BaseGenerator {
         const adapter = (this.env.adapter as QueuedAdapter).newAdapter();
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
+
+        // We should not reuse sharedData at non interactive runs
+        delete generatorOptions.sharedData;
+
         // Install should happen at the root of the monorepository. Force skip install at childs.
         if (this.options.monorepository) {
           generatorOptions.skipInstall = true;

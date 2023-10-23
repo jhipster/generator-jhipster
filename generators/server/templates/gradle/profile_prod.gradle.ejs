@@ -48,7 +48,7 @@ dependencies {
     implementation "com.mysql:mysql-connector-j"
     testImplementation "org.testcontainers:mysql"
   <%_ } _%>
-  <%_ if (prodDatabaseTypePostgres) { _%>
+  <%_ if (prodDatabaseTypePostgresql) { _%>
     <%_ if (reactive) { _%>
     implementation "org.postgresql:r2dbc-postgresql"
     <%_ } _%>

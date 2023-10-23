@@ -19,6 +19,9 @@ Options:
   --experimental                Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   -d, --debug                   Enable debugger
   --skip-jhipster-dependencies  Don't write jhipster dependencies to package.json.
+  --creation-timestamp <value>  Project creation timestamp (used for reproducible builds)
+  --reproducible                Try to reproduce changelog
+  --skip-prompts                Skip prompts
   -h, --help                    display help for command
 
 Commands:
@@ -52,7 +55,6 @@ Commands:
   page                          Create a new page. (Supports vue clients)
   project-name                  Configure project name (alpha)
   run [generator]               Run a module or custom generator
-  spring-boot                   Create a Spring Boot application (alpha)
   spring-service|service        Create a new Spring service bean
   spring-controller             Create a new Spring controller
   openapi-client                Generates java client code from an OpenAPI/Swagger definition

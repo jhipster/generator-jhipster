@@ -21,11 +21,15 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
-import { fromMatrix, extendMatrix, AuthenticationTypeMatrix, checkEnforcements } from '../../test/support/index.mjs';
+import {
+  fromMatrix,
+  extendMatrix,
+  AuthenticationTypeMatrix,
+  checkEnforcements,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import Generator from './generator.mjs';
-import { CLIENT_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { GENERATOR_CYPRESS } from '../generator-list.mjs';
 
 const { CYPRESS } = testFrameworkTypes;
@@ -48,11 +52,7 @@ const e2eMatrix = extendMatrix(
     clientFramework: [ANGULAR, REACT, VUE],
     withAdminUi: [false, true],
     cypressCoverage: [false, true],
-    clientSrcDir: [
-      undefined,
-      { value: 'src/', additional: { clientTestDir: 'test/' } },
-      { value: 'src/main/webapp2/', additional: { clientTestDir: 'src/test/javascript2/' } },
-    ],
+    clientRootDir: [undefined, { value: 'clientRoot/' }, { value: '' }],
   },
 );
 
@@ -103,7 +103,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi, clientTestDir = CLIENT_TEST_SRC_DIR } = sampleConfig;
+        const { applicationType, withAdminUi, clientRootDir = '' } = sampleConfig;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
 
         if (applicationType !== 'microservice') {
@@ -113,7 +113,7 @@ describe(`generator - ${generator}`, () => {
               generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
 
             assertion(
-              `${clientTestDir}cypress/e2e/administration/administration.cy.ts`,
+              `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,
               '  metricsPageHeadingSelector,\n' +
                 '  healthPageHeadingSelector,\n' +
                 '  logsPageHeadingSelector,\n' +
@@ -121,7 +121,7 @@ describe(`generator - ${generator}`, () => {
             );
 
             assertion(
-              `${clientTestDir}cypress/e2e/administration/administration.cy.ts`,
+              `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,
               "  describe('/metrics', () => {\n" +
                 "    it('should load the page', () => {\n" +
                 "      cy.clickOnAdminMenuItem('metrics');\n" +
@@ -152,7 +152,7 @@ describe(`generator - ${generator}`, () => {
             );
 
             assertion(
-              `${clientTestDir}cypress/support/commands.ts`,
+              `${clientRootDir}src/test/javascript/cypress/support/commands.ts`,
               'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
                 'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
                 'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +

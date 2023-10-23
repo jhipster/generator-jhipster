@@ -19,10 +19,10 @@
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
-import { askForAdminUi, askForClient, askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
+import { askForClientTheme, askForClientThemeVariant } from './prompts.mjs';
 import { writeFiles as writeCommonFiles } from './files-common.mjs';
 
-import { writeEnumerationFiles } from './entity-files.mjs';
+import { addEnumerationFiles } from './entity-files.mjs';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
@@ -30,32 +30,47 @@ import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, G
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { createNeedleCallback } from '../base/support/index.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
+import command from './command.mjs';
 
-const { ANGULAR, VUE, REACT } = clientFrameworkTypes;
+const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./types.mjs').ClientApplication>}
- */
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
-  async beforeQueue() {
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
+  command = command;
 
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_COMMON);
+  async beforeQueue() {
+    loadStoredAppOptions.call(this);
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_CLIENT);
     }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_COMMON);
+    }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterCommand(this.command);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForClient,
-      askForAdminUi,
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
       askForClientTheme,
       askForClientThemeVariant,
     });
@@ -67,6 +82,21 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      applyNoFramework() {
+        const { clientFramework } = this.jhipsterConfigWithDefaults;
+        if (clientFramework === CLIENT_FRAMEWORK_NO) {
+          this.jhipsterConfig.skipClient = true;
+          this.cancelCancellableTasks();
+        }
+      },
+      mergeTestConfig() {
+        if (this.jhipsterConfig.clientTestFrameworks) {
+          this.jhipsterConfig.testFrameworks = [
+            ...new Set([...(this.jhipsterConfig.testFrameworks ?? []), ...this.jhipsterConfig.clientTestFrameworks]),
+          ];
+          delete this.jhipsterConfig.clientTestFrameworks;
+        }
+      },
       upgradeAngular() {
         if (this.jhipsterConfig.clientFramework === 'angularX') {
           this.jhipsterConfig.clientFramework = ANGULAR;
@@ -148,6 +178,9 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       addExternalResource({ application, source }) {
+        if (![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
         source.addExternalResourceToRoot = ({ resource, comment }) =>
           this.editFile(
             `${application.clientSrcDir}index.html`,
@@ -199,7 +232,14 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      writeEnumerationFiles,
+      async writeEnumerationFiles({ application, entities }) {
+        if (!application.webappEnumerationsDir || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
+        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+          await addEnumerationFiles.call(this, { application, entity });
+        }
+      },
     });
   }
 
@@ -210,7 +250,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
-        const packageJsonStorage = this.createStorage('package.json');
+        if (![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
+        const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
         const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
@@ -230,16 +273,17 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         }
       },
 
-      microfrontend({ application }) {
-        if (!application.microfrontend) return;
+      microfrontend({ application, source }) {
+        if (!application.microfrontend || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+          return;
+        }
         if (application.clientFrameworkAngular) {
           const conditional = application.applicationTypeMicroservice ? "targetOptions.target === 'serve' ? {} : " : '';
-          this.addWebpackConfig(
-            `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
-            application.clientFramework,
-          );
+          source.addWebpackConfig({
+            config: `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
+          });
         } else if (application.clientFrameworkVue || application.clientFrameworkReact) {
-          this.addWebpackConfig("require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })", application.clientFramework);
+          source.addWebpackConfig({ config: "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })" });
         } else {
           throw new Error(`Client framework ${application.clientFramework} doesn't support microfrontends`);
         }

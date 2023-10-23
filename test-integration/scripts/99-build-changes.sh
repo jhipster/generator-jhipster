@@ -89,12 +89,13 @@ echo "::endgroup::"
 
 echo "::group::Check Server"
 git -c color.ui=always diff --exit-code @~1 -- \
+  'generators/base-entity-changes' \
   'generators/bootstrap-application-server' \
   'generators/cucumber' \
   'generators/gatling' \
   'generators/gradle' \
+  'generators/java' \
   'generators/liquibase' \
-  'generators/liquibase-changelogs' \
   'generators/maven' \
   'generators/server' \
   'generators/spring-cache' \
@@ -114,7 +115,6 @@ git -c color.ui=always diff --exit-code @~1 -- \
   '.github/actions' \
   '.github/workflows' \
   'generators/app' \
-  'generators/base-application' \
   'generators/bootstrap-application' \
   'generators/bootstrap-application-base' \
   'generators/common' \
@@ -131,6 +131,7 @@ echo "::endgroup::"
 echo "::group::Check Base"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/base' \
+  'generators/base-core' \
   'generators/base-application' \
   'generators/bootstrap' \
   'generators/bootstrap-application-base' \

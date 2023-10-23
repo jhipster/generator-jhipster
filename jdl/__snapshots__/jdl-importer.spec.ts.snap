@@ -19,380 +19,6 @@ exports[`jdl - JDLImporter import when importing a JDL application with blueprin
 ]
 `;
 
-exports[`jdl - JDLImporter import when not parsing applications should export entity Country 1`] = `
-{
-  "applications": "*",
-  "entityTableName": "country",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-    },
-  ],
-  "microserviceName": "mymicroservice",
-  "name": "Country",
-  "relationships": [
-    {
-      "otherEntityField": "region",
-      "otherEntityName": "region",
-      "relationshipName": "area",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many",
-    },
-  ],
-  "skipServer": true,
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity Department 1`] = `
-{
-  "applications": "*",
-  "embedded": true,
-  "entityTableName": "department",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": [
-        "required",
-      ],
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text",
-    },
-    {
-      "fieldName": "advertisement",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any",
-    },
-    {
-      "fieldName": "logo",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "image",
-    },
-  ],
-  "microserviceName": "mymicroservice",
-  "name": "Department",
-  "relationships": [
-    {
-      "options": {
-        "id": "42",
-      },
-      "otherEntityName": "location",
-      "relationshipName": "location",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-one",
-    },
-    {
-      "javadoc": "A relationship",
-      "otherEntityName": "employee",
-      "otherEntityRelationshipName": "department",
-      "relationshipName": "employee",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many",
-    },
-    {
-      "otherEntityName": "jobHistory",
-      "otherEntityRelationshipName": "department",
-      "relationshipName": "jobHistory",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-many",
-    },
-  ],
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity Employee 1`] = `
-{
-  "applications": "*",
-  "dto": "mapstruct",
-  "entityTableName": "employee",
-  "fields": [
-    {
-      "fieldName": "firstName",
-      "fieldType": "String",
-      "javadoc": "The firstname attribute.",
-    },
-    {
-      "fieldName": "lastName",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "email",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "phoneNumber",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "hireDate",
-      "fieldType": "ZonedDateTime",
-    },
-    {
-      "fieldName": "salary",
-      "fieldType": "Long",
-    },
-    {
-      "fieldName": "commissionPct",
-      "fieldType": "Long",
-    },
-  ],
-  "javadoc": "The Employee entity.\\nSecond line in javadoc.",
-  "microserviceName": "mymicroservice",
-  "name": "Employee",
-  "pagination": "infinite-scroll",
-  "relationships": [
-    {
-      "otherEntityName": "job",
-      "otherEntityRelationshipName": "emp",
-      "relationshipName": "job",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many",
-    },
-    {
-      "otherEntityField": "login",
-      "otherEntityName": "user",
-      "relationshipName": "user",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "relationshipWithBuiltInEntity": true,
-    },
-    {
-      "otherEntityField": "lastName",
-      "otherEntityName": "employee",
-      "relationshipName": "manager",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-    },
-    {
-      "javadoc": "Another side of the same relationship,",
-      "otherEntityName": "department",
-      "otherEntityRelationshipName": "employee",
-      "relationshipName": "department",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-    },
-    {
-      "otherEntityName": "jobHistory",
-      "otherEntityRelationshipName": "emp",
-      "relationshipName": "jobHistory",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-many",
-    },
-  ],
-  "searchEngine": "elasticsearch",
-  "service": "serviceClass",
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity Job 1`] = `
-{
-  "applications": "*",
-  "entityTableName": "job",
-  "fields": [
-    {
-      "fieldName": "title",
-      "fieldType": "String",
-      "fieldValidateRules": [
-        "minlength",
-        "maxlength",
-      ],
-      "fieldValidateRulesMaxlength": "25",
-      "fieldValidateRulesMinlength": "5",
-    },
-    {
-      "fieldName": "type",
-      "fieldType": "JobType",
-      "fieldValues": "BOSS,SLAVE",
-    },
-    {
-      "fieldName": "minSalary",
-      "fieldType": "Long",
-    },
-    {
-      "fieldName": "maxSalary",
-      "fieldType": "Long",
-    },
-  ],
-  "microserviceName": "mymicroservice",
-  "name": "Job",
-  "pagination": "pagination",
-  "relationships": [
-    {
-      "otherEntityField": "title",
-      "otherEntityName": "task",
-      "otherEntityRelationshipName": "linkedJob",
-      "relationshipName": "chore",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-many",
-    },
-    {
-      "otherEntityField": "employee",
-      "otherEntityName": "employee",
-      "otherEntityRelationshipName": "job",
-      "relationshipName": "emp",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-    },
-    {
-      "otherEntityName": "jobHistory",
-      "otherEntityRelationshipName": "job",
-      "relationshipName": "history",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-many",
-    },
-  ],
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity JobHistory 1`] = `
-{
-  "applications": "*",
-  "entityTableName": "job_history",
-  "fields": [
-    {
-      "fieldName": "startDate",
-      "fieldType": "ZonedDateTime",
-    },
-    {
-      "fieldName": "endDate",
-      "fieldType": "ZonedDateTime",
-    },
-    {
-      "fieldName": "language",
-      "fieldType": "Language",
-      "fieldValues": "FRENCH,ENGLISH,SPANISH",
-    },
-    {
-      "fieldName": "positionDuration",
-      "fieldType": "Duration",
-    },
-  ],
-  "javadoc": "JobHistory comment.",
-  "microserviceName": "mymicroservice",
-  "name": "JobHistory",
-  "pagination": "infinite-scroll",
-  "readOnly": true,
-  "relationships": [
-    {
-      "otherEntityName": "department",
-      "otherEntityRelationshipName": "jobHistory",
-      "relationshipName": "department",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-many",
-    },
-    {
-      "otherEntityName": "job",
-      "otherEntityRelationshipName": "history",
-      "relationshipName": "job",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-many",
-    },
-    {
-      "otherEntityField": "employee",
-      "otherEntityName": "employee",
-      "otherEntityRelationshipName": "jobHistory",
-      "relationshipName": "emp",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-many",
-    },
-  ],
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity Location 1`] = `
-{
-  "applications": "*",
-  "entityTableName": "location",
-  "fields": [
-    {
-      "fieldName": "streetAddress",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "postalCode",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "city",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "stateProvince",
-      "fieldType": "String",
-    },
-  ],
-  "microserviceName": "mymicroservice",
-  "name": "Location",
-  "relationships": [
-    {
-      "otherEntityName": "country",
-      "relationshipName": "country",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many",
-    },
-    {
-      "options": {
-        "id": true,
-      },
-      "otherEntityName": "department",
-      "otherEntityRelationshipName": "location",
-      "relationshipName": "department",
-      "relationshipSide": "right",
-      "relationshipType": "one-to-one",
-    },
-  ],
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity Region 1`] = `
-{
-  "applications": "*",
-  "entityTableName": "region",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-    },
-  ],
-  "microserviceName": "mymicroservice",
-  "name": "Region",
-  "relationships": [],
-}
-`;
-
-exports[`jdl - JDLImporter import when not parsing applications should export entity Task 1`] = `
-{
-  "applications": "*",
-  "entityTableName": "task",
-  "fields": [
-    {
-      "fieldName": "title",
-      "fieldType": "String",
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String",
-    },
-  ],
-  "microserviceName": "mymicroservice",
-  "name": "Task",
-  "relationships": [
-    {
-      "otherEntityField": "jobTitle",
-      "otherEntityName": "job",
-      "otherEntityRelationshipName": "chore",
-      "relationshipName": "linkedJob",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-many",
-    },
-  ],
-}
-`;
-
 exports[`jdl - JDLImporter import when not parsing applications should return the final state 1`] = `
 {
   "exportedApplications": [],
@@ -401,6 +27,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
   "exportedEntities": [
     JSONEntity {
       "applications": "*",
+      "documentation": "",
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "country",
@@ -411,7 +38,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Country",
@@ -431,6 +57,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "",
       "dto": undefined,
       "embedded": true,
       "entityTableName": "department",
@@ -459,7 +86,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Department",
@@ -476,7 +102,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "one-to-one",
         },
         {
-          "javadoc": "A relationship",
+          "documentation": "A relationship",
           "otherEntityName": "employee",
           "otherEntityRelationshipName": "department",
           "relationshipName": "employee",
@@ -495,14 +121,15 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "The Employee entity.\\nSecond line in documentation.",
       "dto": "mapstruct",
       "embedded": undefined,
       "entityTableName": "employee",
       "fields": [
         {
+          "documentation": "The firstname attribute.",
           "fieldName": "firstName",
           "fieldType": "String",
-          "javadoc": "The firstname attribute.",
         },
         {
           "fieldName": "lastName",
@@ -530,7 +157,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "The Employee entity.\\nSecond line in javadoc.",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Employee",
@@ -560,7 +186,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
           "relationshipType": "many-to-one",
         },
         {
-          "javadoc": "Another side of the same relationship,",
+          "documentation": "Another side of the same relationship,",
           "otherEntityName": "department",
           "otherEntityRelationshipName": "employee",
           "relationshipName": "department",
@@ -580,6 +206,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "",
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "job",
@@ -609,7 +236,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Job",
@@ -644,6 +270,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "JobHistory comment.",
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "job_history",
@@ -667,7 +294,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "JobHistory comment.",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "JobHistory",
@@ -701,6 +327,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "",
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "location",
@@ -723,7 +350,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Location",
@@ -751,6 +377,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "",
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "region",
@@ -761,7 +388,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Region",
@@ -772,6 +398,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
     },
     JSONEntity {
       "applications": "*",
+      "documentation": "",
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "task",
@@ -786,7 +413,6 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
       ],
       "fluentMethods": undefined,
-      "javadoc": "",
       "jpaMetamodelFiltering": undefined,
       "microserviceName": "mymicroservice",
       "name": "Task",
@@ -809,227 +435,185 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
 `;
 
 exports[`jdl - JDLImporter import when parsing JDL applications and deployment config should export the application & deployment contents 1`] = `
-[
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "monolith",
-      "baseName": "tata",
-      "packageFolder": "com/mathieu/tata",
-      "packageName": "com.mathieu.tata",
+{
+  "exportedApplications": [
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "tata",
+        "packageFolder": "com/mathieu/tata",
+        "packageName": "com.mathieu.tata",
+      },
+    },
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "gateway",
+        "baseName": "titi",
+        "packageFolder": "com/mathieu/titi",
+        "packageName": "com.mathieu.titi",
+      },
+    },
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "microservice",
+        "baseName": "toto",
+        "packageFolder": "com/mathieu/toto",
+        "packageName": "com.mathieu.toto",
+      },
+    },
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "tutu",
+        "packageFolder": "com/mathieu/tutu",
+        "packageName": "com.mathieu.tutu",
+      },
+    },
+  ],
+  "exportedApplicationsWithEntities": {
+    "tata": {
+      "config": {
+        "applicationType": "monolith",
+        "baseName": "tata",
+        "packageFolder": "com/mathieu/tata",
+        "packageName": "com.mathieu.tata",
+      },
+      "entities": [],
+    },
+    "titi": {
+      "config": {
+        "applicationType": "gateway",
+        "baseName": "titi",
+        "packageFolder": "com/mathieu/titi",
+        "packageName": "com.mathieu.titi",
+      },
+      "entities": [],
+    },
+    "toto": {
+      "config": {
+        "applicationType": "microservice",
+        "baseName": "toto",
+        "packageFolder": "com/mathieu/toto",
+        "packageName": "com.mathieu.toto",
+      },
+      "entities": [],
+    },
+    "tutu": {
+      "config": {
+        "applicationType": "monolith",
+        "baseName": "tutu",
+        "packageFolder": "com/mathieu/tutu",
+        "packageName": "com.mathieu.tutu",
+      },
+      "entities": [],
     },
   },
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "gateway",
-      "baseName": "titi",
-      "packageFolder": "com/mathieu/titi",
-      "packageName": "com.mathieu.titi",
+  "exportedDeployments": [
+    {
+      "generator-jhipster": {
+        "appsFolders": [
+          "tata",
+          "titi",
+        ],
+        "clusteredDbApps": [],
+        "deploymentType": "docker-compose",
+        "directoryPath": "../",
+        "dockerRepositoryName": "test",
+        "gatewayType": "SpringCloudGateway",
+        "monitoring": "no",
+        "serviceDiscoveryType": "eureka",
+      },
     },
-  },
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "microservice",
-      "baseName": "toto",
-      "packageFolder": "com/mathieu/toto",
-      "packageName": "com.mathieu.toto",
-    },
-  },
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "monolith",
-      "baseName": "tutu",
-      "packageFolder": "com/mathieu/tutu",
-      "packageName": "com.mathieu.tutu",
-    },
-  },
-  {
-    "generator-jhipster": {
-      "appsFolders": [
-        "tata",
-        "titi",
-      ],
-      "clusteredDbApps": [],
-      "deploymentType": "docker-compose",
-      "directoryPath": "../",
-      "dockerRepositoryName": "test",
-      "gatewayType": "SpringCloudGateway",
-      "monitoring": "no",
-      "serviceDiscoveryType": "eureka",
-    },
-  },
-]
-`;
-
-exports[`jdl - JDLImporter import when parsing JDL applications and deployment config with a realistic sample should export the application & deployment contents 1`] = `
-[
-  {
-    "entities": [
-      "Customer",
-      "Product",
-      "ProductCategory",
-      "ProductOrder",
-      "OrderItem",
-      "Invoice",
-      "Shipment",
-      "Notification",
-    ],
-    "generator-jhipster": {
-      "applicationType": "gateway",
-      "authenticationType": "jwt",
-      "baseName": "store",
-      "buildTool": "gradle",
-      "cacheProvider": "hazelcast",
-      "clientFramework": "react",
-      "packageFolder": "com/jhipster/demo/store",
-      "packageName": "com.jhipster.demo.store",
-      "prodDatabaseType": "mysql",
-      "serviceDiscoveryType": "no",
-      "testFrameworks": [
-        "cypress",
-      ],
-    },
-  },
-  {
-    "entities": [
-      "Product",
-      "ProductCategory",
-      "ProductOrder",
-      "OrderItem",
-    ],
-    "generator-jhipster": {
-      "applicationType": "microservice",
-      "authenticationType": "jwt",
-      "baseName": "product",
-      "buildTool": "gradle",
-      "cacheProvider": "hazelcast",
-      "packageFolder": "com/jhipster/demo/product",
-      "packageName": "com.jhipster.demo.product",
-      "prodDatabaseType": "mysql",
-      "serverPort": "8081",
-      "serviceDiscoveryType": "no",
-    },
-  },
-  {
-    "entities": [
-      "Invoice",
-      "Shipment",
-    ],
-    "generator-jhipster": {
-      "applicationType": "microservice",
-      "authenticationType": "jwt",
-      "baseName": "invoice",
-      "buildTool": "gradle",
-      "packageFolder": "com/jhipster/demo/invoice",
-      "packageName": "com.jhipster.demo.invoice",
-      "prodDatabaseType": "mysql",
-      "serverPort": "8082",
-      "serviceDiscoveryType": "no",
-    },
-  },
-  {
-    "entities": [
-      "Notification",
-    ],
-    "generator-jhipster": {
-      "applicationType": "microservice",
-      "authenticationType": "jwt",
-      "baseName": "notification",
-      "buildTool": "gradle",
-      "cacheProvider": "no",
-      "databaseType": "mongodb",
-      "enableHibernateCache": false,
-      "packageFolder": "com/jhipster/demo/notification",
-      "packageName": "com.jhipster.demo.notification",
-      "serverPort": "8083",
-      "serviceDiscoveryType": "no",
-    },
-  },
-  {
-    "generator-jhipster": {
-      "appsFolders": [
-        "store",
-        "invoice",
-        "notification",
-        "product",
-      ],
-      "clusteredDbApps": [],
-      "deploymentType": "docker-compose",
-      "directoryPath": "../",
-      "dockerRepositoryName": "deepu105",
-      "gatewayType": "SpringCloudGateway",
-      "monitoring": "no",
-      "serviceDiscoveryType": "no",
-    },
-  },
-  {
-    "generator-jhipster": {
-      "appsFolders": [
-        "store",
-        "invoice",
-        "notification",
-        "product",
-      ],
-      "clusteredDbApps": [],
-      "deploymentType": "kubernetes",
-      "directoryPath": "../",
-      "dockerPushCommand": "docker push",
-      "dockerRepositoryName": "deepu105",
-      "ingressDomain": "",
-      "istio": false,
-      "kubernetesNamespace": "default",
-      "kubernetesServiceType": "LoadBalancer",
-      "kubernetesStorageClassName": "",
-      "kubernetesUseDynamicStorage": false,
-      "monitoring": "no",
-      "serviceDiscoveryType": "no",
-    },
-  },
-]
+  ],
+  "exportedEntities": [],
+}
 `;
 
 exports[`jdl - JDLImporter import when parsing JDL applications and exporting them should export the application contents 1`] = `
-[
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "monolith",
-      "baseName": "tata",
-      "packageFolder": "com/mathieu/tata",
-      "packageName": "com.mathieu.tata",
+{
+  "exportedApplications": [
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "tata",
+        "packageFolder": "com/mathieu/tata",
+        "packageName": "com.mathieu.tata",
+      },
+    },
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "gateway",
+        "baseName": "titi",
+        "packageFolder": "com/mathieu/titi",
+        "packageName": "com.mathieu.titi",
+      },
+    },
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "microservice",
+        "baseName": "toto",
+        "packageFolder": "com/mathieu/toto",
+        "packageName": "com.mathieu.toto",
+      },
+    },
+    {
+      "entities": [],
+      "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "tutu",
+        "packageFolder": "com/mathieu/tutu",
+        "packageName": "com.mathieu.tutu",
+      },
+    },
+  ],
+  "exportedApplicationsWithEntities": {
+    "tata": {
+      "config": {
+        "applicationType": "monolith",
+        "baseName": "tata",
+        "packageFolder": "com/mathieu/tata",
+        "packageName": "com.mathieu.tata",
+      },
+      "entities": [],
+    },
+    "titi": {
+      "config": {
+        "applicationType": "gateway",
+        "baseName": "titi",
+        "packageFolder": "com/mathieu/titi",
+        "packageName": "com.mathieu.titi",
+      },
+      "entities": [],
+    },
+    "toto": {
+      "config": {
+        "applicationType": "microservice",
+        "baseName": "toto",
+        "packageFolder": "com/mathieu/toto",
+        "packageName": "com.mathieu.toto",
+      },
+      "entities": [],
+    },
+    "tutu": {
+      "config": {
+        "applicationType": "monolith",
+        "baseName": "tutu",
+        "packageFolder": "com/mathieu/tutu",
+        "packageName": "com.mathieu.tutu",
+      },
+      "entities": [],
     },
   },
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "gateway",
-      "baseName": "titi",
-      "packageFolder": "com/mathieu/titi",
-      "packageName": "com.mathieu.titi",
-    },
-  },
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "microservice",
-      "baseName": "toto",
-      "packageFolder": "com/mathieu/toto",
-      "packageName": "com.mathieu.toto",
-    },
-  },
-  {
-    "entities": [],
-    "generator-jhipster": {
-      "applicationType": "monolith",
-      "baseName": "tutu",
-      "packageFolder": "com/mathieu/tutu",
-      "packageName": "com.mathieu.tutu",
-    },
-  },
-]
+  "exportedDeployments": [],
+  "exportedEntities": [],
+}
 `;
 
 exports[`jdl - JDLImporter import when parsing deployment config should export the deployment contents 1`] = `
@@ -1091,141 +675,18 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
 ]
 `;
 
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export myFirstApp applications 1`] = `
-{
-  "entities": [
-    "A",
-    "B",
-    "E",
-    "F",
-  ],
-  "generator-jhipster": {
-    "applicationType": "monolith",
-    "baseName": "myFirstApp",
-    "clientTheme": "yeti",
-    "clientThemeVariant": "primary",
-    "packageFolder": "com/mycompany/myfirstapp",
-    "packageName": "com.mycompany.myfirstapp",
-  },
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export mySecondApp applications 1`] = `
-{
-  "entities": [
-    "E",
-  ],
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "mySecondApp",
-    "serverPort": "8091",
-  },
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export myThirdApp applications 1`] = `
-{
-  "entities": [
-    "F",
-  ],
-  "generator-jhipster": {
-    "applicationType": "microservice",
-    "baseName": "myThirdApp",
-    "serverPort": "8092",
-  },
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 1`] = `
-{
-  "applications": [
-    "myFirstApp",
-  ],
-  "entityTableName": "a",
-  "fields": [],
-  "name": "A",
-  "relationships": [],
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 2`] = `
-{
-  "applications": [
-    "myFirstApp",
-  ],
-  "entityTableName": "b",
-  "fields": [],
-  "name": "B",
-  "relationships": [],
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 3`] = `
-{
-  "applications": [
-    "myFirstApp",
-    "mySecondApp",
-  ],
-  "entityTableName": "e",
-  "fields": [],
-  "microserviceName": "mySecondApp",
-  "name": "E",
-  "relationships": [],
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myFirstApp 4`] = `
-{
-  "applications": [
-    "myFirstApp",
-    "myThirdApp",
-  ],
-  "entityTableName": "f",
-  "fields": [],
-  "name": "F",
-  "relationships": [],
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for mySecondApp 1`] = `
-{
-  "applications": [
-    "myFirstApp",
-    "mySecondApp",
-  ],
-  "entityTableName": "e",
-  "fields": [],
-  "microserviceName": "mySecondApp",
-  "name": "E",
-  "relationships": [],
-}
-`;
-
-exports[`jdl - JDLImporter import when parsing multiple JDL files with applications and entities should export the entities for myThirdApp 1`] = `
-{
-  "applications": [
-    "myFirstApp",
-    "myThirdApp",
-  ],
-  "entityTableName": "f",
-  "fields": [],
-  "name": "F",
-  "relationships": [],
-}
-`;
-
 exports[`jdl - JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
 [
   JSONEntity {
     "applications": [
       "jhipster",
     ],
+    "documentation": undefined,
     "dto": undefined,
     "embedded": undefined,
     "entityTableName": "a",
     "fields": [],
     "fluentMethods": undefined,
-    "javadoc": undefined,
     "jpaMetamodelFiltering": undefined,
     "name": "A",
     "pagination": undefined,
@@ -1290,12 +751,12 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
     "applications": [
       "jhipster",
     ],
+    "documentation": undefined,
     "dto": undefined,
     "embedded": undefined,
     "entityTableName": "b",
     "fields": [],
     "fluentMethods": undefined,
-    "javadoc": undefined,
     "jpaMetamodelFiltering": undefined,
     "name": "B",
     "pagination": undefined,

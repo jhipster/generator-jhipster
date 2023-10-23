@@ -25,9 +25,12 @@ import { getCacheProviderMavenDefinition } from './internal/dependencies.mjs';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_CACHE);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
   }
 

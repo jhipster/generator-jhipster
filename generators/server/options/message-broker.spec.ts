@@ -9,21 +9,13 @@ describe('generators - server - jdl - messageBroker', () => {
       let state: ImportState;
 
       before(() => {
-        const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} ${optionValue} } }`, {
-          skipFileGeneration: true,
-        });
+        const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} ${optionValue} } }`);
         state = importer.import();
       });
 
       it('should set expected value', () => {
         expect(state.exportedApplicationsWithEntities.jhipster.config[MESSAGE_BROKER]).toBe(optionValue);
       });
-    });
-  });
-  describe('with invalid value', () => {
-    it('should set expected value', () => {
-      const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} foo } }`, { skipFileGeneration: true });
-      expect(() => importer.import()).toThrow(/Unknown value 'foo' for option 'messageBroker'./);
     });
   });
 });

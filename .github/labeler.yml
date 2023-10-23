@@ -71,9 +71,6 @@
 'theme: gradle':
   - generators/gradle/**/*
 
-'theme: aws':
-  - generators/aws/**/*
-
 'theme: Heroku':
   - generators/heroku/**/*
 

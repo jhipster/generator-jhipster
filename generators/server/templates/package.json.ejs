@@ -25,17 +25,6 @@
   "cacheDirectories": [
     "node_modules"
   ],
-  "devDependencies": {
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
-    "prettier": "<%= nodeDependencies.prettier %>",
-    "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
-    "prettier-plugin-packagejson": "<%= nodeDependencies['prettier-plugin-packagejson'] %>"
-  },
   "engines": {
     "node": ">=<%= nodeVersion %>"
   },

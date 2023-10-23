@@ -23,13 +23,13 @@ import Generator from './generator.mjs';
 export const neo4jFiles = {
   serverResource: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/DatabaseConfiguration.java_neo4j'],
     },
     {
       condition: generator => generator.generateBuiltInUserEntity && !generator.databaseMigrationLiquibase,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/neo4j/Neo4jMigrations.java'],
     },
@@ -41,7 +41,7 @@ export const neo4jFiles = {
   ],
   serverTestFw: [
     {
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'config/Neo4jTestContainer.java',

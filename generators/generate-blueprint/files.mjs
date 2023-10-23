@@ -23,18 +23,25 @@ export const files = {
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
       templates: [
-        '.github/workflows/generator.yml',
         '.eslintrc.json',
-        '.mocharc.cjs',
-        'README.md',
-        'test/utils.mjs',
-        'tsconfig.json',
+        '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
+        'README.md',
+        'tsconfig.json',
+        'vitest.config.ts',
+        '.blueprint/cli/commands.mjs',
+        '.blueprint/generate-sample/command.mjs',
+        '.blueprint/generate-sample/generator.mjs',
+        '.blueprint/generate-sample/index.mjs',
       ],
     },
     {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && !ctx.sampleWritten,
+      templates: ['.blueprint/generate-sample/templates/samples/sample.jdl'],
+    },
+    {
       condition: ctx => ctx.cli,
-      templates: [{ file: 'cli/cli.mjs', renameTo: ctx => (ctx.js ? 'cli/cli.cjs' : 'cli/cli.mjs') }],
+      templates: ['cli/cli.cjs'],
     },
     {
       condition: ctx => ctx.commands.length > 0,
@@ -48,12 +55,16 @@ export const generatorFiles = {
     {
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [{ file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') }],
+      templates: [
+        { file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') },
+        { file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
+      ],
     },
     {
       path: 'generators/generator',
+      condition: ctx => ctx.priorities.find(priority => priority.name === 'initializing'),
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [{ file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') }],
+      templates: [{ file: 'command.mjs', renameTo: ctx => (ctx.js ? 'command.js' : 'command.mjs') }],
     },
     {
       path: 'generators/generator',

@@ -1,5 +1,4 @@
-export type RelationshipSide = 'left' | 'right';
-export type RelationshipType = 'one-to-one' | 'many-to-one' | 'one-to-many' | 'many-to-many';
+import { RelationshipType, RelationshipSide } from '../basic-types/relationships.js';
 
 export type Field = {
   fieldName: string;
@@ -16,7 +15,7 @@ export type Relationship = {
 } & Record<string, any>;
 
 export type Entity = {
-  javadoc?: string;
+  documentation?: string;
   fields?: Field[];
   relationships?: Relationship[];
 } & Record<string, any>;

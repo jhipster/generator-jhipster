@@ -1,0 +1,123 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+version: 2.1
+jobs:
+    build:
+        machine:
+            image: ubuntu-2004:current
+        resource_class: large
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    <%_ if (buildToolMaven) { _%>
+                    - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+                    <%_ } else if (buildToolGradle) { _%>
+                    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+                    <%_ } _%>
+                    # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
+                    - v1-dependencies-
+            - run:
+                name: Print Java Version
+                command: 'java -version'
+            - run:
+                name: Print Node Version
+                command: 'node -v'
+            - run:
+                name: Print NPM Version
+                command: 'npm -v'
+            - run:
+                name: Install Node Modules
+                command: 'npm install'
+            <%_ if (ciCdIntegrationsSnyk) { _%>
+            - run:
+                name: Install Snyk CLI
+                command: |
+                    curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
+                    chmod +x snyk
+            - run:
+                name: Snyk test
+                command: './snyk test --all-projects || true'
+            - run:
+                name: Snyk monitor
+                command: './snyk monitor --all-projects'
+            <%_ } _%>
+            - save_cache:
+                paths:
+                    - node
+                    - node_modules
+                    <%_ if (buildToolMaven) { _%>
+                    - ~/.m2
+                    <%_ } else if (buildToolGradle) { _%>
+                    - ~/.gradle
+                    <%_ } _%>
+                    <%_ if (buildToolMaven) { _%>
+                key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+                    <%_ } else if (buildToolGradle) { _%>
+                key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+                    <%_ } _%>
+
+            - run:
+                name: Give Executable Power
+            <%_ if (buildToolMaven) { _%>
+                command: 'chmod +x mvnw'
+            <%_ } else if (buildToolGradle) { _%>
+                command: 'chmod +x gradlew'
+            <%_ } _%>
+            - run:
+                name: Backend tests
+                command: <%= clientPackageManager %> run ci:backend:test
+            <%_ if (!skipClient) { _%>
+            - run:
+                name: Run Front End Tests
+                command: <%= clientPackageManager %> run ci:frontend:test
+            <%_ } _%>
+            <%_ if (buildToolMaven) { _%>
+                <%_ if (ciCdIntegrationsHeroku) { _%>
+            - run:
+                name: Deploy to Heroku
+                command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
+                <%_ } _%>
+            <%_ } else if (buildToolGradle) { _%>
+                <%_ if (ciCdIntegrationsHeroku) { _%>
+            - run:
+                name: Deploy to Heroku
+                command: './gradlew deployHeroku --no-daemon'
+                <%_ } _%>
+            <%_ } _%>
+            <%_ if (cypressTests) {
+                const commented = '# '; _%>
+            <%= commented %>- run:
+            <%= commented %>    name: 'E2E: Package'
+            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:package
+            <%= commented %>- run:
+            <%= commented %>    name: 'E2E: Prepare'
+            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:prepare
+            <%= commented %>- run:
+            <%= commented %>    name: 'E2E: Run'
+            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:run
+            <%_ if(cypressTests) { _%>
+            <%= commented %>    environment:
+            <%= commented %>      CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
+            <%_ } _%>
+            <%= commented %>- run:
+            <%= commented %>    name: 'E2E: Teardown'
+            <%= commented %>    command: <%= clientPackageManager %> run ci:e2e:teardown
+            <%_ } _%>

@@ -7,19 +7,18 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
   "generator-jhipster": {
     "appsFolders": ["09-kafka"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
-    "istio": false,
+    "ingressDomain": null,
+    "ingressType": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["09-kafka"],
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": "no"
   }
 }
 ",
@@ -396,18 +395,18 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
   "generator-jhipster": {
     "appsFolders": ["02-mysql", "03-psql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["02-mysql", "03-psql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1284,8 +1283,8 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
@@ -1296,7 +1295,6 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "Ingress",
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1934,18 +1932,18 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
   "generator-jhipster": {
     "appsFolders": ["01-gateway", "02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway", "02-mysql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2747,18 +2745,18 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
     "ingressDomain": "example.com",
+    "ingressType": null,
     "istio": true,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
-    "kubernetesServiceType": "LoadBalancer",
+    "kubernetesServiceType": null,
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -3629,18 +3627,19 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway", "02-mysql", "03-psql", "04-mongo", "07-mariadb"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -5074,19 +5073,18 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
   "generator-jhipster": {
     "appsFolders": ["08-monolith"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "monolith",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
-    "istio": false,
+    "ingressDomain": null,
+    "ingressType": null,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "default",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["08-monolith"],
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": "no"
   }
 }
 ",
@@ -5448,18 +5446,18 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "prometheus",
-    "packages": ["02-mysql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -8429,18 +8427,18 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
   "generator-jhipster": {
     "appsFolders": ["02-mysql"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipster",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "mynamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["02-mysql"],
     "serviceDiscoveryType": "consul"
   }
 }
@@ -9063,18 +9061,18 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
   "generator-jhipster": {
     "appsFolders": ["01-gateway"],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
+    "dbRandomPassword": "SECRET-PASSWORD",
+    "deploymentApplicationType": "microservice",
     "directoryPath": "./",
     "dockerPushCommand": "docker push",
     "dockerRepositoryName": "jhipsterrepository",
-    "ingressDomain": "",
+    "ingressDomain": null,
+    "ingressType": null,
     "istio": false,
     "jwtSecretKey": "SECRET--50",
     "kubernetesNamespace": "jhipsternamespace",
     "kubernetesServiceType": "LoadBalancer",
     "monitoring": "no",
-    "packages": ["01-gateway"],
     "serviceDiscoveryType": "consul"
   }
 }

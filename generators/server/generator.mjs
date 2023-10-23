@@ -29,15 +29,13 @@ import {
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
   buildJavaSetter as javaSetter,
-  formatDocAsApiDescription,
-  formatDocAsJavaDoc,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   generateKeyStore,
   addSpringFactory,
   hibernateSnakeCase,
 } from './support/index.mjs';
-import { askForOptionalItems, askForServerSideOpts } from './prompts.mjs';
+import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.mjs';
 
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
@@ -98,10 +96,11 @@ import {
   testFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
-import { createBase64Secret, createSecret, normalizePathEnd, createNeedleCallback } from '../base/support/index.mjs';
+import { createBase64Secret, createSecret, createNeedleCallback } from '../base/support/index.mjs';
 import command from './command.mjs';
 import { addJavaAnnotation } from '../java/support/index.mjs';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const dbTypes = fieldTypes;
 const {
@@ -143,66 +142,35 @@ const WAIT_TIMEOUT = 3 * 60000;
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('./index.mjs').GeneratorDefinition>}
- */
 export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   /** @type {string} */
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
   fakeKeytool;
+  command = command;
 
-  async beforeQueue() {
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
-
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
-    await this.dependsOnJHipster(GENERATOR_COMMON);
-    await this.dependsOnJHipster(GENERATOR_JAVA);
-
+  async beforeQueue(useNpmWrapper = true) {
     if (!this.fromBlueprint) {
+      loadStoredAppOptions.call(this);
       await this.composeWithBlueprints(GENERATOR_SERVER);
     }
 
-    // Not using normal blueprints or this is a normal blueprint.
-    if ((!this.fromBlueprint && !this.delegateToBlueprint) || (this.fromBlueprint && this.sbsBlueprint)) {
-      this.setFeatures({
-        customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
-          const buildTool = this.jhipsterConfig.buildTool;
-          if (
-            (preferredPm && preferredPm !== 'npm') ||
-            this.skipClient ||
-            this.jhipsterConfig.skipClient ||
-            (buildTool !== GRADLE && buildTool !== MAVEN)
-          ) {
-            return defaultInstallTask();
-          }
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnJHipster(GENERATOR_JAVA);
 
-          const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
-          try {
-            await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
-          } catch (error) {
-            this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
-          }
-          return true;
-        }.bind(this),
-      });
+      if (useNpmWrapper) {
+        this.useNpmWrapperInstallTask();
+      }
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        this.parseJHipsterOptions(command.options);
-      },
-
-      setupRequiredConfig() {
-        if (!this.jhipsterConfig.applicationType) {
-          this.jhipsterConfig.applicationType = 'monolith';
-        }
+        this.parseJHipsterCommand(this.command);
       },
     });
   }
@@ -213,6 +181,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
+      askForServerTestOpts,
       askForServerSideOpts,
       askForOptionalItems,
     });
@@ -262,7 +235,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
 
-        // We don't expose client/server to cli, composing with languages is used for test purposes.
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
         }
@@ -342,10 +314,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
         application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
+        application.javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS;
 
         if (this.projectVersion) {
-          this.log.info(`Using projectVersion: ${application.projectVersion}`);
           application.projectVersion = this.projectVersion;
+          this.log.info(`Using projectVersion: ${application.projectVersion}`);
         } else {
           application.projectVersion = '0.0.1-SNAPSHOT';
         }
@@ -378,22 +351,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       prepareForTemplates({ application }) {
         const SPRING_BOOT_VERSION = application.javaDependencies['spring-boot'];
         application.addSpringMilestoneRepository =
-          ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC');
-
-        // Application name modified, using each technology's conventions
-        application.frontendAppName = this.getFrontendAppName(application.baseName);
-        application.mainClass = this.getMainClassName(application.baseName);
-
-        application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
-
-        application.mainJavaDir = SERVER_MAIN_SRC_DIR;
-        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
-        application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
-        application.testJavaDir = SERVER_TEST_SRC_DIR;
-        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
-        application.testResourceDir = SERVER_TEST_RES_DIR;
-        application.srcMainDir = MAIN_DIR;
-        application.srcTestDir = TEST_DIR;
+          (application.backendType ?? 'Java') === 'Java' &&
+          (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
@@ -489,21 +448,17 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
       },
       configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+        if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
+
         entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
 
-        const fixedEntityTableName = this._fixEntityTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          application.jhiTablePrefix,
-        );
+        const databaseType =
+          entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
+        const fixedEntityTableName = this._fixEntityTableName(entityConfig.entityTableName, databaseType, application.jhiTablePrefix);
         if (fixedEntityTableName !== entityConfig.entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
-        const validation = this._validateTableName(
-          entityConfig.entityTableName,
-          entityConfig.prodDatabaseType ?? application.prodDatabaseType,
-          entityConfig,
-        );
+        const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
         if (validation !== true) {
           throw new Error(validation);
         }
@@ -528,7 +483,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entityConfig.incrementalChangelog === undefined) {
           // Keep entity's original incrementalChangelog option.
           entityConfig.incrementalChangelog =
-            this.jhipsterConfig.incrementalChangelog &&
+            application.incrementalChangelog &&
             !existsSync(
               this.destinationPath(
                 `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`,
@@ -721,16 +676,16 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         packageJsonConfigStorage.packaging = application.defaultPackaging;
         packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
-      packageJsonBackendScripts() {
+      packageJsonBackendScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${this.jhipsterConfig.packageName}=OFF`;
+        const javaCommonLog = `-Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.${application.packageName}=OFF`;
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 
-        const buildTool = this.jhipsterConfig.buildTool;
+        const buildTool = application.buildTool;
         let e2ePackage = 'target/e2e';
         if (buildTool === MAVEN) {
-          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
+          const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
             'app:start': './mvnw',
             'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
@@ -746,7 +701,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === GRADLE) {
-          const excludeWebapp = this.jhipsterConfig.skipClient ? '' : '-x webapp -x webapp_test';
+          const excludeWebapp = application.skipClient ? '' : '-x webapp -x webapp_test';
           e2ePackage = 'e2e';
           scriptsStorage.set({
             'app:start': './gradlew',
@@ -781,20 +736,20 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
       packageJsonE2eScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = this.jhipsterConfig.buildTool === GRADLE ? 'gradlew' : 'mvnw';
+        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw';
         // TODO add e2eTests property to application.
         if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
           const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
           const applicationEndpoint = application.applicationTypeMicroservice
-            ? `http-get://localhost:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
-            : 'http-get://localhost:$npm_package_config_backend_port/management/health';
+            ? `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
+            : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
 
           scriptsStorage.set({
             'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
             'pree2e:headless': 'npm run ci:server:await',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
             'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
-            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://localhost:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
+            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
           });
         }
       },
@@ -818,11 +773,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             .join(' && ');
 
           scriptsStorage.set({
-            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:$npm_package_config_backend_port/management/health`,
+            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:$npm_package_config_backend_port/management/health`,
             ...Object.fromEntries(
               microservices.map(ms => [
                 `ci:server:await:${ms}`,
-                `wait-on -t ${WAIT_TIMEOUT} http-get://localhost:${serverPort}/services/${ms}/management/health/readiness`,
+                `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${serverPort}/services/${ms}/management/health/readiness`,
               ]),
             ),
             'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,
@@ -995,6 +950,25 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
   }
 
+  useNpmWrapperInstallTask() {
+    this.setFeatures({
+      customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
+        const buildTool = this.jhipsterConfig.buildTool;
+        if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
+          return defaultInstallTask();
+        }
+
+        const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
+        try {
+          await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
+        } catch (error) {
+          this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
+        }
+        return true;
+      }.bind(this),
+    });
+  }
+
   _validateRelationship(entityName, relationship) {
     if (relationship.otherEntityName === undefined) {
       throw new Error(
@@ -1022,39 +996,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       entityTableName = `${jhiTablePrefix}_${entityTableName}`;
     }
     return entityTableName;
-  }
-
-  /**
-   * @private
-   * Format As Field Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns field javadoc
-   */
-  formatAsFieldJavadoc(text) {
-    return formatDocAsJavaDoc(text, 4);
-  }
-
-  /**
-   * @private
-   * Format As Api Description
-   *
-   * @param {string} text - text to format
-   * @returns formatted api description
-   */
-  formatAsApiDescription(text) {
-    return formatDocAsApiDescription(text);
-  }
-
-  /**
-   * @private
-   * Format As Class Javadoc
-   *
-   * @param {string} text - text to format
-   * @returns class javadoc
-   */
-  formatAsClassJavadoc(text) {
-    return formatDocAsJavaDoc(text, 0);
   }
 
   /**

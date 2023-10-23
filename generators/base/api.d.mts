@@ -1,5 +1,5 @@
 import type { BaseOptions, BaseFeatures, ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import { SetOptional } from 'type-fest';
+import type { SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.mjs';
 
 export type ApplicationWithConfig = {
@@ -10,39 +10,80 @@ export type ApplicationWithConfig = {
 };
 
 export type JHipsterGeneratorOptions = BaseOptions & {
-  applicationWithConfig?: ApplicationWithConfig;
-  positionalArguments: unknown[];
-  jhipsterContext?: any;
-  skipYoResolve?: boolean;
-  ignoreErrors?: boolean;
+  /* cli options */
   commandName: string;
-  applicationWithEntities?: any;
-  blueprints?: string;
-  blueprint?: any;
-  configOptions: any;
-  reproducible?: boolean;
-  applicationId?: string;
+  positionalArguments?: unknown[];
+
+  /* yeoman options */
+  skipYoResolve?: boolean;
   sharedData: any;
+  force?: boolean;
+
+  /* base options */
+  applicationId?: string;
+  applicationWithConfig?: ApplicationWithConfig;
+  applicationWithEntities?: any;
+  creationTimestamp?: string;
+  ignoreErrors?: boolean;
   ignoreNeedlesError?: boolean;
+  reproducible?: boolean;
   skipPriorities?: string[];
   skipWriting?: boolean;
   entities?: string[];
+
+  /* blueprint options */
+  blueprints?: string;
+  blueprint?: any;
+  jhipsterContext?: any;
+  composeWithLocalBlueprint?: boolean;
+
+  /* generate-blueprint options */
   localBlueprint?: boolean;
+
+  /* jdl generator options */
+  jdlFile?: string;
+
+  /* application options */
   baseName?: string;
   db?: string;
   applicationType?: string;
   skipUserManagement?: boolean;
-  force?: boolean;
   skipDbChangelog?: boolean;
-  jdlFile?: string;
   recreateInitialChangelog?: boolean;
+
+  /* workspaces options */
+  generateApplications?: boolean;
+  generateWorkspaces?: boolean;
+  generateWith?: string;
   monorepository?: boolean;
+  workspaces?: boolean;
+  workspacesFolders?: string[];
 };
 
 export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
+  /**
+   * Wraps write context and shows removed fields and replacements if exists.
+   */
   jhipster7Migration?: boolean;
   sbsBlueprint?: boolean;
+  checkBlueprint?: boolean;
+  /**
+   * Compose with bootstrap generator.
+   *
+   * Bootstrap generator adds support to:
+   *  - multistep templates.
+   *  - sort jhipster configuration json.
+   *  - force jhipster configuration commit.
+   *  - earlier prettier config commit for correct prettier.
+   *  - prettier and eslint.
+   */
+  jhipsterBootstrap?: boolean;
+  /**
+   * Store current version at .yo-rc.json.
+   * Defaults to true.
+   */
+  storeJHipsterVersion?: boolean;
 };
 
 // eslint-disable-next-line no-use-before-define
@@ -67,7 +108,7 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
       /** @deprecated, use destinationFile instead */
       renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
       /** transforms (files processing) to be applied */
-      transform?: (() => string)[];
+      transform?: boolean | (() => string)[];
       /** binary files skips ejs render, ejs extension and file transform */
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
@@ -86,7 +127,7 @@ export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
   /** condition to enable to write the block */
   condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
-  transform?: (() => string)[];
+  transform?: boolean | (() => string)[];
   templates: WriteFileTemplate<Generator, DataType>[];
 };
 
@@ -118,10 +159,13 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
     }
 );
 
+export type JHispterChoices = string[] | { value: string; name: string }[];
+
 export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   name?: string;
   scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   env?: string;
+  choices?: JHispterChoices;
 };
 
 export type ValidationResult = {
@@ -131,15 +175,54 @@ export type ValidationResult = {
   error?: string | string[];
 };
 
-export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'>;
+export type PromptSpec = {
+  type: 'input' | 'list' | 'confirm' | 'checkbox';
+  message: string | ((any) => string);
+  when?: boolean | ((any) => boolean);
+  default?: any | ((any) => any);
+  filter?: any | ((any) => any);
+  transformer?: any | ((any) => any);
+};
+
+export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: 'storage' | 'blueprint' | 'generator' };
+
+export type ConfigSpec = {
+  description?: string;
+  choices?: JHispterChoices;
+
+  cli?: SetOptional<CliOptionSpec, 'name'>;
+  argument?: JHipsterArgumentConfig;
+  prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
+  scope?: 'storage' | 'blueprint' | 'generator';
+  /**
+   * The callback receives the generator as input for 'generator' scope.
+   * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
+   * The callback receives blueprintStorage contents as input for 'blueprint' scope.
+   */
+  default?: string | boolean | string[] | ((any) => string | boolean | string[]);
+};
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
+export type JHipsterConfigs = Record<string, ConfigSpec>;
+
 export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
-  options: JHipsterOptions;
+  options?: JHipsterOptions;
+  configs?: JHipsterConfigs;
+  /**
+   * Import options from a generator.
+   * @example ['server', 'jhipster-blueprint:server']
+   */
   import?: string[];
+  /**
+   * Override options from the generator been blueprinted.
+   */
+  override?: boolean;
+  /**
+   * Load old options definition (yeoman's `this.options()`) from the generator.
+   */
   loadGeneratorOptions?: boolean;
 };

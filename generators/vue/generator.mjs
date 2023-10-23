@@ -18,7 +18,7 @@
  */
 import { relative } from 'path';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { isFilePending } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -35,6 +35,7 @@ import {
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.mjs';
 import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.mjs';
+import { createNeedleCallback } from '../base/support/index.mjs';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -42,22 +43,14 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 export default class VueGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_VUE);
     }
-  }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        await this.composeWithJHipster(GENERATOR_LANGUAGES);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+    }
   }
 
   get loading() {
@@ -77,7 +70,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
+      prepareForTemplates({ application, source }) {
         application.clientWebappDir = `${application.clientSrcDir}app/`;
         application.webappEnumerationsDir = `${application.clientWebappDir}shared/model/enumerations/`;
         application.clientSpecDir = `${application.clientTestDir}spec/`;
@@ -85,6 +78,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
         // Can be dropped if tests are moved near implementation
         application.applicationRootRelativeToClientTestDir = `${relative(application.clientSpecDir, '.')}/`;
         application.clientSrcDirRelativeToClientTestDir = `${relative(application.clientSpecDir, application.clientWebappDir)}/`;
+
+        source.addWebpackConfig = args => {
+          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+          this.editFile(
+            webpackPath,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-webpack-config',
+              contentToAdd: `,${args.config}`,
+            }),
+          );
+        };
       },
     });
   }
@@ -106,27 +112,10 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
-  get writing() {
-    return this.asWritingTaskGroup({
-      cleanupOldFilesTask,
-      writeFiles,
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get writingEntities() {
-    return this.asWritingEntitiesTaskGroup({
-      cleanupEntitiesFiles,
-      writeEntitiesFiles,
-      writeEntityFiles,
+  get default() {
+    return this.asDefaultTaskGroup({
       async queueTranslateTransform({ control, application }) {
         const { enableTranslation, clientSrcDir } = application;
-        if (!application.enableTranslation) {
-          await control.loadClientTranslations?.();
-        }
         const { getWebappTranslation } = control;
         this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
           name: 'translating webapp',
@@ -143,8 +132,51 @@ export default class VueGenerator extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+  }
+
+  get writing() {
+    return this.asWritingTaskGroup({
+      cleanupOldFilesTask,
+      writeFiles,
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      cleanupEntitiesFiles,
+      writeEntitiesFiles,
+      writeEntityFiles,
+    });
+  }
+
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addIndexAsset({ source, application }) {
+        if (application.microfrontend) return;
+        source.addExternalResourceToRoot({
+          resource: '<script>const global = globalThis;</script>',
+          comment: 'Workaround https://github.com/axios/axios/issues/5622',
+        });
+        source.addExternalResourceToRoot({
+          resource: `<script type="module" src="./app/${application.microfrontend ? 'index.ts' : 'main.ts'}"></script>`,
+          comment: 'Load vue main',
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {

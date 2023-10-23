@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import needleClientBase from './needle-client.mjs';
 import { stripMargin } from '../../base/support/index.mjs';
 import { createNeedleCallback } from '../../base/support/needles.mjs';

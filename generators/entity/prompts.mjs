@@ -18,7 +18,7 @@
  */
 import fs from 'fs';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import {
   reservedKeywords,
   databaseTypes,
@@ -80,7 +80,7 @@ const getFieldNameUndercored = fields =>
   );
 
 function askForMicroserviceJson() {
-  const context = this.context;
+  const context = this.entityData;
   if (this.jhipsterConfig.applicationType !== GATEWAY || context.configExisted) {
     return undefined;
   }
@@ -120,7 +120,7 @@ function askForMicroserviceJson() {
 }
 
 function askForUpdate() {
-  const context = this.context;
+  const context = this.entityData;
   // ask only if running an existing entity without arg option --force or --regenerate
   const isForce = this.options.force || context.regenerate;
   context.updateEntity = 'regenerate'; // default if skipping questions by --force
@@ -163,7 +163,7 @@ function askForUpdate() {
 }
 
 function askForFields() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (this.options.defaults || (context.useConfigurationFile && context.updateEntity !== 'add')) {
     return undefined;
@@ -177,7 +177,7 @@ function askForFields() {
 }
 
 function askForFieldsToRemove() {
-  const context = this.context;
+  const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.fields.length === 0) {
     return undefined;
@@ -216,11 +216,8 @@ function askForFieldsToRemove() {
   });
 }
 
-function askForRelationships() {
-  const context = this.context;
-  if (this.options.defaults) {
-    return undefined;
-  }
+function askForRelationships(...args) {
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
     return undefined;
@@ -229,11 +226,11 @@ function askForRelationships() {
     return undefined;
   }
 
-  return askForRelationship.call(this);
+  return askForRelationship.call(this, ...args);
 }
 
 function askForRelationsToRemove() {
-  const context = this.context;
+  const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
     return undefined;
@@ -279,7 +276,7 @@ function askForRelationsToRemove() {
 }
 
 function askForFiltering() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if server is skipped, or the backend is not sql, or no service requested
   if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
     return undefined;
@@ -308,7 +305,7 @@ function askForFiltering() {
 }
 
 function askForReadOnly() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile) {
     return undefined;
@@ -327,7 +324,7 @@ function askForReadOnly() {
 }
 
 function askForDTO() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped or if no service layer
   if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
     return undefined;
@@ -356,7 +353,7 @@ function askForDTO() {
 }
 
 function askForService() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped
   if (context.useConfigurationFile || context.skipServer) {
     return undefined;
@@ -389,7 +386,7 @@ function askForService() {
 }
 
 function askForPagination() {
-  const context = this.context;
+  const context = this.entityData;
   // don't prompt if data are imported from a file
   if (context.useConfigurationFile) {
     return undefined;
@@ -428,22 +425,27 @@ function askForPagination() {
 /**
  * ask question for a field creation
  */
-function askForField() {
-  const context = this.context;
+async function askForField() {
+  const context = this.entityData;
   this.log.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
-  const skipServer = context.skipServer;
   const databaseType = context.databaseType;
   const clientFramework = context.clientFramework;
   const possibleFiltering = databaseType === SQL && !context.reactive;
-  const prompts = [
+  const fieldAddAnswer = await this.prompt([
     {
       type: 'confirm',
       name: 'fieldAdd',
       message: 'Do you want to add a field to your entity?',
       default: true,
     },
+  ]);
+
+  if (!fieldAddAnswer.fieldAdd) {
+    logFieldsAndRelationships.call(this);
+    return;
+  }
+  const answers = await this.prompt([
     {
-      when: response => response.fieldAdd === true,
       type: 'input',
       name: 'fieldName',
       validate: input => {
@@ -474,67 +476,25 @@ function askForField() {
       message: 'What is the name of your field?',
     },
     {
-      when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)),
       type: 'list',
       name: 'fieldType',
       message: 'What is the type of your field?',
-      choices: [
-        {
-          value: STRING,
-          name: 'String',
-        },
-        {
-          value: INTEGER,
-          name: 'Integer',
-        },
-        {
-          value: LONG,
-          name: 'Long',
-        },
-        {
-          value: FLOAT,
-          name: 'Float',
-        },
-        {
-          value: DOUBLE,
-          name: 'Double',
-        },
-        {
-          value: BIG_DECIMAL,
-          name: 'BigDecimal',
-        },
-        {
-          value: LOCAL_DATE,
-          name: 'LocalDate',
-        },
-        {
-          value: INSTANT,
-          name: 'Instant',
-        },
-        {
-          value: ZONED_DATE_TIME,
-          name: 'ZonedDateTime',
-        },
-        {
-          value: DURATION,
-          name: 'Duration',
-        },
-        {
-          value: BOOLEAN,
-          name: 'Boolean',
-        },
-        {
-          value: ENUM,
-          name: 'Enumeration (Java enum type)',
-        },
-        {
-          value: UUID,
-          name: 'UUID',
-        },
-        {
-          value: BYTES,
-          name: '[BETA] Blob',
-        },
+      choices: () => [
+        { value: STRING, name: 'String' },
+        { value: INTEGER, name: 'Integer' },
+        { value: LONG, name: 'Long' },
+        { value: FLOAT, name: 'Float' },
+        { value: DOUBLE, name: 'Double' },
+        { value: BIG_DECIMAL, name: 'BigDecimal' },
+        { value: LOCAL_DATE, name: 'LocalDate' },
+        { value: INSTANT, name: 'Instant' },
+        { value: ZONED_DATE_TIME, name: 'ZonedDateTime' },
+        { value: DURATION, name: 'Duration' },
+        { value: BOOLEAN, name: 'Boolean' },
+        { value: ENUM, name: 'Enumeration (Java enum type)' },
+        { value: UUID, name: 'UUID' },
+        { value: UUID, name: 'UUID' },
+        ...(databaseType === CASSANDRA ? [{ value: BYTE_BUFFER, name: '[BETA] Blob' }] : [{ value: BYTES, name: '[BETA] Blob' }]),
       ],
       default: 0,
     },
@@ -609,117 +569,26 @@ function askForField() {
       },
     },
     {
-      when: response => response.fieldAdd === true && databaseType === CASSANDRA,
-      type: 'list',
-      name: 'fieldType',
-      message: 'What is the type of your field?',
-      choices: [
-        {
-          value: UUID,
-          name: 'UUID',
-        },
-        {
-          value: STRING,
-          name: 'String',
-        },
-        {
-          value: INTEGER,
-          name: 'Integer',
-        },
-        {
-          value: LONG,
-          name: 'Long',
-        },
-        {
-          value: FLOAT,
-          name: 'Float',
-        },
-        {
-          value: DOUBLE,
-          name: 'Double',
-        },
-        {
-          value: BIG_DECIMAL,
-          name: 'BigDecimal',
-        },
-        {
-          value: LOCAL_DATE,
-          name: 'LocalDate',
-        },
-        {
-          value: INSTANT,
-          name: 'Instant',
-        },
-        {
-          value: ZONED_DATE_TIME,
-          name: 'ZonedDateTime',
-        },
-        {
-          value: DURATION,
-          name: 'Duration',
-        },
-        {
-          value: ENUM,
-          name: 'Enumeration (Java enum type)',
-        },
-        {
-          value: BOOLEAN,
-          name: 'Boolean',
-        },
-        {
-          value: BYTE_BUFFER,
-          name: '[BETA] blob',
-        },
-      ],
-      default: 0,
-    },
-    {
-      when: response => response.fieldAdd === true && response.fieldType === BYTES,
+      when: response => response.fieldType === BYTES || response.fieldType === BYTE_BUFFER,
       type: 'list',
       name: 'fieldTypeBlobContent',
       message: 'What is the content of the Blob field?',
-      choices: [
-        {
-          value: IMAGE,
-          name: 'An image',
-        },
-        {
-          value: ANY,
-          name: 'A binary file',
-        },
-        {
-          value: TEXT,
-          name: 'A CLOB (Text field)',
-        },
+      choices: answers => [
+        { value: IMAGE, name: 'An image' },
+        { value: ANY, name: 'A binary file' },
+        ...(answers.fieldType === BYTES ? [{ value: TEXT, name: 'A CLOB (Text field)' }] : []),
       ],
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldType === BYTE_BUFFER,
-      type: 'list',
-      name: 'fieldTypeBlobContent',
-      message: 'What is the content of the Blob field?',
-      choices: [
-        {
-          value: IMAGE,
-          name: 'An image',
-        },
-        {
-          value: ANY,
-          name: 'A binary file',
-        },
-      ],
-      default: 0,
-    },
-    {
-      when: response => response.fieldAdd === true && response.fieldType !== BYTE_BUFFER,
+      when: response => response.fieldType !== BYTE_BUFFER,
       type: 'confirm',
       name: 'fieldValidate',
       message: 'Do you want to add validation rules to your field?',
       default: false,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true,
+      when: response => response.fieldValidate === true,
       type: 'checkbox',
       name: 'fieldValidateRules',
       message: 'Which validation rules do you want to add?',
@@ -768,7 +637,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
       type: 'input',
       name: 'fieldValidateRulesMinlength',
       validate: input => (inputIsNumber(input) ? true : 'Minimum length must be a positive number'),
@@ -776,7 +645,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
       type: 'input',
       name: 'fieldValidateRulesMaxlength',
       validate: input => (inputIsNumber(input) ? true : 'Maximum length must be a positive number'),
@@ -784,7 +653,7 @@ function askForField() {
       default: 20,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('min'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('min'),
       type: 'input',
       name: 'fieldValidateRulesMin',
       message: 'What is the minimum of your field?',
@@ -797,7 +666,7 @@ function askForField() {
       default: 0,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('max'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('max'),
       type: 'input',
       name: 'fieldValidateRulesMax',
       message: 'What is the maximum of your field?',
@@ -811,7 +680,6 @@ function askForField() {
     },
     {
       when: response =>
-        response.fieldAdd === true &&
         response.fieldValidate === true &&
         response.fieldValidateRules.includes(MINBYTES) &&
         response.fieldType === BYTES &&
@@ -824,7 +692,6 @@ function askForField() {
     },
     {
       when: response =>
-        response.fieldAdd === true &&
         response.fieldValidate === true &&
         response.fieldValidateRules.includes(MAXBYTES) &&
         response.fieldType === BYTES &&
@@ -836,82 +703,71 @@ function askForField() {
       default: 5000000,
     },
     {
-      when: response => response.fieldAdd === true && response.fieldValidate === true && response.fieldValidateRules.includes('pattern'),
+      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('pattern'),
       type: 'input',
       name: 'fieldValidateRulesPattern',
       message: 'What is the regular expression pattern you want to apply on your field?',
       default: '^[a-zA-Z0-9]*$',
     },
-  ];
-  return this.prompt(prompts).then(props => {
-    if (props.fieldAdd) {
-      if (props.fieldIsEnum) {
-        props.fieldType = _.upperFirst(props.fieldType);
-        props.fieldValues = props.fieldValues.toUpperCase();
-      }
+  ]);
 
-      const field = {
-        fieldName: props.fieldName,
-        fieldType: props.enumType || props.fieldType,
-        fieldTypeBlobContent: props.fieldTypeBlobContent,
-        fieldValues: props.fieldValues,
-        fieldValidateRules: props.fieldValidateRules,
-        fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
-        fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
-        fieldValidateRulesPattern: props.fieldValidateRulesPattern,
-        fieldValidateRulesMin: props.fieldValidateRulesMin,
-        fieldValidateRulesMax: props.fieldValidateRulesMax,
-        fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
-        fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes,
-      };
+  if (answers.fieldIsEnum) {
+    answers.fieldType = _.upperFirst(answers.fieldType);
+    answers.fieldValues = answers.fieldValues.toUpperCase();
+  }
 
-      this.entityConfig.fields = this.entityConfig.fields.concat(field);
-    }
-    logFieldsAndRelationships.call(this);
-    if (props.fieldAdd) {
-      return askForField.call(this);
-    }
-    return undefined;
-  });
+  const field = {
+    fieldName: answers.fieldName,
+    fieldType: answers.enumType || answers.fieldType,
+    fieldTypeBlobContent: answers.fieldTypeBlobContent,
+    fieldValues: answers.fieldValues,
+    fieldValidateRules: answers.fieldValidateRules,
+    fieldValidateRulesMinlength: answers.fieldValidateRulesMinlength,
+    fieldValidateRulesMaxlength: answers.fieldValidateRulesMaxlength,
+    fieldValidateRulesPattern: answers.fieldValidateRulesPattern,
+    fieldValidateRulesMin: answers.fieldValidateRulesMin,
+    fieldValidateRulesMax: answers.fieldValidateRulesMax,
+    fieldValidateRulesMinbytes: answers.fieldValidateRulesMinbytes,
+    fieldValidateRulesMaxbytes: answers.fieldValidateRulesMaxbytes,
+  };
+
+  this.entityConfig.fields = this.entityConfig.fields.concat(field);
+
+  logFieldsAndRelationships.call(this);
+  await askForField.call(this);
 }
 
 /**
  * ask question for a relationship creation
  */
-function askForRelationship() {
-  const context = this.context;
+async function askForRelationship(...args) {
+  const [{ application }] = args;
+  const context = this.entityData;
   const name = context.name;
   this.log.log(chalk.green('\nGenerating relationships to other entities\n'));
-  const prompts = [
+  const addRelationshipAnswers = await this.prompt([
     {
       type: 'confirm',
       name: 'relationshipAdd',
       message: 'Do you want to add a relationship to another entity?',
       default: true,
     },
+  ]);
+
+  if (!addRelationshipAnswers.relationshipAdd) {
+    logFieldsAndRelationships.call(this);
+    this.log.log('\n');
+    return;
+  }
+
+  const answers = await this.prompt([
     {
-      when: response => response.relationshipAdd === true,
-      type: 'input',
+      type: 'list',
       name: 'otherEntityName',
-      validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-          return 'Your other entity name cannot contain special characters';
-        }
-        if (input === '') {
-          return 'Your other entity name cannot be empty';
-        }
-        if (isReservedTableName(input, 'JAVA')) {
-          return 'Your other entity name cannot contain a Java reserved keyword';
-        }
-        if (input.toLowerCase() === 'user' && context.applicationType === 'microservice') {
-          return "Your entity cannot have a relationship with User because it's a gateway entity";
-        }
-        return true;
-      },
-      message: 'What is the name of the other entity?',
+      message: 'What is the other entity?',
+      choices: () => [...this.getExistingEntityNames(), ...(application.generateBuiltInUserEntity ? ['User'] : [])],
     },
     {
-      when: response => response.relationshipAdd === true,
       type: 'input',
       name: 'relationshipName',
       validate: input => {
@@ -936,89 +792,63 @@ function askForRelationship() {
       default: response => _.lowerFirst(response.otherEntityName),
     },
     {
-      when: response => response.relationshipAdd === true,
       type: 'list',
       name: 'relationshipType',
       message: 'What is the type of the relationship?',
-      choices: response => {
-        const opts = [
-          {
-            value: 'many-to-one',
-            name: 'many-to-one',
-          },
-          {
-            value: 'many-to-many',
-            name: 'many-to-many',
-          },
-          {
-            value: 'one-to-one',
-            name: 'one-to-one',
-          },
-        ];
-        if (!this.isBuiltInUser(response.otherEntityName)) {
-          opts.unshift({
-            value: 'one-to-many',
-            name: 'one-to-many',
-          });
-        }
-        return opts;
-      },
+      choices: response => [
+        'many-to-one',
+        'many-to-many',
+        'one-to-one',
+        ...(this.isBuiltInUser(response.otherEntityName) ? [] : ['one-to-many']),
+      ],
       default: 0,
     },
     {
-      when: response =>
-        response.relationshipAdd === true &&
-        response.otherEntityName.toLowerCase() !== 'user' &&
-        (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'),
-      type: 'confirm',
-      name: 'ownerSide',
-      message: 'Is this entity the owner of the relationship?',
-      default: false,
-    },
-    {
-      when: response =>
-        context.databaseType === SQL &&
-        response.relationshipAdd === true &&
-        response.relationshipType === 'one-to-one' &&
-        (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'),
+      when: response => application.databaseType === SQL && response.relationshipType === 'one-to-one',
       type: 'confirm',
       name: 'id',
       message: 'Do you want to use JPA Derived Identifier - @MapsId?',
       default: false,
     },
     {
-      when: response =>
-        response.relationshipAdd === true &&
-        (response.relationshipType === 'one-to-many' ||
-          ((response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one') &&
-            !this.isBuiltInUser(response.otherEntityName))),
+      when: answers => {
+        if (this.isBuiltInUser(answers.otherEntityName)) {
+          answers.bidirectional = false;
+          return false;
+        }
+
+        if (!application.databaseTypeNeo4j && answers.relationshipType !== 'many-to-one') {
+          // Relationships requires bidirectional.
+          answers.bidirectional = true;
+          return false;
+        }
+
+        return true;
+      },
+      type: 'input',
+      name: 'bidirectional',
+      message: 'Do you want to generate a bidirectional relationship',
+      default: true,
+    },
+    {
+      when: response => response.bidirectional,
       type: 'input',
       name: 'otherEntityRelationshipName',
       message: 'What is the name of this relationship in the other entity?',
       default: () => _.lowerFirst(name),
     },
     {
-      when: response =>
-        response.relationshipAdd === true &&
-        response.otherEntityName.toLowerCase() !== 'user' &&
-        (response.relationshipType === 'many-to-one' ||
-          (response.relationshipType === 'many-to-many' && response.ownerSide === true) ||
-          (response.relationshipType === 'one-to-one' && response.ownerSide === true)),
       type: 'input',
       name: 'otherEntityField',
       message: response =>
         `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
-      default: 'id',
+      default: answers => (answers.otherEntityName === 'User' ? 'login' : 'id'),
     },
     {
       when: response =>
-        response.relationshipAdd === true &&
-        response.otherEntityName.toLowerCase() !== context.name.toLowerCase() &&
-        (response.relationshipType === 'many-to-one' ||
-          (response.relationshipType === 'many-to-many' &&
-            (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')) ||
-          (response.relationshipType === 'one-to-one' &&
-            (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'))),
+        (response.otherEntityName.toLowerCase() !== context.name.toLowerCase() && response.relationshipType === 'many-to-one') ||
+        response.relationshipType === 'many-to-many' ||
+        response.relationshipType === 'one-to-one',
       type: 'confirm',
       name: 'relationshipValidate',
       message: 'Do you want to add any validation rules to this relationship?',
@@ -1037,42 +867,34 @@ function askForRelationship() {
       ],
       default: 0,
     },
-  ];
-  return this.prompt(prompts).then(props => {
-    if (props.relationshipAdd) {
-      const relationship = {
-        relationshipName: props.relationshipName,
-        otherEntityName: _.lowerFirst(props.otherEntityName),
-        relationshipType: props.relationshipType,
-        relationshipValidateRules: props.relationshipValidateRules,
-        otherEntityField: props.otherEntityField,
-        ownerSide: props.ownerSide,
-        id: props.id,
-        otherEntityRelationshipName: props.otherEntityRelationshipName,
-      };
+  ]);
 
-      if (props.otherEntityName.toLowerCase() === 'user') {
-        relationship.ownerSide = true;
-        relationship.otherEntityField = 'login';
-        relationship.otherEntityRelationshipName = _.lowerFirst(name);
-      }
+  const relationship = {
+    relationshipSide: 'left',
+    relationshipName: answers.relationshipName,
+    otherEntityName: _.lowerFirst(answers.otherEntityName),
+    relationshipType: answers.relationshipType,
+    relationshipValidateRules: answers.relationshipValidateRules,
+    otherEntityField: answers.otherEntityField,
+    ownerSide: answers.ownerSide,
+    id: answers.id,
+    otherEntityRelationshipName: answers.otherEntityRelationshipName,
+  };
 
-      this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
-    }
-    logFieldsAndRelationships.call(this);
-    if (props.relationshipAdd) {
-      return askForRelationship.call(this);
-    }
-    this.log.log('\n');
-    return undefined;
-  });
+  if (this.isBuiltInUser(answers.otherEntityName)) {
+    relationship.otherEntityRelationshipName = _.lowerFirst(name);
+  }
+
+  this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
+
+  await askForRelationship.call(this, ...args);
 }
 
 /**
  * Show the entity and it's fields and relationships in console
  */
 function logFieldsAndRelationships() {
-  const context = this.context;
+  const context = this.entityData;
   if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
     this.log.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
   }
@@ -1125,7 +947,7 @@ function logFieldsAndRelationships() {
       if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
-      this.log.verboseInfo(
+      this.log.log(
         `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
           relationship.relationshipType,
         )} ${chalk.cyan(validationDetails.join(' '))}`,

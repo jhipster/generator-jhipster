@@ -1,0 +1,200 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = this.generateTestEntityId(primaryKey.type);
+_%>
+/* tslint:disable max-line-length */
+import { vitest } from 'vitest';
+import { shallowMount, type MountingOptions } from '@vue/test-utils';
+import sinon, { type SinonStubbedInstance } from 'sinon';
+
+import <%= entityAngularName %> from './<%= entityFileName %>.vue';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import AlertService from '@/shared/alert/alert.service';
+
+type <%= entityAngularName %>ComponentType = InstanceType<typeof <%= entityAngularName %>>;
+
+const bModalStub = {
+  render: () => {},
+  methods: {
+    hide: () => {},
+    show: () => {}
+  }
+};
+
+describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  describe('<%= entityAngularName %> Management Component', () => {
+    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
+    let mountOptions: MountingOptions<<%= entityAngularName %>ComponentType>['global'];
+
+    beforeEach(() => {
+      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+      <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {} });
+
+      alertService = new AlertService({
+<%_ if (enableTranslation) { _%>
+        i18n: { t: vitest.fn() } as any,
+<%_ } _%>
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
+      });
+
+      mountOptions = {
+        stubs: {
+<%_ if (!paginationNo) { _%>
+          jhiItemCount: true,
+          bPagination: true,
+<%_ } _%>
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+<%_ if (!paginationNo) { _%>
+          'jhi-sort-indicator': true,
+<%_ } _%>
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+        }
+      };
+    });
+
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
+
+        // WHEN
+        const wrapper = shallowMount(<%= entityAngularName %>, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({id: <%- tsKeyId %>}));
+      });
+<%_ if (!paginationNo) { _%>
+
+      it('should calculate the sort attribute for an id', async () => {
+        // WHEN
+        const wrapper = shallowMount(<%= entityAngularName %>, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.retrieve.lastCall.firstArg).toMatchObject({
+          sort: ['id,asc'],
+        });
+      });
+<%_ } _%>
+    });
+    describe('Handles', () => {
+      let comp: <%= entityAngularName %>ComponentType;
+
+      beforeEach(async () => {
+        const wrapper = shallowMount(<%= entityAngularName %>, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        <%= entityInstance %>ServiceStub.retrieve.reset();
+        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
+<%_ if (!paginationNo) { _%>
+
+      it('should load a page', async () => {
+        // GIVEN
+        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
+
+        // WHEN
+        comp.page = 2;
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeTruthy();
+        expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({id: <%- tsKeyId %>}));
+    });
+  <%_ if (!paginationInfiniteScroll) { _%>
+
+      it('should not load a page if the page is the same as the previous page', () => {
+        // WHEN
+        comp.page = 1;
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeFalsy();
+      });
+  <%_ } _%>
+
+      it('should re-initialize the page', async () => {
+        // GIVEN
+        comp.page = 2;
+        await comp.$nextTick();
+        <%= entityInstance %>ServiceStub.retrieve.reset();
+        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
+
+        // WHEN
+        comp.clear();
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.page).toEqual(1);
+        expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
+        expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({id: <%- tsKeyId %>}));
+      });
+
+      it('should calculate the sort attribute for a non-id attribute', async () => {
+        // WHEN
+        comp.propOrder = 'name';
+        await comp.$nextTick();
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.retrieve.lastCall.firstArg).toMatchObject({
+          sort: ['name,asc', 'id'],
+        });
+      });
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        <%= entityInstance %>ServiceStub.delete.resolves({});
+
+        // WHEN
+        comp.prepareRemove({id: <%- tsKeyId %>});
+
+        comp.remove<%= entityAngularName %>();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(<%= entityInstance %>ServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
+      });
+<%_ } _%>
+    });
+  });
+});

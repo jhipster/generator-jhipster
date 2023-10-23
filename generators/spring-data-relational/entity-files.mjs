@@ -16,64 +16,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import { moveToJavaEntityPackageSrcDir } from '../server/support/index.mjs';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.mjs';
 
 const sqlFiles = {
   sqlFiles: [
     {
       condition: generator => !generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_persistence'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.jakarta_persistence'],
     },
     {
       condition: generator => !generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.jakarta_lifecycle_events'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.jakarta_lifecycle_events'],
     },
     {
       condition: generator => !generator.reactive && generator.enableHibernateCache,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.hibernate_cache'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.hibernate_cache'],
     },
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.containsBagRelationships,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
-        'repository/_EntityClass_RepositoryWithBagRelationships.java',
-        'repository/_EntityClass_RepositoryWithBagRelationshipsImpl.java',
+        'repository/_entityClass_RepositoryWithBagRelationships.java',
+        'repository/_entityClass_RepositoryWithBagRelationshipsImpl.java',
       ],
     },
     {
       condition: generator => generator.reactive,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_reactive'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.spring_data_reactive'],
     },
     {
       condition: generator => generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_.java.jhi.spring_data_persistable'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_.java.jhi.spring_data_persistable'],
     },
     {
       condition: generator => generator.reactive && generator.requiresPersistableImplementation,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
-      templates: ['domain/_PersistClass_Callback.java'],
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['domain/_persistClass_Callback.java'],
     },
     {
       condition: generator => generator.reactive && !generator.embedded,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
-      renameTo: moveToJavaEntityPackageSrcDir,
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
-        'repository/_EntityClass_RepositoryInternalImpl_reactive.java',
-        'repository/_EntityClass_SqlHelper_reactive.java',
-        'repository/rowmapper/_EntityClass_RowMapper_reactive.java',
+        'repository/_entityClass_RepositoryInternalImpl_reactive.java',
+        'repository/_entityClass_SqlHelper_reactive.java',
+        'repository/rowmapper/_entityClass_RowMapper_reactive.java',
       ],
     },
   ],
@@ -88,9 +79,8 @@ export default async function writeEntitiesTask({ application, entities }) {
         blocks: [
           {
             condition: generator => generator.reactive && generator.requiresPersistableImplementation,
-            path: `${SERVER_MAIN_SRC_DIR}package/`,
-            renameTo: moveToJavaEntityPackageSrcDir,
-            templates: ['domain/_PersistClass_Callback.java'],
+            ...javaMainPackageTemplatesBlock('_entityPackage_'),
+            templates: ['domain/_persistClass_Callback.java'],
           },
         ],
         context: { ...application, ...entity },

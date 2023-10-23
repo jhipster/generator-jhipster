@@ -20,6 +20,7 @@
 import chalk from 'chalk';
 import { Command, Option } from 'commander';
 import lodash from 'lodash';
+import { convertConfigToOption } from '../lib/internal/index.mjs';
 
 const { kebabCase } = lodash;
 
@@ -177,6 +178,16 @@ export default class JHipsterCommand extends Command {
     return this;
   }
 
+  addJHipsterConfigs(configs = {}, blueprintOptionDescription) {
+    Object.entries(configs).forEach(([name, config]) => {
+      const option = convertConfigToOption(name, config);
+      if (option) {
+        this._addGeneratorOption(kebabCase(option.name), option, blueprintOptionDescription);
+      }
+    });
+    return this;
+  }
+
   _addGeneratorOption(optionName, optionDefinition, additionalDescription = '') {
     if (optionName === 'help') {
       return undefined;
@@ -192,14 +203,20 @@ export default class JHipsterCommand extends Command {
       cmdString = `-${optionDefinition.alias}, `;
     }
     cmdString = `${cmdString}${longOption}`;
-    if (optionDefinition.type === String) {
-      cmdString = optionDefinition.required !== false ? `${cmdString} <value>` : `${cmdString} [value]`;
-    } else if (optionDefinition.type === Array) {
+    if (optionDefinition.type === Array) {
       cmdString = optionDefinition.required !== false ? `${cmdString} <value...>` : `${cmdString} [value...]`;
+    } else if (optionDefinition.type && optionDefinition.type !== Boolean) {
+      cmdString = optionDefinition.required !== false ? `${cmdString} <value>` : `${cmdString} [value]`;
     }
-    const option = new Option(cmdString, optionDefinition.description + additionalDescription)
-      .default(optionDefinition.default)
-      .hideHelp(optionDefinition.hide ?? false);
+    // Passing default to `commander` (`.default(optionDefinition.default)`), will set at options passed to initial generator, so it's used in entire generation process.
+    // We want default value to be set on jhipster options parsing so ignore default at commander.
+    let defaultDescription = '';
+    if (optionDefinition.default !== undefined && (!Array.isArray(optionDefinition.default) || optionDefinition.default.length !== 0)) {
+      defaultDescription = ` (default: ${optionDefinition.default})`;
+    }
+    const option = new Option(cmdString, optionDefinition.description + defaultDescription + additionalDescription).hideHelp(
+      optionDefinition.hide ?? false,
+    );
     if (optionDefinition.env) {
       option.env(optionDefinition.env);
     }

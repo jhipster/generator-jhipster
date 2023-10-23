@@ -22,7 +22,7 @@ import { access } from 'fs/promises';
 import { expect } from 'esmocha';
 
 import { testBlueprintSupport } from '../../test/support/tests.mjs';
-import { skipPrettierHelpers as helpers } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers } from '../../test/support/index.mjs';
 import { GENERATOR_GIT } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);

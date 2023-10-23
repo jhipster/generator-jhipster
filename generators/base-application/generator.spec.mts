@@ -25,7 +25,7 @@ import lodash from 'lodash';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.mjs';
 import type { BaseApplication } from '../base-application/types.js';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
 const { snakeCase } = lodash;
@@ -62,6 +62,7 @@ describe(`generator - ${generator}`, () => {
     // application arg
     const loading = esmocha.fn();
     const preparing = esmocha.fn();
+    const postPreparing = esmocha.fn();
     const writing = esmocha.fn();
     const postWriting = esmocha.fn();
     const install = esmocha.fn();
@@ -104,6 +105,10 @@ describe(`generator - ${generator}`, () => {
 
       get [Generator.PREPARING]() {
         return { preparing };
+      }
+
+      get [Generator.POST_PREPARING]() {
+        return { postPreparing };
       }
 
       get [Generator.CONFIGURING_EACH_ENTITY]() {
@@ -194,6 +199,11 @@ describe(`generator - ${generator}`, () => {
         source: expect.any(Object),
       };
 
+      const applicationDefaultsArg = {
+        ...applicationArg,
+        applicationDefaults: expect.any(Function),
+      };
+
       const entityConfiguringArg = {
         ...applicationArg,
         entityStorage: expect.any(Object),
@@ -230,6 +240,8 @@ describe(`generator - ${generator}`, () => {
       expect(prompting).toBeCalledWith(controlArg);
       expect(configuring).toBeCalledWith(controlArg);
       expect(composing).toBeCalledWith(controlArg);
+      expect(loading).toBeCalledWith(applicationDefaultsArg);
+      expect(postPreparing).toBeCalledWith(applicationSourceArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
@@ -271,7 +283,7 @@ describe(`generator - ${generator}`, () => {
       expect(install).toBeCalledWith(applicationArg);
       expect(end).toBeCalledWith(applicationArg);
 
-      expect(preparing).toBeCalledWith(applicationSourceArg);
+      expect(preparing).toBeCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
       expect(postWriting).toBeCalledWith(applicationSourceArg);
     });
   });
@@ -423,6 +435,11 @@ describe(`generator - ${generator}`, () => {
         source: expect.any(Object),
       };
 
+      const applicationDefaultsArg = {
+        ...applicationArg,
+        applicationDefaults: expect.any(Function),
+      };
+
       const entityConfiguringArg = {
         ...applicationArg,
         entityStorage: expect.any(Object),
@@ -468,6 +485,7 @@ describe(`generator - ${generator}`, () => {
       expect(prompting).toBeCalledWith(controlArg);
       expect(configuring).toBeCalledWith(controlArg);
       expect(composing).toBeCalledWith(controlArg);
+      expect(loading).toBeCalledWith(applicationDefaultsArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
@@ -510,7 +528,7 @@ describe(`generator - ${generator}`, () => {
       expect(install).toBeCalledWith(applicationArg);
       expect(end).toBeCalledWith(applicationArg);
 
-      expect(preparing).toBeCalledWith(applicationSourceArg);
+      expect(preparing).toBeCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
       expect(postWriting).toBeCalledWith(applicationSourceArg);
     });
   });

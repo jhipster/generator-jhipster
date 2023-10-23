@@ -29,7 +29,7 @@ import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/optio
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;
-const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, H2_DISK, POSTGRESQL } = databaseTypes;
+const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, POSTGRESQL } = databaseTypes;
 const NO_DATABASE_TYPE = databaseTypes.NO;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
@@ -104,6 +104,9 @@ export function getConfigForClientApplication(options: any = {}): any {
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
+  if (options[OptionNames.MICROFRONTEND] === undefined) {
+    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
+  }
   const clientFramework = options[CLIENT_FRAMEWORK];
   if (clientFramework !== NO_CLIENT_FRAMEWORK) {
     if (!options[CLIENT_THEME]) {
@@ -176,7 +179,7 @@ export function getConfigForDatabaseType(options: any = {}): any {
       options[PROD_DATABASE_TYPE] = POSTGRESQL;
     }
     if (options[DEV_DATABASE_TYPE] === undefined) {
-      options[DEV_DATABASE_TYPE] = H2_DISK;
+      options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
     }
   } else if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
     if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
@@ -257,11 +260,9 @@ export function getServerConfigForMicroserviceApplication(customOptions: any = {
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
     [SERVICE_DISCOVERY_TYPE]: CONSUL,
     [SKIP_USER_MANAGEMENT]: true,
+    [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK,
     ...customOptions,
   };
-  if (options[SKIP_CLIENT] === undefined) {
-    options[SKIP_CLIENT] = options[CLIENT_FRAMEWORK] === undefined || options[CLIENT_FRAMEWORK] === NO_CLIENT_FRAMEWORK;
-  }
 
   options[WITH_ADMIN_UI] = false;
   return {

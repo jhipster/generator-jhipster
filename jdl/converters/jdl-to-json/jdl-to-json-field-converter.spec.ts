@@ -197,7 +197,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 {
   "fieldName": "enumField",
   "fieldType": "CustomEnum",
-  "fieldTypeJavadoc": "enum comment",
+  "fieldTypeDocumentation": "enum comment",
   "fieldValues": "AA,AB",
   "fieldValuesJavadocs": {
     "AA": "some comment",
@@ -231,9 +231,9 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
 {
+  "documentation": "The best field",
   "fieldName": "firstField",
   "fieldType": "String",
-  "javadoc": "The best field",
 }
 `);
         });
@@ -383,9 +383,9 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         it('should convert them', () => {
           jestExpect(convertedField).toMatchInlineSnapshot(`
 {
+  "documentation": "The best field",
   "fieldName": "firstField",
   "fieldType": "String",
-  "javadoc": "The best field",
   "options": {
     "id": 42,
   },

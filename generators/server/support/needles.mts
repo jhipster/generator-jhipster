@@ -45,7 +45,7 @@ type ApplicationPropertiesNeedles = {
  *   'ApplicationProperties.java',
  *   insertContentIntoApplicationProperties({
  *     property: 'private final bar = new Bar();',
- *     proppertyGetter: `
+ *     propertyGetter: `
  * public getBar() {
  *     return bar;
  * }`,

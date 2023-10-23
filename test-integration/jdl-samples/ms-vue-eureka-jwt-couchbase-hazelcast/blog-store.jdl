@@ -158,3 +158,11 @@ deployment {
   monitoring no
   serviceDiscoveryType eureka
 }
+
+deployment {
+  deploymentType kubernetes,
+  appsFolders [gateway, store, blog, notification]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType eureka
+}

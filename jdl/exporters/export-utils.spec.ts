@@ -23,7 +23,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import { writeConfigFile } from '../exporters/export-utils.js';
-import { basicHelpers as helpers } from '../../test/support/helpers.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

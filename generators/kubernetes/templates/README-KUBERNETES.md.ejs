@@ -94,7 +94,7 @@ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kub
 
 <%_ } _%>
 
-<%_ if (app.serviceDiscoveryEureka) { _%>
+<%_ if (serviceDiscoveryEureka) { _%>
 ## JHipster Registry
 
 The registry is deployed using a headless service in Kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:

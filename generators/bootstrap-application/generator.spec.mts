@@ -22,7 +22,7 @@ import { expect } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.mjs';
-import { defaultHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 import { fieldTypes } from '../../jdl/jhipster/index.mjs';
 import { shouldSupportFeatures } from '../../test/support/tests.mjs';
 
@@ -210,6 +210,7 @@ describe(`generator - ${generator}`, () => {
   "entityAngularName": "User",
   "entityAngularNamePlural": "Users",
   "entityApi": "",
+  "entityApiDescription": undefined,
   "entityApiUrl": "users",
   "entityClass": "User",
   "entityClassHumanized": "User",
@@ -222,7 +223,8 @@ describe(`generator - ${generator}`, () => {
   "entityInstance": "user",
   "entityInstanceDbSafe": "jhiUser",
   "entityInstancePlural": "users",
-  "entityJavaPackageFolder": "com/mycompany/myapp/",
+  "entityJavaPackageFolder": "",
+  "entityJavadoc": undefined,
   "entityModelFileName": "user",
   "entityNameCapitalized": "User",
   "entityNamePlural": "Users",
@@ -309,6 +311,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -580,8 +584,10 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
+    "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -601,6 +607,7 @@ describe(`generator - ${generator}`, () => {
     "relationships": [],
     "tsType": "string",
     "type": "UUID",
+    "typeInteger": false,
     "typeLong": false,
     "typeNumeric": false,
     "typeString": false,
@@ -688,6 +695,7 @@ describe(`generator - ${generator}`, () => {
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
+  "entityApiDescription": undefined,
   "entityApiUrl": "entity-as",
   "entityClass": "EntityA",
   "entityClassHumanized": "Entity A",
@@ -700,7 +708,8 @@ describe(`generator - ${generator}`, () => {
   "entityInstance": "entityA",
   "entityInstanceDbSafe": "entityA",
   "entityInstancePlural": "entityAS",
-  "entityJavaPackageFolder": "com/mycompany/myapp/",
+  "entityJavaPackageFolder": "",
+  "entityJavadoc": undefined,
   "entityModelFileName": "entity-a",
   "entityNameCapitalized": "EntityA",
   "entityNamePlural": "EntityAS",
@@ -785,6 +794,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -840,8 +851,10 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
+    "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -861,6 +874,7 @@ describe(`generator - ${generator}`, () => {
     "relationships": [],
     "tsType": "string",
     "type": "UUID",
+    "typeInteger": false,
     "typeLong": false,
     "typeNumeric": false,
     "typeString": false,
@@ -1000,6 +1014,7 @@ describe(`generator - ${generator}`, () => {
   "entityAngularName": "EntityA",
   "entityAngularNamePlural": "EntityAS",
   "entityApi": "",
+  "entityApiDescription": undefined,
   "entityApiUrl": "entity-as",
   "entityClass": "EntityA",
   "entityClassHumanized": "Entity A",
@@ -1012,7 +1027,8 @@ describe(`generator - ${generator}`, () => {
   "entityInstance": "entityA",
   "entityInstanceDbSafe": "entityA",
   "entityInstancePlural": "entityAS",
-  "entityJavaPackageFolder": "com/mycompany/myapp/",
+  "entityJavaPackageFolder": "",
+  "entityJavadoc": undefined,
   "entityModelFileName": "entity-a",
   "entityNameCapitalized": "EntityA",
   "entityNamePlural": "EntityAS",
@@ -1097,6 +1113,8 @@ describe(`generator - ${generator}`, () => {
       "id": true,
       "javaFieldType": "UUID",
       "jpaGeneratedValue": true,
+      "jpaGeneratedValueIdentity": false,
+      "jpaGeneratedValueSequence": false,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -1152,8 +1170,10 @@ describe(`generator - ${generator}`, () => {
     "derived": false,
     "derivedFields": Any<Array>,
     "fields": Any<Array>,
+    "hasInteger": false,
     "hasLong": false,
     "hasUUID": true,
+    "hibernateSnakeCaseName": "id",
     "ids": [
       {
         "autoGenerate": true,
@@ -1173,6 +1193,7 @@ describe(`generator - ${generator}`, () => {
     "relationships": [],
     "tsType": "string",
     "type": "UUID",
+    "typeInteger": false,
     "typeLong": false,
     "typeNumeric": false,
     "typeString": false,

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { getDefaultAppName } from './support/index.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 
@@ -39,10 +39,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     }
 
     this.sharedData.getControl().existingProject =
-      this.options.defaults ||
-      this.options.withEntities ||
-      this.options.applicationWithConfig ||
-      (this.jhipsterConfig.baseName !== undefined && this.config.existed);
+      this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed);
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);

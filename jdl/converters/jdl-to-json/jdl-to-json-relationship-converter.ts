@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { relationshipOptions, validations } from '../../jhipster/index.mjs';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
@@ -66,7 +66,7 @@ function getRelatedRelationships(relationships, entityNames) {
       }
       if (
         jdlRelationship.to === entityName &&
-        (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.destination).length !== 0)
+        (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.source).length !== 0)
       ) {
         relationshipsRelatedToEntity.to.push(jdlRelationship);
       }
@@ -91,7 +91,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
       convertedRelationship.relationshipValidateRules = REQUIRED;
     }
     if (relationshipToConvert.commentInFrom) {
-      convertedRelationship.javadoc = relationshipToConvert.commentInFrom;
+      convertedRelationship.documentation = relationshipToConvert.commentInFrom;
     }
     const splitField: any = extractField(relationshipToConvert.injectedFieldInFrom);
     convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.to);
@@ -122,7 +122,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
       convertedRelationship.relationshipValidateRules = REQUIRED;
     }
     if (relationshipToConvert.commentInTo) {
-      convertedRelationship.javadoc = relationshipToConvert.commentInTo;
+      convertedRelationship.documentation = relationshipToConvert.commentInTo;
     }
     const splitField: any = extractField(relationshipToConvert.injectedFieldInTo);
     convertedRelationship.relationshipName = camelCase(splitField.relationshipName || relationshipToConvert.from);

@@ -2,6 +2,7 @@
   "include": [
     "./cli",
     "./jdl",
+    "./testing",
     "./generators/index.ts",
     "./generators/base",
     "./generators/base-application",

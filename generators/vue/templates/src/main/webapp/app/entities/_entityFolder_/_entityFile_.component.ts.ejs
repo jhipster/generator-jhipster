@@ -1,0 +1,267 @@
+import { defineComponent, inject, onMounted, ref, type Ref, watch, watchEffect } from 'vue';
+<%_ if (enableTranslation) { _%>
+import { useI18n } from 'vue-i18n';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { useIntersectionObserver } from '@vueuse/core';
+<%_ } _%>
+
+import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
+import useDataUtils from '@/shared/data/data-utils.service';
+<%_ } _%>
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+import { useDateFormat } from '@/shared/composables'
+<%_ } _%>
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import { useAlertService } from '@/shared/alert/alert.service';
+
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: '<%= entityAngularName %>',
+  setup() {
+<%_ if (enableTranslation) { _%>
+    const { t: t$} = useI18n();
+<%_ } _%>
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+    const dateFormat = useDateFormat();
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
+    const dataUtils = useDataUtils();
+<%_ } _%>
+    const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
+    const alertService = inject('alertService', () => useAlertService(), true);
+
+<%_ if (searchEngineAny) { _%>
+    const currentSearch = ref('');
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+    const itemsPerPage = ref(20);
+    const queryCount: Ref<number> = ref(null);
+    const page: Ref<number> = ref(1);
+    const propOrder = ref('id');
+    const reverse = ref(false);
+    const totalItems = ref(0);
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+    const links: Ref<any> = ref({});
+<%_ } _%>
+
+    const <%= entityInstancePlural %>: Ref<I<%= entityAngularName %>[]> = ref([]);
+
+    const isFetching = ref(false);
+
+    const clear = () => {
+<%_ if (searchEngineAny) { _%>
+      currentSearch.value = '';
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+      page.value = 1;
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      links.value = {};
+      <%= entityInstancePlural %>.value = [];
+<%_ } _%>
+    };
+<%_ if (!paginationNo) { _%>
+
+    const sort = (): Array<any> => {
+      const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
+      if (propOrder.value !== 'id') {
+        result.push('id');
+      }
+      return result;
+    };
+<%_ } _%>
+
+    const retrieve<%= entityAngularName %>s = async () => {
+      isFetching.value = true;
+      try {
+<%_ if (!paginationNo) { _%>
+        const paginationQuery = {
+          page: page.value - 1,
+          size: itemsPerPage.value,
+          sort: sort(),
+        };
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+        const res = currentSearch.value ?
+          (await <%= entityInstance %>Service().search(currentSearch.value<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>)) :
+          (await <%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>));
+<%_ } else { _%>
+        const res = await <%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>);
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+        totalItems.value = Number(res.headers['x-total-count']);
+        queryCount.value = totalItems.value;
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+        links.value = dataUtils.parseLinks(res.headers?.['link']);
+        <%= entityInstancePlural %>.value.push(...(res.data ?? []));
+<%_ } else { _%>
+        <%= entityInstancePlural %>.value = res.data;
+<%_ } _%>
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
+
+    const handleSyncList = () => {
+<%_ if (paginationInfiniteScroll) { _%>
+      clear();
+<%_ } else { _%>
+      retrieve<%= entityAngularName %>s();
+<%_ } _%>
+    };
+
+    onMounted(async () => {
+      await retrieve<%= entityAngularName %>s();
+    });
+
+<%_ if (searchEngineAny) { _%>
+    const search = (query) => {
+      if (!query) {
+        return clear();
+      }
+      currentSearch.value = query;
+      retrieve<%= entityAngularName %>s();
+    };
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+
+    const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: I<%= entityAngularName %>) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const remove<%= entityAngularName %> = async () => {
+      try {
+        await <%= entityInstance %>Service().delete(removeId.value);
+  <%_ if (enableTranslation) { _%>
+        const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
+  <%_ } else {_%>
+        const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
+  <%_ } _%>
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+  <%_ if (paginationInfiniteScroll) { _%>
+        clear();
+  <%_ } else {_%>
+        retrieve<%= entityAngularName %>s();
+  <%_ } _%>
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+
+    const changeOrder = (newOrder: string) => {
+      if (propOrder.value === newOrder) {
+        reverse.value = !reverse.value;
+      } else {
+        reverse.value = false;
+      }
+      propOrder.value = newOrder;
+    };
+  <%_ if (paginationInfiniteScroll) { _%>
+
+    // Whenever order changes, reset the pagination
+    watch([propOrder, reverse], () => {
+      clear();
+    });
+
+    // Whenever the data resets or page changes, switch to the new page.
+    watch([<%= entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
+      if (data.length === 0 || page !== prevPage) {
+        await retrieve<%= entityAngularName %>s();
+      }
+    });
+
+    const infiniteScrollEl = ref<HTMLElement>(null);
+    const intersectionObserver = useIntersectionObserver(
+      infiniteScrollEl,
+      intersection => {
+        if (intersection[0].isIntersecting && !isFetching.value) {
+          page.value++;
+        }
+      },
+      {
+        threshold: 0.5,
+        immediate: false,
+      }
+    );
+    watchEffect(() => {
+      if (links.value.next) {
+        intersectionObserver.resume();
+      } else if (intersectionObserver.isActive) {
+        intersectionObserver.pause();
+      }
+    });
+  <%_ } else { _%>
+
+    // Whenever order changes, reset the pagination
+    watch([propOrder, reverse], async () => {
+      if (page.value === 1) {
+        // first page, retrieve new data
+        await retrieve<%= entityAngularName %>s();
+      } else {
+        // reset the pagination
+        clear();
+      }
+    });
+
+    // Whenever page changes, switch to the new page.
+    watch(page, async () => {
+      await retrieve<%= entityAngularName %>s();
+    });
+  <%_ } _%>
+<%_ } _%>
+
+    return {
+      <%= entityInstancePlural %>,
+      handleSyncList,
+      isFetching,
+      retrieve<%= entityAngularName %>s,
+      clear,
+<%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
+      ...dateFormat,
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+      currentSearch,
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      remove<%= entityAngularName %>,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+      itemsPerPage,
+      queryCount,
+      page,
+      propOrder,
+      reverse,
+      totalItems,
+      changeOrder,
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      infiniteScrollEl,
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      t$,
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
+      ...dataUtils,
+<%_ } _%>
+    };
+  },
+});

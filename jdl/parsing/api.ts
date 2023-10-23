@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { EOF } from 'chevrotain';
 import JDLAstBuilderVisitor from './jdl-ast-builder-visitor.js';
 import { JDLLexer, tokens } from './lexer/lexer.js';

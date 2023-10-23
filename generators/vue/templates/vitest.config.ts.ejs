@@ -16,42 +16,40 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineConfig } from 'vitest/config';
-import config from './webpack/config';
-import vue from '@vitejs/plugin-vue';
+import { fileURLToPath } from 'node:url'
+import { mergeConfig, defineConfig, configDefaults } from 'vitest/config';
+import viteConfig from './vite.config'
 
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': './<%- clientSrcDir %>app/',
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    resolve: {
+      alias: {
+        vue: 'vue',
+      },
     },
-  },
-  define: {
-    I18N_HASH: '"generated_hash"',
-    SERVER_API_URL: `"${config.serverApiUrl}"`,
-    VERSION: `"${config.version}"`,
-  },
-  test: {
-    globals: true,
-    environment: 'happy-dom', // happy-dom provides a better performance but doesn't have a default url.
-    setupFiles: ['./<%= clientSrcDir %>app/test-setup.ts'],
+    test: {
+      globals: true,
+      environment: 'happy-dom', // happy-dom provides a better performance but doesn't have a default url.
+      setupFiles: [fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/test-setup.ts', import.meta.url))],
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-    alias: {
+      alias: {
   <%_ for (const remote of microfrontends) { _%>
-      '@<%- remote.lowercaseBaseName %>': './<%- clientTestDir %>spec/app/microfrontends/',
+        '@<%- remote.lowercaseBaseName %>': fileURLToPath(new URL('./<%- clientTestDir %>spec/app/microfrontends/', import.meta.url)),
   <%_ } _%>
-    },
+      },
 <%_ } _%>
-    reporters: ['default', 'vitest-sonar-reporter'],
-    outputFile: {
-      'vitest-sonar-reporter': './<%= temporaryDir %>test-results/TESTS-results-vitest.xml',
+      reporters: ['default', 'vitest-sonar-reporter'],
+      outputFile: {
+        'vitest-sonar-reporter': fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-vitest.xml', import.meta.url)),
+      },
+      coverage: {
+        provider: 'v8',
+        statements: 85,
+        branches: 75,
+        lines: 85,
+        reportsDirectory: fileURLToPath(new URL('./target/vite-coverage', import.meta.url)),
+      },
     },
-    coverage: {
-      provider: 'v8',
-      statements: 85,
-      branches: 75,
-      lines: 85,
-    },
-  },
-});
+  }),
+);

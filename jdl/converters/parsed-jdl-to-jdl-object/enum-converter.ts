@@ -43,6 +43,6 @@ function convertEnum(enumeration): JDLEnum {
   return new JDLEnum({
     name: enumeration.name,
     values: enumeration.values,
-    comment: formatComment(enumeration.javadoc),
+    comment: formatComment(enumeration.documentation),
   });
 }

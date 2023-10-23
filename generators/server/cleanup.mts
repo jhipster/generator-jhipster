@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import cleanupOauth2 from './cleanup-oauth2.mjs';
-import { DOCKER_DIR } from '../generator-constants.mjs';
+import { JAVA_DOCKER_DIR } from '../generator-constants.mjs';
 
 import type BaseGenerator from '../base/index.mjs';
 import { GeneratorDefinition } from '../base-application/generator.mjs';
@@ -91,8 +91,8 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
   }
   if (this.isJhipsterVersionLessThan('5.2.2')) {
     if (application.authenticationTypeOauth2 && application.applicationTypeMicroservice) {
-      this.removeFolder(`${DOCKER_DIR}realm-config`);
-      this.removeFile(`${DOCKER_DIR}keycloak.yml`);
+      this.removeFolder(`${JAVA_DOCKER_DIR}realm-config`);
+      this.removeFile(`${JAVA_DOCKER_DIR}keycloak.yml`);
     }
   }
   if (this.isJhipsterVersionLessThan('5.8.0')) {
@@ -159,7 +159,7 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     this.removeFile(`${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`);
   }
   if (this.isJhipsterVersionLessThan('7.8.2')) {
-    this.removeFile(`${DOCKER_DIR}realm-config/jhipster-users-0.json`);
+    this.removeFile(`${JAVA_DOCKER_DIR}realm-config/jhipster-users-0.json`);
     this.removeFile(`${application.javaPackageSrcDir}NoOpMailConfiguration.java`);
   }
   if (this.isJhipsterVersionLessThan('7.10.0')) {

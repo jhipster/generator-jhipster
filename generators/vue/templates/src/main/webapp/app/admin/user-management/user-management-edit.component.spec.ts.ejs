@@ -2,10 +2,10 @@
 const tsKeyId = this.generateTestEntityId(user.primaryKey.type);
 _%>
 import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
+import { shallowMount, type MountingOptions } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
-import { RouteLocation } from 'vue-router';
+import { type RouteLocation } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
 import UserManagementEdit from './user-management-edit.vue';

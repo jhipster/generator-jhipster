@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.js": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -20,455 +14,449 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ".jhipster/SkipClient.json": {
     "stateCleared": "modified",
   },
-  ".postcssrc.js": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
+  "clientRoot/.eslintignore": {
     "stateCleared": "modified",
   },
-  "src/404.html": {
+  "clientRoot/.eslintrc.cjs": {
     "stateCleared": "modified",
   },
-  "src/WEB-INF/web.xml": {
+  "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
-  "src/app/account/account.service.spec.ts": {
+  "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "src/app/account/account.service.ts": {
+  "clientRoot/src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/app/account/login-form/login-form.component.spec.ts": {
+  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/app/account/login-form/login-form.component.ts": {
+  "clientRoot/src/main/webapp/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/login-form/login-form.vue": {
+  "clientRoot/src/main/webapp/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/login.service.ts": {
+  "clientRoot/src/main/webapp/app/account/login-form/login-form.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/docs/docs.component.ts": {
+  "clientRoot/src/main/webapp/app/account/login-form/login-form.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/docs/docs.vue": {
+  "clientRoot/src/main/webapp/app/account/login-form/login-form.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.service.ts": {
+  "clientRoot/src/main/webapp/app/admin/docs/docs.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.vue": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/app.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/app.vue": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/constants.ts": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.component.ts": {
+  "clientRoot/src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.vue": {
+  "clientRoot/src/main/webapp/app/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.component.ts": {
+  "clientRoot/src/main/webapp/app/core/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.vue": {
+  "clientRoot/src/main/webapp/app/core/error/error.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-footer/jhi-footer.component.ts": {
+  "clientRoot/src/main/webapp/app/core/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-footer/jhi-footer.vue": {
+  "clientRoot/src/main/webapp/app/core/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/core/home/home.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.component.ts": {
+  "clientRoot/src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.vue": {
+  "clientRoot/src/main/webapp/app/core/jhi-footer/jhi-footer.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.component.ts": {
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.vue": {
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": {
     "stateCleared": "modified",
   },
-  "src/app/declarations.d.ts": {
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.component.ts": {
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.vue": {
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities.component.ts": {
+  "clientRoot/src/main/webapp/app/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities.vue": {
+  "clientRoot/src/main/webapp/app/entities/entities-menu.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entities-menu.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entities.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
+  "clientRoot/src/main/webapp/app/entities/entities.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.vue": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.vue": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.vue": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.vue": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.vue": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.vue": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/main.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/account.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/admin.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
-  "src/app/router/entities.ts": {
+  "clientRoot/src/main/webapp/app/main.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/index.ts": {
+  "clientRoot/src/main/webapp/app/router/account.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/pages.ts": {
+  "clientRoot/src/main/webapp/app/router/admin.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/alert/alert.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/router/entities.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/alert/alert.service.ts": {
+  "clientRoot/src/main/webapp/app/router/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/date-format.ts": {
+  "clientRoot/src/main/webapp/app/router/pages.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/alert/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/validation.ts": {
+  "clientRoot/src/main/webapp/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/computables/arrays.ts": {
+  "clientRoot/src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/computables/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/axios-interceptor.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/composables/validation.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/axios-interceptor.ts": {
+  "clientRoot/src/main/webapp/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/config-bootstrap-vue.ts": {
+  "clientRoot/src/main/webapp/app/shared/computables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/config.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/dayjs.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/store/account-store.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/config-bootstrap-vue.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/data/data-utils.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/config.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/data/data-utils.service.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/jhi-item-count.component.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/jhi-item-count.vue": {
+  "clientRoot/src/main/webapp/app/shared/data/data-utils.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/entity-with-custom-id.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/data/data-utils.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/microservice.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/jhi-item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/simple.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/jhi-item-count.vue": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/user.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/security/authority.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/jhi-sort-indicator.vue": {
+  "clientRoot/src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/sorts.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/sorts.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shims-vue.d.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
     "stateCleared": "modified",
   },
-  "src/app/store.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/test-setup.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/sorts.ts": {
     "stateCleared": "modified",
   },
-  "src/content/css/loading.css": {
+  "clientRoot/src/main/webapp/app/shims-vue.d.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/main/webapp/app/store.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/main/webapp/app/test-setup.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/logo-jhipster.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/_bootstrap-variables.scss": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/global.scss": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/vendor.scss": {
+  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "src/favicon.ico": {
+  "clientRoot/src/main/webapp/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/index.html": {
+  "clientRoot/src/main/webapp/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "src/manifest.webapp": {
+  "clientRoot/src/main/webapp/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "src/robots.txt": {
+  "clientRoot/src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/index.html": {
+  "clientRoot/src/main/webapp/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "clientRoot/src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "clientRoot/src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "clientRoot/tsconfig.app.json": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "clientRoot/tsconfig.json": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.common.js": {
+  "clientRoot/tsconfig.node.json": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.dev.js": {
+  "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.prod.js": {
+  "clientRoot/vite.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true) should match generated files snapshot 1`] = `
+exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.js": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -481,525 +469,1004 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   ".jhipster/SkipClient.json": {
     "stateCleared": "modified",
   },
-  ".postcssrc.js": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
+  "clientRoot/.eslintignore": {
     "stateCleared": "modified",
   },
-  "src/404.html": {
+  "clientRoot/.eslintrc.cjs": {
     "stateCleared": "modified",
   },
-  "src/WEB-INF/web.xml": {
+  "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
-  "src/app/account/account.service.spec.ts": {
+  "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "src/app/account/account.service.ts": {
+  "clientRoot/src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/app/account/login.service.spec.ts": {
+  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/app/account/login.service.ts": {
+  "clientRoot/src/main/webapp/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/configuration/configuration.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/configuration/configuration.component.ts": {
+  "clientRoot/src/main/webapp/app/account/login.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/configuration/configuration.service.ts": {
+  "clientRoot/src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/configuration/configuration.vue": {
+  "clientRoot/src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/docs/docs.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/configuration/configuration.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/docs/docs.vue": {
+  "clientRoot/src/main/webapp/app/admin/configuration/configuration.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/configuration/configuration.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.service.ts": {
+  "clientRoot/src/main/webapp/app/admin/docs/docs.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/gateway/gateway.vue": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health-modal.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health-modal.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health-modal.vue": {
+  "clientRoot/src/main/webapp/app/admin/gateway/gateway.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health-modal.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health-modal.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health.service.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/health/health.vue": {
+  "clientRoot/src/main/webapp/app/admin/health/health.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/logs/logs.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/logs/logs.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/logs/logs.service.ts": {
+  "clientRoot/src/main/webapp/app/admin/health/health.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/logs/logs.vue": {
+  "clientRoot/src/main/webapp/app/admin/logs/logs.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics-modal.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/logs/logs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics-modal.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/logs/logs.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics-modal.vue": {
+  "clientRoot/src/main/webapp/app/admin/logs/logs.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics-modal.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics.service.ts": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics-modal.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/metrics/metrics.vue": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/app.component.ts": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/app.vue": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/constants.ts": {
+  "clientRoot/src/main/webapp/app/admin/metrics/metrics.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.component.ts": {
+  "clientRoot/src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.vue": {
+  "clientRoot/src/main/webapp/app/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.component.ts": {
+  "clientRoot/src/main/webapp/app/core/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.vue": {
+  "clientRoot/src/main/webapp/app/core/error/error.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-footer/jhi-footer.component.ts": {
+  "clientRoot/src/main/webapp/app/core/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-footer/jhi-footer.vue": {
+  "clientRoot/src/main/webapp/app/core/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/core/home/home.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.component.ts": {
+  "clientRoot/src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.vue": {
+  "clientRoot/src/main/webapp/app/core/jhi-footer/jhi-footer.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.component.ts": {
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.vue": {
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": {
     "stateCleared": "modified",
   },
-  "src/app/declarations.d.ts": {
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.component.ts": {
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.vue": {
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities.component.ts": {
+  "clientRoot/src/main/webapp/app/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities.vue": {
+  "clientRoot/src/main/webapp/app/entities/entities-menu.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entities-menu.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entities.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
+  "clientRoot/src/main/webapp/app/entities/entities.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.vue": {
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.vue": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.vue": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.vue": {
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.vue": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.component.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.component.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.vue": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/user/user.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/locale/translation.service.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/main.ts": {
+  "clientRoot/src/main/webapp/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
-  "src/app/router/admin.ts": {
+  "clientRoot/src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/entities.ts": {
+  "clientRoot/src/main/webapp/app/locale/translation.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/index.ts": {
+  "clientRoot/src/main/webapp/app/main.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/pages.ts": {
+  "clientRoot/src/main/webapp/app/router/admin.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/alert/alert.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/router/entities.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/alert/alert.service.ts": {
+  "clientRoot/src/main/webapp/app/router/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/date-format.ts": {
+  "clientRoot/src/main/webapp/app/router/pages.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/alert/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/validation.ts": {
+  "clientRoot/src/main/webapp/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/computables/arrays.ts": {
+  "clientRoot/src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/computables/index.ts": {
+  "clientRoot/src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/axios-interceptor.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/composables/validation.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/axios-interceptor.ts": {
+  "clientRoot/src/main/webapp/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/config-bootstrap-vue.ts": {
+  "clientRoot/src/main/webapp/app/shared/computables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/config.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/dayjs.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/languages.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/config-bootstrap-vue.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/store/account-store.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/config.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/store/translation-store.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/data/data-utils.service.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/languages.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/data/data-utils.service.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/jhi-item-count.component.ts": {
+  "clientRoot/src/main/webapp/app/shared/config/store/translation-store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/jhi-item-count.vue": {
+  "clientRoot/src/main/webapp/app/shared/data/data-utils.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/entity-with-custom-id.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/data/data-utils.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/microservice.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/jhi-item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/simple.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/jhi-item-count.vue": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/user.model.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/security/authority.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "clientRoot/src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/jhi-sort-indicator.vue": {
+  "clientRoot/src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/sorts.spec.ts": {
+  "clientRoot/src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/sorts.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shims-vue.d.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
     "stateCleared": "modified",
   },
-  "src/app/store.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/test-setup.ts": {
+  "clientRoot/src/main/webapp/app/shared/sort/sorts.ts": {
     "stateCleared": "modified",
   },
-  "src/content/css/loading.css": {
+  "clientRoot/src/main/webapp/app/shims-vue.d.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0.svg": {
+  "clientRoot/src/main/webapp/app/store.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-192.png": {
+  "clientRoot/src/main/webapp/app/test-setup.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-256.png": {
+  "clientRoot/src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3.svg": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-192.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-256.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-384.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-512.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/logo-jhipster.png": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/_bootstrap-variables.scss": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/global.scss": {
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/vendor.scss": {
+  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "src/favicon.ico": {
+  "clientRoot/src/main/webapp/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/index.html": {
+  "clientRoot/src/main/webapp/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "src/manifest.webapp": {
+  "clientRoot/src/main/webapp/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "src/robots.txt": {
+  "clientRoot/src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/dist/images/throbber.gif": {
+  "clientRoot/src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/index.html": {
+  "clientRoot/src/main/webapp/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "clientRoot/src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "tsconfig.json": {
+  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "clientRoot/src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "clientRoot/tsconfig.app.json": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
+  "clientRoot/tsconfig.json": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.common.js": {
+  "clientRoot/tsconfig.node.json": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.dev.js": {
+  "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "webpack/webpack.prod.js": {
+  "clientRoot/vite.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
 }
 `;
 
-exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match generated files snapshot 1`] = `
+{
+  ".jhipster/EntityWithCustomId.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Microservice.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/Simple.json": {
+    "stateCleared": "modified",
+  },
+  ".jhipster/SkipClient.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/.eslintignore": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/.eslintrc.cjs": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/.postcssrc.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/404.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/WEB-INF/web.xml": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/account/account.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/account/account.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/account/login-form/login-form.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/account/login-form/login-form.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/account/login-form/login-form.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/account/login.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/admin/docs/docs.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/admin/docs/docs.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/error/error-loading.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/error/error.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/error/error.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/error/error.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/home/home.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/home/home.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/home/home.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/jhi-footer/jhi-footer.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/core/ribbon/ribbon.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/declarations.d.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entities-menu.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entities-menu.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entities-menu.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entities.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entities.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-details.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice-update.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/microservice/microservice.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-details.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple-update.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/simple/simple.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/main.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/router/account.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/router/admin.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/router/entities.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/router/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/router/pages.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/alert/alert.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/alert/alert.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/composables/date-format.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/composables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/composables/validation.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/computables/arrays.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/computables/index.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/config/axios-interceptor.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/config/axios-interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/config/config-bootstrap-vue.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/config/config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/config/dayjs.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/config/store/account-store.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/data/data-utils.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/data/data-utils.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/jhi-item-count.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/jhi-item-count.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/microservice.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/simple.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/model/user.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/security/authority.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/sort/sorts.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/store.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/test-setup.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/css/loading.css": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3.svg": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/scss/_bootstrap-variables.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/scss/global.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/content/scss/vendor.scss": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/favicon.ico": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/index.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/manifest.webapp": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/microfrontends/entities-menu-test.vue": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/microfrontends/entities-menu.component-test.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/microfrontends/entities-router-test.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/robots.txt": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/swagger-ui/index.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/tsconfig.app.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/vite.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/vitest.config.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/config.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/vue.utils.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.common.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.dev.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.microfrontend.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/webpack.prod.js": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match generated files snapshot 1`] = `
 {
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -1023,421 +1490,433 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "package.json": {
     "stateCleared": "modified",
   },
-  "src/404.html": {
+  "src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/WEB-INF/web.xml": {
+  "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/app/account/account.service.spec.ts": {
+  "src/main/webapp/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/account.service.ts": {
+  "src/main/webapp/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/login-form/login-form.component.spec.ts": {
+  "src/main/webapp/app/account/login.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/login-form/login-form.component.ts": {
+  "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/login-form/login-form.vue": {
+  "src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/account/login.service.ts": {
+  "src/main/webapp/app/admin/docs/docs.vue": {
     "stateCleared": "modified",
   },
-  "src/app/admin/docs/docs.component.ts": {
+  "src/main/webapp/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/admin/docs/docs.vue": {
+  "src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/app/app.component.ts": {
+  "src/main/webapp/app/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/app/app.vue": {
+  "src/main/webapp/app/core/error/error-loading.vue": {
     "stateCleared": "modified",
   },
-  "src/app/constants.ts": {
+  "src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error-loading.vue": {
+  "src/main/webapp/app/core/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.component.spec.ts": {
+  "src/main/webapp/app/core/error/error.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.component.ts": {
+  "src/main/webapp/app/core/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/error/error.vue": {
+  "src/main/webapp/app/core/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.component.spec.ts": {
+  "src/main/webapp/app/core/home/home.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.component.ts": {
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/home/home.vue": {
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-footer/jhi-footer.component.ts": {
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-footer/jhi-footer.vue": {
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.component.ts": {
+  "src/main/webapp/app/core/ribbon/ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/jhi-navbar/jhi-navbar.vue": {
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.component.spec.ts": {
+  "src/main/webapp/app/core/ribbon/ribbon.vue": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.component.ts": {
+  "src/main/webapp/app/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "src/app/core/ribbon/ribbon.vue": {
+  "src/main/webapp/app/entities/entities-menu.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/declarations.d.ts": {
+  "src/main/webapp/app/entities/entities-menu.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.component.ts": {
+  "src/main/webapp/app/entities/entities-menu.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.spec.ts": {
+  "src/main/webapp/app/entities/entities.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities-menu.vue": {
+  "src/main/webapp/app/entities/entities.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities.component.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entities.vue": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
+  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.component.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.component.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-details.vue": {
+  "src/main/webapp/app/entities/microservice/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.component.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.component.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice-update.vue": {
+  "src/main/webapp/app/entities/microservice/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.component.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.component.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.service.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.service.ts": {
+  "src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/microservice/microservice.vue": {
+  "src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.component.spec.ts": {
+  "src/main/webapp/app/entities/simple/simple-details.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.component.ts": {
+  "src/main/webapp/app/entities/simple/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-details.vue": {
+  "src/main/webapp/app/entities/simple/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.component.spec.ts": {
+  "src/main/webapp/app/entities/simple/simple-update.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.component.ts": {
+  "src/main/webapp/app/entities/simple/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple-update.vue": {
+  "src/main/webapp/app/entities/simple/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.component.spec.ts": {
+  "src/main/webapp/app/entities/simple/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.component.ts": {
+  "src/main/webapp/app/entities/simple/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.service.spec.ts": {
+  "src/main/webapp/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.service.ts": {
+  "src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/entities/simple/simple.vue": {
+  "src/main/webapp/app/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/index.ts": {
+  "src/main/webapp/app/locale/translation.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/main.ts": {
+  "src/main/webapp/app/main.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/account.ts": {
+  "src/main/webapp/app/router/admin.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/admin.ts": {
+  "src/main/webapp/app/router/entities.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/entities.ts": {
+  "src/main/webapp/app/router/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/index.ts": {
+  "src/main/webapp/app/router/pages.ts": {
     "stateCleared": "modified",
   },
-  "src/app/router/pages.ts": {
+  "src/main/webapp/app/shared/alert/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/alert/alert.service.spec.ts": {
+  "src/main/webapp/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/alert/alert.service.ts": {
+  "src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/date-format.ts": {
+  "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/index.ts": {
+  "src/main/webapp/app/shared/composables/validation.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/composables/validation.ts": {
+  "src/main/webapp/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/computables/arrays.ts": {
+  "src/main/webapp/app/shared/computables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/computables/index.ts": {
+  "src/main/webapp/app/shared/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/axios-interceptor.spec.ts": {
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/axios-interceptor.ts": {
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/config-bootstrap-vue.ts": {
+  "src/main/webapp/app/shared/config/config.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/config.ts": {
+  "src/main/webapp/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/dayjs.ts": {
+  "src/main/webapp/app/shared/config/languages.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/config/store/account-store.ts": {
+  "src/main/webapp/app/shared/config/store/account-store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/data/data-utils.service.spec.ts": {
+  "src/main/webapp/app/shared/config/store/translation-store.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/data/data-utils.service.ts": {
+  "src/main/webapp/app/shared/data/data-utils.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/jhi-item-count.component.ts": {
+  "src/main/webapp/app/shared/data/data-utils.service.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/jhi-item-count.vue": {
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/entity-with-custom-id.model.ts": {
+  "src/main/webapp/app/shared/jhi-item-count.vue": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/microservice.model.ts": {
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/simple.model.ts": {
+  "src/main/webapp/app/shared/model/microservice.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/model/user.model.ts": {
+  "src/main/webapp/app/shared/model/simple.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/security/authority.ts": {
+  "src/main/webapp/app/shared/model/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/jhi-sort-indicator.vue": {
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/sorts.spec.ts": {
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
     "stateCleared": "modified",
   },
-  "src/app/shared/sort/sorts.ts": {
+  "src/main/webapp/app/shared/sort/sorts.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/app/shims-vue.d.ts": {
+  "src/main/webapp/app/shared/sort/sorts.ts": {
     "stateCleared": "modified",
   },
-  "src/app/store.ts": {
+  "src/main/webapp/app/shims-vue.d.ts": {
     "stateCleared": "modified",
   },
-  "src/app/test-setup.ts": {
+  "src/main/webapp/app/store.ts": {
     "stateCleared": "modified",
   },
-  "src/content/css/loading.css": {
+  "src/main/webapp/app/test-setup.ts": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0.svg": {
+  "src/main/webapp/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_0_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1.svg": {
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_1_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2.svg": {
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_2_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3.svg": {
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-192.png": {
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-256.png": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-384.png": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/jhipster_family_member_3_head-512.png": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "src/content/images/logo-jhipster.png": {
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/_bootstrap-variables.scss": {
+  "src/main/webapp/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "src/content/scss/global.scss": {
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "src/content/scss/vendor.scss": {
+  "src/main/webapp/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "src/favicon.ico": {
+  "src/main/webapp/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "src/index.html": {
+  "src/main/webapp/favicon.ico": {
     "stateCleared": "modified",
   },
-  "src/manifest.webapp": {
+  "src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
-  "src/microfrontends/entities-menu-test.vue": {
+  "src/main/webapp/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "src/microfrontends/entities-menu.component-test.ts": {
+  "src/main/webapp/microfrontends/entities-menu-test.vue": {
     "stateCleared": "modified",
   },
-  "src/microfrontends/entities-router-test.ts": {
+  "src/main/webapp/microfrontends/entities-menu.component-test.ts": {
     "stateCleared": "modified",
   },
-  "src/robots.txt": {
+  "src/main/webapp/microfrontends/entities-router-test.ts": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/dist/images/throbber.gif": {
+  "src/main/webapp/robots.txt": {
     "stateCleared": "modified",
   },
-  "src/swagger-ui/index.html": {
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "src/main/webapp/swagger-ui/index.html": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.app.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
@@ -1464,12 +1943,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
 }
 `;
 
-exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false) should match generated files snapshot 1`] = `
+exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match generated files snapshot 1`] = `
 {
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -1493,1065 +1972,586 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "package.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/404.html": {
+  "src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/WEB-INF/web.xml": {
+  "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/account/account.service.spec.ts": {
+  "src/main/webapp/app/account/account.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/account/account.service.ts": {
+  "src/main/webapp/app/account/account.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/account/login.service.spec.ts": {
+  "src/main/webapp/app/account/activate/activate.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/account/login.service.ts": {
+  "src/main/webapp/app/account/activate/activate.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/admin/docs/docs.component.ts": {
+  "src/main/webapp/app/account/activate/activate.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/admin/docs/docs.vue": {
+  "src/main/webapp/app/account/activate/activate.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/app.component.ts": {
+  "src/main/webapp/app/account/change-password/change-password.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/app.vue": {
+  "src/main/webapp/app/account/change-password/change-password.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/constants.ts": {
+  "src/main/webapp/app/account/change-password/change-password.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/error/error-loading.vue": {
+  "src/main/webapp/app/account/login-form/login-form.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/error/error.component.spec.ts": {
+  "src/main/webapp/app/account/login-form/login-form.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/error/error.component.ts": {
+  "src/main/webapp/app/account/login-form/login-form.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/error/error.vue": {
+  "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/home/home.component.spec.ts": {
+  "src/main/webapp/app/account/register/register.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/home/home.component.ts": {
+  "src/main/webapp/app/account/register/register.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/home/home.vue": {
+  "src/main/webapp/app/account/register/register.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/jhi-footer/jhi-footer.component.ts": {
+  "src/main/webapp/app/account/register/register.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/jhi-footer/jhi-footer.vue": {
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/jhi-navbar/jhi-navbar.component.ts": {
+  "src/main/webapp/app/account/reset-password/finish/reset-password-finish.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/jhi-navbar/jhi-navbar.vue": {
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/ribbon/ribbon.component.spec.ts": {
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/ribbon/ribbon.component.ts": {
+  "src/main/webapp/app/account/reset-password/init/reset-password-init.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/core/ribbon/ribbon.vue": {
+  "src/main/webapp/app/account/settings/settings.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/declarations.d.ts": {
+  "src/main/webapp/app/account/settings/settings.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entities-menu.component.ts": {
+  "src/main/webapp/app/account/settings/settings.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entities-menu.spec.ts": {
+  "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entities-menu.vue": {
+  "src/main/webapp/app/admin/configuration/configuration.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entities.component.ts": {
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entities.vue": {
+  "src/main/webapp/app/admin/configuration/configuration.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
+  "src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
+  "src/main/webapp/app/admin/docs/docs.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
+  "src/main/webapp/app/admin/health/health-modal.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
+  "src/main/webapp/app/admin/health/health-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
+  "src/main/webapp/app/admin/health/health-modal.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
+  "src/main/webapp/app/admin/health/health.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
+  "src/main/webapp/app/admin/health/health.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
+  "src/main/webapp/app/admin/health/health.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
+  "src/main/webapp/app/admin/health/health.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
+  "src/main/webapp/app/admin/health/health.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
+  "src/main/webapp/app/admin/logs/logs.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-details.component.spec.ts": {
+  "src/main/webapp/app/admin/logs/logs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-details.component.ts": {
+  "src/main/webapp/app/admin/logs/logs.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-details.vue": {
+  "src/main/webapp/app/admin/logs/logs.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-update.component.spec.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-modal.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-update.component.ts": {
+  "src/main/webapp/app/admin/metrics/metrics-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice-update.vue": {
+  "src/main/webapp/app/admin/metrics/metrics-modal.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.component.spec.ts": {
+  "src/main/webapp/app/admin/metrics/metrics.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.component.ts": {
+  "src/main/webapp/app/admin/metrics/metrics.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.service.spec.ts": {
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.service.ts": {
+  "src/main/webapp/app/admin/metrics/metrics.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/microservice/microservice.vue": {
+  "src/main/webapp/app/admin/user-management/user-management-edit.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-details.component.spec.ts": {
+  "src/main/webapp/app/admin/user-management/user-management-edit.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-details.component.ts": {
+  "src/main/webapp/app/admin/user-management/user-management-edit.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-details.vue": {
+  "src/main/webapp/app/admin/user-management/user-management-view.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-update.component.spec.ts": {
+  "src/main/webapp/app/admin/user-management/user-management-view.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-update.component.ts": {
+  "src/main/webapp/app/admin/user-management/user-management-view.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple-update.vue": {
+  "src/main/webapp/app/admin/user-management/user-management.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.component.spec.ts": {
+  "src/main/webapp/app/admin/user-management/user-management.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.component.ts": {
+  "src/main/webapp/app/admin/user-management/user-management.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.service.spec.ts": {
+  "src/main/webapp/app/admin/user-management/user-management.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.service.ts": {
+  "src/main/webapp/app/app.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/simple/simple.vue": {
+  "src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/entities/user/user.service.ts": {
+  "src/main/webapp/app/constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/index.ts": {
+  "src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/locale/translation.service.ts": {
+  "src/main/webapp/app/core/error/error.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/main.ts": {
+  "src/main/webapp/app/core/error/error.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/router/admin.ts": {
+  "src/main/webapp/app/core/home/home.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/router/entities.ts": {
+  "src/main/webapp/app/core/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/router/index.ts": {
+  "src/main/webapp/app/core/home/home.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/router/pages.ts": {
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/alert/alert.service.spec.ts": {
+  "src/main/webapp/app/core/jhi-footer/jhi-footer.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/alert/alert.service.ts": {
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/composables/date-format.ts": {
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/composables/index.ts": {
+  "src/main/webapp/app/core/jhi-navbar/jhi-navbar.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/composables/validation.ts": {
+  "src/main/webapp/app/core/ribbon/ribbon.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/computables/arrays.ts": {
+  "src/main/webapp/app/core/ribbon/ribbon.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/computables/index.ts": {
+  "src/main/webapp/app/core/ribbon/ribbon.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/axios-interceptor.spec.ts": {
+  "src/main/webapp/app/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/axios-interceptor.ts": {
+  "src/main/webapp/app/entities/entities-menu.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/config-bootstrap-vue.ts": {
+  "src/main/webapp/app/entities/entities-menu.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/config.ts": {
+  "src/main/webapp/app/entities/entities.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/dayjs.ts": {
+  "src/main/webapp/app/entities/entities.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/languages.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/store/account-store.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/config/store/translation-store.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/data/data-utils.service.spec.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/data/data-utils.service.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/jhi-item-count.component.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/jhi-item-count.vue": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/microservice.model.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/simple.model.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/model/user.model.ts": {
+  "src/main/webapp/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/security/authority.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/sort/jhi-sort-indicator.component.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/sort/jhi-sort-indicator.vue": {
+  "src/main/webapp/app/entities/microservice/microservice-details.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/sort/sorts.spec.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shared/sort/sorts.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/shims-vue.d.ts": {
+  "src/main/webapp/app/entities/microservice/microservice-update.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/store.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/app/test-setup.ts": {
+  "src/main/webapp/app/entities/microservice/microservice.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/css/loading.css": {
+  "src/main/webapp/app/entities/microservice/microservice.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0.svg": {
+  "src/main/webapp/app/entities/microservice/microservice.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-192.png": {
+  "src/main/webapp/app/entities/microservice/microservice.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-256.png": {
+  "src/main/webapp/app/entities/simple/simple-details.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-384.png": {
+  "src/main/webapp/app/entities/simple/simple-details.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-512.png": {
+  "src/main/webapp/app/entities/simple/simple-details.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1.svg": {
+  "src/main/webapp/app/entities/simple/simple-update.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-192.png": {
+  "src/main/webapp/app/entities/simple/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-256.png": {
+  "src/main/webapp/app/entities/simple/simple-update.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-384.png": {
+  "src/main/webapp/app/entities/simple/simple.component.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-512.png": {
+  "src/main/webapp/app/entities/simple/simple.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2.svg": {
+  "src/main/webapp/app/entities/simple/simple.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-192.png": {
+  "src/main/webapp/app/entities/simple/simple.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-256.png": {
+  "src/main/webapp/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-384.png": {
+  "src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-512.png": {
+  "src/main/webapp/app/locale/translation.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3.svg": {
+  "src/main/webapp/app/main.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-192.png": {
+  "src/main/webapp/app/router/account.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-256.png": {
+  "src/main/webapp/app/router/admin.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-384.png": {
+  "src/main/webapp/app/router/entities.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-512.png": {
+  "src/main/webapp/app/router/index.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/images/logo-jhipster.png": {
+  "src/main/webapp/app/router/pages.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/scss/_bootstrap-variables.scss": {
+  "src/main/webapp/app/shared/alert/alert.service.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/scss/global.scss": {
+  "src/main/webapp/app/shared/alert/alert.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/content/scss/vendor.scss": {
+  "src/main/webapp/app/shared/composables/date-format.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/favicon.ico": {
+  "src/main/webapp/app/shared/composables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/index.html": {
+  "src/main/webapp/app/shared/composables/validation.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/manifest.webapp": {
+  "src/main/webapp/app/shared/computables/arrays.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/microfrontends/entities-menu-test.vue": {
+  "src/main/webapp/app/shared/computables/index.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/microfrontends/entities-menu.component-test.ts": {
+  "src/main/webapp/app/shared/config/axios-interceptor.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/microfrontends/entities-router-test.ts": {
+  "src/main/webapp/app/shared/config/axios-interceptor.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/robots.txt": {
+  "src/main/webapp/app/shared/config/config-bootstrap-vue.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/swagger-ui/dist/images/throbber.gif": {
+  "src/main/webapp/app/shared/config/config.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp2/swagger-ui/index.html": {
+  "src/main/webapp/app/shared/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "src/main/webapp/app/shared/config/languages.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/account-store.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/config/store/translation-store.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/data/data-utils.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhi-item-count.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/entity-with-custom-id.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/microservice.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/simple.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/model/user.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/security/authority.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/jhi-sort-indicator.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/sort/sorts.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shims-vue.d.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/store.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/test-setup.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/css/loading.css": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0.svg": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_0_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1.svg": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_1_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2.svg": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_2_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3.svg": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-192.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-256.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-384.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/jhipster_family_member_3_head-512.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/images/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/_bootstrap-variables.scss": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/global.scss": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/content/scss/vendor.scss": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/favicon.ico": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/index.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/manifest.webapp": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/robots.txt": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/dist/images/throbber.gif": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/swagger-ui/index.html": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.app.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "tsconfig.node.json": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
+  "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true) should match generated files snapshot 1`] = `
-{
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.js": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/EntityWithCustomId.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Microservice.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Simple.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/404.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/WEB-INF/web.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/account.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/account.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/activate/activate.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/activate/activate.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/activate/activate.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/activate/activate.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/change-password/change-password.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/change-password/change-password.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/change-password/change-password.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/login-form/login-form.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/login-form/login-form.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/login-form/login-form.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/login.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/register/register.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/register/register.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/register/register.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/register/register.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/reset-password/finish/reset-password-finish.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/reset-password/finish/reset-password-finish.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/reset-password/finish/reset-password-finish.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/reset-password/init/reset-password-init.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/reset-password/init/reset-password-init.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/reset-password/init/reset-password-init.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/settings/settings.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/settings/settings.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/account/settings/settings.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/configuration/configuration.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/configuration/configuration.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/configuration/configuration.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/configuration/configuration.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/docs/docs.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/docs/docs.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health-modal.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health-modal.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health-modal.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/health/health.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/logs/logs.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/logs/logs.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/logs/logs.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/logs/logs.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics-modal.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics-modal.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics-modal.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/metrics/metrics.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management-edit.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management-edit.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management-edit.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management-view.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management-view.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management-view.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/admin/user-management/user-management.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/app.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/app.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/constants.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/error/error.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/error/error.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/error/error.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/home/home.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/home/home.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/home/home.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/jhi-footer/jhi-footer.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/jhi-footer/jhi-footer.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/jhi-navbar/jhi-navbar.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/jhi-navbar/jhi-navbar.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/jhi-navbar/jhi-navbar.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/ribbon/ribbon.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/ribbon/ribbon.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/core/ribbon/ribbon.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/declarations.d.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entities-menu.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entities-menu.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entities.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entities.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-details.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id-update.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/entity-with-custom-id/entity-with-custom-id.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-details.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-details.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-update.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice-update.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/microservice/microservice.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-details.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-details.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-details.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-update.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple-update.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.component.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/simple/simple.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/entities/user/user.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/locale/translation.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/main.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/router/account.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/router/admin.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/router/entities.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/router/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/router/pages.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/alert/alert.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/alert/alert.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/composables/date-format.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/composables/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/composables/validation.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/computables/arrays.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/computables/index.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/axios-interceptor.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/axios-interceptor.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/config-bootstrap-vue.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/config.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/dayjs.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/languages.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/store/account-store.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/config/store/translation-store.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/data/data-utils.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/data/data-utils.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/jhi-item-count.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/jhi-item-count.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/entity-with-custom-id.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/microservice.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/simple.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/security/authority.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/sort/jhi-sort-indicator.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/sort/jhi-sort-indicator.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/sort/sorts.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shared/sort/sorts.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/shims-vue.d.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/store.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/app/test-setup.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/css/loading.css": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_0_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_1_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_2_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3.svg": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-192.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-256.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-384.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/jhipster_family_member_3_head-512.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/images/logo-jhipster.png": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/scss/_bootstrap-variables.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/scss/global.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/content/scss/vendor.scss": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/favicon.ico": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/index.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/manifest.webapp": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/swagger-ui/dist/images/throbber.gif": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp2/swagger-ui/index.html": {
-    "stateCleared": "modified",
-  },
-  "tsconfig-test.json": {
-    "stateCleared": "modified",
-  },
-  "tsconfig.json": {
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -2562,7 +2562,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -2973,28 +2973,22 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.app.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
+    "stateCleared": "modified",
+  },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -3005,7 +2999,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   ".eslintignore": {
     "stateCleared": "modified",
   },
-  ".eslintrc.js": {
+  ".eslintrc.cjs": {
     "stateCleared": "modified",
   },
   ".jhipster/EntityWithCustomId.json": {
@@ -3422,28 +3416,22 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/swagger-ui/index.html": {
     "stateCleared": "modified",
   },
-  "tsconfig-test.json": {
+  "tsconfig.app.json": {
     "stateCleared": "modified",
   },
   "tsconfig.json": {
     "stateCleared": "modified",
   },
+  "tsconfig.node.json": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.vitest.json": {
+    "stateCleared": "modified",
+  },
+  "vite.config.ts": {
+    "stateCleared": "modified",
+  },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
 }
@@ -3451,12 +3439,11 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
 
 exports[`generator - vue samples matrix should match snapshot 1`] = `
 {
-  "gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(true)": {
+  "gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true)": {
     "applicationType": "gateway",
     "authenticationType": "jwt",
     "clientFramework": "vue",
-    "clientSrcDir": "src/",
-    "clientTestDir": "test/",
+    "clientRootDir": "clientRoot/",
     "enableTranslation": false,
     "languages": [
       "fr",
@@ -3468,12 +3455,11 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
     "websocket": true,
     "withAdminUi": false,
   },
-  "gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/-websocket(true)": {
+  "gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true)": {
     "applicationType": "gateway",
     "authenticationType": "oauth2",
     "clientFramework": "vue",
-    "clientSrcDir": "src/",
-    "clientTestDir": "test/",
+    "clientRootDir": "clientRoot/",
     "enableTranslation": true,
     "languages": [
       "fr",
@@ -3484,12 +3470,11 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
     "websocket": true,
     "withAdminUi": true,
   },
-  "microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-src/-websocket(false)": {
+  "microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false)": {
     "applicationType": "microservice",
     "authenticationType": "jwt",
     "clientFramework": "vue",
-    "clientSrcDir": "src/",
-    "clientTestDir": "test/",
+    "clientRootDir": "clientRoot/",
     "enableTranslation": false,
     "languages": [
       "fr",
@@ -3501,12 +3486,11 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
     "websocket": false,
     "withAdminUi": false,
   },
-  "microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(false)": {
+  "microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false)": {
     "applicationType": "microservice",
     "authenticationType": "oauth2",
     "clientFramework": "vue",
-    "clientSrcDir": "src/main/webapp2/",
-    "clientTestDir": "src/test/javascript2/",
+    "clientRootDir": "",
     "enableTranslation": true,
     "languages": [
       "fr",
@@ -3517,12 +3501,11 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
     "websocket": false,
     "withAdminUi": true,
   },
-  "monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-src/main/webapp2/-websocket(true)": {
+  "monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true)": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "clientFramework": "vue",
-    "clientSrcDir": "src/main/webapp2/",
-    "clientTestDir": "src/test/javascript2/",
+    "clientRootDir": "",
     "enableTranslation": true,
     "languages": [
       "fr",
@@ -3538,7 +3521,7 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "clientFramework": "vue",
-    "clientSrcDir": undefined,
+    "clientRootDir": undefined,
     "enableTranslation": false,
     "languages": [
       "fr",
@@ -3553,7 +3536,7 @@ exports[`generator - vue samples matrix should match snapshot 1`] = `
     "applicationType": "monolith",
     "authenticationType": "session",
     "clientFramework": "vue",
-    "clientSrcDir": undefined,
+    "clientRootDir": undefined,
     "enableTranslation": false,
     "languages": [
       "fr",

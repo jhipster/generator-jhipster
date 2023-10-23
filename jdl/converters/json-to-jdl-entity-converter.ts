@@ -29,7 +29,7 @@ import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 import { fieldTypes, unaryOptions, binaryOptions, relationshipOptions } from '../jhipster/index.mjs';
 import { Entity, Field, Relationship } from './types.js';
-import { asJdlRelationshipType } from './parsed-jdl-to-jdl-object/relationship-converter.js';
+import { asJdlRelationshipType } from '../jhipster/relationship-types.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;
@@ -83,7 +83,7 @@ function convertJSONToJDLEntity(entity: Entity, entityName: string): JDLEntity {
   const jdlEntity = new JDLEntity({
     name: entityName,
     tableName: entity.entityTableName,
-    comment: entity.javadoc,
+    comment: entity.documentation,
   });
   addFields(jdlEntity, entity);
   return jdlEntity;
@@ -99,7 +99,7 @@ function convertJSONToJDLField(field: Field) {
   const jdlField = new JDLField({
     name: lowerFirst(field.fieldName),
     type: field.fieldType,
-    comment: field.javadoc,
+    comment: field.documentation,
   });
   if (jdlField.type === BYTES) {
     jdlField.type = getTypeForBlob(field.fieldTypeBlobContent);
@@ -137,7 +137,7 @@ function addEnumsToJDL(entity: Entity) {
         new JDLEnum({
           name: field.fieldType,
           values: getEnumValuesFromString(field.fieldValues),
-          comment: field.fieldTypeJavadoc,
+          comment: field.fieldTypeDocumentation,
         }),
       );
     }
@@ -237,7 +237,7 @@ function getSourceEntitySideAttributes(entityName: string, relationship: Relatio
     sourceEntity: entityName,
     injectedFieldInSourceEntity: getInjectedFieldInSourceEntity(relationship),
     injectedFieldInSourceIsRequired: relationship.relationshipValidateRules,
-    commentForSourceEntity: relationship.javadoc,
+    commentForSourceEntity: relationship.documentation,
   };
 }
 
@@ -257,7 +257,7 @@ function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, de
     injectedFieldInDestinationEntity += `(${foundDestinationSideEntity.otherEntityField})`;
   }
   const injectedFieldInDestinationIsRequired = !!foundDestinationSideEntity.relationshipValidateRules;
-  const commentForDestinationEntity = foundDestinationSideEntity.javadoc;
+  const commentForDestinationEntity = foundDestinationSideEntity.documentation;
   return {
     injectedFieldInDestinationEntity,
     injectedFieldInDestinationIsRequired,

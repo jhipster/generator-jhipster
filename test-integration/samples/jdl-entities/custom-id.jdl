@@ -1,4 +1,23 @@
 /*
+ * Integer custom id
+ */
+@ChangelogDate(20200804035100)
+entity EntityIntegerId {
+  id Integer
+  name String
+}
+
+/*
+ * Integer custom id and sequence
+ */
+@ChangelogDate(20200804035200)
+entity EntityCustomSequence {
+  @SequenceGeneratorName(entityIntegerIdSeq)
+  id Long
+  name String
+}
+
+/*
  * UUID custom id
  */
 @ChangelogDate(20200804035300)

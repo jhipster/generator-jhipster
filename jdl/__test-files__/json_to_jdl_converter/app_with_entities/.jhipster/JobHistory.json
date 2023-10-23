@@ -41,6 +41,6 @@
   "dto": "no",
   "pagination": "no",
   "service": "no",
-  "javadoc": "",
+  "documentation": "",
   "entityTableName": "job_history"
 }

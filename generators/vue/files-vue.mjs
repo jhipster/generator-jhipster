@@ -17,39 +17,44 @@
  * limitations under the License.
  */
 
-import { clientApplicationBlock, clientSrcBlock } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.mjs';
 
 export const vueFiles = {
   common: [
-    {
+    clientRootTemplatesBlock({
       templates: [
         'package.json',
         'tsconfig.json',
-        'tsconfig-test.json',
+        'tsconfig.app.json',
+        'tsconfig.node.json',
+        'tsconfig.vitest.json',
         '.postcssrc.js',
-        '.eslintrc.js',
+        '.eslintrc.cjs',
+        'vite.config.ts',
         'vitest.config.ts',
+      ],
+    }),
+  ],
+  microfrontend: [
+    clientRootTemplatesBlock({
+      condition: generator => generator.microfrontend,
+      templates: [
         'webpack/config.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
         'webpack/webpack.prod.js',
         'webpack/vue.utils.js',
+        'webpack/webpack.microfrontend.js.jhi.vue',
       ],
-    },
-  ],
-  microfrontend: [
+    }),
     {
       condition: generator => generator.microfrontend,
-      templates: ['webpack/webpack.microfrontend.js.jhi.vue'],
-    },
-    {
-      condition: generator => generator.microfrontend,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['index.ts', 'core/error/error-loading.vue'],
     },
     {
       condition: generator => generator.microfrontend,
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: [
         'microfrontends/entities-menu.component-test.ts',
         'microfrontends/entities-menu-test.vue',
@@ -58,19 +63,19 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.applicationTypeMicroservice,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/entities-menu.spec.ts'],
     },
   ],
   sass: [
     {
-      ...clientSrcBlock,
+      ...clientSrcTemplatesBlock(),
       templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
     },
   ],
   vueApp: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'app.vue',
         'app.component.ts',
@@ -98,13 +103,13 @@ export const vueFiles = {
   i18n: [
     {
       condition: generator => generator.enableTranslation,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts', 'shared/config/languages.ts'],
     },
   ],
   sharedVueApp: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'core/home/home.vue',
         'core/home/home.component.ts',
@@ -139,12 +144,12 @@ export const vueFiles = {
   ],
   accountModule: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['account/account.service.ts', 'account/account.service.spec.ts'],
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'account/login-form/login-form.vue',
         'account/login-form/login-form.component.ts',
@@ -155,7 +160,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'account/change-password/change-password.vue',
         'account/change-password/change-password.component.ts',
@@ -181,7 +186,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'account/sessions/sessions.vue',
         'account/sessions/sessions.component.ts',
@@ -191,17 +196,17 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.authenticationTypeOauth2,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['account/login.service.ts', 'account/login.service.spec.ts'],
     },
   ],
   adminModule: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['admin/docs/docs.vue', 'admin/docs/docs.component.ts'],
     },
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       condition: generator => generator.withAdminUi,
       templates: [
         'admin/configuration/configuration.vue',
@@ -231,7 +236,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.communicationSpringWebsocket,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/tracker/tracker.vue',
         'admin/tracker/tracker.component.ts',
@@ -242,7 +247,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.generateUserManagement,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/user-management/user-management.vue',
         'admin/user-management/user-management.component.ts',
@@ -258,7 +263,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/gateway/gateway.vue',
         'admin/gateway/gateway.component.ts',
@@ -268,7 +273,7 @@ export const vueFiles = {
     },
     {
       condition: generator => generator.generateBuiltInUserEntity,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: ['entities/user/user.service.ts'],
     },
   ],
@@ -277,7 +282,7 @@ export const vueFiles = {
 export const entitiesFiles = {
   entities: [
     {
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/entities.component.ts',
         'entities/entities.vue',

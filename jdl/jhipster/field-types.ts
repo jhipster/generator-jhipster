@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import validations from './validations.js';
 import JDLEnum from '../models/jdl-enum.js';
 import databaseTypes from './database-types.js';

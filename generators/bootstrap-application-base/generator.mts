@@ -18,8 +18,9 @@
  */
 import assert from 'assert';
 import os from 'os';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
+import { passthrough } from '@yeoman/transform';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import {
@@ -32,10 +33,11 @@ import {
   prepareRelationship,
 } from '../base-application/support/index.mjs';
 import { createUserEntity } from './utils.mjs';
-import { DOCKER_DIR } from '../generator-constants.mjs';
-import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
+import { JAVA_DOCKER_DIR } from '../generator-constants.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -43,14 +45,22 @@ const { lowerFirst } = _;
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
-    super(args, options, features);
+    super(args, options, { jhipsterBootstrap: false, ...features });
 
     if (this.options.help) return;
 
-    this.loadStoredAppOptions();
+    loadStoredAppOptions.call(this);
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
@@ -84,8 +94,12 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadApplication({ application, control }) {
-        this.loadAppConfig(undefined, application);
-        loadLanguagesConfig(application, this.jhipsterConfigWithDefaults, control);
+        loadAppConfig({
+          config: this.jhipsterConfigWithDefaults,
+          application,
+          useVersionPlaceholders: (this as any).useVersionPlaceholders,
+        });
+        loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
@@ -108,16 +122,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareApplication({ application }) {
-        this.loadDerivedAppConfig(application);
+      prepareApplication({ application, applicationDefaults }) {
+        loadDerivedAppConfig({ application });
 
-        application.nodePackageManager = 'npm';
-        application.dockerServicesDir = DOCKER_DIR;
-
-        // TODO v8 drop the following variables
-        const anyApplication = application as any;
-
-        anyApplication.clientPackageManager = application.nodePackageManager;
+        applicationDefaults({
+          nodePackageManager: 'npm',
+          dockerServicesDir: JAVA_DOCKER_DIR,
+          // TODO drop clientPackageManager
+          clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
+        });
       },
     });
   }
@@ -267,6 +280,45 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
     return this.preparingEachEntityRelationship;
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      task({ application }) {
+        const packageJsonFiles = [this.destinationPath('package.json')];
+        if (application.clientRootDir) {
+          packageJsonFiles.push(this.destinationPath(`${application.clientRootDir}package.json`));
+        }
+        const isPackageJson = file => packageJsonFiles.includes(file.path);
+        const populateNullValues = dependencies => {
+          if (!dependencies) return;
+          for (const key of Object.keys(dependencies)) {
+            if (dependencies[key] === null && application.nodeDependencies[key]) {
+              dependencies[key] = application.nodeDependencies[key];
+            }
+          }
+        };
+        this.queueTransformStream(
+          passthrough(file => {
+            if (file.contents && isPackageJson(file)) {
+              const content = JSON.parse(file.contents.toString());
+              populateNullValues(content.dependencies);
+              populateNullValues(content.devDependencies);
+              populateNullValues(content.peerDependencies);
+              file.contents = Buffer.from(`${JSON.stringify(content, null, 2)}\n`);
+            }
+          }),
+          {
+            name: 'updating package.json dependency versions',
+            streamOptions: { filter: isPackageJson },
+          },
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 
   /**

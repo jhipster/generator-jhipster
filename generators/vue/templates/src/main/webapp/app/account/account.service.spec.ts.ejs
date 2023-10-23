@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 import { createTestingPinia } from '@pinia/testing';
 import AccountService from './account.service';
-import { AccountStore, useStore } from '@/store';
+import { type AccountStore, useStore } from '@/store';
 
 const resetStore = (store: AccountStore) => {
   store.$reset();

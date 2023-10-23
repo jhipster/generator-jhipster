@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
 import { getUXConstraintName } from './database.mjs';
 import { hibernateSnakeCase } from './string.mjs';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.mjs';
 
 const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = fieldTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
@@ -32,7 +33,7 @@ const { MYSQL, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
 
 const { MAPSTRUCT } = MapperTypes;
-const { LONG, UUID } = CommonDBTypes;
+const { INTEGER, LONG, UUID } = CommonDBTypes;
 
 const { snakeCase, upperFirst } = _;
 
@@ -49,9 +50,14 @@ export default function prepareField(entityWithConfig, field, generator) {
     field.readonly = true;
   }
 
+  if (field.documentation) {
+    field.fieldJavadoc = formatDocAsJavaDoc(field.documentation, 4);
+    field.fieldApiDescription = formatDocAsApiDescription(field.documentation);
+  }
+
   if (field.id && entityWithConfig.primaryKey) {
     if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && [LONG, UUID].includes(field.fieldType);
+      field.autoGenerate = !entityWithConfig.primaryKey.composite && [INTEGER, LONG, UUID].includes(field.fieldType);
     }
 
     if (!field.autoGenerate) {
@@ -76,13 +82,19 @@ export default function prepareField(entityWithConfig, field, generator) {
       field.readonly = true;
     } else {
       const defaultGenerationType = entityWithConfig.prodDatabaseType === MYSQL ? 'identity' : 'sequence';
-      field.jpaGeneratedValue = field.jpaGeneratedValue || field.fieldType === LONG ? defaultGenerationType : true;
+      field.jpaGeneratedValue = field.jpaGeneratedValue || [INTEGER, LONG].includes(field.fieldType) ? defaultGenerationType : true;
+      field.jpaGeneratedValueSequence = field.jpaGeneratedValue === 'sequence';
+      field.jpaGeneratedValueIdentity = field.jpaGeneratedValue === 'identity';
       field.autoGenerateByService = false;
       field.autoGenerateByRepository = true;
       field.requiresPersistableImplementation = false;
       field.readonly = true;
-      if (field.jpaGeneratedValue === 'identity') {
+      if (field.jpaGeneratedValueIdentity) {
         field.liquibaseAutoIncrement = true;
+      } else if (field.jpaGeneratedValueSequence) {
+        field.jpaSequenceGeneratorName = field.sequenceGeneratorName ?? 'sequenceGenerator';
+        field.liquibaseSequenceGeneratorName = snakeCase(field.jpaSequenceGeneratorName);
+        field.liquibaseCustomSequenceGenerator = field.liquibaseSequenceGeneratorName !== 'sequence_generator';
       }
     }
   }

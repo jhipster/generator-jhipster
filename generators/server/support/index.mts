@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export * from './config.mjs';
 export * from './doc.mjs';
 export * from './database.mjs';
 export * from './dependabot-maven.mjs';
@@ -27,6 +28,7 @@ export * from './needles.mjs';
 export { default as prepareEntity } from './prepare-entity.mjs';
 export * from './prepare-entity.mjs';
 export { default as prepareField } from './prepare-field.mjs';
+export * from './prepare-relationship.mjs';
 export * from './relationship.mjs';
 export * from './spring-factories.mjs';
 export * from './string.mjs';

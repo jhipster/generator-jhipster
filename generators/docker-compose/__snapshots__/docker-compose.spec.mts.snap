@@ -10,18 +10,41 @@ exports[`generator - Docker Compose gateway and 1 microservice, with 1 couchbase
       "10-couchbase"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [
       "10-couchbase"
     ],
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "10-couchbase"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "10-couchbase/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mscouchbase",
+    "databaseType": "couchbase",
+    "entities": [],
+    "prodDatabaseType": "couchbase",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -182,16 +205,37 @@ exports[`generator - Docker Compose gateway and 1 microservice, with Cassandra s
       "05-cassandra"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "05-cassandra"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "05-cassandra/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mscassandra",
+    "databaseType": "cassandra",
+    "entities": [],
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -360,19 +404,82 @@ exports[`generator - Docker Compose gateway and multi microservices should match
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo",
-      "07-mariadb"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -673,20 +780,84 @@ exports[`generator - Docker Compose gateway and multi microservices using oauth2
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "10-couchbase",
-      "07-mariadb"
-    ],
     "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "authenticationType": "oauth2",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "oauth2",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "oauth2",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "oauth2",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "10-couchbase/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "authenticationType": "oauth2",
+    "baseName": "mscouchbase",
+    "databaseType": "couchbase",
+    "entities": [],
+    "prodDatabaseType": "couchbase",
+    "serverPort": 8081
   }
 }
 ",
@@ -1056,20 +1227,70 @@ exports[`generator - Docker Compose gateway and multi microservices, with 1 mong
       "04-mongo"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [
       "04-mongo"
     ],
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "04-mongo"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "04-mongo/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmongodb",
+    "databaseType": "mongodb",
+    "entities": [],
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1326,19 +1547,83 @@ exports[`generator - Docker Compose gateway and multi microservices, with couchb
       "07-mariadb"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
     "clusteredDbApps": [],
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql",
-      "03-psql",
-      "10-couchbase",
-      "07-mariadb"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "03-psql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mspsql",
+    "entities": [],
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "07-mariadb/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmariadb",
+    "entities": [],
+    "prodDatabaseType": "mariadb",
+    "serverPort": 8081,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "10-couchbase/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "mscouchbase",
+    "databaseType": "couchbase",
+    "entities": [],
+    "prodDatabaseType": "couchbase",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1639,16 +1924,38 @@ exports[`generator - Docker Compose gateway and one microservice should match fi
       "02-mysql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1809,16 +2116,38 @@ exports[`generator - Docker Compose gateway and one microservice, with curator s
       "02-mysql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -1979,16 +2308,38 @@ exports[`generator - Docker Compose gateway and one microservice, with prometheu
       "02-mysql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "prometheus",
-    "packages": [
-      "01-gateway",
-      "02-mysql"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2245,8 +2596,8 @@ scrape_configs:
     metrics_path: /management/prometheus
     static_configs:
     - targets:
-        - jhgate:8080
-        - msmysql:8081
+      - jhgate:8080
+      - msmysql:8081
 ",
     "stateCleared": "modified",
   },
@@ -2263,16 +2614,38 @@ exports[`generator - Docker Compose gateway and one microservice, without monito
       "02-mysql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway",
-      "02-mysql"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2432,16 +2805,26 @@ exports[`generator - Docker Compose monolith should match files snapshot 1`] = `
       "08-monolith"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "08-monolith"
-    ],
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": "no"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "08-monolith/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleMysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "serverPort": 8080
   }
 }
 ",
@@ -2541,16 +2924,24 @@ exports[`generator - Docker Compose one microservice and a directory path withou
       "02-mysql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "02-mysql"
-    ],
     "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081
   }
 }
 ",
@@ -2665,15 +3056,23 @@ exports[`generator - Docker Compose only gateway should match files snapshot 1`]
       "01-gateway"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "01-gateway"
-    ],
+    "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "01-gateway/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "gateway",
+    "baseName": "jhgate",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8080,
     "serviceDiscoveryType": "consul"
   }
 }
@@ -2791,16 +3190,24 @@ exports[`generator - Docker Compose only one microservice should match files sna
       "02-mysql"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "02-mysql"
-    ],
     "serviceDiscoveryType": "consul"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "02-mysql/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "microservice",
+    "baseName": "msmysql",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "mysql",
+    "serverPort": 8081
   }
 }
 ",
@@ -2915,16 +3322,25 @@ exports[`generator - Docker Compose oracle monolith should match files snapshot 
       "12-oracle"
     ],
     "baseName": "workspaces",
-    "clientPackageManager": "npm",
-    "clusteredDbApps": {},
     "directoryPath": "./",
-    "gatewayType": "SpringCloudGateway",
     "jwtSecretKey": "SECRET--50",
     "monitoring": "no",
-    "packages": [
-      "12-oracle"
-    ],
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": "no"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "12-oracle/.yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "oracle-mono",
+    "databaseType": "sql",
+    "entities": [],
+    "prodDatabaseType": "oracle",
+    "serverPort": 8080,
+    "skipClient": true
   }
 }
 ",

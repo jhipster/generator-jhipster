@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
 
@@ -100,6 +100,9 @@ describe(`generator - ${generator}`, () => {
       it('should write java files with gradle build tool and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
 {
+  ".blueprint/app/command.mjs": {
+    "stateCleared": "modified",
+  },
   ".blueprint/app/generator.mjs": {
     "stateCleared": "modified",
   },

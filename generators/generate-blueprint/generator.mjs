@@ -46,16 +46,19 @@ import { files, generatorFiles } from './files.mjs';
 import { packageJson } from '../../lib/index.mjs';
 import { SKIP_COMMIT_HOOK } from '../init/constants.mjs';
 import command from './command.mjs';
-import { NODE_VERSION } from '../generator-constants.mjs';
+import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.mjs';
 
 const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
 export default class extends BaseGenerator {
   async _beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 
@@ -69,9 +72,6 @@ export default class extends BaseGenerator {
         if (this.options.defaults) {
           this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
         }
-      },
-      loadRuntimeOptions() {
-        this.loadRuntimeOptions();
       },
     };
   }
@@ -192,10 +192,12 @@ export default class extends BaseGenerator {
   get writing() {
     return {
       async writing() {
+        this.application.sampleWritten = this.jhipsterConfig.sampleWritten;
         await this.writeFiles({
           sections: files,
           context: this.application,
         });
+        this.jhipsterConfig.sampleWritten = true;
       },
       async writingGenerators() {
         if (!this.application[GENERATORS]) return;
@@ -204,11 +206,13 @@ export default class extends BaseGenerator {
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities = (subGeneratorConfig[PRIORITIES] || []).map(priority => ({
             name: priority,
+            asTaskGroup: `as${upperFirst(priority)}TaskGroup`,
             constant: `${snakeCase(priority).toUpperCase()}`,
           }));
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
-          const jhipsterGenerator = customGenerator ? 'base' : generator;
+          const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
+            js: this.jhipsterConfig.js,
             application: this.application,
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
@@ -234,7 +238,7 @@ export default class extends BaseGenerator {
   }
 
   get postWriting() {
-    return {
+    return this.asPostWritingTaskGroup({
       packageJson() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
@@ -242,22 +246,23 @@ export default class extends BaseGenerator {
           ...packagejs.dependencies,
           ...packagejs.devDependencies,
         };
+        this.loadNodeDependenciesFromPackageJson(
+          mainDependencies,
+          this.fetchFromInstalledJHipster('generate-blueprint/resources/package.json'),
+        );
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
-          keywords: ['yeoman-generator', 'jhipster-blueprint', 'jhipster-7'],
+          keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
           type: 'module',
           files: ['generators'],
           scripts: {
-            ejslint: "ejslint generators/**/*.ejs && ejslint generators/**/*.ejs -d '&'",
+            ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            esmocha: 'esmocha generators --no-insight --forbid-only',
-            pretest: 'npm run prettier:check && npm run lint',
-            test: 'npm run esmocha',
-            'update-snapshot': 'npm run esmocha -- --update-snapshot',
-          },
-          dependencies: {
-            chalk: `${mainDependencies.chalk}`,
+            pretest: 'npm run prettier-check && npm run lint',
+            test: 'vitest run',
+            'update-snapshot': 'vitest run --update',
+            vitest: 'vitest',
           },
           devDependencies: {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
@@ -266,15 +271,16 @@ export default class extends BaseGenerator {
             'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
             'eslint-plugin-import': `${mainDependencies['eslint-plugin-import']}`,
             'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
-            esmocha: `${mainDependencies.esmocha}`,
+            vitest: mainDependencies.vitest,
             prettier: `${mainDependencies.prettier}`,
-            'yeoman-test': `${mainDependencies['yeoman-test']}`,
+            /*
+             * yeoman-test version is loaded through generator-jhipster peer dependency.
+             * generator-jhipster uses a fixed version, blueprints must set a compatible range.
+             */
+            'yeoman-test': '>=8.0.0-rc.1',
           },
           engines: {
-            node: `>=${packagejs.engines.node}`,
-          },
-          imports: {
-            '#test-utils': './test/utils.mjs',
+            node: packagejs.engines.node,
           },
         });
       },
@@ -283,7 +289,7 @@ export default class extends BaseGenerator {
         const { baseName, cliName = `jhipster-${baseName}` } = this.application;
         this.packageJson.merge({
           bin: {
-            [cliName]: `cli/cli.${this.jhipsterConfig.js ? '' : 'm'}js`,
+            [cliName]: 'cli/cli.cjs',
           },
           files: ['cli', 'generators'],
         });
@@ -308,7 +314,7 @@ export default class extends BaseGenerator {
           });
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.POST_WRITING]() {

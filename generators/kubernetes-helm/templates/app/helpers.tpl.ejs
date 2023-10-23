@@ -21,7 +21,7 @@ mysql customisation
 {{- define "mysql.fullname" -}}
 {{- default "<%= app.baseName.toLowerCase() %>-mysql" -}}
 {{- end -}}
-<%_ } else if (app.prodDatabaseTypePostgres) { _%>
+<%_ } else if (app.prodDatabaseTypePostgresql) { _%>
 {{/*
 postgresql customisation
 */}}

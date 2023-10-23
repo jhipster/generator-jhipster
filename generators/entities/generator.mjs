@@ -17,101 +17,53 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.mjs';
+import command from './command.mjs';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, { skipParseOptions: false, ...features });
-
-    // This makes `name` a required argument.
-    this.argument('entities', {
-      type: Array,
-      required: false,
-      description: 'Entities to regenerate.',
-    });
-
-    this.option('skip-db-changelog', {
-      description: 'Skip the generation of database changelog (liquibase for sql databases)',
-      type: Boolean,
-    });
-
-    this.option('base-name', {
-      description: 'Application base name',
-      type: String,
-    });
-
-    this.option('defaults', {
-      description: 'Execute jhipster with default config',
-      type: Boolean,
-    });
-
-    this.option('composed-entities', {
-      description: 'Entities to be that already have been composed',
-      type: Array,
-      hide: true,
-      default: [],
-    });
-
-    this.option('entities-to-import', {
-      description: 'Entities to be imported',
-      type: Array,
-      default: [],
-      hide: true,
-    });
-
-    this.option('regenerate', {
-      description: 'Regenerate entities without prompts',
-      type: Boolean,
-    });
-
-    this.option('write-every-entity', {
-      description: 'Private option to write every entity file',
-      type: Boolean,
-      default: true,
-      hide: true,
-    });
-  }
+  entities;
 
   async beforeQueue() {
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ENTITIES);
     }
-
-    if (this.options.entitiesToImport) {
-      const entities = this.jhipsterConfig.entities || [];
-      this.options.entitiesToImport.forEach(entity => {
-        if (!entities.includes(entity.name)) {
-          entities.push(entity.name);
-        }
-        this.fs.writeJSON(this.destinationPath(JHIPSTER_CONFIG_DIR, `${entity.name}.json`), entity);
-      });
-      this.jhipsterConfig.entities = entities;
-    } else {
-      this.jhipsterConfig.entities = this.jhipsterConfig.entities || [];
-    }
-
-    if (this.options.baseName !== undefined) {
-      this.jhipsterConfig.baseName = this.options.baseName;
-    }
-
-    if (!this.options.entities || this.options.entities.length === 0 || this.options.writeEveryEntity) {
-      this.options.entities = this.getExistingEntityNames();
-      if (this.options.regenerate === undefined) {
-        // Execute a non interactive regeneration.
-        this.options.regenerate = true;
-      }
-    }
   }
 
-  // Public API method used by the getter and also by Blueprints
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadArguments() {
+        this.jhipsterConfig.entities = this.jhipsterConfig.entities || [];
+
+        this.parseJHipsterArguments(command.arguments);
+        if (!this.entities || this.entities.length === 0) {
+          this.entities = this.getExistingEntityNames();
+        } else {
+          for (const entity of this.entities) {
+            if (!this.jhipsterConfig.entities.includes(entity)) {
+              this.jhipsterConfig.entities.push(entity);
+            }
+          }
+        }
+        if (this.entities) {
+          this.log.verboseInfo('Generating entities', ...this.entities);
+        }
+      },
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
   get composing() {
     return {
       async composeApp() {
-        await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { skipPriorities: ['writing', 'postWriting'] } });
+        await this.composeWithJHipster(GENERATOR_APP, {
+          generatorOptions: { skipPriorities: ['writing', 'postWriting'], entities: this.entities },
+        });
       },
     };
   }

@@ -52,4 +52,5 @@ Validations.needsValue = validation => {
 const SUPPORTED_VALIDATION_RULES = Object.keys(Validations)
   .map(key => Validations[key])
   .filter(e => typeof e === 'string');
+export { Validations, SUPPORTED_VALIDATION_RULES };
 export default { Validations, SUPPORTED_VALIDATION_RULES };

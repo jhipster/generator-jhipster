@@ -22,7 +22,7 @@ import { expect } from 'esmocha';
 import lodash from 'lodash';
 
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
@@ -55,7 +55,6 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
-          jhipsterVersion: expect.any(String),
         });
       });
     });
@@ -76,7 +75,6 @@ describe(`generator - ${generator}`, () => {
           user: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
-          jhipsterVersion: expect.any(String),
         });
       });
     });
@@ -96,7 +94,6 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
-          jhipsterVersion: expect.any(String),
         });
       });
     });

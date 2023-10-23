@@ -6,8 +6,8 @@ import {
   extendFilteredMatrix,
   entitiesServerSamples as entities,
   buildSamplesFromMatrix,
+  defaultHelpers as helpers,
 } from '../../test/support/index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { mockedGenerators as serverGenerators } from '../server/__test-support/index.mjs';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.mjs';

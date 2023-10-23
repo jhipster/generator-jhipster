@@ -43,10 +43,10 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.16.1
+          node-version: 18.18.2
       - name: 'SETUP: load npm cache'
         uses: actions/cache@v3
         with:

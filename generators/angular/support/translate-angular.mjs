@@ -19,6 +19,8 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
+import { createJhiTransformTranslateReplacer, createJhiTransformTranslateStringifyReplacer } from '../../languages/support/index.mjs';
+
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 
 const JHI_TRANSLATE_REGEX = /(\n?\s*[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.]+")/.source;
@@ -42,8 +44,8 @@ function getTranslationValue(getWebappTranslation, key, data) {
  */
 function replaceTranslationKeysWithText(getWebappTranslation, content, regexSource, { keyIndex = 1, replacementIndex = 1, escape } = {}) {
   const regex = new RegExp(regexSource, 'g');
-  let match = regex.exec(content);
-  while (match !== null) {
+  const allMatches = content.matchAll(regex);
+  for (const match of allMatches) {
     // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
     const key = match[keyIndex];
     const target = match[replacementIndex];
@@ -52,7 +54,6 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
       translation = escape(translation, match);
     }
     content = content.replace(target, translation);
-    match = regex.exec(content);
   }
   return content;
 }
@@ -62,12 +63,17 @@ function replaceTranslationKeysWithText(getWebappTranslation, content, regexSour
  * @param {import('../generator-base.js')} generator reference to the generator
  * @param {string} content html content
  * @param {string} jsKey
- * @returns string with pageTitle replaced
+ * @returns string with jsKey value replaced
  */
 function replaceJSTranslation(getWebappTranslation, content, jsKey) {
-  return replaceTranslationKeysWithText(getWebappTranslation, content, `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+)['|"]`, {
-    escape: (translation, match) => translation.replaceAll(match[0].slice(-1), `\\${match[0].slice(-1)}`),
-  });
+  return replaceTranslationKeysWithText(
+    getWebappTranslation,
+    content,
+    `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+\\.[a-zA-Z0-9.\\-_]+)['|"]`,
+    {
+      escape: (translation, match) => translation.replaceAll(match[0].slice(-1), `\\${match[0].slice(-1)}`),
+    },
+  );
 }
 
 /**
@@ -102,27 +108,38 @@ function replaceErrorMessage(getWebappTranslation, content) {
  * @type {import('../generator-base.js').EditFileCallback}
  * @this {import('../generator-base.js')}
  */
-// eslint-disable-next-line import/prefer-default-export
-export const createTranslationReplacer = getWebappTranslation =>
-  function replaceAngularTranslations(content, filePath) {
+export const createTranslationReplacer = (getWebappTranslation, enableTranslation) => {
+  const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation);
+  const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
+  return function replaceAngularTranslations(content, filePath) {
     if (/\.html$/.test(filePath)) {
-      content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
-      content = replacePlaceholders(getWebappTranslation, content);
+      if (!enableTranslation) {
+        content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
+        content = replacePlaceholders(getWebappTranslation, content);
+      }
     }
-    if (/(:?route|module)\.ts$/.test(filePath)) {
-      content = replacePageTitles(getWebappTranslation, content);
+    // Translate html files and inline templates.
+    if (/(:?\.html|component\.ts)$/.test(filePath)) {
+      content = htmlJhiTranslateReplacer(content);
+      content = htmlJhiTranslateStringifyReplacer(content);
     }
-    if (/error\.route\.ts$/.test(filePath)) {
-      content = replaceErrorMessage(getWebappTranslation, content);
+    if (!enableTranslation) {
+      if (/(:?route|module)\.ts$/.test(filePath)) {
+        content = replacePageTitles(getWebappTranslation, content);
+      }
+      if (/error\.route\.ts$/.test(filePath)) {
+        content = replaceErrorMessage(getWebappTranslation, content);
+      }
     }
     return content;
   };
+};
 
-const minimatch = new Minimatch('**/*{.html,.route.ts,.module.ts}');
+const minimatch = new Minimatch('**/*{.html,.component.ts,.route.ts,.module.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
-const translateAngularFilesTransform = getWebappTranslation => {
-  const translate = createTranslationReplacer(getWebappTranslation);
+const translateAngularFilesTransform = (getWebappTranslation, enableTranslation) => {
+  const translate = createTranslationReplacer(getWebappTranslation, enableTranslation);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
   });

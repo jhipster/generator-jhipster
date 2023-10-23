@@ -18,6 +18,7 @@
  */
 import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 import { isFilePending } from 'mem-fs-editor/state';
+import prettier from 'prettier';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -25,19 +26,20 @@ import {
   createPrettierTransform,
   createForceWriteConfigFilesTransform,
   autoCrlfTransform,
-  isPrettierConfigFile,
+  isPrettierConfigFilePath,
   createSortConfigFilesTransform,
   createESLintTransform,
+  createRemoveUnusedImportsTransform,
 } from './support/index.mjs';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.mjs';
-import { GENERATOR_UPGRADE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP, GENERATOR_UPGRADE } from '../generator-list.mjs';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.mjs';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.mjs';
 import command from './command.mjs';
-import { createRemoveUnusedImportsTransform } from './support/java-unused-imports-transform.mjs';
+import { loadStoredAppOptions } from '../app/support/index.mjs';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
-const { MULTISTEP_TRANSFORM_QUEUE } = QUEUES;
+const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
 
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
@@ -49,20 +51,27 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
+  prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
+  prettierOptions: prettier.Options = { plugins: [] };
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
+    super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
   }
 
-  beforeQueue() {
-    this.loadStoredAppOptions();
-
-    // Load common runtime options.
-    this.parseCommonRuntimeOptions();
+  async beforeQueue() {
+    loadStoredAppOptions.call(this);
 
     // Force npm override later if needed
     (this.env as any).options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === GENERATOR_UPGRADE;
+
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
   }
 
   get initializing() {
@@ -89,6 +98,12 @@ export default class BootstrapGenerator extends BaseGenerator {
     return {
       queueTransform() {
         this.queueMultistepTransform();
+
+        this.env.sharedFs.on('change', filePath => {
+          if (createMultiStepTransform().templateFileFs.isTemplate(filePath)) {
+            this.queueMultistepTransform();
+          }
+        });
       },
     };
   }
@@ -99,9 +114,14 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
-      async commitPrettierConfig() {
-        const filter = file => isFilePending(file) && isPrettierConfigFile(file);
-        await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
+      async queueCommitPrettierConfig() {
+        await this.queueCommitPrettierConfig();
+
+        this.env.sharedFs.on('change', filePath => {
+          if (isPrettierConfigFilePath(filePath)) {
+            this.queueCommitPrettierConfig();
+          }
+        });
       },
     };
   }
@@ -127,16 +147,23 @@ export default class BootstrapGenerator extends BaseGenerator {
       queueName: MULTISTEP_TRANSFORM_QUEUE,
       once: true,
     });
+  }
 
-    const onChangeListener = file => {
-      if (createMultiStepTransform().templateFileFs.isTemplate(file)) {
-        this.queueMultistepTransform();
-      } else {
-        this.env.sharedFs.once('change', onChangeListener);
-      }
-    };
+  queueCommitPrettierConfig() {
+    this.queueTask({
+      method: async () => {
+        await this.commitPrettierConfig();
+      },
+      taskName: 'commitPrettierConfig',
+      queueName: PRE_CONFLICTS_QUEUE,
+      once: true,
+    });
+  }
 
-    this.env.sharedFs.once('change', onChangeListener);
+  async commitPrettierConfig() {
+    const filter = file => isFilePending(file) && isPrettierConfigFilePath(file.path);
+    await this.commitSharedFs(this.env.sharedFs.stream({ filter }));
+    this.log.ok('committed prettier configuration files');
   }
 
   /**
@@ -157,11 +184,12 @@ export default class BootstrapGenerator extends BaseGenerator {
         : [
             createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js' }),
             createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
-            createPrettierTransform.call(this, {
+            await createPrettierTransform.call(this, {
               ignoreErrors,
               prettierPackageJson: true,
               prettierJava: !this.jhipsterConfig.skipServer,
-              extensions: PRETTIER_EXTENSIONS,
+              extensions: this.prettierExtensions.join(','),
+              prettierOptions: this.prettierOptions,
             }),
           ]),
       ...(this.jhipsterConfig.autoCrlf ? [autoCrlfTransform(this.createGit())] : []),

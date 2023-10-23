@@ -17,12 +17,85 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
-import { GENERATOR_COMMON, GENERATOR_GIT, GENERATOR_SERVER } from '../generator-list.mjs';
+import {
+  GENERATOR_BOOTSTRAP,
+  GENERATOR_CLIENT,
+  GENERATOR_COMMON,
+  GENERATOR_CYPRESS,
+  GENERATOR_GIT,
+  GENERATOR_LANGUAGES,
+  GENERATOR_SERVER,
+} from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
-  options: {},
-  loadGeneratorOptions: true,
-  import: [GENERATOR_SERVER, GENERATOR_COMMON, GENERATOR_GIT],
+  options: {
+    defaults: {
+      description: 'Execute jhipster with default config',
+      type: Boolean,
+    },
+    skipClient: {
+      description: 'Skip the client-side application generation',
+      type: Boolean,
+      scope: 'storage',
+    },
+    skipServer: {
+      description: 'Skip the server-side application generation',
+      type: Boolean,
+      scope: 'storage',
+    },
+    jhiPrefix: {
+      description: 'Add prefix before services, controllers and states name',
+      type: String,
+      scope: 'storage',
+    },
+    entitySuffix: {
+      description: 'Add suffix after entities name',
+      type: String,
+      scope: 'storage',
+    },
+    dtoSuffix: {
+      description: 'Add suffix after dtos name',
+      type: String,
+      scope: 'storage',
+    },
+    blueprint: {
+      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+      type: Array,
+    },
+    blueprints: {
+      description:
+        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
+      type: String,
+    },
+    ignoreErrors: {
+      description: "Don't fail on prettier errors.",
+      type: Boolean,
+    },
+    pkType: {
+      description: 'Default primary key type (beta)',
+      type: String,
+      scope: 'storage',
+    },
+    clientPackageManager: {
+      description: 'Force an unsupported client package manager',
+      type: String,
+      scope: 'storage',
+    },
+    testFrameworks: {
+      description: 'Test frameworks to be generated',
+      type: Array,
+    },
+  },
+  configs: {},
+  import: [
+    GENERATOR_BOOTSTRAP,
+    GENERATOR_SERVER,
+    GENERATOR_CLIENT,
+    GENERATOR_COMMON,
+    GENERATOR_GIT,
+    GENERATOR_CYPRESS,
+    GENERATOR_LANGUAGES,
+  ],
 };
 
 export default command;

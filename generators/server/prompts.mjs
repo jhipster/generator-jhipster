@@ -18,7 +18,7 @@
  */
 
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import {
   applicationOptions,
@@ -28,6 +28,7 @@ import {
   databaseTypes,
   cacheTypes,
   serviceDiscoveryTypes,
+  testFrameworkTypes,
 } from '../../jdl/jhipster/index.mjs';
 import { MESSAGE_BROKER } from './options/index.mjs';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.mjs';
@@ -57,6 +58,8 @@ const {
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
+const { GATLING, CUCUMBER } = testFrameworkTypes;
+const { intersection } = _;
 
 /**
  * Get Option From Array
@@ -213,7 +216,7 @@ export async function askForServerSideOpts({ control }) {
       name: DEV_DATABASE_TYPE,
       message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
       choices: response =>
-        [
+        [SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)].concat([
           {
             value: H2_DISK,
             name: 'H2 with disk-based persistence',
@@ -222,7 +225,7 @@ export async function askForServerSideOpts({ control }) {
             value: H2_MEMORY,
             name: 'H2 with in-memory persistence',
           },
-        ].concat(SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
+        ]),
       default: this.jhipsterConfigWithDefaults.devDatabaseType,
     },
     {
@@ -368,4 +371,22 @@ export async function askForOptionalItems({ control }) {
       }
     });
   }
+}
+
+export async function askForServerTestOpts({ control }) {
+  if (control.existingProject && this.options.askAnswered !== true) return;
+
+  const answers = await this.prompt([
+    {
+      type: 'checkbox',
+      name: 'serverTestFrameworks',
+      message: 'Besides Junit, which testing frameworks would you like to use?',
+      choices: [
+        { name: 'Gatling', value: GATLING },
+        { name: 'Cucumber', value: CUCUMBER },
+      ],
+      default: intersection([GATLING, CUCUMBER], this.jhipsterConfigWithDefaults.testFrameworks),
+    },
+  ]);
+  this.jhipsterConfig.testFrameworks = [...new Set([...(this.jhipsterConfig.testFrameworks ?? []), ...answers.serverTestFrameworks])];
 }

@@ -5,10 +5,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+export const isDistFolder = () => {
+  return basename(join(__dirname, '..')) === 'dist';
+};
+
 export const getPackageRoot = (relativePath?: string) => {
   const sourceRoot = join(__dirname, '..');
-  const sourceBasename = basename(sourceRoot);
-  const packageDirectory = sourceBasename === 'generator-jhipster' ? sourceRoot : join(sourceRoot, '..');
+  const packageDirectory = isDistFolder() ? join(sourceRoot, '..') : sourceRoot;
   return relativePath ? join(packageDirectory, relativePath) : packageDirectory;
 };
 

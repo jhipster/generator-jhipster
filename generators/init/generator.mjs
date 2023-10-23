@@ -30,9 +30,12 @@ import { packageJson } from '../../lib/index.mjs';
  */
 export default class InitGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_INIT);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 
@@ -69,8 +72,8 @@ export default class InitGenerator extends BaseApplicationGenerator {
   }
 
   get composing() {
-    return this.asLoadingTaskGroup({
-      async loadConfig() {
+    return this.asComposingTaskGroup({
+      async compose() {
         await this.composeWithJHipster(GENERATOR_GIT);
       },
     });
@@ -103,6 +106,21 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addPrettierDependencies({ application }) {
+        this.packageJson.merge({
+          scripts: {
+            'prettier-check': 'prettier --check "{,**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+          },
+          devDependencies: {
+            prettier: application.nodeDependencies.prettier,
+            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
+          },
+          engines: {
+            node: application.applicationNodeEngine,
+          },
+        });
+      },
       addCommitHookDependencies({ application }) {
         if (application.skipCommitHook) return;
         this.packageJson.merge({

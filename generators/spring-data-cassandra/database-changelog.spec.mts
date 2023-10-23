@@ -13,7 +13,7 @@ describe('generator - app - database changelogs', () => {
         runResult = await helpers
           .runJHipster(GENERATOR_SPRING_DATA_CASSANDRA)
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
-          .withOptions({ withEntities: true, force: true, skipClient: true });
+          .withOptions({ force: true, skipClient: true });
       });
 
       it('should create database changelog for the entity', () => {

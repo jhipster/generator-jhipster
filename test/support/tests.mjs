@@ -6,9 +6,12 @@ import { expect } from 'esmocha';
 
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
-import { skipPrettierHelpers as helpers } from './helpers.mjs';
+import { skipPrettierHelpers as helpers } from '../../testing/index.mjs';
 import * as GeneratorList from '../../generators/generator-list.mjs';
 import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.mjs';
+import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.mjs';
+
+const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 
 const {
   CONFIGURING_EACH_ENTITY,
@@ -245,7 +248,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     const prioritiesSpy = sinon.spy();
     const prioritiesTasks = [];
     let prioritiesCount = 0;
-    PRIORITY_NAMES_LIST.forEach(priority => {
+    [...PRIORITY_NAMES_LIST, ...workspacesPriorityList].forEach(priority => {
       let callback;
       if (Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${taskPrefix}${priority}`)) {
         prioritiesCount++;
@@ -376,15 +379,17 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     it('should call every priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
     });
-    PRIORITY_NAMES_LIST.filter(priority => !Object.values(ENTITY_PRIORITY_NAMES).includes(priority)).forEach(priority => {
-      it(`should call ${priority} tasks if implemented`, function () {
-        if (!spy.prioritiesTasks[priority]) {
-          this.skip();
-          return;
-        }
-        expect(spy.prioritiesTasks[priority].callCount).toBe(1);
+    [...PRIORITY_NAMES_LIST, ...workspacesPriorityList]
+      .filter(priority => !Object.values(ENTITY_PRIORITY_NAMES).includes(priority))
+      .forEach(priority => {
+        it(`should call ${priority} tasks if implemented`, function () {
+          if (!spy.prioritiesTasks[priority]) {
+            this.skip();
+            return;
+          }
+          expect(spy.prioritiesTasks[priority].callCount).toBe(1);
+        });
       });
-    });
     if (entity) {
       [LOADING_ENTITIES, WRITING_ENTITIES, POST_WRITING_ENTITIES].forEach(priority => {
         it(`should call ${priority} tasks once`, function () {

@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import escapeStringRegexp from 'escape-string-regexp';
-import CoreGenerator from '../../base-core/generator-base.mjs';
+import CoreGenerator from '../../base-core/index.mjs';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.mjs';
 import { joinCallbacks } from './write-files.mjs';
 
@@ -96,7 +96,7 @@ export const checkContentIn = (contentToCheck: string | RegExp, content, ignoreW
 };
 
 /**
- * Write content before needle applying identation
+ * Write content before needle applying indentation
  *
  * @param args
  * @returns null if needle was not found, new content otherwise

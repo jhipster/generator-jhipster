@@ -17,26 +17,89 @@
  * limitations under the License.
  */
 /* eslint-disable camelcase */
+import * as _ from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { createDockerComposeFile, createDockerExtendedServices } from '../base-docker/utils.mjs';
+import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.mjs';
 import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.mjs';
 import { dockerFiles } from './files.mjs';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.mjs';
 import { stringHashCode, createFaker } from '../base/support/index.mjs';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
+
+const { intersection } = _;
 
 export default class DockerGenerator extends BaseApplicationGenerator {
   hasServicesFile = false;
 
   async beforeQueue() {
-    // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_DOCKER);
     }
+
+    if (!this.delegateToBlueprint) {
+      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    }
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      loading({ applicationDefaults }) {
+        applicationDefaults({
+          dockerServices: [],
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      dockerServices({ application }) {
+        if (application.backendTypeSpringBoot) {
+          application.dockerServices.push('app');
+        }
+        if (application.authenticationTypeOauth2) {
+          application.dockerServices.push('keycloak');
+        }
+        if (application.searchEngineElasticsearch) {
+          application.dockerServices.push('elasticsearch');
+        }
+        if (application.messageBrokerKafka || application.messageBrokerPulsar) {
+          application.dockerServices.push(application.messageBroker);
+        }
+        if (application.serviceDiscoveryConsul || application.serviceDiscoveryEureka) {
+          application.dockerServices.push(application.serviceDiscoveryType);
+        }
+        if (application.serviceDiscoveryAny || application.applicationTypeGateway || application.applicationTypeMicroservice) {
+          application.dockerServices.push('zipkin');
+        }
+        if (application.enableSwaggerCodegen) {
+          application.dockerServices.push('swagger-editor');
+        }
+        if (application.cacheProviderMemcached || application.cacheProviderRedis || application.cacheProviderHazelcast) {
+          application.dockerServices.push(application.cacheProvider);
+        }
+        if (
+          application.databaseTypeCassandra ||
+          application.databaseTypeCouchbase ||
+          application.databaseTypeMongodb ||
+          application.databaseTypeNeo4j
+        ) {
+          application.dockerServices.push(application.databaseType);
+        }
+        if (
+          application.prodDatabaseTypePostgresql ||
+          application.prodDatabaseTypeMariadb ||
+          application.prodDatabaseTypeMysql ||
+          application.prodDatabaseTypeMssql
+        ) {
+          application.dockerServices.push(application.prodDatabaseType);
+        }
+      },
       addAppServices({ application, source }) {
         const writeInitialServicesFile = () => {
           if (!this.hasServicesFile) {
@@ -106,7 +169,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       async dockerServices({ application, source }) {
-        if (application.databaseTypeCassandra) {
+        if (application.dockerServices.includes('cassandra')) {
           const serviceName = application.databaseType;
           source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName },
@@ -116,27 +179,21 @@ export default class DockerGenerator extends BaseApplicationGenerator {
             { serviceName, condition: SERVICE_HEALTHY },
             { serviceName: 'cassandra-migration', condition: SERVICE_COMPLETED_SUCCESSFULLY },
           );
-        } else if (application.databaseTypeAny && !application.prodDatabaseTypeOracle) {
-          const serviceName = application.databaseTypeSql ? application.prodDatabaseType : application.databaseType;
+        }
+
+        for (const serviceName of intersection(
+          ['couchbase', 'mongodb', 'neo4j', 'postgresql', 'mysql', 'mariadb', 'mssql', 'elasticsearch', 'keycloak'],
+          application.dockerServices,
+        )) {
           source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
           source.addDockerDependencyToApplication({ serviceName, condition: SERVICE_HEALTHY });
         }
 
-        if (application.searchEngineElasticsearch) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: application.searchEngine });
-          source.addDockerDependencyToApplication({ serviceName: application.searchEngine, condition: SERVICE_HEALTHY });
+        for (const serviceName of application.dockerServices.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
+          source.addDockerExtendedServiceToApplicationAndServices({ serviceName });
         }
 
-        if (application.cacheProviderMemcached || application.cacheProviderRedis) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: application.cacheProvider });
-        }
-
-        if (application.authenticationTypeOauth2) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'keycloak' });
-          source.addDockerDependencyToApplication({ serviceName: 'keycloak', condition: SERVICE_HEALTHY });
-        }
-
-        if (application.serviceDiscoveryEureka) {
+        if (application.dockerServices.includes('eureka')) {
           const depends_on = application.authenticationTypeOauth2
             ? {
                 keycloak: {
@@ -153,20 +210,17 @@ export default class DockerGenerator extends BaseApplicationGenerator {
 
           source.addDockerDependencyToApplication({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
         }
-        if (application.serviceDiscoveryConsul) {
+        if (application.dockerServices.includes('consul')) {
           source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName: 'consul' },
             { serviceFile: './consul.yml', serviceName: 'consul-config-loader' },
           );
         }
-        if (application.messageBrokerKafka) {
+        if (application.dockerServices.includes('kafka')) {
           source.addDockerExtendedServiceToApplicationAndServices(
             { serviceName: 'kafka' },
             { serviceFile: './kafka.yml', serviceName: 'zookeeper' },
           );
-        }
-        if (application.messageBrokerPulsar) {
-          source.addDockerExtendedServiceToApplicationAndServices({ serviceName: 'pulsar' });
         }
       },
 
@@ -238,5 +292,27 @@ export default class DockerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateToBlueprint ? {} : this.postWriting);
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
+  }
+
+  /**
+   * @private
+   * Returns the R2DBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getR2DBCUrl(databaseType, options = {}) {
+    return getR2dbcUrl(databaseType, options);
   }
 }

@@ -24,7 +24,7 @@ import lodash from 'lodash';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
-import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/helpers.mjs';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/index.mjs';
 
 const { snakeCase } = lodash;
 const __filename = fileURLToPath(import.meta.url);
@@ -108,43 +108,6 @@ describe(`generator - ${generator}`, () => {
 
       it('should not create files for the entity Skip', () => {
         runResult.assertNoFile(skipFiles);
-      });
-    });
-
-    describe('selected entities with writeEveryEntity', () => {
-      before(async () => {
-        await helpers
-          .run(generatorPath)
-          .withJHipsterConfig()
-          .withArguments(['Foo', 'Bar'])
-          .withOptions({
-            regenerate: true,
-            force: true,
-            writeEveryEntity: true,
-            ignoreNeedlesError: true,
-            applicationWithEntities,
-          })
-          .withMockedSource();
-      });
-
-      it('should match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
-      });
-
-      it('should match source calls', () => {
-        expect(runResult.sourceCallsArg).toMatchSnapshot();
-      });
-
-      it('should create files for entity Foo', () => {
-        runResult.assertFile(fooFiles);
-      });
-
-      it('should create files for the entity Bar', () => {
-        runResult.assertFile(barFiles);
-      });
-
-      it('should create files for the entity Skip', () => {
-        runResult.assertFile(skipFiles);
       });
     });
 

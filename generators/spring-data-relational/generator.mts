@@ -25,7 +25,7 @@ import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
 import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.mjs';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.mjs';
-import { getDBCExtraOption } from './support/database-data.mjs';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.mjs';
 import {
   getCommonMavenDefinition,
   getDatabaseTypeMavenDefinition,
@@ -33,15 +33,31 @@ import {
   getImperativeMavenDefinition,
   getReactiveMavenDefinition,
 } from './internal/dependencies.mjs';
+import command from './command.mjs';
 
 const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_SPRING_DATA_RELATIONAL);
     }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      loadOptions() {
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get composing() {
@@ -149,5 +165,27 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
+  }
+
+  /**
+   * @private
+   * Returns the R2DBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getR2DBCUrl(databaseType, options = {}) {
+    return getR2dbcUrl(databaseType, options);
   }
 }

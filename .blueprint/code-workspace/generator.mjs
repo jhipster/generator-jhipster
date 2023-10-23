@@ -1,5 +1,5 @@
 import { join } from 'path';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import BaseGenerator from '../../generators/base/index.mjs';
 import { getPackageRoot } from '../../lib/index.mjs';
 import command from './command.mjs';
@@ -8,7 +8,7 @@ import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '
 const { merge } = _;
 
 export default class extends BaseGenerator {
-  sampleName;
+  samplePath;
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
@@ -28,7 +28,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.WRITING]() {
     return this.asEndTaskGroup({
       async generateCodeWorkspace() {
-        this.addSampleToCodeWorkspace(this.sampleName);
+        this.addSampleToCodeWorkspace(this.samplePath);
       },
     });
   }
@@ -40,7 +40,7 @@ export default class extends BaseGenerator {
   /**
    * Merge value to an existing JSON and write to destination
    */
-  addSampleToCodeWorkspace(sampleName) {
+  addSampleToCodeWorkspace(samplePath) {
     this.editFile(this.getCodeWorkspacePath(), { create: true }, content => {
       const data = content ? JSON.parse(content) : {};
       merge(data, {
@@ -60,9 +60,9 @@ export default class extends BaseGenerator {
           configurations: [],
         },
       });
-      if (this.sampleName && !data.folders.find(folder => folder.path === sampleName)) {
+      if (samplePath && !data.folders.find(folder => folder.path === samplePath)) {
         data.folders.push({
-          path: this.sampleName,
+          path: samplePath,
         });
       }
 

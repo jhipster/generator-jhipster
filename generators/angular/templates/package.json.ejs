@@ -78,9 +78,6 @@
     "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
 <%_ } _%>
-<%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
-<%_ } _%>
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
@@ -99,20 +96,12 @@
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "jest": "<%= nodeDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
     "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
     "jest-date-mock": "<%= nodeDependencies['jest-date-mock'] %>",
     "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
     "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
-    "prettier": "<%= nodeDependencies['prettier'] %>",
-    "prettier-plugin-packagejson": "<%= nodeDependencies['prettier-plugin-packagejson'] %>",
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
@@ -138,8 +127,8 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
     "start-tls": "<%= clientPackageManager %> run webapp:dev-ssl",

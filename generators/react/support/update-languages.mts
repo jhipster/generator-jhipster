@@ -34,18 +34,18 @@ function updateLanguagesInPipeTask(this: BaseGenerator, { application, control =
 }
 
 function updateLanguagesInWebpackReactTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
-  const { clientSrcDir, languages } = application;
+  const { clientRootDir, clientSrcDir, languages } = application;
   const { ignoreNeedlesError: ignoreNonExisting } = control;
   let newContent = 'groupBy: [\n';
   // prettier-ignore
   languages?.forEach((language) => {
-      newContent += `                    { pattern: "./${clientSrcDir}i18n/${language}/*.json", fileName: "./i18n/${language}.json" },\n`;
+      newContent += `                    { pattern: "./${this.relativeDir(clientRootDir, clientSrcDir)}i18n/${language}/*.json", fileName: "./i18n/${language}.json" },\n`;
           });
   newContent +=
     '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
     '                ]';
 
-  this.editFile('webpack/webpack.common.js', { ignoreNonExisting }, content =>
+  this.editFile(`${application.clientRootDir}webpack/webpack.common.js`, { ignoreNonExisting }, content =>
     content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent),
   );
 }

@@ -110,6 +110,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -153,6 +156,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -196,6 +202,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -239,6 +248,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -280,6 +292,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -326,6 +341,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -381,6 +399,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -426,6 +447,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -471,6 +495,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -514,6 +541,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -559,6 +589,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -604,6 +637,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -652,6 +688,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -702,6 +741,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -761,6 +803,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',
@@ -809,6 +854,9 @@ describe('generator - Knative', () => {
 
         runResult = await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+          .withOptions({
+            askAnswered: true,
+          })
           .withAnswers({
             deploymentApplicationType: 'microservice',
             directoryPath: './',

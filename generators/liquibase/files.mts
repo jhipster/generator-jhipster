@@ -26,7 +26,8 @@ import { CommonClientServerApplication } from '../base-application/types.mjs';
 export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientServerApplication> = {
   liquibase: [
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      condition: ctx => ctx.backendTypeSpringBoot,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/LiquibaseConfiguration.java'],
     },

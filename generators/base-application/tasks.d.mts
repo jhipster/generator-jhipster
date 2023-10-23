@@ -3,6 +3,7 @@ import { ControlTaskParam, BaseGeneratorDefinition, SourceTaskParam, GenericSour
 import { CommonClientServerApplication } from './types.mjs';
 import { Entity, Field, Relationship } from './types/index.mjs';
 import { ClientSourceType } from '../client/types.mjs';
+import { BaseChangelog } from '../base-entity-changes/types.js';
 
 export type GenericApplicationDefinition<ApplicationType = CommonClientServerApplication> = {
   applicationType: ApplicationType;
@@ -29,6 +30,25 @@ type LoadingEntitiesTaskParam = {
 
 type ApplicationTaskParam<Definition extends GenericApplicationDefinition = ControlTaskParam & GenericApplicationDefinition> = {
   application: Definition['applicationType'] & { user: Definition['entityType'] };
+};
+
+type ApplicationDefaultsTaskParam = {
+  /**
+   * Parameter properties accepts:
+   * - functions: receives the application and the return value is set at the application property.
+   * - non functions: application property will receive the property in case current value is undefined.
+   *
+   * Applies each object in order.
+   *
+   * @example
+   * // application = { prop: 'foo-bar', prop2: 'foo2' }
+   * applicationDefaults(
+   *   application,
+   *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
+   *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
+   * );
+   */
+  applicationDefaults: (...defaults: Record<any, any>[]) => void;
 };
 
 export type EntitiesTaskParam<Definition extends GenericApplicationDefinition = GenericApplicationDefinition> = {
@@ -62,11 +82,10 @@ export type BaseApplicationGeneratorDefinition<
     GenericSourceTypeDefinition<Record<string, (...args: any[]) => any>>,
 > = BaseGeneratorDefinition<Definition> &
   // Add application to existing priorities
+  Record<'loadingTaskParam' | 'preparingTaskParam', ApplicationTaskParam<Definition> & ApplicationDefaultsTaskParam> &
   Record<
-    | 'loadingTaskParam'
-    | 'preparingTaskParam'
+    | 'postPreparingTaskParam'
     | 'defaultTaskParam'
-    | 'writingTaskParam'
     | 'postWritingTaskParam'
     | 'preConflictsTaskParam'
     | 'installTaskParam'
@@ -74,8 +93,9 @@ export type BaseApplicationGeneratorDefinition<
     | 'endTaskParam',
     ApplicationTaskParam<Definition>
   > &
+  Record<'writingTaskParam', ApplicationTaskParam<Definition> & { configChanges?: Record<string, { newValue: any; oldValue: any }> }> &
   // Add entities to existing priorities
-  Record<'defaultTaskParam', EntitiesTaskParam<Definition>> &
+  Record<'defaultTaskParam', EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] }> &
   // Add application and control to new priorities
   Record<
     | 'configuringEachEntityTaskParam'
@@ -96,6 +116,6 @@ export type BaseApplicationGeneratorDefinition<
     preparingEachEntityFieldTaskParam: PreparingEachEntityFieldTaskParam<Definition>;
     preparingEachEntityRelationshipTaskParam: PreparingEachEntityRelationshipTaskParam<Definition>;
     postPreparingEachEntityTaskParam: EachEntityTaskParam<Definition>;
-    writingEntitiesTaskParam: EntitiesTaskParam<Definition>;
-    postWritingEntitiesTaskParam: SourceTaskParam<Definition> & EntitiesTaskParam<Definition>;
+    writingEntitiesTaskParam: EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] };
+    postWritingEntitiesTaskParam: SourceTaskParam<Definition> & EntitiesTaskParam<Definition> & { entityChanges?: BaseChangelog[] };
   };

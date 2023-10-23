@@ -28,19 +28,19 @@ const files: WriteFileSection<Generator, any> = {
       templates: ['gradle/cache.gradle'],
     },
     {
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/CacheConfiguration.java'],
     },
     {
       condition: data => data.cacheProviderInfinispan,
-      path: `${SERVER_MAIN_SRC_DIR}package/`,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/CacheFactoryConfiguration.java'],
     },
     {
       condition: data => data.cacheProviderRedis,
-      path: `${SERVER_TEST_SRC_DIR}package/`,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: [
         'config/EmbeddedRedis.java',

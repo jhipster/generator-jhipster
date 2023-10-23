@@ -24,7 +24,7 @@
 export const prettierConfigFiles = {
   global: [
     {
-      templates: ['.prettierrc', '.prettierignore'],
+      templates: ['.prettierrc', '.prettierignore.jhi'],
     },
   ],
 };
@@ -43,7 +43,7 @@ export const commonFiles = {
   commitHooks: [
     {
       condition: generator => !generator.skipCommitHook,
-      templates: ['.lintstagedrc.js', '.husky/pre-commit'],
+      templates: ['.lintstagedrc.cjs', '.husky/pre-commit'],
     },
   ],
 };

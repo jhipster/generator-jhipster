@@ -46,6 +46,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         auth: 'jwt',
         db: 'mysql',
         blueprint: 'myblueprint',
+        ignoreNeedlesError: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])
       .withAnswers({

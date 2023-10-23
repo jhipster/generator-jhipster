@@ -19,14 +19,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./<%= clientDistDir %>app",
+    "outDir": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/app",
     "types": ["@angular/localize"]
   },
   "files": [
 <%_ if (communicationSpringWebsocket) { _%>
-    "<%= clientSrcDir %>sockjs-client.polyfill.ts",
+    "<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill.ts",
 <%_ } _%>
-    "<%= clientSrcDir %>main.ts"
+    "<%= this.relativeDir(clientRootDir, clientSrcDir) %>main.ts"
   ],
-  "include": ["<%= clientSrcDir %>**/*.d.ts"]
+  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>**/*.d.ts"]
 }

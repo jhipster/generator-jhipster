@@ -20,31 +20,35 @@
 import fs from 'fs';
 import chalk from 'chalk';
 
-import BaseDockerGenerator from '../base-docker/index.mjs';
+import BaseWorkspacesGenerator from '../base-workspaces/index.mjs';
 
 import prompts from '../kubernetes/prompts.mjs';
 import { writeFiles } from './files.mjs';
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.mjs';
-import { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } from '../base-docker/docker-base.mjs';
+import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.mjs';
 import {
   checkKubernetes,
   checkHelm,
   loadConfig,
-  saveConfig,
   setupKubernetesConstants,
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
 } from '../kubernetes/kubernetes-base.mjs';
 import statistics from '../statistics.mjs';
 import { messageBrokerTypes } from '../../jdl/jhipster/index.mjs';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.mjs';
+import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.mjs';
+import { checkDocker } from '../docker/support/index.mjs';
+import { loadDerivedServerConfig } from '../server/support/index.mjs';
+import { loadDerivedAppConfig } from '../app/support/index.mjs';
 
 const { KAFKA } = messageBrokerTypes;
 
 /**
  * @class
- * @extends {BaseDockerGenerator}
+ * @extends {BaseWorkspacesGenerator}
  */
-export default class KubernetesHelmGenerator extends BaseDockerGenerator {
+export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_KUBERNETES_HELM);
@@ -57,7 +61,11 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
         this.log.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-      ...super.initializing,
+      existingDeployment() {
+        this.regenerate = this.regenerate || this.config.existed;
+      },
+      loadDockerDependenciesTask,
+      checkDocker,
       checkKubernetes,
       checkHelm,
       loadConfig,
@@ -66,7 +74,7 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.INITIALIZING]() {
+  get [BaseWorkspacesGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -89,7 +97,7 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.PROMPTING]() {
+  get [BaseWorkspacesGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -99,10 +107,35 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
         statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES_HELM);
       },
 
-      checkImages,
       generateJwtSecret,
+    };
+  }
+
+  get [BaseWorkspacesGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get loading() {
+    return {
+      loadFromYoRc,
+      loadSharedConfig() {
+        this.appConfigs.forEach(element => {
+          loadDerivedAppConfig({ application: element });
+          loadDerivedServerConfig({ application: element });
+        });
+        loadDeploymentConfig.call(this);
+        derivedKubernetesPlatformProperties(this);
+      },
+    };
+  }
+
+  get [BaseWorkspacesGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return {
       configureImageNames,
-      setAppsFolderPaths,
 
       setPostPromptProp() {
         this.appConfigs.forEach(element => {
@@ -113,44 +146,24 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
         });
         this.useKeycloak = false;
       },
-      saveConfig,
     };
   }
 
-  get [BaseDockerGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get loading() {
-    return {
-      loadSharedConfig() {
-        this.appConfigs.forEach(element => {
-          this.loadAppConfig(element, element);
-          this.loadServerConfig(element, element);
-
-          this.loadDerivedAppConfig(element);
-          this.loadDerivedServerConfig(element);
-        });
-        this.loadDeploymentConfig(this);
-        derivedKubernetesPlatformProperties(this);
-      },
-    };
-  }
-
-  get [BaseDockerGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
     return writeFiles();
   }
 
-  get [BaseDockerGenerator.WRITING]() {
+  get [BaseWorkspacesGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get end() {
     return {
+      checkImages,
       deploy() {
         if (this.hasWarning) {
           this.log.warn('Helm configuration generated, but no Jib cache found');
@@ -187,7 +200,29 @@ export default class KubernetesHelmGenerator extends BaseDockerGenerator {
     };
   }
 
-  get [BaseDockerGenerator.END]() {
+  get [BaseWorkspacesGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  /**
+   * @private
+   * Returns the JDBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getJDBCUrl(databaseType, options = {}) {
+    return getJdbcUrl(databaseType, options);
+  }
+
+  /**
+   * @private
+   * Returns the R2DBC URL for a databaseType
+   *
+   * @param {string} databaseType
+   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   */
+  getR2DBCUrl(databaseType, options = {}) {
+    return getR2dbcUrl(databaseType, options);
   }
 }

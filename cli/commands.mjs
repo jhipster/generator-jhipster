@@ -16,6 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
+
+const removedV8 = chalk.yellow(`
+
+This sub-generator is no longer maintained and has been removed from JHipster starting from v8.
+If you are interested in maintaining this sub-generator fill a feature request on the JHipster bug tracker.
+`);
 
 const defaultCommands = {
   add: {
@@ -26,18 +33,22 @@ const defaultCommands = {
   },
   aws: {
     desc: 'Deploy the current application to Amazon Web Services',
+    removed: removedV8,
   },
   'azure-app-service': {
     desc: 'Deploy the current application to Azure App Service',
+    removed: removedV8,
   },
   'azure-spring-cloud': {
     desc: 'Deploy the current application to Azure Spring Cloud',
+    removed: removedV8,
   },
   'ci-cd': {
     desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools',
   },
   cloudfoundry: {
     desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry',
+    removed: removedV8,
   },
   'docker-compose': {
     desc: 'Create all required Docker deployment configuration for the selected applications',
@@ -58,6 +69,7 @@ const defaultCommands = {
   },
   gae: {
     desc: 'Deploy the current application to Google App Engine',
+    removed: removedV8,
   },
   'generate-blueprint': {
     desc: 'Generate a blueprint',
@@ -120,6 +132,7 @@ const defaultCommands = {
   },
   openshift: {
     desc: 'Deploy the current application to OpenShift',
+    removed: removedV8,
   },
   page: {
     desc: 'Create a new page. (Supports vue clients)',
@@ -131,18 +144,18 @@ const defaultCommands = {
     desc: 'Run a module or custom generator',
     argument: ['[generator]'],
   },
-  'spring-boot': {
-    desc: 'Create a Spring Boot application (alpha)',
-  },
   'spring-service': {
     alias: 'service',
     desc: 'Create a new Spring service bean',
+    removed: removedV8,
   },
   'spring-controller': {
     desc: 'Create a new Spring controller',
+    removed: removedV8,
   },
   'openapi-client': {
     desc: 'Generates java client code from an OpenAPI/Swagger definition',
+    removed: removedV8,
   },
   upgrade: {
     desc: 'Upgrade the JHipster version, and upgrade the generated application',

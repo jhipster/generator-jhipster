@@ -40,6 +40,13 @@ describe('login modal', () => {
   it('greets with signin', () => {
     cy.get(titleLoginSelector).should('be.visible');
   });
+<%_ if (clientFrameworkAngular) { _%>
+
+  it('greets visiting /login directly', () => {
+    cy.visit('/login');
+    cy.get(titleLoginSelector).should('be.visible');
+  });
+<%_ } _%>
 
   it('requires username', () => {
     cy.get(passwordLoginSelector).type('a-password');

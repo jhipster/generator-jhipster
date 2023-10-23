@@ -17,13 +17,17 @@
  limitations under the License.
 -%>
 {
-  "extends": "../../../../tsconfig.json",
+<%_ if (clientFrameworkVue) { _%>
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+<%_ } else { _%>
+  "extends": "<%= this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
+<%_ } _%>
   "compilerOptions": {
     "baseUrl": "./",
     "sourceMap": false,
-    "outDir": "../../../../<%= cypressTemporaryDir %>out-tsc",
+    "outDir": "<%- this.relativeDir(cypressDir, temporaryDir) %>cypress/tsc",
     "target": "es2018",
     "types": ["cypress", "node"]
   },
-  "include": ["./../../../../cypress*.config.ts", "./**/*.ts"]
+  "include": ["./<%= this.relativeDir(cypressDir, clientRootDir) %>cypress*.config.ts", "./**/*.ts"]
 }

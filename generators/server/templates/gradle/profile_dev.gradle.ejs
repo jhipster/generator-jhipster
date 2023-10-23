@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (devDatabaseType !== prodDatabaseType && (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgres)) { _%>
+<%_ if (devDatabaseType !== prodDatabaseType && (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgresql)) { _%>
 sourceSets {
     test {
         java {
-            exclude '<%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java'
+            exclude '<%= packageFolder %>/config/<% if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypePostgresql) { %>PostgreSql<% } %>TestContainer.java'
         }
     }
 }
@@ -82,7 +82,7 @@ dependencies {
   <%_ if (prodDatabaseTypeMariadb) { _%>
     testImplementation "org.testcontainers:mariadb"
   <%_ } _%>
-  <%_ if (prodDatabaseTypePostgres) { _%>
+  <%_ if (prodDatabaseTypePostgresql) { _%>
     testImplementation "org.testcontainers:postgresql"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMssql) { _%>
@@ -134,7 +134,7 @@ task webapp(type: NpmTask) {
     inputs.dir("<%= clientSrcDir %>")
         .withPropertyName("webapp-source-dir")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-  <%_ if (!clientFrameworkAngular) { _%>
+  <%_ if (clientFrameworkReact) { _%>
     inputs.files("tsconfig.json")
         .withPropertyName("tsconfig")
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -146,9 +146,26 @@ task webapp(type: NpmTask) {
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
   <%_ if (clientFrameworkVue) { _%>
+    inputs.files("tsconfig.json", "tsconfig.app.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+
     inputs.files(".postcssrc")
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ if (microfrontend) { _%>
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } else { _%>
+
+    inputs.files("vite.config.ts")
+        .withPropertyName("vite")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } _%>
   <%_ } _%>
     outputs.dir("<%= clientDistDir %>")
         .withPropertyName("webapp-build-dir")

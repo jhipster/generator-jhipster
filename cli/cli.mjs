@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { dirname, relative } from 'path';
+import { dirname, join, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';
 import semver from 'semver';
@@ -45,9 +45,11 @@ if (!process.argv.includes('--skip-checks')) {
   }
 }
 
+const appFolderOrWorkspaceRoot = existsSync('../node_modules') ? join(process.cwd(), '..') : process.cwd();
+// If this file is not inside app npm repository and the executable exists inside the repository show warning.
 if (
-  relative(__dirname, process.cwd()).startsWith('..') &&
-  (existsSync('node_modules/.bin/jhipster') || existsSync('../node_modules/.bin/jhipster'))
+  relative(appFolderOrWorkspaceRoot, __dirname).startsWith('..') &&
+  existsSync(join(appFolderOrWorkspaceRoot, 'node_modules/.bin/jhipster'))
 ) {
   logger.warn(`Since JHipster v8, the jhipster command will not use the locally installed generator-jhipster.
     If you want to execute the locally installed generator-jhipster, run: ${chalk.yellow('npx jhipster')}`);

@@ -20,170 +20,116 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import prompts from './prompts.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
-import { applicationTypes, clientFrameworkTypes, getConfigWithDefaults, reservedKeywords } from '../../jdl/jhipster/index.mjs';
-import { GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
-import { removeFieldsWithNullishValues } from '../base/support/index.mjs';
+import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.mjs';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.mjs';
+import command from './command.mjs';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator {
+  name;
+  application = {};
+
   constructor(args, options, features) {
-    super(args, options, { unique: 'argument', skipParseOptions: false, ...features });
-
-    // This makes `name` a required argument.
-    this.argument('name', {
-      type: String,
-      required: true,
-      description: 'Entity name',
-    });
-
-    // This method adds support for a `--[no-]regenerate` flag
-    this.option('regenerate', {
-      description: 'Regenerate the entity without presenting an option to update it',
-      type: Boolean,
-      default: false,
-    });
-
-    this.option('table-name', {
-      description: 'Specify table name that will be used by the entity',
-      type: String,
-    });
-
-    // This method adds support for a `--[no-]fluent-methods` flag
-    this.option('fluent-methods', {
-      description: 'Generate fluent methods in entity beans to allow chained object construction',
-      type: Boolean,
-    });
-
-    // This adds support for a `--angular-suffix` flag
-    this.option('angular-suffix', {
-      description: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
-      type: String,
-    });
-
-    // This adds support for a `--client-root-folder` flag
-    this.option('client-root-folder', {
-      description:
-        'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
-      type: String,
-    });
-
-    // This adds support for a `--skip-ui-grouping` flag
-    this.option('skip-ui-grouping', {
-      description: 'Disables the UI grouping behaviour for entity client side code',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-server` flag
-    this.option('skip-server', {
-      description: 'Skip the server-side code generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-client` flag
-    this.option('skip-client', {
-      description: 'Skip the client-side code generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-db-changelog` flag
-    this.option('skip-db-changelog', {
-      description: 'Skip the generation of database changelog (liquibase for sql databases)',
-      type: Boolean,
-    });
-
-    // This adds support for a `--db` flag
-    this.option('db', {
-      description: 'Provide DB option for the application when using skip-server flag',
-      type: String,
-    });
-
-    this.option('single-entity', {
-      description: 'Regenerate only a single entity, relationships can be not correctly generated',
-      type: Boolean,
-    });
+    super(args, options, { unique: 'argument', ...features });
   }
 
-  async _postConstruct() {
-    const name = _.upperFirst(this.options.name).replace('.json', '');
-    this.entityStorage = this.getEntityConfig(name, true);
-    this.entityConfig = this.entityStorage.createProxy();
-
-    const configExisted = this.entityStorage.existed;
-    const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
-    const entityExisted = fs.existsSync(this.destinationPath(filename));
-
-    this.jhipsterConfig.entities = [...(this.jhipsterConfig.entities ?? []), name];
-    this.context = {
-      name,
-      filename,
-      configExisted,
-      entityExisted,
-      configurationFileExists: this.fs.exists(this.destinationPath(filename)),
-    };
-
+  async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ENTITY, {
-        generatorOptions: {
-          entityExisted,
-          configExisted,
-          arguments: [name],
-        },
-      });
+      await this.composeWithBlueprints(GENERATOR_ENTITY);
     }
 
-    this._setupEntityOptions(this, this, this.context);
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    }
   }
 
   // Public API method used by the getter and also by Blueprints
   get initializing() {
-    return {
-      /* Use need microservice path to load the entity file */
-      askForMicroserviceJson: prompts.askForMicroserviceJson,
+    return this.asInitializingTaskGroup({
+      parseOptions() {
+        this.parseJHipsterArguments(command.arguments);
+        const name = _.upperFirst(this.name).replace('.json', '');
+        this.entityStorage = this.getEntityConfig(name, true);
+        this.entityConfig = this.entityStorage.createProxy();
 
-      loadSharedConfig() {
-        this.application = {};
-        this.loadAppConfig(undefined, this.application);
-        this.loadClientConfig(undefined, this.application);
-        this.loadTranslationConfig(undefined, this.application);
-        // Try to load server config from microservice side, falling back to the app config.
-        this.loadServerConfig(
-          getConfigWithDefaults({
-            ...removeFieldsWithNullishValues(this.jhipsterConfig),
-            ...removeFieldsWithNullishValues(this.microserviceConfig ?? {}),
-          }),
-          this.application,
-        );
+        const configExisted = this.entityStorage.existed;
+        const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
+        const entityExisted = fs.existsSync(this.destinationPath(filename));
 
-        this.loadDerivedAppConfig(this.application);
-        this.loadDerivedClientConfig(this.application);
-        this.loadDerivedServerConfig(this.application);
-        this.loadDerivedPlatformConfig(this.application);
+        this.jhipsterConfig.entities = [...(this.jhipsterConfig.entities ?? []), name];
+        this.entityData = {
+          name,
+          filename,
+          configExisted,
+          entityExisted,
+          configurationFileExists: this.fs.exists(this.destinationPath(filename)),
+        };
+
+        this._setupEntityOptions(this, this, this.entityData);
       },
 
+      loadOptions() {
+        if (this.options.db) {
+          this.entityConfig.databaseType = getDBTypeFromDBValue(this.options.db);
+          if (this.entityConfig.databaseType === 'sql') {
+            this.entityConfig.prodDatabaseType = this.options.db;
+            this.entityConfig.devDatabaseType = this.options.db;
+          }
+        }
+
+        if (this.options.skipServer !== undefined) {
+          this.entityConfig.skipServer = this.options.skipServer;
+        }
+        if (this.options.skipDbChangelog !== undefined) {
+          this.entityConfig.skipDbChangelog = this.options.skipDbChangelog;
+        }
+        if (this.options.skipClient !== undefined) {
+          this.entityConfig.skipClient = this.options.skipClient;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      /* Use need microservice path to load the entity file */
+      askForMicroserviceJson: prompts.askForMicroserviceJson,
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
       isBuiltInEntity() {
-        if (this.isBuiltInUser(this.context.name) || this.isBuiltInAuthority(this.context.name)) {
-          throw new Error(`Is not possible to override built in ${this.context.name}`);
+        if (this.isBuiltInUser(this.entityData.name) || this.isBuiltInAuthority(this.entityData.name)) {
+          throw new Error(`Is not possible to override built in ${this.entityData.name}`);
         }
       },
 
-      setupMicroServiceEntity() {
-        const context = this.context;
+      setupMicroServiceEntity({ application }) {
+        const context = this.entityData;
 
-        if (this.application.applicationType === MICROSERVICE) {
+        if (application.applicationType === MICROSERVICE) {
           context.microserviceName = this.entityConfig.microserviceName = this.jhipsterConfig.baseName;
           if (!this.entityConfig.clientRootFolder) {
             context.clientRootFolder = this.entityConfig.clientRootFolder = this.entityConfig.microserviceName;
           }
-        } else if (this.application.applicationType === GATEWAY) {
+        } else if (application.applicationType === GATEWAY) {
           // If microservicePath is set we are loading the entity from the microservice side.
           context.useMicroserviceJson = !!this.entityConfig.microservicePath;
           if (context.useMicroserviceJson) {
@@ -208,48 +154,25 @@ export default class EntityGenerator extends BaseApplicationGenerator {
               ? ''
               : this.entityConfig.microserviceName;
           }
-
-          if (this.jhipsterConfig.applications && !this.entityConfig.skipClient) {
-            const remoteConfig = this.jhipsterConfig.applications[this.entityConfig.microserviceName];
-            if (remoteConfig && remoteConfig.clientFramework && remoteConfig.clientFramework !== CLIENT_FRAMEWORK_NO) {
-              // Gateway requires entities to discover a microfrontend.
-              // Microfrontends is generated at the microservice side, so skip it at gateway side.
-              this.entityConfig.skipClient = true;
-            }
-          }
         }
       },
 
-      loadOptions() {
-        const context = this.context;
-
-        if (this.options.db) {
-          context.databaseType = getDBTypeFromDBValue(this.options.db);
-          context.prodDatabaseType = this.options.db;
-          context.devDatabaseType = this.options.db;
-        }
-
-        context.skipServer = context.skipServer || this.options.skipServer;
-        context.skipDbChangelog = context.skipDbChangelog || this.options.skipDbChangelog;
-        context.skipClient = context.skipClient || this.options.skipClient;
-      },
-
-      loadEntitySpecificOptions() {
-        this.context.skipClient = this.context.skipClient || this.entityConfig.skipClient;
-        this.context.databaseType = this.context.databaseType || this.entityConfig.databaseType || this.jhipsterConfig.databaseType;
+      loadEntitySpecificOptions({ application }) {
+        this.entityData.skipClient = this.entityData.skipClient || this.entityConfig.skipClient;
+        this.entityData.databaseType = this.entityData.databaseType || this.entityConfig.databaseType || application.databaseType;
       },
 
       validateEntityName() {
-        const validation = this._validateEntityName(this.context.name);
+        const validation = this._validateEntityName(this.entityData.name);
         if (validation !== true) {
           throw new Error(validation);
         }
       },
 
-      bootstrapConfig() {
-        const context = this.context;
+      bootstrapConfig({ application }) {
+        const context = this.entityData;
         const entityName = context.name;
-        if ([MICROSERVICE, GATEWAY].includes(this.application.applicationType)) {
+        if ([MICROSERVICE, GATEWAY].includes(application.applicationType)) {
           if (this.entityConfig.databaseType === undefined) {
             this.entityConfig.databaseType = context.databaseType;
           }
@@ -266,16 +189,15 @@ export default class EntityGenerator extends BaseApplicationGenerator {
           this.log.verboseInfo(`\nThe entity ${entityName} is being created.\n`);
         }
       },
-    };
+    });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
-  // Public API method used by the getter and also by Blueprints
-  get prompting() {
-    return {
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
       /* ask question to user if s/he wants to update entity */
       askForUpdate: prompts.askForUpdate,
       askForFields: prompts.askForFields,
@@ -287,41 +209,38 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       askForFiltering: prompts.askForFiltering,
       askForReadOnly: prompts.askForReadOnly,
       askForPagination: prompts.askForPagination,
-    };
+    });
   }
 
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   // Public API method used by the getter and also by Blueprints
-  get composing() {
-    return {
+  get default() {
+    return this.asDefaultTaskGroup({
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
+          generatorArgs: this.options.singleEntity ? [this.entityData.name] : [],
           generatorOptions: {
-            entities: this.options.singleEntity ? [this.context.name] : undefined,
-            regenerate: true,
-            writeEveryEntity: false,
-            composedEntities: [this.context.name],
             skipDbChangelog: this.options.skipDbChangelog,
             skipInstall: this.options.skipInstall,
           },
         });
       },
-    };
+    });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
   get end() {
     return {
       end() {
-        this.log.log(chalk.bold.green(`Entity ${this.context.entityNameCapitalized} generated successfully.`));
+        this.log.log(chalk.bold.green(`Entity ${this.entityData.entityNameCapitalized} generated successfully.`));
       },
     };
   }
@@ -389,7 +308,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
       return "The entity name cannot end with 'Detail'";
     }
-    if (!this.context.skipServer && isReservedClassName(entityName)) {
+    if (!this.entityData.skipServer && isReservedClassName(entityName)) {
       return 'The entity name cannot contain a Java or JHipster reserved keyword';
     }
     return true;

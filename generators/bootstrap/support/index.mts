@@ -19,6 +19,7 @@
 export { default as autoCrlfTransform } from './auto-crlf-transform.mjs';
 export { default as createForceWriteConfigFilesTransform } from './force-write-config-files-transform.mjs';
 export * from './eslint-transform.mjs';
+export * from './java-unused-imports-transform.mjs';
 export * from './multi-step-transform/index.mjs';
 export * from './prettier-support.mjs';
 export { default as createSortConfigFilesTransform } from './sort-config-files-transform.mjs';

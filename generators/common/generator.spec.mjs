@@ -21,10 +21,9 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { defaultHelpers as helpers, basicHelpers, runResult } from '../../test/support/helpers.mjs';
+import { defaultHelpers as helpers, basicHelpers, runResult, checkEnforcements } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { checkEnforcements } from '../../test/support/index.mjs';
 import { GENERATOR_COMMON } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -54,6 +53,10 @@ describe(`generator - ${generator}`, () => {
       it('should succeed', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
+
+      it('should add generator-jhipster to package.json', () => {
+        runResult.assertFileContent('package.json', 'generator-jhipster');
+      });
     });
     describe('Custom prettier', () => {
       before(async () => {
@@ -70,7 +73,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('uses custom prettier formatting to js file', () => {
-        runResult.assertFileContent('.lintstagedrc.js', / {10}'{/);
+        runResult.assertFileContent('.lintstagedrc.cjs', / {10}'{/);
       });
     });
   });

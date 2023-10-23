@@ -20,3 +20,4 @@ export * from './languages.mjs';
 export { default as generateDateTimeFormat } from './json/dates.mjs';
 export { default as detectLanguage } from './detect-language.mjs';
 export { default as loadLanguagesConfig } from './load-config.mjs';
+export * from './translate.mjs';

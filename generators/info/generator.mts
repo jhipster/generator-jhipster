@@ -26,10 +26,20 @@ import BaseApplicationGenerator from '../base-application/index.mjs';
 import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
+import { YO_RC_FILE } from '../generator-constants.mjs';
+import { replaceSensitiveConfig } from './support/utils.mjs';
+
+const isInfoCommand = commandName => commandName === 'info' || undefined;
 
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
-    super(args, options, { customInstallTask: true, customCommitTask: true, ...features });
+    super(args, options, {
+      jhipsterBootstrap: false,
+      storeJHipsterVersion: false,
+      customInstallTask: isInfoCommand(options.commandName),
+      customCommitTask: isInfoCommand(options.commandName),
+      ...features,
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -39,25 +49,31 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       },
 
       async checkJHipster() {
-        try {
-          const { stdout } = await this.spawnCommand('npm', ['list', 'generator-jhipster'], { stdio: 'pipe' });
-          console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
-        } catch (error) {
-          console.log(`\n\`\`\`\n${(error as any).stdout}\`\`\`\n`);
-        }
+        const { stdout } = await this.spawnCommand('npm list generator-jhipster', { stdio: 'pipe', reject: false });
+        console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
       },
 
       displayConfiguration() {
         // Omit sensitive information.
-        const result = JSON.stringify({ ...this.jhipsterConfig, jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
-        console.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
-        console.log(`\n<details>\n<summary>.yo-rc.json file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        const yoRc = this.readDestinationJSON(YO_RC_FILE);
+        if (yoRc) {
+          const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
+          console.log(`\n##### **JHipster configuration, a \`${YO_RC_FILE}\` file generated in the root folder**\n`);
+          console.log(`\n<details>\n<summary>${YO_RC_FILE} file</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        } else {
+          console.log('\n##### **JHipster configuration not found**\n');
+        }
 
-        if (this.jhipsterConfig.packages && this.jhipsterConfig.packages.length > 0) {
-          for (const pkg of this.jhipsterConfig.packages) {
-            const yoRc = this.readDestinationJSON(`${pkg}/.yo-rc.json`);
-            const result = JSON.stringify({ ...yoRc['generator-jhipster'], jwtSecretKey: undefined, rememberMeKey: undefined }, null, 2);
-            console.log(`\n<details>\n<summary>.yo-rc.json file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+        const packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        if (packages.length > 0) {
+          for (const pkg of packages) {
+            const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
+            if (yoRc) {
+              const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);
+              console.log(`\n<details>\n<summary>${YO_RC_FILE} file for ${pkg}</summary>\n<pre>\n${result}\n</pre>\n</details>\n`);
+            } else {
+              console.log(`\n##### **JHipster configuration for ${pkg} not found**\n`);
+            }
           }
         }
       },
@@ -104,7 +120,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
 
   async checkCommand(command: string, args: string[], printInfo = ({ stdout }: ExecaReturnValue<string>) => console.log(stdout)) {
     try {
-      printInfo(await this.spawnCommand(command, args, { stdio: 'pipe' }));
+      printInfo(await this.spawn(command, args, { stdio: 'pipe' }));
     } catch (_error) {
       console.log(chalk.red(`'${command}' command could not be found`));
     }

@@ -21,9 +21,9 @@ import { type JHipsterCommandDefinition } from '../../generators/base/api.mjs';
 const command: JHipsterCommandDefinition = {
   arguments: {},
   options: {
-    sampleName: {
+    samplePath: {
       type: String,
-      description: 'Sample Name',
+      description: 'Relative or absolute path',
       scope: 'generator',
     },
   },

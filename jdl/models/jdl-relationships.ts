@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
+import { JDLRelationshipType } from '../basic-types/relationships.js';
 import { relationshipTypes } from '../jhipster/index.mjs';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
-import JDLRelationship, { JDLRelationshipType } from './jdl-relationship.js';
+import JDLRelationship from './jdl-relationship.js';
 
 export default class JDLRelationships {
   relationships: Record<JDLRelationshipType, Map<string, JDLRelationship>>;

@@ -50,6 +50,9 @@ const LOADING_QUEUE = `${QUEUE_PREFIX}${LOADING}`;
 const PREPARING = 'preparing';
 const PREPARING_QUEUE = `${QUEUE_PREFIX}${PREPARING}`;
 
+const POST_PREPARING = 'postPreparing';
+const POST_PREPARING_QUEUE = `${QUEUE_PREFIX}${POST_PREPARING}`;
+
 const MULTISTEP_TRANSFORM = 'multistepTransform';
 const MULTISTEP_TRANSFORM_QUEUE = `${QUEUE_PREFIX}${MULTISTEP_TRANSFORM}`;
 
@@ -98,8 +101,14 @@ export const CUSTOM_PRIORITIES = [
   {
     priorityName: PREPARING,
     queueName: PREPARING_QUEUE,
-    before: DEFAULT,
+    before: POST_PREPARING,
     args: generator => generator.getArgsForPriority(PREPARING),
+  },
+  {
+    priorityName: POST_PREPARING,
+    queueName: POST_PREPARING_QUEUE,
+    before: DEFAULT,
+    args: generator => generator.getArgsForPriority(POST_PREPARING),
   },
   {
     priorityName: DEFAULT,
@@ -153,6 +162,7 @@ export const PRIORITY_NAMES = {
   COMPOSING,
   LOADING,
   PREPARING,
+  POST_PREPARING,
 
   DEFAULT,
   WRITING,
@@ -172,6 +182,7 @@ export const PRIORITY_NAMES_LIST = [
   COMPOSING,
   LOADING,
   PREPARING,
+  POST_PREPARING,
 
   DEFAULT,
   WRITING,
@@ -190,6 +201,7 @@ export const QUEUES = {
   COMPOSING_QUEUE,
   LOADING_QUEUE,
   PREPARING_QUEUE,
+  POST_PREPARING_QUEUE,
 
   DEFAULT_QUEUE: DEFAULT,
   WRITING_QUEUE: WRITING,

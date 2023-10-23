@@ -20,7 +20,6 @@ export type BaseGeneratorDefinition<Definition extends GenericSourceTypeDefiniti
   | 'configuringTaskParam'
   | 'composingTaskParam'
   | 'loadingTaskParam'
-  | 'preparingTaskParam'
   | 'defaultTaskParam'
   | 'writingTaskParam'
   | 'postWritingTaskParam'
@@ -30,4 +29,4 @@ export type BaseGeneratorDefinition<Definition extends GenericSourceTypeDefiniti
   | 'endTaskParam',
   ControlTaskParam
 > &
-  Record<'preparingTaskParam' | 'postWritingTaskParam', SourceTaskParam<Definition>>;
+  Record<'preparingTaskParam' | 'postPreparingTaskParam' | 'postWritingTaskParam', SourceTaskParam<Definition>>;

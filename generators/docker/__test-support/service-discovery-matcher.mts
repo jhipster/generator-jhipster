@@ -1,13 +1,13 @@
 import type { RunResult } from 'yeoman-test';
 
-import { DOCKER_DIR } from '../../generator-constants.mjs';
+import { JAVA_DOCKER_DIR } from '../../generator-constants.mjs';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.mjs';
 
 const expectedEurekaFiles = () => {
   return [
-    `${DOCKER_DIR}central-server-config/localhost-config/application.yml`,
-    `${DOCKER_DIR}central-server-config/docker-config/application.yml`,
-    `${DOCKER_DIR}jhipster-registry.yml`,
+    `${JAVA_DOCKER_DIR}central-server-config/localhost-config/application.yml`,
+    `${JAVA_DOCKER_DIR}central-server-config/docker-config/application.yml`,
+    `${JAVA_DOCKER_DIR}jhipster-registry.yml`,
   ];
 };
 
@@ -18,7 +18,11 @@ const desiredEurekaConfig = {
 };
 
 const expectedConsulFiles = () => {
-  return [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`];
+  return [
+    `${JAVA_DOCKER_DIR}central-server-config/application.yml`,
+    `${JAVA_DOCKER_DIR}consul.yml`,
+    `${JAVA_DOCKER_DIR}config/git2consul.json`,
+  ];
 };
 
 const desiredConsulConfig = {

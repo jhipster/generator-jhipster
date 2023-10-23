@@ -586,7 +586,7 @@ describe('cli', () => {
           expect(stdout).toMatch('Usage: jhipster run jhipster:app [options]');
         });
         it('should print options', () => {
-          expect(stdout).toMatch('--application-type <value>');
+          expect(stdout).toMatch('--defaults');
         });
         it('should exit with code 0', () => {
           expect(exitCode).toBe(0);

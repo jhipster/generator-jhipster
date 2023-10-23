@@ -3,13 +3,16 @@ import { fileURLToPath } from 'url';
 import { expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { buildClientSamples, checkEnforcements, entitiesClientSamples as entities } from '../../test/support/index.mjs';
+import {
+  buildClientSamples,
+  checkEnforcements,
+  entitiesClientSamples as entities,
+  defaultHelpers as helpers,
+} from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './index.mjs';
-import { defaultHelpers as helpers } from '../../test/support/helpers.mjs';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.mjs';
-import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR } from '../generator-list.mjs';
 
 const { snakeCase } = lodash;
@@ -73,16 +76,6 @@ const clientAdminFiles = clientSrcDir => [
   `${clientSrcDir}app/admin/metrics/metrics.service.spec.ts`,
 ];
 
-class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
-  get [BaseApplicationGenerator.PREPARING]() {
-    return {
-      mockTranslations({ control }) {
-        control.getWebappTranslation = () => 'translations';
-      },
-    };
-  }
-}
-
 describe(`generator - ${clientFramework}`, () => {
   it('generator-list constant matches folder name', async () => {
     await expect((await import('../generator-list.mjs'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
@@ -97,6 +90,8 @@ describe(`generator - ${clientFramework}`, () => {
   });
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
+    const { clientRootDir = '' } = sampleConfig;
+
     describe(name, () => {
       let runResult;
 
@@ -104,8 +99,8 @@ describe(`generator - ${clientFramework}`, () => {
         runResult = await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
-          .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
-          .withMockedGenerators(['jhipster:common']);
+          .withControl({ getWebappTranslation: () => 'translations' })
+          .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
 
       after(() => runResult.cleanup());
@@ -117,26 +112,15 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"clientFramework": "${clientFramework}"`));
       });
       it('should not contain version placeholders at package.json', () => {
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_COMMON/);
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_REACT/);
-        runResult.assertNoFileContent('package.json', /VERSION_MANAGED_BY_CLIENT_VUE/);
-      });
-
-      describe('skipJhipsterDependencies', () => {
-        const { skipJhipsterDependencies } = sampleConfig;
-        const skipJhipsterDependenciesTitle = skipJhipsterDependencies
-          ? 'should not add generator-jhipster to package.json'
-          : 'should add generator-jhipster to package.json';
-        it(skipJhipsterDependenciesTitle, () => {
-          const assertion = (...args) =>
-            skipJhipsterDependencies ? runResult.assertNoFileContent(...args) : runResult.assertFileContent(...args);
-          assertion('package.json', 'generator-jhipster');
-        });
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_COMMON/);
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_REACT/);
+        runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi, clientSrcDir = CLIENT_MAIN_SRC_DIR } = sampleConfig;
+        const { applicationType, withAdminUi, clientRootDir = '' } = sampleConfig;
+        const clientSrcDir = `${clientRootDir}${CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 

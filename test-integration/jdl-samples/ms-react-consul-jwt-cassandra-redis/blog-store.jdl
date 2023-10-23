@@ -123,6 +123,7 @@ entity Tag {
 
 @ChangelogDate(20210408164813)
 entity Product {
+  @Id id UUID
   title String required
   price BigDecimal required min(0)
   image ImageBlob
@@ -130,6 +131,7 @@ entity Product {
 
 @ChangelogDate(20210408164814)
 entity Notification {
+  @Id id UUID
   title String required
 }
 
@@ -166,3 +168,13 @@ deployment {
   monitoring no
   serviceDiscoveryType consul
 }
+
+/* kubernetes is missing cassandra templates
+deployment {
+  deploymentType kubernetes,
+  appsFolders [gateway, store, blog, notification]
+  dockerRepositoryName "hipsterslabs"
+  monitoring no
+  serviceDiscoveryType consul
+}
+*/

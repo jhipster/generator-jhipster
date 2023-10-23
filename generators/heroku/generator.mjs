@@ -21,7 +21,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import ChildProcess from 'child_process';
 import util from 'util';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
 import runAsync from 'run-async';
@@ -42,6 +42,10 @@ import {
 import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
+import { getFrontendAppName } from '../base/support/index.mjs';
+import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
+import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
+import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
@@ -88,13 +92,14 @@ export default class HerokuGenerator extends BaseGenerator {
   get initializing() {
     return {
       loadCommonConfig() {
-        this.loadAppConfig();
-        this.loadServerConfig();
-        this.loadTranslationConfig();
-        this.loadPlatformConfig();
+        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
+        loadLanguagesConfig({ application: this, config: this.jhipsterConfigWithDefaults });
+        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
 
-        this.loadDerivedAppConfig();
-        this.loadDerivedServerConfig();
+        loadDerivedAppConfig({ application: this });
+        loadDerivedPlatformConfig({ application: this });
+        loadDerivedServerConfig({ application: this });
       },
 
       initializing() {
@@ -103,7 +108,7 @@ export default class HerokuGenerator extends BaseGenerator {
         this.env.options.appPath = configuration.get('appPath') || CLIENT_MAIN_SRC_DIR;
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-        this.frontendAppName = this.getFrontendAppName();
+        this.frontendAppName = getFrontendAppName({ baseName: this.jhipsterConfig.baseName });
         this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
         this.herokuDeployType = configuration.get('herokuDeployType');
@@ -623,7 +628,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       makeScriptExecutable() {
         if (this.abort) return;
         if (this.useOkta) {
@@ -638,7 +643,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
-      productionBuild: runAsync(function () {
+      async productionBuild() {
         if (this.abort) return;
 
         if (this.herokuSkipBuild || this.herokuDeployType === 'git') {
@@ -646,23 +651,11 @@ export default class HerokuGenerator extends BaseGenerator {
           return;
         }
 
-        const done = this.async();
         this.log.log(chalk.bold('\nBuilding application'));
 
-        const child = this.buildApplication(this.buildTool, 'prod', false, err => {
-          if (err) {
-            this.abort = true;
-            this.log.error(err);
-          }
-          done();
-        });
-
-        this.buildCmd = child.buildCmd;
-
-        child.stdout.on('data', data => {
-          process.stdout.write(data.toString());
-        });
-      }),
+        // Use npm script so blueprints just need to override it.
+        await this.spawnCommand('npm run java:jar:prod', { stdio: 'inherit' });
+      },
 
       async productionDeploy() {
         if (this.abort) return;
@@ -883,7 +876,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.END]() {

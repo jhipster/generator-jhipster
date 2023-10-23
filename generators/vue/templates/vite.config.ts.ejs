@@ -1,0 +1,175 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { fileURLToPath, URL } from 'node:url';
+import { dirname, join } from 'node:path';
+import { existsSync } from 'node:fs';
+
+import { mergeConfig, defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import copy from 'rollup-plugin-copy';
+<%_ if (microfrontend) { _%>
+import federation from "@originjs/vite-plugin-federation";
+
+const sharedAppVersion = '0.0.0';
+<%_ } _%>
+
+const getFileFromRepo = (file: string) =>
+  existsSync(fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url)))
+    ? fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url))
+    : fileURLToPath(new URL(`./node_modules/${file}`, import.meta.url));
+
+// eslint-disable-next-line prefer-const
+let config = defineConfig({
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          compatConfig: {
+            MODE: 2,
+          },
+        },
+      },
+    }),
+    copy({
+      targets: [
+        {
+          src: [
+            `${require('swagger-ui-dist').getAbsoluteFSPath()}/*.{js,css,html,png}`,
+            `!${require('swagger-ui-dist').getAbsoluteFSPath()}/**/index.html`,
+            getFileFromRepo('axios/dist/axios.min.js'),
+            fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url)),
+          ],
+          dest: '<%= this.relativeDir(clientRootDir, clientDistDir) %>swagger-ui',
+        },
+      ],
+      hook: 'writeBundle',
+    }),
+  ],
+  root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
+  publicDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>public', import.meta.url)),
+  cacheDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, temporaryDir) %>.vite-cache', import.meta.url)),
+  build: {
+    emptyOutDir: true,
+    outDir: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientDistDir) %>', import.meta.url)),
+    rollupOptions: {
+      input: {
+        app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html', import.meta.url)),
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      vue: '@vue/compat/dist/vue.esm-bundler.js',
+      '@': fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
+    },
+  },
+  define: {
+    I18N_HASH: '"generated_hash"',
+    SERVER_API_URL: '"/"',
+    APP_VERSION: `"${process.env.APP_VERSION ? process.env.APP_VERSION : 'DEV'}"`,
+  },
+  server: {
+    proxy: Object.fromEntries(
+      [
+        '/api',
+        '/management',
+        '/v3/api-docs',
+<%_ if (databaseTypeSql && devDatabaseTypeH2Any) { _%>
+        '/h2-console',
+<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+        '/oauth2',
+        '/login',
+<%_ } _%>
+<%_ if (authenticationTypeSession) { _%>
+        '/login',
+<%_ } _%>
+<%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
+        '/services',
+<%_ } _%>
+      ].map(res => [
+        res,
+        {
+          target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+        },
+      ])
+    ),
+  },
+});
+
+<%_ if (microfrontend) { _%>
+config = mergeConfig(config, {
+  build: {
+    modulePreload: false,
+    minify: false,
+    target: ["chrome89", "edge89", "firefox89", "safari15"],
+  },
+  plugins: [
+    federation({
+      name: '<%= lowercaseBaseName %>',
+<%_ if (applicationTypeGateway) { _%>
+      remotes: {
+  <%_ for (const remote of microfrontends) { _%>
+        '@<%= remote.lowercaseBaseName %>': `/<%= remote.endpointPrefix %>/assets/remoteEntry.js`,
+  <%_ } _%>
+      },
+<%_ } _%>
+<%_ if (applicationTypeMicroservice) { _%>
+      exposes: {
+        './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
+        './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
+      },
+<%_ } _%>
+      shared: {
+        '@vuelidate/core': {},
+        '@vuelidate/validators': {},
+        axios: {},
+        // 'bootstrap-vue': {},
+        vue: {
+          packagePath: '@vue/compat/dist/vue.esm-bundler.js',
+        },
+        'vue-i18n': {},
+        'vue-router': {},
+        pinia: {},
+        '@/shared/security/authority': {
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/security/authority',
+<%_ if (applicationTypeGateway) { _%>
+          version: sharedAppVersion,
+<%_ } _%>
+        },
+        '@/shared/alert/alert.service': {
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
+<%_ if (applicationTypeGateway) { _%>
+          version: sharedAppVersion,
+<%_ } _%>
+        },
+        '@/locale/translation.service': {
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
+<%_ if (applicationTypeGateway) { _%>
+          version: sharedAppVersion,
+<%_ } _%>
+        },
+      },
+    }),
+  ],
+});
+<%_ } _%>
+// jhipster-needle-add-vite-config - JHipster will add custom config
+
+export default config;

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { isFilePending } from 'mem-fs-editor/state';
 
@@ -33,6 +33,10 @@ import {
   addToEntitiesMenu,
   translateAngularFilesTransform,
   isTranslatedAngularFile,
+  addRoute,
+  addItemToMenu,
+  addItemToAdminMenu,
+  addIconImport,
 } from './support/index.mjs';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
@@ -42,6 +46,7 @@ import {
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.mjs';
 import type { CommonClientServerApplication } from '../base-application/types.mjs';
+import { createNeedleCallback } from '../base/support/index.mjs';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -49,22 +54,14 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   localEntities?: any[];
 
   async beforeQueue() {
-    await this.dependsOnJHipster(GENERATOR_CLIENT);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_ANGULAR);
     }
-  }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composing() {
-        await this.composeWithJHipster(GENERATOR_LANGUAGES);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_CLIENT);
+      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+    }
   }
 
   get loading() {
@@ -88,11 +85,53 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
         application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!;
       },
-      addNeedles({ source }) {
+      addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
           const { application, entities } = param;
           this.addEntitiesToModule({ application, entities });
           this.addEntitiesToMenu({ application, entities });
+        };
+
+        source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
+          this.editFile(
+            `${application.srcMainWebapp}app/admin/admin-routing.module.ts`,
+            addRoute({
+              needle: 'add-admin-route',
+              ...args,
+            }),
+          );
+
+        source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
+          this.editFile(
+            `${application.srcMainWebapp}app/layouts/navbar/navbar.component.html`,
+            addItemToAdminMenu({
+              enableTranslation: application.enableTranslation,
+              jhiPrefix: application.jhiPrefix,
+              ...args,
+            }),
+          );
+          if (args.icon) {
+            source.addIconImport!({ icon: args.icon });
+          }
+        };
+
+        source.addIconImport = args => {
+          const iconsPath = `${application.srcMainWebapp}app/config/font-awesome-icons.ts`;
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Icon imports not updated with icon';
+          this.editFile(iconsPath, { ignoreNonExisting }, addIconImport(args));
+        };
+
+        source.addWebpackConfig = args => {
+          const webpackPath = `${application.clientRootDir}webpack/webpack.custom.js`;
+          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
+          this.editFile(
+            webpackPath,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-webpack-config',
+              contentToAdd: `,${args.config}`,
+            }),
+          );
         };
       },
     });
@@ -108,6 +147,12 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
+      queueTranslateTransform({ control, application }) {
+        this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation), {
+          name: 'translating webapp',
+          streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
+        });
+      },
     });
   }
 
@@ -119,14 +164,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
-      queueTranslateTransform({ control, application }) {
-        if (!application.enableTranslation) {
-          this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation), {
-            name: 'translating webapp',
-            streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
-          });
-        }
-      },
     });
   }
 

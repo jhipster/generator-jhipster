@@ -27,7 +27,7 @@ export default function cleanupOldServerFilesTask(this: Generator, { application
     if (application.devDatabaseTypeH2Any) {
       this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedH2Dialect.java`);
     }
-    if (application.devDatabaseTypePostgres || application.prodDatabaseTypePostgres) {
+    if (application.prodDatabaseTypePostgresql) {
       this.removeFile(`${application.javaPackageSrcDir}domain/util/FixedPostgreSQL82Dialect`);
     }
   }

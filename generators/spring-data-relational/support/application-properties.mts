@@ -19,24 +19,41 @@
 
 import { getDatabaseData } from './database-data.mjs';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.mjs';
+import { databaseTypes } from '../../../jdl/jhipster/index.mjs';
 
-export default function prepareSqlApplicationProperties(application: any) {
-  const devDatabaseData = getDatabaseData(application.devDatabaseType);
+const { ORACLE, MYSQL, POSTGRESQL, MARIADB, MSSQL, H2_MEMORY, H2_DISK } = databaseTypes;
+
+export default function prepareSqlApplicationProperties({ application }: { application: any }) {
+  application.prodDatabaseTypeMariadb = application.prodDatabaseType === MARIADB;
+  application.prodDatabaseTypeMssql = application.prodDatabaseType === MSSQL;
+  application.prodDatabaseTypeMysql = application.prodDatabaseType === MYSQL;
+  application.prodDatabaseTypeOracle = application.prodDatabaseType === ORACLE;
+  application.prodDatabaseTypePostgresql = application.prodDatabaseType === POSTGRESQL;
+
+  application.devDatabaseTypeH2Disk = application.devDatabaseType === H2_DISK;
+  application.devDatabaseTypeH2Memory = application.devDatabaseType === H2_MEMORY;
+  application.devDatabaseTypeH2Any = application.devDatabaseTypeH2Disk || application.devDatabaseTypeH2Memory;
+
+  application.devDatabaseTypeMariadb = application.prodDatabaseTypeMariadb && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypeMssql = application.prodDatabaseTypeMssql && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypeMysql = application.prodDatabaseTypeMysql && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypeOracle = application.prodDatabaseTypeOracle && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypePostgresql = application.prodDatabaseTypePostgresql && !application.devDatabaseTypeH2Any;
+  application.devDatabaseTypePostgres = application.devDatabaseTypePostgresql; // Deprecated
+
+  if (!application.databaseTypeSql) {
+    return;
+  }
+
   const prodDatabaseData = getDatabaseData(application.prodDatabaseType);
-
-  application.devHibernateDialect = devDatabaseData.hibernateDialect;
   application.prodHibernateDialect = prodDatabaseData.hibernateDialect;
-
-  application.devJdbcDriver = devDatabaseData.jdbcDriver;
   application.prodJdbcDriver = prodDatabaseData.jdbcDriver;
-
-  application.devDatabaseUsername = devDatabaseData.defaultUsername ?? application.baseName;
-  application.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
   application.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? application.baseName;
   application.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
+  application.prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? application.baseName;
 
   const prodDatabaseOptions = {
-    databaseName: prodDatabaseData.defaultDatabaseName ?? application.baseName,
+    databaseName: application.prodDatabaseName,
     hostname: 'localhost',
   };
 
@@ -50,44 +67,67 @@ export default function prepareSqlApplicationProperties(application: any) {
   }
 
   if (application.devDatabaseTypeH2Any) {
-    const devDatabaseOptions = {
-      databaseName: devDatabaseData.defaultDatabaseName ?? application.lowercaseBaseName,
-    };
-    application.devJdbcUrl = getJdbcUrl(application.devDatabaseType, {
-      ...devDatabaseOptions,
-      buildDirectory: `./${application.temporaryDir}`,
-      prodDatabaseType: application.prodDatabaseType,
-    });
+    try {
+      const devDatabaseData = getDatabaseData(application.devDatabaseType);
+      application.devHibernateDialect = devDatabaseData.hibernateDialect;
+      application.devJdbcDriver = devDatabaseData.jdbcDriver;
+      application.devDatabaseUsername = devDatabaseData.defaultUsername ?? application.baseName;
+      application.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
+      application.devDatabaseName = devDatabaseData.defaultDatabaseName ?? application.baseName;
 
-    let devLiquibaseOptions;
-    if (application.devDatabaseTypeH2Memory) {
-      devLiquibaseOptions = {
-        protocolSuffix: 'h2:tcp://',
-        localDirectory: 'localhost:18080/mem:',
+      const devDatabaseOptions = {
+        databaseName: application.devDatabaseName,
       };
-    } else {
-      devLiquibaseOptions = {
-        // eslint-disable-next-line no-template-curly-in-string
-        buildDirectory: application.buildToolGradle ? `./${application.temporaryDir}` : '${project.build.directory}/',
-      };
-    }
-
-    application.devLiquibaseUrl = getJdbcUrl(application.devDatabaseType, {
-      ...devDatabaseOptions,
-      skipExtraOptions: true,
-      ...devLiquibaseOptions,
-    });
-
-    if (application.reactive) {
-      application.devR2dbcUrl = getR2dbcUrl(application.devDatabaseType, {
+      application.devJdbcUrl = getJdbcUrl(application.devDatabaseType, {
         ...devDatabaseOptions,
         buildDirectory: `./${application.temporaryDir}`,
         prodDatabaseType: application.prodDatabaseType,
       });
+
+      let devLiquibaseOptions;
+      if (application.devDatabaseTypeH2Memory) {
+        devLiquibaseOptions = {
+          protocolSuffix: 'h2:tcp://',
+          localDirectory: 'localhost:18080/mem:',
+        };
+      } else {
+        devLiquibaseOptions = {
+          // eslint-disable-next-line no-template-curly-in-string
+          buildDirectory: application.buildToolGradle ? `./${application.temporaryDir}` : '${project.build.directory}/',
+        };
+      }
+
+      application.devLiquibaseUrl = getJdbcUrl(application.devDatabaseType, {
+        ...devDatabaseOptions,
+        skipExtraOptions: true,
+        ...devLiquibaseOptions,
+      });
+
+      if (application.reactive) {
+        application.devR2dbcUrl = getR2dbcUrl(application.devDatabaseType, {
+          ...devDatabaseOptions,
+          buildDirectory: `./${application.temporaryDir}`,
+          prodDatabaseType: application.prodDatabaseType,
+        });
+      }
+    } catch (error) {
+      if (application.backendTypeSpringBoot) {
+        throw error;
+      }
     }
   } else {
     application.devJdbcUrl = application.prodJdbcUrl;
     application.devLiquibaseUrl = application.prodLiquibaseUrl;
     application.devR2dbcUrl = application.prodR2dbcUrl;
+    application.devHibernateDialect = application.prodHibernateDialect;
+    application.devJdbcDriver = application.prodJdbcDriver;
+    application.devDatabaseUsername = application.prodDatabaseUsername;
+    application.devDatabasePassword = application.prodDatabasePassword;
+    application.devDatabaseName = application.prodDatabaseName;
+    application.devJdbcUrl = application.prodJdbcUrl;
+    application.devLiquibaseUrl = application.prodLiquibaseUrl;
+    if (application.reactive) {
+      application.devR2dbcUrl = application.prodR2dbcUrl;
+    }
   }
 }

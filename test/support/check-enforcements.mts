@@ -20,7 +20,7 @@ import assert from 'assert';
 import fs, { readFileSync } from 'fs';
 import path, { basename } from 'path';
 import fse from 'fs-extra';
-import { getGeneratorFolder } from './get-generator.mjs';
+import { getGeneratorFolder } from '../../testing/get-generator.mjs';
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

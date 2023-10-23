@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.mjs';
@@ -27,12 +27,16 @@ import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.mjs
 import type { BaseApplication, CommonClientServerApplication } from './types.mjs';
 import { getEntitiesFromDir } from './support/index.mjs';
 import { SpringBootSourceType } from '../server/types.mjs';
-
-const { upperFirst } = _;
+import { ClientSourceType } from '../client/types.mjs';
+import { LanguageSourceType } from '../languages/types.js';
+import command from './command.mjs';
+import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
+import { mutateData } from '../base/support/config.mjs';
 
 const {
   LOADING,
   PREPARING,
+  POST_PREPARING,
   CONFIGURING_EACH_ENTITY,
   LOADING_ENTITIES,
   PREPARING_EACH_ENTITY,
@@ -62,7 +66,7 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType;
+export type BaseApplicationSource = Record<string, (...args: any[]) => any> & SpringBootSourceType & ClientSourceType & LanguageSourceType;
 
 export type JHipsterApplication = BaseApplication & Partial<CommonClientServerApplication>;
 
@@ -96,12 +100,14 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  constructor(args, options, features) {
+  constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
 
     if (this.options.help) {
       return;
     }
+
+    this.parseJHipsterOptions(command.options);
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 
@@ -119,8 +125,8 @@ export default class BaseApplicationGenerator<
       });
       if (this.options.applicationWithEntities.entities) {
         const entities = this.options.applicationWithEntities.entities.map(entity => {
-          const entityName = _.upperFirst(entity.name);
-          const file = this.destinationPath(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+          const entityName = upperFirst(entity.name);
+          const file = this.getEntityConfigPath(entityName);
           this.fs.writeJSON(file, { ...this.fs.readJSON(file), ...entity });
           return entityName;
         });
@@ -131,12 +137,20 @@ export default class BaseApplicationGenerator<
   }
 
   /**
+   * Get Entities configuration path
+   * @returns
+   */
+  getEntitiesConfigPath(...args) {
+    return this.destinationPath(JHIPSTER_CONFIG_DIR, ...args);
+  }
+
+  /**
    * Get Entity configuration path
    * @param entityName Entity name
    * @returns
    */
   getEntityConfigPath(entityName: string) {
-    return this.destinationPath(JHIPSTER_CONFIG_DIR, `${upperFirst(entityName)}.json`);
+    return this.getEntitiesConfigPath(`${upperFirst(entityName)}.json`);
   }
 
   /**
@@ -165,7 +179,7 @@ export default class BaseApplicationGenerator<
       return e1.definition.changelogDate - e2.definition.changelogDate;
     }
 
-    const configDir = this.destinationPath(JHIPSTER_CONFIG_DIR);
+    const configDir = this.getEntitiesConfigPath();
 
     const entities: { name: string; definition: Record<string, any> }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
@@ -311,23 +325,24 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  getArgsForPriority(priorityName) {
+  getArgsForPriority(priorityName): any[] {
     const args = super.getArgsForPriority(priorityName);
     let firstArg = this.getTaskFirstArgForPriority(priorityName);
     if (args.length > 0) {
       firstArg = { ...args[0], ...firstArg };
     }
-    return [firstArg] as any;
+    return [firstArg];
   }
 
   /**
-   * @private
+   * @protected
    */
-  getTaskFirstArgForPriority(priorityName): any {
+  protected getTaskFirstArgForPriority(priorityName): any {
     if (
       ![
         LOADING,
         PREPARING,
+        POST_PREPARING,
 
         CONFIGURING_EACH_ENTITY,
         LOADING_ENTITIES,
@@ -353,6 +368,12 @@ export default class BaseApplicationGenerator<
     }
     const application = this.sharedData.getApplication();
 
+    if ([PREPARING, LOADING].includes(priorityName)) {
+      return {
+        application,
+        applicationDefaults: data => mutateData(application, data),
+      };
+    }
     if (LOADING_ENTITIES === priorityName) {
       return {
         application,
@@ -385,7 +406,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to configure.
-   * This method doesn't filter entities. An filtered config can be changed at thie priority.
+   * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
   getEntitiesDataToConfigure() {

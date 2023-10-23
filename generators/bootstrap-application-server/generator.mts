@@ -16,11 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
-import { dockerContainers, javaDependencies } from '../generator-constants.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
+import {
+  JAVA_VERSION,
+  MAIN_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_MAIN_SRC_DIR,
+  SERVER_TEST_RES_DIR,
+  SERVER_TEST_SRC_DIR,
+  TEST_DIR,
+  dockerContainers,
+  javaDependencies,
+} from '../generator-constants.mjs';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.mjs';
 import {
   loadRequiredConfigDerivedProperties,
@@ -28,23 +38,46 @@ import {
   getPomVersionProperties,
   getGradleLibsVersionsProperties,
   addEntitiesOtherRelationships,
+  hibernateSnakeCase,
+  loadServerConfig,
+  loadDerivedServerConfig,
+  prepareRelationship,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
 import { GRADLE_VERSION } from '../gradle/constants.mjs';
+import { normalizePathEnd } from '../base/support/path.mjs';
+import { getFrontendAppName } from '../base/support/index.mjs';
+import { getMainClassName } from '../java/support/index.mjs';
+import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.mjs';
+import serverCommand from '../server/command.mjs';
 
 export default class BoostrapApplicationServer extends BaseApplicationGenerator {
+  constructor(args: any, options: any, features: any) {
+    super(args, options, { jhipsterBootstrap: false, ...features });
+  }
+
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 
   get loading() {
     return this.asLoadingTaskGroup({
       async loadApplication({ application }) {
-        this.loadServerConfig(undefined, application);
+        loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
+        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
         (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
-        application.backendType = 'Java';
+        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
+        application.backendType = this.jhipsterConfig.backendType ?? 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
@@ -80,7 +113,28 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ application }) {
-        this.loadDerivedServerConfig(application);
+        loadDerivedConfig(serverCommand.configs, { application });
+        loadDerivedServerConfig({ application });
+      },
+      prepareForTemplates({ application: app }) {
+        const application: any = app;
+        // Application name modified, using each technology's conventions
+        application.frontendAppName = getFrontendAppName({ baseName: application.baseName });
+        application.mainClass = getMainClassName({ baseName: application.baseName });
+
+        application.jhiTablePrefix = hibernateSnakeCase(application.jhiPrefix);
+
+        application.mainJavaDir = SERVER_MAIN_SRC_DIR;
+        application.mainJavaPackageDir = normalizePathEnd(`${SERVER_MAIN_SRC_DIR}${application.packageFolder}`);
+        application.mainJavaResourceDir = SERVER_MAIN_RES_DIR;
+        application.testJavaDir = SERVER_TEST_SRC_DIR;
+        application.testJavaPackageDir = normalizePathEnd(`${SERVER_TEST_SRC_DIR}${application.packageFolder}`);
+        application.testResourceDir = SERVER_TEST_RES_DIR;
+        application.srcMainDir = MAIN_DIR;
+        application.srcTestDir = TEST_DIR;
+
+        application.backendTypeSpringBoot = application.backendType === 'Java';
+        application.backendTypeJavaAny = application.backendTypeJavaAny ?? application.backendTypeSpringBoot;
       },
     });
   }
@@ -136,6 +190,18 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.preparingEachEntityField;
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        prepareRelationship({ entity, relationship });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {

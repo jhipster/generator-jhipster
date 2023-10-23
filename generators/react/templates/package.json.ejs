@@ -88,12 +88,6 @@
     "eslint-plugin-react": "<%= nodeDependencies['eslint-plugin-react'] %>",
     "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
     "fork-ts-checker-webpack-plugin": "<%= nodeDependencies['fork-ts-checker-webpack-plugin'] %>",
-<%_ if (!skipJhipsterDependencies) { _%>
-    "generator-jhipster": "<%= jhipsterVersion %>",
-  <%_ blueprints.forEach(blueprint => { _%>
-    "<%= blueprint.name %>": "<%= blueprint.version %>",
-  <%_ }); _%>
-<%_ } _%>
     "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
     "identity-obj-proxy": "<%= nodeDependencies['identity-obj-proxy'] %>",
     "jest": "<%= nodeDependencies['jest'] %>",
@@ -110,11 +104,6 @@
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
-    "prettier": "<%= nodeDependencies['prettier'] %>",
-<%_ if (!skipServer) { _%>
-    "prettier-plugin-java": "<%= nodeDependencies['prettier-plugin-java'] %>",
-<%_ } _%>
-    "prettier-plugin-packagejson": "<%= nodeDependencies['prettier-plugin-packagejson'] %>",
     "react-infinite-scroll-component": "<%= nodeDependencies['react-infinite-scroll-component'] %>",
     "redux-mock-store": "<%= nodeDependencies['redux-mock-store'] %>",
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
@@ -152,8 +141,8 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= clientDistDir %>",
-    "clean-www": "rimraf <%= clientDistDir %>app/{src,<%= temporaryDir %>}",
+    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",

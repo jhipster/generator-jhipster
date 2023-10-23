@@ -225,7 +225,7 @@ describe('jdl - ObjectUtils', () => {
             name: 'MyEntity',
             fields: [],
             relationships: [],
-            javadoc: undefined,
+            documentation: undefined,
           };
           const secondObject = {
             name: 'MyEntity',
@@ -701,7 +701,7 @@ describe('jdl - ObjectUtils', () => {
 
         before(() => {
           const firstObject = {
-            javadoc: 'My first comment',
+            documentation: 'My first comment',
             fields: [
               {
                 id: 1,
@@ -727,7 +727,7 @@ describe('jdl - ObjectUtils', () => {
             service: 'no',
           };
           const secondObject = {
-            javadoc: 'My Second Comment',
+            documentation: 'My Second Comment',
             fields: [
               {
                 id: 1,
@@ -761,7 +761,7 @@ describe('jdl - ObjectUtils', () => {
       });
       context('as they do not have the same number of attributes', () => {
         type ObjectType = {
-          javadoc: string;
+          documentation: string;
           fields: (
             | { id: number; theAnswer: number; notTheAnswer?: undefined }
             | { id: number; notTheAnswer: number; theAnswer?: undefined }
@@ -779,7 +779,7 @@ describe('jdl - ObjectUtils', () => {
 
         before(() => {
           firstObject = {
-            javadoc: 'My first comment',
+            documentation: 'My first comment',
             fields: [
               {
                 id: 1,
@@ -805,7 +805,7 @@ describe('jdl - ObjectUtils', () => {
             service: 'no',
           };
           secondObject = {
-            javadoc: 'My first comment',
+            documentation: 'My first comment',
             fields: [
               {
                 id: 1,

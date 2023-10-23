@@ -380,7 +380,7 @@ entity C
 {
   "annotations": [],
   "body": [],
-  "javadoc": null,
+  "documentation": null,
   "name": "A",
   "tableName": "A",
 }
@@ -400,7 +400,7 @@ entity C
 {
   "annotations": [],
   "body": [],
-  "javadoc": null,
+  "documentation": null,
   "name": "A",
   "tableName": "a_table",
 }
@@ -479,7 +479,7 @@ entity A`);
     },
   ],
   "body": [],
-  "javadoc": null,
+  "documentation": null,
   "name": "A",
   "tableName": "A",
 }
@@ -500,7 +500,7 @@ entity A`);
 {
   "annotations": [],
   "body": [],
-  "javadoc": "A comment",
+  "documentation": "A comment",
   "name": "A",
   "tableName": "A",
 }
@@ -524,7 +524,7 @@ entity A`);
 {
   "annotations": [],
   "body": [],
-  "javadoc": "
+  "documentation": "
  * Big
  * comment.
 ",
@@ -559,7 +559,7 @@ entity A`);
     },
   ],
   "body": [],
-  "javadoc": "A comment",
+  "documentation": "A comment",
   "name": "A",
   "tableName": "A",
 }
@@ -608,13 +608,13 @@ entity A`);
           "type": "UNARY",
         },
       ],
-      "javadoc": "field comment",
+      "documentation": "field comment",
       "name": "name",
       "type": "String",
       "validations": [],
     },
   ],
-  "javadoc": null,
+  "documentation": null,
   "name": "A",
   "tableName": "A",
 }
@@ -1023,7 +1023,7 @@ entity A {
       it('should parse them', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": null,
+  "documentation": null,
   "name": "MyEnum",
   "values": [
     {
@@ -1057,7 +1057,7 @@ entity A {
       it('should parse them', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": null,
+  "documentation": null,
   "name": "MyEnum",
   "values": [
     {
@@ -1096,7 +1096,7 @@ entity A {
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": null,
+  "documentation": null,
   "name": "MyEnum",
   "values": [
     {
@@ -1137,7 +1137,7 @@ entity A {
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": "country enum",
+  "documentation": "country enum",
   "name": "MyEnum",
   "values": [
     {
@@ -1192,7 +1192,7 @@ entity A {
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": "country enum",
+  "documentation": "country enum",
   "name": "MyEnum",
   "values": [
     {
@@ -1248,7 +1248,7 @@ entity A {
       it('should parse it', () => {
         jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": null,
+  "documentation": null,
   "name": "MyEnum",
   "values": [
     {
@@ -1302,7 +1302,7 @@ entity A {
         it('should parse it', () => {
           jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": null,
+  "documentation": null,
   "name": "MyEnum",
   "values": [
     {
@@ -1339,7 +1339,7 @@ entity A {
         it('should parse it', () => {
           jestExpect(parsedEnum).toMatchInlineSnapshot(`
 {
-  "javadoc": null,
+  "documentation": null,
   "name": "MyEnum",
   "values": [
     {
@@ -1388,8 +1388,8 @@ entity A {
 {
   "cardinality": "OneToOne",
   "from": {
+    "documentation": null,
     "injectedField": null,
-    "javadoc": null,
     "name": "A",
   },
   "options": {
@@ -1398,8 +1398,8 @@ entity A {
     "source": [],
   },
   "to": {
+    "documentation": null,
     "injectedField": null,
-    "javadoc": null,
     "name": "B",
   },
 }
@@ -1588,8 +1588,8 @@ entity A {
   {
     "cardinality": "OneToOne",
     "from": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "A",
     },
     "options": {
@@ -1603,16 +1603,16 @@ entity A {
       "source": [],
     },
     "to": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "B",
     },
   },
   {
     "cardinality": "OneToOne",
     "from": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "B",
     },
     "options": {
@@ -1621,16 +1621,16 @@ entity A {
       "source": [],
     },
     "to": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "C",
     },
   },
   {
     "cardinality": "OneToOne",
     "from": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "D",
     },
     "options": {
@@ -1644,8 +1644,8 @@ entity A {
       "source": [],
     },
     "to": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "E",
     },
   },
@@ -1669,8 +1669,8 @@ entity A {
   {
     "cardinality": "OneToOne",
     "from": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "A",
     },
     "options": {
@@ -1684,8 +1684,8 @@ entity A {
       ],
     },
     "to": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "B",
     },
   },
@@ -1707,8 +1707,8 @@ entity A {
   {
     "cardinality": "OneToOne",
     "from": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "A",
     },
     "options": {
@@ -1722,8 +1722,8 @@ entity A {
       "source": [],
     },
     "to": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "B",
     },
   },
@@ -1745,8 +1745,8 @@ entity A {
   {
     "cardinality": "OneToOne",
     "from": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "A",
     },
     "options": {
@@ -1765,8 +1765,8 @@ entity A {
       ],
     },
     "to": {
+      "documentation": null,
       "injectedField": null,
-      "javadoc": null,
       "name": "B",
     },
   },

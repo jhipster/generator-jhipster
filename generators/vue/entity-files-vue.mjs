@@ -16,36 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationBlock, replaceEntityFilePath, CLIENT_TEMPLATES_APP_DIR } from '../client/utils.mjs';
+import { clientApplicationTemplatesBlock } from '../client/support/files.mjs';
 
 export const entityFiles = {
   client: [
-    {
-      path: `${CLIENT_TEMPLATES_APP_DIR}entities/_entityFolder/`,
-      renameTo: (data, filepath) => `${data.clientSrcDir}app/shared/model/${replaceEntityFilePath(data, filepath)}`,
-      templates: ['_entityModel.model.ts'],
-    },
+    clientApplicationTemplatesBlock({
+      relativePath: 'shared/model/',
+      templates: ['_entityModel_.model.ts'],
+    }),
     {
       condition: generator => !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
-        'entities/_entityFolder/_entityFile-details.vue',
-        'entities/_entityFolder/_entityFile-details.component.ts',
-        'entities/_entityFolder/_entityFile-details.component.spec.ts',
-        'entities/_entityFolder/_entityFile.vue',
-        'entities/_entityFolder/_entityFile.component.ts',
-        'entities/_entityFolder/_entityFile.component.spec.ts',
-        'entities/_entityFolder/_entityFile.service.ts',
-        'entities/_entityFolder/_entityFile.service.spec.ts',
+        'entities/_entityFolder_/_entityFile_-details.vue',
+        'entities/_entityFolder_/_entityFile_-details.component.ts',
+        'entities/_entityFolder_/_entityFile_-details.component.spec.ts',
+        'entities/_entityFolder_/_entityFile_.vue',
+        'entities/_entityFolder_/_entityFile_.component.ts',
+        'entities/_entityFolder_/_entityFile_.component.spec.ts',
+        'entities/_entityFolder_/_entityFile_.service.ts',
+        'entities/_entityFolder_/_entityFile_.service.spec.ts',
       ],
     },
     {
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationBlock,
+      ...clientApplicationTemplatesBlock(),
       templates: [
-        'entities/_entityFolder/_entityFile-update.vue',
-        'entities/_entityFolder/_entityFile-update.component.ts',
-        'entities/_entityFolder/_entityFile-update.component.spec.ts',
+        'entities/_entityFolder_/_entityFile_-update.vue',
+        'entities/_entityFolder_/_entityFile_-update.component.ts',
+        'entities/_entityFolder_/_entityFile_-update.component.spec.ts',
       ],
     },
   ],

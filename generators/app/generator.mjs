@@ -18,267 +18,44 @@
  */
 /* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { checkNode } from './support/index.mjs';
+import { checkNode, loadStoredAppOptions } from './support/index.mjs';
 import cleanupOldFilesTask from './cleanup.mjs';
-import prompts from './prompts.mjs';
+import { askForInsightOptIn } from './prompts.mjs';
 import statistics from '../statistics.mjs';
 import {
   GENERATOR_APP,
   GENERATOR_COMMON,
-  GENERATOR_LANGUAGES,
   GENERATOR_CLIENT,
-  GENERATOR_PAGE,
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
 } from '../generator-list.mjs';
 
-import { applicationTypes, applicationOptions, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
+import { applicationTypes, applicationOptions } from '../../jdl/jhipster/index.mjs';
+import command from './command.mjs';
 
 const { MICROSERVICE } = applicationTypes;
-const { NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, features);
-
-    this.option('defaults', {
-      description: 'Execute jhipster with default config',
-      type: Boolean,
-    });
-    this.option('base-name', {
-      description: 'Application base name',
-      type: String,
-    });
-    this.option('application-type', {
-      description: 'Application type to generate',
-      type: String,
-    });
-
-    this.option('client-framework', {
-      description: 'Provide client framework for the application',
-      type: String,
-    });
-
-    // This adds support for a `--skip-client` flag
-    this.option('skip-client', {
-      description: 'Skip the client-side application generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-server` flag
-    this.option('skip-server', {
-      description: 'Skip the server-side application generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-commit-hook` flag
-    this.option('skip-commit-hook', {
-      description: 'Skip adding husky commit hooks',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-user-management` flag
-    this.option('skip-user-management', {
-      description: 'Skip the user management module during app generation',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-check-length-of-identifier` flag
-    this.option('skip-check-length-of-identifier', {
-      description: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
-      type: Boolean,
-    });
-
-    // This adds support for a `--skip-fake-data` flag
-    this.option('skip-fake-data', {
-      description: 'Skip generation of fake data for development',
-      type: Boolean,
-    });
-
-    // This adds support for a `--with-entities` flag
-    this.option('with-entities', {
-      alias: 'e',
-      description: 'Regenerate the existing entities if any',
-      type: Boolean,
-    });
-
-    // This adds support for a `--jhi-prefix` flag
-    this.option('jhi-prefix', {
-      description: 'Add prefix before services, controllers and states name',
-      type: String,
-    });
-
-    // This adds support for a `--entity-suffix` flag
-    this.option('entity-suffix', {
-      description: 'Add suffix after entities name',
-      type: String,
-    });
-
-    // This adds support for a `--dto-suffix` flag
-    this.option('dto-suffix', {
-      description: 'Add suffix after dtos name',
-      type: String,
-    });
-
-    // This adds support for a `--auth` flag
-    this.option('auth', {
-      description: 'Provide authentication type for the application when skipping server side generation',
-      type: String,
-    });
-
-    // This adds support for a `--db` flag
-    this.option('db', {
-      description: 'Provide DB name for the application when skipping server side generation',
-      type: String,
-    });
-
-    // This adds support for a `--build` flag
-    this.option('build', {
-      description: 'Provide build tool for the application when skipping server side generation',
-      type: String,
-    });
-
-    // This adds support for a `--websocket` flag
-    this.option('websocket', {
-      description: 'Provide websocket option for the application when skipping server side generation',
-      type: String,
-    });
-
-    // This adds support for a `--search-engine` flag
-    this.option('search-engine', {
-      description: 'Provide search engine for the application when skipping server side generation',
-      type: String,
-    });
-
-    // NOTE: Deprecated!!! Use --blueprints instead
-    this.option('blueprint', {
-      description: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
-      type: String,
-    });
-    // This adds support for a `--blueprints` flag which can be used to specify one or more blueprints to use for generation
-    this.option('blueprints', {
-      description:
-        'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
-      type: String,
-    });
-
-    // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
-    this.option('creation-timestamp', {
-      description: 'Project creation timestamp (used for reproducible builds)',
-      type: String,
-    });
-
-    this.option('incremental-changelog', {
-      description: 'Creates incremental database changelogs',
-      type: Boolean,
-    });
-
-    this.option('recreate-initial-changelog', {
-      description: 'Recreate the initial database changelog based on the current config',
-      type: Boolean,
-    });
-
-    this.option('legacy-db-names', {
-      description: 'Generate database names with jhipster 6 compatibility.',
-      type: Boolean,
-    });
-
-    this.option('ignore-errors', {
-      description: "Don't fail on prettier errors.",
-      type: Boolean,
-    });
-
-    this.option('native-language', {
-      alias: 'n',
-      description: 'Set application native language',
-      type: String,
-      required: false,
-    });
-
-    this.option('enable-translation', {
-      description: 'Enable translation',
-      type: Boolean,
-      required: false,
-    });
-
-    this.option('language', {
-      alias: 'l',
-      description: 'Language to be added to application (existing languages are not removed)',
-      type: Array,
-    });
-
-    this.option('pk-type', {
-      description: 'Default primary key type (beta)',
-      type: String,
-    });
-
-    this.option('reproducible', {
-      description: 'Try to reproduce changelog',
-      type: Boolean,
-    });
-
-    this.option('client-package-manager', {
-      description: 'Force an unsupported client package manager',
-      type: String,
-    });
-
-    this.option('cypress-coverage', {
-      description: 'Enable Cypress code coverage report generation',
-      type: Boolean,
-    });
-
-    this.option('cypress-audit', {
-      description: 'Enable cypress-audit/lighthouse report generation',
-      type: Boolean,
-    });
-
-    this.option('microfrontend', {
-      description: 'Force generation of experimental microfrontend support',
-      type: Boolean,
-    });
-
-    this.option('test-frameworks', {
-      description: 'Test frameworks to be generated',
-      type: Array,
-    });
-
-    this.option('reactive', {
-      description: 'Generate a reactive backend',
-      type: Boolean,
-    });
-
-    this.option('enable-swagger-codegen', {
-      description: 'API first development using OpenAPI-generator',
-      type: Boolean,
-    });
-
-    this.option('cache-provider', {
-      description: 'Cache provider',
-      type: String,
-    });
-
-    this.option('enable-hibernate-cache', {
-      description: 'Enable hibernate cache',
-      type: Boolean,
-    });
-  }
+  command = command;
 
   async beforeQueue() {
-    this.loadStoredAppOptions();
-    this.loadRuntimeOptions();
+    loadStoredAppOptions.call(this);
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_APP);
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
     }
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       validateNode() {
         if (this.skipChecks) {
           return;
@@ -291,13 +68,16 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           await this.checkForNewVersion();
         }
       },
+      loadOptions() {
+        this.parseJHipsterCommand(this.command);
+      },
 
       validate() {
-        if (this.skipServer && this.skipClient) {
+        if (!this.skipChecks && this.jhipsterConfig.skipServer && this.jhipsterConfig.skipClient) {
           throw new Error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -305,10 +85,13 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   }
 
   get prompting() {
-    return {
-      askForInsightOptIn: prompts.askForInsightOptIn,
-      askForApplicationType: prompts.askForApplicationType,
-    };
+    return this.asPromptingTaskGroup({
+      askForInsightOptIn,
+      async prompting({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(this.command.configs));
+      },
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
@@ -319,18 +102,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return {
       setup() {
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
-          this.jhipsterConfig.skipClient =
-            this.jhipsterConfig.skipClient ||
-            !this.jhipsterConfig.clientFramework ||
-            this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
-          this.jhipsterConfig.withAdminUi = false;
           this.jhipsterConfig.skipUserManagement = true;
-        } else {
-          this.jhipsterConfig.skipClient = this.jhipsterConfig.skipClient || this.jhipsterConfig.clientFramework === CLIENT_FRAMEWORK_NO;
-        }
-
-        if (this.jhipsterConfig.skipClient) {
-          this.jhipsterConfig.clientFramework = CLIENT_FRAMEWORK_NO;
         }
       },
       fixConfig() {
@@ -351,52 +123,32 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
        * Composing with others generators, must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
        *
-       * Generators `server`, `client`, `common`, `languages` depends on each other.
-       * We are composing in the same task so every priority are executed in parallel.
-       * - compose (app) -> initializing (common) -> initializing (server) -> ...
-       *
-       * When composing in different tasks the result would be:
+       * Composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
+       *
+       * This behaviour allows a more consistent blueprint support.
        */
-      async compose() {
-        const { enableTranslation, skipServer, clientFramework } = this.jhipsterConfigWithDefaults;
+      async composeCommon() {
         await this.composeWithJHipster(GENERATOR_COMMON);
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES, {
-            generatorOptions: { regenerate: true },
-          });
-        }
-        if (!skipServer) {
+      },
+      async composeServer() {
+        if (!this.jhipsterConfigWithDefaults.skipServer) {
           await this.composeWithJHipster(GENERATOR_SERVER);
         }
-        if (clientFramework !== CLIENT_FRAMEWORK_NO) {
+      },
+      async composeClient() {
+        if (!this.jhipsterConfigWithDefaults.skipClient) {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
-      askForTestOpts: prompts.askForTestOpts,
-
       /**
        * At this point every other generator should already be configured, so, enforce defaults fallback.
        */
       saveConfigWithDefaults() {
-        this.setConfigDefaults();
-
-        this._validateAppConfiguration();
-      },
-
-      async composePages() {
-        if (!this.jhipsterConfig.pages || this.jhipsterConfig.pages.length === 0) return;
-        await Promise.all(
-          this.jhipsterConfig.pages.map(page => {
-            return this.composeWithJHipster(page.generator || GENERATOR_PAGE, {
-              generatorArgs: [page.name],
-              generatorOptions: {
-                skipInstall: true,
-                page,
-              },
-            });
-          }),
-        );
+        const config = this.jhipsterConfigWithDefaults;
+        if (config.entitySuffix === config.dtoSuffix) {
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+        }
       },
     });
   }
@@ -429,11 +181,5 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  _validateAppConfiguration(config = this.jhipsterConfig) {
-    if (config.entitySuffix === config.dtoSuffix) {
-      throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-    }
   }
 }
