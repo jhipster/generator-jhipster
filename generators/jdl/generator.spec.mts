@@ -167,7 +167,29 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should write expected files', () => {
-        expect(runResult.getSnapshot()).toMatchSnapshot();
+        expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationIndex": 0,
+    "baseName": "jhipster",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-foo"
+      }
+    ],
+    "entities": []
+  },
+  "generator-jhipster-foo": {
+    "config": "bar"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`);
       });
     });
   });

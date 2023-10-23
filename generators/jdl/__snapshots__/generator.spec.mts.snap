@@ -57,30 +57,6 @@ exports[`generator - jdl --json-only option for two applications and entity jdl 
 }
 `;
 
-exports[`generator - jdl for application jdl with blueprint jdl with blueprint config should write expected files 1`] = `
-{
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "applicationIndex": 0,
-    "baseName": "jhipster",
-    "blueprints": [
-      {
-        "name": "generator-jhipster-foo"
-      }
-    ],
-    "entities": []
-  },
-  "generator-jhipster-foo": {
-    "config": "bar"
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
 exports[`generator - jdl for application jdl with valid jdl should write expected files 1`] = `
 {
   ".yo-rc.json": {
