@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           baseName: 'jhipster',
         }),
-      ).rejects.toThrow("The JDL object, the application's name and its the database type are mandatory.");
+      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
     });
     it('without baseName should reject', async () => {
       await expect(
@@ -76,7 +76,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           db: 'postgresql',
         }),
-      ).rejects.toThrow("The JDL object, the application's name and its the database type are mandatory.");
+      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
     });
 
     describe('with valid parameters', () => {
