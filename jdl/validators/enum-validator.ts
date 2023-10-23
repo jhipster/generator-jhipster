@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import Validator from './validator.js';
+import Validator, { ValidatorOptions } from './validator.js';
 import { reservedKeywords } from '../jhipster/index.mjs';
 
 const { isReservedClassName } = reservedKeywords;
@@ -26,12 +26,11 @@ export default class EnumValidator extends Validator {
     super('enum', ['name']);
   }
 
-  validate(jdlEnum) {
+  validate(jdlEnum, options: ValidatorOptions = {}) {
     super.validate(jdlEnum);
-  }
-
-  validateBusiness(jdlEnum) {
-    checkForReservedClassName(jdlEnum);
+    if (options.checkReservedKeywords) {
+      checkForReservedClassName(jdlEnum);
+    }
   }
 }
 

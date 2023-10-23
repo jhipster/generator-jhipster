@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import Validator from './validator.js';
+import Validator, { ValidatorOptions } from './validator.js';
 import { reservedKeywords } from '../jhipster/index.mjs';
 
 const { isReservedClassName } = reservedKeywords;
@@ -27,12 +27,11 @@ export default class EntityValidator extends Validator {
     super('entity', ['name', 'tableName']);
   }
 
-  validate(jdlEntity) {
+  validate(jdlEntity, options: ValidatorOptions = {}) {
     super.validate(jdlEntity);
-  }
-
-  validateBusiness(jdlEntity) {
-    checkForReservedClassName(jdlEntity);
+    if (options.checkReservedKeywords) {
+      checkForReservedClassName(jdlEntity);
+    }
   }
 }
 

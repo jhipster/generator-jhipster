@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           baseName: 'jhipster',
         }),
-      ).rejects.toThrow('Database type is required to validate entities.');
+      ).rejects.toThrow("The JDL object, the application's name and its the database type are mandatory.");
     });
     it('without baseName should reject', async () => {
       await expect(

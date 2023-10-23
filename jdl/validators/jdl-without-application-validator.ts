@@ -19,7 +19,7 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, reservedKeywords, relationshipOptions } from '../jhipster/index.mjs';
+import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, relationshipOptions } from '../jhipster/index.mjs';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
@@ -29,9 +29,10 @@ import BinaryOptionValidator from './binary-option-validator.js';
 
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
+import { ValidatorOptions } from './validator.js';
+import { isReservedFieldName, isReservedPaginationWords, isReservedTableName } from '../jhipster/reserved-keywords.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
-const { isReservedFieldName, isReservedTableName, isReservedPaginationWords } = reservedKeywords;
 const { SQL } = databaseTypes;
 
 /**
@@ -49,68 +50,57 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
   if (!jdlObject) {
     throw new Error('A JDL object must be passed to check for business errors.');
   }
-
-  if (applicationSettings.blueprints && applicationSettings.blueprints.length !== 0) {
-    return {
-      checkForErrors: () => {
-        logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
-      },
-    };
-  }
+  const { blueprints, databaseType } = applicationSettings;
+  const checkReservedKeywords = Boolean((databaseType ?? 'no') !== 'no') && (blueprints?.length ?? 0) === 0;
 
   return {
     checkForErrors: () => {
-      checkForEntityErrors();
+      checkForEntityErrors({ checkReservedKeywords });
       checkForRelationshipErrors();
-      checkForEnumErrors();
-      checkForEntityBusinessErrors();
-      checkForEnumBusinessErrors();
-      checkDeploymentsErrors();
-      checkForOptionErrors();
+      checkForEnumErrors({ checkReservedKeywords });
+      if (checkReservedKeywords) {
+        checkDeploymentsErrors();
+        checkForOptionErrors();
+      } else {
+        logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
+      }
     },
   };
 
-  function checkForEntityErrors() {
+  function checkForEntityErrors(options: ValidatorOptions) {
     if (jdlObject.getEntityQuantity() === 0) {
       return;
     }
     const validator = new EntityValidator();
     jdlObject.forEachEntity(jdlEntity => {
-      validator.validate(jdlEntity);
-      checkForFieldErrors(jdlEntity.name, jdlEntity.fields);
-    });
-  }
-
-  function checkForEntityBusinessErrors() {
-    if (jdlObject.getEntityQuantity() === 0) {
-      return;
-    }
-    if (!applicationSettings.databaseType) {
-      throw new Error('Database type is required to validate entities.');
-    }
-    const validator = new EntityValidator();
-    jdlObject.forEachEntity(jdlEntity => {
-      validator.validateBusiness(jdlEntity);
-      if (isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
-        logger.warn(`The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
+      validator.validate(jdlEntity, options);
+      if (options.checkReservedKeywords) {
+        if (isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
+          logger.warn(
+            `The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`,
+          );
+        }
       }
+      checkForFieldErrors(jdlEntity.name, jdlEntity.fields, options);
     });
   }
 
-  function checkForFieldErrors(entityName, jdlFields) {
+  function checkForFieldErrors(entityName, jdlFields, options: ValidatorOptions) {
     const validator = new FieldValidator();
     const filtering = applicationSettings.databaseType === SQL;
 
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
       validator.validate(jdlField);
-      if (isReservedFieldName(jdlField.name)) {
-        logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
-      }
-      if (filtering && isReservedPaginationWords(jdlField.name)) {
-        throw new Error(
-          `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`,
-        );
+      if (options.checkReservedKeywords) {
+        if (isReservedFieldName(jdlField.name)) {
+          logger.warn(`The name '${jdlField.name}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
+        }
+        if (filtering && isReservedPaginationWords(jdlField.name)) {
+          throw new Error(
+            `Field name '${fieldName}' found in ${entityName} is a reserved keyword, as it is used by Spring for pagination in the URL.`,
+          );
+        }
       }
       const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
       if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
@@ -145,23 +135,13 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     });
   }
 
-  function checkForEnumErrors() {
+  function checkForEnumErrors(options: ValidatorOptions) {
     if (jdlObject.getEnumQuantity() === 0) {
       return;
     }
     const validator = new EnumValidator();
     jdlObject.forEachEnum(jdlEnum => {
-      validator.validate(jdlEnum);
-    });
-  }
-
-  function checkForEnumBusinessErrors() {
-    if (jdlObject.getEnumQuantity() === 0) {
-      return;
-    }
-    const validator = new EnumValidator();
-    jdlObject.forEachEnum(jdlEnum => {
-      validator.validateBusiness(jdlEnum);
+      validator.validate(jdlEnum, options);
     });
   }
 
