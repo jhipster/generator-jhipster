@@ -155,6 +155,21 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
+
+    describe('with blueprint jdl with blueprint config', () => {
+      let runResult: RunResult;
+
+      before(async () => {
+        runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          jsonOnly: true,
+          inline: 'application { config { blueprints [foo] foo:config bar } }',
+        });
+      });
+
+      it('should write expected files', () => {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
   });
 
   describe('for one application and entity jdl', () => {

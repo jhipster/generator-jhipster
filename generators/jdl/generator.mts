@@ -33,6 +33,7 @@ import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jd
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.mjs';
+import { mergeYoRcContent, splitBlueprintConfigs } from '../../jdl/index.js';
 
 const { upperFirst } = _;
 
@@ -307,10 +308,8 @@ export default class JdlGenerator extends BaseGenerator {
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
         const oldConfig: any = fs.readJSON(configFile, {});
-        fs.writeJSON(configFile, {
-          ...oldConfig,
-          [GENERATOR_JHIPSTER]: { ...oldConfig[GENERATOR_JHIPSTER], ...config },
-        });
+
+        fs.writeJSON(configFile, mergeYoRcContent(oldConfig, splitBlueprintConfigs(config)));
       }
       for (const entity of entities) {
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);
