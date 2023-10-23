@@ -28,6 +28,9 @@ export default class EnumValidator extends Validator {
 
   validate(jdlEnum) {
     super.validate(jdlEnum);
+  }
+
+  validateBusiness(jdlEnum) {
     checkForReservedClassName(jdlEnum);
   }
 }

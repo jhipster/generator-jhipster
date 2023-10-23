@@ -18,11 +18,13 @@
  */
 
 import createApplicationConfigurationFromObject from './jdl-application-configuration-factory.js';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
+import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import JDLApplicationEntities from './jdl-application-entities.js';
 import JDLOptions from './jdl-options.js';
 
 export default class JDLApplication {
-  config: any;
+  config: JDLApplicationConfiguration;
   entityNames: any;
   options: any;
 
@@ -51,10 +53,10 @@ export default class JDLApplication {
       return undefined;
     }
     const option = this.config.getOption(optionName);
-    return option.getValue();
+    return option!.getValue();
   }
 
-  forEachConfigurationOption(passedFunction) {
+  forEachConfigurationOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
     this.config.forEachOption(passedFunction);
   }
 

@@ -31,7 +31,7 @@ export default function createApplicationConfigurationFromObject(configurationOb
   const configuration = new JDLApplicationConfiguration();
   Object.keys(configurationObject).forEach(optionName => {
     const optionValue = configurationObject[optionName];
-    if (!applicationDefinition.doesOptionExist(optionName)) {
+    if (!applicationDefinition.doesOptionExist(optionName) && !optionName.includes(':')) {
       logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
     }
@@ -41,7 +41,21 @@ export default function createApplicationConfigurationFromObject(configurationOb
 }
 
 function createJDLConfigurationOption(name, value) {
-  const type = applicationDefinition.getTypeForOption(name);
+  let type = applicationDefinition.getTypeForOption(name);
+  if (type === 'unknown') {
+    if (typeof value === 'boolean') {
+      type = 'boolean';
+    } else if (/^\d*$/.test(value)) {
+      value = parseInt(value, 10);
+      type = 'integer';
+    } else if (Array.isArray(value)) {
+      type = 'list';
+    } else if (typeof value === 'string') {
+      type = 'string';
+    } else {
+      throw new Error(`Unknown value type for option ${name}`);
+    }
+  }
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));

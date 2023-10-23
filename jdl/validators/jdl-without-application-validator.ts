@@ -63,6 +63,8 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
       checkForEntityErrors();
       checkForRelationshipErrors();
       checkForEnumErrors();
+      checkForEntityBusinessErrors();
+      checkForEnumBusinessErrors();
       checkDeploymentsErrors();
       checkForOptionErrors();
     },
@@ -72,16 +74,26 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     if (jdlObject.getEntityQuantity() === 0) {
       return;
     }
+    const validator = new EntityValidator();
+    jdlObject.forEachEntity(jdlEntity => {
+      validator.validate(jdlEntity);
+      checkForFieldErrors(jdlEntity.name, jdlEntity.fields);
+    });
+  }
+
+  function checkForEntityBusinessErrors() {
+    if (jdlObject.getEntityQuantity() === 0) {
+      return;
+    }
     if (!applicationSettings.databaseType) {
       throw new Error('Database type is required to validate entities.');
     }
     const validator = new EntityValidator();
     jdlObject.forEachEntity(jdlEntity => {
-      validator.validate(jdlEntity);
+      validator.validateBusiness(jdlEntity);
       if (isReservedTableName(jdlEntity.tableName, applicationSettings.databaseType)) {
         logger.warn(`The table name '${jdlEntity.tableName}' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.`);
       }
-      checkForFieldErrors(jdlEntity.name, jdlEntity.fields);
     });
   }
 
@@ -140,6 +152,16 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
     const validator = new EnumValidator();
     jdlObject.forEachEnum(jdlEnum => {
       validator.validate(jdlEnum);
+    });
+  }
+
+  function checkForEnumBusinessErrors() {
+    if (jdlObject.getEnumQuantity() === 0) {
+      return;
+    }
+    const validator = new EnumValidator();
+    jdlObject.forEachEnum(jdlEnum => {
+      validator.validateBusiness(jdlEnum);
     });
   }
 

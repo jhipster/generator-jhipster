@@ -18,24 +18,25 @@
  */
 
 import ApplicationOptions from '../jhipster/application-options.js';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const { OptionNames } = ApplicationOptions;
 
 export default class JDLApplicationConfiguration {
-  options: any;
+  options: Record<string, JDLApplicationConfigurationOption>;
 
   constructor() {
     this.options = {};
   }
 
-  hasOption(optionName) {
+  hasOption(optionName: string) {
     if (!optionName) {
       return false;
     }
     return optionName in this.options;
   }
 
-  getOption(optionName) {
+  getOption(optionName: string) {
     if (!optionName) {
       throw new Error('An option name has to be passed to get the option.');
     }
@@ -45,14 +46,14 @@ export default class JDLApplicationConfiguration {
     return this.options[optionName];
   }
 
-  setOption(option) {
+  setOption(option: JDLApplicationConfigurationOption) {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.options[option.name] = option;
   }
 
-  forEachOption(passedFunction) {
+  forEachOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
     if (!passedFunction) {
       return;
     }

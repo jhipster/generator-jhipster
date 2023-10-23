@@ -29,6 +29,9 @@ export default class EntityValidator extends Validator {
 
   validate(jdlEntity) {
     super.validate(jdlEntity);
+  }
+
+  validateBusiness(jdlEntity) {
     checkForReservedClassName(jdlEntity);
   }
 }

@@ -56,7 +56,7 @@ describe('jdl - EnumValidator', () => {
       context('with a reserved class name as name', () => {
         it('should fail', () => {
           expect(() => {
-            validator.validate(new JDLEnum({ name: 'Catch' }));
+            validator.validateBusiness(new JDLEnum({ name: 'Catch' }));
           }).to.throw(/^The enum name 'Catch' is reserved keyword and can not be used as enum class name\.$/);
         });
       });

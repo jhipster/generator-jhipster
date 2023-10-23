@@ -28,6 +28,8 @@ import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
+import JDLApplication from '../models/jdl-application.js';
+import ListJDLApplicationConfigurationOption from '../models/list-jdl-application-configuration-option.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -47,20 +49,37 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
   return {
     checkForErrors: () => {
       jdlObject.forEachApplication(jdlApplication => {
+        checkForBlueprintConfigErrors(jdlApplication);
+        checkForRelationshipErrors();
+        checkForEntityErrors(jdlApplication);
+        checkForEnumErrors();
         const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
         if (blueprints && blueprints.length > 0) {
           logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
           return;
         }
-        checkForEntityErrors(jdlApplication);
-        checkForRelationshipErrors();
-        checkForEnumErrors();
+        checkForEntityBusinessErrors(jdlApplication);
+        checkForEnumBusinessErrors();
         checkDeploymentsErrors();
         checkForOptionErrors();
       });
       checkForRelationshipsBetweenApplications();
     },
   };
+
+  function checkForBlueprintConfigErrors(jdlApplication: JDLApplication) {
+    jdlApplication.forEachConfigurationOption(option => {
+      if (option.name.includes(':')) {
+        const [nsSuffix, configName] = option.name.split(':');
+        const namespace = `generator-jhipster-${nsSuffix}`;
+        const blueprints: ListJDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
+        if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === namespace)) {
+          throw new Error(`Blueprint config ${option.name} requires the blueprint ${nsSuffix}`);
+        }
+        option.name = `${namespace}:${configName}`;
+      }
+    });
+  }
 
   function checkForEntityErrors(jdlApplication) {
     if (jdlObject.getEntityQuantity() === 0) {
@@ -72,6 +91,20 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
         return;
       }
       validator.validate(jdlEntity);
+      checkForFieldErrors(jdlEntity.name, jdlEntity.fields, jdlApplication);
+    });
+  }
+
+  function checkForEntityBusinessErrors(jdlApplication) {
+    if (jdlObject.getEntityQuantity() === 0) {
+      return;
+    }
+    const validator = new EntityValidator();
+    jdlObject.forEachEntity(jdlEntity => {
+      if (!jdlApplication.hasEntityName(jdlEntity.name)) {
+        return;
+      }
+      validator.validateBusiness(jdlEntity);
       checkForFieldErrors(jdlEntity.name, jdlEntity.fields, jdlApplication);
     });
   }
@@ -118,6 +151,16 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     const validator = new EnumValidator();
     jdlObject.forEachEnum(jdlEnum => {
       validator.validate(jdlEnum);
+    });
+  }
+
+  function checkForEnumBusinessErrors() {
+    if (jdlObject.getEnumQuantity() === 0) {
+      return;
+    }
+    const validator = new EnumValidator();
+    jdlObject.forEachEnum(jdlEnum => {
+      validator.validateBusiness(jdlEnum);
     });
   }
 

@@ -74,6 +74,7 @@ const {
 const applicationConfigCategoryToken = createTokenFromConfig({ name: 'CONFIG_KEY', pattern: Lexer.NA });
 
 const applicationConfigTokens: Pick<ITokenConfig, 'name' | 'pattern'>[] = [
+  { name: 'BLUEPRINT_CONFIGS', pattern: /\w*:\w*/ },
   { name: 'BASE_NAME', pattern: BASE_NAME },
   { name: 'BLUEPRINTS', pattern: BLUEPRINTS },
   { name: 'BLUEPRINT', pattern: BLUEPRINT },
