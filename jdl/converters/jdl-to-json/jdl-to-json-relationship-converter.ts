@@ -66,7 +66,7 @@ function getRelatedRelationships(relationships, entityNames) {
       }
       if (
         jdlRelationship.to === entityName &&
-        (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.destination).length !== 0)
+        (jdlRelationship.injectedFieldInTo || Object.keys(jdlRelationship.options.source).length !== 0)
       ) {
         relationshipsRelatedToEntity.to.push(jdlRelationship);
       }
