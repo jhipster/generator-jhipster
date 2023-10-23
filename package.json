@@ -126,7 +126,7 @@
     "ejs": "3.1.9",
     "escape-string-regexp": "5.0.0",
     "eslint": "8.52.0",
-    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-import": "2.29.0",
     "eslint-plugin-unused-imports": "3.0.0",
     "execa": "8.0.1",
     "fast-xml-parser": "4.3.2",
