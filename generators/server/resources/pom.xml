@@ -15,7 +15,7 @@
         <gatling.version>3.9.5</gatling.version>
         <h2.version>2.2.224</h2.version>
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
-        <hazelcast-spring.version>5.3.2</hazelcast-spring.version>
+        <hazelcast-spring.version>5.3.4</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.3</jaxb-runtime.version>
         <junit-platform-launcher.version>1.10.0</junit-platform-launcher.version>
