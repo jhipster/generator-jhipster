@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20.8.1
       - run: npm install -g npm@latest
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
