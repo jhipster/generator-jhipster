@@ -52,7 +52,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       jdlObject.forEachApplication(jdlApplication => {
         const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
         const checkReservedKeywords = (blueprints?.length ?? 0) === 0;
-        checkForBlueprintConfigErrors(jdlApplication);
+        checkForNamespaceConfigErrors(jdlApplication);
         checkForRelationshipErrors();
         checkForEntityErrors(jdlApplication, { checkReservedKeywords });
         checkForEnumErrors({ checkReservedKeywords });
@@ -67,16 +67,11 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     },
   };
 
-  function checkForBlueprintConfigErrors(jdlApplication: JDLApplication) {
-    jdlApplication.forEachConfigurationOption(option => {
-      if (option.name.includes(':')) {
-        const [nsSuffix, configName] = option.name.split(':');
-        const namespace = `generator-jhipster-${nsSuffix}`;
-        const blueprints: ListJDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
-        if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === namespace)) {
-          throw new Error(`Blueprint config ${option.name} requires the blueprint ${nsSuffix}`);
-        }
-        option.name = `${namespace}:${configName}`;
+  function checkForNamespaceConfigErrors(jdlApplication: JDLApplication) {
+    jdlApplication.forEachNamespaceConfiguration(config => {
+      const blueprints: ListJDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
+      if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === config.namespace)) {
+        throw new Error(`Blueprint namespace config ${config.namespace} requires the blueprint ${config.namespace}`);
       }
     });
   }

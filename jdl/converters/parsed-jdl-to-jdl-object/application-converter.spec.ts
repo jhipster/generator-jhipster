@@ -117,9 +117,9 @@ describe('jdl - ApplicationConverter', () => {
                   baseName: 'mono',
                   blueprints: [
                     'generator-jhipster-nodejs',
-                    'generator-jhipster-vuejs',
+                    'vuejs',
                     'generator-jhipster-imaginary-blueprint',
-                    'generator-jhipster-super-framework',
+                    'super-framework',
                   ],
                 }),
               ];

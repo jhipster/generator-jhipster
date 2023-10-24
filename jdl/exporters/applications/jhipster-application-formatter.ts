@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import JDLApplication from '../../models/jdl-application.js';
 import { GENERATOR_NAME } from '../export-utils.js';
 
 /**
@@ -55,7 +56,8 @@ function setUpApplicationStructure(application) {
     [GENERATOR_NAME]: {},
   };
   applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
-  applicationToExport.entities = application.getEntityNames();
+  applicationToExport.namespaceConfigs = getApplicationNamespaceConfig(application);
+  applicationToExport[GENERATOR_NAME].entities = application.getEntityNames();
   if (application.hasConfigurationOption('creationTimestamp')) {
     applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);
   }
@@ -67,6 +69,20 @@ function getApplicationConfig(application) {
   const result = {};
   application.forEachConfigurationOption(option => {
     result[option.name] = option.getValue();
+  });
+  return result;
+}
+
+function getApplicationNamespaceConfig(application: JDLApplication) {
+  if (application.namespaceConfigs.length === 0) {
+    return undefined;
+  }
+  const result = {};
+  application.forEachNamespaceConfiguration(configurationOption => {
+    result[configurationOption.namespace!] = result[configurationOption.namespace!] ?? {};
+    configurationOption.forEachOption(option => {
+      result[configurationOption.namespace!][option.name] = option.getValue();
+    });
   });
   return result;
 }

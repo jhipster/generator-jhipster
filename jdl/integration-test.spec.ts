@@ -317,14 +317,16 @@ Map {
 application {
   config {
     baseName jhipster
-    foo:stringConfig stringValue
+  }
+  config:foo {
+    stringConfig stringValue
   }
 }
 `;
 
       it('should throw error', () => {
         const importer = createImporterFromContent(jdl);
-        jestExpect(() => importer.import()).toThrowError({ message: 'Blueprint config foo:stringConfig requires the blueprint foo' });
+        jestExpect(() => importer.import()).toThrowError({ message: 'Blueprint namespace config foo requires the blueprint foo' });
       });
     });
 
@@ -334,12 +336,21 @@ application {
 application {
   config {
     baseName jhipster
-    blueprints [foo]
-    foo:stringConfig stringValue
-    foo:trueConfig true
-    foo:falseConfig false
-    foo:listConfig [item]
-    foo:integerConfig 123
+    blueprints [foo, bar]
+  }
+  config:foo {
+    stringConfig fooValue
+    trueConfig true
+    falseConfig false
+    listConfig [fooitem]
+    integerConfig 123
+  }
+  config:bar {
+    stringConfig barValue
+    trueConfig true
+    falseConfig false
+    listConfig [baritem]
+    integerConfig 321
   }
 }
 `;
@@ -351,21 +362,32 @@ application {
       });
 
       it('should result matching', () => {
-        jestExpect(result[applicationName].config).toMatchInlineSnapshot(`
+        jestExpect(result[applicationName]).toMatchInlineSnapshot(`
 {
-  "baseName": "jhipster",
-  "blueprints": [
-    {
-      "name": "generator-jhipster-foo",
+  "config": {
+    "baseName": "jhipster",
+    "blueprints": [
+      {
+        "name": "foo",
+      },
+      {
+        "name": "bar",
+      },
+    ],
+    "entities": [],
+  },
+  "entities": [],
+  "namespaceConfigs": {
+    "bar": {
+      "falseConfig": false,
+      "integerConfig": 321,
+      "listConfig": [
+        "baritem",
+      ],
+      "stringConfig": "barValue",
+      "trueConfig": true,
     },
-  ],
-  "generator-jhipster-foo:falseConfig": false,
-  "generator-jhipster-foo:integerConfig": 123,
-  "generator-jhipster-foo:listConfig": [
-    "item",
-  ],
-  "generator-jhipster-foo:stringConfig": "stringValue",
-  "generator-jhipster-foo:trueConfig": true,
+  },
 }
 `);
       });

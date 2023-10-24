@@ -24,9 +24,11 @@ const { OptionNames } = ApplicationOptions;
 
 export default class JDLApplicationConfiguration {
   options: Record<string, JDLApplicationConfigurationOption>;
+  namespace?: string;
 
-  constructor() {
+  constructor(namespace?: string) {
     this.options = {};
+    this.namespace = namespace;
   }
 
   hasOption(optionName: string) {
@@ -64,12 +66,13 @@ export default class JDLApplicationConfiguration {
 
   toString(indent = 0) {
     const spaceBeforeConfigKeyword = ' '.repeat(indent);
+    const namespace = this.namespace ? `:${this.namespace}` : '';
     if (Object.keys(this.options).length === 0) {
-      return `${spaceBeforeConfigKeyword}config {}`;
+      return `${spaceBeforeConfigKeyword}config${namespace} {}`;
     }
     const spaceBeforeOption = ' '.repeat(2 * indent);
     const config = getFormattedConfigOptionsString(this.options, spaceBeforeOption);
-    return `${spaceBeforeConfigKeyword}config {
+    return `${spaceBeforeConfigKeyword}config${namespace} {
 ${config}
 ${spaceBeforeConfigKeyword}}`;
   }

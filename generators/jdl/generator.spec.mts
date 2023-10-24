@@ -162,7 +162,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
           jsonOnly: true,
-          inline: 'application { config { blueprints [foo] foo:config bar } }',
+          inline: 'application { config { blueprints [foo, bar] } config:foo { config fooValue } config:bar { config barValue } }',
         });
       });
 
@@ -177,12 +177,15 @@ describe(`generator - ${generator}`, () => {
     "blueprints": [
       {
         "name": "generator-jhipster-foo"
+      },
+      {
+        "name": "generator-jhipster-bar"
       }
     ],
     "entities": []
   },
-  "generator-jhipster-foo": {
-    "config": "bar"
+  "generator-jhipster-bar": {
+    "config": "barValue"
   }
 }
 ",

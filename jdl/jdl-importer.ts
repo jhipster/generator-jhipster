@@ -82,7 +82,7 @@ export function createImporterFromContent(jdlString, configuration?: any) {
   return makeJDLImporter(content, configuration || {});
 }
 
-export type ApplicationWithEntities = { config: any; entities: any[] };
+export type ApplicationWithEntities = { config: any; namespaceConfigs: Record<string, Record<string, any>>; entities: any[] };
 
 export type ImportState = {
   exportedApplications: any[];
@@ -231,6 +231,7 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
   const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
   importState.exportedApplicationsWithEntities[applicationName] = {
     config: formattedApplication['generator-jhipster'],
+    namespaceConfigs: formattedApplication.namespaceConfigs,
     entities: [],
   };
   if (jsonEntities.length !== 0) {

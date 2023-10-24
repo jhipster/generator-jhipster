@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
-import createApplicationConfigurationFromObject from './jdl-application-configuration-factory.js';
+import createApplicationConfigurationFromObject, {
+  createApplicationNamespaceConfigurationFromObject,
+} from './jdl-application-configuration-factory.js';
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import JDLApplicationEntities from './jdl-application-entities.js';
@@ -25,11 +27,13 @@ import JDLOptions from './jdl-options.js';
 
 export default class JDLApplication {
   config: JDLApplicationConfiguration;
+  namespaceConfigs: Array<JDLApplicationConfiguration>;
   entityNames: any;
   options: any;
 
-  constructor({ config = {}, entityNames = [] }: any = {}) {
+  constructor({ config = {}, entityNames = [], namespaceConfigs = {} }: any = {}) {
     this.config = createApplicationConfigurationFromObject(config);
+    this.namespaceConfigs = createApplicationNamespaceConfigurationFromObject(namespaceConfigs);
     this.entityNames = new JDLApplicationEntities(entityNames);
     this.options = new JDLOptions();
   }
@@ -58,6 +62,12 @@ export default class JDLApplication {
 
   forEachConfigurationOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
     this.config.forEachOption(passedFunction);
+  }
+
+  forEachNamespaceConfiguration(passedFunction: (option: JDLApplicationConfiguration) => void) {
+    for (const namespaceConfig of this.namespaceConfigs) {
+      passedFunction(namespaceConfig);
+    }
   }
 
   addEntityName(entityName) {
@@ -105,7 +115,7 @@ export default class JDLApplication {
   }
 
   toString() {
-    let stringifiedApplication = `application {\n${this.config.toString(2)}\n`;
+    let stringifiedApplication = `application {\n${this.config.toString(2)}\n${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
     if (this.entityNames.size() !== 0) {
       stringifiedApplication += `\n${this.entityNames.toString(2)}\n`;
     }

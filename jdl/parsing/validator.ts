@@ -51,9 +51,8 @@ const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
-const BLUEPRINT_CONFIGS_PATTERN = /^((\d*)|([A-Za-z][A-Za-z0-9]*))$/;
 
-export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'UNKNOWN';
+export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING';
 
 export type JDLValidatorOption = {
   type: JDLValidatorOptionType;
@@ -62,11 +61,6 @@ export type JDLValidatorOption = {
 };
 
 const configPropsValidations: Record<string, JDLValidatorOption> = {
-  BLUEPRINT_CONFIGS: {
-    type: 'UNKNOWN',
-    pattern: BLUEPRINT_CONFIGS_PATTERN,
-    msg: 'blueprint configs',
-  },
   APPLICATION_TYPE: {
     type: 'NAME',
     pattern: ALPHABETIC_LOWER,
@@ -375,8 +369,6 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
 
   checkExpectedValueType(expected, actual) {
     switch (expected) {
-      case 'UNKNOWN':
-        return true;
       case 'NAME':
         if (
           actual.name !== 'qualifiedName' &&
