@@ -5,29 +5,6 @@
     "cli": true,
     "localBlueprint": false,
     "generators": {
-      "app": {
-        "command": false,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "preparingEachEntity",
-          "preparingEachEntityField",
-          "preparingEachEntityRelationship",
-          "default",
-          "writing",
-          "writingEntities",
-          "postWriting",
-          "postWritingEntities",
-          "install",
-          "end"
-        ],
-        "sbs": false,
-        "written": true
-      },
       "client": {
         "command": false,
         "priorities": [
@@ -125,6 +102,6 @@
     "mainGenerator": "generate-blueprint",
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",
-    "subGenerators": ["app", "client", "common", "cypress", "server"]
+    "subGenerators": ["client", "common", "cypress", "server"]
   }
 }
