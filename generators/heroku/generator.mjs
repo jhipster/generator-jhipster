@@ -19,26 +19,16 @@
 /* eslint-disable consistent-return */
 import crypto from 'crypto';
 import fs from 'fs';
-import ChildProcess from 'child_process';
-import util from 'util';
 import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
-import runAsync from 'run-async';
 
 import BaseGenerator from '../base/index.mjs';
 
 import statistics from '../statistics.mjs';
 import { CLIENT_MAIN_SRC_DIR, JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
 import { GENERATOR_HEROKU } from '../generator-list.mjs';
-import {
-  authenticationTypes,
-  buildToolTypes,
-  cacheTypes,
-  databaseTypes,
-  searchEngineTypes,
-  serviceDiscoveryTypes,
-} from '../../jdl/jhipster/index.mjs';
+import { buildToolTypes, cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
 import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
@@ -49,14 +39,12 @@ import { loadLanguagesConfig } from '../languages/support/index.mjs';
 
 const cacheProviderOptions = cacheTypes;
 const { MEMCACHED, REDIS } = cacheTypes;
-const { OAUTH2 } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 const { MARIADB, MYSQL, POSTGRESQL } = databaseTypes;
 const { EUREKA } = serviceDiscoveryTypes;
 
 const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
-const execCmd = util.promisify(ChildProcess.exec);
 
 export default class HerokuGenerator extends BaseGenerator {
   constructor(args, options, features) {
@@ -113,9 +101,6 @@ export default class HerokuGenerator extends BaseGenerator {
         this.dynoSize = 'Free';
         this.herokuDeployType = configuration.get('herokuDeployType');
         this.herokuJavaVersion = configuration.get('herokuJavaVersion');
-        this.useOkta = configuration.get('useOkta');
-        this.oktaAdminLogin = configuration.get('oktaAdminLogin');
-        this.oktaAdminPassword = configuration.get('oktaAdminPassword');
       },
     };
   }
@@ -126,11 +111,9 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get prompting() {
     return {
-      askForApp: runAsync(function () {
-        const done = this.async();
-
+      async askForApp(done) {
         if (this.herokuAppName) {
-          ChildProcess.exec(`heroku apps:info --json ${this.herokuAppName}`, (err, stdout) => {
+          this.spawnCommand(`heroku apps:info --json ${this.herokuAppName}`, (err, stdout) => {
             if (err) {
               this.abort = true;
               this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
@@ -175,7 +158,7 @@ export default class HerokuGenerator extends BaseGenerator {
             done();
           });
         }
-      }),
+      },
 
       askForHerokuDeployType() {
         if (this.abort) return null;
@@ -221,50 +204,6 @@ export default class HerokuGenerator extends BaseGenerator {
           this.herokuJavaVersion = props.herokuJavaVersion;
         });
       },
-      askForOkta() {
-        if (this.abort) return null;
-        if (this.authenticationType !== OAUTH2) return null;
-        if (this.useOkta) return null;
-        const prompts = [
-          {
-            type: 'list',
-            name: 'useOkta',
-            message:
-              'You are using OAuth 2.0. Do you want to use Okta? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
-            choices: [
-              {
-                value: true,
-                name: 'Yes, provision the Okta add-on',
-              },
-              {
-                value: false,
-                name: 'No, I want to configure my identity provider manually',
-              },
-            ],
-            default: 1,
-          },
-          {
-            when: answers => answers.useOkta,
-            type: 'input',
-            name: 'oktaAdminLogin',
-            message: 'Login (valid email) for the JHipster Admin user:',
-            validate: input => {
-              if (!input) {
-                return 'You must enter a login for the JHipster admin';
-              }
-              return true;
-            },
-          },
-        ];
-
-        return this.prompt(prompts).then(props => {
-          this.useOkta = props.useOkta;
-          if (this.useOkta) {
-            this.oktaAdminLogin = props.oktaAdminLogin;
-            this.oktaAdminPassword = this.randomPassword;
-          }
-        });
-      },
     };
   }
 
@@ -274,26 +213,23 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get configuring() {
     return {
-      checkInstallation: runAsync(function () {
+      async checkInstallation(done) {
         if (this.abort) return;
-        const done = this.async();
 
-        ChildProcess.exec('heroku --version', err => {
+        this.spawnCommand('heroku --version', err => {
           if (err) {
             this.log.error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
             this.abort = true;
           }
           done();
         });
-      }),
+      },
 
       saveConfig() {
         this.config.set({
           herokuAppName: this.herokuAppName,
           herokuDeployType: this.herokuDeployType,
           herokuJavaVersion: this.herokuJavaVersion,
-          useOkta: this.useOkta,
-          oktaAdminLogin: this.oktaAdminLogin,
         });
       },
     };
@@ -309,9 +245,8 @@ export default class HerokuGenerator extends BaseGenerator {
         statistics.sendSubGenEvent('generator', GENERATOR_HEROKU);
       },
 
-      gitInit: runAsync(function () {
+      async gitInit(done) {
         if (this.abort) return;
-        const done = this.async();
 
         try {
           fs.lstatSync('.git');
@@ -320,27 +255,26 @@ export default class HerokuGenerator extends BaseGenerator {
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
           this.log.log(chalk.bold('\nInitializing Git repository'));
-          const child = ChildProcess.exec('git init', () => {
+          const child = this.spawnCommand('git init', () => {
             done();
           });
           child.stdout.on('data', data => {
             this.log.verboseInfo(data.toString());
           });
         }
-      }),
+      },
 
-      installHerokuDeployPlugin: runAsync(function () {
+      async installHerokuDeployPlugin(done) {
         if (this.abort) return;
-        const done = this.async();
         const cliPlugin = 'heroku-cli-deploy';
 
-        ChildProcess.exec('heroku plugins', (err, stdout) => {
+        this.spawnCommand('heroku plugins', (err, stdout) => {
           if (_.includes(stdout, cliPlugin)) {
             this.log.log('\nHeroku CLI deployment plugin already installed');
             done();
           } else {
             this.log.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            const child = ChildProcess.exec(`heroku plugins:install ${cliPlugin}`, err => {
+            const child = this.spawnCommand(`heroku plugins:install ${cliPlugin}`, err => {
               if (err) {
                 this.abort = true;
                 this.log.error(err);
@@ -354,16 +288,15 @@ export default class HerokuGenerator extends BaseGenerator {
             });
           }
         });
-      }),
+      },
 
-      herokuCreate: runAsync(function () {
+      async herokuCreate(done) {
         if (this.abort || this.herokuAppExists) return;
-        const done = this.async();
 
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-        const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, { timeout: 6000 }, (err, stdout, stderr) => {
+        const child = this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, { timeout: 6000 }, (err, stdout, stderr) => {
           if (err) {
             if (stderr.includes('is already taken')) {
               const prompts = [
@@ -388,7 +321,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.log.verboseInfo('');
               this.prompt(prompts).then(props => {
                 if (props.herokuForceName === 'Yes') {
-                  ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout) => {
+                  this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout) => {
                     if (err) {
                       this.abort = true;
                       this.log.error(err);
@@ -402,7 +335,7 @@ export default class HerokuGenerator extends BaseGenerator {
                     done();
                   });
                 } else {
-                  ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout) => {
+                  this.spawnCommand(`heroku create ${regionParams}`, (err, stdout) => {
                     if (err) {
                       this.abort = true;
                       this.log.error(err);
@@ -412,7 +345,7 @@ export default class HerokuGenerator extends BaseGenerator {
                       this.log.verboseInfo(stdout.trim());
 
                       // ensure that the git remote is the same as the appName
-                      ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, err => {
+                      this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`, err => {
                         if (err) {
                           this.abort = true;
                           this.log.error(err);
@@ -452,11 +385,10 @@ export default class HerokuGenerator extends BaseGenerator {
             this.log.verboseInfo(output.trim());
           }
         });
-      }),
+      },
 
-      herokuAddonsCreate: runAsync(function () {
+      async herokuAddonsCreate(done) {
         if (this.abort) return;
-        const done = this.async();
 
         const addonCreateCallback = (addon, err) => {
           if (err) {
@@ -476,15 +408,8 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (this.searchEngine === ELASTICSEARCH) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          ChildProcess.exec(`heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+          this.spawnCommand(`heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`, (err, stdout, stderr) => {
             addonCreateCallback.bind('Elasticsearch', err, stdout, stderr);
-          });
-        }
-
-        if (this.useOkta) {
-          this.log.log(chalk.bold('\nProvisioning okta addon'));
-          ChildProcess.exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-            addonCreateCallback('Okta', err, stdout, stderr);
           });
         }
 
@@ -499,7 +424,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+          this.spawnCommand(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
             addonCreateCallback('Database', err, stdout, stderr);
           });
         } else {
@@ -515,7 +440,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon ${cacheAddOn}`));
-          ChildProcess.exec(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+          this.spawnCommand(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
             addonCreateCallback('Cache', err, stdout, stderr);
           });
         } else {
@@ -523,7 +448,7 @@ export default class HerokuGenerator extends BaseGenerator {
         }
 
         done();
-      }),
+      },
 
       configureJHipsterRegistry() {
         if (this.abort || this.herokuAppExists) return undefined;
@@ -557,7 +482,7 @@ export default class HerokuGenerator extends BaseGenerator {
             props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
             const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
             const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-            const child = ChildProcess.exec(configSetCmd, err => {
+            const child = this.spawnCommand(configSetCmd, err => {
               if (err) {
                 this.abort = true;
                 this.log.error(err);
@@ -592,14 +517,6 @@ export default class HerokuGenerator extends BaseGenerator {
         if (this.buildTool === GRADLE) {
           this.writeFile('heroku.gradle.ejs', 'gradle/heroku.gradle');
         }
-        if (this.useOkta) {
-          this.writeFile('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
-          fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', err => {
-            if (err) {
-              this.log.warn(`${chalk.yellow.bold('WARNING!')} Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
-            }
-          });
-        }
       },
 
       addHerokuBuildPlugin() {
@@ -629,20 +546,6 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get end() {
     return this.asEndTaskGroup({
-      makeScriptExecutable() {
-        if (this.abort) return;
-        if (this.useOkta) {
-          try {
-            fs.chmodSync('provision-okta-addon.sh', '755');
-          } catch (err) {
-            this.log.warn(
-              `${chalk.yellow.bold(
-                'WARNING!',
-              )}Failed to make 'provision-okta-addon.sh' executable, you may need to run 'chmod +x provison-okta-addon.sh'`,
-            );
-          }
-        }
-      },
       async productionBuild() {
         if (this.abort) return;
 
@@ -671,7 +574,7 @@ export default class HerokuGenerator extends BaseGenerator {
             const gitAddCmd = 'git add .';
             this.log.log(chalk.cyan(gitAddCmd));
 
-            const gitAdd = execCmd(gitAddCmd);
+            const gitAdd = this.spawnCommand(gitAddCmd);
             gitAdd.child.stdout.on('data', data => {
               this.log.verboseInfo(data);
             });
@@ -684,7 +587,7 @@ export default class HerokuGenerator extends BaseGenerator {
             const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
             this.log.log(chalk.cyan(gitCommitCmd));
 
-            const gitCommit = execCmd(gitCommitCmd);
+            const gitCommit = this.spawnCommand(gitCommitCmd);
             gitCommit.child.stdout.on('data', data => {
               this.log.verboseInfo(data);
             });
@@ -702,14 +605,14 @@ export default class HerokuGenerator extends BaseGenerator {
             }
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
-            await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
-            const { stdout: data } = await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+            await this.spawnCommand(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
+            const { stdout: data } = await this.spawnCommand(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
             if (data) {
               this.logger.info(data);
               // remote:  !     The following add-ons were automatically provisioned: . These add-ons may incur additional cost,
               // which is prorated to the second. Run `heroku addons` for more info.
               if (data.includes('Run `heroku addons` for more info.')) {
-                await execCmd('heroku addons');
+                await this.spawnCommand('heroku addons');
               }
 
               this.log('');
@@ -748,7 +651,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
             this.log.log(chalk.bold('\nDeploying application'));
 
-            const herokuPush = execCmd('git push heroku HEAD:main', { maxBuffer: 1024 * 10000 });
+            const herokuPush = this.spawnCommand('git push heroku HEAD:main', { maxBuffer: 1024 * 10000 });
 
             herokuPush.child.stdout.on('data', data => {
               this.log.verboseInfo(data);
@@ -763,43 +666,6 @@ export default class HerokuGenerator extends BaseGenerator {
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
             this.log.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-
-            if (this.useOkta) {
-              let curlAvailable = false;
-              let jqAvailable = false;
-              try {
-                await execCmd('curl --help');
-                curlAvailable = true;
-              } catch (err) {
-                this.log.log(
-                  chalk.red('cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'),
-                );
-                this.log.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
-              }
-              try {
-                await execCmd('jq --help');
-                jqAvailable = true;
-              } catch (err) {
-                this.log.log(
-                  chalk.red('jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'),
-                );
-                this.log.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
-              }
-              if (curlAvailable && jqAvailable) {
-                this.log.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users for JHipster.'));
-                try {
-                  await execCmd('./provision-okta-addon.sh');
-                  this.log.log(chalk.bold('\nOkta configured successfully!'));
-                  this.log.log(chalk.green(`\nUse ${chalk.bold(`${this.oktaAdminLogin}/${this.oktaAdminPassword}`)} to login.\n`));
-                } catch (err) {
-                  this.log.log(
-                    chalk.red(
-                      'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.',
-                    ),
-                  );
-                }
-              }
-            }
           } catch (err) {
             this.log.error(err);
           }
@@ -821,8 +687,8 @@ export default class HerokuGenerator extends BaseGenerator {
             ),
           );
           try {
-            await execCmd(herokuSetBuildpackCommand);
-            const herokuDeploy = execCmd(herokuDeployCommand);
+            await this.spawnCommand(herokuSetBuildpackCommand);
+            const herokuDeploy = this.spawnCommand(herokuDeployCommand);
             herokuDeploy.child.stdout.on('data', data => {
               this.log.verboseInfo(data);
             });
@@ -834,43 +700,6 @@ export default class HerokuGenerator extends BaseGenerator {
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
             this.log.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-
-            if (this.useOkta) {
-              let curlAvailable = false;
-              let jqAvailable = false;
-              try {
-                await execCmd('curl --help');
-                curlAvailable = true;
-              } catch (err) {
-                this.log.log(
-                  chalk.red('cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'),
-                );
-                this.log.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
-              }
-              try {
-                await execCmd('jq --help');
-                jqAvailable = true;
-              } catch (err) {
-                this.log.log(
-                  chalk.red('jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'),
-                );
-                this.log.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
-              }
-              if (curlAvailable && jqAvailable) {
-                this.log.log(chalk.green('Running ./provision-okta-addon.sh to create all required roles and users for JHipster.'));
-                try {
-                  await execCmd('./provision-okta-addon.sh');
-                  this.log.log(chalk.bold('\nOkta configured successfully!'));
-                  this.log.log(chalk.green(`\nUse ${chalk.bold(`${this.oktaAdminLogin}/${this.oktaAdminPassword}`)} to login.`));
-                } catch (err) {
-                  this.log.log(
-                    chalk.red(
-                      'Failed to execute ./provision-okta-addon.sh. Make sure to set up Okta according to https://www.jhipster.tech/heroku/.',
-                    ),
-                  );
-                }
-              }
-            }
           } catch (err) {
             this.log.error(err);
           }
