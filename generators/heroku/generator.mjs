@@ -111,11 +111,11 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get prompting() {
     return {
-      async askForApp(done) {
+      async askForApp() {
         if (this.herokuAppName) {
-          this.spawnCommand(`heroku apps:info --json ${this.herokuAppName}`, (err, stdout) => {
-            if (err) {
-              this.abort = true;
+          const { stdout, exitCode } = await this.spawnCommand(`heroku apps:info --json ${this.herokuAppName}`, { reject: false, stdio: 'pipe' });
+          if (exitCode !== 0) {
+              this.cancelCancellableTasks();
               this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
               this.log.error('Run the generator again to create a new application.');
               this.herokuAppName = null;
@@ -155,7 +155,6 @@ export default class HerokuGenerator extends BaseGenerator {
             this.herokuAppName = _.kebabCase(props.herokuAppName);
             this.herokuRegion = props.herokuRegion;
             this.herokuAppExists = false;
-            done();
           });
         }
       },
