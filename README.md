@@ -19,9 +19,9 @@ We are honoured by any contributions you may have small or large. Please refer t
 The following Java and Node combinations are tested and verified by GitHub Actions:
 
 | Java | Node | Status |
-|------|------|--------|
-| 21   | 20   | ✅      |
-| 17   | 18   | ✅      |
+| ---- | ---- | ------ |
+| 21   | 20   | ✅     |
+| 17   | 18   | ✅     |
 
 ## Sponsors
 
