@@ -212,16 +212,12 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get configuring() {
     return {
-      async checkInstallation(done) {
-        if (this.abort) return;
-
-        this.spawnCommand('heroku --version', err => {
-          if (err) {
-            this.log.error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
-            this.abort = true;
-          }
-          done();
-        });
+      async checkInstallation() {
+        const { exitCode } = await this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' });
+        if (exitCode !== 0) {
+          this.log.error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
+          this.cancelCancellableTasks();
+        }
       },
 
       saveConfig() {
@@ -289,7 +285,7 @@ export default class HerokuGenerator extends BaseGenerator {
         });
       },
 
-      async herokuCreate(done) {
+      async herokuCreate() {
         if (this.abort || this.herokuAppExists) return;
 
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
