@@ -70,7 +70,7 @@ function createUnknownJDLConfigurationOption(name, value) {
 }
 
 function createApplicationJDLConfigurationOption(name: string, value: any) {
-  let type = applicationDefinition.getTypeForOption(name);
+  const type = applicationDefinition.getTypeForOption(name);
   return createJDLConfigurationOption(type, name, value);
 }
 

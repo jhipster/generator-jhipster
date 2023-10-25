@@ -32,7 +32,7 @@ export default function createTokenFromConfig(config: ITokenConfig) {
   // library with a separate lexing phase.
   // See: https://github.com/SAP/chevrotain/blob/master/examples/lexer/keywords_vs_identifiers/keywords_vs_identifiers.js
   // a Concise way to resolve the problem without manually adding the "longer_alt" property dozens of times.
-  if ((isString(config.pattern) && namePattern.test(config.pattern))) {
+  if (isString(config.pattern) && namePattern.test(config.pattern)) {
     config.longer_alt = NAME;
     if (!config.categories) {
       config.categories = [];

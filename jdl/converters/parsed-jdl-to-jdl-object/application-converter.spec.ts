@@ -115,12 +115,7 @@ describe('jdl - ApplicationConverter', () => {
                 createJDLApplication({
                   applicationType: MONOLITH,
                   baseName: 'mono',
-                  blueprints: [
-                    'generator-jhipster-nodejs',
-                    'vuejs',
-                    'generator-jhipster-imaginary-blueprint',
-                    'super-framework',
-                  ],
+                  blueprints: ['generator-jhipster-nodejs', 'vuejs', 'generator-jhipster-imaginary-blueprint', 'super-framework'],
                 }),
               ];
             });

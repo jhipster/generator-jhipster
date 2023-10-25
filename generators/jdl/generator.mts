@@ -33,7 +33,7 @@ import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jd
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.mjs';
-import { mergeYoRcContent, splitBlueprintConfigs } from '../../jdl/index.js';
+import { mergeYoRcContent } from '../../jdl/index.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.mjs';
 
 const { upperFirst } = _;

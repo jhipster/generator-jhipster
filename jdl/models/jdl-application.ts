@@ -115,7 +115,9 @@ export default class JDLApplication {
   }
 
   toString() {
-    let stringifiedApplication = `application {\n${this.config.toString(2)}\n${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
+    let stringifiedApplication = `application {
+${this.config.toString(2)}
+${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
     if (this.entityNames.size() !== 0) {
       stringifiedApplication += `\n${this.entityNames.toString(2)}\n`;
     }

@@ -18,7 +18,6 @@
  */
 import { CstParser } from 'chevrotain';
 import { tokens as LexerTokens } from './lexer/lexer.js';
-import { applicationConfigCategoryToken } from './lexer/application-tokens.js';
 import { NAME } from './lexer/shared-tokens.js';
 
 let instance;
