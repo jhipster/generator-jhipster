@@ -18,24 +18,27 @@
  */
 
 import ApplicationOptions from '../jhipster/application-options.js';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const { OptionNames } = ApplicationOptions;
 
 export default class JDLApplicationConfiguration {
-  options: any;
+  options: Record<string, JDLApplicationConfigurationOption>;
+  namespace?: string;
 
-  constructor() {
+  constructor(namespace?: string) {
     this.options = {};
+    this.namespace = namespace;
   }
 
-  hasOption(optionName) {
+  hasOption(optionName: string) {
     if (!optionName) {
       return false;
     }
     return optionName in this.options;
   }
 
-  getOption(optionName) {
+  getOption(optionName: string) {
     if (!optionName) {
       throw new Error('An option name has to be passed to get the option.');
     }
@@ -45,14 +48,14 @@ export default class JDLApplicationConfiguration {
     return this.options[optionName];
   }
 
-  setOption(option) {
+  setOption(option: JDLApplicationConfigurationOption) {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.options[option.name] = option;
   }
 
-  forEachOption(passedFunction) {
+  forEachOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
     if (!passedFunction) {
       return;
     }
@@ -63,12 +66,13 @@ export default class JDLApplicationConfiguration {
 
   toString(indent = 0) {
     const spaceBeforeConfigKeyword = ' '.repeat(indent);
+    const namespace = this.namespace ? `:${this.namespace}` : '';
     if (Object.keys(this.options).length === 0) {
-      return `${spaceBeforeConfigKeyword}config {}`;
+      return `${spaceBeforeConfigKeyword}config${namespace} {}`;
     }
     const spaceBeforeOption = ' '.repeat(2 * indent);
     const config = getFormattedConfigOptionsString(this.options, spaceBeforeOption);
-    return `${spaceBeforeConfigKeyword}config {
+    return `${spaceBeforeConfigKeyword}config${namespace} {
 ${config}
 ${spaceBeforeConfigKeyword}}`;
   }

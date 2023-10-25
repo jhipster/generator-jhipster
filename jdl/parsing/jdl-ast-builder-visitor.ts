@@ -466,6 +466,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   applicationSubDeclaration(context) {
     const applicationSubDeclaration: {
       config: any;
+      namespaceConfigs: Record<string, Record<string, any>>;
       entities: {
         entityList: any[];
         excluded: any[];
@@ -474,6 +475,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       useOptions: any[];
     } = {
       config: {},
+      namespaceConfigs: {},
       entities: { entityList: [], excluded: [] },
       options: {},
       useOptions: [],
@@ -482,6 +484,10 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.applicationSubConfig) {
       // Apparently the pegjs grammar only returned the last config
       applicationSubDeclaration.config = this.visit(context.applicationSubConfig[context.applicationSubConfig.length - 1]);
+    }
+    if (context.applicationSubNamespaceConfig) {
+      const { namespace, config } = this.visit(context.applicationSubNamespaceConfig[context.applicationSubNamespaceConfig.length - 1]);
+      applicationSubDeclaration.namespaceConfigs[namespace] = config;
     }
 
     if (context.applicationSubEntities) {
@@ -530,6 +536,49 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     }
 
     return applicationSubDeclaration;
+  }
+
+  applicationSubNamespaceConfig(context) {
+    const config: any = {};
+
+    const namespace = context.namespace[0].image;
+    if (context.applicationNamespaceConfigDeclaration) {
+      const configProps = context.applicationNamespaceConfigDeclaration.map(this.visit, this);
+      configProps.forEach(configProp => {
+        config[configProp.key] = configProp.value;
+      });
+    }
+
+    return { namespace, config };
+  }
+
+  applicationNamespaceConfigDeclaration(context) {
+    const key = context.NAME[0].image;
+    const value = this.visit(context.namespaceConfigValue);
+
+    return { key, value };
+  }
+
+  namespaceConfigValue(context) {
+    if (context.qualifiedName) {
+      return this.visit(context.qualifiedName);
+    }
+    if (context.list) {
+      return this.visit(context.list);
+    }
+    if (context.INTEGER) {
+      return context.INTEGER[0].image;
+    }
+    if (context.STRING) {
+      const stringImage = context.STRING[0].image;
+      return stringImage.substring(1, stringImage.length - 1);
+    }
+    if (context.BOOLEAN) {
+      return context.BOOLEAN[0].image === 'true';
+    }
+
+    /* istanbul ignore next */
+    throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
   }
 
   applicationSubConfig(context) {

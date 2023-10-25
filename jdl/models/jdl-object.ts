@@ -227,7 +227,7 @@ export default class JDLObject {
     return this.options.getOptionsForName(optionName);
   }
 
-  forEachOption(passedFunction) {
+  forEachOption(passedFunction: (option: any) => void) {
     if (!passedFunction) {
       return;
     }

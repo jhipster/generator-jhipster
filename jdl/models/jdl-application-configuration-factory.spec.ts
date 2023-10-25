@@ -35,6 +35,7 @@ describe('jdl - JDLApplicationConfigurationFactory', () => {
       it('should a configuration without option', () => {
         expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
+  "namespace": undefined,
   "options": {},
 }
 `);
@@ -53,6 +54,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
+  "namespace": undefined,
   "options": {
     "baseName": StringJDLApplicationConfigurationOption {
       "name": "baseName",
@@ -76,6 +78,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
+  "namespace": undefined,
   "options": {
     "serverPort": IntegerJDLApplicationConfigurationOption {
       "name": "serverPort",
@@ -98,6 +101,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
+  "namespace": undefined,
   "options": {
     "enableTranslation": BooleanJDLApplicationConfigurationOption {
       "name": "enableTranslation",
@@ -120,6 +124,7 @@ JDLApplicationConfiguration {
         it('should create it', () => {
           expect(createdConfiguration).toMatchInlineSnapshot(`
 JDLApplicationConfiguration {
+  "namespace": undefined,
   "options": {
     "testFrameworks": ListJDLApplicationConfigurationOption {
       "name": "testFrameworks",
