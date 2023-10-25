@@ -247,7 +247,7 @@ export default class HerokuGenerator extends BaseGenerator {
           this.log.log(chalk.bold('\nInitializing Git repository'));
           const gitInit = this.spawnCommand('git init', { stdio: 'pipe' });
           gitInit.stdout.on('data', data => {
-            this.log.verboseInfo(stdout);
+            this.log.verboseInfo(gitInit.stdout);
             this.log.verboseInfo(data.toString());
           });
           await gitInit;
