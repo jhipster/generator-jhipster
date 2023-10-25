@@ -16,9 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
-// Microfrontend api, should match accross gateway and microservices.
+const { share, shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+// const packageJson = require('../package.json');
+// Microfrontend api, should match across gateway and microservices.
 const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+const shareAllDefaults = { ...sharedDefaults, requiredVersion: 'auto' }
+const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults }]));
+
+/*
+const shareDependencies = ({ skipList = [] }) => Object.fromEntries(Object.entries(packageJson.dependencies).filter(([dependency]) => !skipList.includes(dependency)).map(([dependency, version]) => [
+  dependency,
+  { ...sharedDefaults, requiredVersion: version },
+]));
+*/
 
 module.exports = (config, options, targetOptions) => {
   return withModuleFederationPlugin({
@@ -33,32 +45,28 @@ module.exports = (config, options, targetOptions) => {
     },
 <%_ } _%>
     shared: {
-      ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
-      ...Object.fromEntries(
-        [
-          'app/config/input.constants',
-          'app/config/pagination.constants',
-          'app/config/translation.config',
-          'app/core/auth',
-          'app/core/config',
-          'app/core/interceptor',
-          'app/core/request',
-          'app/core/util',
-          'app/shared',
-          'app/shared/alert',
-          'app/shared/auth',
-          'app/shared/date',
-          'app/shared/language',
-          'app/shared/pagination',
-          'app/shared/sort',
-        ].map(sharedPath => [
-          sharedPath,
-          {
-            singleton: true,
-            import: sharedPath,
-            requiredVersion: apiVersion,
-          },
-        ]),
+      ...shareAll(shareAllDefaults),
+      // shareAll looks for secondaries at the current workspace path, not hoisted packages. Add manually.
+      ...share({
+        '@angular/common/http': { ...shareAllDefaults },
+        'rxjs/operators': { ...sharedDefaults },
+      }),
+      ...shareMappings(
+        'app/config/input.constants',
+        'app/config/pagination.constants',
+        'app/config/translation.config',
+        'app/core/auth',
+        'app/core/config',
+        'app/core/interceptor',
+        'app/core/request',
+        'app/core/util',
+        'app/shared',
+        'app/shared/alert',
+        'app/shared/auth',
+        'app/shared/date',
+        'app/shared/language',
+        'app/shared/pagination',
+        'app/shared/sort',
       ),
     },
   });

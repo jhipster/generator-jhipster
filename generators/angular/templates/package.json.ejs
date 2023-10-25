@@ -58,13 +58,13 @@
     "sockjs-client": "1.6.1",
     "@stomp/rx-stomp": "1.2.0",
 <%_ } _%>
-<%_ if (skipServer) { _%>
-    "sonar-scanner": "3.1.0",
-<%_ } _%>
     "tslib": "<%= nodeDependencies['tslib'] %>",
     "zone.js": "<%= nodeDependencies['zone.js'] %>"
   },
   "devDependencies": {
+<%_ if (skipServer) { _%>
+    "sonar-scanner": "3.1.0",
+<%_ } _%>
 <%_ if (microfrontend && applicationTypeGateway) { _%>
     "@angular-architects/module-federation-runtime": "<%= nodeDependencies['@angular-architects/module-federation-runtime'] %>",
     "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
