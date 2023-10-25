@@ -280,11 +280,22 @@ export default class HerokuGenerator extends BaseGenerator {
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-        const { stderr, stdout, exitCode } = await this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, {
+        const createCommand = this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, {
           reject: false,
           stdio: 'pipe',
         });
 
+        createCommand.stdout.on('data', data => {
+          const output = data.toString();
+          if (data.search('Heroku credentials') >= 0) {
+            this.cancelCancellableTasks();
+            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+          } else {
+            this.log.verboseInfo(output.trim());
+          }
+        });
+
+        const { stderr, exitCode } = await createCommand;
         if (exitCode !== 0) {
           if (stderr.includes('is already taken')) {
             const prompts = [
@@ -356,16 +367,6 @@ export default class HerokuGenerator extends BaseGenerator {
             }
           }
         }
-
-        stdout.on('data', data => {
-          const output = data.toString();
-          if (data.search('Heroku credentials') >= 0) {
-            this.cancelCancellableTasks();
-            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
-          } else {
-            this.log.verboseInfo(output.trim());
-          }
-        });
       },
 
       async herokuAddonsCreate() {
