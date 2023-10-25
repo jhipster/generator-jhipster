@@ -31,7 +31,7 @@ export default function createApplicationConfigurationFromObject(configurationOb
   const configuration = new JDLApplicationConfiguration();
   Object.keys(configurationObject).forEach(optionName => {
     const optionValue = configurationObject[optionName];
-    if (!applicationDefinition.doesOptionExist(optionName) && !optionName.includes(':')) {
+    if (!applicationDefinition.doesOptionExist(optionName)) {
       logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
     }
