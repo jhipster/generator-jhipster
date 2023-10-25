@@ -31,7 +31,7 @@ const EntitiesMenuItems = React.lazy(() => import('app/entities/menu').catch(() 
 const <%= remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(async () => importRemote<any>({
   url: `./services/<%= remote.lowercaseBaseName %>`,
   scope: '<%= remote.lowercaseBaseName %>',
-  exposedModule: './entities-menu',
+  module: './entities-menu',
 }).catch(() => import('app/shared/error/error-loading')));
 
     <%_ } _%>
