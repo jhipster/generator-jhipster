@@ -78,7 +78,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       loadCommonConfig() {
         loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
@@ -102,7 +102,7 @@ export default class HerokuGenerator extends BaseGenerator {
         this.herokuDeployType = configuration.get('herokuDeployType');
         this.herokuJavaVersion = configuration.get('herokuJavaVersion');
       },
-    };
+    });
   }
 
   get [BaseGenerator.INITIALIZING]() {
@@ -110,7 +110,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       async askForApp() {
         if (this.herokuAppName) {
           const { stdout, exitCode } = await this.spawnCommand(`heroku apps:info --json ${this.herokuAppName}`, {
@@ -201,7 +201,7 @@ export default class HerokuGenerator extends BaseGenerator {
           this.herokuJavaVersion = props.herokuJavaVersion;
         });
       },
-    };
+    });
   }
 
   get [BaseGenerator.PROMPTING]() {
@@ -209,7 +209,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       async checkInstallation() {
         const { exitCode } = await this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' });
         if (exitCode !== 0) {
@@ -225,7 +225,7 @@ export default class HerokuGenerator extends BaseGenerator {
           herokuJavaVersion: this.herokuJavaVersion,
         });
       },
-    };
+    });
   }
 
   get [BaseGenerator.CONFIGURING]() {
@@ -233,7 +233,7 @@ export default class HerokuGenerator extends BaseGenerator {
   }
 
   get default() {
-    return {
+    return this.asDefaultTaskGroup({
       insight() {
         statistics.sendSubGenEvent('generator', GENERATOR_HEROKU);
       },
@@ -245,10 +245,12 @@ export default class HerokuGenerator extends BaseGenerator {
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
           this.log.log(chalk.bold('\nInitializing Git repository'));
-          const { stdout } = await this.spawnCommand('git init', { reject: false, stdio: 'pipe' });
-          stdout.on('data', data => {
+          const gitInit = this.spawnCommand('git init', { stdio: 'pipe' });
+          gitInit.stdout.on('data', data => {
+          this.log.verboseInfo(stdout);
             this.log.verboseInfo(data.toString());
           });
+          await gitInit;
         }
       },
 
@@ -267,9 +269,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.log.error(stderr);
               this.cancelCancellableTasks();
             }
-            stdout.on('data', data => {
-              this.log.verboseInfo(data.toString());
-            });
+            this.log.verboseInfo(stdout);
           }
         }
       },
@@ -460,27 +460,25 @@ export default class HerokuGenerator extends BaseGenerator {
           ];
 
           this.log.verboseInfo('');
-          return this.prompt(prompts).then(props => {
+          return this.prompt(prompts).then(async props => {
             // Encode username/password to avoid errors caused by spaces
             props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
             props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
             const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
             const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-            const child = this.spawnCommand(configSetCmd, err => {
-              if (err) {
-                this.abort = true;
-                this.log.error(err);
-              }
+            const child = this.spawnCommand(configSetCmd, {
+              stdio: 'pipe',
             });
 
             child.stdout.on('data', data => {
               this.log.verboseInfo(data.toString());
             });
+            await child;
           });
         }
         return undefined;
       },
-    };
+    });
   }
 
   get [BaseGenerator.DEFAULT]() {
@@ -550,11 +548,11 @@ export default class HerokuGenerator extends BaseGenerator {
             this.log.log(chalk.cyan(gitAddCmd));
 
             const gitAdd = this.spawnCommand(gitAddCmd);
-            gitAdd.child.stdout.on('data', data => {
+            gitAdd.stdout.on('data', data => {
               this.log.verboseInfo(data);
             });
 
-            gitAdd.child.stderr.on('data', data => {
+            gitAdd.stderr.on('data', data => {
               this.log.verboseInfo(data);
             });
             await gitAdd;
@@ -562,7 +560,7 @@ export default class HerokuGenerator extends BaseGenerator {
             const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
             this.log.log(chalk.cyan(gitCommitCmd));
 
-            const gitCommit = await this.spawnCommand(gitCommitCmd);
+            const gitCommit = this.spawnCommand(gitCommitCmd);
             gitCommit.child.stdout.on('data', data => {
               this.log.verboseInfo(data);
             });
