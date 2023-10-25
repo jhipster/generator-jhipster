@@ -36,57 +36,19 @@ const { DefinePlugin } = require('webpack');
         },
 <%_ } _%>
         shared: {
-          ...Object.fromEntries(Object.entries(packageJson.dependencies).map(([module, version]) => ([module, { requiredVersion: version, singleton: true, shareScope: 'default' }]))),
-          'app/config/constants': {
-            singleton: true,
-            import: 'app/config/constants',
-            requiredVersion: appVersion,
-          },
-          'app/config/store': {
-            singleton: true,
-            import: 'app/config/store',
-            requiredVersion: appVersion,
-          },
-          'app/shared/error/error-boundary-routes': {
-            singleton: true,
-            import: 'app/shared/error/error-boundary-routes',
-            requiredVersion: appVersion,
-          },
-          'app/shared/layout/menus/menu-components': {
-            singleton: true,
-            import: 'app/shared/layout/menus/menu-components',
-            requiredVersion: appVersion,
-          },
-          'app/shared/layout/menus/menu-item': {
-            singleton: true,
-            import: 'app/shared/layout/menus/menu-item',
-            requiredVersion: appVersion,
-          },
-          'app/shared/reducers': {
-            singleton: true,
-            import: 'app/shared/reducers',
-            requiredVersion: appVersion,
-          },
-          'app/shared/reducers/locale': {
-            singleton: true,
-            import: 'app/shared/reducers/locale',
-            requiredVersion: appVersion,
-          },
-          'app/shared/reducers/reducer.utils': {
-            singleton: true,
-            import: 'app/shared/reducers/reducer.utils',
-            requiredVersion: appVersion,
-          },
-          'app/shared/util/date-utils': {
-            singleton: true,
-            import: 'app/shared/util/date-utils',
-            requiredVersion: appVersion,
-          },
-          'app/shared/util/entity-utils': {
-            singleton: true,
-            import: 'app/shared/util/entity-utils',
-            requiredVersion: appVersion,
-          },
+          ...shareDependencies(),
+          ...shareMappings(
+            'app/config/constants',
+            'app/config/store',
+            'app/shared/error/error-boundary-routes',
+            'app/shared/layout/menus/menu-components',
+            'app/shared/layout/menus/menu-item',
+            'app/shared/reducers',
+            'app/shared/reducers/locale',
+            'app/shared/reducers/reducer.utils',
+            'app/shared/util/date-utils',
+            'app/shared/util/entity-utils',
+          ),
         },
 <&_ } -&>
 <&_ if (fragment.pluginsSection) { -&>
