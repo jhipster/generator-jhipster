@@ -36,33 +36,12 @@ const { DefinePlugin } = require('webpack');
         },
 <%_ } _%>
         shared: {
-          '@vuelidate/core': { singleton: true, shareScope: 'default' },
-          '@vuelidate/validators': { singleton: true, shareScope: 'default' },
-          axios: { singleton: true, shareScope: 'default' },
-          'vue-loader': { eager: true, singleton: false, shareScope: 'default' },
-          'bootstrap-vue': { singleton: true, shareScope: 'default' },
-          vue: { singleton: true, shareScope: 'default' },
-          'vue-i18n': { singleton: true, shareScope: 'default' },
-          'vue-router': { singleton: true, shareScope: 'default' },
-          pinia: { singleton: true, shareScope: 'default' },
-          '@/shared/security/authority': {
-            singleton: true,
-            shareScope: 'default',
-            import: '@/shared/security/authority',
-            requiredVersion: appVersion,
-          },
-          '@/shared/alert/alert.service': {
-            singleton: true,
-            shareScope: 'default',
-            import: '@/shared/alert/alert.service',
-            requiredVersion: appVersion,
-          },
-          '@/locale/translation.service': {
-            singleton: true,
-            shareScope: 'default',
-            import: '@/locale/translation.service',
-            requiredVersion: appVersion,
-          },
+          ...shareDependencies(),
+          ...shareMappings(
+            '@/shared/security/authority',
+            '@/shared/alert/alert.service',
+            '@/locale/translation.service',
+          ),
         },
 <&_ } -&>
 <&_ if (fragment.pluginsSection) { -&>
