@@ -320,51 +320,29 @@ export default class HerokuGenerator extends BaseGenerator {
             this.log.verboseInfo('');
             const props = await this.prompt(prompts);
             if (props.herokuForceName === 'Yes') {
-              this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout) => {
-                if (err) {
-                  this.abort = true;
-                  this.log.error(err);
-                } else {
-                  this.log.verboseInfo(stdout.trim());
-                  this.config.set({
-                    herokuAppName: this.herokuAppName,
-                    herokuDeployType: this.herokuDeployType,
-                  });
-                }
+              const { stdout } = await this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`);
+              this.log.verboseInfo(stdout);
+              this.config.set({
+                herokuAppName: this.herokuAppName,
+                herokuDeployType: this.herokuDeployType,
               });
             } else {
-              this.spawnCommand(`heroku create ${regionParams}`, (err, stdout) => {
-                if (err) {
-                  this.abort = true;
-                  this.log.error(err);
-                } else {
-                  // Extract from "Created random-app-name-1234... done"
-                  this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
-                  this.log.verboseInfo(stdout.trim());
+              const { stdout } = await this.spawnCommand(`heroku create ${regionParams}`);
+              // Extract from "Created random-app-name-1234... done"
+              this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
+              this.log.verboseInfo(stdout.trim());
 
-                  // ensure that the git remote is the same as the appName
-                  this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`, err => {
-                    if (err) {
-                      this.abort = true;
-                      this.log.error(err);
-                    } else {
-                      this.config.set({
-                        herokuAppName: this.herokuAppName,
-                        herokuDeployType: this.herokuDeployType,
-                      });
-                    }
-                  });
-                }
+              // ensure that the git remote is the same as the appName
+              await this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`);
+              this.config.set({
+                herokuAppName: this.herokuAppName,
+                herokuDeployType: this.herokuDeployType,
               });
             }
+          } else if (stderr.includes('Invalid credentials')) {
+            throw new Error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
           } else {
-            this.cancelCancellableTasks();
-            this.herokuAppName = null;
-            if (stderr.includes('Invalid credentials')) {
-              this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
-            } else {
-              this.log.error(stderr);
-            }
+            throw new Error(stderr);
           }
         }
       },
