@@ -34,7 +34,7 @@ const apiVersion = '0.0.1';
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults }]));
 
-const shareDependencies = ({ skipList = [] }) => Object.fromEntries(Object.entries(packageJson.dependencies).filter(([dependency]) => !skipList.includes(dependency)).map(([dependency, version]) => [
+const shareDependencies = ({ skipList = [] } = {}) => Object.fromEntries(Object.entries(packageJson.dependencies).filter(([dependency]) => !skipList.includes(dependency)).map(([dependency, version]) => [
   dependency,
   { ...sharedDefaults, requiredVersion: version },
 ]));
