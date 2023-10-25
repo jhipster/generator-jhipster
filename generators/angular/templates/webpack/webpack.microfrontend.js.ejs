@@ -17,20 +17,12 @@
  limitations under the License.
 -%>
 const { share, shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
-// const packageJson = require('../package.json');
 // Microfrontend api, should match across gateway and microservices.
 const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 const shareAllDefaults = { ...sharedDefaults, requiredVersion: 'auto' }
 const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults }]));
-
-/*
-const shareDependencies = ({ skipList = [] }) => Object.fromEntries(Object.entries(packageJson.dependencies).filter(([dependency]) => !skipList.includes(dependency)).map(([dependency, version]) => [
-  dependency,
-  { ...sharedDefaults, requiredVersion: version },
-]));
-*/
 
 module.exports = (config, options, targetOptions) => {
   return withModuleFederationPlugin({
