@@ -461,6 +461,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "rtl": false,
   },
   "nodeDependencies": {
+    "@angular-architects/module-federation": "ANGULAR_ARCHITECTS_MODULE_FEDERATION_VERSION",
     "@angular-architects/module-federation-runtime": "ANGULAR_ARCHITECTS_MODULE_FEDERATION_RUNTIME_VERSION",
     "@angular-builders/custom-webpack": "ANGULAR_BUILDERS_CUSTOM_WEBPACK_VERSION",
     "@angular-builders/jest": "ANGULAR_BUILDERS_JEST_VERSION",
@@ -1029,6 +1030,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "rtl": false,
   },
   "nodeDependencies": {
+    "@angular-architects/module-federation": "ANGULAR_ARCHITECTS_MODULE_FEDERATION_VERSION",
     "@angular-architects/module-federation-runtime": "ANGULAR_ARCHITECTS_MODULE_FEDERATION_RUNTIME_VERSION",
     "@angular-builders/custom-webpack": "ANGULAR_BUILDERS_CUSTOM_WEBPACK_VERSION",
     "@angular-builders/jest": "ANGULAR_BUILDERS_JEST_VERSION",
