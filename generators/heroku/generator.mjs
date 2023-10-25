@@ -47,6 +47,14 @@ const { EUREKA } = serviceDiscoveryTypes;
 const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
 
 export default class HerokuGenerator extends BaseGenerator {
+  herokuAppName;
+  herokuDeployType;
+  herokuJavaVersion;
+  herokuRegion;
+  herokuAppExists;
+  herokuSkipDeploy;
+  herokuSkipBuild;
+
   constructor(args, options, features) {
     super(args, options, features);
 
@@ -79,6 +87,13 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      async checkInstallation() {
+        const { exitCode } = await this.printChildOutput(this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' }));
+        if (exitCode !== 0) {
+          throw new Error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
+        }
+      },
+
       loadCommonConfig() {
         loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
@@ -97,10 +112,7 @@ export default class HerokuGenerator extends BaseGenerator {
         this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
         this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
         this.frontendAppName = getFrontendAppName({ baseName: this.jhipsterConfig.baseName });
-        this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
-        this.herokuDeployType = configuration.get('herokuDeployType');
-        this.herokuJavaVersion = configuration.get('herokuJavaVersion');
       },
     });
   }
@@ -112,16 +124,14 @@ export default class HerokuGenerator extends BaseGenerator {
   get prompting() {
     return this.asPromptingTaskGroup({
       async askForApp() {
-        if (this.herokuAppName) {
-          const { stdout, exitCode } = await this.spawnCommand(`heroku apps:info --json ${this.herokuAppName}`, {
+        if (this.jhipsterConfig.herokuAppName) {
+          const { stdout, exitCode } = await this.spawnCommand(`heroku apps:info --json ${this.jhipsterConfig.herokuAppName}`, {
             reject: false,
             stdio: 'pipe',
           });
           if (exitCode !== 0) {
-            this.cancelCancellableTasks();
-            this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
-            this.log.error('Run the generator again to create a new application.');
-            this.herokuAppName = null;
+            this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
+            throw new Error('Run the generator again to create a new application.');
           } else {
             const json = JSON.parse(stdout);
             this.herokuAppName = json.app.name;
@@ -132,74 +142,66 @@ export default class HerokuGenerator extends BaseGenerator {
             this.herokuAppExists = true;
             this.config.set({
               herokuAppName: this.herokuAppName,
-              herokuDeployType: this.herokuDeployType,
             });
           }
         } else {
-          const prompts = [
-            {
-              type: 'input',
-              name: 'herokuAppName',
-              message: 'Name to deploy as:',
-              default: this.baseName,
-            },
-            {
-              type: 'list',
-              name: 'herokuRegion',
-              message: 'On which region do you want to deploy ?',
-              choices: ['us', 'eu'],
-              default: 0,
-            },
-          ];
-
-          const props = await this.prompt(prompts);
-          this.herokuAppName = _.kebabCase(props.herokuAppName);
-          this.herokuRegion = props.herokuRegion;
           this.herokuAppExists = false;
-        }
-      },
-
-      askForHerokuDeployType() {
-        if (this.herokuDeployType) return null;
-        const prompts = [
-          {
-            type: 'list',
-            name: 'herokuDeployType',
-            message: 'Which type of deployment do you want ?',
-            choices: [
+          await this.prompt(
+            [
               {
-                value: 'git',
-                name: 'Git (compile on Heroku)',
-              },
-              {
-                value: 'jar',
-                name: 'JAR (compile locally)',
+                type: 'input',
+                name: 'herokuAppName',
+                message: 'Name to deploy as:',
+                default: this.baseName,
               },
             ],
-            default: 0,
-          },
-        ];
-
-        return this.prompt(prompts).then(props => {
-          this.herokuDeployType = props.herokuDeployType;
-        });
+            this.config,
+          );
+        }
       },
-
-      askForHerokuJavaVersion() {
-        if (this.herokuJavaVersion) return null;
-        const prompts = [
+      async askForRegion() {
+        const answers = await this.prompt([
           {
             type: 'list',
-            name: 'herokuJavaVersion',
-            message: 'Which Java version would you like to use to build and run your app ?',
-            choices: JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
-            default: JAVA_VERSION,
+            name: 'herokuRegion',
+            message: 'On which region do you want to deploy ?',
+            choices: ['us', 'eu'],
+            default: 0,
           },
-        ];
+        ]);
+        this.herokuRegion = answers.herokuRegion;
+      },
+      async askForHerokuDeployType() {
+        await this.prompt(
+          [
+            {
+              type: 'list',
+              name: 'herokuDeployType',
+              message: 'Which type of deployment do you want ?',
+              choices: [
+                { value: 'git', name: 'Git (compile on Heroku)' },
+                { value: 'jar', name: 'JAR (compile locally)' },
+              ],
+              default: 0,
+            },
+          ],
+          this.config,
+        );
+      },
 
-        return this.prompt(prompts).then(props => {
-          this.herokuJavaVersion = props.herokuJavaVersion;
-        });
+      async askForHerokuJavaVersion() {
+        await this.prompt(
+          [
+            {
+              type: 'list',
+              name: 'herokuJavaVersion',
+              message: 'Which Java version would you like to use to build and run your app ?',
+              choices: JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
+              default: JAVA_VERSION,
+            },
+          ],
+          this.config,
+        );
       },
     });
   }
@@ -208,28 +210,18 @@ export default class HerokuGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get configuring() {
+  get loading() {
     return this.asConfiguringTaskGroup({
-      async checkInstallation() {
-        const { exitCode } = await this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' });
-        if (exitCode !== 0) {
-          this.log.error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
-          this.cancelCancellableTasks();
-        }
-      },
-
       saveConfig() {
-        this.config.set({
-          herokuAppName: this.herokuAppName,
-          herokuDeployType: this.herokuDeployType,
-          herokuJavaVersion: this.herokuJavaVersion,
-        });
+        this.herokuAppName = _.kebabCase(this.jhipsterConfig.herokuAppName);
+        this.herokuJavaVersion = this.jhipsterConfig.herokuJavaVersion;
+        this.herokuDeployType = this.jhipsterConfig.herokuDeployType;
       },
     });
   }
 
-  get [BaseGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get default() {
@@ -245,12 +237,7 @@ export default class HerokuGenerator extends BaseGenerator {
         } catch (e) {
           // An exception is thrown if the folder doesn't exist
           this.log.log(chalk.bold('\nInitializing Git repository'));
-          const gitInit = this.spawnCommand('git init', { stdio: 'pipe' });
-          gitInit.stdout.on('data', data => {
-            this.log.verboseInfo(gitInit.stdout);
-            this.log.verboseInfo(data.toString());
-          });
-          await gitInit;
+          await this.printChildOutput(this.spawnCommand('git init', { stdio: 'pipe' }));
         }
       },
 
@@ -261,13 +248,11 @@ export default class HerokuGenerator extends BaseGenerator {
         if (exitCode !== 0) {
           if (_.includes(stdout, cliPlugin)) {
             this.log.log('\nHeroku CLI deployment plugin already installed');
-            this.cancelCancellableTasks();
           } else {
             this.log.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
             const { stdout, exitCode } = await this.spawnCommand(`heroku plugins:install ${cliPlugin}`, { reject: false, stdio: 'pipe' });
             if (exitCode !== 0) {
-              this.log.error(stderr);
-              this.cancelCancellableTasks();
+              throw new Error(stderr);
             }
             this.log.verboseInfo(stdout);
           }
@@ -280,22 +265,18 @@ export default class HerokuGenerator extends BaseGenerator {
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-        const createCommand = this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, {
-          reject: false,
-          stdio: 'pipe',
-        });
+        const { stdout, stderr, exitCode } = await this.printChildOutput(
+          this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, {
+            reject: false,
+            stdio: 'pipe',
+          }),
+        );
 
-        createCommand.stdout.on('data', data => {
-          const output = data.toString();
-          if (data.search('Heroku credentials') >= 0) {
-            this.cancelCancellableTasks();
-            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
-          } else {
-            this.log.verboseInfo(output.trim());
-          }
-        });
+        if (stdout.search('Heroku credentials') >= 0) {
+          this.cancelCancellableTasks();
+          this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+        }
 
-        const { stderr, exitCode } = await createCommand;
         if (exitCode !== 0) {
           if (stderr.includes('is already taken')) {
             const prompts = [
@@ -445,14 +426,11 @@ export default class HerokuGenerator extends BaseGenerator {
             props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
             const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
             const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-            const child = this.spawnCommand(configSetCmd, {
-              stdio: 'pipe',
-            });
-
-            child.stdout.on('data', data => {
-              this.log.verboseInfo(data.toString());
-            });
-            await child;
+            await this.printChildOutput(
+              this.spawnCommand(configSetCmd, {
+                stdio: 'pipe',
+              }),
+            );
           });
         }
         return undefined;
@@ -526,28 +504,12 @@ export default class HerokuGenerator extends BaseGenerator {
             const gitAddCmd = 'git add .';
             this.log.log(chalk.cyan(gitAddCmd));
 
-            const gitAdd = this.spawnCommand(gitAddCmd);
-            gitAdd.stdout.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-
-            gitAdd.stderr.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-            await gitAdd;
+            await this.printChildOutput(this.spawnCommand(gitAddCmd));
 
             const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
             this.log.log(chalk.cyan(gitCommitCmd));
 
-            const gitCommit = this.spawnCommand(gitCommitCmd);
-            gitCommit.child.stdout.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-
-            gitCommit.child.stderr.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-            await gitCommit;
+            await this.printChildOutput(this.spawnCommand(gitCommitCmd));
 
             let buildpack = 'heroku/java';
             let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
@@ -603,17 +565,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
             this.log.log(chalk.bold('\nDeploying application'));
 
-            const herokuPush = this.spawnCommand('git push heroku HEAD:main', { maxBuffer: 1024 * 10000 });
-
-            herokuPush.child.stdout.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-
-            herokuPush.child.stderr.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-
-            await herokuPush;
+            await this.printChildOutput(this.spawnCommand('git push heroku HEAD:main'));
 
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
@@ -639,16 +591,8 @@ export default class HerokuGenerator extends BaseGenerator {
             ),
           );
           try {
-            await this.spawnCommand(herokuSetBuildpackCommand);
-            const herokuDeploy = this.spawnCommand(herokuDeployCommand);
-            herokuDeploy.child.stdout.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-
-            herokuDeploy.child.stderr.on('data', data => {
-              this.log.verboseInfo(data);
-            });
-            await herokuDeploy;
+            await this.printChildOutput(this.spawnCommand(herokuSetBuildpackCommand, { stdio: 'pipe' }));
+            await this.printChildOutput(this.spawnCommand(herokuDeployCommand, { stdio: 'pipe' }));
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
             this.log.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
@@ -674,5 +618,20 @@ export default class HerokuGenerator extends BaseGenerator {
    */
   addMavenProfile(profileId, other) {
     createPomStorage(this).addProfile({ id: profileId, content: other });
+  }
+
+  /**
+   * @param {ReturnType<BaseGenerator['spawnCommand']>} child
+   * @param {(chunk: any) => void} child
+   * @returns {ReturnType<BaseGenerator['spawnCommand']>}
+   */
+  printChildOutput(child, log = data => this.log.verboseInfo(data)) {
+    child.stdout.on('data', data => {
+      data.toString().split(/\r?\n/).forEach(log);
+    });
+    child.stderr.on('data', data => {
+      data.toString().split(/\r?\n/).forEach(log);
+    });
+    return child;
   }
 }
