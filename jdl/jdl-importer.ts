@@ -229,9 +229,10 @@ function importOneApplicationAndEntities(jdlObject, configuration) {
     jdlObject,
   });
   const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
+  const { 'generator-jhipster': config, ...remaining } = formattedApplication;
   importState.exportedApplicationsWithEntities[applicationName] = {
-    config: formattedApplication['generator-jhipster'],
-    namespaceConfigs: formattedApplication.namespaceConfigs,
+    config,
+    ...remaining,
     entities: [],
   };
   if (jsonEntities.length !== 0) {
@@ -267,8 +268,10 @@ function importApplicationsAndEntities(jdlObject, configuration) {
       forSeveralApplications: true,
     });
     const exportedConfig = importState.exportedApplications.find(config => applicationName === config['generator-jhipster'].baseName);
+    const { 'generator-jhipster': config, ...remaining } = exportedConfig;
     importState.exportedApplicationsWithEntities[applicationName] = {
-      config: exportedConfig['generator-jhipster'],
+      config,
+      ...remaining,
       entities: exportedJSONEntities,
     };
     importState.exportedEntities = uniqBy([...importState.exportedEntities, ...exportedJSONEntities], 'name');

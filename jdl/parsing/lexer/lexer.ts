@@ -74,7 +74,6 @@ createTokenFromConfig({
 
 // Constants
 // Application constants
-createTokenFromConfig({ name: 'CONFIG_WITH_NAMESPACE', pattern: /config:\w+/ });
 createTokenFromConfig({ name: 'CONFIG', pattern: 'config' });
 createTokenFromConfig({ name: 'ENTITIES', pattern: 'entities' });
 

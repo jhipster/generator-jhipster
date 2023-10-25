@@ -51,12 +51,14 @@ export function formatApplicationToExport(application, configuration = {}) {
   return setUpApplicationStructure(application, configuration);
 }
 
-function setUpApplicationStructure(application) {
+function setUpApplicationStructure(application: JDLApplication) {
   let applicationToExport: any = {
     [GENERATOR_NAME]: {},
   };
   applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
-  applicationToExport.namespaceConfigs = getApplicationNamespaceConfig(application);
+  if (application.namespaceConfigs.length > 0) {
+    applicationToExport.namespaceConfigs = getApplicationNamespaceConfig(application);
+  }
   applicationToExport[GENERATOR_NAME].entities = application.getEntityNames();
   if (application.hasConfigurationOption('creationTimestamp')) {
     applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);

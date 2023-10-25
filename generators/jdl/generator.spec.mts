@@ -162,7 +162,7 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
           jsonOnly: true,
-          inline: 'application { config { blueprints [foo, bar] } config:foo { config fooValue } config:bar { config barValue } }',
+          inline: 'application { config { blueprints [foo, bar] } config(foo) { config fooValue } config(bar) { config barValue } }',
         });
       });
 

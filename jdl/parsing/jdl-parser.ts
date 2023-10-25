@@ -519,7 +519,10 @@ export default class JDLParser extends CstParser {
 
   applicationSubNamespaceConfig(): any {
     this.RULE('applicationSubNamespaceConfig', () => {
-      this.CONSUME(LexerTokens.CONFIG_WITH_NAMESPACE);
+      this.CONSUME(LexerTokens.CONFIG);
+      this.CONSUME(LexerTokens.LPAREN);
+      this.CONSUME(LexerTokens.NAME, { LABEL: 'namespace' });
+      this.CONSUME(LexerTokens.RPAREN);
       this.CONSUME(LexerTokens.LCURLY);
       this.MANY(() => {
         this.OR([

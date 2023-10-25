@@ -318,7 +318,7 @@ application {
   config {
     baseName jhipster
   }
-  config:foo {
+  config(foo) {
     stringConfig stringValue
   }
 }
@@ -336,16 +336,16 @@ application {
 application {
   config {
     baseName jhipster
-    blueprints [foo, bar]
+    blueprints [foo, entity-audit]
   }
-  config:foo {
+  config(foo) {
     stringConfig fooValue
     trueConfig true
     falseConfig false
     listConfig [fooitem]
     integerConfig 123
   }
-  config:bar {
+  config(entity-audit) {
     stringConfig barValue
     trueConfig true
     falseConfig false
@@ -371,14 +371,14 @@ application {
         "name": "foo",
       },
       {
-        "name": "bar",
+        "name": "entity-audit",
       },
     ],
     "entities": [],
   },
   "entities": [],
   "namespaceConfigs": {
-    "bar": {
+    "entity-audit": {
       "falseConfig": false,
       "integerConfig": 321,
       "listConfig": [

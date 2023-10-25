@@ -541,7 +541,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   applicationSubNamespaceConfig(context) {
     const config: any = {};
 
-    const namespace = context.CONFIG_WITH_NAMESPACE[0].image.split(':')[1];
+    const namespace = context.namespace[0].image;
     if (context.applicationNamespaceConfigDeclaration) {
       const configProps = context.applicationNamespaceConfigDeclaration.map(this.visit, this);
       configProps.forEach(configProp => {
