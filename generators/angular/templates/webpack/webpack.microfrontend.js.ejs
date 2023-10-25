@@ -22,7 +22,7 @@ const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 const shareAllDefaults = { ...sharedDefaults, requiredVersion: 'auto' }
-const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults }]));
+const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
 
 module.exports = (config, options, targetOptions) => {
   return withModuleFederationPlugin({
