@@ -173,6 +173,13 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
   ],
   [
     "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -370,6 +377,13 @@ exports[`generator - Heroku monolith application in the US calls should match sn
   ],
   [
     "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -563,6 +577,13 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     {
       "reject": false,
       "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
     },
   ],
   [
@@ -772,6 +793,13 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
   ],
   [
     "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -965,6 +993,13 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     {
       "reject": false,
       "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
     },
   ],
   [
@@ -1174,6 +1209,13 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
   ],
   [
     "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -1378,6 +1420,13 @@ exports[`generator - Heroku monolith application with existing app calls should 
     {
       "reject": false,
       "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku login",
+    {
+      "stdio": "inherit",
     },
   ],
   [

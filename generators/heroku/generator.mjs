@@ -87,6 +87,8 @@ export default class HerokuGenerator extends BaseGenerator {
           } else {
             throw new Error(error);
           }
+        } else {
+          await this.spawnCommand('heroku login', { stdio: 'inherit' });
         }
       },
 
