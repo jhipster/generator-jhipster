@@ -24,7 +24,7 @@ You should regenerate the blueprint to update dependencies.
 npx --package generator-jhipster@latest jhipster generate-blueprint
 ```
 
-When updating from a minor jhipster version, you probably will want to ignore (press s) to every generator and test conflict.
+When updating from a minor JHipster version, you probably will want to ignore (press s) to every generator and test conflict.
 Ignore (i option instead of s) will store the file at `.yo-resolve` so that following `generate-blueprint` executions will ignore those files by default.
 
 From time to time generate-blueprint may generate different code.

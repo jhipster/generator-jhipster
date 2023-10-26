@@ -56,7 +56,7 @@ entity Department {}
 
 ##### Translation variant
 
-Translation variant allows different translations for the entity whenever appliable.
+Translation variant allows different translations for the entity whenever applicable.
 
 ```jdl
 @EntityI18nVariant('female')

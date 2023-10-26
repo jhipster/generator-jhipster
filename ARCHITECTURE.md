@@ -2,7 +2,7 @@
 
 ## Yeoman basis
 
-Internally JHipster uses [yeoman](https://yeoman.io) as core.
+Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is the [most popular generator of all time](https://yeoman.io/generators/). 
 
 ## File structure
 
@@ -28,11 +28,11 @@ Internally JHipster uses [yeoman](https://yeoman.io) as core.
 
 ## Lifecycle
 
-- [Cli entrypoint](https://github.com/jhipster/generator-jhipster/blob/main/cli/jhipster.cjs)
+- [CLI entry point](https://github.com/jhipster/generator-jhipster/blob/main/cli/jhipster.cjs)
 - [Basic environment validation](https://github.com/jhipster/generator-jhipster/blob/main/cli/cli.mjs)
 - [Cli arguments parsing and Environment bootstrap](https://github.com/jhipster/generator-jhipster/blob/main/cli/program.mjs)
-  - Lookup for Generators and Blueprints
-  - Build cli options and arguments definition
+  - Lookup for generators and blueprints
+  - Build CLI options and arguments definition
   - Parse options and arguments
 - Run Generator (start the Environment) passing options and arguments
 - Run every task from the highest precedence priority until there is no more pending task
@@ -73,7 +73,7 @@ TODO
 
 #### Configuring (yeoman)
 
-Check and fix configurations.
+Check and fix configurations:
 
 ```
   get [Generator.CONFIGURING]() {
@@ -90,7 +90,7 @@ Check and fix configurations.
 
 #### Composing (base)
 
-Compose with other generators.
+Compose with other generators:
 
 ```
   get [Generator.COMPOSING]() {
@@ -106,7 +106,7 @@ Compose with other generators.
 
 #### Loading (base)
 
-Load configuration.
+Load configuration:
 
 ```
   get [Generator.LOADING]() {
@@ -121,7 +121,7 @@ Load configuration.
 
 #### Preparing (base)
 
-Generate properties to improve understanding.
+Generate properties to improve understanding:
 
 ```
   get [Generator.PREPARING]() {
@@ -137,7 +137,7 @@ Generate properties to improve understanding.
 
 #### Configuring each entity (base-application)
 
-Configure and check entity's configuration.
+Configure and check entity's configuration:
 
 ```
   get [Generator.CONFIGURING_EACH_ENTITY]() {
@@ -158,7 +158,7 @@ Usually empty the entire entity configuration is loaded by default.
 
 #### Preparing each entity (base-application)
 
-Generate properties to improve understanding at entity level.
+Generate properties to improve understanding at the entity level:
 
 ```
   get [Generator.PREPARING_EACH_ENTITY]() {
@@ -172,7 +172,7 @@ Generate properties to improve understanding at entity level.
 
 #### Preparing each entity field (base-application)
 
-Generate properties to improve understanding at field level.
+Generate properties to improve understanding at the field level:
 
 ```
   get [Generator.PREPARING_EACH_ENTITY_FIELD]() {
@@ -186,7 +186,7 @@ Generate properties to improve understanding at field level.
 
 #### Preparing each entity relationship (base-application)
 
-Generate properties to improve understanding at relationship level.
+Generate properties to improve understanding at the relationship level:
 
 ```
   get [Generator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
@@ -200,7 +200,7 @@ Generate properties to improve understanding at relationship level.
 
 #### Default (yeoman)
 
-Generate properties to improve understanding that depends on others properties.
+Generate properties to improve understanding that depends on others' properties:
 
 ```
   get [Generator.DEFAULT]() {
@@ -214,10 +214,10 @@ Generate properties to improve understanding that depends on others properties.
 
 #### Writing (yeoman)
 
-Write files to in memory file system.
+Write files to the in-memory file system.
 
-There are a lot of apis to write files, copy files, delete files.
-`writeFiles` is the most used at official generators.
+There are a lot of APIs to write files, copy files, and delete files.
+The `writeFiles()` method is the most used in official generators.
 
 ```
   get [Generator.WRITING]() {
@@ -239,9 +239,9 @@ There are a lot of apis to write files, copy files, delete files.
 
 #### Writing entities (base-application)
 
-Write entity files to in memory file system.
+Write entity files to the in-memory file system.
 
-Entities writing is a separed priority to keep workflow sane when using options like `--skip-application` and `--single-entity`.
+Writing entities is a separate priority to keep the workflow sane when using options like `--skip-application` and `--single-entity`.
 
 ```
   get [Generator.WRITING_ENTITIES]() {
@@ -265,11 +265,11 @@ Entities writing is a separed priority to keep workflow sane when using options 
 
 #### Post writing (base)
 
-Injects code in the generated source
+Injects code in the generated source.
 
 ##### Injecting code with provided apis (needles)
 
-JHipster adds apis to some code injection.
+JHipster adds APIs to some code injection:
 
 ```
   get [Generator.POST_WRITING]() {
@@ -302,7 +302,7 @@ Install task is queued by detecting `package.json` changes.
 
 #### End (yeoman)
 
-Print generator result and info.
+Print generator result and info:
 
 ```
   get [Generator.END]() {

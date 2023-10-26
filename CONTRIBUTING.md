@@ -94,7 +94,7 @@ Before you submit your pull request consider the following guidelines:
 
 - Search [GitHub](https://github.com/jhipster/generator-jhipster/pulls?utf8=%E2%9C%93&q=is%3Apr) for an open or closed Pull Request
   that relates to your submission.
-- If you want to modify the JHipster generator, read our [Development](DEVELOPMENT.md)
+- If you want to modify the JHipster generator, read our [Development Guide](DEVELOPMENT.md)
 - Follow our [Coding Rules](#rules).
 - In GitHub, send a pull request to `jhipster/generator-jhipster:main`.
 - **Every CI tests must pass**.
@@ -107,7 +107,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 - All features or bug fixes **must be tested** by one or more tests.
 - Most files formatting are checked by prettier and eslint.
-- EJS files uses a 2 spaces identation for templates logic and follows the generated file rules for the templating parts.
+- EJS files use a two-space indentation for template logic and follow the generated file rules for the templating parts.
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 

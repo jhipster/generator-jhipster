@@ -16,8 +16,8 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 ### Set `jhipster` command to use the cloned project
 
-Since v8 `generator-jhipster` is written in typescript.
-To run it you need to compile to javascript or use a just-in-time compilation.
+Since v8 `generator-jhipster` is written in TypeScript.
+To run it you need to compile to JavaScript or use a just-in-time compilation.
 
 #### Runnning jit executable
 
@@ -46,20 +46,20 @@ Also add the option `--skip-jhipster-dependencies` to generate the application i
 
 To put it in a nutshell, you need to:
 
-1.  run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
-2.  run `jhipster --skip-jhipster-dependencies` on the generated application folder
+1.  Run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
+2.  Run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
-You can execute `jhipster --install-path` to check where jhipster is being executed from.
+You can execute `jhipster --install-path` to check where JHipster is being executed from.
 
 You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
-For projects with jhipster third party library (i.e. react-jhipster, etc.) you need to run `npm link` on the library project as well, then npm link the original framework (i.e. react) from the generated project to the library project `cd react-jhipster && npm link <path-to-generated-project>/node_modules/react`.
+For projects with JHipster third-party libraries (i.e. react-jhipster, etc.), you need to run `npm link` on the library project as well, then `npm link` the original framework (i.e. react) from the generated project to the library project `cd react-jhipster && npm link <path-to-generated-project>/node_modules/react`.
 
 ```shell
 jhipster
 ```
 
-Depending on which parts of the generator you have changed, do not forget to run jhipster command with the proper arguments e.g. when updating the entity template run:
+Depending on which parts of the generator you have changed, do not forget to run the `jhipster` command with the proper arguments e.g. when updating the entity template run:
 
 ```shell
 jhipster --with-entities
@@ -159,7 +159,7 @@ npm run ci:e2e:run # Runs e2e tests
 
 ### Development Containers
 
-Container is built using java, node and npm recommended by `generator-jhipster`.
+A container is built using Java, Node, and npm as recommended by `generator-jhipster`.
 Once up, you should have the stack maintainers recommends.
 
 ### Execution shortcuts
