@@ -18,33 +18,18 @@
  */
 /* eslint-disable consistent-return */
 import crypto from 'crypto';
-import fs from 'fs';
 import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
 
-import BaseGenerator from '../base/index.mjs';
+import BaseGenerator from '../base-application/index.mjs';
 
 import statistics from '../statistics.mjs';
-import { CLIENT_MAIN_SRC_DIR, JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
-import { GENERATOR_HEROKU } from '../generator-list.mjs';
-import { buildToolTypes, cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.mjs';
+import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_HEROKU } from '../generator-list.mjs';
 import { mavenProfileContent } from './templates.mjs';
 import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
-import { getFrontendAppName } from '../base/support/index.mjs';
-import { loadAppConfig, loadDerivedAppConfig } from '../app/support/index.mjs';
-import { loadDerivedPlatformConfig, loadDerivedServerConfig, loadPlatformConfig, loadServerConfig } from '../server/support/index.mjs';
-import { loadLanguagesConfig } from '../languages/support/index.mjs';
-
-const cacheProviderOptions = cacheTypes;
-const { MEMCACHED, REDIS } = cacheTypes;
-const { GRADLE, MAVEN } = buildToolTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
-const { MARIADB, MYSQL, POSTGRESQL } = databaseTypes;
-const { EUREKA } = serviceDiscoveryTypes;
-
-const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
 
 export default class HerokuGenerator extends BaseGenerator {
   herokuAppName;
@@ -54,6 +39,7 @@ export default class HerokuGenerator extends BaseGenerator {
   herokuAppExists;
   herokuSkipDeploy;
   herokuSkipBuild;
+  dynoSize;
 
   constructor(args, options, features) {
     super(args, options, features);
@@ -83,6 +69,9 @@ export default class HerokuGenerator extends BaseGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_HEROKU);
     }
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    }
   }
 
   get initializing() {
@@ -94,24 +83,8 @@ export default class HerokuGenerator extends BaseGenerator {
         }
       },
 
-      loadCommonConfig() {
-        loadAppConfig({ config: this.jhipsterConfigWithDefaults, application: this, useVersionPlaceholders: this.useVersionPlaceholders });
-        loadServerConfig({ config: this.jhipsterConfigWithDefaults, application: this });
-        loadLanguagesConfig({ application: this, config: this.jhipsterConfigWithDefaults });
-        loadPlatformConfig({ config: this.jhipsterConfigWithDefaults, application: this });
-
-        loadDerivedAppConfig({ application: this });
-        loadDerivedPlatformConfig({ application: this });
-        loadDerivedServerConfig({ application: this });
-      },
-
       initializing() {
         this.log.log(chalk.bold('Heroku configuration is starting'));
-        const configuration = this.config;
-        this.env.options.appPath = configuration.get('appPath') || CLIENT_MAIN_SRC_DIR;
-        this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
-        this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
-        this.frontendAppName = getFrontendAppName({ baseName: this.jhipsterConfig.baseName });
         this.dynoSize = 'Free';
       },
     });
@@ -157,19 +130,18 @@ export default class HerokuGenerator extends BaseGenerator {
             ],
             this.config,
           );
+
+          const answers = await this.prompt([
+            {
+              type: 'list',
+              name: 'herokuRegion',
+              message: 'On which region do you want to deploy ?',
+              choices: ['us', 'eu'],
+              default: 0,
+            },
+          ]);
+          this.herokuRegion = answers.herokuRegion;
         }
-      },
-      async askForRegion() {
-        const answers = await this.prompt([
-          {
-            type: 'list',
-            name: 'herokuRegion',
-            message: 'On which region do you want to deploy ?',
-            choices: ['us', 'eu'],
-            default: 0,
-          },
-        ]);
-        this.herokuRegion = answers.herokuRegion;
       },
       async askForHerokuDeployType() {
         await this.prompt(
@@ -231,13 +203,12 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async gitInit() {
-        try {
-          fs.lstatSync('.git');
+        const git = this.createGit();
+        if (await git.checkIsRepo()) {
           this.log.log(chalk.bold('\nUsing existing Git repository'));
-        } catch (e) {
-          // An exception is thrown if the folder doesn't exist
+        } else {
           this.log.log(chalk.bold('\nInitializing Git repository'));
-          await this.printChildOutput(this.spawnCommand('git init', { stdio: 'pipe' }));
+          await git.init();
         }
       },
 
@@ -246,7 +217,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
         const { stdout, stderr, exitCode } = await this.spawnCommand('heroku plugins', { reject: false, stdio: 'pipe' });
         if (exitCode !== 0) {
-          if (_.includes(stdout, cliPlugin)) {
+          if (stdout.includes(cliPlugin)) {
             this.log.log('\nHeroku CLI deployment plugin already installed');
           } else {
             this.log.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
@@ -272,9 +243,8 @@ export default class HerokuGenerator extends BaseGenerator {
           }),
         );
 
-        if (stdout.search('Heroku credentials') >= 0) {
-          this.cancelCancellableTasks();
-          this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+        if (stdout.includes('Heroku credentials')) {
+          throw new Error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
         }
 
         if (exitCode !== 0) {
@@ -303,22 +273,15 @@ export default class HerokuGenerator extends BaseGenerator {
             if (props.herokuForceName === 'Yes') {
               const { stdout } = await this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`);
               this.log.verboseInfo(stdout);
-              this.config.set({
-                herokuAppName: this.herokuAppName,
-                herokuDeployType: this.herokuDeployType,
-              });
             } else {
               const { stdout } = await this.spawnCommand(`heroku create ${regionParams}`);
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
-              this.log.verboseInfo(stdout.trim());
+              this.log.verboseInfo(stdout);
 
               // ensure that the git remote is the same as the appName
               await this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`);
-              this.config.set({
-                herokuAppName: this.herokuAppName,
-                herokuDeployType: this.herokuDeployType,
-              });
+              this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
             throw new Error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
@@ -328,76 +291,75 @@ export default class HerokuGenerator extends BaseGenerator {
         }
       },
 
-      async herokuAddonsCreate() {
+      async herokuAddonsCreate({ application }) {
         const addonCreateCallback = (addon, err) => {
           if (err) {
             const verifyAccountUrl = 'https://heroku.com/verify';
-            if (_.includes(err, verifyAccountUrl)) {
-              this.abort = true;
+            if (err.includes(verifyAccountUrl)) {
               this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
-              this.log.error(err);
+              throw new Error(err);
             } else {
               this.log.verboseInfo(`No new ${addon} addon created`);
             }
           } else {
-            this.log.verboseInfo(`Created ${addon} addon`);
+            this.log.ok(`Created ${addon} addon`);
           }
         };
 
         this.log.log(chalk.bold('\nProvisioning addons'));
-        if (this.searchEngine === ELASTICSEARCH) {
+        if (application.searchEngineElasticsearch) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          const { stderr, stdout, exitCode } = await this.spawnCommand(
-            `heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`,
-            { reject: false, stdio: 'pipe' },
-          );
-          addonCreateCallback.bind('Elasticsearch', exitCode, stdout, stderr);
+          const { stderr } = await this.spawnCommand(`heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`, {
+            reject: false,
+            stdio: 'pipe',
+          });
+          addonCreateCallback('Elasticsearch', stderr);
         }
 
         let dbAddOn;
-        if (this.prodDatabaseType === POSTGRESQL) {
+        if (application.prodDatabaseTypePostgresql) {
           dbAddOn = 'heroku-postgresql --as DATABASE';
-        } else if (this.prodDatabaseType === MYSQL) {
+        } else if (application.prodDatabaseTypeMysql) {
           dbAddOn = 'jawsdb:kitefin --as DATABASE';
-        } else if (this.prodDatabaseType === MARIADB) {
+        } else if (application.prodDatabaseTypeMariadb) {
           dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
         }
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          const { stderr, stdout, exitCode } = await this.spawnCommand(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {
+          const { stderr } = await this.spawnCommand(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {
             reject: false,
             stdio: 'pipe',
           });
-          addonCreateCallback('Database', exitCode, stdout, stderr);
+          addonCreateCallback('Database', stderr);
         } else {
           this.log.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
         }
 
         let cacheAddOn;
-        if (this.cacheProvider === MEMCACHED) {
+        if (application.cacheProviderMemcached) {
           cacheAddOn = 'memcachier:dev --as MEMCACHIER';
-        } else if (this.cacheProvider === REDIS) {
+        } else if (application.cacheProviderRedis) {
           cacheAddOn = 'heroku-redis:hobby-dev --as REDIS';
         }
 
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon ${cacheAddOn}`));
 
-          const { stderr, stdout, exitCode } = await this.spawnCommand(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, {
+          const { stderr } = await this.spawnCommand(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, {
             reject: false,
             stdio: 'pipe',
           });
-          addonCreateCallback('Cache', exitCode, stdout, stderr);
+          addonCreateCallback('Cache', stderr);
         } else {
           this.log.log(chalk.bold(`\nNo suitable cache addon for cacheprovider ${this.cacheProvider} available.`));
         }
       },
 
-      configureJHipsterRegistry() {
+      configureJHipsterRegistry({ application }) {
         if (this.herokuAppExists) return undefined;
 
-        if (this.serviceDiscoveryType === EUREKA) {
+        if (application.serviceDiscoveryEureka) {
           const prompts = [
             {
               type: 'input',
@@ -444,19 +406,25 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      copyHerokuFiles() {
+      copyHerokuFiles({ application }) {
         this.log.log(chalk.bold('\nCreating Heroku deployment files'));
-        this.writeFile('bootstrap-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-        this.writeFile('application-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
-        this.writeFile('Procfile.ejs', 'Procfile');
-        this.writeFile('system.properties.ejs', 'system.properties');
-        if (this.buildTool === GRADLE) {
-          this.writeFile('heroku.gradle.ejs', 'gradle/heroku.gradle');
+        const context = {
+          ...application,
+          herokuAppName: this.herokuAppName,
+          dynoSize: this.dynoSize,
+          herokuJavaVersion: this.herokuJavaVersion,
+        };
+        this.writeFile('bootstrap-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, context);
+        this.writeFile('application-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, context);
+        this.writeFile('Procfile.ejs', 'Procfile', context);
+        this.writeFile('system.properties.ejs', 'system.properties', context);
+        if (application.buildToolGradle) {
+          this.writeFile('heroku.gradle.ejs', 'gradle/heroku.gradle', context);
         }
       },
 
-      addHerokuBuildPlugin() {
-        if (this.buildTool !== GRADLE) return;
+      addHerokuBuildPlugin({ application }) {
+        if (!application.buildToolGradle) return;
         // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile(
           'build.gradle',
@@ -466,9 +434,9 @@ export default class HerokuGenerator extends BaseGenerator {
         this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
       },
 
-      addHerokuMavenProfile() {
-        if (this.buildTool === MAVEN) {
-          this.addMavenProfile('heroku', mavenProfileContent(this));
+      addHerokuMavenProfile({ application }) {
+        if (application.buildToolMaven) {
+          this.addMavenProfile('heroku', mavenProfileContent(application));
         }
       },
     });
@@ -492,7 +460,7 @@ export default class HerokuGenerator extends BaseGenerator {
         await this.spawnCommand('npm run java:jar:prod', { stdio: 'inherit' });
       },
 
-      async productionDeploy() {
+      async productionDeploy({ application }) {
         if (this.herokuSkipDeploy) {
           this.log.log(chalk.bold('\nSkipping deployment'));
           return;
@@ -513,7 +481,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
             let buildpack = 'heroku/java';
             let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
-            if (this.buildTool === GRADLE) {
+            if (application.buildToolGradle) {
               buildpack = 'heroku/gradle';
               configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
             }
@@ -554,10 +522,8 @@ export default class HerokuGenerator extends BaseGenerator {
               if (props.userDeployDecision === 'Yes') {
                 this.log.info(chalk.bold('Continuing deployment...'));
               } else {
-                this.log(this.logger);
                 this.log.info(chalk.bold('You aborted deployment!'));
-                this.abort = true;
-                this.herokuAppName = null;
+                this.cancelCancellableTasks();
                 return;
               }
               this.log('');
@@ -576,7 +542,7 @@ export default class HerokuGenerator extends BaseGenerator {
         } else {
           this.log.log(chalk.bold('\nDeploying application'));
           let jarFileWildcard = 'target/*.jar';
-          if (this.buildTool === GRADLE) {
+          if (application.buildToolGradle) {
             jarFileWildcard = 'build/libs/*.jar';
           }
 

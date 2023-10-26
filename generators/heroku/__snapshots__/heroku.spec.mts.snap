@@ -7,6 +7,7 @@ exports[`generator - Heroku microservice application with JAR deployment should 
   "generator-jhipster": {
     "applicationType": "microservice",
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "17"
@@ -172,13 +173,6 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -210,6 +204,7 @@ exports[`generator - Heroku monolith application in the EU should match files sn
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -375,13 +370,6 @@ exports[`generator - Heroku monolith application in the US calls should match sn
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -413,6 +401,7 @@ exports[`generator - Heroku monolith application in the US should match files sn
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -578,13 +567,6 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -636,6 +618,7 @@ exports[`generator - Heroku monolith application with Git deployment should matc
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "git",
     "herokuJavaVersion": "11"
@@ -801,13 +784,6 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -839,6 +815,7 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -1004,13 +981,6 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -1050,6 +1020,7 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -1215,13 +1186,6 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -1261,6 +1225,7 @@ exports[`generator - Heroku monolith application with elasticsearch should match
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11",
@@ -1437,13 +1402,6 @@ exports[`generator - Heroku monolith application with existing app calls should 
   ],
   [
     "spawnCommand",
-    "git init",
-    {
-      "stdio": "pipe",
-    },
-  ],
-  [
-    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -1467,6 +1425,7 @@ exports[`generator - Heroku monolith application with existing app should match 
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-existing",
     "herokuDeployType": "git",
     "herokuJavaVersion": "17"
