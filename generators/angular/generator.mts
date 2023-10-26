@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { isFilePending } from 'mem-fs-editor/state';
 
@@ -147,6 +147,12 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
+      queueTranslateTransform({ control, application }) {
+        this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation), {
+          name: 'translating webapp',
+          streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
+        });
+      },
     });
   }
 
@@ -158,12 +164,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       cleanupOldFilesTask,
       writeFiles,
-      queueTranslateTransform({ control, application }) {
-        this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation), {
-          name: 'translating webapp',
-          streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
-        });
-      },
     });
   }
 

@@ -17,46 +17,17 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { cleanupOldFiles } from './entity-cleanup.mjs';
 import { moveToJavaPackageSrcDir, javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from './support/index.mjs';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
+import { SERVER_TEST_SRC_DIR } from '../generator-constants.mjs';
 import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.mjs';
-import { getEnumInfo } from '../base-application/support/index.mjs';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes, ServiceTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-
-export const modelFiles = {
-  model: [
-    {
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_persistClass_.java.jhi'],
-    },
-  ],
-  modelTestFiles: [
-    {
-      ...javaTestPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_persistClass_Test.java'],
-    },
-  ],
-};
-
-/**
- * The default is to use a file path string. It implies use of the template method.
- * For any other config an object { file:.., method:.., template:.. } can be used
- */
-export const entityFiles = {
-  server: [
-    {
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['domain/_persistClass_.java.jhi.jakarta_validation'],
-    },
-  ],
-};
 
 export const restFiles = {
   restFiles: [
@@ -228,8 +199,6 @@ const userFiles = {
 };
 
 export const serverFiles = {
-  ...modelFiles,
-  ...entityFiles,
   ...restFiles,
   ...filteringFiles,
   ...filteringReactiveFiles,
@@ -256,32 +225,8 @@ export function writeFiles() {
         } else if (!entity.builtIn) {
           await this.writeFiles({
             sections: serverFiles,
-            rootTemplatesPath: application.reactive ? ['reactive', ''] : '',
+            rootTemplatesPath: application.reactive ? ['reactive', '', '../../java/templates/'] : ['', '../../java/templates/'],
             context: { ...application, ...entity },
-          });
-        }
-      }
-    },
-
-    async writeEnumFiles({ application, entities }) {
-      for (const entity of entities.filter(entity => !entity.skipServer)) {
-        for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
-          const fieldType = field.fieldType;
-          const enumInfo = {
-            ...getEnumInfo(field, entity.clientRootFolder),
-            frontendAppName: application.frontendAppName,
-            packageName: application.packageName,
-            entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
-          };
-          await this.writeFiles({
-            templates: [
-              {
-                sourceFile: `${SERVER_MAIN_SRC_DIR}_package_/_entityPackage_/domain/enumeration/Enum.java.ejs`,
-                destinationFile: `${SERVER_MAIN_SRC_DIR}${entity.entityAbsoluteFolder}/domain/enumeration/${fieldType}.java`,
-              },
-            ],
-            rootTemplatesPath: application.reactive ? ['reactive', ''] : '',
-            context: enumInfo,
           });
         }
       }

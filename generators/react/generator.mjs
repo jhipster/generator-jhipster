@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { isFilePending } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
@@ -68,7 +68,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -108,10 +108,8 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.preparingEachEntity));
   }
 
-  get writing() {
-    return {
-      cleanupOldFilesTask,
-      writeFiles,
+  get default() {
+    return this.asDefaultTaskGroup({
       queueTranslateTransform({ control, application }) {
         if (!application.enableTranslation) {
           this.queueTransformStream(translateReactFilesTransform(control.getWebappTranslation), {
@@ -120,6 +118,17 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           });
         }
       },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
+  get writing() {
+    return {
+      cleanupOldFilesTask,
+      writeFiles,
     };
   }
 

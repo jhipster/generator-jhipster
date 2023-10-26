@@ -74,7 +74,7 @@ JDLField {
           const convertedField = convertField({
             name: 'AnAwesomeField',
             type: 'String',
-            javadoc: 'An awesome comment!',
+            documentation: 'An awesome comment!',
           });
           commentFromConvertedField = convertedField.comment;
         });

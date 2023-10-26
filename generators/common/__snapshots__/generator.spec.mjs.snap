@@ -38,9 +38,9 @@ trim_trailing_whitespace = false
 ",
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": {
+  ".lintstagedrc.cjs": {
     "contents": "module.exports = {
-  '{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
+  '{,**/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
 };
 ",
     "stateCleared": "modified",
@@ -92,6 +92,8 @@ overrides:
   "README.md": {
     "contents": "# jhipster
 
+This application was generated using JHipster JHIPSTER_VERSION, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION](https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION).
+
 
 ## Project Structure
 
@@ -126,7 +128,10 @@ overrides:
   "devDependencies": {
     "generator-jhipster": "JHIPSTER_VERSION",
     "husky": "HUSKY_VERSION",
-    "lint-staged": "LINT_STAGED_VERSION"
+    "lint-staged": "LINT_STAGED_VERSION",
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
+    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION"
   },
   "scripts": {
     "prepare": "husky install"

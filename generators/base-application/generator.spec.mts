@@ -62,6 +62,7 @@ describe(`generator - ${generator}`, () => {
     // application arg
     const loading = esmocha.fn();
     const preparing = esmocha.fn();
+    const postPreparing = esmocha.fn();
     const writing = esmocha.fn();
     const postWriting = esmocha.fn();
     const install = esmocha.fn();
@@ -104,6 +105,10 @@ describe(`generator - ${generator}`, () => {
 
       get [Generator.PREPARING]() {
         return { preparing };
+      }
+
+      get [Generator.POST_PREPARING]() {
+        return { postPreparing };
       }
 
       get [Generator.CONFIGURING_EACH_ENTITY]() {
@@ -236,6 +241,7 @@ describe(`generator - ${generator}`, () => {
       expect(configuring).toBeCalledWith(controlArg);
       expect(composing).toBeCalledWith(controlArg);
       expect(loading).toBeCalledWith(applicationDefaultsArg);
+      expect(postPreparing).toBeCalledWith(applicationSourceArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });

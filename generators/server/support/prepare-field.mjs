@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
 import { getUXConstraintName } from './database.mjs';
 import { hibernateSnakeCase } from './string.mjs';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.mjs';
 
 const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
 const TYPE_BYTE_BUFFER = fieldTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
@@ -47,6 +48,11 @@ export default function prepareField(entityWithConfig, field, generator) {
     field.transient = true;
     // Disable update form.
     field.readonly = true;
+  }
+
+  if (field.documentation) {
+    field.fieldJavadoc = formatDocAsJavaDoc(field.documentation, 4);
+    field.fieldApiDescription = formatDocAsApiDescription(field.documentation);
   }
 
   if (field.id && entityWithConfig.primaryKey) {

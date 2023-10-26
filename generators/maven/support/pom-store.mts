@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import sortKeys from 'sort-keys';
 
 import CoreGenerator from '../../base-core/index.mjs';

@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.mjs';
 import {
   JAVA_VERSION,
   MAIN_DIR,
@@ -41,6 +41,7 @@ import {
   hibernateSnakeCase,
   loadServerConfig,
   loadDerivedServerConfig,
+  prepareRelationship,
 } from '../server/support/index.mjs';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.mjs';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.mjs';
@@ -57,6 +58,14 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
   }
 
   async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    }
+
+    if (this.delegateToBlueprint) {
+      throw new Error('Only sbs blueprint is supported');
+    }
+
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
   }
 
@@ -181,6 +190,18 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.preparingEachEntityField;
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        prepareRelationship({ entity, relationship });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.preparingEachEntityRelationship;
   }
 
   get postPreparingEachEntity() {

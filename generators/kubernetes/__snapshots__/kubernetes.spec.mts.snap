@@ -483,6 +483,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes Kafka application should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gateway should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -1442,6 +1444,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes MySQL and PostgreSQL microservices without gateway should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes gateway and ingress should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -2132,6 +2136,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes gateway and ingress should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes gateway and ingressType gke should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -2442,7 +2448,6 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.allow-http: "true"
-    kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: jhgate-ip
     cert-manager.io/issuer: letsencrypt-staging
     acme.cert-manager.io/http01-edit-in-place: "true"
@@ -5657,6 +5662,8 @@ deploy:
   },
 }
 `;
+
+exports[`generator - Kubernetes gateway and ingressType gke should match spawn calls snapshot 1`] = `[]`;
 
 exports[`generator - Kubernetes gateway and ingressType nginx should match files snapshot 1`] = `
 {
@@ -9096,6 +9103,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes gateway and ingressType nginx should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes gateway and mysql microservice should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -9947,6 +9956,8 @@ deploy:
   },
 }
 `;
+
+exports[`generator - Kubernetes gateway and mysql microservice should match spawn calls snapshot 1`] = `[]`;
 
 exports[`generator - Kubernetes gateway with istio routing should match files snapshot 1`] = `
 {
@@ -10928,6 +10939,18 @@ deploy:
     "stateCleared": "modified",
   },
 }
+`;
+
+exports[`generator - Kubernetes gateway with istio routing should match spawn calls snapshot 1`] = `
+[
+  [
+    "spawnCommandSync",
+    "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'",
+    {
+      "stdio": "pipe",
+    },
+  ],
+]
 `;
 
 exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql microservices should match files snapshot 1`] = `
@@ -12938,6 +12961,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes gateway, mysql, psql, mongodb, mariadb, mssql microservices should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes monolith application should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -13392,6 +13417,8 @@ deploy:
   },
 }
 `;
+
+exports[`generator - Kubernetes monolith application should match spawn calls snapshot 1`] = `[]`;
 
 exports[`generator - Kubernetes mysql microservice with custom namespace and jhipster prometheus monitoring should match files snapshot 1`] = `
 {
@@ -16747,6 +16774,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes mysql microservice with custom namespace and jhipster prometheus monitoring should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes mysql microservice with custom namespace should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -17423,6 +17452,8 @@ deploy:
   },
 }
 `;
+
+exports[`generator - Kubernetes mysql microservice with custom namespace should match spawn calls snapshot 1`] = `[]`;
 
 exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning should match files snapshot 1`] = `
 {
@@ -19432,6 +19463,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes only gateway should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -20107,6 +20140,8 @@ deploy:
 }
 `;
 
+exports[`generator - Kubernetes only gateway should match spawn calls snapshot 1`] = `[]`;
+
 exports[`generator - Kubernetes only gateway with eureka should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -20670,3 +20705,5 @@ deploy:
   },
 }
 `;
+
+exports[`generator - Kubernetes only gateway with eureka should match spawn calls snapshot 1`] = `[]`;

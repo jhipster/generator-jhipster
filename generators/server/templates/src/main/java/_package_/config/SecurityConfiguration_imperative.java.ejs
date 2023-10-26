@@ -182,7 +182,7 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!skipClient) { _%>
-                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"), mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
   <%_ if (clientFrameworkVue) { _%>
                     .requestMatchers(mvc.pattern("/assets/**")).permitAll()
@@ -245,6 +245,7 @@ public class SecurityConfiguration {
             )
             .formLogin(formLogin ->
                 formLogin
+                    .loginPage("/")
                     .loginProcessingUrl("/api/authentication")
                     .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
                     .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))

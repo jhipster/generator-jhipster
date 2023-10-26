@@ -28,9 +28,10 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v8
+      - uses: actions/stale@b69b346013879cedbf50c69f572cd85439a41936
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          ascending: true
           stale-issue-label: 'area: stale'
           stale-issue-message: |
             This issue is stale because it has been open for too long without any activity.

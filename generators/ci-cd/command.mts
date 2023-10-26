@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 
 const { kebabCase, intersection } = _;

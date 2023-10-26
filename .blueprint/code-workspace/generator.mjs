@@ -1,5 +1,5 @@
 import { join } from 'path';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import BaseGenerator from '../../generators/base/index.mjs';
 import { getPackageRoot } from '../../lib/index.mjs';
 import command from './command.mjs';

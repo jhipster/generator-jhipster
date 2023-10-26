@@ -149,13 +149,10 @@ _%>
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException ||
-            ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException) {
-                // return 201 - CREATED on purpose to not reveal information to potential attackers
-                // see https://github.com/jhipster/generator-jhipster/issues/21731
-                return ProblemDetailWithCauseBuilder.instance()
-                    .withStatus(201).build();
-            }
+        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException ) 
+            return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();    
+        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException ) 
+            return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();
         if(ex instanceof <%= packageName %>.service.InvalidPasswordException )
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 

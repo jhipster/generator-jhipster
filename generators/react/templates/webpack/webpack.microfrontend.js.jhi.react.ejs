@@ -22,13 +22,6 @@ const { DefinePlugin } = require('webpack');
 <%_ } _%>
 <&_ } -&>
 <&_ if (fragment.moduleFederationSection) { -&>
-<%_ if (applicationTypeGateway) { _%>
-        remotes: {
-  <%_ for (const microfrontend of microfrontends) { _%>
-          '@<%= microfrontend.lowercaseBaseName %>': `<%= microfrontend.lowercaseBaseName %>@/<%= microfrontend.endpointPrefix %>/remoteEntry.js`,
-  <%_ } _%>
-        },
-<%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
         exposes: {
           './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/menu',

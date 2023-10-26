@@ -35,16 +35,46 @@ export default function createApplicationConfigurationFromObject(configurationOb
       logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
     }
-    if (!applicationDefinition.doesOptionValueExist(optionName, optionValue)) {
-      throw new Error(`Unknown value '${optionValue}' for option '${optionName}'.`);
-    }
-    configuration.setOption(createJDLConfigurationOption(optionName, optionValue));
+    configuration.setOption(createApplicationJDLConfigurationOption(optionName, optionValue));
   });
   return configuration;
 }
 
-function createJDLConfigurationOption(name, value) {
+export function createApplicationNamespaceConfigurationFromObject(
+  parsedNamespaceConfigs: Record<string, Record<string, any>> = {},
+): Array<JDLApplicationConfiguration> {
+  return Object.entries(parsedNamespaceConfigs).map(([namespace, parsedConfig]) => {
+    const configuration = new JDLApplicationConfiguration(namespace);
+    for (const [optionName, optionValue] of Object.entries(parsedConfig)) {
+      configuration.setOption(createUnknownJDLConfigurationOption(optionName, optionValue));
+    }
+    return configuration;
+  });
+}
+
+function createUnknownJDLConfigurationOption(name, value) {
+  let type;
+  if (typeof value === 'boolean') {
+    type = 'boolean';
+  } else if (/^\d+$/.test(value)) {
+    value = parseInt(value, 10);
+    type = 'integer';
+  } else if (Array.isArray(value)) {
+    type = 'list';
+  } else if (typeof value === 'string') {
+    type = 'string';
+  } else {
+    throw new Error(`Unknown value type for option ${name}`);
+  }
+  return createJDLConfigurationOption(type, name, value);
+}
+
+function createApplicationJDLConfigurationOption(name: string, value: any) {
   const type = applicationDefinition.getTypeForOption(name);
+  return createJDLConfigurationOption(type, name, value);
+}
+
+function createJDLConfigurationOption(type: string, name: string, value: any) {
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));

@@ -196,4 +196,22 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+
+  describe('with entities', () => {
+    before(async () => {
+      await helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig({ skipClient: true }, [
+        { name: 'Foo', changelogDate: '20160926101210', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+        {
+          name: 'Bar',
+          changelogDate: '20160926101211',
+          dto: 'mapstruct',
+          fields: [{ fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] }],
+        },
+      ]);
+    });
+
+    it('should match files snapshot', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
 });

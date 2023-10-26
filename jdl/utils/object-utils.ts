@@ -68,7 +68,7 @@ export function areEntitiesEqual(firstEntity: any, secondEntity: any) {
   if (
     firstEntity.fields.length !== secondEntity.fields.length ||
     firstEntity.relationships.length !== secondEntity.relationships.length ||
-    firstEntity.javadoc !== secondEntity.javadoc ||
+    firstEntity.documentation !== secondEntity.documentation ||
     firstEntity.entityTableName !== secondEntity.entityTableName ||
     Object.keys(firstEntity).length !== Object.keys(secondEntity).length ||
     checkIfSecurityDiffers(firstEntity, secondEntity)

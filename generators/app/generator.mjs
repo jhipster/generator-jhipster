@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { checkNode, loadStoredAppOptions } from './support/index.mjs';

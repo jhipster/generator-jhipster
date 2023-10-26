@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-useless-escape */
 
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import JDLParser from './jdl-parser.js';

@@ -244,6 +244,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
             .formLogin(formLogin -> formLogin
+                .loginPage("/")
                 .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
                 .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
                 .authenticationSuccessHandler(this::onAuthenticationSuccess)
@@ -284,6 +285,8 @@ public class SecurityConfiguration {
   <%_ if (microfrontend) { _%>
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
                     .pathMatchers("/services/*/*.js").permitAll()
+                    .pathMatchers("/services/*/*.txt").permitAll()
+                    .pathMatchers("/services/*/*.json").permitAll()
                     .pathMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
                     .pathMatchers("/services/*/management/health/readiness").permitAll()

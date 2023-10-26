@@ -105,7 +105,6 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'TESTS: blueprint files should be written'
         run: |
-          ls template-file-app
           ls template-file-client
           ls template-file-common
           ls template-file-cypress

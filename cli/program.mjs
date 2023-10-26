@@ -245,7 +245,7 @@ export const buildCommands = async ({
           const boostrapGen = ['bootstrap', generator];
           const allDependencies = await buildAllDependencies(boostrapGen, {
             env,
-            blueprintNamespaces: blueprint ? [] : envBuilder.getBlueprintsNamespaces(),
+            blueprintNamespaces: envBuilder.getBlueprintsNamespaces(),
           });
           for (const [metaName, { meta: generatorMeta, blueprintNamespace }] of Object.entries(allDependencies)) {
             if (blueprintNamespace) {

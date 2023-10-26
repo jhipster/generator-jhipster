@@ -29,13 +29,15 @@ import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../bas
 import { YO_RC_FILE } from '../generator-constants.mjs';
 import { replaceSensitiveConfig } from './support/utils.mjs';
 
+const isInfoCommand = commandName => commandName === 'info' || undefined;
+
 export default class InfoGenerator extends BaseApplicationGenerator {
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
       jhipsterBootstrap: false,
       storeJHipsterVersion: false,
-      customInstallTask: true,
-      customCommitTask: true,
+      customInstallTask: isInfoCommand(options.commandName),
+      customCommitTask: isInfoCommand(options.commandName),
       ...features,
     });
   }
@@ -62,8 +64,9 @@ export default class InfoGenerator extends BaseApplicationGenerator {
           console.log('\n##### **JHipster configuration not found**\n');
         }
 
-        if (this.jhipsterConfig.packages && this.jhipsterConfig.packages.length > 0) {
-          for (const pkg of this.jhipsterConfig.packages) {
+        const packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        if (packages.length > 0) {
+          for (const pkg of packages) {
             const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
             if (yoRc) {
               const result = JSON.stringify(replaceSensitiveConfig(yoRc), null, 2);

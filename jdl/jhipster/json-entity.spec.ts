@@ -53,12 +53,12 @@ describe('jdl - JSONEntity', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
+  "documentation": undefined,
   "dto": undefined,
   "embedded": undefined,
   "entityTableName": undefined,
   "fields": [],
   "fluentMethods": undefined,
-  "javadoc": undefined,
   "jpaMetamodelFiltering": undefined,
   "name": "Toto",
   "pagination": undefined,
@@ -79,7 +79,7 @@ JSONEntity {
           entityTableName: 'titi',
           fields: [42],
           fluentMethods: true,
-          javadoc: '',
+          documentation: '',
           jpaMetamodelFiltering: true,
           pagination: 'pagination',
           readOnly: true,
@@ -101,6 +101,7 @@ JSONEntity {
   "angularJSSuffix": "yes",
   "applications": [],
   "clientRootFolder": "oh",
+  "documentation": "",
   "dto": "mapstruct",
   "embedded": true,
   "entityTableName": "titi",
@@ -108,7 +109,6 @@ JSONEntity {
     42,
   ],
   "fluentMethods": true,
-  "javadoc": "",
   "jpaMetamodelFiltering": true,
   "microserviceName": "nope",
   "name": "Titi",
@@ -131,6 +131,7 @@ JSONEntity {
   "angularJSSuffix": "yes",
   "applications": [],
   "clientRootFolder": "oh",
+  "documentation": "",
   "dto": "mapstruct",
   "embedded": true,
   "entityTableName": "titi",
@@ -138,7 +139,6 @@ JSONEntity {
     42,
   ],
   "fluentMethods": true,
-  "javadoc": "",
   "jpaMetamodelFiltering": true,
   "microserviceName": "nope",
   "name": "Titi",
@@ -293,7 +293,7 @@ JSONEntity {
       before(() => {
         jsonEntity = new JSONEntity({
           entityName: 'Toto',
-          javadoc: 'A comment',
+          documentation: 'A comment',
         });
         jsonEntity.setOptions({
           dto: 'mapstruct',
@@ -305,12 +305,12 @@ JSONEntity {
         jestExpect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "applications": [],
+  "documentation": "A comment",
   "dto": "mapstruct",
   "embedded": undefined,
   "entityTableName": undefined,
   "fields": [],
   "fluentMethods": undefined,
-  "javadoc": "A comment",
   "jpaMetamodelFiltering": undefined,
   "name": "Toto",
   "pagination": "pagination",

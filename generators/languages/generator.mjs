@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
-import _ from 'lodash';
+import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { askForLanguages, askI18n } from './prompts.mjs';
@@ -56,6 +56,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   composedBlueprints;
   languageCommand;
   writeJavaLanguageFiles;
+  regenerateLanguages;
 
   constructor(args, options, features) {
     super(args, options, features);
@@ -191,7 +192,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
         if (application.enableTranslation) {
-          if (!this.languageCommand) {
+          if (!this.languageCommand || this.regenerateLanguages) {
             this.languagesToApply = application.languages;
           } else {
             this.languagesToApply = [...new Set(this.languagesToApply || [])];

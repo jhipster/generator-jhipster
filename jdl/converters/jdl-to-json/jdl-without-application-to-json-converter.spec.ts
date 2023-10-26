@@ -65,21 +65,21 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should throw an error', () => {
           expect(() => {
             convert();
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
       context('such as an no database type', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), applicationName: 'toto' });
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
       context('such as no application name', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), databaseType: 'sql' });
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
     });
@@ -160,22 +160,22 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
-            JSONEntity {
-              "applications": "*",
-              "dto": undefined,
-              "embedded": undefined,
-              "entityTableName": "entity_a",
-              "fields": [],
-              "fluentMethods": undefined,
-              "javadoc": "The best entity",
-              "jpaMetamodelFiltering": undefined,
-              "name": "A",
-              "pagination": undefined,
-              "readOnly": undefined,
-              "relationships": [],
-              "service": undefined,
-            }
-          `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
         });
       });
       context('with options', () => {
@@ -262,28 +262,28 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
-            JSONEntity {
-              "angularJSSuffix": "suffix",
-              "applications": "*",
-              "clientRootFolder": "../client_root_folder",
-              "dto": "mapstruct",
-              "embedded": true,
-              "entityTableName": "entity_a",
-              "fields": [],
-              "fluentMethods": false,
-              "javadoc": "The best entity",
-              "jpaMetamodelFiltering": true,
-              "microserviceName": "myMs",
-              "name": "A",
-              "pagination": "pagination",
-              "readOnly": true,
-              "relationships": [],
-              "searchEngine": "couchbase",
-              "service": "serviceImpl",
-              "skipClient": true,
-              "skipServer": true,
-            }
-          `);
+JSONEntity {
+  "angularJSSuffix": "suffix",
+  "applications": "*",
+  "clientRootFolder": "../client_root_folder",
+  "documentation": "The best entity",
+  "dto": "mapstruct",
+  "embedded": true,
+  "entityTableName": "entity_a",
+  "fields": [],
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": true,
+  "microserviceName": "myMs",
+  "name": "A",
+  "pagination": "pagination",
+  "readOnly": true,
+  "relationships": [],
+  "searchEngine": "couchbase",
+  "service": "serviceImpl",
+  "skipClient": true,
+  "skipServer": true,
+}
+`);
         });
       });
       context('when setting the DTO option without the service option', () => {
@@ -327,22 +327,22 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         });
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
-            JSONEntity {
-              "applications": "*",
-              "dto": "mapstruct",
-              "embedded": undefined,
-              "entityTableName": "entity_a",
-              "fields": [],
-              "fluentMethods": undefined,
-              "javadoc": "The best entity",
-              "jpaMetamodelFiltering": undefined,
-              "name": "A",
-              "pagination": undefined,
-              "readOnly": undefined,
-              "relationships": [],
-              "service": "serviceClass",
-            }
-          `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": "mapstruct",
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when setting the filtering option without the service option', () => {
@@ -385,22 +385,22 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         });
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
-            JSONEntity {
-              "applications": "*",
-              "dto": undefined,
-              "embedded": undefined,
-              "entityTableName": "entity_a",
-              "fields": [],
-              "fluentMethods": undefined,
-              "javadoc": "The best entity",
-              "jpaMetamodelFiltering": true,
-              "name": "A",
-              "pagination": undefined,
-              "readOnly": undefined,
-              "relationships": [],
-              "service": "serviceClass",
-            }
-          `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": true,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": "serviceClass",
+}
+`);
         });
       });
       context('when the searching option is set with exclusions', () => {
@@ -433,23 +433,23 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
-            JSONEntity {
-              "applications": "*",
-              "dto": undefined,
-              "embedded": undefined,
-              "entityTableName": "entity_a",
-              "fields": [],
-              "fluentMethods": undefined,
-              "javadoc": "The best entity",
-              "jpaMetamodelFiltering": undefined,
-              "name": "A",
-              "pagination": undefined,
-              "readOnly": undefined,
-              "relationships": [],
-              "searchEngine": "no",
-              "service": undefined,
-            }
-          `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": undefined,
+}
+`);
         });
       });
       context('with fields', () => {
@@ -485,31 +485,31 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
-              JSONEntity {
-                "applications": "*",
-                "dto": undefined,
-                "embedded": undefined,
-                "entityTableName": "entity_a",
-                "fields": [
-                  {
-                    "fieldName": "firstField",
-                    "fieldType": "String",
-                  },
-                  {
-                    "fieldName": "secondField",
-                    "fieldType": "Integer",
-                  },
-                ],
-                "fluentMethods": undefined,
-                "javadoc": "The best entity",
-                "jpaMetamodelFiltering": undefined,
-                "name": "A",
-                "pagination": undefined,
-                "readOnly": undefined,
-                "relationships": [],
-                "service": undefined,
-              }
-            `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [
+    {
+      "fieldName": "firstField",
+      "fieldType": "String",
+    },
+    {
+      "fieldName": "secondField",
+      "fieldType": "Integer",
+    },
+  ],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
           });
         });
         context('when having blobs', () => {
@@ -554,43 +554,43 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
-              JSONEntity {
-                "applications": "*",
-                "dto": undefined,
-                "embedded": undefined,
-                "entityTableName": "entity_a",
-                "fields": [
-                  {
-                    "fieldName": "anyBlobField",
-                    "fieldType": "byte[]",
-                    "fieldTypeBlobContent": "any",
-                  },
-                  {
-                    "fieldName": "textBlobField",
-                    "fieldType": "byte[]",
-                    "fieldTypeBlobContent": "text",
-                  },
-                  {
-                    "fieldName": "blobField",
-                    "fieldType": "byte[]",
-                    "fieldTypeBlobContent": "any",
-                  },
-                  {
-                    "fieldName": "imageBlobField",
-                    "fieldType": "byte[]",
-                    "fieldTypeBlobContent": "image",
-                  },
-                ],
-                "fluentMethods": undefined,
-                "javadoc": "The best entity",
-                "jpaMetamodelFiltering": undefined,
-                "name": "A",
-                "pagination": undefined,
-                "readOnly": undefined,
-                "relationships": [],
-                "service": undefined,
-              }
-            `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [
+    {
+      "fieldName": "anyBlobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+    },
+    {
+      "fieldName": "textBlobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+    },
+    {
+      "fieldName": "blobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+    },
+    {
+      "fieldName": "imageBlobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image",
+    },
+  ],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
           });
         });
         context('with field types being enums', () => {
@@ -621,28 +621,28 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
-              JSONEntity {
-                "applications": "*",
-                "dto": undefined,
-                "embedded": undefined,
-                "entityTableName": "a",
-                "fields": [
-                  {
-                    "fieldName": "enumField",
-                    "fieldType": "CustomEnum",
-                    "fieldValues": "AA,AB",
-                  },
-                ],
-                "fluentMethods": undefined,
-                "javadoc": "The best entity",
-                "jpaMetamodelFiltering": undefined,
-                "name": "A",
-                "pagination": undefined,
-                "readOnly": undefined,
-                "relationships": [],
-                "service": undefined,
-              }
-            `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "a",
+  "fields": [
+    {
+      "fieldName": "enumField",
+      "fieldType": "CustomEnum",
+      "fieldValues": "AA,AB",
+    },
+  ],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
           });
         });
         context('with comments', () => {
@@ -673,28 +673,28 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
-              JSONEntity {
-                "applications": "*",
-                "dto": undefined,
-                "embedded": undefined,
-                "entityTableName": "entity_a",
-                "fields": [
-                  {
-                    "fieldName": "firstField",
-                    "fieldType": "String",
-                    "javadoc": "The best field",
-                  },
-                ],
-                "fluentMethods": undefined,
-                "javadoc": "The best entity",
-                "jpaMetamodelFiltering": undefined,
-                "name": "A",
-                "pagination": undefined,
-                "readOnly": undefined,
-                "relationships": [],
-                "service": undefined,
-              }
-            `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [
+    {
+      "documentation": "The best field",
+      "fieldName": "firstField",
+      "fieldType": "String",
+    },
+  ],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
           });
         });
         context('with validations', () => {
@@ -780,58 +780,58 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
-              JSONEntity {
-                "applications": "*",
-                "dto": undefined,
-                "embedded": undefined,
-                "entityTableName": "entity_a",
-                "fields": [
-                  {
-                    "fieldName": "stringField",
-                    "fieldType": "String",
-                    "fieldValidateRules": [
-                      "required",
-                      "unique",
-                      "minlength",
-                      "maxlength",
-                      "pattern",
-                    ],
-                    "fieldValidateRulesMaxlength": 10,
-                    "fieldValidateRulesMinlength": 0,
-                    "fieldValidateRulesPattern": "^d$",
-                  },
-                  {
-                    "fieldName": "integerField",
-                    "fieldType": "Integer",
-                    "fieldValidateRules": [
-                      "min",
-                      "max",
-                    ],
-                    "fieldValidateRulesMax": 10,
-                    "fieldValidateRulesMin": 0,
-                  },
-                  {
-                    "fieldName": "blobField",
-                    "fieldType": "byte[]",
-                    "fieldTypeBlobContent": "any",
-                    "fieldValidateRules": [
-                      "minbytes",
-                      "maxbytes",
-                    ],
-                    "fieldValidateRulesMaxbytes": 10,
-                    "fieldValidateRulesMinbytes": 0,
-                  },
-                ],
-                "fluentMethods": undefined,
-                "javadoc": "The best entity",
-                "jpaMetamodelFiltering": undefined,
-                "name": "A",
-                "pagination": undefined,
-                "readOnly": undefined,
-                "relationships": [],
-                "service": undefined,
-              }
-            `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [
+    {
+      "fieldName": "stringField",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required",
+        "unique",
+        "minlength",
+        "maxlength",
+        "pattern",
+      ],
+      "fieldValidateRulesMaxlength": 10,
+      "fieldValidateRulesMinlength": 0,
+      "fieldValidateRulesPattern": "^d$",
+    },
+    {
+      "fieldName": "integerField",
+      "fieldType": "Integer",
+      "fieldValidateRules": [
+        "min",
+        "max",
+      ],
+      "fieldValidateRulesMax": 10,
+      "fieldValidateRulesMin": 0,
+    },
+    {
+      "fieldName": "blobField",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+      "fieldValidateRules": [
+        "minbytes",
+        "maxbytes",
+      ],
+      "fieldValidateRulesMaxbytes": 10,
+      "fieldValidateRulesMinbytes": 0,
+    },
+  ],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
           });
         });
         context('with options', () => {
@@ -865,31 +865,31 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
 
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
-              JSONEntity {
-                "applications": "*",
-                "dto": undefined,
-                "embedded": undefined,
-                "entityTableName": "entity_a",
-                "fields": [
-                  {
-                    "fieldName": "firstField",
-                    "fieldType": "String",
-                    "javadoc": "The best field",
-                    "options": {
-                      "id": 42,
-                    },
-                  },
-                ],
-                "fluentMethods": undefined,
-                "javadoc": "The best entity",
-                "jpaMetamodelFiltering": undefined,
-                "name": "A",
-                "pagination": undefined,
-                "readOnly": undefined,
-                "relationships": [],
-                "service": undefined,
-              }
-            `);
+JSONEntity {
+  "applications": "*",
+  "documentation": "The best entity",
+  "dto": undefined,
+  "embedded": undefined,
+  "entityTableName": "entity_a",
+  "fields": [
+    {
+      "documentation": "The best field",
+      "fieldName": "firstField",
+      "fieldType": "String",
+      "options": {
+        "id": 42,
+      },
+    },
+  ],
+  "fluentMethods": undefined,
+  "jpaMetamodelFiltering": undefined,
+  "name": "A",
+  "pagination": undefined,
+  "readOnly": undefined,
+  "relationships": [],
+  "service": undefined,
+}
+`);
           });
         });
       });
@@ -1196,7 +1196,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
             jestExpect(relationshipsForA).toMatchInlineSnapshot(`
               [
                 {
-                  "javadoc": "A to B",
+                  "documentation": "A to B",
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
                   "relationshipName": "b",
@@ -1208,7 +1208,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
             jestExpect(relationshipsForB).toMatchInlineSnapshot(`
               [
                 {
-                  "javadoc": "A to B but in the destination",
+                  "documentation": "A to B but in the destination",
                   "otherEntityName": "a",
                   "otherEntityRelationshipName": "b",
                   "relationshipName": "a",

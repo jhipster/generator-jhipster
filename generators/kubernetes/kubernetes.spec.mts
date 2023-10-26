@@ -1,6 +1,6 @@
 import { expect } from 'esmocha';
 
-import { basicHelpers as helpers, getGenerator } from '../../test/support/index.mjs';
+import { basicHelpers as helpers, getGenerator, runResult } from '../../test/support/index.mjs';
 import { GENERATOR_KUBERNETES } from '../generator-list.mjs';
 
 const expectedFiles = {
@@ -56,6 +56,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -77,6 +78,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -104,6 +108,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -124,6 +129,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files and content', () => {
       runResult.assertFile(expectedFiles.eurekaregistry);
@@ -151,6 +159,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -172,6 +181,9 @@ describe('generator - Kubernetes', () => {
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
     });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
+    });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
     });
@@ -187,17 +199,17 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('mysql microservice with custom namespace', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['02-mysql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -218,6 +230,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -245,6 +260,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -265,6 +281,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -292,6 +311,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -313,6 +333,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -346,6 +369,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -366,6 +390,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -399,6 +426,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -419,6 +447,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -449,6 +480,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -469,6 +501,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -508,6 +543,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -528,6 +564,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
       runResult.assertNoFile(expectedFiles.eurekaregistry);
@@ -553,6 +592,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -573,6 +613,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it("doesn't creates registry files", () => {
       runResult.assertNoFile(expectedFiles.eurekaregistry);
@@ -598,6 +641,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -617,6 +661,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -647,6 +694,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -667,6 +715,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);
@@ -694,6 +745,7 @@ describe('generator - Kubernetes', () => {
 
       runResult = await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
+        .withSpawnMock()
         .withOptions({
           askAnswered: true,
         })
@@ -714,6 +766,9 @@ describe('generator - Kubernetes', () => {
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
+    });
+    it('should match spawn calls snapshot', function () {
+      expect(runResult.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
     it('creates expected registry files', () => {
       runResult.assertFile(expectedFiles.consulregistry);

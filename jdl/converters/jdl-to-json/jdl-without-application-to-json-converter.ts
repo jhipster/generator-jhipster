@@ -43,7 +43,7 @@ export default {
  */
 export function convert(args: any = {}) {
   if (!args.jdlObject || !args.applicationName || !args.databaseType) {
-    throw new Error("The JDL object, the application's name and its the database type are mandatory.");
+    throw new Error("The JDL object, the application's name, and its the database type are mandatory.");
   }
   init(args);
   setBasicEntityInformation();

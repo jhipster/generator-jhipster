@@ -32,7 +32,7 @@
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-        <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.javadoc %>"<% } } %>>__jhiTransformTranslate__('<%- field.fieldTranslationKey %>')</span></dt>
+        <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTransformTranslate__('<%- field.fieldTranslationKey %>')</span></dt>
         <dd>
     <%_ if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label _%>

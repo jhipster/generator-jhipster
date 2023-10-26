@@ -518,6 +518,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           jestExpect(parsedConfig).toMatchInlineSnapshot(`
 JDLApplication {
   "config": JDLApplicationConfiguration {
+    "namespace": undefined,
     "options": {
       "baseName": StringJDLApplicationConfigurationOption {
         "name": "baseName",
@@ -547,6 +548,7 @@ JDLApplication {
   "entityNames": JDLApplicationEntities {
     "entityNames": Set {},
   },
+  "namespaceConfigs": [],
   "options": JDLOptions {
     "optionSize": 0,
     "options": {},

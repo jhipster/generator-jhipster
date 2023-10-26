@@ -42,11 +42,11 @@ describe('jdl - JDL DSL API', () => {
               name: 'field',
               type: 'String',
               validations: [],
-              javadoc: null,
+              documentation: null,
               annotations: [{ optionName: 'Id', type: 'UNARY' }],
             },
           ],
-          javadoc: null,
+          documentation: null,
         });
       });
     });
