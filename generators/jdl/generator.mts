@@ -33,6 +33,8 @@ import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jd
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.mjs';
 import statistics from '../statistics.mjs';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.mjs';
+import { mergeYoRcContent } from '../../jdl/index.js';
+import { normalizeBlueprintName } from '../base/internal/blueprint.mjs';
 
 const { upperFirst } = _;
 
@@ -300,17 +302,27 @@ export default class JdlGenerator extends BaseGenerator {
 
   writeConfig(...applications: Partial<ApplicationWithEntitiesAndPath>[]) {
     for (const application of applications) {
-      const { folder = '', config, entities = [], sharedFs } = application;
+      const { folder = '', entities = [], sharedFs } = application;
+      let { config, namespaceConfigs } = application;
 
       const appPath = folder ? `${folder}/` : folder;
       const fs: MemFsEditor = sharedFs ? createMemFsEditor(sharedFs) : this.fs;
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
         const oldConfig: any = fs.readJSON(configFile, {});
-        fs.writeJSON(configFile, {
-          ...oldConfig,
-          [GENERATOR_JHIPSTER]: { ...oldConfig[GENERATOR_JHIPSTER], ...config },
-        });
+        if (Array.isArray(config.blueprints)) {
+          config = {
+            ...config,
+            blueprints: config.blueprints.map(({ name, ...remaining }) => ({ ...remaining, name: normalizeBlueprintName(name) })),
+          };
+        }
+        if (namespaceConfigs) {
+          namespaceConfigs = Object.fromEntries(
+            Object.entries(namespaceConfigs).map(([ns, config]) => [normalizeBlueprintName(ns), config]),
+          );
+        }
+
+        fs.writeJSON(configFile, mergeYoRcContent(oldConfig, { ...namespaceConfigs, [GENERATOR_JHIPSTER]: config }));
       }
       for (const entity of entities) {
         const configFile = this.destinationPath(`${appPath}${JHIPSTER_CONFIG_DIR}/${upperFirst(entity.name)}.json`);

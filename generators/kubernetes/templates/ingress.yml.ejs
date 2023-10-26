@@ -24,7 +24,6 @@ metadata:
   <%_ if (useKeycloak && ingressTypeGke) { _%>
   annotations:
     kubernetes.io/ingress.allow-http: "true"
-    kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: <%= app.baseName.toLowerCase()%>-ip
     cert-manager.io/issuer: letsencrypt-staging
     acme.cert-manager.io/http01-edit-in-place: "true"

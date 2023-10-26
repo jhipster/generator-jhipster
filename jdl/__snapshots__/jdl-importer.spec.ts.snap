@@ -3,17 +3,17 @@
 exports[`jdl - JDLImporter import when importing a JDL application with blueprints should return the blueprints attributes in the application 1`] = `
 [
   {
-    "entities": [],
     "generator-jhipster": {
       "baseName": "appWithBlueprints",
       "blueprints": [
         {
-          "name": "generator-jhipster-vuejs",
+          "name": "vuejs",
         },
         {
           "name": "generator-jhipster-dotnetcore",
         },
       ],
+      "entities": [],
     },
   },
 ]
@@ -438,37 +438,37 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
 {
   "exportedApplications": [
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "entities": [],
         "packageFolder": "com/mathieu/tata",
         "packageName": "com.mathieu.tata",
       },
     },
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "entities": [],
         "packageFolder": "com/mathieu/titi",
         "packageName": "com.mathieu.titi",
       },
     },
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "entities": [],
         "packageFolder": "com/mathieu/toto",
         "packageName": "com.mathieu.toto",
       },
     },
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "entities": [],
         "packageFolder": "com/mathieu/tutu",
         "packageName": "com.mathieu.tutu",
       },
@@ -479,6 +479,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "entities": [],
         "packageFolder": "com/mathieu/tata",
         "packageName": "com.mathieu.tata",
       },
@@ -488,6 +489,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "entities": [],
         "packageFolder": "com/mathieu/titi",
         "packageName": "com.mathieu.titi",
       },
@@ -497,6 +499,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "entities": [],
         "packageFolder": "com/mathieu/toto",
         "packageName": "com.mathieu.toto",
       },
@@ -506,6 +509,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and deployment c
       "config": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "entities": [],
         "packageFolder": "com/mathieu/tutu",
         "packageName": "com.mathieu.tutu",
       },
@@ -537,37 +541,37 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
 {
   "exportedApplications": [
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "entities": [],
         "packageFolder": "com/mathieu/tata",
         "packageName": "com.mathieu.tata",
       },
     },
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "entities": [],
         "packageFolder": "com/mathieu/titi",
         "packageName": "com.mathieu.titi",
       },
     },
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "entities": [],
         "packageFolder": "com/mathieu/toto",
         "packageName": "com.mathieu.toto",
       },
     },
     {
-      "entities": [],
       "generator-jhipster": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "entities": [],
         "packageFolder": "com/mathieu/tutu",
         "packageName": "com.mathieu.tutu",
       },
@@ -578,6 +582,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "monolith",
         "baseName": "tata",
+        "entities": [],
         "packageFolder": "com/mathieu/tata",
         "packageName": "com.mathieu.tata",
       },
@@ -587,6 +592,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "gateway",
         "baseName": "titi",
+        "entities": [],
         "packageFolder": "com/mathieu/titi",
         "packageName": "com.mathieu.titi",
       },
@@ -596,6 +602,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "microservice",
         "baseName": "toto",
+        "entities": [],
         "packageFolder": "com/mathieu/toto",
         "packageName": "com.mathieu.toto",
       },
@@ -605,6 +612,7 @@ exports[`jdl - JDLImporter import when parsing JDL applications and exporting th
       "config": {
         "applicationType": "monolith",
         "baseName": "tutu",
+        "entities": [],
         "packageFolder": "com/mathieu/tutu",
         "packageName": "com.mathieu.tutu",
       },

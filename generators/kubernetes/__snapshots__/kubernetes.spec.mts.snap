@@ -2448,7 +2448,6 @@ metadata:
   namespace: default
   annotations:
     kubernetes.io/ingress.allow-http: "true"
-    kubernetes.io/ingress.class: gce
     kubernetes.io/ingress.global-static-ip-name: jhgate-ip
     cert-manager.io/issuer: letsencrypt-staging
     acme.cert-manager.io/http01-edit-in-place: "true"

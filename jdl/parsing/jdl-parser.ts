@@ -18,6 +18,7 @@
  */
 import { CstParser } from 'chevrotain';
 import { tokens as LexerTokens } from './lexer/lexer.js';
+import { NAME } from './lexer/shared-tokens.js';
 
 let instance;
 
@@ -68,9 +69,12 @@ export default class JDLParser extends CstParser {
     this.applicationDeclaration();
     this.applicationSubDeclaration();
     this.applicationSubConfig();
+    this.applicationSubNamespaceConfig();
     this.applicationSubEntities();
     this.applicationConfigDeclaration();
     this.configValue();
+    this.applicationNamespaceConfigDeclaration();
+    this.namespaceConfigValue();
     this.qualifiedName();
     this.list();
 
@@ -502,6 +506,7 @@ export default class JDLParser extends CstParser {
     this.RULE('applicationSubDeclaration', () => {
       this.MANY(() => {
         this.OR([
+          { ALT: () => this.SUBRULE(this.applicationSubNamespaceConfig) },
           { ALT: () => this.SUBRULE(this.applicationSubConfig) },
           { ALT: () => this.SUBRULE(this.applicationSubEntities) },
           { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
@@ -509,6 +514,45 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
         ]);
       });
+    });
+  }
+
+  applicationSubNamespaceConfig(): any {
+    this.RULE('applicationSubNamespaceConfig', () => {
+      this.CONSUME(LexerTokens.CONFIG);
+      this.CONSUME(LexerTokens.LPAREN);
+      this.CONSUME(LexerTokens.NAME, { LABEL: 'namespace' });
+      this.CONSUME(LexerTokens.RPAREN);
+      this.CONSUME(LexerTokens.LCURLY);
+      this.MANY(() => {
+        this.OR([
+          { ALT: () => this.CONSUME(LexerTokens.JAVADOC) },
+          { ALT: () => this.SUBRULE(this.applicationNamespaceConfigDeclaration) },
+        ]);
+      });
+      this.CONSUME(LexerTokens.RCURLY);
+    });
+  }
+
+  applicationNamespaceConfigDeclaration(): any {
+    this.RULE('applicationNamespaceConfigDeclaration', () => {
+      this.CONSUME(NAME);
+      this.SUBRULE(this.namespaceConfigValue);
+      this.OPTION(() => {
+        this.CONSUME(LexerTokens.COMMA);
+      });
+    });
+  }
+
+  namespaceConfigValue(): any {
+    this.RULE('namespaceConfigValue', () => {
+      this.OR([
+        { ALT: () => this.CONSUME(LexerTokens.BOOLEAN) },
+        { ALT: () => this.SUBRULE(this.qualifiedName) },
+        { ALT: () => this.SUBRULE(this.list) },
+        { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
+        { ALT: () => this.CONSUME(LexerTokens.STRING) },
+      ]);
     });
   }
 

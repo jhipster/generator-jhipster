@@ -107,8 +107,8 @@
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.4",
     "@types/lodash": "4.14.200",
-    "@typescript-eslint/eslint-plugin": "6.8.0",
-    "@typescript-eslint/parser": "6.8.0",
+    "@typescript-eslint/eslint-plugin": "6.9.0",
+    "@typescript-eslint/parser": "6.9.0",
     "@yeoman/adapter": "1.4.0",
     "@yeoman/conflicter": "1.1.0",
     "@yeoman/namespace": "1.0.0",
@@ -118,7 +118,7 @@
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "11.1.0",
-    "conf": "11.0.2",
+    "conf": "12.0.0",
     "debug": "4.3.4",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.6.1",
@@ -126,7 +126,7 @@
     "ejs": "3.1.9",
     "escape-string-regexp": "5.0.0",
     "eslint": "8.52.0",
-    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-import": "2.29.0",
     "eslint-plugin-unused-imports": "3.0.0",
     "execa": "8.0.1",
     "fast-xml-parser": "4.3.2",
@@ -155,7 +155,7 @@
     "run-async": "3.0.0",
     "semver": "7.5.4",
     "simple-git": "3.20.0",
-    "type-fest": "4.5.0",
+    "type-fest": "4.6.0",
     "uuid": "9.0.1",
     "winston": "3.11.0",
     "yaml": "2.3.3",
@@ -164,12 +164,12 @@
   },
   "devDependencies": {
     "@actions/core": "1.10.1",
-    "@node-loaders/esbuildx": "1.2.0",
+    "@node-loaders/esbuildx": "1.4.0",
     "@types/chai": "4.3.9",
     "@types/glob": "npm:noist@1.0.0",
     "@types/minimatch": "npm:noist@1.0.0",
     "@types/mocha": "10.0.3",
-    "@types/node": "18.18.6",
+    "@types/node": "18.18.7",
     "@types/sinon-chai": "3.2.11",
     "chai": "4.3.10",
     "chokidar": "3.5.3",
@@ -181,7 +181,7 @@
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-plugin-mocha": "10.2.0",
     "eslint-plugin-prettier": "5.0.1",
-    "esmocha": "1.0.1",
+    "esmocha": "1.1.0",
     "fs-extra": "11.1.1",
     "jest-extended": "4.0.2",
     "jsdoc": "4.0.2",
@@ -194,10 +194,10 @@
     "sort-keys": "5.0.0",
     "typescript": "5.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "^8.1.1"
+    "yeoman-test": "8.1.1"
   },
   "peerDependencies": {
-    "yeoman-test": "^8.1.1"
+    "yeoman-test": "8.1.1"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
