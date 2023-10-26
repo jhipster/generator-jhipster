@@ -45,6 +45,7 @@
     "react-loadable": "<%= nodeDependencies['react-loadable'] %>",
     "react-redux": "<%= nodeDependencies['react-redux'] %>",
     "react-redux-loading-bar": "<%= nodeDependencies['react-redux-loading-bar'] %>",
+    "react-router": "<%= nodeDependencies['react-router-dom'] %>",
     "react-router-dom": "<%= nodeDependencies['react-router-dom'] %>",
     "react-toastify": "<%= nodeDependencies['react-toastify'] %>",
     "react-transition-group": "<%= nodeDependencies['react-transition-group'] %>",
@@ -64,6 +65,9 @@
     <%_ } _%>
   },
   "devDependencies": {
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    "@module-federation/utilities": "<%= nodeDependencies['@module-federation/utilities'] %>",
+<%_ } _%>
     "@testing-library/react": "<%= nodeDependencies['@testing-library/react'] %>",
     "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/lodash": "<%= nodeDependencies['@types/lodash'] %>",
