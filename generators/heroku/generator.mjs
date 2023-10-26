@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import crypto from 'crypto';
-import * as _ from 'lodash-es';
+import { kebabCase } from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
 
@@ -60,7 +59,6 @@ export default class HerokuGenerator extends BaseGenerator {
       return;
     }
 
-    this.randomPassword = crypto.randomBytes(20).toString('hex');
     this.herokuSkipBuild = this.options.skipBuild;
     this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
   }
@@ -185,7 +183,7 @@ export default class HerokuGenerator extends BaseGenerator {
   get loading() {
     return this.asConfiguringTaskGroup({
       saveConfig() {
-        this.herokuAppName = _.kebabCase(this.jhipsterConfig.herokuAppName);
+        this.herokuAppName = kebabCase(this.jhipsterConfig.herokuAppName);
         this.herokuJavaVersion = this.jhipsterConfig.herokuJavaVersion;
         this.herokuDeployType = this.jhipsterConfig.herokuDeployType;
       },
