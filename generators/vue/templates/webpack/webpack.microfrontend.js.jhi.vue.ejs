@@ -21,14 +21,19 @@
 const { DefinePlugin } = require('webpack');
 <%_ } _%>
 <&_ } -&>
-<&_ if (fragment.moduleFederationSection) { -&>
-<%_ if (applicationTypeGateway) { _%>
-        remotes: {
-  <%_ for (const remote of microfrontends) { _%>
-          '@<%= remote.lowercaseBaseName %>': `<%= remote.lowercaseBaseName %>@/<%= remote.endpointPrefix %>/remoteEntry.js`,
-  <%_ } _%>
-        },
+
+<&_ if (fragment.configSection) { -&>
+<%_ if (applicationTypeGateway && clientFrameworkVue) { _%>
+    resolve: {
+      fallback: {
+        // Workaround https://github.com/module-federation/universe/issues/1575
+        path: false,
+      },
+    },
 <%_ } _%>
+<&_ } -&>
+
+<&_ if (fragment.moduleFederationSection) { -&>
 <%_ if (applicationTypeMicroservice) { _%>
         exposes: {
           './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
@@ -44,6 +49,7 @@ const { DefinePlugin } = require('webpack');
           ),
         },
 <&_ } -&>
+
 <&_ if (fragment.pluginsSection) { -&>
 <%_ if (applicationTypeMicroservice) { _%>
       new DefinePlugin({

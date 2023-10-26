@@ -20,6 +20,7 @@
  // Register sections and max allowed fragments, 0 for unlimited.
  fragments.registerSections({
    importsSection:0,
+   configSection: 0,
    moduleFederationSection: 0,
    pluginsSection: 0,
  });
@@ -48,6 +49,7 @@ module.exports = ({ serve }) => {
       chunkIds: 'named',
       runtimeChunk: false,
     },
+<&- fragments.configSection() &>
     plugins: [
       new ModuleFederationPlugin({
 <%_ if (applicationTypeMicroservice) { _%>
