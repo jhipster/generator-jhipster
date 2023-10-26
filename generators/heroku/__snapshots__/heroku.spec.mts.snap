@@ -591,23 +591,11 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
   ],
   [
     "spawnCommand",
-    "git add .",
-  ],
-  [
-    "spawnCommand",
-    "git commit -m "Deploy to Heroku" --allow-empty",
-  ],
-  [
-    "spawnCommand",
     "heroku config:set MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" --app jhipster-test",
   ],
   [
     "spawnCommand",
     "heroku buildpacks:add heroku/java --app jhipster-test",
-  ],
-  [
-    "spawnCommand",
-    "git push heroku HEAD:main",
   ],
 ]
 `;

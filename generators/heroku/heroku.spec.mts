@@ -35,7 +35,6 @@ describe('generator - Heroku', () => {
 
     stub.withArgs('spawnCommand', 'heroku --version').returns(createSpawnCommandReturn());
     stub.withArgs('spawnCommand', 'heroku plugins').returns(createSpawnCommandReturn({ stdout: 'heroku-cli-deploy', stderr: '' }));
-    stub.withArgs('spawnCommand', 'git init').returns(createSpawnCommandReturn());
   });
   afterEach(() => {
     stub.resetHistory();
@@ -124,13 +123,10 @@ describe('generator - Heroku', () => {
         stub
           .withArgs('spawnCommand', `heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`)
           .returns(createSpawnCommandReturn());
-        stub.withArgs('spawnCommand', 'git add .').returns(createSpawnCommandReturn());
-        stub.withArgs('spawnCommand', 'git commit -m "Deploy to Heroku" --allow-empty').returns(createSpawnCommandReturn());
         stub
           .withArgs('spawnCommand', `heroku config:set MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" --app ${herokuAppName}`)
           .returns(createSpawnCommandReturn());
         stub.withArgs('spawnCommand', `heroku buildpacks:add heroku/java --app ${herokuAppName}`).returns(createSpawnCommandReturn());
-        stub.withArgs('spawnCommand', 'git push heroku HEAD:master').returns(createSpawnCommandReturn());
         await helpers
           .createJHipster(GENERATOR_HEROKU)
           .withJHipsterConfig()

@@ -31,6 +31,8 @@ import { createPomStorage } from '../maven/support/pom-store.mjs';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.mjs';
 
 export default class HerokuGenerator extends BaseGenerator {
+  hasHerokuCli;
+
   herokuAppName;
   herokuDeployType;
   herokuJavaVersion;
@@ -76,14 +78,22 @@ export default class HerokuGenerator extends BaseGenerator {
     return this.asInitializingTaskGroup({
       async checkInstallation() {
         const { exitCode } = await this.printChildOutput(this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' }));
-        if (exitCode !== 0) {
-          throw new Error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
+        this.hasHerokuCli = exitCode === 0;
+        if (!this.hasHerokuCli) {
+          const error = "You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/";
+          if (this.skipChecks) {
+            this.log.warn(error);
+            this.log.warn('Generation will continue with limited support');
+          } else {
+            throw new Error(error);
+          }
         }
       },
 
       initializing() {
         this.log.log(chalk.bold('Heroku configuration is starting'));
         this.dynoSize = 'Free';
+        this.herokuAppExists = Boolean(this.jhipsterConfig.herokuAppName);
       },
     });
   }
@@ -95,7 +105,7 @@ export default class HerokuGenerator extends BaseGenerator {
   get prompting() {
     return this.asPromptingTaskGroup({
       async askForApp() {
-        if (this.jhipsterConfig.herokuAppName) {
+        if (this.hasHerokuCli && this.herokuAppExists) {
           const { stdout, exitCode } = await this.spawnCommand(`heroku apps:info --json ${this.jhipsterConfig.herokuAppName}`, {
             reject: false,
             stdio: 'pipe',
@@ -110,13 +120,11 @@ export default class HerokuGenerator extends BaseGenerator {
               this.dynoSize = json.dynos[0].size;
             }
             this.log.verboseInfo(`Deploying as existing application: ${chalk.bold(this.herokuAppName)}`);
-            this.herokuAppExists = true;
             this.config.set({
               herokuAppName: this.herokuAppName,
             });
           }
         } else {
-          this.herokuAppExists = false;
           await this.prompt(
             [
               {
@@ -201,6 +209,8 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async gitInit() {
+        if (!this.herokuDeployType === 'git') return;
+
         const git = this.createGit();
         if (await git.checkIsRepo()) {
           this.log.log(chalk.bold('\nUsing existing Git repository'));
@@ -211,6 +221,8 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async installHerokuDeployPlugin() {
+        if (!this.hasHerokuCli) return;
+
         const cliPlugin = 'heroku-cli-deploy';
 
         const { stdout, stderr, exitCode } = await this.spawnCommand('heroku plugins', { reject: false, stdio: 'pipe' });
@@ -229,7 +241,7 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async herokuCreate() {
-        if (this.herokuAppExists) return;
+        if (!this.hasHerokuCli || this.herokuAppExists) return;
 
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
@@ -282,7 +294,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
-            throw new Error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
           } else {
             throw new Error(stderr);
           }
@@ -290,19 +302,7 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async herokuAddonsCreate({ application }) {
-        const addonCreateCallback = (addon, err) => {
-          if (err) {
-            const verifyAccountUrl = 'https://heroku.com/verify';
-            if (err.includes(verifyAccountUrl)) {
-              this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
-              throw new Error(err);
-            } else {
-              this.log.verboseInfo(`No new ${addon} addon created`);
-            }
-          } else {
-            this.log.ok(`Created ${addon} addon`);
-          }
-        };
+        if (!this.hasHerokuCli) return;
 
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
@@ -311,7 +311,7 @@ export default class HerokuGenerator extends BaseGenerator {
             reject: false,
             stdio: 'pipe',
           });
-          addonCreateCallback('Elasticsearch', stderr);
+          this.checkAddOnReturn({ addOn: 'Elasticsearch', stderr });
         }
 
         let dbAddOn;
@@ -329,7 +329,7 @@ export default class HerokuGenerator extends BaseGenerator {
             reject: false,
             stdio: 'pipe',
           });
-          addonCreateCallback('Database', stderr);
+          this.checkAddOnReturn({ addOn: 'Database', stderr });
         } else {
           this.log.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
         }
@@ -342,58 +342,49 @@ export default class HerokuGenerator extends BaseGenerator {
         }
 
         if (cacheAddOn) {
-          this.log.log(chalk.bold(`\nProvisioning cache addon ${cacheAddOn}`));
+          this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
           const { stderr } = await this.spawnCommand(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, {
             reject: false,
             stdio: 'pipe',
           });
-          addonCreateCallback('Cache', stderr);
+          this.checkAddOnReturn({ addOn: 'Cache', stderr });
         } else {
           this.log.log(chalk.bold(`\nNo suitable cache addon for cacheprovider ${this.cacheProvider} available.`));
         }
       },
 
-      configureJHipsterRegistry({ application }) {
-        if (this.herokuAppExists) return undefined;
+      async configureJHipsterRegistry({ application }) {
+        if (!this.hasHerokuCli || this.herokuAppExists || !application.serviceDiscoveryEureka) return undefined;
 
-        if (application.serviceDiscoveryEureka) {
-          const prompts = [
-            {
-              type: 'input',
-              name: 'herokuJHipsterRegistryApp',
-              message: 'What is the name of your JHipster Registry Heroku application?',
-              default: 'jhipster-registry',
-            },
-            {
-              type: 'input',
-              name: 'herokuJHipsterRegistryUsername',
-              message: 'What is your JHipster Registry username?',
-              default: 'admin',
-            },
-            {
-              type: 'input',
-              name: 'herokuJHipsterRegistryPassword',
-              message: 'What is your JHipster Registry password?',
-              default: 'password',
-            },
-          ];
+        this.log.verboseInfo('');
+        const answers = await this.prompt([
+          {
+            type: 'input',
+            name: 'herokuJHipsterRegistryApp',
+            message: 'What is the name of your JHipster Registry Heroku application?',
+            default: 'jhipster-registry',
+          },
+          {
+            type: 'input',
+            name: 'herokuJHipsterRegistryUsername',
+            message: 'What is your JHipster Registry username?',
+            default: 'admin',
+          },
+          {
+            type: 'input',
+            name: 'herokuJHipsterRegistryPassword',
+            message: 'What is your JHipster Registry password?',
+            default: 'password',
+          },
+        ]);
 
-          this.log.verboseInfo('');
-          return this.prompt(prompts).then(async props => {
-            // Encode username/password to avoid errors caused by spaces
-            props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
-            props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
-            const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
-            const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-            await this.printChildOutput(
-              this.spawnCommand(configSetCmd, {
-                stdio: 'pipe',
-              }),
-            );
-          });
-        }
-        return undefined;
+        // Encode username/password to avoid errors caused by spaces
+        const herokuJHipsterRegistryUsername = encodeURIComponent(answers.herokuJHipsterRegistryUsername);
+        const herokuJHipsterRegistryPassword = encodeURIComponent(answers.herokuJHipsterRegistryPassword);
+        const herokuJHipsterRegistry = `https://${herokuJHipsterRegistryUsername}:${herokuJHipsterRegistryPassword}@${answers.herokuJHipsterRegistryApp}.herokuapp.com`;
+        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
+        await this.printChildOutput(this.spawnCommand(configSetCmd, { stdio: 'pipe' }));
       },
     });
   }
@@ -411,7 +402,9 @@ export default class HerokuGenerator extends BaseGenerator {
           herokuAppName: this.herokuAppName,
           dynoSize: this.dynoSize,
           herokuJavaVersion: this.herokuJavaVersion,
+          herokuDeployType: this.herokuDeployType,
         };
+
         this.writeFile('bootstrap-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`, context);
         this.writeFile('application-heroku.yml.ejs', `${SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, context);
         this.writeFile('Procfile.ejs', 'Procfile', context);
@@ -459,7 +452,7 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async productionDeploy({ application }) {
-        if (this.herokuSkipDeploy) {
+        if (this.herokuSkipDeploy || !this.hasHerokuCli) {
           this.log.log(chalk.bold('\nSkipping deployment'));
           return;
         }
@@ -467,15 +460,8 @@ export default class HerokuGenerator extends BaseGenerator {
         if (this.herokuDeployType === 'git') {
           try {
             this.log.log(chalk.bold('\nUpdating Git repository'));
-            const gitAddCmd = 'git add .';
-            this.log.log(chalk.cyan(gitAddCmd));
-
-            await this.printChildOutput(this.spawnCommand(gitAddCmd));
-
-            const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
-            this.log.log(chalk.cyan(gitCommitCmd));
-
-            await this.printChildOutput(this.spawnCommand(gitCommitCmd));
+            const git = this.createGit();
+            await git.add('.').commit('Deploy to Heroku', { '--allow-empty': null });
 
             let buildpack = 'heroku/java';
             let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
@@ -529,7 +515,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
             this.log.log(chalk.bold('\nDeploying application'));
 
-            await this.printChildOutput(this.spawnCommand('git push heroku HEAD:main'));
+            await git.push('heroku', 'HEAD:main');
 
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
@@ -597,5 +583,19 @@ export default class HerokuGenerator extends BaseGenerator {
       data.toString().split(/\r?\n/).forEach(log);
     });
     return child;
+  }
+
+  checkAddOnReturn({ addon, stderr }) {
+    if (stderr) {
+      const verifyAccountUrl = 'https://heroku.com/verify';
+      if (stderr.includes(verifyAccountUrl)) {
+        this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
+        throw new Error(stderr);
+      } else {
+        this.log.verboseInfo(`No new ${addon} addon created`);
+      }
+    } else {
+      this.log.ok(`Created ${addon} addon`);
+    }
   }
 }
