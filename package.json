@@ -194,10 +194,10 @@
     "sort-keys": "5.0.0",
     "typescript": "5.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "8.1.1"
+    "yeoman-test": "8.2.0"
   },
   "peerDependencies": {
-    "yeoman-test": "8.1.1"
+    "yeoman-test": "8.2.0"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
