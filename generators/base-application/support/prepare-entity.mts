@@ -146,7 +146,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
-    entityWithConfig.changelogDateForRecent = parseChangelog(entityWithConfig.changelogDate);
+    entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
   }
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
