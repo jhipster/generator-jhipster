@@ -646,6 +646,9 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
       "--app",
       "jhipster-test",
     ],
+    {
+      "reject": false,
+    },
   ],
 ]
 `;
