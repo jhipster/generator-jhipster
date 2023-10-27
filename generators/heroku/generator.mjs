@@ -80,7 +80,8 @@ export default class HerokuGenerator extends BaseGenerator {
         const { exitCode } = await this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' });
         this.hasHerokuCli = exitCode === 0;
         if (!this.hasHerokuCli) {
-          const error = "You don't have the Heroku CLI installed. See https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli to learn how to install it.";
+          const error =
+            "You don't have the Heroku CLI installed. See https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli to learn how to install it.";
           if (this.skipChecks) {
             this.log.warn(error);
             this.log.warn('Generation will continue with limited support');
@@ -307,11 +308,15 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          const { stdout, stderr } = await this.spawnCommand('heroku', ['addons:create', 'bonsai:sandbox-6', '--as', 'BONSAI', '--app', this.herokuAppName], {
-            reject: false,
-            stdio: 'pipe',
-          });
-          this.checkAddOnReturn({addOn: 'Elasticsearch', stdout, stderr});
+          const { stdout, stderr } = await this.spawnCommand(
+            'heroku',
+            ['addons:create', 'bonsai:sandbox-6', '--as', 'BONSAI', '--app', this.herokuAppName],
+            {
+              reject: false,
+              stdio: 'pipe',
+            },
+          );
+          this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout, stderr });
         }
 
         let dbAddOn;
@@ -325,11 +330,15 @@ export default class HerokuGenerator extends BaseGenerator {
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          const { stdout, stderr } = await this.spawnCommand('heroku', ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName], {
-            reject: false,
-            stdio: 'pipe',
-          });
-          this.checkAddOnReturn({addOn: 'Database', stdout, stderr});
+          const { stdout, stderr } = await this.spawnCommand(
+            'heroku',
+            ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
+            {
+              reject: false,
+              stdio: 'pipe',
+            },
+          );
+          this.checkAddOnReturn({ addOn: 'Database', stdout, stderr });
         } else {
           this.log.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
         }
@@ -344,10 +353,14 @@ export default class HerokuGenerator extends BaseGenerator {
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stdout, stderr } = await this.spawnCommand('heroku', ['addons:create', cacheAddOn[0], cacheAddOn[1], cacheAddOn[2], '--app', this.herokuAppName], {
-            reject: false,
-            stdio: 'pipe',
-          });
+          const { stdout, stderr } = await this.spawnCommand(
+            'heroku',
+            ['addons:create', cacheAddOn[0], cacheAddOn[1], cacheAddOn[2], '--app', this.herokuAppName],
+            {
+              reject: false,
+              stdio: 'pipe',
+            },
+          );
           this.checkAddOnReturn({ addOn: 'Cache', stdout, stderr });
         }
       },
@@ -415,10 +428,7 @@ export default class HerokuGenerator extends BaseGenerator {
       addHerokuBuildPlugin({ application }) {
         if (!application.buildToolGradle) return;
         // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
-        this.editFile(
-          'build.gradle',
-          addGradlePluginCallback({ id: 'com.heroku.sdk.heroku-gradle', version: '1.0.4' }),
-        );
+        this.editFile('build.gradle', addGradlePluginCallback({ id: 'com.heroku.sdk.heroku-gradle', version: '1.0.4' }));
         // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
       },
@@ -586,7 +596,7 @@ export default class HerokuGenerator extends BaseGenerator {
     return child;
   }
 
-  checkAddOnReturn({addOn, stdout, stderr}) {
+  checkAddOnReturn({ addOn, stdout, stderr }) {
     if (stdout) {
       this.log.ok(`Created ${addOn.valueOf()} add-on`);
       this.log.ok(stdout);
