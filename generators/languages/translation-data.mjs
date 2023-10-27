@@ -20,7 +20,6 @@ import { inspect } from 'node:util';
 import * as _ from 'lodash-es';
 import { transform } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
-import { clearFileState } from 'mem-fs-editor/state';
 
 const { get } = _;
 
@@ -49,7 +48,7 @@ export default class TranslationData {
     this.translations = translations;
   }
 
-  loadFromStreamTransform({ baseDir, enableTranslation, clientSrcDir, nativeLanguage, fallbackLanguage = 'en' }) {
+  loadFromStreamTransform({ enableTranslation, clientSrcDir, nativeLanguage, fallbackLanguage = 'en' }) {
     const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
     const minimatchNative = new Minimatch(`**/${clientSrcDir}i18n/${nativeLanguage}/*.json`);
     return transform(file => {
