@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+import { setTimeout } from 'node:timers/promises';
 import { kebabCase } from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
@@ -291,6 +292,11 @@ export default class HerokuGenerator extends BaseGenerator {
               // ensure that the git remote is the same as the appName
               await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
+
+              if (!this.skipChecks) {
+                this.log.info('Waiting a few seconds for the application to be provisioned');
+                await setTimeout(3000);
+              }
             }
           } else if (stderr.includes('Invalid credentials')) {
             this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
