@@ -247,7 +247,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
         const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
-        this.log.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
+        this.log.log(chalk.bold('\nCreating Heroku application and setting up Node environment'));
         const { stdout, stderr, exitCode } = await this.printChildOutput(
           this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, {
             reject: false,
