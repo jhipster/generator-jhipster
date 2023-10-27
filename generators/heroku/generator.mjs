@@ -90,6 +90,15 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
+      async heroku() {
+        if (!this.hasHerokuCli) return;
+
+        const { exitCode } = await this.spawnHerokuCommand('whoami', { reject: false });
+        if (exitCode !== 0) {
+          this.log.log(chalk.bold('Log in heroku to continue.'));
+          await this.spawnHerokuCommand('login --interactive', { stdio: 'inherit' });
+        }
+      },
 
       initializing() {
         this.log.log(chalk.bold('Heroku configuration is starting'));
@@ -285,8 +294,8 @@ export default class HerokuGenerator extends BaseGenerator {
             } else {
               const { stdout } = await this.spawnHeroku(['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
-              this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
               this.log.verboseInfo(stdout);
+              this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
 
               // ensure that the git remote is the same as the appName
               await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
@@ -582,9 +591,13 @@ export default class HerokuGenerator extends BaseGenerator {
    * @param  {import('execa').Options} opt
    * @returns {ReturnType<BaseGenerator['spawnCommand']>}
    */
-  spawnHerokuCommand(command, opt = {}) {
+  spawnHerokuCommand(command, opt) {
     const varargs = opt ? [opt] : [];
-    return this.printChildOutput(this.spawnCommand(`heroku ${command}`, ...varargs));
+    const child = this.spawnCommand(`heroku ${command}`, ...varargs);
+    if (opt?.stdio !== 'pipe') {
+      return child;
+    }
+    return this.printChildOutput(child);
   }
 
   /**
@@ -594,11 +607,15 @@ export default class HerokuGenerator extends BaseGenerator {
    */
   spawnHeroku(args, opt) {
     const varargs = opt ? [opt] : [];
-    return this.printChildOutput(this.spawn('heroku', args, ...varargs));
+    const child = this.spawn('heroku', args, ...varargs);
+    if (opt?.stdio !== 'pipe') {
+      return child;
+    }
+    return this.printChildOutput();
   }
 
   /**
-   * @template {{stdout: any; stderr: any} = ReturnType<BaseGenerator['spawnCommand']>} T
+   * @template {{stdout: any; stderr: any}} T
    * @param {T} child
    * @param {(chunk: any) => void} child
    * @returns {T}
