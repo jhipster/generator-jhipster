@@ -1100,7 +1100,7 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     [
       "git:remote",
       "--app",
-      "",
+      "random-app-name",
     ],
     {
       "reject": false,
@@ -1116,7 +1116,7 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
       "--as",
       "DATABASE",
       "--app",
-      "",
+      "random-app-name",
     ],
   ],
 ]
@@ -1129,7 +1129,7 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
   "generator-jhipster": {
     "baseName": "jhipster",
     "entities": [],
-    "herokuAppName": "",
+    "herokuAppName": "random-app-name",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
   }
@@ -1250,7 +1250,7 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
 
 eureka:
   instance:
-    hostname: .herokuapp.com
+    hostname: random-app-name.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
 
