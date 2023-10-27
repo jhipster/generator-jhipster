@@ -212,7 +212,7 @@ export default class HerokuGenerator extends BaseGenerator {
       async gitInit() {
         if (!this.herokuDeployType === 'git') return;
 
-        const git = this.createGit();
+        const git = this.createGit().outputHandler((_command, stdout, stderr) => this.printChildOutput({ stdout, stderr }));
         if (await git.checkIsRepo()) {
           this.log.log(chalk.bold('\nUsing existing Git repository'));
         } else {
@@ -468,7 +468,7 @@ export default class HerokuGenerator extends BaseGenerator {
         if (this.herokuDeployType === 'git') {
           try {
             this.log.log(chalk.bold('\nUpdating Git repository'));
-            const git = this.createGit();
+            const git = this.createGit().outputHandler((_command, stdout, stderr) => this.printChildOutput({ stdout, stderr }));
             await git.add('.').commit('Deploy to Heroku', { '--allow-empty': null });
 
             let buildpack = 'heroku/java';
@@ -586,11 +586,11 @@ export default class HerokuGenerator extends BaseGenerator {
    * @param {(chunk: any) => void} child
    * @returns {ReturnType<BaseGenerator['spawnCommand']>}
    */
-  printChildOutput(child, log = data => this.log.verboseInfo(data)) {
-    child.stdout.on('data', data => {
+  printChildOutput({ stdout, stderr }, log = data => this.log.verboseInfo(data)) {
+    stdout.on('data', data => {
       data.toString().split(/\r?\n/).forEach(log);
     });
-    child.stderr.on('data', data => {
+    stderr.on('data', data => {
       data.toString().split(/\r?\n/).forEach(log);
     });
     return child;
