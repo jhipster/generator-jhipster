@@ -301,7 +301,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         };
         this.queueTransformStream(
           {
-            name: 'updating package.json dependency versions',
+            name: 'updating package.json dependencies versions',
             filter: file => isFileStateModified(file) && isPackageJson(file) && file.path.startsWith(this.destinationPath()),
             refresh: false,
           },
