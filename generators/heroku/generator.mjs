@@ -80,7 +80,7 @@ export default class HerokuGenerator extends BaseGenerator {
         const { exitCode } = await this.printChildOutput(this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' }));
         this.hasHerokuCli = exitCode === 0;
         if (!this.hasHerokuCli) {
-          const error = "You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/.";
+          const error = "You don't have the Heroku CLI installed. See https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli to learn how to install it.";
           if (this.skipChecks) {
             this.log.warn(error);
             this.log.warn('Generation will continue with limited support');
