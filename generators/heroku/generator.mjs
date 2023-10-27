@@ -611,7 +611,7 @@ export default class HerokuGenerator extends BaseGenerator {
     if (opt?.stdio !== 'pipe') {
       return child;
     }
-    return this.printChildOutput();
+    return this.printChildOutput(child);
   }
 
   /**

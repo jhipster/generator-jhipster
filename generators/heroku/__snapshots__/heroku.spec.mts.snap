@@ -173,6 +173,13 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
   ],
   [
     "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -384,6 +391,13 @@ exports[`generator - Heroku monolith application in the US calls should match sn
   ],
   [
     "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -589,6 +603,13 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     {
       "reject": false,
       "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
     },
   ],
   [
@@ -825,6 +846,13 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
   ],
   [
     "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -1032,6 +1060,13 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     {
       "reject": false,
       "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
     },
   ],
   [
@@ -1261,6 +1296,13 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
   ],
   [
     "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+    },
+  ],
+  [
+    "spawnCommand",
     "heroku plugins",
     {
       "reject": false,
@@ -1485,6 +1527,13 @@ exports[`generator - Heroku monolith application with existing app calls should 
     {
       "reject": false,
       "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
     },
   ],
   [
