@@ -77,7 +77,7 @@ export default class HerokuGenerator extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       async checkInstallation() {
-        const { exitCode } = await this.printChildOutput(this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' }));
+        const { exitCode } = await this.spawnCommand('heroku --version', { reject: false, stdio: 'pipe' });
         this.hasHerokuCli = exitCode === 0;
         if (!this.hasHerokuCli) {
           const error = "You don't have the Heroku CLI installed. See https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli to learn how to install it.";
@@ -87,8 +87,6 @@ export default class HerokuGenerator extends BaseGenerator {
           } else {
             throw new Error(`${error} To ignore this error run 'jhipster heroku --skip-checks'`);
           }
-        } else {
-          await this.spawnCommand('heroku login', { stdio: 'inherit' });
         }
       },
 
@@ -309,50 +307,48 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          const { stderr } = await this.spawnCommand(`heroku addons:create bonsai:sandbox-6 --as BONSAI --app ${this.herokuAppName}`, {
+          const { stdout, stderr } = await this.spawnCommand('heroku', ['addons:create', 'bonsai:sandbox-6', '--as', 'BONSAI', '--app', this.herokuAppName], {
             reject: false,
             stdio: 'pipe',
           });
-          this.checkAddOnReturn({ addOn: 'Elasticsearch', stderr });
+          this.checkAddOnReturn({addOn: 'Elasticsearch', stdout, stderr});
         }
 
         let dbAddOn;
         if (application.prodDatabaseTypePostgresql) {
-          dbAddOn = 'heroku-postgresql --as DATABASE';
+          dbAddOn = 'heroku-postgresql';
         } else if (application.prodDatabaseTypeMysql) {
-          dbAddOn = 'jawsdb:kitefin --as DATABASE';
+          dbAddOn = 'jawsdb:kitefin';
         } else if (application.prodDatabaseTypeMariadb) {
-          dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
+          dbAddOn = 'jawsdb-maria:kitefin';
         }
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          const { stderr } = await this.spawnCommand(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {
+          const { stdout, stderr } = await this.spawnCommand('heroku', ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName], {
             reject: false,
             stdio: 'pipe',
           });
-          this.checkAddOnReturn({ addOn: 'Database', stderr });
+          this.checkAddOnReturn({addOn: 'Database', stdout, stderr});
         } else {
           this.log.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
         }
 
         let cacheAddOn;
         if (application.cacheProviderMemcached) {
-          cacheAddOn = 'memcachier:dev --as MEMCACHIER';
+          cacheAddOn = ['memcachier:dev', '--as', 'MEMCACHIER'];
         } else if (application.cacheProviderRedis) {
-          cacheAddOn = 'heroku-redis:hobby-dev --as REDIS';
+          cacheAddOn = ['heroku-redis:hobby-dev', '--as', 'REDIS'];
         }
 
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stderr } = await this.spawnCommand(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, {
+          const { stdout, stderr } = await this.spawnCommand('heroku', ['addons:create', cacheAddOn[0], cacheAddOn[1], cacheAddOn[2], '--app', this.herokuAppName], {
             reject: false,
             stdio: 'pipe',
           });
-          this.checkAddOnReturn({ addOn: 'Cache', stderr });
-        } else {
-          this.log.log(chalk.bold(`\nNo suitable cache addon for cacheprovider ${this.cacheProvider} available.`));
+          this.checkAddOnReturn({ addOn: 'Cache', stdout, stderr });
         }
       },
 
@@ -385,8 +381,8 @@ export default class HerokuGenerator extends BaseGenerator {
         const herokuJHipsterRegistryUsername = encodeURIComponent(answers.herokuJHipsterRegistryUsername);
         const herokuJHipsterRegistryPassword = encodeURIComponent(answers.herokuJHipsterRegistryPassword);
         const herokuJHipsterRegistry = `https://${herokuJHipsterRegistryUsername}:${herokuJHipsterRegistryPassword}@${answers.herokuJHipsterRegistryApp}.herokuapp.com`;
-        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-        await this.printChildOutput(this.spawnCommand(configSetCmd, { stdio: 'pipe' }));
+        const configSetCmd = ['config:set', 'JHIPSTER_REGISTRY_URL', herokuJHipsterRegistry, '--app', this.herokuAppName];
+        await this.printChildOutput(this.spawnCommand('heroku', configSetCmd, { stdio: 'pipe' }));
       },
     });
   }
@@ -466,20 +462,22 @@ export default class HerokuGenerator extends BaseGenerator {
             await git.add('.').commit('Deploy to Heroku', { '--allow-empty': null });
 
             let buildpack = 'heroku/java';
-            let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
+            let configName = 'MAVEN_CUSTOM_OPTS';
+            let configValues = '-Pprod,heroku -DskipTests';
             if (application.buildToolGradle) {
               buildpack = 'heroku/gradle';
-              configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
+              configName = 'GRADLE_TASK';
+              configValues = 'stage -Pprod -PnodeInstall';
             }
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
-            this.log.log(`heroku config:set ${configVars}--app ${this.herokuAppName}`)
-            await this.spawnCommand(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
-            const { stdout: data } = await this.spawnCommand(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+            // todo: check if config already exists
+            await this.spawnCommand('heroku', ['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
+
+            // todo: check if buildpack already exists
+            const { stdout: data } = await this.spawnCommand('heroku', ['buildpacks:add', buildpack, '--app', this.herokuAppName]);
             if (data) {
               this.logger.info(data);
-              // remote:  !     The following add-ons were automatically provisioned: . These add-ons may incur additional cost,
-              // which is prorated to the second. Run `heroku addons` for more info.
               if (data.includes('Run `heroku addons` for more info.')) {
                 await this.spawnCommand('heroku addons');
               }
@@ -516,7 +514,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.log('');
             }
 
-            this.log.log(chalk.bold('\nDeploying application'));
+            this.log.log(chalk.bold('\nDeploying application...'));
 
             await git.push('heroku', 'HEAD:main');
 
@@ -588,17 +586,18 @@ export default class HerokuGenerator extends BaseGenerator {
     return child;
   }
 
-  checkAddOnReturn({ addon, stderr }) {
-    if (stderr) {
+  checkAddOnReturn({addOn, stdout, stderr}) {
+    if (stdout) {
+      this.log.ok(`Created ${addOn.valueOf()} add-on`);
+      this.log.ok(stdout);
+    } else if (stderr) {
       const verifyAccountUrl = 'https://heroku.com/verify';
       if (stderr.includes(verifyAccountUrl)) {
         this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
         throw new Error(stderr);
       } else {
-        this.log.verboseInfo(`No new ${addon} addon created`);
+        this.log.verboseInfo(`No new ${addOn.valueOf()} add-on created`);
       }
-    } else {
-      this.log.ok(`Created ${addon} addon`);
     }
   }
 }
