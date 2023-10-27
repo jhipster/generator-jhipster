@@ -362,7 +362,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
           const { stdout, stderr } = await this.spawn(
             'heroku',
-            ['addons:create', cacheAddOn[0], cacheAddOn[1], cacheAddOn[2], '--app', this.herokuAppName],
+            ['addons:create', ...cacheAddOn, '--app', this.herokuAppName],
             {
               reject: false,
               stdio: 'pipe',
