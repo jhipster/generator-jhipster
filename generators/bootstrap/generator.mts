@@ -115,7 +115,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       async queueCommitPrettierConfig() {
         await this.queueCommitPrettierConfig();
 
-        this.env.sharedFs.once('change', filePath => {
+        this.env.sharedFs.on('change', filePath => {
           if (isPrettierConfigFilePath(filePath)) {
             this.queueCommitPrettierConfig();
           }
