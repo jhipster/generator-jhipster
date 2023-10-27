@@ -90,7 +90,7 @@ export default class HerokuGenerator extends BaseGenerator {
           }
         }
       },
-      async heroku() {
+      async herokuLogin() {
         if (!this.hasHerokuCli) return;
 
         const { exitCode } = await this.spawnHerokuCommand('whoami', { reject: false });
@@ -360,14 +360,10 @@ export default class HerokuGenerator extends BaseGenerator {
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stdout, stderr } = await this.spawn(
-            'heroku',
-            ['addons:create', ...cacheAddOn, '--app', this.herokuAppName],
-            {
-              reject: false,
-              stdio: 'pipe',
-            },
-          );
+          const { stdout, stderr } = await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName], {
+            reject: false,
+            stdio: 'pipe',
+          });
           this.checkAddOnReturn({ addOn: 'Cache', stdout, stderr });
         }
       },
@@ -463,7 +459,7 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nBuilding application'));
 
         // Use npm script so blueprints just need to override it.
-        await this.spawnCommand('npm run java:jar:prod', { stdio: 'inherit' });
+        await this.printChildOutput(this.spawnCommand('npm run java:jar:prod'));
       },
 
       async productionDeploy({ application }) {
