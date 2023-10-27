@@ -99,15 +99,9 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
     return {
-      queueTransform() {
+      queueMultistepTransform() {
         const multiStepTransform = createMultiStepTransform();
         this.queueMultistepTransform(multiStepTransform);
-
-        this.env.sharedFs.on('change', filePath => {
-          if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
-            this.queueMultistepTransform(multiStepTransform);
-          }
-        });
       },
     };
   }
@@ -121,7 +115,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       async queueCommitPrettierConfig() {
         await this.queueCommitPrettierConfig();
 
-        this.env.sharedFs.on('change', filePath => {
+        this.env.sharedFs.once('change', filePath => {
           if (isPrettierConfigFilePath(filePath)) {
             this.queueCommitPrettierConfig();
           }
@@ -149,7 +143,12 @@ export default class BootstrapGenerator extends BaseGenerator {
           },
           multiStepTransform,
         );
-        await this.pipeline();
+
+        this.env.sharedFs.on('change', filePath => {
+          if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
+            this.queueMultistepTransform(multiStepTransform);
+          }
+        });
       },
       taskName: MULTISTEP_TRANSFORM_QUEUE,
       queueName: MULTISTEP_TRANSFORM_QUEUE,
@@ -170,15 +169,15 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   async commitPrettierConfig() {
     await this.commitSharedFs({
+      log: 'prettier configuration files commited to disk',
       filter: file => isPrettierConfigFilePath(file.path),
     });
-    this.log.ok('committed prettier configuration files');
   }
 
   /**
    * Commits the MemFs to the disc.
    */
-  async commitSharedFs(options: PipelineOptions<MemFsEditorFile> = {}) {
+  async commitSharedFs({ log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {}) {
     const skipYoResolveTransforms: Array<FileTransform<MemFsEditorFile>> = [];
     if (this.options.skipYoResolve) {
       skipYoResolveTransforms.push(createYoResolveTransform());
@@ -216,6 +215,15 @@ export default class BootstrapGenerator extends BaseGenerator {
       createCommitTransform(),
     ];
 
-    await this.pipeline({ refresh: false, ...options }, ...transformStreams);
+    // Disable progress since it blocks stdin.
+    await this.pipeline(
+      {
+        refresh: false,
+        ...options,
+        disabled: true,
+      },
+      ...transformStreams,
+    );
+    this.log.ok(log ?? 'files commited to disk');
   }
 }

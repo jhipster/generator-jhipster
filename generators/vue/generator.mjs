@@ -120,7 +120,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
         this.queueTransformStream(
           {
             name: 'translating vue application',
-            filter: file => isFileStateModified(file) && isTranslatedVueFile(file) && file.path.startsWith(this.destinationPath()),
+            filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedVueFile(file),
             refresh: false,
           },
           translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
@@ -130,7 +130,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
           this.queueTransformStream(
             {
               name: 'converting vue translations',
-              filter: file => isFileStateModified(file) && isTranslationFile(file) && file.path.startsWith(this.destinationPath()),
+              filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslationFile(file),
               refresh: false,
             },
             transform,

@@ -115,7 +115,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           this.queueTransformStream(
             {
               name: 'translating react application',
-              filter: file => isFileStateModified(file) && isTranslatedReactFile(file) && file.path.startsWith(this.destinationPath()),
+              filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
               refresh: false,
             },
             translateReactFilesTransform(control.getWebappTranslation),
