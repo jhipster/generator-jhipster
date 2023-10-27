@@ -421,7 +421,7 @@ export default class HerokuGenerator extends BaseGenerator {
         // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile(
           'build.gradle',
-          addGradlePluginCallback({ groupId: 'gradle.plugin.com.heroku.sdk', artifactId: 'heroku-gradle', version: '1.0.4' }),
+          addGradlePluginCallback({ id: 'com.heroku.sdk.heroku-gradle', version: '1.0.4' }),
         );
         // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
@@ -473,6 +473,7 @@ export default class HerokuGenerator extends BaseGenerator {
             }
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
+            this.log.log(`heroku config:set ${configVars}--app ${this.herokuAppName}`)
             await this.spawnCommand(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
             const { stdout: data } = await this.spawnCommand(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
             if (data) {
