@@ -143,7 +143,7 @@
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
     "p-queue": "7.4.1",
-    "p-transform": "4.1.3",
+    "p-transform": "4.1.5",
     "parse-gitignore": "2.0.0",
     "pluralize": "8.0.0",
     "prettier": "3.0.3",
