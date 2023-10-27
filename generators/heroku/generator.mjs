@@ -107,7 +107,7 @@ export default class HerokuGenerator extends BaseGenerator {
     return this.asPromptingTaskGroup({
       async askForApp() {
         if (this.hasHerokuCli && this.herokuAppExists) {
-          const { stdout, exitCode } = await this.spawnCommand(`heroku apps:info --json ${this.jhipsterConfig.herokuAppName}`, {
+          const { stdout, exitCode } = await this.spawn('heroku', ['apps:info', '--json', this.jhipsterConfig.herokuAppName], {
             reject: false,
             stdio: 'pipe',
           });
@@ -244,11 +244,11 @@ export default class HerokuGenerator extends BaseGenerator {
       async herokuCreate() {
         if (!this.hasHerokuCli || this.herokuAppExists) return;
 
-        const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
+        const regionParams = this.herokuRegion !== 'us' ? ['--region', this.herokuRegion] : [];
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up Node environment'));
         const { stdout, stderr, exitCode } = await this.printChildOutput(
-          this.spawnCommand(`heroku create ${this.herokuAppName}${regionParams}`, {
+          this.spawn('heroku', ['create', this.herokuAppName, ...regionParams], {
             reject: false,
             stdio: 'pipe',
           }),
@@ -282,16 +282,16 @@ export default class HerokuGenerator extends BaseGenerator {
             this.log.verboseInfo('');
             const props = await this.prompt(prompts);
             if (props.herokuForceName === 'Yes') {
-              const { stdout } = await this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`);
+              const { stdout } = await this.spawn('heroku', ['git:remote', '--app', this.herokuAppName]);
               this.log.verboseInfo(stdout);
             } else {
-              const { stdout } = await this.spawnCommand(`heroku create ${regionParams}`);
+              const { stdout } = await this.spawn('heroku', ['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
               this.log.verboseInfo(stdout);
 
               // ensure that the git remote is the same as the appName
-              await this.spawnCommand(`heroku git:remote --app ${this.herokuAppName}`);
+              await this.spawn('heroku', ['git:remote', '--app', this.herokuAppName]);
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
@@ -308,7 +308,7 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          const { stdout, stderr } = await this.spawnCommand(
+          const { stdout, stderr } = await this.spawn(
             'heroku',
             ['addons:create', 'bonsai:sandbox-6', '--as', 'BONSAI', '--app', this.herokuAppName],
             {
@@ -330,7 +330,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          const { stdout, stderr } = await this.spawnCommand(
+          const { stdout, stderr } = await this.spawn(
             'heroku',
             ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
             {
@@ -353,7 +353,7 @@ export default class HerokuGenerator extends BaseGenerator {
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stdout, stderr } = await this.spawnCommand(
+          const { stdout, stderr } = await this.spawn(
             'heroku',
             ['addons:create', cacheAddOn[0], cacheAddOn[1], cacheAddOn[2], '--app', this.herokuAppName],
             {
@@ -395,7 +395,7 @@ export default class HerokuGenerator extends BaseGenerator {
         const herokuJHipsterRegistryPassword = encodeURIComponent(answers.herokuJHipsterRegistryPassword);
         const herokuJHipsterRegistry = `https://${herokuJHipsterRegistryUsername}:${herokuJHipsterRegistryPassword}@${answers.herokuJHipsterRegistryApp}.herokuapp.com`;
         const configSetCmd = ['config:set', 'JHIPSTER_REGISTRY_URL', herokuJHipsterRegistry, '--app', this.herokuAppName];
-        await this.printChildOutput(this.spawnCommand('heroku', configSetCmd, { stdio: 'pipe' }));
+        await this.printChildOutput(this.spawn('heroku', configSetCmd, { stdio: 'pipe' }));
       },
     });
   }
@@ -482,10 +482,10 @@ export default class HerokuGenerator extends BaseGenerator {
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
             // todo: check if config already exists
-            await this.spawnCommand('heroku', ['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
+            await this.spawn('heroku', ['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
 
             // todo: check if buildpack already exists
-            const { stdout: data } = await this.spawnCommand('heroku', ['buildpacks:add', buildpack, '--app', this.herokuAppName]);
+            const { stdout: data } = await this.spawn('heroku', ['buildpacks:add', buildpack, '--app', this.herokuAppName]);
             if (data) {
               this.logger.info(data);
               if (data.includes('Run `heroku addons` for more info.')) {
@@ -586,7 +586,8 @@ export default class HerokuGenerator extends BaseGenerator {
    * @param {(chunk: any) => void} child
    * @returns {ReturnType<BaseGenerator['spawnCommand']>}
    */
-  printChildOutput({ stdout, stderr }, log = data => this.log.verboseInfo(data)) {
+  printChildOutput(child, log = data => this.log.verboseInfo(data)) {
+    const { stdout, stderr } = child;
     stdout.on('data', data => {
       data.toString().split(/\r?\n/).forEach(log);
     });

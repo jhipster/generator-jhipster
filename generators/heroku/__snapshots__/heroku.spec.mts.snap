@@ -180,15 +180,21 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
     },
   ],
   [
-    "spawnCommand",
-    "heroku create jhipster-test --region eu",
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+      "--region",
+      "eu",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -385,15 +391,19 @@ exports[`generator - Heroku monolith application in the US calls should match sn
     },
   ],
   [
-    "spawnCommand",
-    "heroku create jhipster-test",
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -590,15 +600,19 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     },
   ],
   [
-    "spawnCommand",
-    "heroku create jhipster-test",
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -614,7 +628,7 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "config:set",
@@ -624,7 +638,7 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     ],
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "buildpacks:add",
@@ -815,15 +829,21 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
     },
   ],
   [
-    "spawnCommand",
-    "heroku create jhipster-test --region eu",
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+      "--region",
+      "eu",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -1020,23 +1040,35 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     },
   ],
   [
-    "spawnCommand",
-    "heroku create jhipster-test",
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
     },
   ],
   [
-    "spawnCommand",
-    "heroku create ",
+    "spawn",
+    "heroku",
+    [
+      "create",
+    ],
   ],
   [
-    "spawnCommand",
-    "heroku git:remote --app ",
+    "spawn",
+    "heroku",
+    [
+      "git:remote",
+      "--app",
+      "",
+    ],
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -1233,15 +1265,19 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
     },
   ],
   [
-    "spawnCommand",
-    "heroku create jhipster-test",
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -1257,7 +1293,7 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
@@ -1449,8 +1485,13 @@ exports[`generator - Heroku monolith application with existing app calls should 
     },
   ],
   [
-    "spawnCommand",
-    "heroku apps:info --json jhipster-existing",
+    "spawn",
+    "heroku",
+    [
+      "apps:info",
+      "--json",
+      "jhipster-existing",
+    ],
     {
       "reject": false,
       "stdio": "pipe",
@@ -1465,7 +1506,7 @@ exports[`generator - Heroku monolith application with existing app calls should 
     },
   ],
   [
-    "spawnCommand",
+    "spawn",
     "heroku",
     [
       "addons:create",
