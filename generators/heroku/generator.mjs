@@ -77,7 +77,7 @@ export default class HerokuGenerator extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       async checkInstallation() {
-        const { exitCode } = await this.spawnHerokuCommand('--version', { reject: false, stdio: 'pipe' });
+        const { exitCode } = await this.spawnHerokuCommand('--version', { verboseInfo: false });
         this.hasHerokuCli = exitCode === 0;
         if (!this.hasHerokuCli) {
           const error =
@@ -93,10 +93,10 @@ export default class HerokuGenerator extends BaseGenerator {
       async herokuLogin() {
         if (!this.hasHerokuCli) return;
 
-        const { exitCode } = await this.spawnHerokuCommand('whoami', { reject: false });
+        const { exitCode } = await this.spawnHerokuCommand('whoami', { verboseInfo: false });
         if (exitCode !== 0) {
           this.log.log(chalk.bold('Log in heroku to continue.'));
-          await this.spawnHerokuCommand('login --interactive', { stdio: 'inherit' });
+          await this.spawnHerokuCommand('login --interactive', { reject: true, stdio: 'inherit' });
         }
       },
 
@@ -116,10 +116,7 @@ export default class HerokuGenerator extends BaseGenerator {
     return this.asPromptingTaskGroup({
       async askForApp() {
         if (this.hasHerokuCli && this.herokuAppExists) {
-          const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName], {
-            reject: false,
-            stdio: 'pipe',
-          });
+          const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName]);
           if (exitCode !== 0) {
             this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
             throw new Error('Run the generator again to create a new application.');
@@ -235,17 +232,16 @@ export default class HerokuGenerator extends BaseGenerator {
 
         const cliPlugin = 'heroku-cli-deploy';
 
-        const { stdout, stderr, exitCode } = await this.spawnHerokuCommand('plugins', { reject: false, stdio: 'pipe' });
+        const { stdout, stderr, exitCode } = await this.spawnHerokuCommand('plugins', { stdio: 'pipe' });
         if (exitCode !== 0) {
           if (stdout.includes(cliPlugin)) {
             this.log.log('\nHeroku CLI deployment plugin already installed');
           } else {
             this.log.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            const { stdout, exitCode } = await this.spawnHerokuCommand(`plugins:install ${cliPlugin}`, { reject: false, stdio: 'pipe' });
+            const { exitCode } = await this.spawnHerokuCommand(`plugins:install ${cliPlugin}`);
             if (exitCode !== 0) {
               throw new Error(stderr);
             }
-            this.log.verboseInfo(stdout);
           }
         }
       },
@@ -256,10 +252,7 @@ export default class HerokuGenerator extends BaseGenerator {
         const regionParams = this.herokuRegion !== 'us' ? ['--region', this.herokuRegion] : [];
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up Node environment'));
-        const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName, ...regionParams], {
-          reject: false,
-          stdio: 'pipe',
-        });
+        const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName, ...regionParams]);
 
         if (stdout.includes('Heroku credentials')) {
           throw new Error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
@@ -286,15 +279,13 @@ export default class HerokuGenerator extends BaseGenerator {
               },
             ];
 
-            this.log.verboseInfo('');
+            this.log.log('');
             const props = await this.prompt(prompts);
             if (props.herokuForceName === 'Yes') {
-              const { stdout } = await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
-              this.log.verboseInfo(stdout);
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName], { reject: true });
             } else {
               const { stdout } = await this.spawnHeroku(['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
-              this.log.verboseInfo(stdout);
               this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
 
               // ensure that the git remote is the same as the appName
@@ -315,14 +306,14 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
           this.log.log(chalk.bold('\nProvisioning bonsai elasticsearch addon'));
-          const { stdout, stderr } = await this.spawn(
-            'heroku',
-            ['addons:create', 'bonsai:sandbox-6', '--as', 'BONSAI', '--app', this.herokuAppName],
-            {
-              reject: false,
-              stdio: 'pipe',
-            },
-          );
+          const { stdout, stderr } = await this.spawn('heroku', [
+            'addons:create',
+            'bonsai:sandbox-6',
+            '--as',
+            'BONSAI',
+            '--app',
+            this.herokuAppName,
+          ]);
           this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout, stderr });
         }
 
@@ -337,14 +328,14 @@ export default class HerokuGenerator extends BaseGenerator {
 
         if (dbAddOn) {
           this.log.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-          const { stdout, stderr } = await this.spawn(
-            'heroku',
-            ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
-            {
-              reject: false,
-              stdio: 'pipe',
-            },
-          );
+          const { stdout, stderr } = await this.spawn('heroku', [
+            'addons:create',
+            dbAddOn,
+            '--as',
+            'DATABASE',
+            '--app',
+            this.herokuAppName,
+          ]);
           this.checkAddOnReturn({ addOn: 'Database', stdout, stderr });
         } else {
           this.log.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
@@ -360,10 +351,7 @@ export default class HerokuGenerator extends BaseGenerator {
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stdout, stderr } = await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName], {
-            reject: false,
-            stdio: 'pipe',
-          });
+          const { stdout, stderr } = await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName]);
           this.checkAddOnReturn({ addOn: 'Cache', stdout, stderr });
         }
       },
@@ -371,7 +359,7 @@ export default class HerokuGenerator extends BaseGenerator {
       async configureJHipsterRegistry({ application }) {
         if (!this.hasHerokuCli || this.herokuAppExists || !application.serviceDiscoveryEureka) return undefined;
 
-        this.log.verboseInfo('');
+        this.log.log('');
         const answers = await this.prompt([
           {
             type: 'input',
@@ -488,7 +476,7 @@ export default class HerokuGenerator extends BaseGenerator {
             await this.spawnHeroku(['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
 
             // todo: check if buildpack already exists
-            const { stdout: data } = await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName], { reject: false });
+            const { stdout: data } = await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName]);
             if (data) {
               this.log.info(data);
               if (data.includes('Run `heroku addons` for more info.')) {
@@ -588,9 +576,10 @@ export default class HerokuGenerator extends BaseGenerator {
    * @returns {ReturnType<BaseGenerator['spawnCommand']>}
    */
   spawnHerokuCommand(command, opt) {
-    const varargs = opt ? [opt] : [];
-    const child = this.spawnCommand(`heroku ${command}`, ...varargs);
-    if (opt?.stdio !== 'pipe') {
+    opt = { stdio: 'pipe', reject: false, ...opt };
+    const { verboseInfo, ...spawnOptions } = opt;
+    const child = this.spawnCommand(`heroku ${command}`, spawnOptions);
+    if (opt.stdio !== 'pipe' || verboseInfo === false) {
       return child;
     }
     return this.printChildOutput(child);
@@ -602,9 +591,10 @@ export default class HerokuGenerator extends BaseGenerator {
    * @returns {ReturnType<BaseGenerator['spawn']>}
    */
   spawnHeroku(args, opt) {
-    const varargs = opt ? [opt] : [];
-    const child = this.spawn('heroku', args, ...varargs);
-    if (opt?.stdio !== 'pipe') {
+    opt = { stdio: 'pipe', reject: false, ...opt };
+    const { verboseInfo, ...spawnOptions } = opt;
+    const child = this.spawn('heroku', args, spawnOptions);
+    if (spawnOptions.stdio !== 'pipe' || verboseInfo === false) {
       return child;
     }
     return this.printChildOutput(child);

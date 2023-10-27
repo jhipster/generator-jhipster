@@ -176,6 +176,7 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -211,10 +212,6 @@ exports[`generator - Heroku monolith application in the EU calls should match sn
       "--app",
       "jhipster-test",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
 ]
 `;
@@ -394,6 +391,7 @@ exports[`generator - Heroku monolith application in the US calls should match sn
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -427,10 +425,6 @@ exports[`generator - Heroku monolith application in the US calls should match sn
       "--app",
       "jhipster-test",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
 ]
 `;
@@ -610,6 +604,7 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -643,10 +638,6 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
       "--app",
       "jhipster-test",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
   [
     "spawn",
@@ -657,6 +648,10 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
       "--app",
       "jhipster-test",
     ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
   [
     "spawn",
@@ -669,6 +664,7 @@ exports[`generator - Heroku monolith application with Git deployment calls shoul
     ],
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
 ]
@@ -849,6 +845,7 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -884,10 +881,6 @@ exports[`generator - Heroku monolith application with PostgreSQL calls should ma
       "--app",
       "jhipster-test",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
 ]
 `;
@@ -1067,6 +1060,7 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -1095,6 +1089,10 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
     [
       "create",
     ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
   [
     "spawn",
@@ -1104,6 +1102,10 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
       "--app",
       "",
     ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
   ],
   [
     "spawn",
@@ -1116,10 +1118,6 @@ exports[`generator - Heroku monolith application with an unavailable app name ca
       "--app",
       "",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
 ]
 `;
@@ -1299,6 +1297,7 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -1332,10 +1331,6 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
       "--app",
       "jhipster-test",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
   [
     "spawn",
@@ -1348,10 +1343,6 @@ exports[`generator - Heroku monolith application with elasticsearch calls should
       "--app",
       "jhipster-test",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
 ]
 `;
@@ -1534,6 +1525,7 @@ exports[`generator - Heroku monolith application with existing app calls should 
     "heroku whoami",
     {
       "reject": false,
+      "stdio": "pipe",
     },
   ],
   [
@@ -1568,10 +1560,6 @@ exports[`generator - Heroku monolith application with existing app calls should 
       "--app",
       "jhipster-existing",
     ],
-    {
-      "reject": false,
-      "stdio": "pipe",
-    },
   ],
 ]
 `;
