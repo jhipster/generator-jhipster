@@ -18,6 +18,7 @@
  */
 import { stat } from 'fs/promises';
 import { createReadStream } from 'fs';
+import { relative } from 'path';
 import { transform } from 'p-transform';
 import { isBinaryFile } from 'isbinaryfile';
 import { simpleGit } from 'simple-git';
@@ -72,7 +73,7 @@ const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
         }
 
         const attrs = Object.fromEntries(
-          (await git.raw('check-attr', 'binary', 'eol', '--', file.path))
+          (await git.raw('check-attr', 'binary', 'eol', '--', relative(baseDir, file.path)))
             .split(/\r\n|\r|\n/)
             .map(attr => attr.split(':'))
             .map(([_file, attr, value]) => [attr, value]),
