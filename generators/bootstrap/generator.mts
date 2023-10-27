@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
+import { createCommitTransform } from 'mem-fs-editor/transform';
 import prettier from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
-import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import BaseGenerator from '../base/index.mjs';
 import {
@@ -138,15 +139,18 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   queueMultistepTransform(multiStepTransform: ReturnType<typeof createMultiStepTransform>) {
     this.queueTask({
-      method: () =>
-        this.pipeline(
+      method: async () => {
+        await this.pipeline(
           {
             name: 'applying multi-step templates',
             filter: file => isFileStateModified(file) && multiStepTransform.templateFileFs.isTemplate(file.path),
             refresh: true,
+            allowOverride: true,
           },
           multiStepTransform,
-        ),
+        );
+        await this.pipeline();
+      },
       taskName: MULTISTEP_TRANSFORM_QUEUE,
       queueName: MULTISTEP_TRANSFORM_QUEUE,
       once: true,
@@ -209,8 +213,9 @@ export default class BootstrapGenerator extends BaseGenerator {
       ...prettierTransforms,
       ...autoCrlfTransforms,
       createConflicterTransform(this.env.adapter, { ...(this.env as any).conflicterOptions, memFs: this.env.sharedFs }),
+      createCommitTransform(),
     ];
 
-    await this.fs.commit(options, ...transformStreams);
+    await this.pipeline({ refresh: false, ...options }, ...transformStreams);
   }
 }

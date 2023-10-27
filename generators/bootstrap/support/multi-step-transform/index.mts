@@ -16,40 +16,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Duplex } from 'stream';
-import PQueue from 'p-queue';
+import { type DuplexWithDebug, transform } from 'p-transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import TemplateFileFs from './template-file-fs.mjs';
+import TemplateFile from './template-file.mjs';
 
 // eslint-disable-next-line import/prefer-default-export
 export const createMultiStepTransform = () => {
-  const twoStepTemplateQueue = new PQueue({ concurrency: 1, autoStart: false });
   const templateFileFs = new TemplateFileFs({});
-  const pendingFiles: string[] = [];
+  const templateFiles: Array<TemplateFile> = [];
 
-  const duplex: Duplex & { templateFileFs: TemplateFileFs } = Duplex.from(async function* (source: AsyncGenerator<MemFsEditorFile>) {
-    for await (const file of source) {
+  const duplex: DuplexWithDebug & { templateFileFs: TemplateFileFs } = transform(
+    (file: MemFsEditorFile) => {
       if (!templateFileFs.isTemplate(file.path)) {
         throw new Error(`File ${file.path} is not supported`);
       }
-      const templateFile = templateFileFs.add(file.path, file.contents!.toString());
+      const templateFile = templateFileFs.add(file);
       if (templateFile.rootTemplate) {
-        // If multi-step root, postpone.
-        twoStepTemplateQueue.add(() => {
-          if (pendingFiles.includes(templateFile.basePath)) {
-            return;
-          }
-          file.path = templateFile.basePath;
-          file.contents = Buffer.from(templateFile.render().concat('\n'));
-        });
-      } else {
-        delete file.state;
+        templateFiles.push(templateFile);
       }
-
-      yield file;
-    }
-    await twoStepTemplateQueue.start().onIdle();
-  }) as any;
+      return undefined;
+    },
+    async function () {
+      for (const templateFile of templateFiles) {
+        const file = templateFile.file;
+        file.path = templateFile.basePath;
+        file.contents = Buffer.from(templateFile.render().concat('\n'));
+        this.push(templateFile.file);
+      }
+    },
+  ) as any;
 
   duplex.templateFileFs = templateFileFs;
   return duplex;
