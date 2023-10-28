@@ -12,7 +12,7 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Contributing
 
-We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
+We are honored by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
 
 ## Sponsors
 
