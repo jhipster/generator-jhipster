@@ -385,19 +385,19 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     this.queueTask({
       method: async () => {
         const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
-        await this.env.applyTransforms([this.translationData.loadFromStreamTransform({ clientSrcDir, nativeLanguage, fallbackLanguage })], {
-          name: 'loading translations',
-          streamOptions: { filter },
-        });
-        if (!enableTranslation) {
-          await this.env.applyTransforms(
-            [this.translationData.clearTranslationsStatusTransform({ clientSrcDir, nativeLanguage, fallbackLanguage })],
-            {
-              name: 'clearing translations',
-              streamOptions: { filter },
-            },
-          );
-        }
+        await this.pipeline(
+          {
+            name: 'loading translations',
+            filter: file => file.path.startsWith(this.destinationPath()) && filter(file),
+            refresh: true,
+          },
+          this.translationData.loadFromStreamTransform({
+            enableTranslation,
+            clientSrcDir,
+            nativeLanguage,
+            fallbackLanguage,
+          }),
+        );
       },
       taskName: 'loadingTranslations',
       queueName: QUEUES.LOADING_TRANSLATIONS_QUEUE,

@@ -20,40 +20,47 @@ import assert from 'assert';
 import path from 'path';
 import { minimatch } from 'minimatch';
 
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import TemplateFile from './template-file.mjs';
 
 export default class TemplateFileFs {
-  constructor(options = {}) {
+  fragmentFiles: Record<string, TemplateFile>;
+  rootFiles: Array<MemFsEditorFile> = [];
+  extension: string;
+  delimiter: string;
+
+  constructor(options: { extension?: string; delimiter?: string } = {}) {
     this.extension = options.extension || 'jhi';
     this.delimiter = options.delimiter || '&';
     this.fragmentFiles = {};
   }
 
-  isTemplate(filePath) {
+  isTemplate(filePath: string): boolean {
     return this.isRootTemplate(filePath) || this.isDerivedTemplate(filePath);
   }
 
-  isRootTemplate(filePath) {
+  isRootTemplate(filePath: string): boolean {
     return path.extname(filePath) === `.${this.extension}`;
   }
 
-  isDerivedTemplate(filePath) {
+  isDerivedTemplate(filePath: string): boolean {
     return minimatch(filePath, `**/*.${this.extension}.*`, { dot: true });
   }
 
-  add(filePath, contents) {
-    assert(filePath, 'filePath is required');
-    assert(contents, 'contents is required');
+  add(file: MemFsEditorFile): TemplateFile {
+    assert(file.contents, 'contents is required');
 
-    const templateFile = this.get(filePath);
-    templateFile.compile(filePath, contents, { delimiter: this.delimiter });
-    if (!templateFile.rootTemplate) {
+    const templateFile = this.get(file.path);
+    templateFile.compile(file.path, file.contents.toString(), { delimiter: this.delimiter });
+    if (templateFile.rootTemplate) {
+      templateFile.file = file;
+    } else {
       this.get(templateFile.parentPath).addFragment(templateFile);
     }
     return templateFile;
   }
 
-  get(filePath) {
+  get(filePath: string): TemplateFile {
     assert(filePath, 'filePath is required');
     this.fragmentFiles[filePath] = this.fragmentFiles[filePath] || new TemplateFile(path.basename(filePath), this.extension);
     return this.fragmentFiles[filePath];
