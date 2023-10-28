@@ -102,7 +102,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
       initializing() {
         this.log.log(chalk.bold('Heroku configuration is starting'));
-        this.dynoSize = 'Free';
+        this.dynoSize = 'Basic';
         this.herokuAppExists = Boolean(this.jhipsterConfig.herokuAppName);
       },
     });
@@ -257,7 +257,7 @@ export default class HerokuGenerator extends BaseGenerator {
         const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName, ...regionParams]);
 
         if (stdout.includes('Heroku credentials')) {
-          throw new Error("Error: Not authenticated. Run 'heroku login' to login to your Heroku account and try again.");
+          throw new Error("Error: Not authenticated. Run 'heroku login' to log in to your Heroku account and try again.");
         }
 
         if (exitCode !== 0) {
@@ -294,7 +294,7 @@ export default class HerokuGenerator extends BaseGenerator {
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
-            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+            this.log.error("Error: Not authenticated. Run 'heroku login' to log in to your Heroku account and try again.");
           } else {
             throw new Error(stderr);
           }
