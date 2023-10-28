@@ -22,3 +22,8 @@ jobs:
           git branch -va
           git rebase upstream/main
           git push -f origin
+          git branch upstream-main upstream/main
+          #git fetch origin upstream_main
+          #git checkout upstream_main
+          #git rebase upstream/main
+          git push origin upstream-main
