@@ -33,8 +33,11 @@ export const getJavaValueGeneratorForType = (type) => {
   if (type === UUID) {
     return 'UUID.randomUUID()';
   }
-  if (type === LONG || type === INTEGER) {
-    return 'count.incrementAndGet()';
+  if (type === INTEGER) {
+    return 'intCount.incrementAndGet()';
+  }
+  if (type === LONG) {
+    return 'longCount.incrementAndGet()';
   }
   throw new Error(`Java type ${type} does not have a random generator implemented`);
 }

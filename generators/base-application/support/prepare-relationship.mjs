@@ -29,6 +29,7 @@ import {
 import { upperFirstCamelCase } from '../../base/support/string.mjs';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.mjs';
 import { stringifyApplicationData } from './debug.mjs';
+import { mutateData } from '../../base/support/config.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
@@ -160,8 +161,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
 
-  _.defaults(relationship, {
+  mutateData(relationship, {
     propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
+    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? _.upperFirst(propertyName),
   });
 
   if (entityWithConfig.dto === MAPSTRUCT) {
