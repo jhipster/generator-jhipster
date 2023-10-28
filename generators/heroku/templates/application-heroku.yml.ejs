@@ -78,17 +78,5 @@ spring:
   elasticsearch:
     uris: ${BONSAI_URL}
 <%_ } _%>
-<%_ if (useOkta) { _%>
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: ${OKTA_OAUTH2_ISSUER}
-        registration:
-          oidc:
-            client-id: ${OKTA_OAUTH2_CLIENT_ID_WEB}
-            client-secret: ${OKTA_OAUTH2_CLIENT_SECRET_WEB}
-<%_ } _%>
 server:
   port: ${PORT:8080}
