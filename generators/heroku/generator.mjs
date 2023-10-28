@@ -117,7 +117,9 @@ export default class HerokuGenerator extends BaseGenerator {
       async askForApp() {
         if (this.hasHerokuCli && this.herokuAppExists) {
           // todo: suppress output so JSON isn't printed to console
-          const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName], { verboseInfo:false });
+          const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName], {
+            verboseInfo:false,
+          });
           if (exitCode !== 0) {
             this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
             this.herokuAppName = null;
