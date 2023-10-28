@@ -480,7 +480,7 @@ export default class HerokuGenerator extends BaseGenerator {
 
             const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName]);
             if (!buildpackData.includes(buildpack)) {
-              const { stdout: data, stderr: error } = await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName]);
+              await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName]);
             }
 
             this.log.log(chalk.bold('\nDeploying application...'));
