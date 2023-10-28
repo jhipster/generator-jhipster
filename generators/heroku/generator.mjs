@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import { setTimeout } from 'node:timers/promises';
 import { kebabCase } from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';
@@ -96,8 +95,8 @@ export default class HerokuGenerator extends BaseGenerator {
 
         const { exitCode } = await this.spawnHerokuCommand('whoami', { verboseInfo: false });
         if (exitCode !== 0) {
-          this.log.log(chalk.bold('Log in heroku to continue.'));
-          await this.spawnHerokuCommand('login --interactive', { reject: true, stdio: 'inherit' });
+          this.log.log(chalk.bold('Log in to Heroku to continue.'));
+          await this.spawnHerokuCommand('login', { reject: true, stdio: 'inherit' });
         }
       },
 
@@ -117,9 +116,11 @@ export default class HerokuGenerator extends BaseGenerator {
     return this.asPromptingTaskGroup({
       async askForApp() {
         if (this.hasHerokuCli && this.herokuAppExists) {
+          // todo: suppress output so JSON isn't printed to console
           const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName]);
           if (exitCode !== 0) {
             this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
+            this.herokuAppName = null;
             throw new Error('Run the generator again to create a new application.');
           } else {
             const json = JSON.parse(stdout);
@@ -149,7 +150,7 @@ export default class HerokuGenerator extends BaseGenerator {
             {
               type: 'list',
               name: 'herokuRegion',
-              message: 'On which region do you want to deploy ?',
+              message: 'On which region do you want to deploy?',
               choices: ['us', 'eu'],
               default: 0,
             },
@@ -163,7 +164,7 @@ export default class HerokuGenerator extends BaseGenerator {
             {
               type: 'list',
               name: 'herokuDeployType',
-              message: 'Which type of deployment do you want ?',
+              message: 'Which type of deployment do you want?',
               choices: [
                 { value: 'git', name: 'Git (compile on Heroku)' },
                 { value: 'jar', name: 'JAR (compile locally)' },
@@ -181,7 +182,7 @@ export default class HerokuGenerator extends BaseGenerator {
             {
               type: 'list',
               name: 'herokuJavaVersion',
-              message: 'Which Java version would you like to use to build and run your app ?',
+              message: 'Which Java version would you like to use to build and run your app?',
               choices: JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
               default: JAVA_VERSION,
             },
@@ -256,7 +257,7 @@ export default class HerokuGenerator extends BaseGenerator {
         const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName, ...regionParams]);
 
         if (stdout.includes('Heroku credentials')) {
-          throw new Error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+          throw new Error("Error: Not authenticated. Run 'heroku login' to login to your Heroku account and try again.");
         }
 
         if (exitCode !== 0) {
@@ -287,16 +288,10 @@ export default class HerokuGenerator extends BaseGenerator {
             } else {
               const { stdout } = await this.spawnHeroku(['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
-              this.herokuAppName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
-
+              this.herokuAppName = stdout.substring(stdout.lastIndexOf('/') + 1, stdout.indexOf('.git'));
               // ensure that the git remote is the same as the appName
               await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
-
-              if (!this.skipChecks) {
-                this.log.info('Waiting a few seconds for the application to be provisioned');
-                await setTimeout(3000);
-              }
             }
           } else if (stderr.includes('Invalid credentials')) {
             this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
@@ -307,7 +302,7 @@ export default class HerokuGenerator extends BaseGenerator {
       },
 
       async herokuAddonsCreate({ application }) {
-        if (!this.hasHerokuCli) return;
+        if (!this.hasHerokuCli || this.herokuAppExists) return;
 
         this.log.log(chalk.bold('\nProvisioning addons'));
         if (application.searchEngineElasticsearch) {
@@ -478,47 +473,14 @@ export default class HerokuGenerator extends BaseGenerator {
             }
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
-            // todo: check if config already exists
-            await this.spawnHeroku(['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
+            const { stdout: configData } = await this.spawnHeroku(['config:get', configName, '--app', this.herokuAppName]);
+            if (!configData) {
+              await this.spawnHeroku(['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
+            }
 
-            // todo: check if buildpack already exists
-            const { stdout: data } = await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName]);
-            if (data) {
-              this.log.info(data);
-              if (data.includes('Run `heroku addons` for more info.')) {
-                await this.spawnHerokuCommand('addons');
-              }
-
-              this.log('');
-              const prompts = [
-                {
-                  type: 'list',
-                  name: 'userDeployDecision',
-                  message: 'Continue to deploy?',
-                  choices: [
-                    {
-                      value: 'Yes',
-                      name: 'Yes, I confirm',
-                    },
-                    {
-                      value: 'No',
-                      name: 'No, abort (Recommended)',
-                    },
-                  ],
-                  default: 0,
-                },
-              ];
-
-              this.log('');
-              const props = await this.prompt(prompts);
-              if (props.userDeployDecision === 'Yes') {
-                this.log.info(chalk.bold('Continuing deployment...'));
-              } else {
-                this.log.info(chalk.bold('You aborted deployment!'));
-                this.cancelCancellableTasks();
-                return;
-              }
-              this.log('');
+            const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName]);
+            if (!buildpackData.includes(buildpack)) {
+              const { stdout: data, stderr: error } = await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName]);
             }
 
             this.log.log(chalk.bold('\nDeploying application...'));
