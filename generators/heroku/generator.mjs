@@ -579,7 +579,7 @@ export default class HerokuGenerator extends BaseGenerator {
   printChildOutput(child, log = data => this.log.verboseInfo(data)) {
     const { stdout, stderr } = child;
     stdout.on('data', data => {
-      data.toString().split(/\r?\n/).forEach(log);
+      data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     stderr.on('data', data => {
       data.toString().split(/\r?\n/).forEach(log);
