@@ -150,12 +150,17 @@ export default class JDLParser extends CstParser {
       this.CONSUME(LexerTokens.NAME, { LABEL: 'option' });
       this.OPTION(() => {
         this.CONSUME(LexerTokens.LPAREN);
-        this.OR([
-          { ALT: () => this.CONSUME2(LexerTokens.STRING, { LABEL: 'value' }) },
-          { ALT: () => this.CONSUME2(LexerTokens.NAME, { LABEL: 'value' }) },
-          { ALT: () => this.CONSUME3(LexerTokens.INTEGER, { LABEL: 'value' }) },
-          { ALT: () => this.CONSUME3(LexerTokens.DECIMAL, { LABEL: 'value' }) },
-        ]);
+        this.OR({
+          IGNORE_AMBIGUITIES: true,
+          DEF: [
+            { ALT: () => this.CONSUME(LexerTokens.STRING, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(LexerTokens.INTEGER, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(LexerTokens.DECIMAL, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(LexerTokens.TRUE, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(LexerTokens.FALSE, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME2(LexerTokens.NAME, { LABEL: 'value' }) },
+          ],
+        });
         this.CONSUME(LexerTokens.RPAREN);
       });
     });

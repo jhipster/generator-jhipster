@@ -63,6 +63,63 @@ describe('jdl - integration tests', () => {
 
   context('when parsing entities JDL', () => {
     const applicationName = 'jhipster';
+
+    context('with annotations', () => {
+      let result: Map<any, any[]>;
+      const jdl = `
+@BooleanTrue(true)
+@BooleanFalse(false)
+@Integer(1)
+@Decimal(10.1)
+@Escaped("a.b")
+@String(foo)
+@Unary
+entity A {}
+`;
+
+      beforeEach(() => {
+        result = convertWithoutApplication({
+          applicationName,
+          databaseType: 'sql',
+          jdlObject: DocumentParser.parseFromConfigurationObject({
+            parsedContent: parseFromContent(jdl),
+            applicationType: MONOLITH,
+          }),
+        });
+      });
+
+      it('should result matching', () => {
+        jestExpect(result).toMatchInlineSnapshot(`
+Map {
+  "jhipster" => [
+    JSONEntity {
+      "applications": "*",
+      "booleanFalse": false,
+      "booleanTrue": true,
+      "decimal": 10.1,
+      "documentation": undefined,
+      "dto": undefined,
+      "embedded": undefined,
+      "entityTableName": "a",
+      "escaped": "a.b",
+      "fields": [],
+      "fluentMethods": undefined,
+      "integer": 1,
+      "jpaMetamodelFiltering": undefined,
+      "name": "A",
+      "pagination": undefined,
+      "readOnly": undefined,
+      "relationships": [],
+      "service": undefined,
+      "string": "foo",
+      "unary": true,
+    },
+  ],
+}
+`);
+      });
+    });
+
     context('with bidirectional relationship', () => {
       let result: Map<any, any[]>;
       const jdl = `
