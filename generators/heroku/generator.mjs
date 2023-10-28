@@ -449,7 +449,7 @@ export default class HerokuGenerator extends BaseGenerator {
         this.log.log(chalk.bold('\nBuilding application'));
 
         // Use npm script so blueprints just need to override it.
-        await this.printChildOutput(this.spawnCommand('npm run java:jar:prod'));
+        await this.printChildOutput(this.spawnCommand('npm run java:jar:prod', { stdio: 'pipe' }));
       },
 
       async productionDeploy({ application }) {
