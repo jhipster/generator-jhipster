@@ -220,7 +220,7 @@ export default class HerokuGenerator extends BaseGenerator {
       async gitInit() {
         if (!this.herokuDeployType === 'git') return;
 
-        const git = this.createGit().outputHandler((_command, stdout, stderr) => this.printChildOutput({ stdout, stderr }));
+        const git = this.createGit();
         if (await git.checkIsRepo()) {
           this.log.log(chalk.bold('\nUsing existing Git repository'));
         } else {
