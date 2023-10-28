@@ -582,7 +582,7 @@ export default class HerokuGenerator extends BaseGenerator {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     stderr.on('data', data => {
-      data.toString().split(/\r?\n/).forEach(log);
+      data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     return child;
   }
