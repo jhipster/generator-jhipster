@@ -221,6 +221,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   get default() {
     return this.asDefaultTaskGroup({
       async loadNativeLanguage({ application, control }) {
+        if (application.skipClient) return;
         control.translations = control.translations ?? {};
         this.translationData = new TranslationData({ generator: this, translations: control.translations });
         const { clientSrcDir, enableTranslation, nativeLanguage } = application;
@@ -353,6 +354,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       addEntities({ application, entities, source }) {
+        if (application.skipClient) return;
         const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
         for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
           for (const language of languagesToApply) {

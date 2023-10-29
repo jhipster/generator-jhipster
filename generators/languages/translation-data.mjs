@@ -52,7 +52,7 @@ export default class TranslationData {
     const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
     const minimatchNative = new Minimatch(`**/${clientSrcDir}i18n/${nativeLanguage}/*.json`);
     return transform(file => {
-      if (filter(file)) {
+      if (filter(file) && file.contents) {
         const contents = JSON.parse(file.contents.toString());
         this.mergeTranslation(contents, !minimatchNative.match(file.path));
         if (!enableTranslation) {
