@@ -178,7 +178,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             prepareEntity(entity, this, application);
             prepareEntityForServer(entity);
             if (!entity.embedded && !entity.primaryKey) {
-              prepareEntityPrimaryKeyForTemplates(entity, this);
+              prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
             }
             for (const field of entity.fields ?? []) {
               prepareField(entity, field, this);
