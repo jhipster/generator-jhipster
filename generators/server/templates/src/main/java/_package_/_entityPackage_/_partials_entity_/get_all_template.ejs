@@ -62,7 +62,7 @@ _%>
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
-    @GetMapping("count")
+    @GetMapping("/count")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Long><% if (reactive) { %>><% } %> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
     <% if (!reactive) { %>
         log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
