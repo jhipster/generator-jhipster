@@ -102,7 +102,7 @@ jobs:
           npm install --force
           npm run backend:build-cache || true
           cd app1
-          ./npmw
+          ./npmw -v
           cd ../..
           rm -rf app
           mkdir app
@@ -132,7 +132,7 @@ jobs:
           npm install --force
           npm run backend:build-cache || true
           cd app1
-          ./npmw
+          ./npmw -v
           cd ../..
           rm -rf app
           mkdir app
