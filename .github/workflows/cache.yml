@@ -45,7 +45,7 @@ jobs:
         with:
           jdl-sample: cache
           generator-jhipster-branch: local
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v3

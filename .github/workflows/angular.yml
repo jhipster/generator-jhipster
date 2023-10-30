@@ -100,7 +100,7 @@ jobs:
           jdl-sample: ${{ matrix.setup-jdl-sample }}
           application-environment: ${{ matrix.setup-application-environment }}
           application-packaging: ${{ matrix.setup-application-packaging }}
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v3
