@@ -312,14 +312,29 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
   }
 
   annotationDeclaration(context) {
+    const optionName = context.option[0].image;
     if (!context.value) {
-      return { optionName: context.option[0].image, type: 'UNARY' };
+      return { optionName, type: 'UNARY' };
     }
-    return {
-      optionName: context.option[0].image,
-      optionValue: context.value[0].image.replace(/"/g, ''),
-      type: 'BINARY',
-    };
+    let { image: optionValue } = context.value[0];
+    const { tokenType } = context.value[0];
+    switch (tokenType.name) {
+      case 'INTEGER':
+        optionValue = parseInt(optionValue, 10);
+        break;
+      case 'DECIMAL':
+        optionValue = parseFloat(optionValue);
+        break;
+      case 'TRUE':
+        optionValue = true;
+        break;
+      case 'FALSE':
+        optionValue = false;
+        break;
+      default:
+        optionValue = optionValue.replace(/"/g, '');
+    }
+    return { optionName, optionValue, type: 'BINARY' };
   }
 
   entityTableNameDeclaration(context) {

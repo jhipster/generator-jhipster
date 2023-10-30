@@ -7,6 +7,7 @@ exports[`generator - Heroku microservice application with JAR deployment should 
   "generator-jhipster": {
     "applicationType": "microservice",
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "17"
@@ -160,12 +161,68 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application in the EU calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+      "--region",
+      "eu",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
 exports[`generator - Heroku monolith application in the EU should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -317,6 +374,59 @@ server:
     "stateCleared": "modified",
   },
 }
+`;
+
+exports[`generator - Heroku monolith application in the US calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
 `;
 
 exports[`generator - Heroku monolith application in the US should match files snapshot 1`] = `
@@ -325,6 +435,7 @@ exports[`generator - Heroku monolith application in the US should match files sn
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -478,12 +589,121 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application with Git deployment calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:get",
+      "MAVEN_CUSTOM_OPTS",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "config:set",
+      "MAVEN_CUSTOM_OPTS=-Pprod,heroku -DskipTests",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "buildpacks",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "buildpacks:add",
+      "heroku/java",
+      "--app",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+]
+`;
+
 exports[`generator - Heroku monolith application with Git deployment should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "git",
     "herokuJavaVersion": "11"
@@ -637,12 +857,68 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application with PostgreSQL calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+      "--region",
+      "eu",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
 exports[`generator - Heroku monolith application with PostgreSQL should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
@@ -796,13 +1072,91 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application with an unavailable app name calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "git:remote",
+      "--app",
+      "random-app-name",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "random-app-name",
+    ],
+  ],
+]
+`;
+
 exports[`generator - Heroku monolith application with an unavailable app name should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
-    "herokuAppName": "jhipster-new-name",
+    "entities": [],
+    "herokuAppName": "random-app-name",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11"
   }
@@ -923,7 +1277,7 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
 
 eureka:
   instance:
-    hostname: jhipster-new-name.herokuapp.com
+    hostname: random-app-name.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
 
@@ -955,12 +1309,78 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application with elasticsearch calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "create",
+      "jhipster-test",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "bonsai:sandbox-6",
+      "--as",
+      "BONSAI",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "addons:create",
+      "heroku-postgresql",
+      "--as",
+      "DATABASE",
+      "--app",
+      "jhipster-test",
+    ],
+  ],
+]
+`;
+
 exports[`generator - Heroku monolith application with elasticsearch should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-test",
     "herokuDeployType": "jar",
     "herokuJavaVersion": "11",
@@ -1117,12 +1537,55 @@ server:
 }
 `;
 
+exports[`generator - Heroku monolith application with existing app calls should match snapshot 1`] = `
+[
+  [
+    "spawnCommand",
+    "heroku --version",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku whoami",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawn",
+    "heroku",
+    [
+      "apps:info",
+      "--json",
+      "jhipster-existing",
+    ],
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+  [
+    "spawnCommand",
+    "heroku plugins",
+    {
+      "reject": false,
+      "stdio": "pipe",
+    },
+  ],
+]
+`;
+
 exports[`generator - Heroku monolith application with existing app should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "entities": [],
     "herokuAppName": "jhipster-existing",
     "herokuDeployType": "git",
     "herokuJavaVersion": "17"

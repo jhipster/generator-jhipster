@@ -1,4 +1,7 @@
 import { createRouter as createVueRouter, createWebHistory<% if (applicationTypeGateway && microfrontend) { %>, type RouteRecordRaw<% } %> } from 'vue-router';
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+import { importRemote } from '@module-federation/utilities';
+<%_ } _%>
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
@@ -43,7 +46,11 @@ const router = createRouter();
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 export const lazyRoutes = Promise.all([
   <%_ for (const remote of microfrontends) { _%>
-  import('@<%= remote.lowercaseBaseName %>/entities-router')
+  importRemote<any>({
+    url: `./<%= remote.endpointPrefix %>`,
+    scope: '<%= remote.lowercaseBaseName %>',
+    module: './entities-router',
+  })
     .then(<%= remote.lowercaseBaseName %>Router => {
       router.addRoute(<%= remote.lowercaseBaseName %>Router.default as RouteRecordRaw);
       return <%= remote.lowercaseBaseName %>Router.default;

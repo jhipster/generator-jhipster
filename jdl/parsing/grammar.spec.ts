@@ -470,12 +470,12 @@ entity A`);
     },
     {
       "optionName": "customAnnotation2",
-      "optionValue": "2",
+      "optionValue": 2,
       "type": "BINARY",
     },
     {
       "optionName": "customAnnotation3",
-      "optionValue": "2.42",
+      "optionValue": 2.42,
       "type": "BINARY",
     },
     {

@@ -94,7 +94,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "relationships": [
         {
           "options": {
-            "id": "42",
+            "id": 42,
           },
           "otherEntityName": "location",
           "relationshipName": "location",

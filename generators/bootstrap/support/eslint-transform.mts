@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { passthrough } from 'p-transform';
-import { isFileStateDeleted } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import ESLint from 'eslint';
 import { Minimatch } from 'minimatch';
 
@@ -53,11 +53,8 @@ export const createESLintTransform = function (
   });
 
   return passthrough(async file => {
-    if (!minimatch.match(file.path) || isFileStateDeleted(file)) {
+    if (!minimatch.match(file.path) || !isFileStateModified(file)) {
       return;
-    }
-    if (!file.contents) {
-      throw new Error(`File content doesn't exist for ${file.relative}`);
     }
     try {
       if (await eslint.isPathIgnored(file.path)) {

@@ -40,7 +40,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           fields: [{ fieldName: 'id', fieldType: 'CustomType', path: ['id'], relationshipsPath: [] }],
         };
         beforeEach(() => {
-          entity = prepareEntityPrimaryKeyForTemplates(entity, defaultGenerator);
+          entity = prepareEntityPrimaryKeyForTemplates({ entity });
         });
         it('should adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({
@@ -76,7 +76,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           ],
         };
         beforeEach(() => {
-          entity = prepareEntityPrimaryKeyForTemplates(entity, defaultGenerator);
+          entity = prepareEntityPrimaryKeyForTemplates({ entity });
         });
         it('should not adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({
@@ -179,10 +179,10 @@ describe('generator - base-application - support - prepareEntity', () => {
             ],
           };
 
-          entity1 = prepareEntityPrimaryKeyForTemplates(entity1, defaultGenerator, true);
-          entity2 = prepareEntityPrimaryKeyForTemplates(entity2, defaultGenerator, true);
-          entity3 = prepareEntityPrimaryKeyForTemplates(entity3, defaultGenerator, true);
-          entity4 = prepareEntityPrimaryKeyForTemplates(entity4, defaultGenerator, true);
+          entity1 = prepareEntityPrimaryKeyForTemplates({ entity: entity1, enableCompositeId: true });
+          entity2 = prepareEntityPrimaryKeyForTemplates({ entity: entity2, enableCompositeId: true });
+          entity3 = prepareEntityPrimaryKeyForTemplates({ entity: entity3, enableCompositeId: true });
+          entity4 = prepareEntityPrimaryKeyForTemplates({ entity: entity4, enableCompositeId: true });
         });
 
         it('should prepare correct primaryKey for entity1', () => {

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.mjs';
@@ -73,19 +73,28 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
     return this.asDefaultTaskGroup({
       generatedAnnotation({ application }) {
         if (this.jhipsterConfig.withGeneratedFlag) {
-          this.queueTransformStream(generatedAnnotationTransform(application.packageName), {
-            name: 'adding @GeneratedByJHipster annotations',
-            streamOptions: { filter: file => isFilePending(file) && file.path.endsWith('.java') },
-          });
+          this.queueTransformStream(
+            {
+              name: 'adding @GeneratedByJHipster annotations',
+              filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && file.path.endsWith('.java'),
+              refresh: false,
+            },
+            generatedAnnotationTransform(application.packageName),
+          );
         }
       },
       generatedPackageInfo({ application }) {
         const mainPackageMatch = matchMainJavaFiles(application.srcMainJava);
         if (this.packageInfoFile) {
           this.queueTransformStream(
+            {
+              name: 'adding package-info.java files',
+              filter: file =>
+                isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && mainPackageMatch.match(file.path),
+              refresh: true,
+            },
             packageInfoTransform({
               javaRoots: [this.destinationPath(application.srcMainJava)],
-              editor: this.fs,
               javadocs: {
                 ...Object.fromEntries(application.packageInfoJavadocs.map(doc => [doc.packageName, doc.documentation])),
                 [`${application.packageName}`]: 'Application root.',
@@ -96,12 +105,6 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
                 [`${application.packageName}.web.rest`]: 'Rest layer.',
               },
             }),
-            {
-              name: 'adding package-info.java files',
-              streamOptions: {
-                filter: file => isFilePending(file) && !file.path.endsWith('package-info.java') && mainPackageMatch.match(file.path),
-              },
-            },
           );
         }
       },
