@@ -758,7 +758,7 @@
                     <version>${maven-resources-plugin.version}</version>
                     <executions>
                         <execution>
-                            <id>default-resources</id>
+                            <id>config-resources</id>
                             <phase>validate</phase>
                             <goals>
                                 <goal>copy-resources</goal>
@@ -776,13 +776,6 @@
                                         <includes>
                                             <include>config/*.yml</include>
                                         </includes>
-                                    </resource>
-                                    <resource>
-                                        <directory><%= SERVER_MAIN_RES_DIR %></directory>
-                                        <filtering>false</filtering>
-                                        <excludes>
-                                            <exclude>config/*.yml</exclude>
-                                        </excludes>
                                     </resource>
                                 </resources>
                             </configuration>

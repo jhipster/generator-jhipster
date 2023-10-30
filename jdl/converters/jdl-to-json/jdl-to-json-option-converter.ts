@@ -112,7 +112,7 @@ function getJSONOptionKeyAndValue(jdlOption) {
     case FILTER:
       return { key: 'jpaMetamodelFiltering', value: true };
     default:
-      return { key: jdlOption.name, value: jdlOption.value || true };
+      return { key: jdlOption.name, value: jdlOption.getType() === 'UNARY' ? true : jdlOption.value };
   }
 }
 
@@ -124,7 +124,7 @@ function preventEntitiesFromBeingSearched(entityNames) {
 
 function setOptionToEntityName(option, entityName: string) {
   const { optionName, optionValue } = option;
-  const optionContentForEntity = convertedOptionContent.get(entityName) || {};
+  const optionContentForEntity = convertedOptionContent.get(entityName) ?? {};
   optionContentForEntity[optionName] = optionValue;
   convertedOptionContent.set(entityName, optionContentForEntity);
 }

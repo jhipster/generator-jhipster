@@ -25,7 +25,7 @@ export default class ListJDLApplicationConfigurationOption extends JDLApplicatio
     super(name, new Set(value));
   }
 
-  getValue() {
+  getValue(): any[] {
     return Array.from(this.value);
   }
 

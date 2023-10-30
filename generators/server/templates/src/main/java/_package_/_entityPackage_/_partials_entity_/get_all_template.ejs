@@ -75,7 +75,7 @@ _%>
     }
 <%_ } else { _%>
   <%_ if (paginationNo) { _%>
-    public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");
     <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
@@ -96,7 +96,7 @@ _%>
             return <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList()<% } %>;
     <%_ } _%>
   <%_ } else { _%>
-    public <% if (reactive) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public <% if (reactive) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get a page of <%= entityClassPlural %>");
     <%_ if (reactive) { _%>
         return <%= entityInstance %><%= viaService ? 'Service.countAll' : 'Repository.count' %>().zipWith(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<%= reactiveEntityToDto %>.collectList())

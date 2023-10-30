@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import * as _ from 'lodash-es';
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
@@ -68,7 +68,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -108,18 +108,31 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.preparingEachEntity));
   }
 
+  get default() {
+    return this.asDefaultTaskGroup({
+      queueTranslateTransform({ control, application }) {
+        if (!application.enableTranslation) {
+          this.queueTransformStream(
+            {
+              name: 'translating react application',
+              filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedReactFile(file),
+              refresh: false,
+            },
+            translateReactFilesTransform(control.getWebappTranslation),
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
   get writing() {
     return {
       cleanupOldFilesTask,
       writeFiles,
-      queueTranslateTransform({ control, application }) {
-        if (!application.enableTranslation) {
-          this.queueTransformStream(translateReactFilesTransform(control.getWebappTranslation), {
-            name: 'translating webapp',
-            streamOptions: { filter: file => isFilePending(file) && isTranslatedReactFile(file) },
-          });
-        }
-      },
     };
   }
 

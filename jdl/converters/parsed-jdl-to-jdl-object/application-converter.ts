@@ -39,30 +39,13 @@ export function convertApplications(parsedApplications) {
     throw new Error('Applications have to be passed so as to be converted.');
   }
   return parsedApplications.map(parsedApplication => {
-    const formattedApplicationConfiguration = formatApplicationConfigurationOptions(parsedApplication.config);
-    const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
+    const jdlApplication = createJDLApplication(parsedApplication.config, parsedApplication.namespaceConfigs);
     jdlApplication.addEntityNames(parsedApplication.entities);
     const entityOptions = getEntityOptionsInApplication(parsedApplication);
     checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME), entityOptions, parsedApplication.entities);
     entityOptions.forEach(option => jdlApplication.addOption(option));
     return jdlApplication;
   });
-}
-
-function formatApplicationConfigurationOptions(applicationConfiguration) {
-  const formattedOptions: any = {};
-  if (Array.isArray(applicationConfiguration.blueprints)) {
-    formattedOptions.blueprints = applicationConfiguration.blueprints.map(blueprintName => {
-      if (!/^generator-jhipster-/.test(blueprintName)) {
-        return `generator-jhipster-${blueprintName}`;
-      }
-      return blueprintName;
-    });
-  }
-  return {
-    ...applicationConfiguration,
-    ...formattedOptions,
-  };
 }
 
 function getEntityOptionsInApplication(parsedApplication) {

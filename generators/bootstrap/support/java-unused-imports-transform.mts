@@ -1,6 +1,6 @@
 import { extname } from 'path';
 import { passthrough } from '@yeoman/transform';
-import { isFileStateDeleted } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import { removeUnusedImports } from 'java-lint';
 import { VinylMemFsEditorFile } from 'mem-fs-editor';
 import CoreGenerator from '../../base-core/index.mjs';
@@ -14,7 +14,7 @@ export const createRemoveUnusedImportsTransform = function (
 ) {
   const { ignoreErrors } = options;
   return passthrough((file: VinylMemFsEditorFile) => {
-    if (extname(file.path) === '.java' && !isFileStateDeleted(file)) {
+    if (extname(file.path) === '.java' && isFileStateModified(file)) {
       if (file.contents) {
         try {
           file.contents = Buffer.from(removeUnusedImports(file.contents.toString('utf8')));

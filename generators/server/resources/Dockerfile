@@ -13,10 +13,10 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:16.0
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:22.0.4
+FROM quay.io/keycloak/keycloak:22.0.5
 LABEL ALIAS=keycloak
 
-FROM mysql:8.1.0
+FROM mysql:8.2.0
 
 FROM mariadb:11.1.2
 
@@ -31,7 +31,7 @@ FROM cassandra:3.11.14
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.12.0
+FROM neo4j:5.13.0
 
 FROM hazelcast/management-center:5.3.3
 LABEL ALIAS=hazelcast
@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:10.1.5
+FROM grafana/grafana:10.2.0
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

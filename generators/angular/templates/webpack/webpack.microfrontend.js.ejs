@@ -16,138 +16,60 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const { withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 const packageJson = require('../package.json');
-const appVersion = packageJson.version;
+// Microfrontend api, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+const shareAllDefaults = { ...sharedDefaults, requiredVersion: 'auto' }
+const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
+
+const shareDependencies = ({ skipList = [] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
+
+let sharedDependencies = shareDependencies({ skipList: ['@angular/localize'] });
+sharedDependencies = {
+  ...sharedDependencies,
+  '@angular/common/http': sharedDependencies['@angular/common'],
+  'rxjs/operators': sharedDependencies.rxjs,
+};
 
 module.exports = (config, options, targetOptions) => {
-  return {
-    experiments: {
-      outputModule: true,
-    },
-    plugins: [
-      new ModuleFederationPlugin({
-        library: {
-          type: 'module',
-        },
+  return withModuleFederationPlugin({
+    name: '<%= lowercaseBaseName %>',
 <%_ if (applicationTypeMicroservice) { _%>
-        name: '<%= lowercaseBaseName %>',
-        filename: 'remoteEntry.js',
-        exposes: {
+    exposes: {
   <%_ if (enableTranslation) { _%>
-          './translation-module': 'app/shared/language/translation.module.ts',
+      './translation-module': 'app/shared/language/translation.module.ts',
   <%_ } _%>
-          './entity-navbar-items': 'app/entities/entity-navbar-items.ts',
-          './entity-routing': 'app/entities/entity-routing.module.ts',
-        },
-<%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-        remotes: {},
-<%_ } _%>
-        shared: {
-          // { eager?, import?, packageName?, requiredVersion?, shareKey?, shareScope?, singleton?, strictVersion?, version? }
-          '@angular/core': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@angular/common'] %>' },
-          '@angular/common': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@angular/common'] %>' },
-          '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@angular/common'] %>' },
-          '@angular/router': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@angular/common'] %>' },
-          '@angular/forms': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@angular/common'] %>' },
-          '@angular/platform-browser': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@angular/common'] %>' },
-          '@fortawesome/angular-fontawesome': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@fortawesome/angular-fontawesome'] %>' },
-          '@fortawesome/fontawesome-common-types': { singleton: true, strictVersion: true },
-          '@fortawesome/fontawesome-svg-core': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>' },
-          '@fortawesome/free-solid-svg-icons': { singleton: true },
-          '@ng-bootstrap/ng-bootstrap': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@ng-bootstrap/ng-bootstrap'] %>' },
-          '@ngx-translate/core': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@ngx-translate/core'] %>' },
-          '@ngx-translate/http-loader': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['@ngx-translate/http-loader'] %>' },
-          dayjs: { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['dayjs'] %>' },
-          'ngx-infinite-scroll': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['ngx-infinite-scroll'] %>' },
-          rxjs: { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['rxjs'] %>' },
-          'rxjs/operators': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['rxjs'] %>' },
-          'zone.js': { singleton: true, strictVersion: true, requiredVersion: '<%= nodeDependencies['zone.js'] %>' },
-          'app/config/input.constants': {
-            singleton: true,
-            import: 'app/config/input.constants',
-            requiredVersion: appVersion,
-          },
-          'app/config/pagination.constants': {
-            singleton: true,
-            import: 'app/config/pagination.constants',
-            requiredVersion: appVersion,
-          },
-          'app/config/translation.config': {
-            singleton: true,
-            import: 'app/config/translation.config',
-            requiredVersion: appVersion,
-          },
-          'app/core/auth': {
-            singleton: true,
-            import: 'app/core/auth',
-            requiredVersion: appVersion,
-          },
-          'app/core/config': {
-            singleton: true,
-            import: 'app/core/config',
-            requiredVersion: appVersion,
-          },
-          'app/core/interceptor': {
-            singleton: true,
-            import: 'app/core/interceptor',
-            requiredVersion: appVersion,
-          },
-          'app/core/request': {
-            singleton: true,
-            import: 'app/core/request',
-            requiredVersion: appVersion,
-          },
-          'app/core/util': {
-            singleton: true,
-            import: 'app/core/util',
-            requiredVersion: appVersion,
-          },
-          'app/shared': {
-            singleton: true,
-            import: 'app/shared',
-            requiredVersion: appVersion,
-          },
-          'app/shared/alert': {
-            singleton: true,
-            import: 'app/shared/alert',
-            requiredVersion: appVersion,
-          },
-          'app/shared/auth': {
-            singleton: true,
-            import: 'app/shared/auth',
-            requiredVersion: appVersion,
-          },
-          'app/shared/date': {
-            singleton: true,
-            import: 'app/shared/date',
-            requiredVersion: appVersion,
-          },
-          'app/shared/language': {
-            singleton: true,
-            import: 'app/shared/language',
-            requiredVersion: appVersion,
-          },
-          'app/shared/pagination': {
-            singleton: true,
-            import: 'app/shared/pagination',
-            requiredVersion: appVersion,
-          },
-          'app/shared/sort': {
-            singleton: true,
-            import: 'app/shared/sort',
-            requiredVersion: appVersion,
-          },
-        },
-      }),
-    ],
-    output: {
-      publicPath: 'auto',
-      uniqueName: '<%= lowercaseBaseName %>',
+      './entity-navbar-items': 'app/entities/entity-navbar-items.ts',
+      './entity-routing': 'app/entities/entity-routing.module.ts',
     },
-    optimization: {
-      runtimeChunk: false,
+<%_ } _%>
+    shared: {
+      ...sharedDependencies,
+      ...shareMappings(
+        'app/config/input.constants',
+        'app/config/pagination.constants',
+        'app/config/translation.config',
+        'app/core/auth',
+        'app/core/config',
+        'app/core/interceptor',
+        'app/core/request',
+        'app/core/util',
+        'app/shared',
+        'app/shared/alert',
+        'app/shared/auth',
+        'app/shared/date',
+        'app/shared/language',
+        'app/shared/pagination',
+        'app/shared/sort',
+      ),
     },
-  };
+  });
 };

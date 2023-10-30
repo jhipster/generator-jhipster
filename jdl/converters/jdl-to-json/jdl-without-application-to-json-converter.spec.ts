@@ -64,21 +64,21 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should throw an error', () => {
           expect(() => {
             convert();
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
       context('such as an no database type', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), applicationName: 'toto' });
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
       context('such as no application name', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), databaseType: 'sql' });
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
     });

@@ -19,6 +19,7 @@
 
 import fs from 'fs';
 import { doesFileExist } from '../utils/file-utils.js';
+import { mergeYoRcContent } from './config.js';
 
 export const GENERATOR_NAME = 'generator-jhipster';
 
@@ -31,19 +32,7 @@ export function writeConfigFile(config, yoRcPath = '.yo-rc.json') {
   let newYoRc = { ...config };
   if (doesFileExist(yoRcPath)) {
     const yoRc = JSON.parse(fs.readFileSync(yoRcPath, { encoding: 'utf-8' }));
-    let creationTimestamp = config[GENERATOR_NAME].creationTimestamp;
-    if (yoRc[GENERATOR_NAME] && yoRc[GENERATOR_NAME].creationTimestamp) {
-      creationTimestamp = yoRc[GENERATOR_NAME].creationTimestamp;
-    }
-    newYoRc = {
-      ...yoRc,
-      ...config,
-      [GENERATOR_NAME]: {
-        ...yoRc[GENERATOR_NAME],
-        ...config[GENERATOR_NAME],
-        creationTimestamp,
-      },
-    };
+    newYoRc = mergeYoRcContent(yoRc, config);
   }
   fs.writeFileSync(yoRcPath, JSON.stringify(newYoRc, null, 2).concat('\n'));
 }

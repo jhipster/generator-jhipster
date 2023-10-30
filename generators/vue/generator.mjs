@@ -19,7 +19,7 @@
 import { relative } from 'path';
 import chalk from 'chalk';
 import * as _ from 'lodash-es';
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.mjs';
@@ -112,6 +112,38 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get default() {
+    return this.asDefaultTaskGroup({
+      async queueTranslateTransform({ control, application }) {
+        const { enableTranslation, clientSrcDir } = application;
+        const { getWebappTranslation } = control;
+        this.queueTransformStream(
+          {
+            name: 'translating vue application',
+            filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedVueFile(file),
+            refresh: false,
+          },
+          translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
+        );
+        if (enableTranslation) {
+          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
+          this.queueTransformStream(
+            {
+              name: 'converting vue translations',
+              filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslationFile(file),
+              refresh: false,
+            },
+            transform,
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupOldFilesTask,
@@ -128,21 +160,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
       cleanupEntitiesFiles,
       writeEntitiesFiles,
       writeEntityFiles,
-      async queueTranslateTransform({ control, application }) {
-        const { enableTranslation, clientSrcDir } = application;
-        const { getWebappTranslation } = control;
-        this.queueTransformStream(translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }), {
-          name: 'translating webapp',
-          streamOptions: { filter: file => isFilePending(file) && isTranslatedVueFile(file) },
-        });
-        if (enableTranslation) {
-          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
-          this.queueTransformStream(transform, {
-            name: 'converting translations',
-            streamOptions: { filter: file => isFilePending(file) && isTranslationFile(file) },
-          });
-        }
-      },
     });
   }
 
