@@ -16,7 +16,7 @@ LABEL ALIAS=postgresql
 FROM quay.io/keycloak/keycloak:22.0.5
 LABEL ALIAS=keycloak
 
-FROM mysql:8.1.0
+FROM mysql:8.2.0
 
 FROM mariadb:11.1.2
 
