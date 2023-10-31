@@ -439,9 +439,9 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     private static Random random = new Random();
   <%_ if (primaryKey.hasLong) { _%>
-    private static AtomicLong count = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
   <%_ } else if (primaryKey.hasInteger) { _%>
-    private static AtomicInteger count = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
+    private static AtomicInteger intCount = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
   <%_ } _%>
 <%_ } _%>
 
