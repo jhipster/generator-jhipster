@@ -27,7 +27,7 @@ export const entityServerFiles: WriteFileSection = {
   ],
   modelTestFiles: [
     javaTestPackageTemplatesBlock({
-      templates: ['_entityPackage_/domain/_persistClass_Test.java'],
+      templates: ['_entityPackage_/domain/_persistClass_Test.java', '_entityPackage_/domain/_persistClass_TestSamples.java'],
     }),
   ],
   server: [

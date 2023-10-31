@@ -21,6 +21,7 @@ import { fieldTypes, validations } from '../../../jdl/jhipster/index.mjs';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.mjs';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.mjs';
 import { fieldIsEnum } from './field-utils.mjs';
+import { mutateData } from '../../base/support/config.mjs';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const {
@@ -266,14 +267,18 @@ export default function prepareField(entityWithConfig, field, generator) {
 }
 
 function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
-  _.defaults(field, {
-    propertyName: field.fieldName,
+  mutateData(field, {
     path: [field.fieldName],
-    fieldNameCapitalized: _.upperFirst(field.fieldName),
-    fieldNameUnderscored: _.snakeCase(field.fieldName),
-    fieldNameHumanized: _.startCase(field.fieldName),
-    fieldTranslationKey: `${entityWithConfig.i18nKeyPrefix}.${field.fieldName}`,
-    tsType: getTypescriptType(field.fieldType),
+    propertyName: field.fieldName,
+    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? _.upperFirst(propertyName),
+    fieldNameCapitalized: ({ fieldName, fieldNameCapitalized }) => fieldNameCapitalized ?? _.upperFirst(fieldName),
+    fieldNameUnderscored: ({ fieldName, fieldNameUnderscored }) => fieldNameUnderscored ?? _.snakeCase(fieldName),
+    fieldNameHumanized: ({ fieldName, fieldNameHumanized }) => fieldNameHumanized ?? _.startCase(fieldName),
+    fieldTranslationKey: ({ fieldName, fieldTranslationKey }) => fieldTranslationKey ?? `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
+    tsType: ({ fieldType, tsType }) => tsType ?? getTypescriptType(fieldType),
+  });
+
+  _.defaults(field, {
     entity: entityWithConfig,
   });
   const fieldType = field.fieldType;

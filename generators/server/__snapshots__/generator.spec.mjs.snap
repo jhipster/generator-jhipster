@@ -1115,7 +1115,13 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
