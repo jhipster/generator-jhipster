@@ -175,12 +175,12 @@ public class PublicUserResource {
 <%_ if (searchEngineAny) { _%>
 
     /**
-     * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
+     * {@code SEARCH /users/_search/:query} : search for the User corresponding to the query.
      *
      * @param query the query to search.
      * @return the result of the search.
      */
-    @GetMapping("/_search/users/{query}")
+    @GetMapping("/users/_search/{query}")
     public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
   <%_ if (searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>
