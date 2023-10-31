@@ -141,7 +141,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
       },
 
       async writeEnumFiles({ application, entities }) {
-        if (!this.generateEnums || !this.generateEntities) return;
+        if (!this.generateEnums) return;
 
         for (const entity of entities.filter(entity => !entity.skipServer)) {
           for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
