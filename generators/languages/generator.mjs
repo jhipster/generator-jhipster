@@ -228,11 +228,13 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         const fallbackLanguage = 'en';
         this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
         const filter = createTranslationsFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
-        this.env.sharedFs.on('change', filePath => {
+        const listener = filePath => {
           if (filter(filePath)) {
+            this.env.sharedFs.removeListener('change', listener);
             this.queueLoadLanguages({ clientSrcDir, enableTranslation, nativeLanguage, fallbackLanguage });
           }
-        });
+        };
+        this.env.sharedFs.on('change', listener);
 
         control.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },

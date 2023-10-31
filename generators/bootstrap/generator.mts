@@ -100,8 +100,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
     return {
       queueMultistepTransform() {
-        const multiStepTransform = createMultiStepTransform();
-        this.queueMultistepTransform(multiStepTransform);
+        this.queueMultistepTransform();
       },
     };
   }
@@ -112,14 +111,8 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get preConflicts(): GenericTaskGroup<this, BaseGeneratorDefinition['preConflictsTaskParam']> {
     return {
-      async queueCommitPrettierConfig() {
-        await this.queueCommitPrettierConfig();
-
-        this.env.sharedFs.on('change', filePath => {
-          if (isPrettierConfigFilePath(filePath)) {
-            this.queueCommitPrettierConfig();
-          }
-        });
+      queueCommitPrettierConfig() {
+        this.queueCommitPrettierConfig();
       },
     };
   }
@@ -131,7 +124,15 @@ export default class BootstrapGenerator extends BaseGenerator {
   /**
    * Queue multi step templates transform
    */
-  queueMultistepTransform(multiStepTransform: ReturnType<typeof createMultiStepTransform>) {
+  queueMultistepTransform() {
+    const multiStepTransform = createMultiStepTransform();
+    const listener = filePath => {
+      if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
+        this.env.sharedFs.removeListener('change', listener);
+        this.queueMultistepTransform();
+      }
+    };
+
     this.queueTask({
       method: async () => {
         await this.pipeline(
@@ -144,11 +145,7 @@ export default class BootstrapGenerator extends BaseGenerator {
           multiStepTransform,
         );
 
-        this.env.sharedFs.on('change', filePath => {
-          if (multiStepTransform.templateFileFs.isTemplate(filePath)) {
-            this.queueMultistepTransform(multiStepTransform);
-          }
-        });
+        this.env.sharedFs.on('change', listener);
       },
       taskName: MULTISTEP_TRANSFORM_QUEUE,
       queueName: MULTISTEP_TRANSFORM_QUEUE,
@@ -157,9 +154,17 @@ export default class BootstrapGenerator extends BaseGenerator {
   }
 
   queueCommitPrettierConfig() {
+    const listener = filePath => {
+      if (isPrettierConfigFilePath(filePath)) {
+        this.env.sharedFs.removeListener('change', listener);
+        this.queueCommitPrettierConfig();
+      }
+    };
+
     this.queueTask({
       method: async () => {
         await this.commitPrettierConfig();
+        this.env.sharedFs.on('change', listener);
       },
       taskName: 'commitPrettierConfig',
       queueName: PRE_CONFLICTS_QUEUE,
