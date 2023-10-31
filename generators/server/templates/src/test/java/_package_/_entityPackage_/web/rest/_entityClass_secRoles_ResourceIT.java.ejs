@@ -858,7 +858,7 @@ _%>
     void update<%= entityClass %>MapsIdAssociationWithNewIdIsAllowed() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
-    <%_ const alreadyGeneratedEntities = []; _%>
+    <%_ let alreadyGeneratedEntities = []; _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
