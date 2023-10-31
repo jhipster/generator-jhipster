@@ -53,7 +53,7 @@ class <%= persistClass %>Test {
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
 <%_} _%>
     }
-<%_ for (const relationship of relationships.filter(relationship => !relationship.otherEntity.builtIn)) { _%>
+<%_ for (const relationship of relationships) { _%>
 
     @Test
     void <%- relationship.relationshipName %>Test() throws Exception {
