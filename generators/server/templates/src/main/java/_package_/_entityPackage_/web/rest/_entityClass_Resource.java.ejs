@@ -133,7 +133,7 @@ import org.springframework.security.access.annotation.Secured;
  * REST controller for managing {@link <%= entityAbsoluteClass %>}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/<%= entityApiUrl %>")
 <%_ if (databaseTypeSql && !viaService && !saveUserSnapshot) { _%>
 @Transactional
 <%_ } _%>
@@ -169,7 +169,7 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/<%= entityApiUrl %>")
+    @PostMapping("")
     <%_ if (hasRolesSecurity && security.roles.post) { _%>
     @Secured({<%- security.roles.post %>})
     <%_ }_%>
@@ -229,7 +229,7 @@ public class <%= entityClass %>Resource {
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/<%= entityApiUrl %>/{<%= primaryKey.name %>}")
+    @PutMapping("/{<%= primaryKey.name %>}")
 	<%_ if (hasRolesSecurity && security.roles.put) { _%>
     @Secured({<%- security.roles.put %>})
 	<%_ }_%>
@@ -301,7 +301,7 @@ public class <%= entityClass %>Resource {
      * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/<%= entityApiUrl %>/{<%= primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
+    @PatchMapping(value = "/{<%= primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
 	<%_ if (hasRolesSecurity && security.roles.put) { _%>
     @Secured({<%- security.roles.put %>})
 	<%_ }_%>
@@ -384,9 +384,9 @@ public class <%= entityClass %>Resource {
 <%_ } _%>
      */
 <%_ if (reactive) { _%>
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 <%_ } else { _%>
-    @GetMapping("/<%= entityApiUrl %>")
+    @GetMapping("")
 <%_ } _%>
 	<%_ if (hasRolesSecurity && security.roles.get) { _%>
     @Secured({<%- security.roles.get %>})
@@ -404,7 +404,7 @@ public class <%= entityClass %>Resource {
     * If the user does not have authority to access the endpoint it will return status {@code 403 (Forbidden)} .
     <%_ } _%>
      */
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_NDJSON_VALUE)
     <%_ if (hasRolesSecurity && security.roles.get) { _%>
     @Secured({<%- security.roles.get %>})
     <%_ }_%>
@@ -430,7 +430,7 @@ public class <%= entityClass %>Resource {
      * If the user does not have authority to access the endpoint it will return status {@code 403 (Forbidden)} .
     <%_ } _%>
      */
-    @GetMapping("/<%= entityApiUrl %>/{id}")
+    @GetMapping("/{id}")
 	<%_ if (hasRolesSecurity && security.roles.get) { _%>
     @Secured({<%- security.roles.get %>})
 	<%_ }_%>
@@ -452,7 +452,7 @@ public class <%= entityClass %>Resource {
      * If the user does not have authority to access the endpoint it will return status {@code 403 (Forbidden)} .
      <%_ } _%>
      */
-    @DeleteMapping("/<%= entityApiUrl %>/{id}")
+    @DeleteMapping("/{id}")
 	<%_ if (hasRolesSecurity && security.roles.delete) { _%>
     @Secured({<%- security.roles.delete %>})
 	<%_ }_%>
@@ -477,7 +477,7 @@ public class <%= entityClass %>Resource {
 <%_ if (searchEngineAny) { _%>
 
     /**
-     * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding
+     * {@code SEARCH  /<%= entityApiUrl %>/_search?query=:query} : search for the <%= entityInstance %> corresponding
      * to the query.
      *
      * @param query the query of the <%= entityInstance %> search.
@@ -493,10 +493,10 @@ public class <%= entityClass %>Resource {
      <%_ } _%>
      */
     <%_ if (hasRolesSecurity && security.roles.get) { _%>
-    @GetMapping("/_search/<%= entityApiUrl %>")
+    @GetMapping("/_search")
     @Secured({<%- security.roles.get %>})<%- include('../../_partials_entity_/search_template', {viaService}); -%>
     <%_ } else { _%>
-    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../_partials_entity_/search_template', {viaService}); -%>
+    @GetMapping("/_search")<%- include('../../_partials_entity_/search_template', {viaService}); -%>
     <%_ } _%>
 <%_ } _%>
 }

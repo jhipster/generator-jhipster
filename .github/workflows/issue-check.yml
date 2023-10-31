@@ -74,19 +74,19 @@ jobs:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
+          key: ${{ runner.os }}-node-
       - name: 'SETUP: load maven cache'
         uses: actions/cache/restore@v3
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
+          key: ${{ runner.os }}-maven-
       - name: 'SETUP: load gradle cache'
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
+          key: ${{ runner.os }}-gradle-
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'

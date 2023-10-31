@@ -487,15 +487,15 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private static final String ENTITY_API_URL = "/api/<%= entityApiUrl %>";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%= primaryKey.name %>}";
 <%_ if (searchEngineAny) { _%>
-    private static final String ENTITY_SEARCH_API_URL = "/api/_search/<%= entityApiUrl %>";
+    private static final String ENTITY_SEARCH_API_URL = "/api/<%= entityApiUrl %>/_search";
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 
     private static Random random = new Random();
   <%_ if (primaryKey.hasLong) { _%>
-    private static AtomicLong count = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
   <%_ } else if (primaryKey.hasInteger) { _%>
-    private static AtomicInteger count = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
+    private static AtomicInteger intCount = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
   <%_ } _%>
 <%_ } _%>
 
@@ -858,7 +858,7 @@ _%>
     void update<%= entityClass %>MapsIdAssociationWithNewIdIsAllowed() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
-    <%_ let alreadyGeneratedEntities = []; _%>
+    <%_ const alreadyGeneratedEntities = []; _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);

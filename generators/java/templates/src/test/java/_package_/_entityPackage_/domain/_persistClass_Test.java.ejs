@@ -18,6 +18,17 @@
 -%>
 package <%= entityAbsolutePackage %>.domain;
 
+import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>TestSamples.*;
+<%_ for (const otherEntity of otherEntities.filter(otherEntity => !otherEntity.builtIn)) { _%>
+import static <%= otherEntity.entityAbsolutePackage %>.domain.<%= otherEntity.persistClass %>TestSamples.*;
+<%_ } _%>
+<%_ for (const otherEntity of otherEntities.filter(otherEntity => entityPackage !== otherEntity.entityPackage)) { _%>
+import <%= otherEntity.entityAbsolutePackage %>.domain.<%= otherEntity.persistClass %>;
+<%_ } _%>
+<%_ if (relationships.some(relationship => relationship.collection)) { _%>
+import java.util.HashSet;
+import java.util.Set;
+<%_ } _%>
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
@@ -31,15 +42,85 @@ class <%= persistClass %>Test {
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= persistClass %>.class);
 <%_if (!embedded) { _%>
-        <%= persistClass %> <%= persistInstance %>1 = new <%= persistClass %>();
-        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeInteger) { %>1<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeString) { %>"id1"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
+        <%= persistClass %> <%= persistInstance %>1 = get<%= persistClass %>Sample1();
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
+        assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
+
         <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
         assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
-        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeInteger) { %>2<% } else if (primaryKey.typeLong) { %>2L<% } else if (primaryKey.typeString) { %>"id2"<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } %>);
-        assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
-        <%= persistInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
+
+        <%= persistInstance %>2 = get<%= persistClass %>Sample2();
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
 <%_} _%>
     }
+<%_ for (const relationship of relationships.filter(relationship => !relationship.otherEntity.builtIn)) { _%>
+
+    @Test
+    void <%- relationship.relationshipName %>Test() throws Exception {
+        <%= persistClass %> <%= persistInstance %> = get<%= persistClass %>RandomSampleGenerator();
+        <%= relationship.otherEntity.persistClass %> <%= relationship.otherEntity.persistInstance %>Back = get<%= relationship.otherEntity.persistClass %>RandomSampleGenerator();
+  <%_ if (relationship.collection) { _%>
+
+        <%= persistInstance %>.add<%- relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistInstance %>Back);
+        assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).containsOnly(<%= relationship.otherEntity.persistInstance %>Back);
+  <%_ } else { _%>
+
+        <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(<%= relationship.otherEntity.persistInstance %>Back);
+        assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).isEqualTo(<%= relationship.otherEntity.persistInstance %>Back);
+  <%_ } _%>
+  <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.otherRelationship.collection) { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).containsOnly(<%= persistInstance %>);
+    <%_ } else { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).isEqualTo(<%= persistInstance %>);
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (relationship.collection) { _%>
+
+        <%= persistInstance %>.remove<%- relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistInstance %>Back);
+        assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).doesNotContain(<%= relationship.otherEntity.persistInstance %>Back);
+  <%_ } else { _%>
+
+    <%_ if (fluentMethods) { _%>
+        <%= persistInstance %>.<%- relationship.propertyName %>(null);
+    <%_ } else { _%>
+        <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(null);
+    <%_ } _%>
+        assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).isNull();
+  <%_ } _%>
+  <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.otherRelationship.collection) { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).doesNotContain(<%= persistInstance %>);
+    <%_ } else { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).isNull();
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (relationship.collection) { _%>
+
+    <%_ if (fluentMethods) { _%>
+        <%= persistInstance %>.<%- relationship.propertyName %>(new HashSet<>(Set.of(<%= relationship.otherEntity.persistInstance %>Back)));
+    <%_ } else { _%>
+        <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(new HashSet<>(Set.of(<%= relationship.otherEntity.persistInstance %>Back)));
+    <%_ } _%>
+        assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).containsOnly(<%= relationship.otherEntity.persistInstance %>Back);
+    <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).containsOnly(<%= persistInstance %>);
+      <%_ } else { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).isEqualTo(<%= persistInstance %>);
+      <%_ } _%>
+    <%_ } _%>
+
+        <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(new HashSet<>());
+        assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).doesNotContain(<%= relationship.otherEntity.persistInstance %>Back);
+    <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).doesNotContain(<%= persistInstance %>);
+      <%_ } else { _%>
+        assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).isNull();
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
+    }
+<%_ } _%>
 }
