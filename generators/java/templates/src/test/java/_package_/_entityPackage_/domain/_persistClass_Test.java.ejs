@@ -81,7 +81,11 @@ class <%= persistClass %>Test {
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).doesNotContain(<%= relationship.otherEntity.persistInstance %>Back);
   <%_ } else { _%>
 
+    <%_ if (fluentMethods) { _%>
+        <%= persistInstance %>.<%- relationship.propertyName %>(null);
+    <%_ } else { _%>
         <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(null);
+    <%_ } _%>
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).isNull();
   <%_ } _%>
   <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
@@ -93,7 +97,11 @@ class <%= persistClass %>Test {
   <%_ } _%>
   <%_ if (relationship.collection) { _%>
 
+    <%_ if (fluentMethods) { _%>
+        <%= persistInstance %>.<%- relationship.propertyName %>(new HashSet<>(Set.of(<%= relationship.otherEntity.persistInstance %>Back)));
+    <%_ } else { _%>
         <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(new HashSet<>(Set.of(<%= relationship.otherEntity.persistInstance %>Back)));
+    <%_ } _%>
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).containsOnly(<%= relationship.otherEntity.persistInstance %>Back);
     <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
       <%_ if (relationship.otherRelationship.collection) { _%>
