@@ -150,7 +150,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   fakeKeytool;
   command = command;
 
-  async beforeQueue(useNpmWrapper = true) {
+  async beforeQueue() {
     if (!this.fromBlueprint) {
       loadStoredAppOptions.call(this);
       await this.composeWithBlueprints(GENERATOR_SERVER);
@@ -160,10 +160,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
       await this.dependsOnJHipster(GENERATOR_COMMON);
       await this.dependsOnJHipster(GENERATOR_JAVA);
-
-      if (useNpmWrapper) {
-        this.useNpmWrapperInstallTask();
-      }
     }
   }
 
@@ -387,6 +383,20 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      useNpmWrapper({ application }) {
+        if (application.useNpmWrapper) {
+          this.useNpmWrapperInstallTask();
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get configuringEachEntity() {
