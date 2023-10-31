@@ -6,7 +6,7 @@ import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFi
 
 const baseApiUrl = '<%= entityApi %>api/<%= entityApiUrl %>';
 <%_ if (searchEngineAny) { _%>
-const baseSearchApiUrl = '<%= entityApi %>api/_search/<%= entityApiUrl %>?query=';
+const baseSearchApiUrl = '<%= entityApi %>api/<%= entityApiUrl %>/_search?query=';
 <%_ } _%>
 
 export default class <%= entityAngularName %>Service {
