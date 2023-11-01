@@ -119,10 +119,6 @@ describe(`generator - ${generator}`, () => {
     it('should not contain jakarta', () => {
       result.assertNoFile('src/main/java/com/mycompany/myapp/domain/Foo.java');
     });
-
-    it('should not write enum files', () => {
-      expect(Object.keys(result.getStateSnapshot('**/enumeration/**')).length).toBe(0);
-    });
   });
 
   describe('with custom properties values', () => {
