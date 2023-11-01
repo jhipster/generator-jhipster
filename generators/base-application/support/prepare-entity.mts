@@ -306,7 +306,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     } else {
       if (entityWithConfig.microserviceName && !application?.microfrontend) {
         this?.log.warn(
-          "Microservice entities should have the id field type specified to make sure gateway and microservice types won't conflict",
+          "Microservice entities should have the id field type specified (e.g., id String) to make sure gateway and microservice types won't conflict",
         );
       }
       idField = {
