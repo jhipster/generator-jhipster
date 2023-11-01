@@ -211,10 +211,13 @@ export default class EnvironmentBuilder {
    * @return {EnvironmentBuilder} this for chaining.
    */
   async _lookupBlueprints(options) {
-    const allBlueprints = Object.keys(this._blueprintsWithVersion);
-    if (allBlueprints && allBlueprints.length > 0) {
+    const missingBlueprints = Object.keys(this._blueprintsWithVersion).filter(
+      blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint)),
+    );
+
+    if (missingBlueprints && missingBlueprints.length > 0) {
       // Lookup for blueprints.
-      await this.env.lookup({ ...options, filterPaths: true, packagePatterns: allBlueprints });
+      await this.env.lookup({ ...options, filterPaths: true, packagePatterns: missingBlueprints });
     }
     return this;
   }
