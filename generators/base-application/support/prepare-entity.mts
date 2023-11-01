@@ -297,9 +297,17 @@ export function prepareEntityPrimaryKeyForTemplates(
     let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
     if (idField) {
       idField.id = true;
+      _.defaults(idField, {
+        id: true,
+        fieldNameHumanized: 'ID',
+        fieldTranslationKey: 'global.field.id',
+        autoGenerate: true,
+      });
     } else {
       if (entityWithConfig.microserviceName && !application?.microfrontend) {
-        this?.log.warn("Microservice entities should have a custom id to make sure gateway and microservice types won't conflict");
+        this?.log.warn(
+          "Microservice entities should have the id field type specified to make sure gateway and microservice types won't conflict",
+        );
       }
       idField = {
         fieldName: 'id',
