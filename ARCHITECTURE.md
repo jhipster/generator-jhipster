@@ -2,7 +2,7 @@
 
 ## Yeoman basis
 
-Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is the [most popular generator of all time](https://yeoman.io/generators/). 
+Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is the [most popular generator of all time](https://yeoman.io/generators/).
 
 ## File structure
 
