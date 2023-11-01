@@ -32,9 +32,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
-<%_ if (primaryKey && primaryKey.hasUUID) { _%>
-import java.util.UUID;
-<%_ } _%>
 
 class <%= persistClass %>Test {
 
@@ -68,7 +65,7 @@ class <%= persistClass %>Test {
         <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(<%= relationship.otherEntity.persistInstance %>Back);
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).isEqualTo(<%= relationship.otherEntity.persistInstance %>Back);
   <%_ } _%>
-  <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+  <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
     <%_ if (relationship.otherRelationship.collection) { _%>
         assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).containsOnly(<%= persistInstance %>);
     <%_ } else { _%>
@@ -88,7 +85,7 @@ class <%= persistClass %>Test {
     <%_ } _%>
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).isNull();
   <%_ } _%>
-  <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+  <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
     <%_ if (relationship.otherRelationship.collection) { _%>
         assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).doesNotContain(<%= persistInstance %>);
     <%_ } else { _%>
@@ -103,7 +100,7 @@ class <%= persistClass %>Test {
         <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(new HashSet<>(Set.of(<%= relationship.otherEntity.persistInstance %>Back)));
     <%_ } _%>
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).containsOnly(<%= relationship.otherEntity.persistInstance %>Back);
-    <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
       <%_ if (relationship.otherRelationship.collection) { _%>
         assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).containsOnly(<%= persistInstance %>);
       <%_ } else { _%>
@@ -113,7 +110,7 @@ class <%= persistClass %>Test {
 
         <%= persistInstance %>.set<%- relationship.propertyNameCapitalized %>(new HashSet<>());
         assertThat(<%= persistInstance %>.get<%- relationship.propertyNameCapitalized %>()).doesNotContain(<%= relationship.otherEntity.persistInstance %>Back);
-    <%_ if (relationship.otherRelationship && !relationship.ownerSide && !relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference && !relationship.otherEntity.embedded) { _%>
       <%_ if (relationship.otherRelationship.collection) { _%>
         assertThat(<%= relationship.otherEntity.persistInstance %>Back.get<%- relationship.otherRelationship.propertyNameCapitalized %>()).doesNotContain(<%= persistInstance %>);
       <%_ } else { _%>

@@ -40,16 +40,6 @@ const {
 
 const { MAPSTRUCT } = MapperTypes;
 
-function _derivedProperties(relationship) {
-  _.defaults(relationship, {
-    relationshipOneToOne: relationship.relationshipType === 'one-to-one',
-    relationshipOneToMany: relationship.relationshipType === 'one-to-many',
-    relationshipManyToOne: relationship.relationshipType === 'many-to-one',
-    relationshipManyToMany: relationship.relationshipType === 'many-to-many',
-    otherEntityUser: relationship.otherEntityName === 'user',
-  });
-}
-
 function _defineOnUpdateAndOnDelete(relationship, generator) {
   relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
   relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);
@@ -73,13 +63,21 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   Object.assign(relationship, {
     relationshipLeftSide: relationship.relationshipSide === 'left',
     relationshipRightSide: relationship.relationshipSide === 'right',
+    collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
+    relationshipOneToOne: relationship.relationshipType === 'one-to-one',
+    relationshipOneToMany: relationship.relationshipType === 'one-to-many',
+    relationshipManyToOne: relationship.relationshipType === 'many-to-one',
+    relationshipManyToMany: relationship.relationshipType === 'many-to-many',
+    otherEntityUser: relationship.otherEntityName === 'user',
   });
 
-  _.defaults(relationship, {
+  mutateData(relationship, {
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
-    ownerSide: relationship.ownerSide || relationship.relationshipType === 'many-to-one' || relationship.relationshipSide === 'left',
-    collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
+    ownerSide: ({ ownerSide, relationshipLeftSide, relationshipManyToOne, relationshipOneToMany }) =>
+      ownerSide ?? (relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany)),
+    relationshipUpdateBackReference: ({ relationshipUpdateBackReference, ownerSide, relationshipRightSide }) =>
+      relationshipUpdateBackReference ?? (entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide),
   });
 
   relationship.otherSideReferenceExists = false;
@@ -248,8 +246,6 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   relationship.reference = relationshipToReference(entityWithConfig, relationship);
 
   _defineOnUpdateAndOnDelete(relationship, generator);
-
-  _derivedProperties(relationship);
 
   return relationship;
 }
