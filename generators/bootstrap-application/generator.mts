@@ -212,6 +212,16 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       postPreparingEntities({ entities }) {
         preparePostEntitiesCommonDerivedProperties(entities);
       },
+      checkProperties({ entities }) {
+        for (const entity of entities) {
+          const properties = [...entity.fields.map(entity => entity.propertyName), ...entity.relationships.map(rel => rel.propertyName)];
+          if (new Set(properties).size !== properties.length) {
+            // Has duplicated properties.
+            const duplicated = [...new Set(properties.filter((v, i, a) => a.indexOf(v) !== i))];
+            throw new Error(`You have duplicated properties ${duplicated.join(', ')}`);
+          }
+        }
+      },
     });
   }
 
