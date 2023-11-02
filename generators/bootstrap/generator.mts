@@ -184,7 +184,7 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs({ log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {}) {
     const skipYoResolveTransforms: Array<FileTransform<MemFsEditorFile>> = [];
-    if (this.options.skipYoResolve) {
+    if (!this.options.skipYoResolve) {
       skipYoResolveTransforms.push(createYoResolveTransform());
     }
 
