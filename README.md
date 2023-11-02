@@ -29,20 +29,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
-### Gold Sponsors
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://dev.entando.org/jhipster" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
 ### Bronze sponsors
 
 [![BronzeSponsors][bronze-sponsors-image]][bronze-sponsors-url]
