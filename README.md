@@ -12,27 +12,22 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Contributing
 
-We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
+We are honored by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
+
+## Supported Java and Node versions
+
+The following Java and Node combinations are tested and verified by GitHub Actions:
+
+| Java | Node | Status |
+| ---- | ---- | ------ |
+| 21   | 20   | ✅     |
+| 17   | 18   | ✅     |
 
 ## Sponsors
 
 Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/generator-jhipster) or [learn more about sponsoring the project](https://www.jhipster.tech/sponsors/).
 
 **Thank you to our sponsors!**
-
-### Gold Sponsors
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://dev.entando.org/jhipster" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
 
 ### Bronze sponsors
 

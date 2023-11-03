@@ -161,10 +161,10 @@ const deprecatedProperties = {
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
-const javascriptBuiltInProperties = ['parseInt', 'Boolean', 'JSON', 'Object'];
+const javascriptBuiltInProperties = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
 
 const getProperty = (context, prop) => {
-  if (prop === Symbol.unscopables) {
+  if (typeof prop === 'symbol') {
     return undefined;
   }
   if (prop in deprecatedProperties) {
@@ -175,7 +175,7 @@ const getProperty = (context, prop) => {
     );
     return value;
   }
-  if (prop.startsWith('DOCKER_')) {
+  if (prop?.startsWith?.('DOCKER_')) {
     console.log(
       `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(
         // eslint-disable-next-line no-template-curly-in-string

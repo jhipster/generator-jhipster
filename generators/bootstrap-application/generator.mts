@@ -33,8 +33,6 @@ import {
 } from '../generator-list.mjs';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.mjs';
-import { getDefaultAppName } from '../project-name/support/index.mjs';
-import { packageJson } from '../../lib/index.mjs';
 import { loadStoredAppOptions } from '../app/support/index.mjs';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.mjs';
 
@@ -63,24 +61,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
-  }
-
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      defaults() {
-        if (!this.options.reproducible) {
-          this.config.defaults({
-            jhipsterVersion: packageJson.version,
-            baseName: getDefaultAppName(this),
-            creationTimestamp: new Date().getTime(),
-          });
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.configuring;
   }
 
   get preparing() {
@@ -211,6 +191,16 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     return this.asDefaultTaskGroup({
       postPreparingEntities({ entities }) {
         preparePostEntitiesCommonDerivedProperties(entities);
+      },
+      checkProperties({ entities }) {
+        for (const entity of entities) {
+          const properties = [...entity.fields.map(entity => entity.propertyName), ...entity.relationships.map(rel => rel.propertyName)];
+          if (new Set(properties).size !== properties.length) {
+            // Has duplicated properties.
+            const duplicated = [...new Set(properties.filter((v, i, a) => a.indexOf(v) !== i))];
+            throw new Error(`You have duplicated properties ${duplicated.join(', ')}`);
+          }
+        }
       },
     });
   }

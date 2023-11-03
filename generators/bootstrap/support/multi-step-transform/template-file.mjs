@@ -6,6 +6,8 @@ import ejs from 'ejs';
 import TemplateData from './template-data.mjs';
 
 export default class TemplateFile {
+  file;
+
   constructor(filename, extension) {
     this._filename = filename;
     this._extension = extension;

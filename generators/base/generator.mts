@@ -558,9 +558,6 @@ export default class JHipsterBaseBlueprintGenerator<
 
     const generatorName = packageNameToNamespace(blueprint);
     const generatorNamespace = `${generatorName}:${subGen}`;
-    if (!this.env.isPackageRegistered(generatorName)) {
-      await this.env.lookup({ filterPaths: true, packagePatterns: blueprint } as any);
-    }
     if (!(await this.env.get(generatorNamespace))) {
       this.log.debug(
         `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(subGen)} with namespace ${chalk.yellow(

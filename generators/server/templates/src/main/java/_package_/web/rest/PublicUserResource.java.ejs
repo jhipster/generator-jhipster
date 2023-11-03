@@ -75,7 +75,6 @@ import java.util.*;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.stream.StreamSupport;
-import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.*;
 <%_ } _%>
 
 @RestController
@@ -111,7 +110,7 @@ public class PublicUserResource {
     }
 
     /**
-     * {@code GET /users} : get all users with only the public informations - calling this are allowed for anyone.
+     * {@code GET /users} : get all users with only public information - calling this method is allowed for anyone.
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
      *
   <%_ if (reactive) { _%>
@@ -176,12 +175,12 @@ public class PublicUserResource {
 <%_ if (searchEngineAny) { _%>
 
     /**
-     * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
+     * {@code SEARCH /users/_search/:query} : search for the User corresponding to the query.
      *
      * @param query the query to search.
      * @return the result of the search.
      */
-    @GetMapping("/_search/users/{query}")
+    @GetMapping("/users/_search/{query}")
     public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
   <%_ if (searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>

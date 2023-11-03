@@ -62,7 +62,7 @@ jobs:
           entities-sample: ${{ matrix.entity }}
           application-environment: ${{ matrix.environment }}
           application-packaging: ${{ (matrix.war == 1 && 'war') || 'jar' }}
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v3
@@ -70,35 +70,26 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-angular-${{ hashFiles('generator-jhipster/package-lock.json', 'generator-jhipster/**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-angular-
-            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}-
-            ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
+          key: ${{ runner.os }}-node-
+
       - name: 'SETUP: load maven cache'
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/pom.xml.ejs') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}-
-            ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
+          key: ${{ runner.os }}-maven-
       - name: 'SETUP: load gradle cache'
         if: contains(matrix.app-type, 'gradle')
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-${{ hashFiles('generator-jhipster/**/build.gradle.ejs') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}-
-            ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
+          key: ${{ runner.os }}-gradle-
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'

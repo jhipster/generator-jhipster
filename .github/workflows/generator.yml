@@ -44,19 +44,16 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.9.0
       - name: 'SETUP: load npm cache'
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.npm
             ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-
-            ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-node-
       - name: 'install required npm version'
         run: npm install -g npm@$(node -e "console.log(require('./generators/common/resources/package.json').devDependencies.npm);")
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit

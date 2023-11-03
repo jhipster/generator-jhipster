@@ -85,6 +85,7 @@ MAX = 43`);
 {
   "config": {},
   "entities": [],
+  "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
 }
@@ -111,6 +112,7 @@ MAX = 43`);
     "applicationType": "monolith",
   },
   "entities": [],
+  "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
 }
@@ -136,6 +138,7 @@ MAX = 43`);
     "baseName": "toto",
   },
   "entities": [],
+  "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
 }
@@ -164,6 +167,7 @@ MAX = 43`);
     ],
   },
   "entities": [],
+  "namespaceConfigs": {},
   "options": {},
   "useOptions": [],
 }
@@ -201,6 +205,7 @@ application {
       "baseName": "superApp2",
     },
     "entities": [],
+    "namespaceConfigs": {},
     "options": {},
     "useOptions": [],
   },
@@ -210,6 +215,7 @@ application {
       "baseName": "superApp1",
     },
     "entities": [],
+    "namespaceConfigs": {},
     "options": {},
     "useOptions": [],
   },
@@ -464,12 +470,12 @@ entity A`);
     },
     {
       "optionName": "customAnnotation2",
-      "optionValue": "2",
+      "optionValue": 2,
       "type": "BINARY",
     },
     {
       "optionName": "customAnnotation3",
-      "optionValue": "2.42",
+      "optionValue": 2.42,
       "type": "BINARY",
     },
     {

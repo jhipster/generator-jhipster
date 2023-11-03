@@ -167,10 +167,10 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
       prepareEntity({ entity }) {
         prepareEntityServerForTemplates(entity);
       },
-      preparePrimaryKey({ entity }) {
+      preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
         if (!entity.embedded && !entity.primaryKey) {
-          prepareEntityPrimaryKeyForTemplates(entity, this);
+          prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
         }
       },
     });

@@ -55,6 +55,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   recreateInitialChangelog: boolean;
   numberOfRows: number;
   databaseChangelogs: any[] = [];
+  injectBuildTool = true;
+  injectLogs = true;
 
   constructor(args: any, options: any, features: any) {
     super(args, options, { skipParseOptions: false, ...features });
@@ -178,7 +180,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             prepareEntity(entity, this, application);
             prepareEntityForServer(entity);
             if (!entity.embedded && !entity.primaryKey) {
-              prepareEntityPrimaryKeyForTemplates(entity, this);
+              prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
             }
             for (const field of entity.fields ?? []) {
               prepareField(entity, field, this);
@@ -279,13 +281,14 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       customizeSpring({ source }) {
+        if (!this.injectLogs) return;
         source.addLogbackMainLog?.({ name: 'liquibase', level: 'WARN' });
         source.addLogbackMainLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
         source.addLogbackTestLog?.({ name: 'liquibase', level: 'WARN' });
         source.addLogbackTestLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
       },
       customizeMaven({ source, application }) {
-        if (!application.buildToolMaven) return;
+        if (!application.buildToolMaven || !this.injectBuildTool) return;
         if (!application.javaDependencies) {
           throw new Error('Some application fields are be mandatory');
         }
@@ -391,7 +394,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
         }
       },
       injectGradle({ source, application }) {
-        if (!application.buildToolGradle) return;
+        if (!application.buildToolGradle || !this.injectBuildTool) return;
         if (!application.javaDependencies) {
           throw new Error('Some application fields are be mandatory');
         }

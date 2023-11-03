@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           baseName: 'jhipster',
         }),
-      ).rejects.toThrow('Database type is required to validate entities.');
+      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
     });
     it('without baseName should reject', async () => {
       await expect(
@@ -76,7 +76,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           db: 'postgresql',
         }),
-      ).rejects.toThrow("The JDL object, the application's name and its the database type are mandatory.");
+      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
     });
 
     describe('with valid parameters', () => {
@@ -153,6 +153,46 @@ describe(`generator - ${generator}`, () => {
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+
+    describe('with blueprint jdl with blueprint config', () => {
+      let runResult: RunResult;
+
+      before(async () => {
+        runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          jsonOnly: true,
+          inline: 'application { config { blueprints [foo, bar] } config(foo) { config fooValue } config(bar) { config barValue } }',
+        });
+      });
+
+      it('should write expected files', () => {
+        expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationIndex": 0,
+    "baseName": "jhipster",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-foo"
+      },
+      {
+        "name": "generator-jhipster-bar"
+      }
+    ],
+    "entities": []
+  },
+  "generator-jhipster-bar": {
+    "config": "barValue"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`);
       });
     });
   });

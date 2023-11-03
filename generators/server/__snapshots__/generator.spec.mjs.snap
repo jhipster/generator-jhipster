@@ -1079,12 +1079,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/global.json": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
     "stateCleared": "modified",
   },
@@ -1121,7 +1115,13 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {

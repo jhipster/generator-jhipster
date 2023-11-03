@@ -55,6 +55,9 @@
     "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    "@module-federation/utilities": "<%= nodeDependencies['@module-federation/utilities'] %>",
+<%_ } _%>
 <%_ if (microfrontend) { _%>
     "@originjs/vite-plugin-federation": "1.2.3",
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
