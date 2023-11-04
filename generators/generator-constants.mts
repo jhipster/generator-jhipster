@@ -23,7 +23,7 @@ export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0-SNAPSHOT';
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
 // Force spring milestone repository. Spring Boot milestones are detected.
-export const ADD_SPRING_MILESTONE_REPOSITORY = false;
+export const ADD_SPRING_MILESTONE_REPOSITORY = true;
 
 // Version of Node, NPM
 export const NODE_VERSION = '18.18.2';
