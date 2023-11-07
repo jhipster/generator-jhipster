@@ -6,7 +6,7 @@ const { join } = require('path');
 
 const [_nodeExec, _exec, ...args] = process.argv;
 // eslint-disable-next-line no-console
-console.log('jhipster', ...args);
+console.error('jhipster', ...args);
 
 (async () => {
   // eslint-disable-next-line import/no-unresolved

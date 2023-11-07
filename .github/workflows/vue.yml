@@ -143,7 +143,7 @@ jobs:
       - name: 'GENERATION: config'
         run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh --skip-install ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
+        run: jhipster generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
       - name: 'GENERATION: workspace git'
         if: matrix.workspaces == 'true'
         run: |
