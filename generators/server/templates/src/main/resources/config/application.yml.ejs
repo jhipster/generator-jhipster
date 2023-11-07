@@ -142,6 +142,7 @@ management:
       export:
         enabled: true
         step: 60
+  metrics:
     enable:
       http: true
       jvm: true
@@ -155,11 +156,10 @@ management:
         all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
     tags:
       application: ${spring.application.name}
-    web:
-      server:
-        request:
-          autotime:
-            enabled: true
+    data:
+      repository:
+        autotime:
+          enabled: true
 
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
