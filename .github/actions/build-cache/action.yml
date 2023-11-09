@@ -27,7 +27,7 @@ runs:
       with:
         generator-path: generator-jhipster
         generator-jhipster-path: generator-jhipster
-    - uses: ./.github/actions/cache-java-dependencies
+    - uses: ./generator-jhipster/.github/actions/cache-java-dependencies
       if: always()
       with:
         jhipster-bom-path: jhipster-bom
