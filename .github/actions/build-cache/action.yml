@@ -27,11 +27,11 @@ runs:
       with:
         generator-path: generator-jhipster
         generator-jhipster-path: generator-jhipster
-    - uses: hipster-labs/actions/cache-java-dependencies@v0
+    - uses: ./.github/actions/cache-java-dependencies
       if: always()
       with:
-        generator-jhipster-path: generator-jhipster
         jhipster-bom-path: jhipster-bom
+        generator-jhipster-path: generator-jhipster
     - uses: hipster-labs/actions/save-cache@v0
       if: always()
       with:
