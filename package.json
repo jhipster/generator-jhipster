@@ -155,7 +155,7 @@
     "run-async": "3.0.0",
     "semver": "7.5.4",
     "simple-git": "3.20.0",
-    "type-fest": "4.7.0",
+    "type-fest": "4.7.1",
     "uuid": "9.0.1",
     "winston": "3.11.0",
     "yaml": "2.3.4",
