@@ -20,154 +20,22 @@
 name: Build cache
 on:
   workflow_dispatch:
-    inputs:
-      key:
-        description: 'Cache key'
-        required: false
-        default: '-new'
   schedule:
     - cron: '0 0 * * *'
 jobs:
   npm_cache:
     name: Create cache
-    runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/app
+    runs-on: ubuntu-22.04
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
         uses: actions/checkout@v4
         with:
           path: generator-jhipster
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
+      - uses: actions/checkout@v4
         with:
-          jdl-sample: cache
-          generator-jhipster-branch: local
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ steps.setup.outputs.node-version }}
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: ${{ steps.setup.outputs.java-version }}
-
-      # generator-jhipster npm
-      - name: 'Install generator-jhipster npm version'
-        run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
-      - name: Cache generator-jhipster node_modules
-        run: npm ci
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster
-      - name: Cache last released generator-jhipster
-        run: |
-          npm install -g generator-jhipster@latest
-          npm uninstall -g generator-jhipster
-        continue-on-error: true
-      - name: Cache common node_modules
-        run: npm install
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/common/resources
-      - name: Cache angular node_modules
-        run: npm install --force
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/angular/resources
-      - name: Cache client common node_modules
-        run: |
-          npm install --force
-          npx cypress install
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/client/resources
-      - name: Cache react node_modules
-        run: npm install --force
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/react/resources
-      - name: Cache vue node_modules
-        run: npm install --force
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}/generator-jhipster/generators/vue/resources
-
-      - name: 'mvn: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
-        continue-on-error: true
-
-      - name: 'mvn(imperative): prepare project'
-        run: |
-          $JHI_SCRIPTS/11-generate-config.sh
-        continue-on-error: true
-      - name: 'mvn(imperative): cache dependencies'
-        run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces
-          npm install --force
-          npm run backend:build-cache || true
-          cd app1
-          ./npmw -v
-          cd ../..
-          rm -rf app
-          mkdir app
-        continue-on-error: true
-
-      - name: 'mvn(reactive): prepare project'
-        run: |
-          $JHI_SCRIPTS/11-generate-config.sh
-        continue-on-error: true
-      - name: 'mvn(reactive): cache dependencies'
-        run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --reactive
-          npm install --force
-          npm run backend:build-cache || true
-          cd ..
-          rm -rf app
-          mkdir app
-        continue-on-error: true
-
-      - name: 'gradle(imperative): prepare project'
-        run: |
-          $JHI_SCRIPTS/11-generate-config.sh
-        continue-on-error: true
-      - name: 'gradle(imperative): cache dependencies'
-        run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --build gradle
-          npm install --force
-          npm run backend:build-cache || true
-          cd app1
-          ./npmw -v
-          cd ../..
-          rm -rf app
-          mkdir app
-        continue-on-error: true
-
-      - name: 'gradle(reactive): prepare project'
-        run: |
-          $JHI_SCRIPTS/11-generate-config.sh
-        continue-on-error: true
-      - name: 'gradle(reactive): cache dependencies'
-        run: |
-          $JHI_SCRIPTS/12-generate-project.sh --skip-install --workspaces --build gradle --reactive
-          npm install --force
-          npm run backend:build-cache || true
-          cd ..
-          rm -rf app
-          mkdir app
-        continue-on-error: true
-
-      - name: 'save npm cache'
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
-      - name: 'save maven cache'
-        uses: actions/cache/save@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
-      - name: 'save gradle cache'
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}${{ github.event.inputs.key }}
+          path: jhipster-bom
+          repository: jhipster/jhipster-bom
+          ref: main
+          fetch-depth: 1
+      - uses: ./generator-jhipster/.github/actions/setup-default-node-java
+      - uses: ./generator-jhipster/.github/actions/build-cache
