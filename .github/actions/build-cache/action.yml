@@ -35,7 +35,7 @@ runs:
     - uses: hipster-labs/actions/save-cache@v0
       if: always()
       with:
-        key: ${{ github.job_workflow_sha }}
+        key: -${{ github.run_id }}
         npm: true
         maven: true
         gradle: true
