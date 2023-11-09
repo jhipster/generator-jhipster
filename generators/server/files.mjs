@@ -493,11 +493,6 @@ export const baseServerFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/Constants.java'],
     },
-    {
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [data => `config/LocaleConfiguration_${data.imperativeOrReactive}.java`],
-    },
   ],
   serverJavaDomain: [
     {
