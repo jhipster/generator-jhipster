@@ -858,10 +858,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       dest.devDatabaseType = config.prodDatabaseType;
     }
 
-    // force variables unused by microservice applications
-    if (config.applicationType === MICROSERVICE) {
-      dest.websocket = NO_WEBSOCKET;
+    if (config.websocket && config.websocket !== NO_WEBSOCKET) {
+      if (config.reactive) {
+        throw new Error('Spring Websocket is not supported with reactive applications.');
+      }
+      if (config.applicationType === MICROSERVICE) {
+        throw new Error('Spring Websocket is not supported with microservice applications.');
+      }
     }
+
     const databaseType = config.databaseType;
     if (databaseType === NO_DATABASE) {
       dest.devDatabaseType = NO_DATABASE;
