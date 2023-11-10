@@ -102,6 +102,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       entityWithConfig.databaseType !== DATABASE_NO &&
       (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
     ) {
+      if (otherEntityData.builtInUser) {
+        throw new Error(`Error at entity ${entityName}: relationships with built-in User cannot have back reference`);
+      }
       throw new Error(
         `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`,
       );
