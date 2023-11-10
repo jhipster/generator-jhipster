@@ -86,7 +86,7 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
-      - uses: hipster-labs/actions/restore-cache@v0
+      - uses: jhipster/actions/restore-cache@v0
         with:
           npm: true
           maven: true

@@ -40,7 +40,7 @@ jobs:
           node-version: 18
       - run: npm install -g npm@latest
       - uses: actions/checkout@v4
-      - uses: hipster-labs/actions/restore-cache@v0
+      - uses: jhipster/actions/restore-cache@v0
         with:
           npm: true
       - name: Create commit
