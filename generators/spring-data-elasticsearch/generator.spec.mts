@@ -27,6 +27,7 @@ import {
   entitiesServerSamples as entities,
   buildSamplesFromMatrix,
   defaultHelpers as helpers,
+  runResult,
 } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from './generator.mjs';
@@ -74,16 +75,20 @@ describe('generator - elasticsearch', () => {
     const { enableTranslation } = sampleConfig;
 
     describe(name, () => {
-      let runResult;
+      if (
+        sampleConfig.websocket &&
+        (sampleConfig.reactive || sampleConfig.applicationType === 'microservice' || sampleConfig.applicationType === 'gateway')
+      ) {
+        it('should throw an error', async () => {
+          await expect(helpers.runJHipster(serverGeneratorFile).withJHipsterConfig(sampleConfig)).rejects.toThrow();
+        });
+
+        return;
+      }
 
       before(async () => {
-        runResult = await helpers
-          .run(serverGeneratorFile)
-          .withJHipsterConfig(sampleConfig, entities)
-          .withMockedGenerators(mockedGenerators);
+        await helpers.run(serverGeneratorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should compose with jhipster:common', () => {
         expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);

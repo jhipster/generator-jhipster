@@ -7,6 +7,7 @@ import {
   buildServerMatrix,
   entitiesSimple as entities,
   defaultHelpers as helpers,
+  runResult,
 } from '../../test/support/index.mjs';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from '../server/index.mjs';
@@ -40,16 +41,20 @@ describe(`generator - ${databaseType}`, () => {
     const { authenticationType } = sampleConfig;
 
     describe(name, () => {
-      let runResult;
+      if (
+        sampleConfig.websocket &&
+        (sampleConfig.reactive || sampleConfig.applicationType === 'microservice' || sampleConfig.applicationType === 'gateway')
+      ) {
+        it('should throw an error', async () => {
+          await expect(helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig(sampleConfig)).rejects.toThrow();
+        });
+
+        return;
+      }
 
       before(async () => {
-        runResult = await helpers
-          .runJHipster(GENERATOR_SERVER)
-          .withJHipsterConfig(sampleConfig, entities)
-          .withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
