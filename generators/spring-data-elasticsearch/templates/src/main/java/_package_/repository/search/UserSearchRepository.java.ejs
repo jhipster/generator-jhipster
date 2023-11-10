@@ -19,7 +19,7 @@
 package <%= packageName %>.repository.search;
 
 import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.repository.<%= user.persistClass %>Repository;
+import <%= packageName %>.repository.<%= user.entityClass %>Repository;
 
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
@@ -49,7 +49,7 @@ import java.util.UUID;
 import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
 /**
- * Spring Data Elasticsearch repository for the User entity.
+ * Spring Data Elasticsearch repository for the <%= user.persistClass %> entity.
  */
 public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= user.primaryKey.type %>>, UserSearchRepositoryInternal {
 }
@@ -70,7 +70,7 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     @Override
     public Flux<<%= user.persistClass %>> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
-        return reactiveElasticsearchTemplate.search(nativeQuery, User.class).map(SearchHit::getContent);
+        return reactiveElasticsearchTemplate.search(nativeQuery, <%= user.persistClass %>.class).map(SearchHit::getContent);
     }
 }
 <%_ } else { _%>
@@ -105,7 +105,7 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     public Stream<<%= user.persistClass %>> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
         return elasticsearchTemplate
-            .search(nativeQuery, User.class)
+            .search(nativeQuery, <%= user.persistClass %>.class)
             .map(SearchHit::getContent)
             .stream();
     }
