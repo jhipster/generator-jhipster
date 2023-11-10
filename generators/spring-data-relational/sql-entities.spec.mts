@@ -7,6 +7,7 @@ import {
   entitiesServerSamples as entities,
   buildSamplesFromMatrix,
   defaultHelpers as helpers,
+  runResult,
 } from '../../test/support/index.mjs';
 import { mockedGenerators as serverGenerators } from '../server/__test-support/index.mjs';
 
@@ -62,17 +63,24 @@ describe(`generator - ${databaseType} - entities`, () => {
     const { enableTranslation } = sampleConfig;
 
     describe(name, () => {
-      let runResult;
+      if (
+        sampleConfig.websocket &&
+        (sampleConfig.reactive || sampleConfig.applicationType === 'microservice' || sampleConfig.applicationType === 'gateway')
+      ) {
+        it('should throw an error', async () => {
+          await expect(helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig(sampleConfig)).rejects.toThrow();
+        });
+
+        return;
+      }
 
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_SERVER)
           .withJHipsterConfig(sampleConfig, entities)
           .withOptions({ skipPriorities })
           .withMockedGenerators(mockedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should compose with jhipster:common', () => {
         expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
