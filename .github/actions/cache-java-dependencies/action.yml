@@ -1,0 +1,94 @@
+#
+# Copyright 2013-2023 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Cache java dependencies
+description: Cache java dependencies
+inputs:
+  generator-jhipster-path:
+    description: JHipster generator folder relative to workspace.
+    required: false
+  jhipster-bom-path:
+    description: JHipster bom folder relative to workspace.
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: 'mvn: install JHipster'
+      run: |
+        echo "::group::jhipster-bom"
+        ./mvnw dependency:go-offline --ntp
+        echo "::endgroup::"
+      if: always() && inputs.jhipster-bom-path
+      shell: bash
+      working-directory: ${{ github.workspace }}/${{ inputs.jhipster-bom-path }}
+    - run: rm -rf tmp; mkdir tmp
+      shell: bash
+      working-directory: ${{ github.workspace }}
+    - name: 'mvn(imperative): cache dependencies'
+      run: |
+        echo "::group::maven(imperative)"
+        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --workspaces
+        npm run backend:build-cache -- --ntp || true
+        cd app1
+        ./npmw -v
+        echo "::endgroup::"
+      shell: bash
+      if: always()
+      working-directory: ${{ github.workspace }}/tmp
+    - run: rm -rf tmp; mkdir tmp
+      shell: bash
+      working-directory: ${{ github.workspace }}
+    - name: 'mvn(reactive): cache dependencies'
+      run: |
+        echo "::group::maven(reactive)"
+        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --reactive
+        npm install --force
+        npm run backend:build-cache -- --ntp || true
+        echo "::endgroup::"
+      shell: bash
+      if: always()
+      working-directory: ${{ github.workspace }}/tmp
+    - run: rm -rf tmp; mkdir tmp
+      shell: bash
+      working-directory: ${{ github.workspace }}
+    - name: 'gradle(imperative): cache dependencies'
+      run: |
+        echo "::group::gradle(imperative)"
+        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --build gradle
+        npm install --force
+        npm run backend:build-cache || true
+        cd app1
+        ./npmw -v
+        echo "::endgroup::"
+      shell: bash
+      if: always()
+      working-directory: ${{ github.workspace }}/tmp
+    - run: rm -rf tmp; mkdir tmp
+      shell: bash
+      working-directory: ${{ github.workspace }}
+    - name: 'gradle(reactive): cache dependencies'
+      run: |
+        echo "::group::gradle(reactive)"
+        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --build gradle --reactive
+        npm install --force
+        npm run backend:build-cache || true
+        echo "::endgroup::"
+      shell: bash
+      if: always()
+      working-directory: ${{ github.workspace }}/tmp

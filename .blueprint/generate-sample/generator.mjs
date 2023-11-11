@@ -1,3 +1,4 @@
+import { extname } from 'path';
 import BaseGenerator from '../../generators/base/index.mjs';
 import command from './command.mjs';
 import { generateSample } from './support/generate-sample.js';
@@ -30,7 +31,16 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.END]() {
     return this.asEndTaskGroup({
+      async generateJdlSample() {
+        if (extname(this.sampleName) !== '.jdl') return;
+
+        await this.composeWithJHipster(GENERATOR_JDL, {
+          generatorArgs: [this.templatePath('samples', this.sampleName)],
+        });
+      },
       async generateSample() {
+        if (extname(this.sampleName) === '.jdl') return;
+
         const sample = await generateSample(this.sampleName, {
           destSamplesFolder: this._globalConfig.get('samplesFolder'),
           destProjectFolder: this.projectFolder ?? this.global ? undefined : process.cwd(),

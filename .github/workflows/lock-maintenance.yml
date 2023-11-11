@@ -40,13 +40,9 @@ jobs:
           node-version: 18
       - run: npm install -g npm@latest
       - uses: actions/checkout@v4
-      - name: 'SETUP: load npm cache'
-        uses: actions/cache/restore@v3
+      - uses: jhipster/actions/restore-cache@v0
         with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-
+          npm: true
       - name: Create commit
         run: |
           rm package-lock.json
