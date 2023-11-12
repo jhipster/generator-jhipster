@@ -57,7 +57,7 @@ runs:
     - name: 'mvn(reactive): cache dependencies'
       run: |
         echo "::group::maven(reactive)"
-        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --reactive
+        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --reactive --websocket no
         npm install --force
         npm run backend:build-cache -- --ntp || true
         echo "::endgroup::"
@@ -85,7 +85,7 @@ runs:
     - name: 'gradle(reactive): cache dependencies'
       run: |
         echo "::group::gradle(reactive)"
-        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --build gradle --reactive
+        ${{ github.workspace }}/${{ inputs.generator-jhipster-path }}/bin/jhipster.cjs generate-sample cache.jdl --skip-install --skip-install --workspaces --build gradle --reactive --websocket no
         npm install --force
         npm run backend:build-cache || true
         echo "::endgroup::"
