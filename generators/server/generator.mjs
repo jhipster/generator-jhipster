@@ -430,7 +430,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
         if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
           if (!entityConfig.searchEngine) {
-            // If a non-microfrontent microservice entity, should be disabled by default.
+            // If a non-microfrontend microservice entity, should be disabled by default.
             entityConfig.searchEngine = NO_SEARCH_ENGINE;
           }
         }
