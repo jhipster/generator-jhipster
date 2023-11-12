@@ -1,4 +1,5 @@
 import { extname } from 'path';
+import { transform } from '@yeoman/transform';
 import BaseGenerator from '../../generators/base/index.mjs';
 import command from './command.mjs';
 import { generateSample } from './support/generate-sample.js';
@@ -48,7 +49,10 @@ export default class extends BaseGenerator {
         });
 
         // Cleanup mem-fs files. Reload them from disk.
-        await this.pipeline({ refresh: true, filter: () => true, pendingFiles: false });
+        await this.pipeline(
+          { refresh: true, pendingFiles: false },
+          transform(() => {}),
+        );
 
         let generatorOptions = {};
         if (sample.sample.workspaces && sample.sample.workspaces !== 'false') {
