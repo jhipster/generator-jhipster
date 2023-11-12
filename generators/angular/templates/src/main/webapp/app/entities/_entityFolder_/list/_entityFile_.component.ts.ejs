@@ -299,7 +299,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[] | null): I<%= entityAngularName %>[] {
 <%_ if (paginationInfiniteScroll) { _%>
-      // If there is previus link, data is a infinite scroll pagination content.
+      // If there is previous link, data is a infinite scroll pagination content.
       if ('prev' in this.links) {
         const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %> ?? [];
         if (data) {
