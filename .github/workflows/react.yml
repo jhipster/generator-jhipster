@@ -58,7 +58,7 @@ jobs:
         with:
           workflow-samples-file: react
   applications:
-    name: ${{ matrix.name }}
+    name: ${{ matrix.name }} (n${{ matrix.node }}/j${{ matrix.java }})
     runs-on: ${{ matrix.os || 'ubuntu-20.04' }}
     needs: build-matrix
     defaults:
