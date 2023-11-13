@@ -40,8 +40,8 @@ writeFileSync(
                   'setup-entities-sample': sample.entity ?? 'none',
                   'setup-jdl-entities-sample': sample['jdl-entity'] ?? '',
                   'setup-jdl-sample': sample['jdl-samples'] ?? '',
-                  'java': sample['java'] ?? JAVA_VERSION,
-                  'node': sample['node'] ?? NODE_VERSION,
+                  java: sample['java'] ?? JAVA_VERSION,
+                  node: sample['node'] ?? NODE_VERSION,
                 }));
             } catch (error) {
               console.log(`File ${file} not found`, error);
