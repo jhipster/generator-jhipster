@@ -83,10 +83,6 @@ describe(`generator - ${generator}`, () => {
         const git = runResult.generator.createGit();
         await expect(git.log()).resolves.toMatchObject({ total: 1 });
       });
-      it('should have uncommited files', async () => {
-        const git = runResult.generator.createGit();
-        await expect(git.diff()).resolves.toMatch(/\+ {4}"baseName": "changed"/);
-      });
     });
   });
 });

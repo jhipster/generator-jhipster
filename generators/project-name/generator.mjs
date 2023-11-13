@@ -25,12 +25,15 @@ import { GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
 import { BASE_NAME } from './constants.mjs';
 import { getHipster } from '../base/support/index.mjs';
 import command from './command.mjs';
+import { validateProjectName } from './support/name-resolver.mjs';
 
 /**
  * @class
  * @extends {BaseApplicationGenerator<import('../base-application/types.mjs').BaseApplication>}
  */
 export default class ProjectNameGenerator extends BaseApplicationGenerator {
+  javaApplication;
+
   async beforeQueue() {
     if (this.options.defaults) {
       if (!this.jhipsterConfig.baseName) {
@@ -71,7 +74,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
               type: 'input',
               validate: input => this.validateBaseName(input),
               message: 'What is the base name of your application?',
-              default: () => getDefaultAppName(this),
+              default: () => getDefaultAppName({ reproducible: this.options.reproducible, javaApplication: this.javaApplication }),
             },
           ],
           this.config,
@@ -131,15 +134,6 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
    * @returns Boolean
    */
   validateBaseName(input) {
-    if (!/^([\w]*)$/.test(input)) {
-      return 'Your base name cannot contain special characters or a blank space';
-    }
-    if (/_/.test(input)) {
-      return 'Your base name cannot contain underscores as this does not meet the URI spec';
-    }
-    if (input?.toLowerCase() === 'application') {
-      return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
-    }
-    return true;
+    return validateProjectName(input, { javaApplication: this.javaApplication });
   }
 }

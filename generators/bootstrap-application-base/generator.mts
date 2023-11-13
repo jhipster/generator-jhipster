@@ -62,7 +62,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+    const projectNameGenerator = (await this.dependsOnJHipster(GENERATOR_PROJECT_NAME)) as any;
+    projectNameGenerator.javaApplication = true;
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
 

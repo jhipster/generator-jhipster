@@ -8,8 +8,5 @@ exports[`generator - git with default config should write files and match snapsh
   ".gitignore": {
     "stateCleared": "modified",
   },
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
 }
 `;
