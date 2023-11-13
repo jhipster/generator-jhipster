@@ -8,18 +8,22 @@
     {
       "name": "vue-noi18n-mysql-ws-oauth2",
       "app-sample": "vue-noi18n-ws-oauth2",
-      "entity": "sqlfull"
+      "entity": "sqlfull",
+      "node": "20",
+      "java": "21"
     },
     {
       "name": "vue-fulli18n-mysql-es",
       "app-sample": "vue-fulli18n-es",
-      "entity": "sql"
+      "entity": "sql",
+      "node": "20"
     },
     {
       "name": "vue-gradle-h2mem-ws-session",
       "app-sample": "vue-gradle-ws-session",
       "entity": "sql",
-      "environment": "dev"
+      "environment": "dev",
+      "java": "21"
     },
     {
       "name": "vue-h2disk-ws-theme",
