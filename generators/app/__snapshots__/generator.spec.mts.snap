@@ -412,7 +412,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "jwtSecretKey": "SECRET--64",
   "languages": [
     "en",
-    "fr",
   ],
   "languagesDefinition": [
     {
@@ -423,16 +422,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
       "javaLocaleMessageSourceSuffix": "en",
       "languageTag": "en",
       "name": "English",
-      "rtl": false,
-    },
-    {
-      "angularLocale": "fr",
-      "dayjsLocale": "fr",
-      "displayName": "Français",
-      "fakerjsLocale": "fr",
-      "javaLocaleMessageSourceSuffix": "fr",
-      "languageTag": "fr",
-      "name": "French",
       "rtl": false,
     },
   ],
@@ -981,7 +970,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
-    "fr",
   ],
   "languagesDefinition": [
     {
@@ -992,16 +980,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
       "javaLocaleMessageSourceSuffix": "en",
       "languageTag": "en",
       "name": "English",
-      "rtl": false,
-    },
-    {
-      "angularLocale": "fr",
-      "dayjsLocale": "fr",
-      "displayName": "Français",
-      "fakerjsLocale": "fr",
-      "javaLocaleMessageSourceSuffix": "fr",
-      "languageTag": "fr",
-      "name": "French",
       "rtl": false,
     },
   ],
@@ -1551,7 +1529,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "jwtSecretKey": Any<String>,
   "languages": [
     "en",
-    "fr",
   ],
   "languagesDefinition": [
     {
@@ -1562,16 +1539,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
       "javaLocaleMessageSourceSuffix": "en",
       "languageTag": "en",
       "name": "English",
-      "rtl": false,
-    },
-    {
-      "angularLocale": "fr",
-      "dayjsLocale": "fr",
-      "displayName": "Français",
-      "fakerjsLocale": "fr",
-      "javaLocaleMessageSourceSuffix": "fr",
-      "languageTag": "fr",
-      "name": "French",
       "rtl": false,
     },
   ],

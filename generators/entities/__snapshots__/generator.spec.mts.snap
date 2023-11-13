@@ -266,15 +266,6 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/i18n/en/skip.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/bar.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/foo.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/skip.json": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
@@ -338,27 +329,12 @@ exports[`generator - entities regenerating all entities should match source call
       "translationValue": "Foo",
     },
     {
-      "language": "fr",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
-    {
       "language": "en",
       "translationKey": "bar",
       "translationValue": "Bar",
     },
     {
-      "language": "fr",
-      "translationKey": "bar",
-      "translationValue": "Bar",
-    },
-    {
       "language": "en",
-      "translationKey": "skip",
-      "translationValue": "Skip",
-    },
-    {
-      "language": "fr",
       "translationKey": "skip",
       "translationValue": "Skip",
     },
@@ -565,12 +541,6 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/i18n/en/foo.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/bar.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/foo.json": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
@@ -620,17 +590,7 @@ exports[`generator - entities regenerating some entities should match source cal
       "translationValue": "Foo",
     },
     {
-      "language": "fr",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
-    {
       "language": "en",
-      "translationKey": "bar",
-      "translationValue": "Bar",
-    },
-    {
-      "language": "fr",
       "translationKey": "bar",
       "translationValue": "Bar",
     },
