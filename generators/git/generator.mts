@@ -84,7 +84,7 @@ export default class InitGenerator extends BaseGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      /** Husky commit hook install at install priority requires git to be initilized */
+      /** Husky commit hook install at install priority requires git to be initialized */
       async initGitRepo() {
         if (!this.skipGit && !this.jhipsterConfig.monorepository) {
           await this.initializeGitRepository();
