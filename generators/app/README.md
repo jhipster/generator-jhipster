@@ -69,13 +69,16 @@ entity Company {}
 
 ### Fields
 
-TODO add jdl and json examples
-
 #### Notable customizations
 
 ##### Label
 
-TODO add humanized name example
+```jdl
+entity Company {
+  @FieldNameHumanized('Company Name')
+  company_name
+}
+```
 
 ### Relationships
 
@@ -83,7 +86,11 @@ TODO add humanized name example
 
 ##### Label
 
-TODO add humanized name example
+```jdl
+relationship ManyToOnly {
+  @RelationshipNameHumanized('Company user') Company{user} to User
+}
+```
 
 ##### Eager loading relationships
 

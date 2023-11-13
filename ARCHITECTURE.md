@@ -69,7 +69,15 @@ get [Generator.INITIALIZING]() {
 
 Prompt for configuration.
 
-TODO
+```ts
+get [Generator.PROMPTING]() {
+  return this.asPromptingTaskGroup() {
+    async prompting() {
+      await this.prompt(this.prepareQuestions(command.configs));
+    },
+  }
+}
+```
 
 #### Configuring (yeoman)
 
@@ -95,9 +103,9 @@ Compose with other generators:
 ```ts
 get [Generator.COMPOSING]() {
   return this.asComposingTaskGroup() {
-    composing() {
+    async composing() {
       if (this.jhipsterConfigWithDefaults.clientFramework === 'angular') {
-        this.composeWithJHipster('angular');
+        await this.composeWithJHipster('angular');
       }
     },
   }
@@ -222,8 +230,8 @@ The `writeFiles()` method is the most used in official generators.
 ```ts
 get [Generator.WRITING]() {
   return this.asWritingTaskGroup({
-    writingTask({ application }) {
-      this.writeFiles({
+    async writingTask({ application }) {
+      await this.writeFiles({
         blocks: [
           {
             condition: ctx => ctx.shouldWrite,
@@ -246,9 +254,9 @@ Writing entities is a separate priority to keep the workflow sane when using opt
 ```ts
 get [Generator.WRITING_ENTITIES]() {
   return this.asWritingTaskGroup({
-    writingTask({ application, entities }) {
+    async writingTask({ application, entities }) {
       for (const entity of entities) {
-        this.writeFiles({
+        await this.writeFiles({
           blocks: [
             {
               condition: ctx => ctx.shouldWrite,
@@ -336,5 +344,3 @@ Adds Blueprint composing APIS.
 ### GeneratorApplication
 
 Adds Entities related apis.
-
-## JDL
