@@ -419,7 +419,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to load.
-   * This method doesn't filter entities. An filtered config can be changed at thie priority.
+   * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
   getEntitiesDataToLoad() {
