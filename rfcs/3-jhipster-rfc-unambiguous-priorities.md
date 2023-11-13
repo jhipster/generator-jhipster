@@ -18,7 +18,7 @@ This RFC proposes to change priorities declaration to a more unambiguous way. Ma
 
 Priorities are currently implemented as a getter with a non `_` prefixed name, and any new function with a non `_` prefixed name will be queued as a task at `default` priority. Javascript standard is that `_` prefixed name is private method, and non `_` prefixed name are class members instead of tasks. We should try to follow Javascript standards.
 
-JHipter workflow is clear and each priorities has it's purpose. This makes tasks outside priorities useless and its drawbacks overcome its benefits. We don't need to queue any tasks outside our declared priorities.
+JHipster workflow is clear and each priorities has it's purpose. This makes tasks outside priorities useless and its drawbacks overcome its benefits. We don't need to queue any tasks outside our declared priorities.
 
 ## Guide-level explanation
 
