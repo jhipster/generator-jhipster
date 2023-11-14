@@ -7,6 +7,7 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -121,6 +122,7 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -247,6 +249,7 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -361,6 +364,7 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -487,6 +491,7 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -661,6 +666,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -749,6 +755,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -826,6 +833,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -914,6 +922,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -986,6 +995,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1098,6 +1108,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1207,6 +1218,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1313,6 +1325,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1441,6 +1454,7 @@ jobs:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1549,6 +1563,7 @@ gradle-package:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1685,6 +1700,7 @@ deploy-to-production:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1805,6 +1821,7 @@ maven-package:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -1931,6 +1948,7 @@ deploy-to-production:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -2061,6 +2079,7 @@ maven-package:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -2196,6 +2215,7 @@ webapp-prod:
   "generator-jhipster": {
     "baseName": "jhipster",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "skipServer": true
   }
@@ -2213,6 +2233,7 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Gradle Angular NPM should matc
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -2395,6 +2416,7 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM inside Docke
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -2669,6 +2691,7 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM should match
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -2854,6 +2877,7 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM with full op
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -3180,6 +3204,7 @@ notifications:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "gradle",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -3253,6 +3278,7 @@ notifications:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
@@ -3332,6 +3358,7 @@ notifications:
   "generator-jhipster": {
     "baseName": "sampleMysql",
     "buildTool": "maven",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": ["cypress"]
   }
