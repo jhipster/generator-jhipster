@@ -35,6 +35,10 @@ updates:
       # Should match supported node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+    groups:
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint/*'
 
   - package-ecosystem: 'npm'
     directory: '/generators/generate-blueprint/resources/'
@@ -69,7 +73,22 @@ updates:
       angular:
         patterns:
           - '@angular/*'
+          - '@angular-architects/*'
+          - '@angular-builders/*'
           - '@angular-devkit/*'
+          - '@fortawesome/angular-fontawesome'
+          - '@ng-bootstrap/*'
+          - 'jest-preset-angular'
+          - 'ngx-cookie-service'
+          - 'ngx-infinite-scroll'
+          - 'typescript'
+          - 'zone.js'
+      angular-eslint:
+        patterns:
+          - '@angular-eslint/*'
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint/*'
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/resources/'
@@ -112,6 +131,10 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+    groups:
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint/*'
 
   - package-ecosystem: 'npm'
     directory: '/generators/vue/resources/'
@@ -132,6 +155,10 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+    groups:
+      typescript-eslint:
+        patterns:
+          - '@typescript-eslint/*'
 
   - package-ecosystem: 'docker'
     directory: '/generators/server/resources/'
