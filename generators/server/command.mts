@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
-import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
+import { GENERATOR_COMMON, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.mjs';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
@@ -148,7 +148,7 @@ const command: JHipsterCommandDefinition = {
       ],
     },
   },
-  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
+  import: [GENERATOR_COMMON, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };
 
 export default command;

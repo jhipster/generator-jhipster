@@ -19,6 +19,7 @@
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import {
   GENERATOR_BOOTSTRAP,
+  GENERATOR_BOOTSTRAP_APPLICATION_BASE,
   GENERATOR_CLIENT,
   GENERATOR_COMMON,
   GENERATOR_CYPRESS,
@@ -86,12 +87,12 @@ const command: JHipsterCommandDefinition = {
       type: Array,
     },
   },
-  configs: {},
   import: [
     GENERATOR_BOOTSTRAP,
+    GENERATOR_BOOTSTRAP_APPLICATION_BASE,
+    GENERATOR_COMMON,
     GENERATOR_SERVER,
     GENERATOR_CLIENT,
-    GENERATOR_COMMON,
     GENERATOR_GIT,
     GENERATOR_CYPRESS,
     GENERATOR_LANGUAGES,

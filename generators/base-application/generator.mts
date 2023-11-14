@@ -29,7 +29,6 @@ import { getEntitiesFromDir } from './support/index.mjs';
 import { SpringBootSourceType } from '../server/types.mjs';
 import { ClientSourceType } from '../client/types.mjs';
 import { LanguageSourceType } from '../languages/types.js';
-import command from './command.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
 import { mutateData } from '../base/support/config.mjs';
 
@@ -106,8 +105,6 @@ export default class BaseApplicationGenerator<
     if (this.options.help) {
       return;
     }
-
-    this.parseJHipsterOptions(command.options);
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 

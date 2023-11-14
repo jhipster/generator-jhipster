@@ -21,6 +21,7 @@ import * as _ from 'lodash-es';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.mjs';
 import { JHipsterCommandDefinition } from '../base/api.mjs';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFrameworkTypes } from '../../jdl/index.js';
+import { GENERATOR_COMMON } from '../generator-list.mjs';
 
 const { CYPRESS } = testFrameworkTypes;
 const { intersection } = _;
@@ -124,6 +125,7 @@ const command: JHipsterCommandDefinition = {
       },
     },
   },
+  import: [GENERATOR_COMMON],
 };
 
 export default command;
