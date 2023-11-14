@@ -46,7 +46,7 @@ export const validateNpmProjectName = (name: string) => {
 export const validateProjectName = (name: string, { javaApplication }: { javaApplication?: boolean } = {}) =>
   javaApplication ? validateJavaApplicationName(name) : validateNpmProjectName(name);
 
-const getDefaultName = (generator: any) => {
+const getDefaultName = (generator: { reproducible?: boolean; javaApplication?: boolean } | any) => {
   if (generator?.options && isReproducible(generator)) {
     return defaultName;
   }
