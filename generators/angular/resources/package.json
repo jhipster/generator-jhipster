@@ -20,7 +20,7 @@
     "@angular-architects/module-federation": "16.0.4",
     "@angular-architects/module-federation-runtime": "16.0.4",
     "@angular-builders/custom-webpack": "16.0.1",
-    "@angular-builders/jest": "16.0.1",
+    "@angular-builders/jest": "17.0.0",
     "@angular-eslint/eslint-plugin": "16.2.0",
     "@angular/cli": "16.2.9",
     "@types/jest": "29.5.8",
