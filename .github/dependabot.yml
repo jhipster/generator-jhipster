@@ -65,6 +65,11 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+    groups:
+      angular:
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/resources/'
