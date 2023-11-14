@@ -17,7 +17,7 @@
     "zone.js": "0.13.3"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "16.0.4",
+    "@angular-architects/module-federation": "17.0.1",
     "@angular-architects/module-federation-runtime": "16.0.4",
     "@angular-builders/custom-webpack": "16.0.1",
     "@angular-builders/jest": "16.0.1",
