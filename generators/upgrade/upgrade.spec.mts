@@ -17,14 +17,14 @@ const __dirname = dirname(__filename);
 describe('generator - upgrade', function () {
   describe('default application', () => {
     before(async () => {
-      const VERSION_PLACEHOLDERS = process.env.VERSION_PLACEHOLDERS;
-      delete process.env.VERSION_PLACEHOLDERS;
-
-      await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig({
-        skipClient: true,
-        skipServer: true,
-        baseName: 'upgradeTest',
-      });
+      await helpers
+        .runJHipster(GENERATOR_APP)
+        .withJHipsterConfig({
+          skipClient: true,
+          skipServer: true,
+          baseName: 'upgradeTest',
+        })
+        .withOptions({ useVersionPlaceholders: false });
       await runResult
         .create(getGenerator(GENERATOR_UPGRADE))
         .withOptions({
@@ -32,10 +32,9 @@ describe('generator - upgrade', function () {
           force: true,
           silent: false,
           targetVersion: packageJson.version,
+          useVersionPlaceholders: false,
         })
         .run();
-
-      process.env.VERSION_PLACEHOLDERS = VERSION_PLACEHOLDERS;
     });
 
     it('generated git commits to match snapshot', () => {

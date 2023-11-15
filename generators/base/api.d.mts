@@ -22,6 +22,9 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   /* base options */
   applicationId?: string;
   applicationWithConfig?: ApplicationWithConfig;
+  /**
+   * @deprecated
+   */
   applicationWithEntities?: any;
   creationTimestamp?: string;
   ignoreErrors?: boolean;

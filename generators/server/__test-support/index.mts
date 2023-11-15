@@ -68,10 +68,8 @@ export const shouldComposeWithSpringCloudStream = (sampleConfig, runResultSuppli
   }
 };
 
-const shouldComposeWithDatabasetype = (databaseType, testSample, runResultSupplier) => {
+const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: boolean, runResultSupplier) => {
   const generator = databaseType;
-  const shouldCompose =
-    typeof testSample === 'boolean' ? testSample : testSample?.applicationWithEntities?.config?.databaseType === databaseType;
   if (shouldCompose) {
     it(`should compose with ${generator} generator`, () => {
       assert(runResultSupplier().mockedGenerators[`jhipster:spring-data-${generator}`].calledOnce);
@@ -83,5 +81,5 @@ const shouldComposeWithDatabasetype = (databaseType, testSample, runResultSuppli
   }
 };
 
-export const shouldComposeWithCouchbase = (testSample, runResultSupplier) =>
-  shouldComposeWithDatabasetype(COUCHBASE, testSample, runResultSupplier);
+export const shouldComposeWithCouchbase = (shouldCompose: boolean, runResultSupplier) =>
+  shouldComposeWithDatabasetype(COUCHBASE, shouldCompose, runResultSupplier);

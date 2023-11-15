@@ -118,6 +118,7 @@ export default class BaseApplicationGenerator<
     });
 
     if (this.options.applicationWithEntities) {
+      this.log.warn('applicationWithEntities option is deprecated');
       // Write new definitions to memfs
       this.config.set({
         ...this.config.getAll(),

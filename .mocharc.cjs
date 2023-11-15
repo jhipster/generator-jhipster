@@ -5,7 +5,6 @@ module.exports = {
   timeout: 50000,
   ui: 'bdd',
   extension: ['js', 'spec.cjs', 'spec.mjs', 'spec.ts', 'spec.mts'],
-  require: ['test/mocha.config.cjs'],
   // Resolve absolute path for test with fork and different cwd.
   // `loader` options is passed to forks, but `require` is not.
   // Use node-option instead (it overrides loader option)
