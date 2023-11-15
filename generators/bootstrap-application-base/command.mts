@@ -17,25 +17,33 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { parseCreationTimestamp } from '../base/support/timestamp.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    autoCrlf: {
-      description: 'Detect line endings',
+    baseName: {
+      description: 'Application base name',
+      type: String,
+      scope: 'storage',
+    },
+    skipJhipsterDependencies: {
+      description: "Don't write jhipster dependencies to package.json.",
       type: Boolean,
       scope: 'storage',
     },
-    skipPrettier: {
-      description: 'Skip prettier',
-      type: Boolean,
-      hide: true,
-      scope: 'generator',
+    creationTimestamp: {
+      description: 'Project creation timestamp (used for reproducible builds)',
+      type: parseCreationTimestamp,
+      scope: 'storage',
     },
-    refreshOnCommit: {
-      description: 'Refresh files on commit',
-      type: Boolean,
-      hide: true,
-      scope: 'generator',
+  },
+  configs: {
+    jdlStore: {
+      description: 'JDL store',
+      cli: {
+        type: String,
+      },
+      scope: 'storage',
     },
   },
 };
