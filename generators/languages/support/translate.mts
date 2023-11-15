@@ -81,7 +81,7 @@ export const replaceTranslationKeysWithText = (
       replacement = `${wrapTranslation[0]}${translation}${wrapTranslation[1]}`;
     } else if (escapeHtml) {
       // Escape specific chars
-      replacement = replacement.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
+      replacement = replacement.replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/@/g, '&#64;');
     } else if (stringify) {
       replacement = JSON.stringify(replacement);
     }
