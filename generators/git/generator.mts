@@ -134,6 +134,7 @@ export default class InitGenerator extends BaseGenerator {
           }
         };
 
+        // @ts-expect-error keep compatibility with other adapters
         if (this.env.adapter.queue) {
           await (this.env.adapter as QueuedAdapter).queue(commitFiles);
         } else {

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -31,6 +32,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
+  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE],
 };
 
 export default command;

@@ -35,20 +35,11 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   javaApplication;
 
   async beforeQueue() {
-    if (this.options.defaults) {
-      if (!this.jhipsterConfig.baseName) {
-        this.jhipsterConfig.baseName = getDefaultAppName(this);
-      }
-    }
-
     this.sharedData.getControl().existingProject =
       this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed);
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
-    }
-    if (this.sharedData.getControl().existingProject && !this.jhipsterConfig.baseName) {
-      this.jhipsterConfig.baseName = getDefaultAppName(this);
     }
   }
 
@@ -56,6 +47,16 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       loadOptions() {
         this.parseJHipsterOptions(command.options);
+      },
+      parseOptions() {
+        if (this.options.defaults) {
+          if (!this.jhipsterConfig.baseName) {
+            this.jhipsterConfig.baseName = getDefaultAppName({
+              reproducible: this.options.reproducible,
+              javaApplication: this.javaApplication,
+            });
+          }
+        }
       },
     });
   }

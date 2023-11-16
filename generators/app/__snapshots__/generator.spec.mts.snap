@@ -23,6 +23,12 @@ Options:
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
+  --base-name <value>                      Application base name
+  --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
+  --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
+  --jdl-store <value>                      JDL store
+  --prettier-tab-width <value>             Default tab width for prettier
+  --skip-commit-hook                       Skip adding husky commit hooks
   --auth <value>                           Provide authentication type for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
@@ -49,8 +55,6 @@ Options:
   --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
-  --prettier-tab-width <value>             Default tab width for prettier
-  --skip-commit-hook                       Skip adding husky commit hooks
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
   --cypress-coverage                       Enable Cypress code coverage report generation
@@ -61,6 +65,138 @@ Options:
   --regenerate-languages                   Regenerate languages
   -h, --help                               display help for command
 "
+`;
+
+exports[`generator - app jdlStore with application and entities should match snapshot 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "contents": "{
+  "changelogDate": "20200101000200",
+  "fields": [],
+  "name": "Bar",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "contents": "{
+  "changelogDate": "20200101000100",
+  "fields": [],
+  "name": "Foo",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "creationTimestamp": 1577836800000,
+    "jdlStore": "app.jdl",
+    "jhipsterVersion": "8.0.0"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "app.jdl": {
+    "contents": "application {
+  config {
+    baseName jhipster
+    skipClient true
+    skipServer true
+  }
+
+  entities Foo, Bar
+}
+
+entity Foo
+entity Bar
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - app jdlStore with application should match snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "creationTimestamp": 1577836800000,
+    "jdlStore": "app.jdl",
+    "jhipsterVersion": "8.0.0"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "app.jdl": {
+    "contents": "application {
+  config {
+    baseName jhipster
+    skipClient true
+    skipServer true
+  }
+}
+
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - app jdlStore with incremental changelog application and entities should match snapshot 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "contents": "{
+  "changelogDate": "20200101000200",
+  "fields": [],
+  "name": "Bar",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "contents": "{
+  "changelogDate": "20200101000100",
+  "fields": [],
+  "name": "Foo",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "creationTimestamp": 1577836800000,
+    "jdlStore": "app.jdl",
+    "jhipsterVersion": "8.0.0"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+  "app.jdl": {
+    "contents": "application {
+  config {
+    baseName jhipster
+    skipClient true
+    skipServer true
+  }
+
+  entities Foo, Bar
+}
+
+entity Foo
+entity Bar
+",
+    "stateCleared": "modified",
+  },
+}
 `;
 
 exports[`generator - app with default config should match snapshot 1`] = `

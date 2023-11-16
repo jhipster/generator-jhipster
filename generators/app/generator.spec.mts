@@ -22,7 +22,7 @@ import { expect } from 'esmocha';
 import lodash from 'lodash';
 
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
-import { defaultHelpers as helpers } from '../../test/support/index.mjs';
+import { defaultHelpers as helpers, runResult } from '../../test/support/index.mjs';
 import Generator from './index.mjs';
 
 const { snakeCase } = lodash;
@@ -95,6 +95,68 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
         });
+      });
+    });
+  });
+
+  describe('jdlStore', () => {
+    describe('with application', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withJHipsterConfig({
+            jdlStore: 'app.jdl',
+            skipServer: true,
+            skipClient: true,
+          })
+          .withOptions({ refreshOnCommit: true })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match snapshot', () => {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+    describe('with application and entities', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withJHipsterConfig(
+            {
+              jdlStore: 'app.jdl',
+              skipServer: true,
+              skipClient: true,
+            },
+            [{ name: 'Foo' }, { name: 'Bar' }],
+          )
+          .withOptions({ refreshOnCommit: true })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match snapshot', () => {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+
+    describe('with incremental changelog application and entities', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withJHipsterConfig(
+            {
+              jdlStore: 'app.jdl',
+              skipServer: true,
+              skipClient: true,
+              incrementalChangelog: true,
+            },
+            [{ name: 'Foo' }, { name: 'Bar' }],
+          )
+          .withOptions({ refreshOnCommit: true })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match snapshot', () => {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
       });
     });
   });

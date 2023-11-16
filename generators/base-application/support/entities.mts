@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, mkdirSync, opendirSync } from 'fs';
+import { existsSync, opendirSync } from 'fs';
 import { extname, basename } from 'path';
 
 // eslint-disable-next-line import/prefer-default-export
 export function getEntitiesFromDir(configDir: string): string[] {
   if (!existsSync(configDir)) {
-    mkdirSync(configDir);
+    return [];
   }
   const dir = opendirSync(configDir);
   const entityNames: string[] = [];

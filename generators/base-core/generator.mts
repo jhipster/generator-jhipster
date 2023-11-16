@@ -31,6 +31,7 @@ import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import semver, { lt as semverLessThan } from 'semver';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
+import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.mjs';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.mjs';
@@ -137,8 +138,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
 
-  // TODO switch to FullEnvironment type
-  declare env: any;
+  // Override the type of `env` to be a full Environment
+  declare env: Environment;
   declare log: Logger;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {

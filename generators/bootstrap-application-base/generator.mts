@@ -39,6 +39,8 @@ import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_CO
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
+import { exportJDLTransform, importJDLTransform } from './support/index.mjs';
+import command from './command.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -71,6 +73,27 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.printDestinationInfo();
+      },
+      parseOptions() {
+        this.parseJHipsterCommand(command);
+      },
+      async jdlStore() {
+        if (this.jhipsterConfig.jdlStore) {
+          this.logger.warn('Storing configuration inside a JDL file is experimental');
+          this.logger.info(`Using JDL store ${this.jhipsterConfig.jdlStore}`);
+
+          const destinationPath = this.destinationPath();
+          const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
+
+          this.features.commitTransformFactory = () =>
+            exportJDLTransform({
+              destinationPath,
+              jdlStorePath,
+              // JDL export does not support exporting annotations, keep entities config to avoid losing information.
+              keepEntitiesConfig: true,
+            });
+          await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath }));
+        }
       },
     });
   }

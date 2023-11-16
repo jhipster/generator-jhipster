@@ -31,6 +31,12 @@ const command: JHipsterCommandDefinition = {
       hide: true,
       scope: 'generator',
     },
+    refreshOnCommit: {
+      description: 'Refresh files on commit',
+      type: Boolean,
+      hide: true,
+      scope: 'generator',
+    },
   },
 };
 

@@ -91,6 +91,11 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
    * Defaults to true.
    */
   storeJHipsterVersion?: boolean;
+
+  /**
+   * Create transforms for commit.
+   */
+  commitTransformFactory?: () => any;
 };
 
 // eslint-disable-next-line no-use-before-define
