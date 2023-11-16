@@ -35,6 +35,7 @@ import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.mjs';
 import command from './command.mjs';
 import { QUEUES } from '../base-application/priorities.mjs';
+import { PRIORITY_NAMES } from '../base/priorities.mjs';
 
 const { startCase } = _;
 
@@ -74,6 +75,17 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+    }
+
+    if (
+      !this.jhipsterConfigWithDefaults.skipClient &&
+      this.jhipsterConfigWithDefaults.clientFramework !== 'no' &&
+      (!this.jhipsterConfig.enableTranslation || this.jhipsterConfigWithDefaults.clientFramework === 'angular')
+    ) {
+      // We must write languages files for translation process for entities only generation.
+      // Angular frontend uses translation files even if enableTranslation is enabled.
+      // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
+      this.setFeatures({ disableSkipPriorities: true });
     }
   }
 
@@ -268,7 +280,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
         if (
           !application.enableTranslation ||
           application.skipServer ||
-          (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles)
+          (!application.backendTypeSpringBoot && !this.writeJavaLanguageFiles) ||
+          this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)
         )
           return;
         await Promise.all(
@@ -323,6 +336,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       write({ application, control }) {
+        if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
+
         if (application.enableTranslation && !application.skipClient) {
           if (application.clientFrameworkAngular) {
             updateLanguagesInAngularTask.call(this, { application, control });
