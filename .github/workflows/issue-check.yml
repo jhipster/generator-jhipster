@@ -131,6 +131,7 @@ jobs:
         if: always()
         uses: jwalton/gh-docker-logs@v2
     outputs:
+      valid: ${{ steps.project.outputs.valid }}
       yo-rc: ${{ steps.project.outputs.yo-rc }}
       entities-jdl: ${{ steps.project.outputs.entities-jdl }}
       application: ${{ steps.project.outputs.result }}
@@ -156,6 +157,9 @@ jobs:
                       github.rest.issues.removeLabel({...issue, name: label.name})
                   }
               }
+              if (!${{ needs.application.outputs.valid }}) {
+                  github.rest.issues.addLabels({...issue, labels: ['area: invalid', 'area: stale']})
+              }
             })
       - uses: mshick/add-pr-comment@v2.8.1
         with:
@@ -168,3 +172,6 @@ jobs:
             Frontend check: ${{ needs.application.outputs.frontend-check }}
             Backend check: ${{ needs.application.outputs.backend-check }}
             E2E check: ${{ needs.application.outputs.e2e-check }}
+
+            This check uses `jhipster info` output from the issue description to generate the sample.
+            Bug report that does not contain this information will be marked as invalid.
