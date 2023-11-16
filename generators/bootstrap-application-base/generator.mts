@@ -79,7 +79,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       },
       async jdlStore() {
         if (this.jhipsterConfig.jdlStore) {
-          this.logger.info(`Using jdl store ${this.jhipsterConfig.jdlStore}`);
+          this.logger.warn('Storing configuration inside a JDL file is experimental');
+          this.logger.info(`Using JDL store ${this.jhipsterConfig.jdlStore}`);
 
           const destinationPath = this.destinationPath();
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
