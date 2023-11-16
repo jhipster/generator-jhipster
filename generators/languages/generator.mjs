@@ -84,7 +84,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     ) {
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.
-      // As side efect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
+      // As side effect, with angular frontends, translation files will be written for nativeLanguage for entity only generation.
       this.setFeatures({ disableSkipPriorities: true });
     }
   }
