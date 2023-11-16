@@ -69,6 +69,26 @@ Options:
 
 exports[`generator - app jdlStore with application and entities should match snapshot 1`] = `
 {
+  ".jhipster/Bar.json": {
+    "contents": "{
+  "changelogDate": "20200101000200",
+  "fields": [],
+  "name": "Bar",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".jhipster/Foo.json": {
+    "contents": "{
+  "changelogDate": "20200101000100",
+  "fields": [],
+  "name": "Foo",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {

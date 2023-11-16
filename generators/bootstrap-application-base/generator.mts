@@ -84,7 +84,13 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           const destinationPath = this.destinationPath();
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
 
-          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath });
+          this.features.commitTransformFactory = () =>
+            exportJDLTransform({
+              destinationPath,
+              jdlStorePath,
+              // JDL export does not support exporting annotations, keep entities config to avoid losing information.
+              keepEntitiesConfig: true,
+            });
           await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath }));
         }
       },
