@@ -111,7 +111,9 @@ exports[`generator - app jdlStore with application and entities should match sna
   entities Foo, Bar
 }
 
+@ChangelogDate("20200101000100")
 entity Foo
+@ChangelogDate("20200101000200")
 entity Bar
 ",
     "stateCleared": "modified",
@@ -151,7 +153,9 @@ exports[`generator - app jdlStore with incremental changelog application and ent
 {
   ".jhipster/Bar.json": {
     "contents": "{
-  "changelogDate": "20200101000200",
+  "annotations": {
+    "changelogDate": "20200101000200"
+  },
   "fields": [],
   "name": "Bar",
   "relationships": []
@@ -161,7 +165,9 @@ exports[`generator - app jdlStore with incremental changelog application and ent
   },
   ".jhipster/Foo.json": {
     "contents": "{
-  "changelogDate": "20200101000100",
+  "annotations": {
+    "changelogDate": "20200101000100"
+  },
   "fields": [],
   "name": "Foo",
   "relationships": []
@@ -191,7 +197,9 @@ exports[`generator - app jdlStore with incremental changelog application and ent
   entities Foo, Bar
 }
 
+@ChangelogDate("20200101000100")
 entity Foo
+@ChangelogDate("20200101000200")
 entity Bar
 ",
     "stateCleared": "modified",

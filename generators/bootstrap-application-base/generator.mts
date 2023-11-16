@@ -167,10 +167,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
       configureEntity({ entityStorage, entityConfig }) {
-        entityStorage.defaults({ fields: [], relationships: [] });
+        entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
-        if (entityConfig.changelogDate === undefined) {
-          entityConfig.changelogDate = this.dateFormatForLiquibase();
+        if (entityConfig.changelogDate) {
+          entityConfig.annotations.changelogDate = entityConfig.changelogDate;
+          delete entityConfig.changelogDate;
+        }
+        if (!entityConfig.annotations.changelogDate) {
+          entityConfig.annotations.changelogDate = this.dateFormatForLiquibase();
+          entityStorage.save();
         }
       },
 
@@ -242,8 +247,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
               throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
             }
           } else {
-            const entity = entityStorage.getAll();
+            let entity = entityStorage.getAll() as any;
             entity.name = entity.name ?? entityName;
+            entity = { ...entity, ...entity.annotations };
             this.sharedData.setEntity(entityName, entity);
           }
         }

@@ -174,7 +174,7 @@ export default class BaseApplicationGenerator<
    */
   getExistingEntities(): { name: string; definition: Record<string, any> }[] {
     function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
+      return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();

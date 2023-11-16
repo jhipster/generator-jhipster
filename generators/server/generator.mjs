@@ -457,7 +457,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.jpaMetamodelFiltering = false;
         }
       },
-      configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+      configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
         entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
@@ -481,22 +481,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.pagination = NO_PAGINATION;
         }
 
-        // Validate root entity json content
-        if (entityConfig.changelogDate === undefined) {
-          const currentDate = this.dateFormatForLiquibase();
-          if (entityStorage.existed) {
-            this.log.verboseInfo(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
-          }
-          entityConfig.changelogDate = currentDate;
-        }
-
         if (entityConfig.incrementalChangelog === undefined) {
           // Keep entity's original incrementalChangelog option.
           entityConfig.incrementalChangelog =
             application.incrementalChangelog &&
             !existsSync(
               this.destinationPath(
-                `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`,
+                `src/main/resources/config/liquibase/changelog/${entityConfig.annotations?.changelogDate}_added_entity_${entityConfig.name}.xml`,
               ),
             );
         }

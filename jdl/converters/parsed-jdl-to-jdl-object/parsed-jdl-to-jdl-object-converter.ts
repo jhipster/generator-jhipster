@@ -18,7 +18,6 @@
  */
 import * as _ from 'lodash-es';
 import JDLObject from '../../models/jdl-object.js';
-import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { applicationTypes, binaryOptions } from '../../jhipster/index.mjs';
 
@@ -106,7 +105,6 @@ function fillClassesAndFields() {
   jdlEntities.forEach(jdlEntity => {
     jdlObject.addEntity(jdlEntity);
   });
-  addOptionsFromEntityAnnotations();
 }
 
 function getJDLFieldsFromParsedEntity(entity) {
@@ -119,35 +117,6 @@ function getJDLFieldsFromParsedEntity(entity) {
     fields.push(jdlField);
   }
   return fields;
-}
-
-function addOptionsFromEntityAnnotations() {
-  parsedContent.entities.forEach(entity => {
-    const entityName = entity.name;
-    const annotations = entity.annotations;
-    annotations.forEach(annotation => {
-      let annotationName = _.lowerFirst(annotation.optionName);
-      if (annotation.type === 'UNARY') {
-        jdlObject.addOption(
-          new JDLUnaryOption({
-            name: annotationName,
-            entityNames: [entityName],
-          }),
-        );
-      } else if (annotation.type === 'BINARY') {
-        if (annotationName === 'paginate') {
-          annotationName = binaryOptions.Options.PAGINATION;
-        }
-        jdlObject.addOption(
-          new JDLBinaryOption({
-            name: annotationName,
-            value: annotation.optionValue,
-            entityNames: [entityName],
-          }),
-        );
-      }
-    });
-  });
 }
 
 function getValidations(field) {
