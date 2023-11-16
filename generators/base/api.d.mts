@@ -72,6 +72,10 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   sbsBlueprint?: boolean;
   checkBlueprint?: boolean;
   /**
+   * Disable skipPriorities flag.
+   */
+  disableSkipPriorities?: boolean;
+  /**
    * Compose with bootstrap generator.
    *
    * Bootstrap generator adds support to:
