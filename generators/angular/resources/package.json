@@ -45,7 +45,7 @@
     "ts-jest": "29.1.1",
     "typescript": "5.2.2",
     "webpack": "5.89.0",
-    "webpack-bundle-analyzer": "4.10.0",
+    "webpack-bundle-analyzer": "4.10.1",
     "webpack-merge": "5.10.0",
     "webpack-notifier": "1.15.0"
   }
