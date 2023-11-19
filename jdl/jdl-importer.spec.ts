@@ -429,7 +429,7 @@ relationship ManyToMany {
 
         before(() => {
           importer = createImporterFromContent(entities, {
-            applicationName: 'jhipter',
+            applicationName: 'jhipster',
             databaseType: 'postgresql',
           });
         });

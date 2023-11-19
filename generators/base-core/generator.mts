@@ -186,7 +186,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     this.registerPriorities(CUSTOM_PRIORITIES);
 
     if (this.getFeatures().jhipsterBootstrap ?? true) {
-      // jhipster:bootstrap is always required. Run it once the enviroment starts.
+      // jhipster:bootstrap is always required. Run it once the environment starts.
       this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
         once: 'queueJhipsterBootstrap',
         startQueue: false,
