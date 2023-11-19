@@ -13,7 +13,7 @@ export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinat
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesFolder = join(destinationPath, '.jhipster');
     const entitiesMatcher = new Minimatch(`${entitiesFolder}/*.json`);
-    const entityFiels: Array<MemFsEditorFile> = [];
+    const entityFields: Array<MemFsEditorFile> = [];
 
     let jdlStoreFileInMemory: MemFsEditorFile | undefined;
     let yoRcFileInMemory: MemFsEditorFile | undefined;
@@ -25,7 +25,7 @@ export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinat
       } else if (file.path === yoRcFilePath) {
         yoRcFileInMemory = file;
       } else if (entitiesMatcher.match(file.path)) {
-        entityFiels.push(file);
+        entityFields.push(file);
       } else {
         yield file;
       }
@@ -36,12 +36,12 @@ export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinat
       if (yoRcFileInMemory) {
         yield yoRcFileInMemory;
       }
-      for (const file of entityFiels) {
+      for (const file of entityFields) {
         yield file;
       }
       return;
     }
-    if (entityFiels.length > 0) {
+    if (entityFields.length > 0) {
       throw new Error('Entities configuration files are not supported by jdlStore');
     }
     const importer = createImporterFromContent(jdlStoreContents.toString());
