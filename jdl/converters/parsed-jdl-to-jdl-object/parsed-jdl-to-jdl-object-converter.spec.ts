@@ -728,14 +728,9 @@ JDLDeployment {
       });
       context('when parsing entities with annotations', () => {
         context('that are not capitalized', () => {
-          let dtoOption;
-          let filterOption;
-          let paginationOption;
-          let serviceOption;
-          let skipClientOption;
-          let customUnaryOption;
-          let customBinaryOption;
-          let customBinaryOption2;
+          let entityA;
+          let entityB;
+          let entityC;
           let fieldAnnotation;
           let relationshipAnnotationOnSource;
           let relationshipAnnotationOnDestination;
@@ -746,30 +741,40 @@ JDLDeployment {
               parsedContent: input,
               applicationType: MONOLITH,
             });
-            dtoOption = jdlObject.getOptionsForName(binaryOptions.Options.DTO)[0];
-            filterOption = jdlObject.getOptionsForName(unaryOptions.FILTER)[0];
-            paginationOption = jdlObject.getOptionsForName(binaryOptions.Options.PAGINATION)[0];
-            serviceOption = jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)[0];
-            skipClientOption = jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)[0];
-            customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
-            customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
-            customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
+            entityA = jdlObject.entities.A;
+            entityB = jdlObject.entities.B;
+            entityC = jdlObject.entities.C;
             fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
             relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
             relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.destination;
           });
 
           it('should set the annotations as options', () => {
-            expect(dtoOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-            expect(filterOption.entityNames).to.deep.equal(new Set(['C']));
-            expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
-            expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-            expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
-            expect(customUnaryOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-            expect(customBinaryOption.entityNames).to.deep.equal(new Set(['A']));
-            expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
-            expect(customBinaryOption.value).to.deep.equal('customValue');
-            expect(customBinaryOption2.value).to.deep.equal('customValue2');
+            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+{
+  "dto": "mapstruct",
+  "myCustomBinaryOption": "customValue",
+  "myCustomUnaryOption": true,
+  "service": "serviceClass",
+  "skipClient": true,
+}
+`);
+            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+{
+  "dto": "mapstruct",
+  "myCustomUnaryOption": true,
+  "pagination": "pagination",
+  "service": "serviceClass",
+}
+`);
+            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+{
+  "filter": true,
+  "myCustomBinaryOption": "customValue2",
+  "pagination": "pagination",
+  "skipClient": true,
+}
+`);
             expect(fieldAnnotation).to.deep.equal(true);
             jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
@@ -784,14 +789,9 @@ JDLDeployment {
           });
         });
         context('that are capitalized', () => {
-          let dtoOption;
-          let filterOption;
-          let paginationOption;
-          let serviceOption;
-          let skipClientOption;
-          let customUnaryOption;
-          let customBinaryOption;
-          let customBinaryOption2;
+          let entityA;
+          let entityB;
+          let entityC;
           let fieldAnnotation;
           let relationshipAnnotationOnSource;
           let relationshipAnnotationOnDestination;
@@ -802,30 +802,40 @@ JDLDeployment {
               parsedContent: input,
               applicationType: MONOLITH,
             });
-            dtoOption = jdlObject.getOptionsForName(binaryOptions.Options.DTO)[0];
-            filterOption = jdlObject.getOptionsForName(unaryOptions.FILTER)[0];
-            paginationOption = jdlObject.getOptionsForName(binaryOptions.Options.PAGINATION)[0];
-            serviceOption = jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)[0];
-            skipClientOption = jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)[0];
-            customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
-            customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
-            customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
+            entityA = jdlObject.entities.A;
+            entityB = jdlObject.entities.B;
+            entityC = jdlObject.entities.C;
             fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
             relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
             relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.destination;
           });
 
           it('should set the annotations as options with lower-case letters first', () => {
-            expect(dtoOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-            expect(filterOption.entityNames).to.deep.equal(new Set(['C']));
-            expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
-            expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-            expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
-            expect(customUnaryOption.entityNames).to.deep.equal(new Set(['A', 'B']));
-            expect(customBinaryOption.entityNames).to.deep.equal(new Set(['A']));
-            expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
-            expect(customBinaryOption.value).to.deep.equal('customValue');
-            expect(customBinaryOption2.value).to.deep.equal('customValue2');
+            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+{
+  "dto": "mapstruct",
+  "myCustomBinaryOption": "customValue",
+  "myCustomUnaryOption": true,
+  "service": "serviceClass",
+  "skipClient": true,
+}
+`);
+            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+{
+  "dto": "mapstruct",
+  "myCustomUnaryOption": true,
+  "paginate": "pagination",
+  "service": "serviceClass",
+}
+`);
+            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+{
+  "filter": true,
+  "myCustomBinaryOption": "customValue2",
+  "paginate": "pagination",
+  "skipClient": true,
+}
+`);
             expect(fieldAnnotation).to.deep.equal(true);
             jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
@@ -841,14 +851,9 @@ JDLDeployment {
         });
       });
       context('when parsing a mix between annotations and regular options', () => {
-        let dtoOptions;
-        let filterOptions;
-        let paginationOptions;
-        let serviceOptions;
-        let skipClientOptions;
-        let skipServerOptions;
-        let readOnlyOptions;
-        let embeddedOptions;
+        let entityA;
+        let entityB;
+        let entityC;
 
         before(() => {
           const input = JDLReader.parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'annotations_and_options.jdl')]);
@@ -856,41 +861,39 @@ JDLDeployment {
             parsedContent: input,
             applicationType: MONOLITH,
           });
-          dtoOptions = jdlObject.getOptionsForName(binaryOptions.Options.DTO);
-          filterOptions = jdlObject.getOptionsForName(unaryOptions.FILTER);
-          paginationOptions = jdlObject.getOptionsForName(binaryOptions.Options.PAGINATION);
-          serviceOptions = jdlObject.getOptionsForName(binaryOptions.Options.SERVICE);
-          skipClientOptions = jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT);
-          skipServerOptions = jdlObject.getOptionsForName(unaryOptions.SKIP_SERVER);
-          readOnlyOptions = jdlObject.getOptionsForName(unaryOptions.READ_ONLY);
-          embeddedOptions = jdlObject.getOptionsForName(unaryOptions.EMBEDDED);
+          entityA = jdlObject.entities.A;
+          entityB = jdlObject.entities.B;
+          entityC = jdlObject.entities.C;
         });
 
         it('correctly should set the options', () => {
-          expect(dtoOptions).to.have.length(1);
-          expect(dtoOptions[0].entityNames).to.deep.equal(new Set(['A', 'B']));
-
-          expect(filterOptions).to.have.length(1);
-          expect(filterOptions[0].entityNames).to.deep.equal(new Set(['C']));
-
-          expect(paginationOptions).to.have.length(1);
-          expect(paginationOptions[0].entityNames).to.deep.equal(new Set(['B', 'C']));
-
-          expect(serviceOptions).to.have.length(2);
-          expect(serviceOptions[0].entityNames).to.deep.equal(new Set(['A', 'B']));
-          expect(serviceOptions[1].entityNames).to.deep.equal(new Set(['A']));
-
-          expect(skipClientOptions).to.have.length(1);
-          expect(skipClientOptions[0].entityNames).to.deep.equal(new Set(['A', 'C']));
-
-          expect(skipServerOptions).to.have.length(1);
-          expect(skipServerOptions[0].entityNames).to.deep.equal(new Set(['A']));
-
-          expect(readOnlyOptions).to.have.length(1);
-          expect(readOnlyOptions[0].entityNames).to.deep.equal(new Set(['A', 'C']));
-
-          expect(embeddedOptions).to.have.length(1);
-          expect(embeddedOptions[0].entityNames).to.deep.equal(new Set(['B', 'C']));
+          it('should set the annotations as options with lower-case letters first', () => {
+            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+{
+  "dto": "mapstruct",
+  "myCustomBinaryOption": "customValue",
+  "myCustomUnaryOption": true,
+  "service": "serviceClass",
+  "skipClient": true,
+}
+`);
+            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+{
+  "dto": "mapstruct",
+  "myCustomUnaryOption": true,
+  "paginate": "pagination",
+  "service": "serviceClass",
+}
+`);
+            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+{
+  "filter": true,
+  "myCustomBinaryOption": "customValue2",
+  "paginate": "pagination",
+  "skipClient": true,
+}
+`);
+          });
         });
       });
       context('when having a pattern validation with a quote in it', () => {

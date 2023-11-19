@@ -84,6 +84,7 @@ function convertJSONToJDLEntity(entity: Entity, entityName: string): JDLEntity {
     name: entityName,
     tableName: entity.entityTableName,
     comment: entity.documentation,
+    annotations: entity.annotations,
   });
   addFields(jdlEntity, entity);
   return jdlEntity;

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
 import getTableNameFromEntityName from '../jhipster/entity-table-name-creator.js';
 import JDLField from './jdl-field.js';
@@ -26,6 +27,7 @@ export default class JDLEntity {
   tableName: any;
   fields: Record<string, JDLField>;
   comment: any;
+  annotations: Record<string, boolean | string | number>;
 
   constructor(args) {
     const merged = merge(defaults(), args);
@@ -36,6 +38,7 @@ export default class JDLEntity {
     this.tableName = merged.tableName || merged.name;
     this.fields = merged.fields;
     this.comment = merged.comment;
+    this.annotations = merged.annotations ?? {};
   }
 
   /**
@@ -68,6 +71,16 @@ export default class JDLEntity {
         .map(line => ` * ${line}\n`)
         .join('')} */\n`;
     }
+    Object.entries(this.annotations).forEach(([key, value]) => {
+      key = upperFirst(key);
+      if (value === true) {
+        stringifiedEntity += `@${key}\n`;
+      } else if (typeof value === 'string') {
+        stringifiedEntity += `@${key}("${value}")\n`;
+      } else {
+        stringifiedEntity += `@${key}(${value})\n`;
+      }
+    });
     stringifiedEntity += `entity ${this.name}`;
     if (this.tableName && getTableNameFromEntityName(this.name) !== getTableNameFromEntityName(this.tableName)) {
       stringifiedEntity += ` (${this.tableName})`;
@@ -82,7 +95,7 @@ export default class JDLEntity {
 function defaults() {
   return {
     fields: {},
-    options: [],
+    annotations: {},
   };
 }
 
