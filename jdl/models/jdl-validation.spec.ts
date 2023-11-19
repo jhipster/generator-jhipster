@@ -66,7 +66,7 @@ describe('jdl - JDLValidation', () => {
         validation = new JDLValidation();
       });
 
-      it('should stringifiy its content', () => {
+      it('should stringify its content', () => {
         expect(validation.toString()).to.equal('required');
       });
     });
