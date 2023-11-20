@@ -40,22 +40,20 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   context('regenerating', () => {
-    const applicationWithEntities = {
-      entities: [
-        {
-          name: 'Foo',
-          changelogDate: '20160926101210',
-        },
-        {
-          name: 'Bar',
-          changelogDate: '20160926101211',
-        },
-        {
-          name: 'Skip',
-          changelogDate: '20160926101212',
-        },
-      ],
-    };
+    const entities = [
+      {
+        name: 'Foo',
+        changelogDate: '20160926101210',
+      },
+      {
+        name: 'Bar',
+        changelogDate: '20160926101211',
+      },
+      {
+        name: 'Skip',
+        changelogDate: '20160926101212',
+      },
+    ];
 
     const fooFiles = [
       `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_Foo.xml`,
@@ -79,13 +77,12 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .run(generatorPath)
-          .withJHipsterConfig()
+          .withJHipsterConfig({}, entities)
           .withArguments(['Foo', 'Bar'])
           .withOptions({
             regenerate: true,
             force: true,
             ignoreNeedlesError: true,
-            applicationWithEntities,
           })
           .withMockedSource();
       });
@@ -115,12 +112,11 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         await helpers
           .run(generatorPath)
-          .withJHipsterConfig()
+          .withJHipsterConfig({}, entities)
           .withOptions({
             regenerate: true,
             force: true,
             ignoreNeedlesError: true,
-            applicationWithEntities,
           })
           .withMockedSource();
       });

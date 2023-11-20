@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { upperFirst } from 'lodash-es';
 import { RelationshipSide, JDLRelationshipType } from '../basic-types/relationships.js';
 import { Validations } from '../jhipster/index.mjs';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
@@ -118,9 +119,9 @@ export default class JDLRelationship implements JDLRelationshipModel {
     if (Object.keys(sourceOptions).length !== 0) {
       Object.keys(sourceOptions).forEach(name => {
         const value = sourceOptions[name];
-        string += `  @${name}${value != null && sourceOptions[name] !== true ? `(${value})` : ''}\n`;
+        name = upperFirst(name);
+        string += `@${name}${value != null && value !== true ? `(${value}) ` : ' '}`;
       });
-      string += '  ';
     }
     string += `${this.from}`;
     if (this.injectedFieldInFrom) {
@@ -137,12 +138,11 @@ export default class JDLRelationship implements JDLRelationshipModel {
     }
     const destinationOptions = this.options.destination;
     if (Object.keys(destinationOptions).length !== 0) {
-      string += '\n';
       Object.keys(destinationOptions).forEach(name => {
         const value = destinationOptions[name];
-        string += `  @${name}${value != null && destinationOptions[name] !== true ? `(${value})` : ''}\n`;
+        name = upperFirst(name);
+        string += `@${name}${value != null && value !== true ? `(${value}) ` : ' '}`;
       });
-      string += '  ';
     }
     string += `${this.to}`;
     if (this.injectedFieldInTo) {

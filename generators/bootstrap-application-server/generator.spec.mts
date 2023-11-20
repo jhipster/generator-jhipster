@@ -56,6 +56,7 @@ describe(`generator - ${generator}`, () => {
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "creationTimestamp": 1577836800000,
     "entities": []
   }
 }

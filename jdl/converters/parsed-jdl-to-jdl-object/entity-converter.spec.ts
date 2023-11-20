@@ -51,12 +51,14 @@ describe('jdl - EntityConverter', () => {
         expect(convertedEntities).toMatchInlineSnapshot(`
 [
   JDLEntity {
+    "annotations": {},
     "comment": "/** No comment */",
     "fields": {},
     "name": "A",
     "tableName": "A",
   },
   JDLEntity {
+    "annotations": {},
     "comment": undefined,
     "fields": {},
     "name": "B",

@@ -39,6 +39,8 @@ import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_CO
 import { packageJson } from '../../lib/index.mjs';
 import { loadLanguagesConfig } from '../languages/support/index.mjs';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.mjs';
+import { exportJDLTransform, importJDLTransform } from './support/index.mjs';
+import command from './command.mjs';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -62,7 +64,8 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+    const projectNameGenerator = (await this.dependsOnJHipster(GENERATOR_PROJECT_NAME)) as any;
+    projectNameGenerator.javaApplication = true;
     await this.composeWithJHipster(GENERATOR_BOOTSTRAP);
   }
 
@@ -70,6 +73,21 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.printDestinationInfo();
+      },
+      parseOptions() {
+        this.parseJHipsterCommand(command);
+      },
+      async jdlStore() {
+        if (this.jhipsterConfig.jdlStore) {
+          this.logger.warn('Storing configuration inside a JDL file is experimental');
+          this.logger.info(`Using JDL store ${this.jhipsterConfig.jdlStore}`);
+
+          const destinationPath = this.destinationPath();
+          const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
+
+          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath });
+          await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath }));
+        }
       },
     });
   }
@@ -143,10 +161,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
       configureEntity({ entityStorage, entityConfig }) {
-        entityStorage.defaults({ fields: [], relationships: [] });
+        entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
-        if (entityConfig.changelogDate === undefined) {
-          entityConfig.changelogDate = this.dateFormatForLiquibase();
+        if (entityConfig.changelogDate) {
+          entityConfig.annotations.changelogDate = entityConfig.changelogDate;
+          delete entityConfig.changelogDate;
+        }
+        if (!entityConfig.annotations.changelogDate) {
+          entityConfig.annotations.changelogDate = this.dateFormatForLiquibase();
+          entityStorage.save();
         }
       },
 
@@ -218,8 +241,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
               throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
             }
           } else {
-            const entity = entityStorage.getAll();
+            let entity = entityStorage.getAll() as any;
             entity.name = entity.name ?? entityName;
+            entity = { ...entity, ...entity.annotations };
             this.sharedData.setEntity(entityName, entity);
           }
         }

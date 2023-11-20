@@ -59,7 +59,9 @@ export async function askForLanguages({ control }) {
       choices: () => {
         const languageOptions = this.supportedLanguages;
         const nativeLanguage = this.jhipsterConfigWithDefaults.nativeLanguage;
-        return languagesAsChoices(languageOptions.filter(l => l.languageTag !== nativeLanguage));
+        const choices = languagesAsChoices(languageOptions.filter(l => l.languageTag !== nativeLanguage));
+        const defaults = this.jhipsterConfigWithDefaults.languages ?? [];
+        return [...choices.filter(({ value }) => defaults.includes(value)), ...choices.filter(({ value }) => !defaults.includes(value))];
       },
       default: () => this.jhipsterConfigWithDefaults.languages,
     },

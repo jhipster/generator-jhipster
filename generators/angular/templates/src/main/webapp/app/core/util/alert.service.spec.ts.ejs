@@ -296,7 +296,7 @@ describe('Alert service test', () => {
       }
     ));
 
-    it('should produce a info message with provided key if transltion key does not exist in translations and message is not provided', inject(
+    it('should produce a info message with provided key if translation key does not exist in translations and message is not provided', inject(
       [AlertService, TranslateService],
       (service: AlertService) => {
         expect(service.addAlert({ type: 'info', translationKey: 'hello.jhipster' })).toEqual(

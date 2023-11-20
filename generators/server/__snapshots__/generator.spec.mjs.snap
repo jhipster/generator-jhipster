@@ -1061,9 +1061,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages_fr.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -1209,9 +1206,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/i18n/messages_fr.properties": {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": {

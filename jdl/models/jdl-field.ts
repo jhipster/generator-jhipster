@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
 
 export default class JDLField {
@@ -75,6 +76,16 @@ export default class JDLField {
         .map(line => ` * ${line}\n`)
         .join('')} */\n`;
     }
+    Object.entries(this.options ?? {}).forEach(([key, value]) => {
+      key = upperFirst(key);
+      if (value === true) {
+        string += `@${key}\n`;
+      } else if (typeof value === 'string') {
+        string += `@${key}("${value}")\n`;
+      } else {
+        string += `@${key}(${value})\n`;
+      }
+    });
     string += `${this.name} ${this.type}`;
     Object.keys(this.validations).forEach(validationName => {
       string += ` ${this.validations[validationName].toString()}`;

@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Duplex } from 'stream';
 import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import { isFileStateModified } from 'mem-fs-editor/state';
+import { isFileStateModified, isFilePending } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import prettier from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
@@ -56,9 +57,10 @@ export default class BootstrapGenerator extends BaseGenerator {
   skipPrettier?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
   prettierOptions: prettier.Options = { plugins: [] };
+  refreshOnCommit = false;
 
   constructor(args: any, options: any, features: any) {
-    super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitSharedFs(), ...features });
+    super(args, options, { jhipsterBootstrap: false, uniqueGlobally: true, customCommitTask: () => this.commitTask(), ...features });
   }
 
   async beforeQueue() {
@@ -80,7 +82,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadOptions() {
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterOptions(command.options, command.configs);
       },
       validateBlueprint() {
         if (this.jhipsterConfig.blueprints && !this.skipChecks) {
@@ -179,12 +181,25 @@ export default class BootstrapGenerator extends BaseGenerator {
     });
   }
 
+  async commitTask() {
+    await this.commitSharedFs(
+      { refresh: this.refreshOnCommit },
+      ...this.env
+        .findFeature('commitTransformFactory')
+        .map(({ feature }) => feature())
+        .flat(),
+    );
+  }
+
   /**
    * Commits the MemFs to the disc.
    */
-  async commitSharedFs({ log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {}) {
+  async commitSharedFs(
+    { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
+    ...transforms: Array<FileTransform<MemFsEditorFile>>
+  ) {
     const skipYoResolveTransforms: Array<FileTransform<MemFsEditorFile>> = [];
-    if (this.options.skipYoResolve) {
+    if (!this.options.skipYoResolve) {
       skipYoResolveTransforms.push(createYoResolveTransform());
     }
 
@@ -220,13 +235,24 @@ export default class BootstrapGenerator extends BaseGenerator {
       createCommitTransform(),
     ];
 
-    // Disable progress since it blocks stdin.
     await this.pipeline(
       {
         refresh: false,
+        // Let pending files pass through.
+        pendingFiles: false,
         ...options,
+        // Disable progress since it blocks stdin.
         disabled: true,
       },
+      ...transforms,
+      // Filter out pending files.
+      Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
+        for await (const file of files) {
+          if (isFilePending(file)) {
+            yield file;
+          }
+        }
+      }),
       ...transformStreams,
     );
     this.log.ok(log ?? 'files commited to disk');

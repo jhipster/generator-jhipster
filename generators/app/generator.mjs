@@ -32,6 +32,8 @@ import {
   GENERATOR_SERVER,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
 } from '../generator-list.mjs';
+import { getDefaultAppName } from '../project-name/support/index.mjs';
+import { packageJson } from '../../lib/index.mjs';
 
 import { applicationTypes, applicationOptions } from '../../jdl/jhipster/index.mjs';
 import command from './command.mjs';
@@ -101,6 +103,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   get configuring() {
     return {
       setup() {
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipUserManagement = true;
         }
@@ -108,6 +111,14 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
           this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+        }
+      },
+      defaults() {
+        if (!this.options.reproducible) {
+          this.config.defaults({
+            baseName: getDefaultAppName(this),
+            creationTimestamp: new Date().getTime(),
+          });
         }
       },
     };
