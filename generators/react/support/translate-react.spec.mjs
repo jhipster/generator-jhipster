@@ -50,7 +50,7 @@ home.subtitle-translated-value-0
 `);
         });
 
-        it('should replace multine Translate tag with contentKey comming first', () => {
+        it('should replace multine Translate tag with contentKey coming first', () => {
           const body = `
 <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
 Active sessions for [<strong>{account.login}</strong>]
