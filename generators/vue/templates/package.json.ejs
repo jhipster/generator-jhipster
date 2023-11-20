@@ -156,6 +156,7 @@
 <%_ } else { %>
     "webapp:build:dev": "<%= clientPackageManager %> run vite-build",
     "webapp:build:prod": "<%= clientPackageManager %> run vite-build",
+    "webapp:dev": "<%= clientPackageManager %> run vite-serve",
     "webapp:serve": "<%= clientPackageManager %> run vite-serve",
 <%_ } %>
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
