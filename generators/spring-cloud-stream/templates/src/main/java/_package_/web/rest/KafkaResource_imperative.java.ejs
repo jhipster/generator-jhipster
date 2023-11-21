@@ -43,7 +43,7 @@ public class <%= upperFirstCamelCaseBaseName %>KafkaResource {
     }
 
     @PostMapping("/publish")
-    public void publish(@RequestParam String message) {
+    public void publish(@RequestParam("message") String message) {
         log.debug("REST request the message : {} to send to Kafka topic ", message);
         streamBridge.send(PRODUCER_BINDING_NAME, message);
     }
