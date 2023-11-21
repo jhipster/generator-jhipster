@@ -43,8 +43,7 @@
             data-cy="firstname"
           />
 
-        @if (settingsForm.get('firstName')!.invalid &&
-          (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)) {
+        @if (settingsForm.get('firstName')!.invalid && (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)) {
           <div>
           @if (settingsForm.get('firstName')?.errors?.required) {
             <small class="form-text text-danger"
@@ -79,8 +78,7 @@
             data-cy="lastname"
           />
 
-        @if (settingsForm.get('lastName')!.invalid &&
-          (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched))
+        @if (settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)) {
           <div>
           @if (settingsForm.get('lastName')?.errors?.required) {
             <small class="form-text text-danger"

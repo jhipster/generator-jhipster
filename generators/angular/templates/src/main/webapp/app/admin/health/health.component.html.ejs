@@ -36,7 +36,7 @@
       </thead>
     @if (health) {
       <tbody>
-      @for (componentHealth of health.components | keyvalue; track componentHealth.key)
+      @for (componentHealth of health.components | keyvalue; track componentHealth.key) {
         <tr>
           <td>
             <%_ if (enableTranslation) { _%>
