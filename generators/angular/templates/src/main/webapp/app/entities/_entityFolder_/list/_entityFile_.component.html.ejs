@@ -80,9 +80,9 @@
                         <div class="d-flex">
                             <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>">__jhiTransformTranslate__('<%- field.fieldTranslationKey %>')</span>
   <%_ if (!field.transient) { _%>
-                        @if (!currentSearch) {
-                            <fa-icon class="p-1" <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %> <% } %>icon="sort"></fa-icon>
-                        }
+                        <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch) {<% } %>
+                            <fa-icon class="p-1" icon="sort"></fa-icon>
+                        <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>}<% } %>
   <%_ } _%>
                         </div>
                     </th>

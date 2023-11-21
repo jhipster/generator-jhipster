@@ -44,8 +44,7 @@
   }
 _%>
 
-        <%_ if (field.autoGenerate) { _%>
-            @if (editForm.controls.<%= field.fieldName %>.value !== null) {
+            <% if (field.autoGenerate) { %>@if (editForm.controls.<%= field.fieldName %>.value !== null) {<% } %>
                 <div class="mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>><%= fieldNameHumanized %></label>
   <%_ if (field.fieldIsEnum) { _%>
@@ -160,9 +159,7 @@ _%>
                 }
   <%_ } _%>
                 </div>
-        <%_ if (field.autoGenerate) { _%>
-            }
-        <%_ } _%>
+            <% if (field.autoGenerate) { %>}<% } %>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
   const { otherEntity, ownerSide, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
