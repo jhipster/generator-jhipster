@@ -22,6 +22,7 @@ import * as _ from 'lodash-es';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.mjs';
 import { getUXConstraintName } from './database.mjs';
 import { hibernateSnakeCase } from './string.mjs';
+import { getJavaValueGeneratorForType } from './templates/field-values.mjs';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.mjs';
 
 const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
@@ -152,5 +153,21 @@ export default function prepareField(entityWithConfig, field, generator) {
     field.javaFieldType = field.fieldType;
   }
 
+  if (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID) {
+    if (field.fieldTypeInteger) {
+      field.javaValueSample1 = '1';
+      field.javaValueSample2 = '2';
+    } else if (field.fieldTypeLong) {
+      field.javaValueSample1 = '1L';
+      field.javaValueSample2 = '2L';
+    } else if (field.fieldTypeString) {
+      field.javaValueSample1 = `"${field.fieldName}1"`;
+      field.javaValueSample2 = `"${field.fieldName}2"`;
+    } else if (field.fieldTypeUUID) {
+      field.javaValueSample1 = 'UUID.fromString("23d8dc04-a48b-45d9-a01d-4b728f0ad4aa")';
+      field.javaValueSample2 = 'UUID.fromString("ad79f240-3727-46c3-b89f-2cf6ebd74367")';
+    }
+    field.javaValueGenerator = getJavaValueGeneratorForType(field.javaFieldType);
+  }
   field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType);
 }

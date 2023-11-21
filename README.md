@@ -2,7 +2,7 @@
 
 [![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url] [![Package Health][health-image]][health-url]
 
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
 
 Greetings, Java Hipster!
 
@@ -12,27 +12,22 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Contributing
 
-We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
+We are honored by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/main/CONTRIBUTING.md) for any information about contributing to the project.
+
+## Supported Java and Node versions
+
+The following Java and Node combinations are tested and verified by GitHub Actions:
+
+| Java | Node | Status |
+| ---- | ---- | ------ |
+| 21   | 20   | ✅     |
+| 17   | 18   | ✅     |
 
 ## Sponsors
 
 Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/generator-jhipster) or [learn more about sponsoring the project](https://www.jhipster.tech/sponsors/).
 
 **Thank you to our sponsors!**
-
-### Gold Sponsors
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://dev.entando.org/jhipster" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/entandoe.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
 
 ### Bronze sponsors
 
@@ -46,56 +41,74 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 <object data="https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890&button=false" type="image/svg+xml"></object>
 
-## Azure Builds
+## Daily Builds
 
 Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 
-| Pipeline Status                                                        |
-| :--------------------------------------------------------------------- |
-| [![Angular Maven SQL][github-angular-maven-sql]][github-actions]       |
-| [![Angular Maven NoSQL][github-angular-maven-nosql]][github-actions]   |
-| [![Angular Gradle SQL][github-angular-gradle-sql]][github-actions]     |
-| [![Angular Gradle NoSQL][github-angular-gradle-nosql]][github-actions] |
-| [![React Maven SQL][github-react-maven-sql]][github-actions]           |
-| [![React Maven NoSQL][github-react-maven-nosql]][github-actions]       |
-| [![React Gradle SQL][github-react-gradle-sql]][github-actions]         |
-| [![React Gradle NoSQL][github-react-gradle-nosql]][github-actions]     |
-| [![Vue Maven SQL][github-vue-maven-sql]][github-actions]               |
-| [![Vue Maven NoSQL][github-vue-maven-nosql]][github-actions]           |
-| [![Vue Gradle SQL][github-vue-gradle-sql]][github-actions]             |
-| [![Vue Gradle NoSQL][github-vue-gradle-nosql]][github-actions]         |
-| [![Elasticsearch][github-elasticsearch]][github-actions]               |
-| [![Monolith OAuth2][github-monolith-oauth2]][github-actions]           |
-| [![No Database][github-no-database]][github-actions]                   |
-| [![Microservices JWT][github-ms-jwt]][github-actions]                  |
-| [![Microservices OAuth2][github-ms-oauth2]][github-actions]            |
-| [![Docker Image][github-docker-image]][github-actions]                 |
-| [![Official Windows][github-official-windows]][github-actions]         |
+| Pipeline Status                                                                      |
+| :----------------------------------------------------------------------------------- |
+| [![Angular Maven SQL][ng-maven-sql.yaml-badge]][ng-maven-sql.yaml-link]              |
+| [![Angular Maven NoSQL][ng-maven-nosql.yaml-badge]][ng-maven-nosql.yaml-link]        |
+| [![Angular Gradle SQL][ng-gradle-sql.yaml-badge]][ng-gradle-sql.yaml-link]           |
+| [![Angular Gradle NoSQL][ng-gradle-nosql.yaml-badge]][ng-gradle-nosql.yaml-link]     |
+| [![React Maven SQL][react-maven-sql.yaml-badge]][react-maven-sql.yaml-link]          |
+| [![React Maven NoSQL][react-maven-nosql.yaml-badge]][react-maven-nosql.yaml-link]    |
+| [![React Gradle SQL][react-gradle-sql.yaml-badge]][react-gradle-sql.yaml-link]       |
+| [![React Gradle NoSQL][react-gradle-nosql.yaml-badge]][react-gradle-nosql.yaml-link] |
+| [![Vue Maven SQL][vue-maven-sql.yaml-badge]][vue-maven-sql.yaml-link]                |
+| [![Vue Maven NoSQL][vue-maven-nosql.yaml-badge]][vue-maven-nosql.yaml-link]          |
+| [![Vue Gradle SQL][vue-gradle-sql.yaml-badge]][vue-gradle-sql.yaml-link]             |
+| [![Vue Gradle NoSQL][vue-gradle-nosql.yaml-badge]][vue-gradle-nosql.yaml-link]       |
+| [![Elasticsearch][elasticsearch.yaml-badge]][elasticsearch.yaml-link]                |
+| [![Monolith OAuth 2.0][monolith-oauth2.yaml-badge]][monolith-oauth2.yaml-link]       |
+| [![No Database][no-database.yaml-badge]][no-database.yaml-link]                      |
+| [![Microservices JWT][ms-jwt.yaml-badge]][ms-jwt.yaml-link]                          |
+| [![Microservices OAuth 2.0][ms-oauth2.yaml-badge]][ms-oauth2.yaml-link]              |
+| [![Docker Image][docker-image.yaml-badge]][docker-image.yaml-link]                   |
+| [![Official Windows][windows.yaml-badge]][windows.yaml-link]                         |
 
 ## Analysis of the sample JHipster project
 
 [![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
-[github-actions]: https://github.com/hipster-labs/jhipster-daily-builds/actions
-[github-official-windows]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Official%20Windows/badge.svg
-[github-angular-maven-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven%20SQL/badge.svg
-[github-angular-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven%20NoSQL/badge.svg
-[github-angular-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle%20SQL/badge.svg
-[github-angular-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle%20NoSQL/badge.svg
-[github-react-maven-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven%20SQL/badge.svg
-[github-react-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven%20NoSQL/badge.svg
-[github-react-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle%20SQL/badge.svg
-[github-react-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle%20NoSQL/badge.svg
-[github-vue-maven-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven%20SQL/badge.svg
-[github-vue-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Maven%20NoSQL/badge.svg
-[github-vue-gradle-sql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20SQL/badge.svg
-[github-vue-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Vue%20Gradle%20NoSQL/badge.svg
-[github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
-[github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth%202.0/badge.svg
-[github-no-database]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/No%20Database/badge.svg
-[github-ms-jwt]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20JWT/badge.svg
-[github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth%202.0/badge.svg
-[github-docker-image]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Docker%20Image/badge.svg
+[ng-maven-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-maven-sql.yaml/badge.svg
+[ng-maven-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-maven-sql.yaml
+[ng-maven-nosql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-maven-nosql.yaml/badge.svg
+[ng-maven-nosql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-maven-nosql.yaml
+[ng-gradle-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-gradle-sql.yaml/badge.svg
+[ng-gradle-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-gradle-sql.yaml
+[ng-gradle-nosql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-gradle-nosql.yaml/badge.svg
+[ng-gradle-nosql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-gradle-nosql.yaml
+[react-maven-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-maven-sql.yaml/badge.svg
+[react-maven-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-maven-sql.yaml
+[react-maven-nosql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-maven-nosql.yaml/badge.svg
+[react-maven-nosql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-maven-nosql.yaml
+[react-gradle-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-gradle-sql.yaml/badge.svg
+[react-gradle-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-gradle-sql.yaml
+[react-gradle-nosql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-gradle-nosql.yaml/badge.svg
+[react-gradle-nosql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/react-gradle-nosql.yaml
+[vue-maven-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-maven-sql.yaml/badge.svg
+[vue-maven-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-maven-sql.yaml
+[vue-maven-nosql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-maven-nosql.yaml/badge.svg
+[vue-maven-nosql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-maven-nosql.yaml
+[vue-gradle-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-gradle-sql.yaml/badge.svg
+[vue-gradle-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-gradle-sql.yaml
+[vue-gradle-nosql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-gradle-nosql.yaml/badge.svg
+[vue-gradle-nosql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/vue-gradle-nosql.yaml
+[elasticsearch.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/elasticsearch.yaml/badge.svg
+[elasticsearch.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/elasticsearch.yaml
+[monolith-oauth2.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/monolith-oauth2.yaml/badge.svg
+[monolith-oauth2.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/monolith-oauth2.yaml
+[no-database.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/no-database.yaml/badge.svg
+[no-database.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/no-database.yaml
+[ms-jwt.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ms-jwt.yaml/badge.svg
+[ms-jwt.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ms-jwt.yaml
+[ms-oauth2.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ms-oauth2.yaml/badge.svg
+[ms-oauth2.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ms-oauth2.yaml
+[docker-image.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/docker-image.yaml/badge.svg
+[docker-image.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/docker-image.yaml
+[windows.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/windows.yaml/badge.svg
+[windows.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/windows.yaml
 [sonar-url]: https://sonarcloud.io/dashboard?id=jhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=coverage

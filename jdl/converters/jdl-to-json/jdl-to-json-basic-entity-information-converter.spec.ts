@@ -87,6 +87,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [],
   "documentation": "The best entity",
   "dto": undefined,

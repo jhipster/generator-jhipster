@@ -19,12 +19,21 @@
 import React<% if (microfrontend) { %>, { Suspense }<% } %> from 'react';
 import { translate } from 'react-jhipster';
 import { NavDropdown } from './menu-components';
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+import { importRemote } from '@module-federation/utilities';
+<%_ } _%>
 <%_ if (microfrontend) { _%>
 
 const EntitiesMenuItems = React.lazy(() => import('app/entities/menu').catch(() => import('app/shared/error/error-loading')));
+
   <%_ if (applicationTypeGateway) { _%>
     <%_ for (const remote of microfrontends) { _%>
-const <%= remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(() => import('@<%= remote.lowercaseBaseName %>/entities-menu').catch(() => import('app/shared/error/error-loading')));
+const <%= remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(async () => importRemote<any>({
+  url: `./services/<%= remote.lowercaseBaseName %>`,
+  scope: '<%= remote.lowercaseBaseName %>',
+  module: './entities-menu',
+}).catch(() => import('app/shared/error/error-loading')));
+
     <%_ } _%>
   <%_ } _%>
 <%_ } else { _%>

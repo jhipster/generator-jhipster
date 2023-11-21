@@ -85,7 +85,7 @@ function getJDLObjectFromMultipleApplications(directory) {
   return jdlObject;
 }
 
-function getJDLObjectFromSingleApplication(
+export function getJDLObjectFromSingleApplication(
   yoRcFileContent,
   entities?: Map<string, Entity>,
   existingJDLObject = new JDLObject(),

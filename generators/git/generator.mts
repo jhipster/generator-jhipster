@@ -21,7 +21,7 @@ import chalk from 'chalk';
 import type { QueuedAdapter } from '@yeoman/types';
 
 import BaseGenerator from '../base/index.mjs';
-import { GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.mjs';
+import { GENERATOR_GIT } from '../generator-list.mjs';
 import { files } from './files.mjs';
 import command from './command.mjs';
 
@@ -37,10 +37,6 @@ export default class InitGenerator extends BaseGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GIT);
-    }
-
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 
@@ -84,7 +80,7 @@ export default class InitGenerator extends BaseGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      /** Husky commit hook install at install priority requires git to be initilized */
+      /** Husky commit hook install at install priority requires git to be initialized */
       async initGitRepo() {
         if (!this.skipGit && !this.jhipsterConfig.monorepository) {
           await this.initializeGitRepository();
@@ -138,6 +134,7 @@ export default class InitGenerator extends BaseGenerator {
           }
         };
 
+        // @ts-expect-error keep compatibility with other adapters
         if (this.env.adapter.queue) {
           await (this.env.adapter as QueuedAdapter).queue(commitFiles);
         } else {

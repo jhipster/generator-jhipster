@@ -64,21 +64,21 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should throw an error', () => {
           expect(() => {
             convert();
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
       context('such as an no database type', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), applicationName: 'toto' });
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
       context('such as no application name', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), databaseType: 'sql' });
-          }).to.throw(/^The JDL object, the application's name and its the database type are mandatory\.$/);
+          }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
     });
@@ -160,6 +160,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -263,6 +264,7 @@ JSONEntity {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "suffix",
+  "annotations": {},
   "applications": "*",
   "clientRootFolder": "../client_root_folder",
   "documentation": "The best entity",
@@ -327,6 +329,7 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": "mapstruct",
@@ -385,6 +388,7 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -433,6 +437,7 @@ JSONEntity {
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -485,6 +490,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -554,6 +560,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -621,6 +628,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -673,6 +681,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -780,6 +789,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -865,6 +875,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,

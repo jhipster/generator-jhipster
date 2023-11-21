@@ -24,6 +24,7 @@ import { upperFirst } from '../utils/string-utils.js';
  * The JSONEntity class represents a read-to-be exported to JSON entity.
  */
 class JSONEntity {
+  annotations: Record<string, boolean | string | number>;
   [x: string]: any;
 
   /**
@@ -50,6 +51,7 @@ class JSONEntity {
     const merged = merge(getDefaults(args.entityName), args);
     this.name = merged.name;
     this.fields = merged.fields;
+    this.annotations = merged.annotations;
     this.relationships = merged.relationships;
     this.documentation = merged.documentation;
     this.entityTableName = merged.entityTableName;
@@ -109,6 +111,10 @@ class JSONEntity {
       this[optionName] = options[optionName];
     });
   }
+
+  setAnnotations(annotations = {}) {
+    Object.assign(this.annotations, annotations);
+  }
 }
 
 export default JSONEntity;
@@ -119,5 +125,6 @@ function getDefaults(entityName) {
     fields: [],
     relationships: [],
     applications: [],
+    annotations: {},
   };
 }

@@ -55,6 +55,9 @@
     "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+    "@module-federation/utilities": "<%= nodeDependencies['@module-federation/utilities'] %>",
+<%_ } _%>
 <%_ if (microfrontend) { _%>
     "@originjs/vite-plugin-federation": "1.2.3",
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
@@ -153,6 +156,7 @@
 <%_ } else { %>
     "webapp:build:dev": "<%= clientPackageManager %> run vite-build",
     "webapp:build:prod": "<%= clientPackageManager %> run vite-build",
+    "webapp:dev": "<%= clientPackageManager %> run vite-serve",
     "webapp:serve": "<%= clientPackageManager %> run vite-serve",
 <%_ } %>
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { passthrough } from 'p-transform';
-import { isFileStateDeleted } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginProperties from 'prettier-plugin-properties';
@@ -50,7 +50,7 @@ export const createPrettierTransform = async function (
   const minimatch = new Minimatch(globExpression, { dot: true });
 
   return passthrough(async (file: VinylMemFsEditorFile) => {
-    if (!minimatch.match(file.path) || isFileStateDeleted(file)) {
+    if (!minimatch.match(file.path) || !isFileStateModified(file)) {
       return;
     }
     if (!file.contents) {

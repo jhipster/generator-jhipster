@@ -2,6 +2,7 @@ import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
 import { expect } from 'esmocha';
 import { transform } from 'p-transform';
+import { setModifiedFileState } from 'mem-fs-editor/state';
 
 import { createESLintTransform } from './eslint-transform.mjs';
 
@@ -15,6 +16,7 @@ import { Foo } from 'bar';
 export const foo = 'bar';
 `),
       };
+      setModifiedFileState(file);
       await pipeline(
         Readable.from([file]),
         createESLintTransform(),

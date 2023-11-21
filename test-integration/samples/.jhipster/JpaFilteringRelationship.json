@@ -40,7 +40,7 @@
     {
       "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
-      "otherEntityRelationshipName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "requiredManyToOneOtherSide",
       "relationshipName": "requiredManyToOne",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
@@ -48,7 +48,7 @@
     {
       "otherEntityField": "id",
       "otherEntityName": "jpaFilteringOtherSide",
-      "otherEntityRelationshipName": "jpaFilteringRelationship",
+      "otherEntityRelationshipName": "manyToOneOtherSide",
       "relationshipName": "manyToOne",
       "relationshipType": "many-to-one"
     },

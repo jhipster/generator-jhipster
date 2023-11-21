@@ -35,17 +35,14 @@ jobs:
     if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
       - run: npm install -g npm@latest
       - uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: jhipster/actions/restore-cache@v0
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}-
-          restore-keys: |
-            ${{ runner.os }}-node-
+          npm: true
       - name: Create commit
         run: |
           rm package-lock.json

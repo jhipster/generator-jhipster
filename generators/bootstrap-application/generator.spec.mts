@@ -121,6 +121,9 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
+  "annotations": {
+    "changelogDate": "20220129025419"
+  },
   "changelogDate": "20220129025419",
   "fields": [
     {
@@ -136,6 +139,9 @@ describe(`generator - ${generator}`, () => {
   },
   ".jhipster/User.json": {
     "contents": "{
+  "annotations": {
+    "changelogDate": "20220129025420"
+  },
   "changelogDate": "20220129025420",
   "fields": [
     {
@@ -168,6 +174,9 @@ describe(`generator - ${generator}`, () => {
 {
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
+  "annotations": {
+    "changelogDate": "20220129025420",
+  },
   "anyFieldHasDocumentation": false,
   "anyFieldHasFileBasedContentType": false,
   "anyFieldHasImageContentType": false,
@@ -310,6 +319,9 @@ describe(`generator - ${generator}`, () => {
       "generateFakeData": Any<Function>,
       "id": true,
       "javaFieldType": "UUID",
+      "javaValueGenerator": "UUID.randomUUID()",
+      "javaValueSample1": "UUID.fromString("23d8dc04-a48b-45d9-a01d-4b728f0ad4aa")",
+      "javaValueSample2": "UUID.fromString("ad79f240-3727-46c3-b89f-2cf6ebd74367")",
       "jpaGeneratedValue": true,
       "jpaGeneratedValueIdentity": false,
       "jpaGeneratedValueSequence": false,
@@ -319,6 +331,7 @@ describe(`generator - ${generator}`, () => {
         "id",
       ],
       "propertyName": "id",
+      "propertyNameCapitalized": "Id",
       "readonly": true,
       "reference": Any<Object>,
       "relationshipsPath": [],
@@ -387,12 +400,16 @@ describe(`generator - ${generator}`, () => {
       "filterableField": true,
       "generateFakeData": Any<Function>,
       "javaFieldType": "String",
+      "javaValueGenerator": "UUID.randomUUID().toString()",
+      "javaValueSample1": ""login1"",
+      "javaValueSample2": ""login2"",
       "loadColumnType": "string",
       "nullable": true,
       "path": [
         "login",
       ],
       "propertyName": "login",
+      "propertyNameCapitalized": "Login",
       "reference": Any<Object>,
       "relationshipsPath": [],
       "shouldCreateContentType": false,
@@ -459,12 +476,16 @@ describe(`generator - ${generator}`, () => {
       "filterableField": true,
       "generateFakeData": Any<Function>,
       "javaFieldType": "String",
+      "javaValueGenerator": "UUID.randomUUID().toString()",
+      "javaValueSample1": ""firstName1"",
+      "javaValueSample2": ""firstName2"",
       "loadColumnType": "string",
       "nullable": true,
       "path": [
         "firstName",
       ],
       "propertyName": "firstName",
+      "propertyNameCapitalized": "FirstName",
       "reference": Any<Object>,
       "relationshipsPath": [],
       "shouldCreateContentType": false,
@@ -531,12 +552,16 @@ describe(`generator - ${generator}`, () => {
       "filterableField": true,
       "generateFakeData": Any<Function>,
       "javaFieldType": "String",
+      "javaValueGenerator": "UUID.randomUUID().toString()",
+      "javaValueSample1": ""lastName1"",
+      "javaValueSample2": ""lastName2"",
       "loadColumnType": "string",
       "nullable": true,
       "path": [
         "lastName",
       ],
       "propertyName": "lastName",
+      "propertyNameCapitalized": "LastName",
       "reference": Any<Object>,
       "relationshipsPath": [],
       "shouldCreateContentType": false,
@@ -657,6 +682,9 @@ describe(`generator - ${generator}`, () => {
           `
 {
   "allReferences": Any<Array>,
+  "annotations": {
+    "changelogDate": "20220129025419",
+  },
   "anyFieldHasDocumentation": false,
   "anyFieldHasFileBasedContentType": false,
   "anyFieldHasImageContentType": false,
@@ -793,6 +821,9 @@ describe(`generator - ${generator}`, () => {
       "generateFakeData": Any<Function>,
       "id": true,
       "javaFieldType": "UUID",
+      "javaValueGenerator": "UUID.randomUUID()",
+      "javaValueSample1": "UUID.fromString("23d8dc04-a48b-45d9-a01d-4b728f0ad4aa")",
+      "javaValueSample2": "UUID.fromString("ad79f240-3727-46c3-b89f-2cf6ebd74367")",
       "jpaGeneratedValue": true,
       "jpaGeneratedValueIdentity": false,
       "jpaGeneratedValueSequence": false,
@@ -802,6 +833,7 @@ describe(`generator - ${generator}`, () => {
         "id",
       ],
       "propertyName": "id",
+      "propertyNameCapitalized": "Id",
       "readonly": true,
       "reference": Any<Object>,
       "relationshipsPath": [],
@@ -946,6 +978,9 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
+  "annotations": {
+    "changelogDate": "20220129025419"
+  },
   "changelogDate": "20220129025419",
   "fields": [
     {
@@ -976,6 +1011,9 @@ describe(`generator - ${generator}`, () => {
           `
 {
   "allReferences": Any<Array>,
+  "annotations": {
+    "changelogDate": "20220129025419",
+  },
   "anyFieldHasDocumentation": false,
   "anyFieldHasFileBasedContentType": false,
   "anyFieldHasImageContentType": false,
@@ -1112,6 +1150,9 @@ describe(`generator - ${generator}`, () => {
       "generateFakeData": Any<Function>,
       "id": true,
       "javaFieldType": "UUID",
+      "javaValueGenerator": "UUID.randomUUID()",
+      "javaValueSample1": "UUID.fromString("23d8dc04-a48b-45d9-a01d-4b728f0ad4aa")",
+      "javaValueSample2": "UUID.fromString("ad79f240-3727-46c3-b89f-2cf6ebd74367")",
       "jpaGeneratedValue": true,
       "jpaGeneratedValueIdentity": false,
       "jpaGeneratedValueSequence": false,
@@ -1121,6 +1162,7 @@ describe(`generator - ${generator}`, () => {
         "id",
       ],
       "propertyName": "id",
+      "propertyNameCapitalized": "Id",
       "readonly": true,
       "reference": Any<Object>,
       "relationshipsPath": [],

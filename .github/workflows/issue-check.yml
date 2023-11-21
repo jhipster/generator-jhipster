@@ -61,32 +61,18 @@ jobs:
       - name: 'SETUP: environment'
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
-      - name: 'SETUP: load npm cache'
-        uses: actions/cache/restore@v3
+      - uses: jhipster/actions/restore-cache@v0
         with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load maven cache'
-        uses: actions/cache/restore@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ steps.setup.outputs.date }}
-      - name: 'SETUP: load gradle cache'
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ steps.setup.outputs.date }}
+          npm: true
+          maven: true
+          gradle: true
       - name: 'TOOLS: configure tools installed by the system'
         run: $JHI_SCRIPTS/03-system.sh
       - name: 'TOOLS: configure git'
@@ -145,6 +131,7 @@ jobs:
         if: always()
         uses: jwalton/gh-docker-logs@v2
     outputs:
+      valid: ${{ steps.project.outputs.valid }}
       yo-rc: ${{ steps.project.outputs.yo-rc }}
       entities-jdl: ${{ steps.project.outputs.entities-jdl }}
       application: ${{ steps.project.outputs.result }}
@@ -158,7 +145,7 @@ jobs:
     permissions:
       issues: write
     steps:
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -169,6 +156,9 @@ jobs:
                   if (label.name == 'area: check') {
                       github.rest.issues.removeLabel({...issue, name: label.name})
                   }
+              }
+              if (!${{ needs.application.outputs.valid }}) {
+                  github.rest.issues.addLabels({...issue, labels: ['area: invalid', 'area: stale']})
               }
             })
       - uses: mshick/add-pr-comment@v2.8.1
@@ -182,3 +172,6 @@ jobs:
             Frontend check: ${{ needs.application.outputs.frontend-check }}
             Backend check: ${{ needs.application.outputs.backend-check }}
             E2E check: ${{ needs.application.outputs.e2e-check }}
+
+            This check uses `jhipster info` output from the issue description to generate the sample.
+            Bug report that does not contain this information will be marked as invalid.

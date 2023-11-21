@@ -257,31 +257,76 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/skip/update/skip-update.component.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/en/activate.json": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/i18n/en/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/configuration.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/error.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/foo.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/en/global.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/health.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/home.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/login.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/logs.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/metrics.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/password.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/register.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/reset.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/sessions.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/settings.json": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/i18n/en/skip.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/bar.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/foo.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/skip.json": {
+  "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/SkipTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
@@ -329,27 +374,12 @@ exports[`generator - entities regenerating all entities should match source call
       "translationValue": "Foo",
     },
     {
-      "language": "fr",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
-    {
       "language": "en",
       "translationKey": "bar",
       "translationValue": "Bar",
     },
     {
-      "language": "fr",
-      "translationKey": "bar",
-      "translationValue": "Bar",
-    },
-    {
       "language": "en",
-      "translationKey": "skip",
-      "translationValue": "Skip",
-    },
-    {
-      "language": "fr",
       "translationKey": "skip",
       "translationValue": "Skip",
     },
@@ -550,22 +580,67 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/app/entities/foo/update/foo-update.component.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/en/activate.json": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/i18n/en/bar.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/configuration.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/error.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/foo.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/bar.json": {
+  "src/main/webapp/i18n/en/global.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/fr/foo.json": {
+  "src/main/webapp/i18n/en/health.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/home.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/login.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/logs.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/metrics.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/password.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/register.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/reset.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/sessions.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/settings.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/BarResourceIT.java": {
@@ -605,17 +680,7 @@ exports[`generator - entities regenerating some entities should match source cal
       "translationValue": "Foo",
     },
     {
-      "language": "fr",
-      "translationKey": "foo",
-      "translationValue": "Foo",
-    },
-    {
       "language": "en",
-      "translationKey": "bar",
-      "translationValue": "Bar",
-    },
-    {
-      "language": "fr",
       "translationKey": "bar",
       "translationValue": "Bar",
     },

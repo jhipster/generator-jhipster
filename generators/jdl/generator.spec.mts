@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           baseName: 'jhipster',
         }),
-      ).rejects.toThrow('Database type is required to validate entities.');
+      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
     });
     it('without baseName should reject', async () => {
       await expect(
@@ -76,7 +76,7 @@ describe(`generator - ${generator}`, () => {
           inline: 'entity Foo {}',
           db: 'postgresql',
         }),
-      ).rejects.toThrow("The JDL object, the application's name and its the database type are mandatory.");
+      ).rejects.toThrow("The JDL object, the application's name, and its the database type are mandatory.");
     });
 
     describe('with valid parameters', () => {
@@ -102,7 +102,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should write expected files', () => {
-        expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+        expect(runResult.getSnapshot()).toEqual({
+          '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+        });
       });
     });
 
@@ -127,7 +129,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should write expected files', () => {
-        expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+        expect(runResult.getSnapshot()).toEqual({
+          '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+        });
       });
     });
   });
@@ -153,6 +157,46 @@ describe(`generator - ${generator}`, () => {
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+
+    describe('with blueprint jdl with blueprint config', () => {
+      let runResult: RunResult;
+
+      before(async () => {
+        runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          jsonOnly: true,
+          inline: 'application { config { blueprints [foo, bar] } config(foo) { config fooValue } config(bar) { config barValue } }',
+        });
+      });
+
+      it('should write expected files', () => {
+        expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationIndex": 0,
+    "baseName": "jhipster",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-foo"
+      },
+      {
+        "name": "generator-jhipster-bar"
+      }
+    ],
+    "entities": []
+  },
+  "generator-jhipster-bar": {
+    "config": "barValue"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`);
       });
     });
   });
@@ -272,7 +316,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write expected files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
 
@@ -287,7 +333,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should match files snapshot', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
     });
@@ -304,7 +352,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write expected files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.yo-rc.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
     });
@@ -321,7 +371,10 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write expected files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.yo-rc.json': expect.objectContaining({ contents: expect.stringMatching(/"entities": \[\s*"Foo"\s*]/g) }),
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
 
@@ -337,7 +390,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write entity files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
     });
@@ -371,8 +426,8 @@ describe(`generator - ${generator}`, () => {
 
         it('should write expected files', () => {
           expect(runResult.getSnapshot()).toEqual({
-            'jhipster/.jhipster/Foo.json': expect.any(Object),
-            'jhipster2/.jhipster/Bar.json': expect.any(Object),
+            'jhipster/.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+            'jhipster2/.jhipster/Bar.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
           });
         });
       });

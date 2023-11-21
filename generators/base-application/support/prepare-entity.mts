@@ -43,6 +43,7 @@ import {
 import { fieldIsEnum } from './field-utils.mjs';
 
 import { Entity } from '../types/index.mjs';
+import type CoreGenerator from '../../base-core/generator.mjs';
 
 const { sortedUniq, intersection } = _;
 
@@ -146,7 +147,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
-    entityWithConfig.changelogDateForRecent = parseChangelog(entityWithConfig.changelogDate);
+    entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
   }
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;
@@ -284,7 +285,10 @@ export function derivedPrimaryKeyProperties(primaryKey) {
   });
 }
 
-export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator, enableCompositeId = true) {
+export function prepareEntityPrimaryKeyForTemplates(
+  this: CoreGenerator | void,
+  { entity: entityWithConfig, enableCompositeId = true, application }: { entity: any; enableCompositeId?: boolean; application?: any },
+) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
   const idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
   let idCount = idFields.length + idRelationships.length;
@@ -293,10 +297,12 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
     let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
     if (idField) {
       idField.id = true;
+      idField.autoGenerate = idField.autoGenerate ?? true;
     } else {
-      if (entityWithConfig.microserviceName) {
-        // TODO ignore warning for microfrontends.
-        generator.log.warn("Microservice entities should have a custom id to make sure gateway and microservice types won't conflict");
+      if (entityWithConfig.microserviceName && !application?.microfrontend) {
+        this?.log.warn(
+          "Microservice entities should have the id field type specified (e.g., id String) to make sure gateway and microservice types don't conflict",
+        );
       }
       idField = {
         fieldName: 'id',
@@ -413,7 +419,7 @@ export function prepareEntityPrimaryKeyForTemplates(entityWithConfig, generator,
       idField.dynamic = false;
       // Allow ids type to be empty and fallback to default type for the database.
       if (!idField.fieldType) {
-        idField.fieldType = generator.jhipsterConfig.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
+        idField.fieldType = application?.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
       }
       primaryKeyName = idField.fieldName;
       primaryKeyType = idField.fieldType;

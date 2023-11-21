@@ -28,6 +28,9 @@ import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
+import JDLApplication from '../models/jdl-application.js';
+import ListJDLApplicationConfigurationOption from '../models/list-jdl-application-configuration-option.js';
+import { ValidatorOptions } from './validator.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -48,13 +51,15 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     checkForErrors: () => {
       jdlObject.forEachApplication(jdlApplication => {
         const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
-        if (blueprints && blueprints.length > 0) {
+        const checkReservedKeywords = (blueprints?.length ?? 0) === 0;
+        checkForNamespaceConfigErrors(jdlApplication);
+        checkForRelationshipErrors();
+        checkForEntityErrors(jdlApplication, { checkReservedKeywords });
+        checkForEnumErrors({ checkReservedKeywords });
+        if (!checkReservedKeywords) {
           logger.warn('Blueprints are being used, the JDL validation phase is skipped.');
           return;
         }
-        checkForEntityErrors(jdlApplication);
-        checkForRelationshipErrors();
-        checkForEnumErrors();
         checkDeploymentsErrors();
         checkForOptionErrors();
       });
@@ -62,7 +67,16 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     },
   };
 
-  function checkForEntityErrors(jdlApplication) {
+  function checkForNamespaceConfigErrors(jdlApplication: JDLApplication) {
+    jdlApplication.forEachNamespaceConfiguration(config => {
+      const blueprints: ListJDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
+      if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === config.namespace)) {
+        throw new Error(`Blueprint namespace config ${config.namespace} requires the blueprint ${config.namespace}`);
+      }
+    });
+  }
+
+  function checkForEntityErrors(jdlApplication, options: ValidatorOptions) {
     if (jdlObject.getEntityQuantity() === 0) {
       return;
     }
@@ -71,7 +85,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
       if (!jdlApplication.hasEntityName(jdlEntity.name)) {
         return;
       }
-      validator.validate(jdlEntity);
+      validator.validate(jdlEntity, options);
       checkForFieldErrors(jdlEntity.name, jdlEntity.fields, jdlApplication);
     });
   }
@@ -111,13 +125,13 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForEnumErrors() {
+  function checkForEnumErrors(options: ValidatorOptions) {
     if (jdlObject.getEnumQuantity() === 0) {
       return;
     }
     const validator = new EnumValidator();
     jdlObject.forEachEnum(jdlEnum => {
-      validator.validate(jdlEnum);
+      validator.validate(jdlEnum, options);
     });
   }
 

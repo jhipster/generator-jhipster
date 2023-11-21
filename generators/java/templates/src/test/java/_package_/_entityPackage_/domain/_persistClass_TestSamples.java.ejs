@@ -1,0 +1,85 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= entityAbsolutePackage %>.domain;
+
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import <%= packageName %>.web.rest.TestUtil;
+<%_ if (fields.some(field => field.fieldTypeString) || fields.some(field => field.fieldTypeUUID)) { _%>
+import java.util.UUID;
+<%_ } _%>
+<%_ if (fields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
+import java.util.Random;
+<%_ } _%>
+<%_ if (fields.some(field => field.fieldTypeLong)) { _%>
+import java.util.concurrent.atomic.AtomicLong;
+<%_ } _%>
+<%_ if (fields.some(field => field.fieldTypeInteger)) { _%>
+import java.util.concurrent.atomic.AtomicInteger;
+<%_ } _%>
+
+<%_ const sampleFields = fields.filter(field => !field.mapstructExpression && (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID)); _%>
+public class <%= persistClass %>TestSamples {
+
+<%_ if (fields.some(field => field.fieldTypeLong || field.fieldTypeInteger)) { _%>
+    private static final Random random = new Random();
+<%_ } _%>
+<%_ if (fields.some(field => field.fieldTypeLong)) { _%>
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
+<%_ } _%>
+<%_ if (fields.some(field => field.fieldTypeInteger)) { _%>
+    private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
+<%_ } _%>
+
+    public static <%= persistClass %> get<%= persistClass %>Sample1() {
+<%_ if (fluentMethods) { _%>
+        return new <%= persistClass %>()<% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueSample1 %>)<% }) %>;
+<%_ } else { _%>
+        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+  <%_ for (const field of sampleFields) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.javaValueSample1 %>);
+  <%_ } _%>
+        return <%= persistInstance %>;
+<%_ } _%>
+    }
+
+    public static <%= persistClass %> get<%= persistClass %>Sample2() {
+<%_ if (fluentMethods) { _%>
+        return new <%= persistClass %>()<% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueSample2 %>)<% }) %>;
+<%_ } else { _%>
+        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+  <%_ for (const field of sampleFields) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.javaValueSample2 %>);
+  <%_ } _%>
+        return <%= persistInstance %>;
+<%_ } _%>
+    }
+
+    public static <%= persistClass %> get<%= persistClass %>RandomSampleGenerator() {
+<%_ if (fluentMethods) { _%>
+        return new <%= persistClass %>()<% sampleFields.forEach(field => { %>.<%- field.fieldName %>(<%- field.javaValueGenerator %>)<% }) %>;
+<%_ } else { _%>
+        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+  <%_ for (const field of sampleFields) { _%>
+        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.javaValueGenerator %>);
+  <%_ } _%>
+        return <%= persistInstance %>;
+<%_ } _%>
+    }
+}

@@ -28,7 +28,8 @@ import { parseFromContent, parseFromFiles } from './readers/jdl-reader.js';
 import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import exportToJDL from './exporters/jdl-exporter.js';
 import { basicHelpers as helpers } from '../test/support/index.mjs';
-import { convert } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import { ApplicationWithEntities, createImporterFromContent } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
@@ -62,18 +63,83 @@ describe('jdl - integration tests', () => {
 
   context('when parsing entities JDL', () => {
     const applicationName = 'jhipster';
-    const jdl = `
+
+    context('with annotations', () => {
+      let result: Map<any, any[]>;
+      let convertedJdl: string;
+      const jdl = `@BooleanTrue(true)
+@BooleanFalse(false)
+@Integer(1)
+@Decimal(10.1)
+@Escaped("a.b")
+@String(foo)
+@Unary
+entity A
+`;
+      const expectedJdl = jdl.replace('(true)', '').replace('(foo)', '("foo")');
+
+      beforeEach(() => {
+        const jdlObject = DocumentParser.parseFromConfigurationObject({
+          parsedContent: parseFromContent(jdl),
+          applicationType: MONOLITH,
+        });
+        result = convertWithoutApplication({
+          applicationName,
+          databaseType: 'sql',
+          jdlObject,
+        });
+        convertedJdl = jdlObject.toString();
+      });
+
+      it('stringfied JDL should match original jdl', () => {
+        jestExpect(convertedJdl).toEqual(expectedJdl);
+      });
+      it('should result matching', () => {
+        jestExpect(result).toMatchInlineSnapshot(`
+Map {
+  "jhipster" => [
+    JSONEntity {
+      "annotations": {
+        "booleanFalse": false,
+        "booleanTrue": true,
+        "decimal": 10.1,
+        "escaped": "a.b",
+        "integer": 1,
+        "string": "foo",
+        "unary": true,
+      },
+      "applications": "*",
+      "documentation": undefined,
+      "dto": undefined,
+      "embedded": undefined,
+      "entityTableName": "a",
+      "fields": [],
+      "fluentMethods": undefined,
+      "jpaMetamodelFiltering": undefined,
+      "name": "A",
+      "pagination": undefined,
+      "readOnly": undefined,
+      "relationships": [],
+      "service": undefined,
+    },
+  ],
+}
+`);
+      });
+    });
+
+    context('with bidirectional relationship', () => {
+      let result: Map<any, any[]>;
+      const jdl = `
 entity A {}
 entity B {}
 relationship ManyToOne {
   A to B
 }
 `;
-    context('with bidirectional relationship', () => {
-      let result: Map<any, any[]>;
 
       beforeEach(() => {
-        result = convert({
+        result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
           jdlObject: DocumentParser.parseFromConfigurationObject({
@@ -84,8 +150,8 @@ relationship ManyToOne {
       });
 
       it('should add relationship at both sides', () => {
-        jestExpect(result.get('jhipster')![0].relationships.length).toBe(1);
-        jestExpect(result.get('jhipster')![1].relationships.length).toBe(1);
+        jestExpect(result.get(applicationName)![0].relationships.length).toBe(1);
+        jestExpect(result.get(applicationName)![1].relationships.length).toBe(1);
       });
 
       it('should result matching', () => {
@@ -93,6 +159,7 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -116,6 +183,7 @@ Map {
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -146,28 +214,34 @@ Map {
 
     context('with unidirectional relationship and annotation at destination', () => {
       let result: Map<any, any[]>;
-      const jdl = `
-entity A {}
-entity B {}
+      let convertedJdl: string;
+      const jdl = `entity A
+entity B
 relationship ManyToOne {
   A{b} to @AnnotationAtASide B
 }
 `;
 
       beforeEach(() => {
-        result = convert({
+        const jdlObject = DocumentParser.parseFromConfigurationObject({
+          parsedContent: parseFromContent(jdl),
+          applicationType: MONOLITH,
+        });
+        result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
-          jdlObject: DocumentParser.parseFromConfigurationObject({
-            parsedContent: parseFromContent(jdl),
-            applicationType: MONOLITH,
-          }),
+          jdlObject,
         });
+        convertedJdl = jdlObject.toString();
+      });
+
+      it('convert back to jdl', () => {
+        jestExpect(convertedJdl).toBe(jdl);
       });
 
       it('should add relationship at one side', () => {
-        jestExpect(result.get('jhipster')![0].relationships.length).toBe(1);
-        jestExpect(result.get('jhipster')![1].relationships.length).toBe(0);
+        jestExpect(result.get(applicationName)![0].relationships.length).toBe(1);
+        jestExpect(result.get(applicationName)![1].relationships.length).toBe(0);
       });
 
       it('should result matching', () => {
@@ -175,6 +249,7 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -200,6 +275,7 @@ Map {
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -231,7 +307,7 @@ relationship ManyToOne {
 `;
 
       beforeEach(() => {
-        result = convert({
+        result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
           jdlObject: DocumentParser.parseFromConfigurationObject({
@@ -242,8 +318,8 @@ relationship ManyToOne {
       });
 
       it('should add relationship at both sides', () => {
-        jestExpect(result.get('jhipster')![0].relationships.length).toBe(1);
-        jestExpect(result.get('jhipster')![1].relationships.length).toBe(1);
+        jestExpect(result.get(applicationName)![0].relationships.length).toBe(1);
+        jestExpect(result.get(applicationName)![1].relationships.length).toBe(1);
       });
 
       it('should result matching', () => {
@@ -251,6 +327,7 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -276,6 +353,7 @@ Map {
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -302,6 +380,91 @@ Map {
       "service": undefined,
     },
   ],
+}
+`);
+      });
+    });
+  });
+
+  context('when parsing JDL with blueprint configs', () => {
+    const applicationName = 'jhipster';
+
+    context('without blueprint', () => {
+      const jdl = `
+application {
+  config {
+    baseName jhipster
+  }
+  config(foo) {
+    stringConfig stringValue
+  }
+}
+`;
+
+      it('should throw error', () => {
+        const importer = createImporterFromContent(jdl);
+        jestExpect(() => importer.import()).toThrowError({ message: 'Blueprint namespace config foo requires the blueprint foo' });
+      });
+    });
+
+    context('with blueprint', () => {
+      let result: Record<string, ApplicationWithEntities>;
+      const jdl = `
+application {
+  config {
+    baseName jhipster
+    blueprints [foo, entity-audit]
+  }
+  config(foo) {
+    stringConfig fooValue
+    trueConfig true
+    falseConfig false
+    listConfig [fooitem]
+    integerConfig 123
+  }
+  config(entity-audit) {
+    stringConfig barValue
+    trueConfig true
+    falseConfig false
+    listConfig [baritem]
+    integerConfig 321
+  }
+}
+`;
+
+      beforeEach(() => {
+        const importer = createImporterFromContent(jdl);
+        const importState = importer.import();
+        result = importState.exportedApplicationsWithEntities;
+      });
+
+      it('should result matching', () => {
+        jestExpect(result[applicationName]).toMatchInlineSnapshot(`
+{
+  "config": {
+    "baseName": "jhipster",
+    "blueprints": [
+      {
+        "name": "foo",
+      },
+      {
+        "name": "entity-audit",
+      },
+    ],
+    "entities": [],
+  },
+  "entities": [],
+  "namespaceConfigs": {
+    "entity-audit": {
+      "falseConfig": false,
+      "integerConfig": 321,
+      "listConfig": [
+        "baritem",
+      ],
+      "stringConfig": "barValue",
+      "trueConfig": true,
+    },
+  },
 }
 `);
       });

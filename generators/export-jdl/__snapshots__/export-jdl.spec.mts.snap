@@ -10,6 +10,7 @@ exports[`generator - export-jdl exports entities to a JDL file with file argumen
     baseName standard
     buildTool gradle
     cacheProvider ehcache
+    creationTimestamp 1577836800000
     databaseType sql
     devDatabaseType h2Memory
     enableHibernateCache true
@@ -127,6 +128,7 @@ exports[`generator - export-jdl exports entities to a JDL file without argument 
     baseName standard
     buildTool gradle
     cacheProvider ehcache
+    creationTimestamp 1577836800000
     databaseType sql
     devDatabaseType h2Memory
     enableHibernateCache true

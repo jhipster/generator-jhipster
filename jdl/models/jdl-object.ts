@@ -227,7 +227,7 @@ export default class JDLObject {
     return this.options.getOptionsForName(optionName);
   }
 
-  forEachOption(passedFunction) {
+  forEachOption(passedFunction: (option: any) => void) {
     if (!passedFunction) {
       return;
     }
@@ -265,10 +265,10 @@ export default class JDLObject {
       string += `${this.enums.toString()}\n`;
     }
     if (this.getRelationshipQuantity() !== 0) {
-      string += `${relationshipsToString(this.relationships)}\n`;
+      string += `${relationshipsToString(this.relationships)}`;
     }
     if (this.getOptionQuantity() !== 0) {
-      string += `${optionsToString(this.options)}`;
+      string += `\n${optionsToString(this.options)}`;
     }
     return string;
   }
@@ -303,7 +303,7 @@ function relationshipsToString(relationships) {
   if (string === '') {
     return '';
   }
-  return `${relationships.toString()}\n`;
+  return `${string}\n`;
 }
 function optionsToString(options) {
   const string = options.toString();

@@ -20,6 +20,7 @@
  // Register sections and max allowed fragments, 0 for unlimited.
  fragments.registerSections({
    importsSection:0,
+   configSection: 0,
    moduleFederationSection: 0,
    pluginsSection: 0,
  });
@@ -28,7 +29,18 @@ _&>
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 <&- fragments.importsSection() &>
 const packageJson = require('../package.json');
-const appVersion = packageJson.version;
+// Microfrontend api, should match across gateway and microservices.
+const apiVersion = '0.0.1';
+
+const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
+const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
+
+const shareDependencies = ({ skipList = [] } = {}) =>
+  Object.fromEntries(
+    Object.entries(packageJson.dependencies)
+      .filter(([dependency]) => !skipList.includes(dependency))
+      .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
+  );
 
 module.exports = ({ serve }) => {
   return {
@@ -37,6 +49,7 @@ module.exports = ({ serve }) => {
       chunkIds: 'named',
       runtimeChunk: false,
     },
+<&- fragments.configSection() &>
     plugins: [
       new ModuleFederationPlugin({
 <%_ if (applicationTypeMicroservice) { _%>

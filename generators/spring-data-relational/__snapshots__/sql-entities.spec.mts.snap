@@ -158,13 +158,22 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/UserServiceIT.java": {
@@ -189,203 +198,6 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/UserResourceIT.java": {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`generator - sql - entities gateway-oauth2-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen:true-websocket(true)-consul-postgresql-enableHibernateCache(false)-h2Disk-infinispan should match generated files snapshot 1`] = `
-{
-  ".jhipster/AnotherSimple.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/EntityWithCustomId.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Microservice.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Simple.json": {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityCallback.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/rowmapper/EntityWithCustomIdRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/rowmapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntityCallback.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/criteria/SimpleCriteria.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/criteria/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/SimpleRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/SimpleSqlHelper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/rowmapper/SimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/rowmapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
     "stateCleared": "modified",
   },
 }
@@ -501,16 +313,28 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
@@ -683,16 +507,28 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/MicroserviceTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
@@ -708,179 +544,6 @@ exports[`generator - sql - entities microservice-jwt-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`generator - sql - entities microservice-oauth2-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen:true-websocket(true)-eureka-mariadb-enableHibernateCache(true)-h2Memory-memcached should match generated files snapshot 1`] = `
-{
-  ".jhipster/AnotherSimple.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/EntityWithCustomId.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Microservice.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Simple.json": {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/domain/EntityWithCustomIdEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/EntityWithCustomIdRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/custom/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/SimpleEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/UserEntity.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/UserRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/AnotherSimpleService.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/SimpleQueryService.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/UserService.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/criteria/SimpleCriteria.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/criteria/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AdminUserDTO.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/AnotherSimpleDTO.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/UserDTO.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/AnotherSimpleServiceImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/impl/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/AnotherSimpleMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/EntityMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/UserMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/mapper/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/service/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/SimpleResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/UserServiceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/AnotherSimpleMapperTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/service/mapper/UserMapperTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/SimpleResourceIT.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/web/rest/UserResourceIT.java": {
     "stateCleared": "modified",
   },
 }
@@ -1062,16 +725,28 @@ exports[`generator - sql - entities microservice-oauth2-reactive(true)-gradle-en
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/MicroserviceTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/UserServiceIT.java": {
@@ -1235,16 +910,28 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
@@ -1429,16 +1116,28 @@ exports[`generator - sql - entities monolith-jwt-reactive(true)-gradle-enableTra
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/MicroserviceTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
@@ -1590,16 +1289,28 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
@@ -1808,16 +1519,28 @@ exports[`generator - sql - entities monolith-oauth2-reactive(true)-gradle-enable
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/MicroserviceTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/UserServiceIT.java": {
@@ -1981,16 +1704,28 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/custom/domain/EntityWithCustomIdEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/MicroserviceEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
@@ -2175,16 +1910,28 @@ exports[`generator - sql - entities monolith-session-reactive(true)-gradle-enabl
   "src/test/java/com/package/custom/domain/EntityWithCustomIdTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/custom/domain/EntityWithCustomIdTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/custom/web/rest/EntityWithCustomIdResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/MicroserviceTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/package/domain/MicroserviceTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/package/domain/SimpleTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/package/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {

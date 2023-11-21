@@ -21,7 +21,7 @@ $header-color-secondary: #bbb;
 $header-color-hover: darken($header-color, 20%);
 
 /* ==========================================================================
-Developement Ribbon
+Development Ribbon
 ========================================================================== */
 .ribbon {
   background-color: rgba(170, 0, 0, 0.5);
@@ -33,7 +33,7 @@ Developement Ribbon
   transform: rotate(-45deg);
   overflow: hidden;
   position: absolute;
-  top: 30px;
+  top: 40px;
   white-space: nowrap;
   width: 15em;
   z-index: 99999;
@@ -105,7 +105,7 @@ Navbar styles
 }
 
 .navbar-version {
-  font-size: 10px;
+  font-size: 0.65em;
   color: $header-color-secondary;
   padding: 0 0 0 10px;
 }
@@ -119,13 +119,14 @@ Navbar styles
     width: auto;
     display: inline-block;
     img {
-      height: 45px;
+      width: 45px;
     }
   }
 }
 
 .brand-title {
-  font-size: 24px;
+  font-size: 1.25rem;
+  margin-left: .25rem;
   color: $header-color;
   &:hover {
     color: $header-color-hover;

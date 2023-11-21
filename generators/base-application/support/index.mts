@@ -29,3 +29,4 @@ export { default as prepareField } from './prepare-field.mjs';
 export * from './prepare-field.mjs';
 export { default as prepareRelationship } from './prepare-relationship.mjs';
 export * from './relationship.mjs';
+export * from './update-application-entities-transform.mjs';

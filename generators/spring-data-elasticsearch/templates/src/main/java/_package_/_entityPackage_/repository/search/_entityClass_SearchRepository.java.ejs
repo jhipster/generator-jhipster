@@ -19,12 +19,10 @@
 package <%= entityAbsolutePackage %>.repository.search;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-import <%= entityAbsolutePackage %>.repository.<%= persistClass %>Repository;
+import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 
 <%_ if (!paginationNo) { _%>
   <%_ if (!reactive) { _%>
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.elasticsearch.core.SearchHits;

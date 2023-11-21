@@ -29,6 +29,7 @@ import {
 import { upperFirstCamelCase } from '../../base/support/string.mjs';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.mjs';
 import { stringifyApplicationData } from './debug.mjs';
+import { mutateData } from '../../base/support/config.mjs';
 
 const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
@@ -38,16 +39,6 @@ const {
 } = validations;
 
 const { MAPSTRUCT } = MapperTypes;
-
-function _derivedProperties(relationship) {
-  _.defaults(relationship, {
-    relationshipOneToOne: relationship.relationshipType === 'one-to-one',
-    relationshipOneToMany: relationship.relationshipType === 'one-to-many',
-    relationshipManyToOne: relationship.relationshipType === 'many-to-one',
-    relationshipManyToMany: relationship.relationshipType === 'many-to-many',
-    otherEntityUser: relationship.otherEntityName === 'user',
-  });
-}
 
 function _defineOnUpdateAndOnDelete(relationship, generator) {
   relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
@@ -72,13 +63,21 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   Object.assign(relationship, {
     relationshipLeftSide: relationship.relationshipSide === 'left',
     relationshipRightSide: relationship.relationshipSide === 'right',
+    collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
+    relationshipOneToOne: relationship.relationshipType === 'one-to-one',
+    relationshipOneToMany: relationship.relationshipType === 'one-to-many',
+    relationshipManyToOne: relationship.relationshipType === 'many-to-one',
+    relationshipManyToMany: relationship.relationshipType === 'many-to-many',
+    otherEntityUser: relationship.otherEntityName === 'user',
   });
 
-  _.defaults(relationship, {
+  mutateData(relationship, {
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
-    ownerSide: relationship.ownerSide || relationship.relationshipType === 'many-to-one' || relationship.relationshipSide === 'left',
-    collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
+    ownerSide: ({ ownerSide, relationshipLeftSide, relationshipManyToOne, relationshipOneToMany }) =>
+      ownerSide ?? (relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany)),
+    relationshipUpdateBackReference: ({ relationshipUpdateBackReference, ownerSide, relationshipRightSide }) =>
+      relationshipUpdateBackReference ?? (entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide),
   });
 
   relationship.otherSideReferenceExists = false;
@@ -103,6 +102,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       entityWithConfig.databaseType !== DATABASE_NO &&
       (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
     ) {
+      if (otherEntityData.builtInUser) {
+        throw new Error(`Error at entity ${entityName}: relationships with built-in User cannot have back reference`);
+      }
       throw new Error(
         `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`,
       );
@@ -160,8 +162,9 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
 
-  _.defaults(relationship, {
+  mutateData(relationship, {
     propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
+    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? _.upperFirst(propertyName),
   });
 
   if (entityWithConfig.dto === MAPSTRUCT) {
@@ -246,8 +249,6 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   relationship.reference = relationshipToReference(entityWithConfig, relationship);
 
   _defineOnUpdateAndOnDelete(relationship, generator);
-
-  _derivedProperties(relationship);
 
   return relationship;
 }

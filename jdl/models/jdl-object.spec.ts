@@ -332,6 +332,7 @@ describe('jdl - JDLObject', () => {
         jestExpect(returnedEntities).toMatchInlineSnapshot(`
 [
   JDLEntity {
+    "annotations": {},
     "comment": undefined,
     "fields": {},
     "name": "toto",

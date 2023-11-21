@@ -294,7 +294,8 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
             .filter(gen => gen !== generatorName)
             .map(gen => `jhipster:${gen}`),
         ])
-        .withOptions({ blueprint: 'foo', baseName: 'jhipster' })
+        .withJHipsterConfig()
+        .withOptions({ blueprint: 'foo' })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });
@@ -316,35 +317,6 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       if (skipSbsBlueprint) {
         this.skip();
       }
-      let options = { blueprint: 'foo-sbs', baseName: 'jhipster' };
-      if (entity) {
-        options = {
-          ...options,
-          applicationWithEntities: {
-            config: {
-              skipUserManagement: true,
-            },
-            entities: [
-              {
-                name: 'One',
-                fields: [{ fieldName: 'id', fieldType: 'Long' }],
-                relationships: [{ relationshipName: 'relationship', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-              },
-              {
-                name: 'Two',
-                fields: [
-                  { fieldName: 'id', fieldType: 'Long' },
-                  { fieldName: 'name', fieldType: 'String' },
-                ],
-                relationships: [
-                  { relationshipName: 'relationship1', otherEntityName: 'One', relationshipType: 'many-to-one' },
-                  { relationshipName: 'relationship2', otherEntityName: 'Two', relationshipType: 'many-to-one' },
-                ],
-              },
-            ],
-          },
-        };
-      }
       const context = helpers
         .run(generatorPath)
         .withMockedGenerators([
@@ -354,7 +326,31 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
             .filter(gen => gen !== generatorName)
             .map(gen => `jhipster:${gen}`),
         ])
-        .withOptions(options)
+        .withJHipsterConfig(
+          {},
+          entity
+            ? [
+                {
+                  name: 'One',
+                  fields: [{ fieldName: 'id', fieldType: 'Long' }],
+                  relationships: [{ relationshipName: 'relationship', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
+                },
+                {
+                  name: 'Two',
+                  fields: [
+                    { fieldName: 'id', fieldType: 'Long' },
+                    { fieldName: 'name', fieldType: 'String' },
+                  ],
+                  relationships: [
+                    { relationshipName: 'relationship1', otherEntityName: 'One', relationshipType: 'many-to-one' },
+                    { relationshipName: 'relationship2', otherEntityName: 'Two', relationshipType: 'many-to-one' },
+                  ],
+                },
+              ]
+            : undefined,
+        )
+        .commitFiles()
+        .withOptions({ blueprint: 'foo-sbs' })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });

@@ -129,7 +129,7 @@ A Kubernetes Operator only make sense if you are planning to run your applicatio
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-Building Kubernetes Operators is a long journey. In order to find some best practices we need to iterate and improve while we learn. We don't have all the answers right now, but having a concreate project will help us to improve it until it is useful for the entire community.
+Building Kubernetes Operators is a long journey. In order to find some best practices we need to iterate and improve while we learn. We don't have all the answers right now, but having a concrete project will help us to improve it until it is useful for the entire community.
 
 # Prior art
 

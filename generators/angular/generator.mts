@@ -18,7 +18,7 @@
  */
 import * as _ from 'lodash-es';
 import chalk from 'chalk';
-import { isFilePending } from 'mem-fs-editor/state';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.mjs';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.mjs';
@@ -148,10 +148,14 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
       queueTranslateTransform({ control, application }) {
-        this.queueTransformStream(translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation), {
-          name: 'translating webapp',
-          streamOptions: { filter: file => isFilePending(file) && isTranslatedAngularFile(file) },
-        });
+        this.queueTransformStream(
+          {
+            name: 'translating angular application',
+            filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedAngularFile(file),
+            refresh: false,
+          },
+          translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation),
+        );
       },
     });
   }

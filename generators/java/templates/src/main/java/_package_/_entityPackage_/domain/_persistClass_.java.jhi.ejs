@@ -240,16 +240,16 @@ _%>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
   <%_ if (relationship.collection) { _%>
     public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntityNamePlural %>) {
-    <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
       <%_ } _%>
         }
         if (<%= relationship.otherEntityNamePlural %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntityNamePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
             <%= relationship.otherEntityNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
@@ -260,16 +260,16 @@ _%>
     }
   <%_ } else { _%>
     public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-    <%_ if (relationship.otherRelationship && !relationship.reference.owned) { _%>
+    <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         if (this.<%= relationship.relationshipFieldName %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
             this.<%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
       <%_ } _%>
         }
         if (<%= relationship.otherEntityName %> != null) {
-      <%_ if (relationship.otherRelationship.reference.collection) { _%>
+      <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
             <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
@@ -292,13 +292,11 @@ _%>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection()) { -&>
     public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
-      <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (!relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
-          <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+      <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
+        <%_ if (relationship.otherRelationship.collection) { _%>
         <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().add(this);
-          <%_ } _%>
+        <%_ } else { _%>
+        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
         <%_ } _%>
       <%_ } _%>
         return this;
@@ -309,13 +307,11 @@ _%>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection()) { -&>
     public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
-      <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (!relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
-          <%_ } else if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+      <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
+        <%_ if (relationship.otherRelationship.collection) { _%>
         <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().remove(this);
-          <%_ } _%>
+        <%_ } else { _%>
+        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
         <%_ } _%>
       <%_ } _%>
         return this;

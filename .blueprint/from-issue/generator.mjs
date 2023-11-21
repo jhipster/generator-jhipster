@@ -12,6 +12,7 @@ import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';
 const RESULT_OUTPUT = 'result';
+const VALID_OUTPUT = 'valid';
 
 const BLANK = 'blank';
 const VALID = 'valid';
@@ -61,6 +62,7 @@ export default class extends BaseGenerator {
 
         const regexp = /<summary>(?<title>(?:(?!<\/summary>).)+)<\/summary>\s+<pre>(?<body>(?:(?!<\/pre>).)+)/gs;
         let match;
+        let valid = false;
         while ((match = regexp.exec(issue.data.body)) !== null) {
           if (match.groups.title.includes('.yo-rc.json file')) {
             try {
@@ -68,6 +70,7 @@ export default class extends BaseGenerator {
                 const yoRcContent = JSON.parse(match.groups.body);
                 this.yoRcContent = yoRcContent[GENERATOR_JHIPSTER] ? yoRcContent : { [GENERATOR_JHIPSTER]: yoRcContent };
                 setOutput(YO_RC_OUTPUT, VALID);
+                valid = true;
               } else {
                 setOutput(YO_RC_OUTPUT, BLANK);
               }
@@ -79,6 +82,7 @@ export default class extends BaseGenerator {
             setOutput(ENTITIES_JDL_OUTPUT, this.jdlEntities ? VALID : BLANK);
           }
         }
+        setOutput(VALID_OUTPUT, valid);
 
         this.projectFolder = this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issue}`);
         if (this.yoRcContent) {

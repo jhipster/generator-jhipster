@@ -277,7 +277,7 @@ export const buildCommands = async ({
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console
-          console.log(`Using jhipster at ${path.dirname(__dirname)}`);
+          console.log(path.dirname(__dirname));
           return Promise.resolve();
         }
 

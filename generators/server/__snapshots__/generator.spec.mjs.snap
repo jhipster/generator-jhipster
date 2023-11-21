@@ -1061,9 +1061,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages_fr.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -1077,12 +1074,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/main/resources/templates/mail/passwordResetEmail.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/fr/global.json": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
@@ -1121,7 +1112,13 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
@@ -1209,9 +1206,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/i18n/messages_fr.properties": {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": {
