@@ -24,10 +24,9 @@ concurrency:
   cancel-in-progress: true
 on:
   push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
-      - 'revert-*'
+    branches:
+      - 'main'
+      - '**maintenance'
     paths-ignore:
       - 'package*.json'
       - 'generators/angular/**'
