@@ -325,11 +325,52 @@ get [Generator.END]() {
 
 ## Blueprints
 
-https://www.jhipster.tech/modules/extending-and-customizing/
-https://www.jhipster.tech/modules/creating-a-module/
-https://www.jhipster.tech/modules/creating-a-blueprint/
+Blueprint support allows to customize the generation process.
+
+A Blueprint package can include any number of sub-generators, each can be a replacement blueprint, a side-by-side blueprint, or a stand alone blueprint.
+
+- Normal blueprints will completely replace the blueprinted sub-generator with a replacement.
+- Side by side blueprint doesn't change the generation process, it customizes it.
+- Stand alone blueprint doesn't hook into a sub-generator.
+
+Examples:
+
+- [Micronaut](https://github.com/jhipster/generator-jhipster-micronaut) has a [server](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/server) replacement blueprint, a [angular](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/angular), [client](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/client), [cypress](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/cypress), [docker](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/docker) and [react](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/react) side by side blueprints, and a [micronaut-cache](https://github.com/jhipster/generator-jhipster-micronaut/tree/0818dd9d90f4a550e008133adc7fad6b17089caa/generators/micronaut-cache) stand alone blueprint
+
+More information can be found at:
+
+[Extending and customizing](https://www.jhipster.tech/modules/extending-and-customizing/)
+[Creating a stand alone Blueprint](https://www.jhipster.tech/modules/creating-a-module/)
+[Creating a blueprint](https://www.jhipster.tech/modules/creating-a-blueprint/)
 
 ### Blueprint lifecycle
+
+#### Replacement blueprint
+
+| Priority     | Blueprinted sub-gen                   | Blueprint sub-gen              |
+| ------------ | ------------------------------------- | ------------------------------ |
+| beforeQueue  | composes with blueprints/dependencies | composes with dependencies     |
+| initializing | X                                     | replacement initializing tasks |
+| prompting    | X                                     | replacement prompting tasks    |
+| ...          | X                                     | ...                            |
+
+#### Side by side blueprint
+
+| Priority     | Blueprinted sub-gen                   | Blueprint sub-gen             | Another blueprint sub-gen     |
+| ------------ | ------------------------------------- | ----------------------------- | ----------------------------- |
+| beforeQueue  | composes with blueprints/dependencies | composes with dependencies    | composes with dependencies    |
+| initializing | initializing tasks                    | additional initializing tasks | additional initializing tasks |
+| prompting    | prompting tasks                       | additional prompting tasks    | additional prompting tasks    |
+| ...          | ...                                   | ...                           | ...                           |
+
+#### Stand alone blueprint
+
+| Priority     | Blueprint sub-gen          |
+| ------------ | -------------------------- |
+| beforeQueue  | composes with dependencies |
+| initializing | initializing tasks         |
+| prompting    | prompting tasks            |
+| ...          | ...                        |
 
 ## Generator Hierarchy
 
