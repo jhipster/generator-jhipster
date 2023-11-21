@@ -41,7 +41,7 @@ export type NeedleInsertion = {
    */
   optional?: boolean;
   /**
-   * Detect and apply ident
+   * Detect and apply indent
    */
   autoIndent?: boolean;
 };
