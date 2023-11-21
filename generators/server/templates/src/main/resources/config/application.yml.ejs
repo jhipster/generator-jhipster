@@ -142,6 +142,9 @@ management:
       export:
         enabled: true
         step: 60
+  observations:
+    key-values:
+      application: ${spring.application.name}
   metrics:
     enable:
       http: true
@@ -154,8 +157,6 @@ management:
         all: true
       percentiles:
         all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
-    tags:
-      application: ${spring.application.name}
     data:
       repository:
         autotime:
