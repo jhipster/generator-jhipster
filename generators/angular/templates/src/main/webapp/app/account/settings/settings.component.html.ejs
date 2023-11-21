@@ -43,7 +43,7 @@
             data-cy="firstname"
           />
 
-        if (settingsForm.get('firstName')!.invalid &&
+        @if (settingsForm.get('firstName')!.invalid &&
           (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)) {
           <div>
           @if (settingsForm.get('firstName')?.errors?.required) {
