@@ -27,7 +27,7 @@ import { ProfileService } from './profile.service';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-page-ribbon',
   template: `
-    @if (ribbonEnv$ | async as ribbonEnv) {
+    @if (ribbonEnv$ | async; as ribbonEnv) {
       <div class="ribbon">
         <a href=""<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="global.ribbon.{{ ribbonEnv }}"<% } %>>{{ __jhiTransformTranslateStringify__('global.ribbon')[ribbonEnv] || '' }}</a>
       </div>
