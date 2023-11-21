@@ -74,7 +74,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
   <%_ } _%>
   <%_ if (reactive) { _%>
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.ForwardedHeaderUtils;
   <%_ } else { _%>
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
   <%_ } _%>
