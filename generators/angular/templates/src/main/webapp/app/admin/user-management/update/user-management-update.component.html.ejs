@@ -34,7 +34,7 @@
 
       @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
         <div>
-        @if (editForm.get('login')!.errors?.required) {
+        @if (editForm.get('login')?.errors?.required) {
           <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.required"
           >__jhiTransformTranslate__('entity.validation.required')</small>
