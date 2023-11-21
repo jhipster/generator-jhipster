@@ -38,7 +38,7 @@ entity Bar {}
 ```json
 {
   "name": "Bar",
-  "options": {
+  "annotations": {
     "customsProp1": "customValue"
   }
 }
