@@ -17,13 +17,15 @@
  limitations under the License.
 -%>
 <div class="modal-header">
-  <h4 class="modal-title" id="showHealthLabel" *ngIf="health">
+@if (health) {
+  <h4 class="modal-title" id="showHealthLabel">
     <%_ if (enableTranslation) { _%>
     {{ 'health.indicator.' + health.key | translate }}
     <%_ } else { _%>
     <span class="text-capitalize">{{ health.key }}</span>
     <%_ } _%>
   </h4>
+}
 
   <button aria-label="Close" data-dismiss="modal" class="btn-close" type="button" (click)="dismiss()">
     <span aria-hidden="true">&times;</span>
@@ -31,7 +33,8 @@
 </div>
 
 <div class="modal-body pad">
-  <div *ngIf="health">
+@if (health) {
+  <div>
     <h5 <%= jhiPrefix %>Translate="health.details.properties">__jhiTransformTranslate__('health.details.properties')</h5>
 
     <div class="table-responsive">
@@ -51,6 +54,7 @@
       </table>
     </div>
   </div>
+}
 </div>
 
 <div class="modal-footer">

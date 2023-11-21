@@ -18,7 +18,8 @@
 -%>
 <h3 id="requestMetrics" <%= jhiPrefix %>Translate="metrics.jvm.http.title">__jhiTransformTranslate__('metrics.jvm.http.title')</h3>
 
-<table class="table table-striped" *ngIf="!updating && requestMetrics" aria-describedby="requestMetrics">
+@if (!updating && requestMetrics) {
+<table class="table table-striped" aria-describedby="requestMetrics">
   <thead>
     <tr>
       <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.code">__jhiTransformTranslate__('metrics.jvm.http.table.code')</th>
@@ -42,3 +43,4 @@
     </tr>
   </tbody>
 </table>
+}

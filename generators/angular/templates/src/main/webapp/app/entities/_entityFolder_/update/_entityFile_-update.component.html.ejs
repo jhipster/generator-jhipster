@@ -44,7 +44,9 @@
   }
 _%>
 
-                <div class="mb-3"<% if (field.autoGenerate) { %> *ngIf="editForm.controls.<%= field.fieldName %>.value !== null"<% } %>>
+        <%_ if (field.autoGenerate) { _%>
+            @if (editForm.controls.<%= field.fieldName %>.value !== null) {
+                <div class="mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>><%= fieldNameHumanized %></label>
   <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
@@ -56,9 +58,12 @@ _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                     <div>
       <%_ if (field.blobContentTypeImage) { _%>
-                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType')!.value + ';base64,' + editForm.get('<%= fieldName %>')!.value" style="max-height: 100px;" *ngIf="editForm.get('<%= fieldName %>')!.value" alt="<%= entityInstance %> image"/>
+                    @if (editForm.get('<%= fieldName %>')!.value) {
+                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType')!.value + ';base64,' + editForm.get('<%= fieldName %>')!.value" style="max-height: 100px" alt="<%= entityInstance %> image"/>
+                    }
       <%_ } _%>
-                        <div *ngIf="editForm.get('<%= fieldName %>')!.value" class="form-text text-danger clearfix">
+                    @if (editForm.get('<%= fieldName %>')!.value) {
+                        <div class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
                             <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value!, editForm.get('<%= fieldName %>ContentType')!.value!)" <%= jhiPrefix %>Translate="entity.action.open">__jhiTransformTranslate__('entity.action.open')</a><br>
                             <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value!) }}</span>
@@ -74,6 +79,7 @@ _%>
                                   <fa-icon icon="times"></fa-icon>
                             </button>
                         </div>
+                    }
                         <input type="file" id="file_<%= fieldName %>" data-cy="<%= fieldName %>" (change)="setFileData($event, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entity.action.addimage"<% } %><% } else { %>false)"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entity.action.addblob"<% } %><% } %>/>
                     </div>
     <%_ } _%>
@@ -102,30 +108,43 @@ _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (field.fieldValidate) { _%>
-                    <div *ngIf="editForm.get('<%= fieldName %>')!.invalid && (editForm.get('<%= fieldName %>')!.dirty || editForm.get('<%= fieldName %>')!.touched)">
+                @if (editForm.get('<%= fieldName %>')!.invalid && (editForm.get('<%= fieldName %>')!.dirty || editForm.get('<%= fieldName %>')!.touched)) {
+                    <div>
     <%_ if (field.fieldValidationRequired) { _%>
+                    @if (editForm.get('<%= fieldName %>')?.errors?.required) {
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">__jhiTransformTranslate__('entity.validation.required')</small>
+                               <%= jhiPrefix %>Translate="entity.validation.required">__jhiTransformTranslate__('entity.validation.required')</small>
+                    }
     <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
+                    @if (editForm.get('<%= fieldName %>')?.errors?.minlength) {
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.minlength" <%= jhiPrefix %>Translate="entity.validation.minlength" [translateValues]="{ min: <%= field.fieldValidateRulesMinlength %> }">__jhiTransformTranslate__('entity.validation.minlength', { "min": <%- field.fieldValidateRulesMinlength %> })</small>
+                               <%= jhiPrefix %>Translate="entity.validation.minlength" [translateValues]="{ min: <%= field.fieldValidateRulesMinlength %> }">__jhiTransformTranslate__('entity.validation.minlength', { "min": <%- field.fieldValidateRulesMinlength %> })</small>
+                    }
     <%_ } _%>
     <%_ if (field.fieldValidationMaxLength) { _%>
+                    @if (editForm.get('<%= fieldName %>')?.errors?.maxlength) {
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.maxlength" <%= jhiPrefix %>Translate="entity.validation.maxlength" [translateValues]="{ max: <%= field.fieldValidateRulesMaxlength %> }">__jhiTransformTranslate__('entity.validation.maxlength', { "max": <%- field.fieldValidateRulesMaxlength %> })</small>
+                               <%= jhiPrefix %>Translate="entity.validation.maxlength" [translateValues]="{ max: <%= field.fieldValidateRulesMaxlength %> }">__jhiTransformTranslate__('entity.validation.maxlength', { "max": <%- field.fieldValidateRulesMaxlength %> })</small>
+                    }
     <%_ } _%>
     <%_ if (field.fieldValidationMin) { _%>
+                    @if (editForm.get('<%= fieldName %>')?.errors?.min) {
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.min" <%= jhiPrefix %>Translate="entity.validation.min" [translateValues]="{ min: <%= field.fieldValidateRulesMin %> }">__jhiTransformTranslate__('entity.validation.min', { "min": <%- field.fieldValidateRulesMin %> })</small>
+                               <%= jhiPrefix %>Translate="entity.validation.min" [translateValues]="{ min: <%= field.fieldValidateRulesMin %> }">__jhiTransformTranslate__('entity.validation.min', { "min": <%- field.fieldValidateRulesMin %> })</small>
+                    }
     <%_ } _%>
     <%_ if (field.fieldValidationMax) { _%>
+                    @if (editForm.get('<%= fieldName %>')?.errors?.max) {
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.max" <%= jhiPrefix %>Translate="entity.validation.max" [translateValues]="{ max: <%= field.fieldValidateRulesMax %> }">__jhiTransformTranslate__('entity.validation.max', { "max": <%- field.fieldValidateRulesMax %> })</small>
+                               <%= jhiPrefix %>Translate="entity.validation.max" [translateValues]="{ max: <%= field.fieldValidateRulesMax %> }">__jhiTransformTranslate__('entity.validation.max', { "max": <%- field.fieldValidateRulesMax %> })</small>
+                    }
     <%_ } _%>
     <%_ if (field.fieldValidationPattern) { _%>
+                    @if (editForm.get('<%= fieldName %>')?.errors?.pattern) {
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get('<%= fieldName %>')?.errors?.pattern" <%= jhiPrefix %>Translate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">__jhiTransformTranslate__('entity.validation.pattern', { "pattern": "<%- fieldNameHumanized %>" })</small>
+                               <%= jhiPrefix %>Translate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">__jhiTransformTranslate__('entity.validation.pattern', { "pattern": "<%- fieldNameHumanized %>" })</small>
+                    }
     <%_ } _%>
     <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>
                         <small class="form-text text-danger"
@@ -136,8 +155,12 @@ _%>
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.datetimelocal" <%= jhiPrefix %>Translate="entity.validation.datetimelocal">__jhiTransformTranslate__('entity.validation.datetimelocal')</small>
     <%_ } _%>
                     </div>
+                }
   <%_ } _%>
                 </div>
+        <%_ if (field.autoGenerate) { _%>
+            }
+        <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
   const { otherEntity, ownerSide, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
@@ -154,9 +177,13 @@ _%>
     <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
     <%_ } else if (!relationship.otherRelationship) { _%>
-                        <option *ngIf="!editForm.get('<%= relationshipName %>')!.value" [ngValue]="null" selected></option>
+                    @if (!editForm.get('<%= relationshipName %>')!.value) {
+                        <option [ngValue]="null" selected></option>
+                    }
     <%_ } else { _%>
-                        <option *ngIf="editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.value == null" [ngValue]="null" selected></option>
+                    @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.value == null) {
+                        <option [ngValue]="null" selected></option>
+                    }
     <%_ } _%>
                         <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     </select>
@@ -171,12 +198,16 @@ _%>
                 </div>
   <%_ } _%>
   <%_ if (relationship.relationshipValidate && (relationship.relationshipManyToOne || ownerSide)) { _%>
-                <div *ngIf="editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.invalid && (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.dirty || editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.touched)">
+            @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.invalid && (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.dirty || editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.touched)) {
+                <div>
     <%_ if (relationshipRequired) { _%>
+                @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])?.errors?.required) {
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])?.errors?.required" <%= jhiPrefix %>Translate="entity.validation.required">__jhiTransformTranslate__('entity.validation.required')</small>
+                           <%= jhiPrefix %>Translate="entity.validation.required">__jhiTransformTranslate__('entity.validation.required')</small>
+                }
     <%_ } _%>
                 </div>
+            }
   <%_ } _%>
 <%_ } _%>
             </div>

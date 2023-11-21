@@ -20,7 +20,8 @@
 
 <div class="row">
   <div class="col-md-4">
-    <div *ngIf="garbageCollectorMetrics">
+  @if (garbageCollectorMetrics) {
+    <div>
       <span>
         GC Live Data Size/GC Max Data Size ({{ garbageCollectorMetrics['jvm.gc.live.data.size'] / 1048576 | number: '1.0-0' }}M /
         {{ garbageCollectorMetrics['jvm.gc.max.data.size'] / 1048576 | number: '1.0-0' }}M)
@@ -40,10 +41,12 @@
         </span>
       </ngb-progressbar>
     </div>
+  }
   </div>
 
   <div class="col-md-4">
-    <div *ngIf="garbageCollectorMetrics">
+  @if (garbageCollectorMetrics) {
+    <div>
       <span>
         GC Memory Promoted/GC Memory Allocated ({{ garbageCollectorMetrics['jvm.gc.memory.promoted'] / 1048576 | number: '1.0-0' }}M /
         {{ garbageCollectorMetrics['jvm.gc.memory.allocated'] / 1048576 | number: '1.0-0' }}M)
@@ -64,20 +67,26 @@
         </span>
       </ngb-progressbar>
     </div>
+  }
   </div>
 
   <div id="garbageCollectorMetrics" class="col-md-4">
-    <div class="row" *ngIf="garbageCollectorMetrics">
+  @if (garbageCollectorMetrics) {
+    <div class="row">
       <div class="col-md-9">Classes loaded</div>
       <div class="col-md-3 text-end">{{ garbageCollectorMetrics.classesLoaded }}</div>
     </div>
-    <div class="row" *ngIf="garbageCollectorMetrics">
+  }
+  @if (garbageCollectorMetrics) {
+    <div class="row">
       <div class="col-md-9">Classes unloaded</div>
       <div class="col-md-3 text-end">{{ garbageCollectorMetrics.classesUnloaded }}</div>
     </div>
+  }
   </div>
 
-  <div class="table-responsive" *ngIf="!updating && garbageCollectorMetrics">
+@if (!updating && garbageCollectorMetrics) {
+  <div class="table-responsive">
     <table class="table table-striped" aria-describedby="garbageCollectorMetrics">
       <thead>
         <tr>
@@ -107,4 +116,5 @@
       </tbody>
     </table>
   </div>
+}
 </div>

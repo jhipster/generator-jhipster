@@ -34,7 +34,8 @@
           <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details">__jhiTransformTranslate__('health.details.details')</th>
         </tr>
       </thead>
-      <tbody *ngIf="health">
+    @if (health) {
+      <tbody>
         <tr *ngFor="let componentHealth of health.components | keyvalue">
           <td>
             <%_ if (enableTranslation) { _%>
@@ -53,16 +54,16 @@
             </span>
           </td>
           <td class="text-center">
-            <a
-              class="hand"
-              (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })"
-              *ngIf="componentHealth.value!.details"
-            >
+          @if (componentHealth.value!.details) {
+            <a class="hand"
+              (click)="showHealth({ key: componentHealth.key, value: componentHealth.value! })">
               <fa-icon icon="eye"></fa-icon>
             </a>
+          }
           </td>
         </tr>
       </tbody>
+    }
     </table>
   </div>
 </div>

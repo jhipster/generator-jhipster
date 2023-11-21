@@ -41,15 +41,21 @@
           <td>{{ route.path }}</td>
           <td>{{ route.serviceId }}</td>
           <td>
-            <div *ngIf="route.serviceInstances.length === 0" class="label label-danger" <%= jhiPrefix %>Translate="gateway.routes.error">__jhiTransformTranslate__('gateway.routes.error')</div>
+          @if (route.serviceInstances.length === 0) {
+            <div class="label label-danger" <%= jhiPrefix %>Translate="gateway.routes.error">__jhiTransformTranslate__('gateway.routes.error')</div>
+          }
 
             <div class="table-responsive">
-              <table class="table table-striped" *ngIf="route">
+            @if (route) {
+              <table class="table table-striped">
                 <tr *ngFor="let instance of route.serviceInstances">
                   <td><a href="{{ instance.uri }}" target="_blank">{{ instance.uri }}</a></td>
                   <td>
-                    <div *ngIf="instance.instanceInfo" class="badge bg-{{ instance.instanceInfo.status === 'UP' ? 'success' : 'danger' }}">{{ instance.instanceInfo.status }}</div>
-                    <div *ngIf="!instance.instanceInfo" class="badge bg-warning">?</div>
+                  @if (instance.instanceInfo) {
+                    <div class="badge bg-{{ instance.instanceInfo.status === 'UP' ? 'success' : 'danger' }}">{{ instance.instanceInfo.status }}</div>
+                  } @else {
+                    <div class="badge bg-warning">?</div>
+                  }
                   </td>
                   <td>
                     <span *ngFor="let entry of (instance.metadata | keyvalue )">
@@ -61,6 +67,7 @@
                   </td>
                 </tr>
               </table>
+            }
             </div>
           </td>
         </tr>

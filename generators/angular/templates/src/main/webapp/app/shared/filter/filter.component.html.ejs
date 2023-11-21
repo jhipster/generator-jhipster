@@ -1,4 +1,5 @@
-<div class="filter-display" *ngIf="filters.hasAnyFilterSet()">
+@if (filters.hasAnyFilterSet()) {
+<div class="filter-display">
   <span <%= jhiPrefix %>Translate="entity.filters.set">__jhiTransformTranslate__('entity.filters.set')</span>
   <fa-icon icon="times" (click)="clearAllFilters()" title="<% if (enableTranslation) { %>{{ 'entity.filters.clearAll' | translate }}<% } else { %>__jhiTransformTranslate__('entity.filters.clearAll')<% } %>"></fa-icon>
   <ul>
@@ -10,3 +11,4 @@
     </ng-container>
   </ul>
 </div>
+}

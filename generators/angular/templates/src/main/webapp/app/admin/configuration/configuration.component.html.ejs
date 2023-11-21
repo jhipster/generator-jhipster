@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<div *ngIf="allBeans">
+@if (allBeans) {
+<div>
   <h2 id="configuration-page-heading" <%= jhiPrefix %>Translate="configuration.title" data-cy="configurationPageHeading">__jhiTransformTranslate__('configuration.title')</h2>
 
   <span <%= jhiPrefix %>Translate="configuration.filter">__jhiTransformTranslate__('configuration.filter')</span>
@@ -73,3 +74,4 @@
     </table>
   </div>
 </div>
+}

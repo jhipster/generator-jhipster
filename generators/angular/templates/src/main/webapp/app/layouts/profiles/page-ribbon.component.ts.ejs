@@ -27,9 +27,11 @@ import { ProfileService } from './profile.service';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-page-ribbon',
   template: `
-    <div class="ribbon" *ngIf="ribbonEnv$ | async as ribbonEnv">
-      <a href=""<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="global.ribbon.{{ ribbonEnv }}"<% } %>>{{ __jhiTransformTranslateStringify__('global.ribbon')[ribbonEnv] || '' }}</a>
-    </div>
+    @if (ribbonEnv$ | async as ribbonEnv) {
+      <div class="ribbon">
+        <a href=""<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="global.ribbon.{{ ribbonEnv }}"<% } %>>{{ __jhiTransformTranslateStringify__('global.ribbon')[ribbonEnv] || '' }}</a>
+      </div>
+    }
   `,
   styleUrls: ['./page-ribbon.component.scss'],
   imports: [SharedModule],

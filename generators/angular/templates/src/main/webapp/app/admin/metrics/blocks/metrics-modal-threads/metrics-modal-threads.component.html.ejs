@@ -25,27 +25,37 @@
 <div class="modal-body">
   <div class="mb-3">
     <span class="badge bg-primary hand" (click)="threadStateFilter = undefined">
-      <fa-icon *ngIf="threadStateFilter === undefined" icon="check"></fa-icon>
+    @if (threadStateFilter === undefined) {
+      <fa-icon icon="check"></fa-icon>
+    }
       All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
     </span>
 
     <span class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Runnable" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.Runnable) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
     </span>
 
     <span class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Waiting" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.Waiting) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
     </span>
 
     <span class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.TimedWaiting" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.TimedWaiting) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
     </span>
 
     <span class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Blocked" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.Blocked) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
     </span>
   </div>

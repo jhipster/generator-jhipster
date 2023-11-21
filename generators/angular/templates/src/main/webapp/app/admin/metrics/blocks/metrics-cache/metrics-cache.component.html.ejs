@@ -18,7 +18,8 @@
 -%>
 <h3 id="cacheMetrics" <%= jhiPrefix %>Translate="metrics.cache.title">__jhiTransformTranslate__('metrics.cache.title')</h3>
 
-<div class="table-responsive" *ngIf="!updating && cacheMetrics">
+@if (!updating && cacheMetrics) {
+<div class="table-responsive">
   <table class="table table-striped" aria-describedby="cacheMetrics">
     <thead>
       <tr>
@@ -58,3 +59,4 @@
     </tbody>
   </table>
 </div>
+}

@@ -18,7 +18,8 @@
 -%>
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <div *ngIf="<%= entityInstance %>">
+  @if (<%= entityInstance %>) {
+    <div>
       <h2 data-cy="<%= entityInstance %>DetailsHeading"><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.detail.title">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.detail.title')</span></h2>
 
       <hr>
@@ -38,17 +39,21 @@ _%>
           <%# TODO: import enum and use its key as label _%>
           <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
-          <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
-          <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
-            <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
-          </a>
-          {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
+        @if (<%= entityInstance %>.<%= fieldName %>) {
+          <div>
+            <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">
+              <img [src]="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %> image"/>
+            </a>
+            {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
           </div>
+        }
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
-          <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
-          <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">__jhiTransformTranslate__('entity.action.open')</a>
-          {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
+        @if (<%= entityInstance %>.<%= fieldName %>) {
+          <div>
+            <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">__jhiTransformTranslate__('entity.action.open')</a>
+            {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
           </div>
+        }
     <%_ } else if (field.fieldTypeDuration) { _%>
           <span>{{ <%= entityInstance %>.<%= fieldName %> | duration }} ({{<%= entityInstance %>.<%= fieldName %> }})</span>
     <%_ } else if (field.fieldTypeTimed) { _%>
@@ -87,9 +92,11 @@ _%>
             <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
           </span>
       <%_ } else { _%>
-          <div *ngIf="<%= entityInstance + '.' + relationshipFieldName %>">
+        @if (<%= entityInstance + '.' + relationshipFieldName %>) {
+          <div>
             <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
           </div>
+        }
       <%_ } _%>
     <%_ } _%>
         </dd>
@@ -114,5 +121,6 @@ _%>
       </button>
 <%_ } _%>
     </div>
+    }
   </div>
 </div>

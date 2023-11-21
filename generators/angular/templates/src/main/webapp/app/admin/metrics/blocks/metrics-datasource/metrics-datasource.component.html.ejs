@@ -18,7 +18,8 @@
 -%>
 <h3 id="datasourceMetrics" <%= jhiPrefix %>Translate="metrics.datasource.title">__jhiTransformTranslate__('metrics.datasource.title')</h3>
 
-<div class="table-responsive" *ngIf="!updating && datasourceMetrics">
+@if (!updating && datasourceMetrics) {
+<div class="table-responsive">
   <table class="table table-striped" aria-describedby="datasourceMetrics">
     <thead>
       <tr>
@@ -73,3 +74,4 @@
     </tbody>
   </table>
 </div>
+}

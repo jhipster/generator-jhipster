@@ -32,87 +32,95 @@
         <label class="form-label" <%= jhiPrefix %>Translate="userManagement.login">__jhiTransformTranslate__('userManagement.login')</label>
         <input type="text" class="form-control" name="login" formControlName="login" />
 
-        <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('login')?.errors?.required"
+      @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
+        <div>
+        @if (editForm.get('login')!.errors?.required) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.required"
           >__jhiTransformTranslate__('entity.validation.required')</small>
+        }
 
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('login')?.errors?.maxlength"
+        @if (editForm.get('login')?.errors?.maxlength) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.maxlength"
             [translateValues]="{ max: 50 }"
           >__jhiTransformTranslate__('entity.validation.maxlength', { "max": 50 })</small>
+        }
 
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('login')?.errors?.pattern"
+        @if (editForm.get('login')?.errors?.pattern) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.patternLogin"
           >__jhiTransformTranslate__('entity.validation.patternLogin')</small>
+        }
         </div>
+      }
       </div>
 
       <div class="mb-3">
         <label class="form-label" <%= jhiPrefix %>Translate="userManagement.firstName">__jhiTransformTranslate__('userManagement.firstName')</label>
         <input type="text" class="form-control" name="firstName" formControlName="firstName" />
 
-        <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('firstName')?.errors?.maxlength"
+      @if (editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)) {
+        <div>
+        @if (editForm.get('firstName')?.errors?.maxlength) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.maxlength"
             [translateValues]="{ max: 50 }"
           >__jhiTransformTranslate__('entity.validation.maxlength', { "max": 50 })</small>
+        }
         </div>
+      }
       </div>
 
       <div class="mb-3">
         <label <%= jhiPrefix %>Translate="userManagement.lastName">__jhiTransformTranslate__('userManagement.lastName')</label>
         <input type="text" class="form-control" name="lastName" formControlName="lastName" />
 
-        <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('lastName')?.errors?.maxlength"
+      @if (editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)) {
+        <div>
+        @if (editForm.get('lastName')?.errors?.maxlength) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.maxlength"
             [translateValues]="{ max: 50 }"
           >__jhiTransformTranslate__('entity.validation.maxlength', { "max": 50 })</small>
+        }
         </div>
+      }
       </div>
 
       <div class="mb-3">
         <label class="form-label" <%= jhiPrefix %>Translate="userManagement.email">__jhiTransformTranslate__('userManagement.email')</label>
         <input type="email" class="form-control" name="email" formControlName="email" />
 
-        <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('email')?.errors?.required"
+      @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
+        <div>
+        @if (editForm.get('email')?.errors?.required) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.required"
           >__jhiTransformTranslate__('entity.validation.required')</small>
+        }
 
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('email')?.errors?.maxlength"
+        @if (editForm.get('email')?.errors?.maxlength) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.maxlength"
             [translateValues]="{ max: 100 }"
           >__jhiTransformTranslate__('entity.validation.maxlength', { "max": 100 })</small>
+        }
 
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('email')?.errors?.minlength"
+        @if (editForm.get('email')?.errors?.minlength) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="entity.validation.minlength"
             [translateValues]="{ min: 5 }"
           >__jhiTransformTranslate__('entity.validation.minlength', { "min": 5 })</small>
+        }
 
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get('email')?.errors?.email"
+        @if (editForm.get('email')?.errors?.email) {
+          <small class="form-text text-danger"
             <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
           >__jhiTransformTranslate__('global.messages.validate.email.invalid')</small>
+        }
         </div>
+      }
       </div>
 
       <div class="form-check">
@@ -130,12 +138,14 @@
       </div>
 <%_ if (enableTranslation) { _%>
 
-      <div class="mb-3" *ngIf="languages && languages.length > 0">
+    @if (languages && languages.length > 0) {
+      <div class="mb-3">
         <label <%= jhiPrefix %>Translate="userManagement.langKey">__jhiTransformTranslate__('userManagement.langKey')</label>
         <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
           <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
         </select>
       </div>
+    }
 <%_ } _%>
 
       <div class="mb-3">
