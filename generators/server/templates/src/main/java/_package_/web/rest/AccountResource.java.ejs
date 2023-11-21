@@ -264,7 +264,7 @@ public class AccountResource {
      * @throws IllegalArgumentException if the series couldn't be URL decoded.
      */
     @DeleteMapping("/account/sessions/{series}")
-    public void invalidateSession(@PathVariable String series) {
+    public void invalidateSession(@PathVariable("series") String series) {
         String decodedSeries = URLDecoder.decode(series, StandardCharsets.UTF_8);
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)

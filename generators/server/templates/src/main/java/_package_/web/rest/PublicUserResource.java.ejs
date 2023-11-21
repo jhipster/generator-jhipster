@@ -181,7 +181,7 @@ public class PublicUserResource {
      * @return the result of the search.
      */
     @GetMapping("/users/_search/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable("query") String query) {
   <%_ if (searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>
         return userSearchRepository.search(query).map(<%= user.dtoClass %>::new).collectList();
