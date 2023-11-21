@@ -55,7 +55,7 @@
     "sinon": "17.0.1",
     "terser-webpack-plugin": "5.3.9",
     "ts-loader": "9.5.1",
-    "typescript": "5.2.2",
+    "typescript": "5.3.2",
     "vite": "5.0.0",
     "vitest": "0.34.6",
     "vitest-sonar-reporter": "0.5.0",
