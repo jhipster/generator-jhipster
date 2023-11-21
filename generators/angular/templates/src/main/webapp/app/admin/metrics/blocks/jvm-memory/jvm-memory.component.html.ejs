@@ -20,7 +20,8 @@
 
 @if (!updating && jvmMemoryMetrics) {
 <div>
-  <div *ngFor="let entry of jvmMemoryMetrics | keyvalue">
+  @for (entry of jvmMemoryMetrics | keyvalue; track $index) {
+  <div>
   @if (entry.value.max !== -1) {
     <span>
       <span>{{ entry.key }}</span>
@@ -42,5 +43,6 @@
     </ngb-progressbar>
   }
   </div>
+  }
 </div>
 }

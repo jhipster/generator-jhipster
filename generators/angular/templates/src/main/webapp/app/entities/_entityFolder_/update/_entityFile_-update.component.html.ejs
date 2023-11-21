@@ -52,7 +52,9 @@ _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.null' | translate }}<% } %></option>
-                        <option *ngFor="let <%= this._.lowerFirst(fieldType) %> of <%- this._.lowerFirst(fieldType) %>Values" [value]="<%= this._.lowerFirst(fieldType) %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.' + <%= this._.lowerFirst(fieldType) %> | translate }}<% } else { %> {{ <%= this._.lowerFirst(fieldType) %> }} <% } %></option>
+                    @for (<%= this._.lowerFirst(fieldType) %> of <%- this._.lowerFirst(fieldType) %>Values; track $index) {
+                        <option [value]="<%= this._.lowerFirst(fieldType) %>"><% if (enableTranslation) { %>{{ '<%= enumPrefix %>.' + <%= this._.lowerFirst(fieldType) %> | translate }}<% } else { %> {{ <%= this._.lowerFirst(fieldType) %> }} <% } %></option>
+                    }
                     </select>
   <%_ } else { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
@@ -185,7 +187,9 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>
-                        <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                    @for (<%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection; track $index) {
+                        <option [ngValue]="<%= otherEntityName %>Option">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                    }
                     </select>
                 </div>
   <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
@@ -193,7 +197,9 @@ _%>
                 <div class="mb-3">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>">__jhiTransformTranslate__('<%- translationKey %>')</label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= propertyName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
-                        <option [ngValue]="<%= otherEntityName %>Option" *ngFor="let <%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                    @for (<%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection; track $index) {
+                        <option [ngValue]="<%= otherEntityName %>Option">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
+                    }
                     </select>
                 </div>
   <%_ } _%>

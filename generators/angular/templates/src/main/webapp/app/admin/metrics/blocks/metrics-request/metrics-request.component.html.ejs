@@ -29,7 +29,8 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let entry of requestMetrics['percode'] | keyvalue">
+  @for (entry of requestMetrics['percode'] | keyvalue; track entry.key) {
+    <tr>
       <td>{{ entry.key }}</td>
       <td>
         <ngb-progressbar [max]="requestMetrics['all'].count" [value]="entry.value.count" [striped]="true" [animated]="false" type="success">
@@ -41,6 +42,7 @@
       </td>
       <td class="text-end">{{ entry.value.max | number: '1.0-2' }}</td>
     </tr>
+  }
   </tbody>
 </table>
 }

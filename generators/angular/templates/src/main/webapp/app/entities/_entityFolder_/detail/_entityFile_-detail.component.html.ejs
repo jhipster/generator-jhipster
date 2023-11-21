@@ -80,17 +80,21 @@ _%>
         <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.collection) { _%>
-          <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+        @for (<%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
+          <span>
             {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
           </span>
+        }
       <%_ } else { _%>
           <span>{{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</span>
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.collection) { _%>
-          <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+        @for (<%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
+          <span>
             <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
           </span>
+        }
       <%_ } else { _%>
         @if (<%= entityInstance + '.' + relationshipFieldName %>) {
           <div>

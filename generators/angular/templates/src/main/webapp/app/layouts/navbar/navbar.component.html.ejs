@@ -68,7 +68,8 @@
             <span class="dropdown-item">Failed to load <%= remote.lowercaseBaseName %> entities</span>
           </li>
         }
-          <li *ngFor="let entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems">
+        @for (entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems; track $index) {
+          <li>
             <a
               class="dropdown-item"
               [routerLink]="entityNavbarItem.route"
@@ -84,6 +85,7 @@
               >{{entityNavbarItem.name}}</span>
             </a>
           </li>
+        }
   <%_ } _%>
 <%_ } _%>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
@@ -187,9 +189,11 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
-          <li *ngFor="let language of languages">
+        @for (language of languages; track $index) {
+          <li>
             <a class="dropdown-item" [<%= jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
           </li>
+        }
         </ul>
       </li>
     }

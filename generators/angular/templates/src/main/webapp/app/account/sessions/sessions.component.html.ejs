@@ -40,7 +40,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let session of sessions">
+      @for (session of sessions; track $index) {
+        <tr>
           <td>{{ session.ipAddress }}</td>
           <td>{{ session.userAgent }}</td>
           <td>{{ session.tokenDate | date:'longDate' }}</td>
@@ -53,6 +54,7 @@
             >__jhiTransformTranslate__('sessions.table.button')</button>
           </td>
         </tr>
+      }
       </tbody>
     </table>
   </div>

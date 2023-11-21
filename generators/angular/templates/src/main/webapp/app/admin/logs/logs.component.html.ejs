@@ -24,9 +24,11 @@
   <div class="float-end">
     <select class="form-select" id="routesSelect" (change)="changeService($event)">
       <option [ngValue]="null"></option>
-      <option *ngFor="let service of services" [value]="service">
+    @for (service of services; track $index) {
+      <option [value]="service">
         {{ service }}
       </option>
+    }
     </select>
   </div>
 <%_ } _%>
@@ -51,7 +53,8 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let logger of filteredAndOrderedLoggers">
+    @for (logger of filteredAndOrderedLoggers; track $index) {
+      <tr>
         <td>
           <small>{{ logger.name | slice: 0:140 }}</small>
         </td>
@@ -105,6 +108,7 @@
           </button>
         </td>
       </tr>
+    }
     </tbody>
   </table>
 </div>

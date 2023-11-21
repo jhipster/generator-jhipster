@@ -72,7 +72,8 @@
       </thead>
     @if (users) {
       <tbody>
-        <tr *ngFor="let user of users; trackBy: trackIdentity">
+      @for (user of users; track trackIdentity) {
+        <tr>
           <td>
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
           </td>
@@ -96,9 +97,11 @@
           <td>{{ user.langKey }}</td>
 <%_ } _%>
           <td>
-            <div *ngFor="let authority of user.authorities">
+          @for (authority of user.authorities; track $index) {
+            <div>
               <span class="badge bg-info">{{ authority }}</span>
             </div>
+          }
           </td>
 <%_ if (!databaseTypeCassandra) { _%>
           <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
@@ -129,6 +132,7 @@
             </div>
           </td>
         </tr>
+      }
       </tbody>
     }
     </table>

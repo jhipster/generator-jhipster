@@ -60,7 +60,8 @@
     </span>
   </div>
 
-  <div class="pad" *ngFor="let thread of getThreads()">
+@for (thread of getThreads(); track $index) {
+  <div class="pad">
     <h6>
       <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
 
@@ -74,10 +75,12 @@
 
     <div class="card" [hidden]="!thread.showThreadDump">
       <div class="card-body">
-        <div *ngFor="let st of thread.stackTrace" class="break">
+      @for (st of thread.stackTrace; track $index) {
+        <div class="break">
           <samp>{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code>)</samp>
           <span class="mt-1"></span>
         </div>
+      }
       </div>
     </div>
     <table class="table table-sm table-responsive">
@@ -104,6 +107,7 @@
       </tbody>
     </table>
   </div>
+}
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary float-start" data-dismiss="modal" (click)="dismiss()">Done</button>

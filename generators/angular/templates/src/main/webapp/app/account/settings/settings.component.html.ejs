@@ -149,7 +149,9 @@
         <div class="mb-3">
           <label for="langKey" <%= jhiPrefix %>Translate="settings.form.language">__jhiTransformTranslate__('settings.form.language')</label>
           <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
-            <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+          @for (language of languages; track $index) {
+            <option [value]="language">{{ language | findLanguageFromKey }}</option>
+          }
           </select>
         </div>
       }

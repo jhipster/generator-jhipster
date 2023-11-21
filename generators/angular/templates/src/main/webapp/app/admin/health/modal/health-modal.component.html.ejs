@@ -46,10 +46,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let healthDetail of health.value.details! | keyvalue">
+        @for (healthDetail of health.value.details! | keyvalue; track healthDetail.key) {
+          <tr>
             <td class="text-start">{{ healthDetail.key }}</td>
             <td class="text-start">{{ readableValue(healthDetail.value) }}</td>
           </tr>
+        }
         </tbody>
       </table>
     </div>

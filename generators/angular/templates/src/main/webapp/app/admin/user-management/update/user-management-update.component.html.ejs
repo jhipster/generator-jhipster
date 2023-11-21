@@ -142,7 +142,9 @@
       <div class="mb-3">
         <label <%= jhiPrefix %>Translate="userManagement.langKey">__jhiTransformTranslate__('userManagement.langKey')</label>
         <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
-          <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+        @for (language of languages; track $index) {
+          <option [value]="language">{{ language | findLanguageFromKey }}</option>
+        }
         </select>
       </div>
     }
@@ -151,7 +153,9 @@
       <div class="mb-3">
         <label <%= jhiPrefix %>Translate="userManagement.profiles">__jhiTransformTranslate__('userManagement.profiles')</label>
         <select class="form-control" multiple name="authority" formControlName="authorities">
-          <option *ngFor="let authority of authorities" [value]="authority">{{ authority }}</option>
+        @for (authority of authorities; track $index) {
+          <option [value]="authority">{{ authority }}</option>
+        }
         </select>
       </div>
       <button type="button" class="btn btn-secondary" (click)="previousState()">

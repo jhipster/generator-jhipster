@@ -105,7 +105,8 @@
                 </tr>
             </thead>
             <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page - 1 >= links['last']" [infiniteScrollDistance]="0"<% } %>>
-                <tr *ngFor="let <%= entityInstance %> of <%= entityInstancePlural %>; trackBy: track<%= primaryKey.nameCapitalized %>" data-cy="entityTable">
+            @for (<%= entityInstance %> of <%= entityInstancePlural %>; track track<%= primaryKey.nameCapitalized %>) {
+                <tr data-cy="entityTable">
 <%_
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
 for (field of fields.filter(field => !field.hidden)) {
@@ -154,17 +155,19 @@ _%>
                     <td>
         <%_ if (relationship.otherEntityUser) { _%>
             <%_ if (relationship.collection) { _%>
-                        <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
-                        </span>
+                    @for (<%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
+                        <span>{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}</span>
+                    }
             <%_ } else { _%>
                         {{ <%= entityInstance %>.<%= relationshipFieldName %>?.<%= otherEntityField %> }}
             <%_ } _%>
         <%_ } else { _%>
             <%_ if (relationship.collection) { _%>
-                        <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                    @for (<%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
+                        <span>
                             <a class="form-control-static" [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
+                    }
             <%_ } else { _%>
                     @if (<%= entityInstance + "." + relationshipFieldName %>) {
                         <div>
@@ -215,6 +218,7 @@ _%>
                         </div>
                     </td>
                 </tr>
+            }
             </tbody>
         </table>
     </div>

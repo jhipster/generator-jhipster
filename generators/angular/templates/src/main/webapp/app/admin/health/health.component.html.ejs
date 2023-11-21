@@ -36,7 +36,8 @@
       </thead>
     @if (health) {
       <tbody>
-        <tr *ngFor="let componentHealth of health.components | keyvalue">
+      @for (componentHealth of health.components | keyvalue; track componentHealth.key)
+        <tr>
           <td>
             <%_ if (enableTranslation) { _%>
             {{ 'health.indicator.' + componentHealth.key | translate }}
@@ -62,6 +63,7 @@
           }
           </td>
         </tr>
+      }
       </tbody>
     }
     </table>

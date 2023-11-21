@@ -35,7 +35,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let entry of cacheMetrics | keyvalue">
+    @for (entry of cacheMetrics | keyvalue; track entry.key) {
+      <tr>
         <td>{{ entry.key }}</td>
         <td class="text-end">{{ entry.value['cache.gets.hit'] }}</td>
         <td class="text-end">{{ entry.value['cache.gets.miss'] }}</td>
@@ -56,6 +57,7 @@
           }}
         </td>
       </tr>
+    }
     </tbody>
   </table>
 </div>

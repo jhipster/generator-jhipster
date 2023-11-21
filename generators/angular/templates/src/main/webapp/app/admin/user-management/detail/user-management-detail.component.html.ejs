@@ -64,9 +64,11 @@
         <dt><span <%= jhiPrefix %>Translate="userManagement.profiles">__jhiTransformTranslate__('userManagement.profiles')</span></dt>
         <dd>
           <ul class="list-unstyled">
-            <li *ngFor="let authority of user.authorities">
+          @for (authority of user.authorities; track $index) {
+            <li>
               <span class="badge bg-info">{{ authority }}</span>
             </li>
+          }
           </ul>
         </dd>
       </dl>
