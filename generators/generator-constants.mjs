@@ -18,7 +18,7 @@
  */
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.0';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.1-SNAPSHOT';
 // Version of Java
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
@@ -29,7 +29,10 @@ export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 export const NODE_VERSION = '20.9.0';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
 
-export const javaDependencies: Record<string, string> = {
+/**
+ * @type {Record<string, string>}
+ */
+export const javaDependencies = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
@@ -52,9 +55,10 @@ export const ELASTICSEARCH_TAG = '8.7.1';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
+ * @type {Record<string, string>}
  * Manually updated docker containers
  */
-export const dockerContainers: Record<string, string> = {
+export const dockerContainers = {
   elasticsearchTag: ELASTICSEARCH_TAG,
   elasticsearchImage: ELASTICSEARCH_IMAGE,
   elasticsearch: `${ELASTICSEARCH_IMAGE}:${ELASTICSEARCH_TAG}`,

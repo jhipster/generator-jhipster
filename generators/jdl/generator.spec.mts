@@ -102,7 +102,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should write expected files', () => {
-        expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+        expect(runResult.getSnapshot()).toEqual({
+          '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+        });
       });
     });
 
@@ -127,7 +129,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should write expected files', () => {
-        expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+        expect(runResult.getSnapshot()).toEqual({
+          '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+        });
       });
     });
   });
@@ -312,7 +316,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write expected files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
 
@@ -327,7 +333,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should match files snapshot', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
     });
@@ -344,7 +352,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write expected files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.yo-rc.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
     });
@@ -361,7 +371,10 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write expected files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.yo-rc.json': expect.any(Object), '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.yo-rc.json': expect.objectContaining({ contents: expect.stringMatching(/"entities": \[\s*"Foo"\s*]/g) }),
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
 
@@ -377,7 +390,9 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should write entity files', () => {
-          expect(runResult.getSnapshot()).toEqual({ '.jhipster/Foo.json': expect.any(Object) });
+          expect(runResult.getSnapshot()).toEqual({
+            '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+          });
         });
       });
     });
@@ -411,8 +426,8 @@ describe(`generator - ${generator}`, () => {
 
         it('should write expected files', () => {
           expect(runResult.getSnapshot()).toEqual({
-            'jhipster/.jhipster/Foo.json': expect.any(Object),
-            'jhipster2/.jhipster/Bar.json': expect.any(Object),
+            'jhipster/.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
+            'jhipster2/.jhipster/Bar.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
           });
         });
       });

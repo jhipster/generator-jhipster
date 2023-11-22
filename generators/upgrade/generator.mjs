@@ -170,9 +170,9 @@ export default class UpgradeGenerator extends BaseGenerator {
     const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --force`;
     this.log.verboseInfo(generatorCommand);
 
-    const npmIntall = this.spawnCommandSync(generatorCommand, { stdio: 'pipe', reject: false });
-    if (npmIntall.exitCode === 0) this.log.ok(`Installed ${npmPackage}@${version}`);
-    else throw new Error(`Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
+    const npmInstall = this.spawnCommandSync(generatorCommand, { stdio: 'pipe', reject: false });
+    if (npmInstall.exitCode === 0) this.log.ok(`Installed ${npmPackage}@${version}`);
+    else throw new Error(`Something went wrong while installing ${npmPackage}! ${npmInstall.stdout} ${npmInstall.stderr}`);
   }
 
   get [BaseGenerator.CONFIGURING]() {

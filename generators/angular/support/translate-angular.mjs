@@ -109,8 +109,8 @@ function replaceErrorMessage(getWebappTranslation, content) {
  * @this {import('../generator-base.js')}
  */
 export const createTranslationReplacer = (getWebappTranslation, enableTranslation) => {
-  const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation);
-  const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
+  const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
+  const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation, { escapeHtml: true });
   return function replaceAngularTranslations(content, filePath) {
     if (/\.html$/.test(filePath)) {
       if (!enableTranslation) {

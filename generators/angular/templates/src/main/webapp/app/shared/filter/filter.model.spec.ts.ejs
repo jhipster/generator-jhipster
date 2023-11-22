@@ -75,7 +75,7 @@ describe('FilterModel Tests', () => {
     });
 
     describe('clear', () => {
-      it("removes empty filters and dosn't emit next element", () => {
+      it("removes empty filters and doesn't emit next element", () => {
         const filters = new FilterOptions([new FilterOption('foo'), new FilterOption('bar')]);
         jest.spyOn(filters.filterChanges, 'next');
 

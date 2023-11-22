@@ -9,7 +9,7 @@ entity A {
   noAnnotation String
 }
 
-@paginate(pagination)
+@pagination(pagination)
 @dto(mapstruct)
 @service(serviceClass)
 @myCustomUnaryOption
@@ -17,7 +17,7 @@ entity B
 
 @skipClient
 @filter
-@paginate(pagination)
+@pagination(pagination)
 @myCustomBinaryOption(customValue2)
 entity C
 

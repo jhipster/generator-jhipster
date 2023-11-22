@@ -48,11 +48,7 @@
 <%_ if (communicationSpringWebsocket) { _%>
               "./<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
 <%_ } _%>
-<%_ if (microfrontend) { _%>
-              "zone.js/dist/zone"
-<%_ } else { _%>
               "zone.js"
-<%_ } _%>
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

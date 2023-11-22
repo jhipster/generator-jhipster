@@ -188,6 +188,15 @@ describe('generator - languages', () => {
             languages: ['en'],
           }),
       );
+      it('creates expected configuration values', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            languages: ['fr', 'en'],
+            nativeLanguage: 'fr',
+            enableTranslation: true,
+          },
+        });
+      });
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
@@ -207,10 +216,19 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .run(generatorPath)
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
+          .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
       );
+      it('creates expected configuration values', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            languages: ['fr', 'en'],
+            nativeLanguage: 'fr',
+            enableTranslation: true,
+          },
+        });
+      });
       containsLanguageFiles('fr');
       containsLanguageFiles('en');
     });
@@ -234,11 +252,20 @@ describe('generator - languages', () => {
       before(() =>
         helpers
           .run(generatorPath)
-          .withLocalConfig({ enableTranslation: true, nativeLanguage: 'en' })
+          .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'en' })
           .withOptions({ ignoreNeedlesError: true })
           .withArguments(['fr', 'de'])
           .withOptions({ baseName: 'jhipster' }),
       );
+      it('creates expected configuration values', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            languages: ['en', 'fr', 'de'],
+            nativeLanguage: 'en',
+            enableTranslation: true,
+          },
+        });
+      });
       containsLanguageFiles('fr');
       containsLanguageFiles('de');
     });
@@ -262,6 +289,15 @@ describe('generator - languages', () => {
           })
           .run();
       });
+      it('creates expected configuration values', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            languages: ['en', 'fr', 'de'],
+            nativeLanguage: 'en',
+            enableTranslation: true,
+          },
+        });
+      });
       describe('for native language translation', () => {
         containsLanguageFiles('en');
         containsLanguageInVueStore('en');
@@ -282,6 +318,15 @@ describe('generator - languages', () => {
           nativeLanguage: 'en',
         });
         await result.create('jhipster:languages').withArguments(['fr', 'de']).withOptions({ baseName: 'jhipster' }).run();
+      });
+      it('creates expected configuration values', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            languages: ['en', 'fr', 'de'],
+            nativeLanguage: 'en',
+            enableTranslation: true,
+          },
+        });
       });
       describe('for native language translation', () => {
         containsLanguageFiles('en');

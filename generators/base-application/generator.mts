@@ -29,7 +29,6 @@ import { getEntitiesFromDir } from './support/index.mjs';
 import { SpringBootSourceType } from '../server/types.mjs';
 import { ClientSourceType } from '../client/types.mjs';
 import { LanguageSourceType } from '../languages/types.js';
-import command from './command.mjs';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.mjs';
 import { mutateData } from '../base/support/config.mjs';
 
@@ -107,8 +106,6 @@ export default class BaseApplicationGenerator<
       return;
     }
 
-    this.parseJHipsterOptions(command.options);
-
     this.registerPriorities(CUSTOM_PRIORITIES);
 
     /* Add tasks allowing entities priorities to match normal priorities pattern */
@@ -118,6 +115,7 @@ export default class BaseApplicationGenerator<
     });
 
     if (this.options.applicationWithEntities) {
+      this.log.warn('applicationWithEntities option is deprecated');
       // Write new definitions to memfs
       this.config.set({
         ...this.config.getAll(),
@@ -176,7 +174,7 @@ export default class BaseApplicationGenerator<
    */
   getExistingEntities(): { name: string; definition: Record<string, any> }[] {
     function isBefore(e1, e2) {
-      return e1.definition.changelogDate - e2.definition.changelogDate;
+      return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
@@ -419,7 +417,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to load.
-   * This method doesn't filter entities. An filtered config can be changed at thie priority.
+   * This method doesn't filter entities. An filtered config can be changed at this priority.
    * @returns {string[]}
    */
   getEntitiesDataToLoad() {

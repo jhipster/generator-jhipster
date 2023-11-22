@@ -74,26 +74,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       async checkDockerCompose() {
         if (this.skipChecks) return;
 
-        const { stdout, exitCode } = await this.spawnCommand('docker compose version', { reject: false, stdio: 'pipe' });
+        const { exitCode } = await this.spawnCommand('docker compose version', { reject: false, stdio: 'pipe' });
         if (exitCode !== 0) {
-          this.log.error(
-            chalk.red(
-              'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
-                '         Read https://docs.docker.com/compose/install/\n',
-            ),
-          );
-        }
-        const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
-        const composeVersionMajor = composeVersion.split('.')[0];
-        const composeVersionMinor = composeVersion.split('.')[1];
-        if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-          this.log.error(
-            chalk.red(
-              `$Docker Compose version 1.6.0 or later is not installed on your computer.
-                                             Docker Compose version found: ${composeVersion}
-                                             Read https://docs.docker.com/compose/install`,
-            ),
-          );
+          throw new Error(`Docker Compose V2 is not installed on your computer.
+         Read https://docs.docker.com/compose/install/
+`);
         }
       },
     };

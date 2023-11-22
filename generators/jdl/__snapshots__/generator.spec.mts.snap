@@ -4,6 +4,7 @@ exports[`generator - jdl --json-only option for two applications and entity jdl 
 {
   "jhipster/.jhipster/Foo.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster"
   ],
@@ -30,6 +31,7 @@ exports[`generator - jdl --json-only option for two applications and entity jdl 
   },
   "jhipster2/.jhipster/Bar.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster2"
   ],
@@ -77,6 +79,7 @@ exports[`generator - jdl for one application and entity jdl with --ignore-applic
 {
   ".jhipster/Foo.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster"
   ],
@@ -95,6 +98,7 @@ exports[`generator - jdl for one application and entity jdl with valid jdl shoul
 {
   ".jhipster/Foo.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster"
   ],
@@ -126,6 +130,7 @@ exports[`generator - jdl for two applications and entity jdl with --ignore-appli
 {
   "jhipster/.jhipster/Foo.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster"
   ],
@@ -139,6 +144,7 @@ exports[`generator - jdl for two applications and entity jdl with --ignore-appli
   },
   "jhipster2/.jhipster/Bar.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster2"
   ],
@@ -184,6 +190,12 @@ Options:
   --pk-type <value>                        Default primary key type (beta)
   --client-package-manager <value>         Force an unsupported client package manager
   --test-frameworks <value...>             Test frameworks to be generated
+  --base-name <value>                      Application base name
+  --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
+  --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
+  --jdl-store <value>                      JDL store
+  --prettier-tab-width <value>             Default tab width for prettier
+  --skip-commit-hook                       Skip adding husky commit hooks
   --auth <value>                           Provide authentication type for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
@@ -209,8 +221,6 @@ Options:
   --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
-  --prettier-tab-width <value>             Default tab width for prettier
-  --skip-commit-hook                       Skip adding husky commit hooks
   --skip-git                               Skip git repository initialization
   --monorepository                         Use monorepository
   --cypress-coverage                       Enable Cypress code coverage report generation
@@ -229,6 +239,7 @@ exports[`generator - jdl with a microservices stack generating json should gener
 {
   "gatewayApp/.jhipster/Bar.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "gatewayApp"
   ],
@@ -242,6 +253,7 @@ exports[`generator - jdl with a microservices stack generating json should gener
   },
   "gatewayApp/.jhipster/Foo.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster",
     "gatewayApp"
@@ -271,6 +283,7 @@ exports[`generator - jdl with a microservices stack generating json should gener
   },
   "jhipster/.jhipster/Foo.json": {
     "contents": "{
+  "annotations": {},
   "applications": [
     "jhipster",
     "gatewayApp"

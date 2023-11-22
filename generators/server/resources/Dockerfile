@@ -10,7 +10,7 @@ LABEL ALIAS=jhipster-control-center
 FROM jhipster/consul-config-loader:v0.4.1
 LABEL ALIAS=consul-config-loader
 
-FROM postgres:16.0
+FROM postgres:16.1
 LABEL ALIAS=postgresql
 
 FROM quay.io/keycloak/keycloak:22.0.5
@@ -18,12 +18,12 @@ LABEL ALIAS=keycloak
 
 FROM mysql:8.2.0
 
-FROM mariadb:11.1.2
+FROM mariadb:11.1.3
 
-FROM mongo:7.0.2
+FROM mongo:7.0.3
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:7.2.2
+FROM couchbase/server:7.2.3
 LABEL ALIAS=couchbase
 
 FROM cassandra:3.11.14
@@ -38,24 +38,24 @@ LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.22-alpine
 
-FROM redis:7.2.2
+FROM redis:7.2.3
 
-FROM confluentinc/cp-kafka:7.5.1
+FROM confluentinc/cp-kafka:7.5.2
 LABEL ALIAS=kafka
 
-FROM confluentinc/cp-zookeeper:7.5.1
+FROM confluentinc/cp-zookeeper:7.5.2
 LABEL ALIAS=zookeeper
 
 FROM apachepulsar/pulsar:3.0.1
 LABEL ALIAS=pulsar
 
-FROM sonarqube:10.2.1-community
+FROM sonarqube:10.3.0-community
 LABEL ALIAS=sonar
 
-FROM docker.io/bitnami/consul:1.16.3
+FROM docker.io/bitnami/consul:1.17.0
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v2.47.2
+FROM prom/prometheus:v2.48.0
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.26.0
@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:10.2.0
+FROM grafana/grafana:10.2.2
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
@@ -79,5 +79,5 @@ LABEL ALIAS=java-jre
 FROM swaggerapi/swagger-editor:latest
 LABEL ALIAS=swagger-editor
 
-FROM openzipkin/zipkin:2.24
+FROM openzipkin/zipkin:3.0
 LABEL ALIAS=zipkin

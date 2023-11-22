@@ -66,53 +66,61 @@ describe('jdl - integration tests', () => {
 
     context('with annotations', () => {
       let result: Map<any, any[]>;
-      const jdl = `
-@BooleanTrue(true)
+      let convertedJdl: string;
+      const jdl = `@BooleanTrue(true)
 @BooleanFalse(false)
 @Integer(1)
 @Decimal(10.1)
 @Escaped("a.b")
 @String(foo)
 @Unary
-entity A {}
+entity A
 `;
+      const expectedJdl = jdl.replace('(true)', '').replace('(foo)', '("foo")');
 
       beforeEach(() => {
+        const jdlObject = DocumentParser.parseFromConfigurationObject({
+          parsedContent: parseFromContent(jdl),
+          applicationType: MONOLITH,
+        });
         result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
-          jdlObject: DocumentParser.parseFromConfigurationObject({
-            parsedContent: parseFromContent(jdl),
-            applicationType: MONOLITH,
-          }),
+          jdlObject,
         });
+        convertedJdl = jdlObject.toString();
       });
 
+      it('stringfied JDL should match original jdl', () => {
+        jestExpect(convertedJdl).toEqual(expectedJdl);
+      });
       it('should result matching', () => {
         jestExpect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {
+        "booleanFalse": false,
+        "booleanTrue": true,
+        "decimal": 10.1,
+        "escaped": "a.b",
+        "integer": 1,
+        "string": "foo",
+        "unary": true,
+      },
       "applications": "*",
-      "booleanFalse": false,
-      "booleanTrue": true,
-      "decimal": 10.1,
       "documentation": undefined,
       "dto": undefined,
       "embedded": undefined,
       "entityTableName": "a",
-      "escaped": "a.b",
       "fields": [],
       "fluentMethods": undefined,
-      "integer": 1,
       "jpaMetamodelFiltering": undefined,
       "name": "A",
       "pagination": undefined,
       "readOnly": undefined,
       "relationships": [],
       "service": undefined,
-      "string": "foo",
-      "unary": true,
     },
   ],
 }
@@ -151,6 +159,7 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -174,6 +183,7 @@ Map {
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -204,23 +214,29 @@ Map {
 
     context('with unidirectional relationship and annotation at destination', () => {
       let result: Map<any, any[]>;
-      const jdl = `
-entity A {}
-entity B {}
+      let convertedJdl: string;
+      const jdl = `entity A
+entity B
 relationship ManyToOne {
   A{b} to @AnnotationAtASide B
 }
 `;
 
       beforeEach(() => {
+        const jdlObject = DocumentParser.parseFromConfigurationObject({
+          parsedContent: parseFromContent(jdl),
+          applicationType: MONOLITH,
+        });
         result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
-          jdlObject: DocumentParser.parseFromConfigurationObject({
-            parsedContent: parseFromContent(jdl),
-            applicationType: MONOLITH,
-          }),
+          jdlObject,
         });
+        convertedJdl = jdlObject.toString();
+      });
+
+      it('convert back to jdl', () => {
+        jestExpect(convertedJdl).toBe(jdl);
       });
 
       it('should add relationship at one side', () => {
@@ -233,6 +249,7 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -258,6 +275,7 @@ Map {
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -309,6 +327,7 @@ relationship ManyToOne {
 Map {
   "jhipster" => [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,
@@ -334,6 +353,7 @@ Map {
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": undefined,
       "dto": undefined,

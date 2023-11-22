@@ -62,7 +62,7 @@ export default class extends BaseGenerator {
           }
         } catch (error: unknown) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          throw new Error(`An error occurred while exporting to JDL: ${(error as any).message}\n${error}`);
+          throw new Error(`An error occurred while exporting to JDL: ${(error as any).message}\n${error}`, { cause: error });
         }
       },
     });

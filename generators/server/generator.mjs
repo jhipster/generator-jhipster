@@ -430,7 +430,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const { applicationTypeMicroservice, applicationTypeGateway, clientFrameworkAny } = application;
         if (entityConfig.microserviceName && !(applicationTypeMicroservice && clientFrameworkAny)) {
           if (!entityConfig.searchEngine) {
-            // If a non-microfrontent microservice entity, should be disabled by default.
+            // If a non-microfrontend microservice entity, should be disabled by default.
             entityConfig.searchEngine = NO_SEARCH_ENGINE;
           }
         }
@@ -457,7 +457,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.jpaMetamodelFiltering = false;
         }
       },
-      configureEntityTable({ application, entityName, entityConfig, entityStorage }) {
+      configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
         entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
@@ -481,22 +481,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.pagination = NO_PAGINATION;
         }
 
-        // Validate root entity json content
-        if (entityConfig.changelogDate === undefined) {
-          const currentDate = this.dateFormatForLiquibase();
-          if (entityStorage.existed) {
-            this.log.verboseInfo(`changelogDate is missing in .jhipster/${entityConfig.name}.json, using ${currentDate} as fallback`);
-          }
-          entityConfig.changelogDate = currentDate;
-        }
-
         if (entityConfig.incrementalChangelog === undefined) {
           // Keep entity's original incrementalChangelog option.
           entityConfig.incrementalChangelog =
             application.incrementalChangelog &&
             !existsSync(
               this.destinationPath(
-                `src/main/resources/config/liquibase/changelog/${entityConfig.changelogDate}_added_entity_${entityConfig.name}.xml`,
+                `src/main/resources/config/liquibase/changelog/${entityConfig.annotations?.changelogDate}_added_entity_${entityConfig.name}.xml`,
               ),
             );
         }
@@ -707,7 +698,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'java:docker': './mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild',
             'java:docker:arm64': 'npm run java:docker -- -Djib-maven-plugin.architecture=arm64',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
-            'backend:build-cache': './mvnw dependency:go-offline',
+            'backend:build-cache': './mvnw dependency:go-offline -ntp',
             'backend:debug': './mvnw -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000"',
           });
         } else if (buildTool === GRADLE) {
@@ -725,7 +716,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             'java:docker:arm64': 'npm run java:docker -- -PjibArchitecture=arm64',
             'backend:unit:test': `./gradlew test integrationTest ${excludeWebapp} ${javaCommonLog} ${javaTestLog}`,
             'postci:e2e:package': 'cp build/libs/*.$npm_package_config_packaging e2e.$npm_package_config_packaging',
-            'backend:build-cache': 'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package',
+            'backend:build-cache':
+              'npm run backend:info && npm run backend:nohttp:test && npm run ci:e2e:package -- -x webapp -x webapp_test',
           });
         }
 
@@ -858,10 +850,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       dest.devDatabaseType = config.prodDatabaseType;
     }
 
-    // force variables unused by microservice applications
-    if (config.applicationType === MICROSERVICE) {
-      dest.websocket = NO_WEBSOCKET;
+    if (config.websocket && config.websocket !== NO_WEBSOCKET) {
+      if (config.reactive) {
+        throw new Error('Spring Websocket is not supported with reactive applications.');
+      }
+      if (config.applicationType === MICROSERVICE) {
+        throw new Error('Spring Websocket is not supported with microservice applications.');
+      }
     }
+
     const databaseType = config.databaseType;
     if (databaseType === NO_DATABASE) {
       dest.devDatabaseType = NO_DATABASE;

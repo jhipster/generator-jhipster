@@ -153,7 +153,7 @@ describe('Notification Middleware', () => {
     },
   };
 
-  const UNKNON_400_ERROR = {
+  const UNKNOWN_400_ERROR = {
     type: ERROR_TYPE,
     error: {
       isAxiosError: true,
@@ -163,7 +163,7 @@ describe('Notification Middleware', () => {
     },
   };
 
-  const UNKNON_ERROR = {
+  const UNKNOWN_ERROR = {
     type: ERROR_TYPE,
     error: {
       isAxiosError: true,
@@ -256,13 +256,13 @@ describe('Notification Middleware', () => {
   });
 
   it('should trigger an error toast message and return error for unknown 400 error', () => {
-    expect(store.dispatch(UNKNON_400_ERROR).error.response.status).toEqual(400);
+    expect(store.dispatch(UNKNOWN_400_ERROR).error.response.status).toEqual(400);
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('Unknown error!');
   });
 
   it('should trigger an error toast message and return error for unknown error', () => {
-    expect(store.dispatch(UNKNON_ERROR).error.isAxiosError).toEqual(true);
+    expect(store.dispatch(UNKNOWN_ERROR).error.isAxiosError).toEqual(true);
     const toastMsg = (toastify.toast as any).error.getCall(0).args[0];
     expect(toastMsg).toContain('Unknown error!');
   });
