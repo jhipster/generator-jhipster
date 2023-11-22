@@ -55,7 +55,7 @@
     </tbody>
   </table>
 
-  @for (propertySource of propertySources; track $index; let i = $index) {
+  @for (propertySource of propertySources; track i; let i = $index) {
   <div>
     <h4 [id]="'property-source-' + i">
       <span>{{ propertySource.name }}</span>
