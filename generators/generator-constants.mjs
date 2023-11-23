@@ -46,7 +46,7 @@ export const javaDependencies = {
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.
    */
-  cassandra: '4.15.0',
+  cassandra: '4.17.0',
 };
 Object.freeze(javaDependencies);
 
