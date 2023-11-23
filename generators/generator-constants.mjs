@@ -51,7 +51,7 @@ export const javaDependencies = {
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.7.1';
+export const ELASTICSEARCH_TAG = '8.10.4';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
