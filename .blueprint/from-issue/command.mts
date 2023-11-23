@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../../generators/base/api.mjs';
+import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.mjs';
 
 const command: JHipsterCommandDefinition = {
   arguments: {
@@ -50,6 +51,7 @@ const command: JHipsterCommandDefinition = {
       env: 'JHI_FOLDER_APP',
     },
   },
+  import: [GENERATOR_APP, GENERATOR_WORKSPACES],
 };
 
 export default command;
