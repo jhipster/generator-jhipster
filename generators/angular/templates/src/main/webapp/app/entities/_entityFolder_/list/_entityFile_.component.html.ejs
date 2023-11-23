@@ -88,9 +88,7 @@
                     </th>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-  <%_ if (relationship.relationshipManyToOne
-    || (relationship.relationshipOneToOne && relationship.ownerSide)
-    || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) {
     const fieldName = "." + relationship.otherEntityField;
   _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>">
@@ -143,15 +141,11 @@ _%>
     <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
-    const ownerSide = relationship.ownerSide;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const otherEntityField = relationship.otherEntityField;
 _%>
-    <%_ if (relationship.relationshipManyToOne
-            || (relationship.relationshipOneToOne && ownerSide)
-            || (relationship.relationshipManyToMany && ownerSide && paginationNo)) {
-    _%>
+    <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>
         <%_ if (relationship.otherEntityUser) { _%>
             <%_ if (relationship.collection) { _%>
@@ -182,7 +176,7 @@ _%>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) { _%>
-    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && (relationship.relationshipOneToMany || relationship.relationshipManyToMany) && !relationship.ownerSide) {
+    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) {
         const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
     _%>
                             <button type="submit"

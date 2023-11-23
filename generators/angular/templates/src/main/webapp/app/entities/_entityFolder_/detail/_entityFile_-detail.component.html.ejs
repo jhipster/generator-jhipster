@@ -67,14 +67,14 @@ _%>
 <%_ } _%>
 <%_
 for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedded)) {
-    const ownerSide = relationship.ownerSide;
+    const { persistableRelationship } = relationship;
     const relationshipName = relationship.relationshipName;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
     const otherEntityStateName = relationship.otherEntityStateName;
     const otherEntityField = relationship.otherEntityField;
-    if (ownerSide) {
+    if (persistableRelationship) {
 _%>
         <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.<%- relationshipName %>')</span></dt>
         <dd>

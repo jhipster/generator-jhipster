@@ -162,13 +162,13 @@ _%>
             <% if (field.autoGenerate) { %>}<% } %>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
-  const { otherEntity, ownerSide, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
+  const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
   const otherEntityName = relationship.otherEntityName;
   const relationshipFieldName = relationship.relationshipFieldName;
   const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
   const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
-  <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
+  <%_ if (relationship.persistableRelationship && !relationship.collection) { _%>
 
                 <div class="mb-3">
                     <label class="form-label" <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipName %>">__jhiTransformTranslate__('<%- translationKey %>')</label>
@@ -189,7 +189,7 @@ _%>
                     }
                     </select>
                 </div>
-  <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
+  <%_ } else if (relationship.persistableRelationship) { _%>
 
                 <div class="mb-3">
                     <label <%= jhiPrefix %>Translate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>">__jhiTransformTranslate__('<%- translationKey %>')</label>
@@ -200,7 +200,7 @@ _%>
                     </select>
                 </div>
   <%_ } _%>
-  <%_ if (relationship.relationshipValidate && (relationship.relationshipManyToOne || ownerSide)) { _%>
+  <%_ if (relationship.relationshipValidate && relationship.persistableRelationship) { _%>
             @if (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.invalid && (editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.dirty || editForm.get([<%- this.buildAngularFormPath(relationship.reference) %>])!.touched)) {
                 <div>
     <%_ if (relationshipRequired) { _%>

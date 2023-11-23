@@ -573,7 +573,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
   const relationshipsByOtherEntity = relationships
-    .filter(rel => !rel.otherEntity.embedded)
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
     .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
       if (!relationshipsByOtherEntity[type]) {
