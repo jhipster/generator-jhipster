@@ -50,16 +50,16 @@ let uniqueRelationFields = new Set();
 
 Object.keys(differentRelationships).forEach(key => {
 
-  const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
-    (rel.relationshipOneToOne && rel.ownerSide && !rel.otherEntityUser)
-      || !rel.relationshipOneToMany);
+  const hasAnyRelationshipQuery = differentRelationships[key].some(rel => rel.persistableRelationship);
   if (hasAnyRelationshipQuery) {
     hasRelationshipQuery = true;
     differentRelationships[key].forEach(rel => {
-      if (rel.relationshipManyToMany && rel.ownerSide) {
-        manyToManyOwners.add(rel);
-      } else {
-        relFieldNames.add(rel);
+      if (rel.persistableRelationship) {
+        if (rel.relationshipManyToMany) {
+          manyToManyOwners.add(rel);
+        } else {
+          relFieldNames.add(rel);
+        }
       }
     });
   }
@@ -169,7 +169,7 @@ _%>
       <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
 <%_ }) _%>
 <%_ relFieldNames.forEach(rel => { _%>
-<%_ if (rel.relationshipManyToOne || (rel.ownerSide && rel.relationshipOneToOne))  { _%>
+<%_ if (rel.persistableRelationship && !rel.collection)  { _%>
         <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>.toString()),
 <%_ } _%>
 <%_ }) _%>
@@ -213,9 +213,9 @@ _%>
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-  if (rel.relationshipManyToOne || (rel.relationshipOneToOne && rel.ownerSide)) { _%>
+  if (rel.persistableRelationship && !rel.collection) { _%>
           <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.<%= otherEntityPkName %>,
-  <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
+  <%_ } else if (rel.persistableRelationship) { _%>
           <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
   <%_ } _%>
 <%_ }) _%>
@@ -321,7 +321,6 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ relationships.forEach(rel => {
-    const ownerSide = rel.ownerSide;
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const otherEntityNamePlural = rel.otherEntityNamePlural;
     const relationshipName = rel.relationshipName;
@@ -331,7 +330,7 @@ _%>
     const otherEntityField = rel.otherEntityField;
     const relationshipRequired = rel.relationshipRequired;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-  <%_ if (rel.relationshipManyToOne || (rel.relationshipOneToOne && ownerSide)) { _%>
+  <%_ if (rel.persistableRelationship && !rel.collection) { _%>
           <ValidatedField
             id="<%= entityFileName %>-<%= relationshipName %>"
             name="<%= relationshipFieldName %>"
@@ -360,7 +359,7 @@ _%>
     <%_ if (relationshipRequired) { _%>
             <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>
     <%_ } _%>
-  <%_ } else if (rel.relationshipManyToMany && rel.ownerSide) { _%>
+  <%_ } else if (rel.persistableRelationship) { _%>
           <ValidatedField
         <%_ if (enableTranslation) { _%>
             label={translate('<%= i18nKeyPrefix %>.<%= relationshipName %>')}

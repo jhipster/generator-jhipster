@@ -114,14 +114,13 @@ _%>
             </dd>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-    const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
     const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
     const otherEntityField = relationship.otherEntityField; _%>
-  <%_ if (ownerSide) { _%>
+  <%_ if (relationship.persistableRelationship) { _%>
             <dt>
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= relationshipName %>">
                 <%= relationshipNameHumanized %>

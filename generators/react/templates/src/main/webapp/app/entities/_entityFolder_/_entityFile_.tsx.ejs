@@ -376,9 +376,7 @@ export const <%= entityReactName %> = () => {
                   <th className="hand" onClick={sort('<%= field.fieldName %>')} ><Translate contentKey="<%= `${i18nKeyPrefix}.${field.fieldName}` %>"><%= field.fieldNameHumanized %></Translate> <FontAwesomeIcon icon={getSortIconByFieldName('<%= field.fieldName %>')} /></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
-    <%_ if (relationship.relationshipManyToOne
-    || (relationship.relationshipOneToOne && relationship.ownerSide)
-    || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) { _%>
+    <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                   <th><Translate contentKey="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>"><%= relationship.relationshipNameHumanized %></Translate> <FontAwesomeIcon icon="sort" /></th>
     <%_ } _%>
 <%_ } _%>
@@ -442,14 +440,11 @@ _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
   const otherEntity = relationship.otherEntity;
-  const ownerSide = relationship.ownerSide;
   const relationshipFieldName = relationship.relationshipFieldName;
   const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
   const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
   const otherEntityField = relationship.otherEntityField; _%>
-  <%_ if (relationship.relationshipManyToOne
-  || (relationship.relationshipOneToOne && ownerSide)
-  || (relationship.relationshipManyToMany && ownerSide && paginationNo)) { _%>
+  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
