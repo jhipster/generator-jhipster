@@ -24,7 +24,6 @@
   const containDefaultProperties = formDefaultProperties.length > 0;
   const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
   const newEntityFormName = anyFieldIsTimeDerived ? `New${entityAngularName}FormRawValue` : `New${entityAngularName}`;
-  const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => relationship.persistableRelationship).length === 0;
 _%>
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -162,12 +161,6 @@ _%>
   }
 
   get<%= entityAngularName %>(form: <%= entityAngularName %>FormGroup): I<%= entityAngularName %> | New<%= entityAngularName %> {
-<%_ if (noPropertyEntity) { _%>
-    if (form.controls.<%= primaryKey.name %>.disabled) {
-      // form.value returns <%= primaryKey.name %> with null value for FormGroup with only one FormControl
-      return { <%= primaryKey.name %>: null };
-    }
-<%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
     return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.getRawValue() as <%= entityAngularName %>FormRawValue | New<%= entityAngularName %>FormRawValue);
 <%_ } else { _%>
