@@ -21,13 +21,13 @@ const desiredConfig = {
 };
 
 export const matchElasticSearchDocker = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenFiles('elaticsearch', resultGetter, expectedElasticsearchFiles, shouldMatch);
+  matchWrittenFiles('elasticsearch', resultGetter, expectedElasticsearchFiles, shouldMatch);
 };
 
 export const matchElasticSearch = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenConfig('elaticsearch', resultGetter, desiredConfig, shouldMatch);
+  matchWrittenConfig('elasticsearch', resultGetter, desiredConfig, shouldMatch);
 };
 
 export const matchElasticSearchUser = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenFiles('elaticsearch user', resultGetter, () => expectedElasticsearchUserFiles(resultGetter), shouldMatch);
+  matchWrittenFiles('elasticsearch user', resultGetter, () => expectedElasticsearchUserFiles(resultGetter), shouldMatch);
 };
