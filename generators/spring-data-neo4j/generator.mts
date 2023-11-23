@@ -65,6 +65,40 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      async configuringEachEntity({ entityConfig }) {
+        if (entityConfig.dto && entityConfig.dto !== 'no') {
+          this.log.warn(
+            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constelation, DTO causes the constelation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      async checkUserRelationship({ entities }) {
+        entities.forEach(entity => {
+          if (entity.relationships.some(relationship => relationship.builtInUser)) {
+            this.log.warn(
+              `Relationship with User entity should be avoided for Neo4j database. Neo4j persists the entire constelation, related User entity will be updated causing security problems. Relationship with User entity is found in entity ${entity.name}.`,
+            );
+          }
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
