@@ -76,6 +76,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     // means that this side should control the reference.
     ownerSide: ({ ownerSide, relationshipLeftSide, relationshipManyToOne, relationshipOneToMany }) =>
       ownerSide ?? (relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany)),
+    persistableRelationship: ({ persistableRelationship, ownerSide }) => persistableRelationship ?? ownerSide,
     relationshipUpdateBackReference: ({ relationshipUpdateBackReference, ownerSide, relationshipRightSide }) =>
       relationshipUpdateBackReference ?? (entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide),
   });
