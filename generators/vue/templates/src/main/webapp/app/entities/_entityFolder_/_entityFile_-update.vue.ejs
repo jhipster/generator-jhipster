@@ -121,7 +121,6 @@ _%>
                     </div>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-  const ownerSide = relationship.ownerSide;
   const otherEntityName = relationship.otherEntityName;
   const otherEntityNamePlural = relationship.otherEntityNamePlural;
   const relationshipName = relationship.relationshipName;
@@ -131,7 +130,7 @@ _%>
   const otherEntityField = relationship.otherEntityField;
   const relationshipRequired = relationship.relationshipRequired;
   const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-  <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide && relationship.otherEntityUser)) { _%>
+  <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="form-group">
                         <label class="form-control-label" v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
@@ -143,19 +142,7 @@ _%>
                             <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
-  <%_ } else if (relationship.relationshipOneToOne && ownerSide) { _%>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
-                            <%_ if (!relationshipRequired) { _%>
-                            <option v-bind:value="null"></option>
-                            <%_ } else { _%>
-                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
-                            <%_ } _%>
-                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
-                        </select>
-                    </div>
-  <%_ } else if (relationship.relationshipManyToMany && ownerSide) { _%>
+  <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="form-group">
                         <label v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>

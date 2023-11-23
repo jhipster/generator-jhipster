@@ -35,7 +35,6 @@
                     </dd>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-    const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
@@ -43,7 +42,7 @@
     const otherEntityName = relationship.otherEntityName;
     const otherEntityField = relationship.otherEntityField;
     const otherEntityAngularName = relationship.otherEntityAngularName; _%>
-  <%_ if (ownerSide) { _%>
+  <%_ if (relationship.persistableRelationship) { _%>
                     <dt>
                         <span v-text="t$('<%= i18nKeyPrefix %>.<%= relationshipName %>')"><%= relationshipNameHumanized %></span>
                     </dt>
