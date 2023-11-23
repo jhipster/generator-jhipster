@@ -39,7 +39,7 @@ import { Account } from 'app/core/auth/account.model';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrl: './home.component.scss',
   imports: [SharedModule, RouterModule],
 })
 export default class HomeComponent implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {

@@ -18,7 +18,8 @@
 -%>
 <h4>System</h4>
 
-<ng-container *ngIf="!updating && systemMetrics">
+@if (!updating && systemMetrics) {
+<ng-container>
   <div class="row">
     <div class="col-md-4">Uptime</div>
     <div class="col-md-8 text-end">{{ convertMillisecondsToDuration(systemMetrics['process.uptime']) }}</div>
@@ -67,3 +68,4 @@
     <div class="col-md-3 text-end">{{ systemMetrics['process.files.open'] | number: '1.0-0' }}</div>
   </div>
 </ng-container>
+}
