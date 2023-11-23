@@ -19,12 +19,12 @@
 <%_
   const formDefaultProperties = [
     ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id).map(field => field.fieldName),
-    ...relationships.filter(relationship => relationship.collection && (relationship.relationshipManyToMany || relationship.ownerSide)).map(relationship => relationship.propertyName)
+    ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName)
   ];
   const containDefaultProperties = formDefaultProperties.length > 0;
   const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
   const newEntityFormName = anyFieldIsTimeDerived ? `New${entityAngularName}FormRawValue` : `New${entityAngularName}`;
-  const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany).length === 0;
+  const noPropertyEntity = fields.filter(field => !field.id).length === 0 && relationships.filter(relationship => relationship.persistableRelationship).length === 0;
 _%>
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -74,7 +74,7 @@ _%>
   <%= fieldName %>ContentType: FormControl<<%= entityFormName %>['<%= fieldName %>ContentType']>;
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
+<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
       const { propertyName, otherEntity } = relationship;
 _%>
   <%= propertyName %>: FormControl<<%= entityFormName %>['<%= propertyName %>']>;
@@ -146,7 +146,7 @@ _%>
       <%= fieldName %>ContentType: new FormControl(<%= entityInstance %>RawValue.<%= fieldName %>ContentType),
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) {
+<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
       const { relationshipRequired, propertyName, relationshipName, collection, otherEntity } = relationship;
 _%>
       <%= propertyName %>: new FormControl(
@@ -215,7 +215,7 @@ _%>
       <%= fieldName %>: currentTime,
     <%_ } _%>
   <%_ } _%>
-  <%_ for (const relationship of relationships.filter(({ ownerSide, relationshipManyToMany }) => ownerSide || relationshipManyToMany)) {
+  <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
         const { relationshipRequired, propertyName, collection, otherEntity, relationshipName } = relationship;
   _%>
     <%_ if (collection) { _%>
@@ -250,7 +250,7 @@ _%>
       <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : undefined,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(({ ownerSide, relationshipManyToMany }) => ownerSide || relationshipManyToMany)) {
+<%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
       const { relationshipRequired, propertyName, collection } = relationship;
 _%>
   <%_ if (collection) { _%>
