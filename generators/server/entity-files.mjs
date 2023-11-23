@@ -80,8 +80,8 @@ const filteringReactiveFiles = {
   ],
 };
 
-export const respositoryFiles = {
-  respositoryFiles: [
+export const repositoryFiles = {
+  repositoryFiles: [
     {
       condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
@@ -184,7 +184,7 @@ export const serverFiles = {
   ...restFiles,
   ...filteringFiles,
   ...filteringReactiveFiles,
-  ...respositoryFiles,
+  ...repositoryFiles,
   ...serviceFiles,
   ...dtoFiles,
 };
