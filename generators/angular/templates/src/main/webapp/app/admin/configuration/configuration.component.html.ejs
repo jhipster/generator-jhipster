@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<div *ngIf="allBeans">
+@if (allBeans) {
+<div>
   <h2 id="configuration-page-heading" <%= jhiPrefix %>Translate="configuration.title" data-cy="configurationPageHeading">__jhiTransformTranslate__('configuration.title')</h2>
 
   <span <%= jhiPrefix %>Translate="configuration.filter">__jhiTransformTranslate__('configuration.filter')</span>
@@ -34,23 +35,28 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let bean of beans">
+    @for (bean of beans; track $index) {
+      <tr>
         <td>
           <span>{{ bean.prefix }}</span>
         </td>
         <td>
-          <div class="row" *ngFor="let property of bean.properties | keyvalue">
+        @for (property of bean.properties | keyvalue; track property.key) {
+          <div class="row">
             <div class="col-md-4">{{ property.key }}</div>
             <div class="col-md-8">
               <span class="float-end bg-secondary break">{{ property.value | json }}</span>
             </div>
           </div>
+        }
         </td>
       </tr>
+    }
     </tbody>
   </table>
 
-  <div *ngFor="let propertySource of propertySources; let i = index">
+  @for (propertySource of propertySources; track i; let i = $index) {
+  <div>
     <h4 [id]="'property-source-' + i">
       <span>{{ propertySource.name }}</span>
     </h4>
@@ -63,13 +69,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let property of propertySource.properties | keyvalue">
+      @for (property of propertySource.properties | keyvalue; track property.key) {
+        <tr>
           <td class="break">{{ property.key }}</td>
           <td class="break">
             <span class="float-end bg-secondary break">{{ property.value.value }}</span>
           </td>
         </tr>
+      }
       </tbody>
     </table>
   </div>
+  }
 </div>
+}
