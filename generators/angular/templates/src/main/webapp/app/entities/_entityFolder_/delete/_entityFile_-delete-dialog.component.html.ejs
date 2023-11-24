@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<form *ngIf="<%= entityInstance %>" name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<%= primaryKey.name %>!)">
+@if (<%= entityInstance %>) {
+<form name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<%= primaryKey.name %>!)">
     <div class="modal-header">
         <h4 class="modal-title" data-cy="<%= entityInstance %>DeleteDialogHeading" <%= jhiPrefix %>Translate="entity.delete.title">__jhiTransformTranslate__('entity.delete.title')</h4>
 
@@ -39,3 +40,4 @@
         </button>
     </div>
 </form>
+}

@@ -6,6 +6,7 @@ exports[`generator - cucumber with default config should match files snapshot 1`
     "contents": "{
   "generator-jhipster": {
     "baseName": "jhipster",
+    "creationTimestamp": 1577836800000,
     "entities": [],
     "testFrameworks": [
       "cucumber"

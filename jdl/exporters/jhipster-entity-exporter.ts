@@ -70,8 +70,9 @@ function updateEntities(subFolder) {
 function updateEntityToGenerateWithExistingOne(filePath, entity) {
   if (doesFileExist(filePath)) {
     const fileOnDisk = readJSONFile(filePath);
-    if (fileOnDisk && fileOnDisk.changelogDate) {
-      entity.changelogDate = fileOnDisk.changelogDate;
+    if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
+      entity.annotations = entity.annotations || {};
+      entity.annotations.changelogDate = fileOnDisk.annotations.changelogDate;
       return { ...fileOnDisk, ...entity };
     }
   }

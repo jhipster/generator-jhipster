@@ -35,6 +35,7 @@ import statistics from '../statistics.mjs';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.mjs';
 import { mergeYoRcContent } from '../../jdl/index.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.mjs';
+import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.mjs';
 
 const { upperFirst } = _;
 
@@ -102,8 +103,11 @@ export default class JdlGenerator extends BaseGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      insight() {
+        statistics.sendSubGenEvent('generator', 'import-jdl');
+      },
       async downloadJdlFiles() {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
@@ -130,18 +134,6 @@ export default class JdlGenerator extends BaseGenerator {
           this.jdlContents.push(this.readDestination(jdlFile)?.toString() ?? '');
         }
       },
-    });
-  }
-
-  get [BaseGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      insight() {
-        statistics.sendSubGenEvent('generator', 'import-jdl');
-      },
       async parseJDL() {
         const configuration = {
           applicationName: this.options.baseName ?? (this.existingProject ? this.jhipsterConfig.baseName : undefined),
@@ -167,6 +159,15 @@ export default class JdlGenerator extends BaseGenerator {
                 ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType !== 'gateway'),
               ];
       },
+      configure() {
+        const nrApplications = this.applications.length;
+        const allNew = allNewApplications(this.applications);
+        const interactiveFallback = !allNew;
+
+        this.interactive = this.interactive ?? interactiveFallback;
+        this.force = this.options.force ?? (nrApplications > 0 && allNew) ? true : undefined;
+        this.reproducible = allNew;
+      },
       customizeApplication() {
         for (const app of this.applications) {
           app.config.entities = app.entities.map(entity => entity.name);
@@ -182,18 +183,13 @@ export default class JdlGenerator extends BaseGenerator {
         addApplicationIndex(this.applications);
         customizeForMicroservices(this.exportedApplicationsWithEntities);
       },
-      configure() {
-        const nrApplications = this.applications.length;
-        const allNew = allNewApplications(this.applications);
-        const interactiveFallback = !allNew;
-
-        this.interactive = this.interactive ?? interactiveFallback;
-        this.force = this.options.force ?? (nrApplications > 0 && allNew) ? true : undefined;
-        this.reproducible = allNew;
-      },
-      generateJson() {
+      async generateJson() {
         if (this.applications.length === 0) {
           this.writeConfig({ entities: this.exportedEntities });
+          await this.env.sharedFs.pipeline(
+            { refresh: true },
+            updateApplicationEntitiesTransform({ destinationPath: this.destinationPath(), throwOnMissingConfig: false }),
+          );
         } else {
           this.writeConfig(...this.applications.map(app => (this.ignoreApplication ? { ...app, config: undefined } : app)));
         }
@@ -239,8 +235,8 @@ export default class JdlGenerator extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+  get [BaseGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get end() {

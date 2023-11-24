@@ -46,12 +46,14 @@ runs:
         echo "Showing config diff changes (won't trigger builds)"
         git -c color.ui=always diff -R --cached -- \
           '.yo-rc.json' '**/.yo-rc.json' \
+          '*.jdl' '**/*.jdl' \
           '.gitignore' '**/.gitignore' \
           '.gitattributes' '**/.gitattributes' \
           '.jhipster/**' '**/.jhipster/**'
         echo "Showing source diff changes (will trigger builds)"
         git -c color.ui=always diff -R --cached --exit-code -- . \
           ':!.yo-rc.json' ':!**/.yo-rc.json' \
+          ':!*.jdl' ':!**/*.jdl' \
           ':!.gitignore' ':!**/.gitignore' \
           ':!.gitattributes' ':!**/.gitattributes' \
           ':!.jhipster/**' ':!**/.jhipster/**' \

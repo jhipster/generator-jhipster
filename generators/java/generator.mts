@@ -39,6 +39,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
   packageInfoFile!: boolean;
   generateEntities!: boolean;
   useJakartaValidation!: boolean;
+  useJacksonIdentityInfo!: boolean;
   generateEnums!: boolean;
 
   async beforeQueue() {
@@ -131,17 +132,17 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
       async writeServerFiles({ application, entities }) {
         if (!this.generateEntities) return;
 
-        const { useJakartaValidation } = this;
+        const { useJakartaValidation, useJacksonIdentityInfo } = this;
         for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
           await this.writeFiles({
             sections: entityServerFiles,
-            context: { ...application, ...entity, useJakartaValidation },
+            context: { ...application, ...entity, useJakartaValidation, useJacksonIdentityInfo },
           });
         }
       },
 
       async writeEnumFiles({ application, entities }) {
-        if (!this.generateEnums || !this.generateEntities) return;
+        if (!this.generateEnums) return;
 
         for (const entity of entities.filter(entity => !entity.skipServer)) {
           for (const field of entity.fields.filter(field => field.fieldIsEnum)) {

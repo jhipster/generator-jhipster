@@ -26,6 +26,7 @@ import { JDLSecurityType } from '../models/jdl-security-type.js';
  * The JSONEntity class represents a read-to-be exported to JSON entity.
  */
 class JSONEntity {
+  annotations: Record<string, boolean | string | number>;
   [x: string]: any;
 
   /**
@@ -52,6 +53,7 @@ class JSONEntity {
     const merged = merge(getDefaults(args.entityName), args);
     this.name = merged.name;
     this.fields = merged.fields;
+    this.annotations = merged.annotations;
     this.relationships = merged.relationships;
     this.documentation = merged.documentation;
     this.entityTableName = merged.entityTableName;
@@ -115,6 +117,10 @@ class JSONEntity {
     });
   }
 
+  setAnnotations(annotations = {}) {
+    Object.assign(this.annotations, annotations);
+  }
+
   setSecure(secure: any) {
     if (secure && secure.securityType) {
       this.secure = new JSONSecure(secure);
@@ -132,5 +138,6 @@ function getDefaults(entityName) {
     fields: [],
     relationships: [],
     applications: [],
+    annotations: {},
   };
 }

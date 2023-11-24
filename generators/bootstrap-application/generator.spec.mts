@@ -121,6 +121,9 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
+  "annotations": {
+    "changelogDate": "20220129025419"
+  },
   "changelogDate": "20220129025419",
   "fields": [
     {
@@ -136,6 +139,9 @@ describe(`generator - ${generator}`, () => {
   },
   ".jhipster/User.json": {
     "contents": "{
+  "annotations": {
+    "changelogDate": "20220129025420"
+  },
   "changelogDate": "20220129025420",
   "fields": [
     {
@@ -168,6 +174,9 @@ describe(`generator - ${generator}`, () => {
 {
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
+  "annotations": {
+    "changelogDate": "20220129025420",
+  },
   "anyFieldHasDocumentation": false,
   "anyFieldHasFileBasedContentType": false,
   "anyFieldHasImageContentType": false,
@@ -679,6 +688,9 @@ describe(`generator - ${generator}`, () => {
           `
 {
   "allReferences": Any<Array>,
+  "annotations": {
+    "changelogDate": "20220129025419",
+  },
   "anyFieldHasDocumentation": false,
   "anyFieldHasFileBasedContentType": false,
   "anyFieldHasImageContentType": false,
@@ -978,6 +990,9 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
+  "annotations": {
+    "changelogDate": "20220129025419"
+  },
   "changelogDate": "20220129025419",
   "fields": [
     {
@@ -1008,6 +1023,9 @@ describe(`generator - ${generator}`, () => {
           `
 {
   "allReferences": Any<Array>,
+  "annotations": {
+    "changelogDate": "20220129025419",
+  },
   "anyFieldHasDocumentation": false,
   "anyFieldHasFileBasedContentType": false,
   "anyFieldHasImageContentType": false,

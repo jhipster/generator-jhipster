@@ -22,6 +22,9 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   /* base options */
   applicationId?: string;
   applicationWithConfig?: ApplicationWithConfig;
+  /**
+   * @deprecated
+   */
   applicationWithEntities?: any;
   creationTimestamp?: string;
   ignoreErrors?: boolean;
@@ -69,6 +72,10 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   sbsBlueprint?: boolean;
   checkBlueprint?: boolean;
   /**
+   * Disable skipPriorities flag.
+   */
+  disableSkipPriorities?: boolean;
+  /**
    * Compose with bootstrap generator.
    *
    * Bootstrap generator adds support to:
@@ -84,6 +91,11 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
    * Defaults to true.
    */
   storeJHipsterVersion?: boolean;
+
+  /**
+   * Create transforms for commit.
+   */
+  commitTransformFactory?: () => any;
 };
 
 // eslint-disable-next-line no-use-before-define

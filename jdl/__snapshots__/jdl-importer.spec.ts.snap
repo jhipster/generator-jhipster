@@ -26,6 +26,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
   "exportedDeployments": [],
   "exportedEntities": [
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "",
       "dto": undefined,
@@ -56,6 +57,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "skipServer": true,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "",
       "dto": undefined,
@@ -120,6 +122,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "The Employee entity.\\nSecond line in documentation.",
       "dto": "mapstruct",
@@ -205,6 +208,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "service": "serviceClass",
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "",
       "dto": undefined,
@@ -269,6 +273,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "JobHistory comment.",
       "dto": undefined,
@@ -326,6 +331,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "",
       "dto": undefined,
@@ -376,6 +382,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "",
       "dto": undefined,
@@ -397,6 +404,7 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
       "service": undefined,
     },
     JSONEntity {
+      "annotations": {},
       "applications": "*",
       "documentation": "",
       "dto": undefined,
@@ -686,6 +694,7 @@ exports[`jdl - JDLImporter import when parsing deployment config should export t
 exports[`jdl - JDLImporter import when passing the unidirectionalRelationships option when parsing one JDL application and entities should return the corresponding exportedApplicationsWithEntities 1`] = `
 [
   JSONEntity {
+    "annotations": {},
     "applications": [
       "jhipster",
     ],
@@ -756,6 +765,7 @@ exports[`jdl - JDLImporter import when passing the unidirectionalRelationships o
     "service": undefined,
   },
   JSONEntity {
+    "annotations": {},
     "applications": [
       "jhipster",
     ],

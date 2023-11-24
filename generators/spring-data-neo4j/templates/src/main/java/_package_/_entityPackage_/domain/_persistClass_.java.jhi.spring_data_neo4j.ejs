@@ -53,45 +53,11 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { -%>
-  <%_ const relationshipForwardReference = "HAS_" + this._.toUpper(this._.snakeCase(relationship.relationshipName)); %>
-  <%_ const relationshipBackReference = "HAS_" + this._.toUpper(this._.snakeCase(relationship.otherEntityRelationshipName)); %>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-    <%_ if (relationship.ownerSide) { _%>
-    @Relationship(value = "<%= relationshipBackReference %>", direction = Relationship.Direction.INCOMING)
+    <%_ if (relationship.relationshipLeftSide) { _%>
+    @Relationship(value = "HAS_<%= this._.toUpper(this._.snakeCase(relationship.relationshipName)) %>", direction = Relationship.Direction.OUTGOING)
     <%_ } else { _%>
-    @Relationship("<%= relationshipForwardReference %>")
+    @Relationship(value = "HAS_<%= this._.toUpper(this._.snakeCase(relationship.otherRelationship.relationshipName)) %>", direction = Relationship.Direction.INCOMING)
     <%_ } _%>
 <&_ } -&>
 <%_ } -%>
-
-<%_ for (const relationship of relationships) { _%>
-<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
-    public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-        this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
-      <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().add(this);
-          <%_ } _%>
-        <%_ } _%>
-      <%_ } _%>
-        return this;
-    }
-<&_ } -&>
-<%_ } -%>
-
-<%_ for (const relationship of relationships) { _%>
-<&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
-    public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-        this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
-      <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().remove(this);
-          <%_ } _%>
-        <%_ } _%>
-      <%_ } _%>
-        return this;
-    }
-<&_ } -&>
-<%_ } _%>

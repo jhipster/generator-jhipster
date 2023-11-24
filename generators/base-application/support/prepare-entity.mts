@@ -501,9 +501,12 @@ export function prepareEntityPrimaryKeyForTemplates(
     let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
     if (idField) {
       idField.id = true;
+      idField.autoGenerate = idField.autoGenerate ?? true;
     } else {
       if (entityWithConfig.microserviceName && !application?.microfrontend) {
-        this?.log.warn("Microservice entities should have a custom id to make sure gateway and microservice types won't conflict");
+        this?.log.warn(
+          "Microservice entities should have the id field type specified (e.g., id String) to make sure gateway and microservice types don't conflict",
+        );
       }
       idField = {
         fieldName: 'id',
@@ -774,7 +777,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
   const relationshipsByOtherEntity = relationships
-    .filter(rel => !rel.otherEntity.embedded)
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
     .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
       if (!relationshipsByOtherEntity[type]) {

@@ -19,14 +19,14 @@
 <%_
   const allRelationshipsByEntityNeedingOptions = Object
     .values(differentRelationships)
-    .map(relationships => relationships.filter(rel => rel.ownerSide))
+    .map(relationships => relationships.filter(rel => rel.persistableRelationship))
     .filter(relationships => relationships.length > 0);
 _%>
 import { Component, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize<% if (relationships.some(rel => rel.ownerSide === true)) { %>, map<% } %> } from 'rxjs/operators';
+import { finalize<% if (relationships.some(rel => rel.persistableRelationship)) { %>, map<% } %> } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -41,7 +41,7 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_
 Object.keys(differentRelationships).forEach(key => {
-  if (differentRelationships[key].some(rel => rel.reference.owned)) {
+  if (differentRelationships[key].some(rel => rel.persistableRelationship)) {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
       if (uniqueRel.otherEntity.builtInUser) {
@@ -77,7 +77,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ }); _%>
 
-<%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
+<%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.persistableRelationship)).filter(relationships => relationships.length > 0)) { _%>
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
   <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
     <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
@@ -99,7 +99,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
         protected <%= entityInstance %>FormService: <%= entityAngularName %>FormService,
 <%_
 Object.keys(differentRelationships).forEach(key => {
-  if (differentRelationships[key].some(rel => rel.relationshipManyToOne || rel.relationshipOneToOne && rel.ownerSide || rel.relationshipManyToMany && rel.ownerSide)) {
+  if (differentRelationships[key].some(rel => rel.persistableRelationship)) {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
@@ -114,7 +114,7 @@ _%>
 <%_ } _%>
         protected activatedRoute: ActivatedRoute,
     ) {}
-<%_ for (const relationshipsByEntity of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.ownerSide && rel.otherEntity.primaryKey))) {
+<%_ for (const relationshipsByEntity of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.persistableRelationship && rel.otherEntity.primaryKey))) {
       const { otherEntity } = relationshipsByEntity[0];
 _%>
 
@@ -129,7 +129,7 @@ _%>
                 this.updateForm(<%= entityInstance %>);
             }
 
-<%_ if (relationships.filter(rel => rel.ownerSide && !rel.otherEntityIsEmbedded).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntityIsEmbedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
         });
@@ -202,7 +202,7 @@ _%>
     protected updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
         this.<%= entityInstance %> = <%= entityInstance %>;
         this.<%= entityInstance %>FormService.resetForm(this.editForm, <%= entityInstance %>);
-<%_ if (relationships.filter(rel => rel.ownerSide).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.persistableRelationship).length > 0) { _%>
 
   <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
@@ -226,9 +226,9 @@ _%>
 <%_ } _%>
     }
 
-<%_ if (relationships.filter(rel => rel.ownerSide && !rel.otherEntityIsEmbedded).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntityIsEmbedded).length > 0) { _%>
     protected loadRelationshipsOptions(): void {
-  <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.ownerSide)).filter(relationships => relationships.length > 0)) { _%>
+  <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.persistableRelationship)).filter(relationships => relationships.length > 0)) { _%>
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); %>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); %>
     <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0] _%>

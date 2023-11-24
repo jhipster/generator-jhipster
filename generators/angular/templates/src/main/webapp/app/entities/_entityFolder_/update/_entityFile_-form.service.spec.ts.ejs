@@ -40,7 +40,7 @@ describe('<%= entityAngularName %> Form Service', () => {
 <%_ for (const field of fields) { _%>
             <%= field.fieldName %>: expect.any(Object),
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) { _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
             <%= relationship.propertyName %>: expect.any(Object),
 <%_ } _%>
           })
@@ -54,7 +54,7 @@ describe('<%= entityAngularName %> Form Service', () => {
 <%_ for (const field of fields) { _%>
           <%= field.fieldName %>: expect.any(Object),
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.ownerSide || relationship.relationshipManyToMany)) { _%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
           <%= relationship.propertyName %>: expect.any(Object),
 <%_ } _%>
         }));

@@ -161,6 +161,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -264,6 +265,7 @@ JSONEntity {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "suffix",
+  "annotations": {},
   "applications": "*",
   "clientRootFolder": "../client_root_folder",
   "documentation": "The best entity",
@@ -328,6 +330,7 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": "mapstruct",
@@ -386,6 +389,7 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -434,6 +438,7 @@ JSONEntity {
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -486,6 +491,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -555,6 +561,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -622,6 +629,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -674,6 +682,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -781,6 +790,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,
@@ -866,6 +876,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": "*",
   "documentation": "The best entity",
   "dto": undefined,

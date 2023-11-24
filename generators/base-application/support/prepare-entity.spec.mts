@@ -44,6 +44,7 @@ describe('generator - base-application - support - prepareEntity', () => {
         });
         it('should adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({
+            autoGenerate: true,
             dynamic: false,
             fieldName: 'id',
             fieldType: 'CustomType',

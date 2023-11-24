@@ -24,9 +24,9 @@ concurrency:
   cancel-in-progress: true
 on:
   push:
-    branches-ignore:
-      - 'dependabot/**'
-      - 'skip_ci*'
+    branches:
+      - 'main'
+      - '**maintenance'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:

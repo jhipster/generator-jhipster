@@ -176,6 +176,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         it('should convert the entity', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -284,6 +285,7 @@ JSONEntity {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "suffix",
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -350,6 +352,7 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -413,6 +416,7 @@ JSONEntity {
         it('should set the service option to serviceClass', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -466,6 +470,7 @@ JSONEntity {
         it('should prevent the entities from being searched', () => {
           jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -523,6 +528,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -597,6 +603,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -669,6 +676,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -726,6 +734,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -838,6 +847,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -928,6 +938,7 @@ JSONEntity {
           it('should convert them', () => {
             jestExpect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [
     "toto",
   ],
@@ -1797,6 +1808,7 @@ JSONEntity {
           jestExpect(convertedEntitiesForTataApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
+    "annotations": {},
     "applications": [
       "tata",
     ],
@@ -1814,6 +1826,7 @@ JSONEntity {
     "service": undefined,
   },
   JSONEntity {
+    "annotations": {},
     "applications": [
       "tata",
     ],
@@ -1831,6 +1844,7 @@ JSONEntity {
     "service": undefined,
   },
   JSONEntity {
+    "annotations": {},
     "applications": [
       "tata",
       "tutu",
@@ -1853,6 +1867,7 @@ JSONEntity {
           jestExpect(convertedEntitiesForTutuApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
+    "annotations": {},
     "applications": [
       "tata",
       "tutu",
@@ -1871,6 +1886,7 @@ JSONEntity {
     "service": undefined,
   },
   JSONEntity {
+    "annotations": {},
     "applications": [
       "tutu",
     ],
@@ -1888,6 +1904,7 @@ JSONEntity {
     "service": "serviceClass",
   },
   JSONEntity {
+    "annotations": {},
     "applications": [
       "tutu",
     ],

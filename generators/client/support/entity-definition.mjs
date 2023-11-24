@@ -55,7 +55,7 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  * @param {string} dto - dto
  * @param [customDateType]
  * @param {boolean} embedded - either the actual entity is embedded or not
- * @param { string} clientFramwork
+ * @param { string} clientFramework
  * @returns variablesWithTypes: Array
  */
 const generateEntityClientFields = (
@@ -65,12 +65,12 @@ const generateEntityClientFields = (
   dto,
   customDateType = 'dayjs.Dayjs',
   embedded = false,
-  clientFramwork = ANGULAR,
+  clientFramework = ANGULAR,
 ) => {
   const variablesWithTypes = [];
   if (!embedded && primaryKey) {
     const tsKeyType = getTypescriptKeyType(primaryKey);
-    if (clientFramwork === VUE) {
+    if (clientFramework === VUE) {
       variablesWithTypes.push(`id?: ${tsKeyType}`);
     }
   }

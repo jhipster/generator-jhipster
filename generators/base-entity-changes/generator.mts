@@ -74,7 +74,7 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
 
     const entitiesByName = Object.fromEntries(entityNames.map(entityName => [entityName, this.sharedData.getEntity(entityName)]));
     const entitiesWithExistingChangelog = entityNames.filter(
-      entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].changelogDate }),
+      entityName => !this.isChangelogNew({ entityName, changelogDate: entitiesByName[entityName].annotations?.changelogDate }),
     );
     const previousEntitiesByName = Object.fromEntries(
       entityNames

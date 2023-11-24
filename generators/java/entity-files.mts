@@ -35,6 +35,10 @@ export const entityServerFiles: WriteFileSection = {
       condition: ctx => ctx.useJakartaValidation,
       templates: ['_entityPackage_/domain/_persistClass_.java.jhi.jakarta_validation'],
     }),
+    javaMainPackageTemplatesBlock({
+      condition: ctx => ctx.useJacksonIdentityInfo,
+      templates: ['_entityPackage_/domain/_persistClass_.java.jhi.jackson_identity_info'],
+    }),
   ],
 };
 

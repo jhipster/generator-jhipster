@@ -44,6 +44,12 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
       hide: true,
     },
+    useJacksonIdentityInfo: {
+      type: Boolean,
+      default: false,
+      scope: 'generator',
+      hide: true,
+    },
     generateEnums: {
       type: Boolean,
       default: true,

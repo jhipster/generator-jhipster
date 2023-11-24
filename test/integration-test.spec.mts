@@ -36,7 +36,7 @@ const fixSamples = process.argv.includes('--fix-samples');
 const itSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples');
 const dailyBuildsSamplesPath = path.join(__dirname, '..', 'test-integration', 'daily-builds');
 const itEntitiesSamplesPath = path.join(__dirname, '..', 'test-integration', 'samples', '.jhipster');
-const REMENBER_ME_KEY = 'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
+const REMEMBER_ME_KEY = 'a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe';
 const JWT_SECRET_KEY =
   'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=';
 
@@ -72,8 +72,8 @@ describe('integration-test', () => {
               config.creationTimestamp = 1596513172471;
               fse.writeJsonSync(yoFile, yoJson);
             }
-            if (config.authenticationType === SESSION && config.rememberMeKey !== REMENBER_ME_KEY) {
-              config.rememberMeKey = REMENBER_ME_KEY;
+            if (config.authenticationType === SESSION && config.rememberMeKey !== REMEMBER_ME_KEY) {
+              config.rememberMeKey = REMEMBER_ME_KEY;
               fse.writeJsonSync(yoFile, yoJson);
             } else if (
               (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&

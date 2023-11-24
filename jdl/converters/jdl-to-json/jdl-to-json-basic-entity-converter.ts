@@ -49,6 +49,7 @@ function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
         entityName,
         entityTableName: getTableNameFromEntityName(jdlEntity.tableName),
         documentation: formatComment(jdlEntity.comment),
+        annotations: jdlEntity.annotations,
       }),
     );
   });

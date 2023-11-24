@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { lowerFirst } from 'lodash-es';
 import { JDLEntity, JDLSecure } from '../../models/index.mjs';
 import { formatComment } from '../../utils/format-utils.js';
 import { JDLSecurityType } from '../../models/jdl-security-type.js';
@@ -38,6 +39,12 @@ export function convertEntities(parsedEntities, jdlFieldGetterFunction): JDLEnti
       name: parsedEntity.name,
       tableName: parsedEntity.tableName || parsedEntity.name,
       comment: formatComment(parsedEntity.documentation),
+      annotations: Object.fromEntries(
+        parsedEntity.annotations?.map(annotation => [
+          lowerFirst(annotation.optionName),
+          annotation.type === 'UNARY' ? true : annotation.optionValue,
+        ]) ?? [],
+      ),
     });
     const jdlFields = jdlFieldGetterFunction.call(undefined, parsedEntity);
     jdlEntity.addFields(jdlFields);

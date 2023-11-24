@@ -52,6 +52,7 @@ describe('jdl - JSONEntity', () => {
       it('should set default values', () => {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [],
   "documentation": undefined,
   "dto": undefined,
@@ -99,6 +100,7 @@ JSONEntity {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
+  "annotations": {},
   "applications": [],
   "clientRootFolder": "oh",
   "documentation": "",
@@ -129,6 +131,7 @@ JSONEntity {
         jestExpect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
+  "annotations": {},
   "applications": [],
   "clientRootFolder": "oh",
   "documentation": "",
@@ -304,6 +307,7 @@ JSONEntity {
       it('should set them', () => {
         jestExpect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
+  "annotations": {},
   "applications": [],
   "documentation": "A comment",
   "dto": "mapstruct",

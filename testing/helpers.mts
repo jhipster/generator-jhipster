@@ -8,7 +8,7 @@ import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.mjs';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.mjs';
 import getGenerator from './get-generator.mjs';
-import { createJHipsterLogger, normalizePathEnd } from '../generators/base/support/index.mjs';
+import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../generators/base/support/index.mjs';
 import BaseGenerator from '../generators/base/index.mjs';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.mjs';
 import { getPackageRoot, isDistFolder } from '../lib/index.mjs';
@@ -111,7 +111,9 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private generateApplicationsSet = false;
 
   withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
-    return this.withFiles(createFiles('', { baseName: 'jhipster', ...configuration }, entities));
+    return this.withFiles(
+      createFiles('', { baseName: 'jhipster', creationTimestamp: parseCreationTimestamp('2020-01-01'), ...configuration }, entities),
+    );
   }
 
   withSkipWritingPriorities(): this {
@@ -343,7 +345,14 @@ export function createTestHelpers(options: any = {}) {
   return helper;
 }
 
-const commonTestOptions = { reproducible: true, skipChecks: true, reproducibleTests: true, noInsight: true };
+const commonTestOptions = {
+  reproducible: true,
+  skipChecks: true,
+  reproducibleTests: true,
+  noInsight: true,
+  useVersionPlaceholders: true,
+  fakeKeytool: true,
+};
 
 export const basicHelpers = createTestHelpers({ generatorOptions: { ...commonTestOptions } });
 

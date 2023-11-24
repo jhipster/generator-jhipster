@@ -28,6 +28,7 @@ export const generateSample = async (
     entity: passedEntity,
     jdlEntity: passedJdlEntity,
     jdlSamples: passedJdlSamples,
+    fork = true,
   } = {},
 ) => {
   if (!sampleName) {
@@ -83,7 +84,15 @@ export const generateSample = async (
 
     const files = globSync('*.jdl');
     // Generate the application using every jdl file
-    await execa(jhipsterBin, ['jdl', ...files, ...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
+    if (fork) {
+      await execa(jhipsterBin, ['jdl', ...files, ...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
+    } else {
+      return {
+        generator: 'jdl',
+        jdlFiles: files,
+        sample,
+      };
+    }
   } else {
     const isDailySample = isDaily(appSample);
     cpSync(
@@ -98,12 +107,29 @@ export const generateSample = async (
     if (jdlEntity) {
       // Generate jdl entities
       const files = globSync('*.jdl');
-      await execa(jhipsterBin, ['jdl', ...files, '--json-only', ...commonCliOptions], { stdio: 'inherit' });
+      if (fork) {
+        await execa(jhipsterBin, ['jdl', ...files, '--json-only', ...commonCliOptions], { stdio: 'inherit' });
+      } else {
+        return {
+          generator: 'app',
+          jdlFiles: files,
+          sample,
+        };
+      }
     }
 
     // Generate the application
-    await execa(jhipsterBin, [...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
+    if (fork) {
+      await execa(jhipsterBin, [...commonCliOptions, ...extraArgs], { stdio: 'inherit' });
+    } else {
+      return {
+        generator: 'app',
+        sample,
+      };
+    }
   }
 
-  await execa(jhipsterBin, ['info'], { stdio: 'inherit' });
+  if (fork) {
+    await execa(jhipsterBin, ['info'], { stdio: 'inherit' });
+  }
 };
