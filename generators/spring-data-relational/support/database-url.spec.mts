@@ -145,16 +145,16 @@ describe('generator - sql - database-url', () => {
       });
     });
     describe('when called for mariadb', () => {
-      it('return r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false', () => {
+      it('return r2dbc:mysql://localhost:3306/test?useLegacyDatetimeCode=false', () => {
         expect(getR2dbcUrl(MARIADB, { databaseName: 'test', hostname: 'localhost' })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test?useLegacyDatetimeCode=false',
+          'r2dbc:mysql://localhost:3306/test?useLegacyDatetimeCode=false',
         );
       });
     });
     describe('when called for mariadb with skipExtraOptions enabled', () => {
-      it('return r2dbc:mariadb://localhost:3306/test', () => {
+      it('return r2dbc:mysql://localhost:3306/test', () => {
         expect(getR2dbcUrl(MARIADB, { databaseName: 'test', hostname: 'localhost', skipExtraOptions: true })).toEqual(
-          'r2dbc:mariadb://localhost:3306/test',
+          'r2dbc:mysql://localhost:3306/test',
         );
       });
     });
