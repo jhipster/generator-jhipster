@@ -37,7 +37,9 @@ export type DatabaseArtifact = { jdbc: JavaArtifact; r2dbc: JavaArtifact };
 const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
   mariadb: {
     jdbc: { groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' },
-    r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
+    // maria-r2dbc driver is failing.
+    // r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
+    r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
   },
   mssql: {
     jdbc: { groupId: 'com.microsoft.sqlserver', artifactId: 'mssql-jdbc' },
