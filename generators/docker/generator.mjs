@@ -251,7 +251,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
             });
             if (application.databaseTypeCassandra) {
               // Wait for migration
-              postServicesSleep = 10;
+              postServicesSleep = 60;
             }
           } else {
             scriptsStorage.set(
