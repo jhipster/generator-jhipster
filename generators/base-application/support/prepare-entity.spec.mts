@@ -316,10 +316,6 @@ describe('generator - base-application - support - prepareEntity', () => {
         expect(result.security).to.be.undefined;
         expect(result.hasSecurity).to.equal(false);
         expect(result.hasRolesSecurity).to.equal(false);
-        expect(result.hasOrganizationalSecurity).to.equal(false);
-        expect(result.hasPrivilegeSecurity).to.equal(false);
-        expect(result.hasRelationSecurity).to.equal(false);
-        expect(result.hasParentSecurity).to.equal(false);
       });
 
       it('prepareEntity should add role based security', () => {

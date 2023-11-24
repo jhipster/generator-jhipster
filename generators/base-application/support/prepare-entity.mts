@@ -275,21 +275,6 @@ export default function prepareEntity(entityWithConfig, generator, application) 
 }
 
 /**
- * Resets the security settings for the given entity.
- *
- * @param {any} entityWithConfig - The entity with its security configuration.
- * @return {void} - Returns nothing.
- */
-function resetSecurity(entityWithConfig: any) {
-  entityWithConfig.hasSecurity = false;
-  entityWithConfig.hasRolesSecurity = false;
-  entityWithConfig.hasOrganizationalSecurity = false;
-  entityWithConfig.hasPrivilegeSecurity = false;
-  entityWithConfig.hasRelationSecurity = false;
-  entityWithConfig.hasParentSecurity = false;
-}
-
-/**
  * Defines role based security for an entity.
  *
  * @param {any} entityWithConfig - The entity with security configuration.
@@ -449,7 +434,8 @@ function defineEntitySecurity(entityWithConfig: any): void {
   const securityType = getSecurityType(entityWithConfig);
 
   if (isNoneSecurityType(securityType)) {
-    resetSecurity(entityWithConfig);
+    entityWithConfig.hasSecurity = false;
+    entityWithConfig.hasRolesSecurity = false;
     return;
   }
 
