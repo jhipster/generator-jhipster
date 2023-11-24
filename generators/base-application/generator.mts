@@ -163,7 +163,7 @@ export default class BaseApplicationGenerator<
   }
 
   /**
-   * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
+   * get sorted list of entity names according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntityNames(): string[] {
     return this.getExistingEntities().map(entity => entity.name);
