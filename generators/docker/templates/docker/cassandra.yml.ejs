@@ -36,7 +36,7 @@ services:
       test: ['CMD', 'cqlsh', '-e', 'describe keyspaces']
       interval: 5s
       timeout: 25s
-      retries: 10
+      retries: 20
   cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
