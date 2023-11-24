@@ -31,6 +31,30 @@ const testcontainerFileForDB = {
   postgresql: 'PostgreSqlTestContainer.java',
 };
 
+type JavaArtifact = { groupId: string; artifactId: string };
+export type DatabaseArtifact = { jdbc: JavaArtifact; r2dbc: JavaArtifact };
+
+const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
+  mariadb: {
+    jdbc: { groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' },
+    r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
+  },
+  mssql: {
+    jdbc: { groupId: 'com.microsoft.sqlserver', artifactId: 'mssql-jdbc' },
+    r2dbc: { groupId: 'io.r2dbc', artifactId: 'r2dbc-mssql' },
+  },
+  mysql: {
+    jdbc: { groupId: 'com.mysql', artifactId: 'mysql-connector-j' },
+    r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
+  },
+  postgresql: {
+    jdbc: { groupId: 'org.postgresql', artifactId: 'postgresql' },
+    r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql' },
+  },
+};
+
+export const getDatabaseDriverForDatabase = (databaseType: string) => databaseArtifactForDB[databaseType];
+
 export const getCommonMavenDefinition = ({ javaDependencies }: { javaDependencies: Record<string, string> }) => ({
   properties: [
     { property: 'jaxb-runtime.version', value: javaDependencies['jaxb-runtime'] },
@@ -121,34 +145,34 @@ export const getDatabaseTypeMavenDefinition: (
     mariadb: {
       jdbc: {
         dependencies: [
-          { inProfile, groupId: 'org.mariadb.jdbc', artifactId: 'mariadb-java-client' },
+          { inProfile, ...databaseArtifactForDB.mariadb.jdbc },
           { groupId: 'org.testcontainers', artifactId: 'mariadb', scope: 'test' },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' }],
+        dependencies: [{ inProfile, ...databaseArtifactForDB.mariadb.r2dbc }],
       },
     },
     mssql: {
       jdbc: {
         dependencies: [
-          { inProfile, groupId: 'com.microsoft.sqlserver', artifactId: 'mssql-jdbc' },
+          { inProfile, ...databaseArtifactForDB.mssql.jdbc },
           { groupId: 'org.testcontainers', artifactId: 'mssqlserver', scope: 'test' },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'io.r2dbc', artifactId: 'r2dbc-mssql' }],
+        dependencies: [{ inProfile, ...databaseArtifactForDB.mssql.r2dbc }],
       },
     },
     mysql: {
       jdbc: {
         dependencies: [
-          { inProfile, groupId: 'com.mysql', artifactId: 'mysql-connector-j' },
+          { inProfile, ...databaseArtifactForDB.mysql.jdbc },
           { groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' }],
+        dependencies: [{ inProfile, ...databaseArtifactForDB.mysql.r2dbc }],
       },
     },
     oracle: {
@@ -163,12 +187,12 @@ export const getDatabaseTypeMavenDefinition: (
     postgresql: {
       jdbc: {
         dependencies: [
-          { inProfile, groupId: 'org.postgresql', artifactId: 'postgresql' },
+          { inProfile, ...databaseArtifactForDB.postgresql.jdbc },
           { groupId: 'org.testcontainers', artifactId: 'postgresql', scope: 'test' },
         ],
       },
       r2dbc: {
-        dependencies: [{ inProfile, groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql' }],
+        dependencies: [{ inProfile, ...databaseArtifactForDB.postgresql.r2dbc }],
       },
     },
   };

@@ -41,32 +41,22 @@ configurations {
 }
 
 dependencies {
-  <%_ if (prodDatabaseTypeMysql) { _%>
+  <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgresql) { _%>
     <%_ if (reactive) { _%>
-    implementation "io.asyncer:r2dbc-mysql"
+    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
     <%_ } _%>
-    implementation "com.mysql:mysql-connector-j"
+    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>"
+  <%_ } _%>
+  <%_ if (prodDatabaseTypeMysql) { _%>
     testImplementation "org.testcontainers:mysql"
   <%_ } _%>
   <%_ if (prodDatabaseTypePostgresql) { _%>
-    <%_ if (reactive) { _%>
-    implementation "org.postgresql:r2dbc-postgresql"
-    <%_ } _%>
-    implementation "org.postgresql:postgresql"
     testImplementation "org.testcontainers:postgresql"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMariadb) { _%>
-    <%_ if (reactive) { _%>
-    implementation "org.mariadb:r2dbc-mariadb"
-    <%_ } _%>
-    implementation "org.mariadb.jdbc:mariadb-java-client"
     testImplementation "org.testcontainers:mariadb"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMssql) { _%>
-    <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-mssql"
-    <%_ } _%>
-    implementation "com.microsoft.sqlserver:mssql-jdbc"
     testImplementation "org.testcontainers:mssqlserver"
   <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>

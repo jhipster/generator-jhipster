@@ -685,6 +685,16 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
+  "prodDatabaseDriver": {
+    "jdbc": {
+      "artifactId": "postgresql",
+      "groupId": "org.postgresql",
+    },
+    "r2dbc": {
+      "artifactId": "r2dbc-postgresql",
+      "groupId": "org.postgresql",
+    },
+  },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
@@ -1243,6 +1253,16 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
+  "prodDatabaseDriver": {
+    "jdbc": {
+      "artifactId": "postgresql",
+      "groupId": "org.postgresql",
+    },
+    "r2dbc": {
+      "artifactId": "r2dbc-postgresql",
+      "groupId": "org.postgresql",
+    },
+  },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
@@ -1746,6 +1766,16 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "prettierExtensions": "md,json,yml,html,java",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
+  "prodDatabaseDriver": {
+    "jdbc": {
+      "artifactId": "postgresql",
+      "groupId": "org.postgresql",
+    },
+    "r2dbc": {
+      "artifactId": "r2dbc-postgresql",
+      "groupId": "org.postgresql",
+    },
+  },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
   "prodDatabasePassword": "",
