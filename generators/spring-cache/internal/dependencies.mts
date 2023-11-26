@@ -151,7 +151,7 @@ export const getCacheProviderMavenDefinition: (
           javaxCacheApi,
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-hibernate-cache-v60',
+            artifactId: 'infinispan-hibernate-cache-v62',
           },
           {
             groupId: 'org.infinispan',
