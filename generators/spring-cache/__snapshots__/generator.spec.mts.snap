@@ -287,7 +287,7 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
           "groupId": "javax.cache",
         },
         {
-          "artifactId": "infinispan-hibernate-cache-v60",
+          "artifactId": "infinispan-hibernate-cache-v62",
           "groupId": "org.infinispan",
         },
         {
