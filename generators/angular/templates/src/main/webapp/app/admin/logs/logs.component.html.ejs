@@ -16,23 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<div class="table-responsive" *ngIf="loggers">
+@if (loggers) {
+<div class="table-responsive">
   <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">__jhiTransformTranslate__('logs.title')</h2>
 
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
   <div class="float-end">
     <select class="form-select" id="routesSelect" (change)="changeService($event)">
       <option [ngValue]="null"></option>
-      <option *ngFor="let service of services" [value]="service">
+    @for (service of services; track $index) {
+      <option [value]="service">
         {{ service }}
       </option>
+    }
     </select>
   </div>
 <%_ } _%>
 
-  <div class="float-end me-3" *ngIf="isLoading">
+@if (isLoading) {
+  <div class="float-end me-3">
     <div class="spinner-border"></div>
   </div>
+}
 
   <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })</p>
 
@@ -48,7 +53,8 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let logger of filteredAndOrderedLoggers">
+    @for (logger of filteredAndOrderedLoggers; track $index) {
+      <tr>
         <td>
           <small>{{ logger.name | slice: 0:140 }}</small>
         </td>
@@ -102,6 +108,8 @@
           </button>
         </td>
       </tr>
+    }
     </tbody>
   </table>
 </div>
+}

@@ -25,32 +25,43 @@
 <div class="modal-body">
   <div class="mb-3">
     <span class="badge bg-primary hand" (click)="threadStateFilter = undefined">
-      <fa-icon *ngIf="threadStateFilter === undefined" icon="check"></fa-icon>
+    @if (threadStateFilter === undefined) {
+      <fa-icon icon="check"></fa-icon>
+    }
       All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
     </span>
 
     <span class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Runnable" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.Runnable) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
     </span>
 
     <span class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Waiting" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.Waiting) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
     </span>
 
     <span class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.TimedWaiting" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.TimedWaiting) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
     </span>
 
     <span class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
-      <fa-icon *ngIf="threadStateFilter === ThreadState.Blocked" icon="check"></fa-icon>
+    @if (threadStateFilter === ThreadState.Blocked) {
+      <fa-icon icon="check"></fa-icon>
+    }
       Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
     </span>
   </div>
 
-  <div class="pad" *ngFor="let thread of getThreads()">
+@for (thread of getThreads(); track $index) {
+  <div class="pad">
     <h6>
       <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
 
@@ -64,10 +75,12 @@
 
     <div class="card" [hidden]="!thread.showThreadDump">
       <div class="card-body">
-        <div *ngFor="let st of thread.stackTrace" class="break">
+      @for (st of thread.stackTrace; track $index) {
+        <div class="break">
           <samp>{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code>)</samp>
           <span class="mt-1"></span>
         </div>
+      }
       </div>
     </div>
     <table class="table table-sm table-responsive">
@@ -94,6 +107,7 @@
       </tbody>
     </table>
   </div>
+}
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary float-start" data-dismiss="modal" (click)="dismiss()">Done</button>

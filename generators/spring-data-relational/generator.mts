@@ -28,6 +28,7 @@ import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.mjs';
 import {
   getCommonMavenDefinition,
+  getDatabaseDriverForDatabase,
   getDatabaseTypeMavenDefinition,
   getH2MavenDefinition,
   getImperativeMavenDefinition,
@@ -78,6 +79,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
         const anyApp = application as any;
         anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
         anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);
+
+        anyApp.prodDatabaseDriver = getDatabaseDriverForDatabase(application.prodDatabaseType);
       },
     });
   }

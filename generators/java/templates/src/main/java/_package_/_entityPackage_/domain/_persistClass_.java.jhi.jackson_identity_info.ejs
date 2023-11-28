@@ -16,12 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component } from '@angular/core';
+<%#
+ This is a fragment file, it will be merged into to root template if available.
+ EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
+-%>
+<&_ if (fragment.importSection) { -&>
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+<&_ } -&>
 
-@Component({
-  standalone: true,
-  selector: '<%= jhiPrefixDashed %>-docs',
-  templateUrl: './docs.component.html',
-  styleUrl: './docs.component.scss',
-})
-export default class DocsComponent {}
+<&_ if (fragment.annotationSection) { -&>
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "<%- primaryKey.name %>", scope = <%- persistClass %>.class)
+<&_ } -&>

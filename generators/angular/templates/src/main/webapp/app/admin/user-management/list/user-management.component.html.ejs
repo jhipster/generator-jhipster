@@ -35,7 +35,8 @@
 
   <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
-  <div class="table-responsive" *ngIf="users">
+@if (users) {
+  <div class="table-responsive">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
         <tr<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()"<% } %>>
@@ -69,35 +70,38 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody *ngIf="users">
-        <tr *ngFor="let user of users; trackBy: trackIdentity">
+    @if (users) {
+      <tbody>
+      @for (user of users; track trackIdentity) {
+        <tr>
           <td>
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
           </td>
           <td>{{ user.login }}</td>
           <td>{{ user.email }}</td>
           <td>
-            <button
-              class="btn btn-danger btn-sm"
+          @if (!user.activated) {
+            <button class="btn btn-danger btn-sm"
               (click)="setActive(user, true)"
-              *ngIf="!user.activated"
               <%= jhiPrefix %>Translate="userManagement.deactivated"
             >__jhiTransformTranslate__('userManagement.deactivated')</button>
-            <button
-              class="btn btn-success btn-sm"
+          } @else {
+            <button class="btn btn-success btn-sm"
               (click)="setActive(user, false)"
-              *ngIf="user.activated"
               [disabled]="!currentAccount || currentAccount.login === user.login"
               <%= jhiPrefix %>Translate="userManagement.activated"
             >__jhiTransformTranslate__('userManagement.activated')</button>
+          }
           </td>
 <%_ if (enableTranslation) { _%>
           <td>{{ user.langKey }}</td>
 <%_ } _%>
           <td>
-            <div *ngFor="let authority of user.authorities">
+          @for (authority of user.authorities; track $index) {
+            <div>
               <span class="badge bg-info">{{ authority }}</span>
             </div>
+          }
           </td>
 <%_ if (!databaseTypeCassandra) { _%>
           <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
@@ -128,12 +132,16 @@
             </div>
           </td>
         </tr>
+      }
       </tbody>
+    }
     </table>
   </div>
+}
 <%_ if (!databaseTypeCassandra) { _%>
 
-  <div *ngIf="users">
+@if (users) {
+  <div>
     <div class="d-flex justify-content-center">
       <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
     </div>
@@ -150,5 +158,6 @@
       ></ngb-pagination>
     </div>
   </div>
+}
 <%_ } _%>
 </div>

@@ -55,12 +55,12 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
     runResult.assertFileContent(
       `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
       `
-          <li>
-            <a class="dropdown-item" routerLink="/entityPage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityClassHumanized</span>
-            </a>
-          </li>
+            <li>
+              <a class="dropdown-item" routerLink="/entityPage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityClassHumanized</span>
+              </a>
+            </li>
 `,
     );
   });

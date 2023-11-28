@@ -31,12 +31,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let activity of activities">
+      @for (activity of activities; track $index) {
+        <tr>
           <td>{{ activity.userLogin }}</td>
           <td>{{ activity.ipAddress }}</td>
           <td>{{ activity.page }}</td>
           <td>{{ activity.time | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
         </tr>
+      }
       </tbody>
     </table>
   </div>

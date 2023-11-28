@@ -26,23 +26,27 @@
 
     <p class="lead" <%= jhiPrefix %>Translate="home.subtitle">__jhiTransformTranslate__('home.subtitle')</p>
 
-    <div [ngSwitch]="account !== null">
-      <div class="alert alert-success" *ngSwitchCase="true">
-        <span id="home-logged-message" *ngIf="account" <%= jhiPrefix %>Translate="home.logged.message"
-          [translateValues]="{ username: account.login }">__jhiTransformTranslate__('home.logged.message', { "username": "{{ account.login }}" })</span>
-      </div>
+    <div>
+      @if (account !== null) {
+        <div class="alert alert-success">
+        @if (account) {
+          <span id="home-logged-message" <%= jhiPrefix %>Translate="home.logged.message"
+            [translateValues]="{ username: account.login }">__jhiTransformTranslate__('home.logged.message', { "username": "{{ account.login }}" })</span>
+        }
+        </div>
+      } @else {
+        <div class="alert alert-warning">
+          <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix">__jhiTransformTranslate__('global.messages.info.authenticated.prefix')</span>
+          <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link">__jhiTransformTranslate__('global.messages.info.authenticated.link')</a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix">__jhiTransformTranslate__('global.messages.info.authenticated.suffix')</span>
+        </div>
+        <%_ if (generateUserManagement) { _%>
 
-      <div class="alert alert-warning" *ngSwitchCase="false">
-        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix">__jhiTransformTranslate__('global.messages.info.authenticated.prefix')</span>
-        <a class="alert-link" (click)="login()" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link">__jhiTransformTranslate__('global.messages.info.authenticated.link')</a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix">__jhiTransformTranslate__('global.messages.info.authenticated.suffix')</span>
-      </div>
-      <%_ if (generateUserManagement) { _%>
-
-      <div class="alert alert-warning" *ngSwitchCase="false">
-        <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">__jhiTransformTranslate__('global.messages.info.register.noaccount')</span>&nbsp;
-        <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">__jhiTransformTranslate__('global.messages.info.register.link')</a>
-      </div>
-      <%_ } _%>
+          <div class="alert alert-warning">
+            <span <%= jhiPrefix %>Translate="global.messages.info.register.noaccount">__jhiTransformTranslate__('global.messages.info.register.noaccount')</span>&nbsp;
+            <a class="alert-link" routerLink="/account/register" <%= jhiPrefix %>Translate="global.messages.info.register.link">__jhiTransformTranslate__('global.messages.info.register.link')</a>
+          </div>
+        <%_ } _%>
+      }
     </div>
 
     <p <%= jhiPrefix %>Translate="home.question">__jhiTransformTranslate__('home.question')</p>

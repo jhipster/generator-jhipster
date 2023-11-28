@@ -102,15 +102,15 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "<%= dasherizedBaseName %>:build:development",
+            "buildTarget": "<%= dasherizedBaseName %>:build:development",
             "port": <%= devServerPort %>
           },
           "configurations": {
             "production": {
-              "browserTarget": "<%= dasherizedBaseName %>:build:production"
+              "buildTarget": "<%= dasherizedBaseName %>:build:production"
             },
             "development": {
-              "browserTarget": "<%= dasherizedBaseName %>:build:development"
+              "buildTarget": "<%= dasherizedBaseName %>:build:development"
             }
           },
           "defaultConfiguration": "development"

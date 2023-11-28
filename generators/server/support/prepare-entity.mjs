@@ -91,7 +91,10 @@ export function preparePostEntityServerDerivedProperties(entity) {
     .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
     .forEach(relationship => {
       relationship.ignoreOtherSideProperty =
-        !relationship.embedded && !!relationship.otherEntity && relationship.otherEntity.relationships.length > 0;
+        entity.databaseType !== 'neo4j' &&
+        !relationship.embedded &&
+        !!relationship.otherEntity &&
+        relationship.otherEntity.relationships.length > 0;
     });
   entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
 

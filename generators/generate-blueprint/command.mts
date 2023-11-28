@@ -53,7 +53,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
     [DYNAMIC]: {
-      description: 'Genate dynamic generators (advanced)',
+      description: 'Generate dynamic generators (advanced)',
       type: Boolean,
       scope: 'storage',
     },
