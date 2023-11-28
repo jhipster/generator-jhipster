@@ -41,7 +41,7 @@ relationship ManyToOne {
 }
 `;
 
-const jdlApplicationEntitieWithByteTypes = `
+const jdlApplicationEntityWithByteTypes = `
 ${jdlApplication}
 entity Smarty {
   name String required unique minlength(2) maxlength(10)
@@ -56,7 +56,7 @@ enum ProductCategory {
   Laptop, Desktop, Phone, Tablet, Accessory
 }`;
 
-const jdlApplicationEntitieWithoutByteTypes = `
+const jdlApplicationEntityWithoutByteTypes = `
 ${jdlApplication}
 entity Smarty {
   name String
@@ -1139,11 +1139,11 @@ entity Customer {
   context('entities with/without byte fields should create fake data', () => {
     [
       {
-        entity: jdlApplicationEntitieWithByteTypes,
+        entity: jdlApplicationEntityWithByteTypes,
         bytesFields: true,
       },
       {
-        entity: jdlApplicationEntitieWithoutByteTypes,
+        entity: jdlApplicationEntityWithoutByteTypes,
         bytesFields: false,
       },
     ].forEach(eachEntityConfig => {
