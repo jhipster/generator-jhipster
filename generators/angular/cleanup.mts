@@ -285,8 +285,6 @@ export default function cleanupOldFilesTask(this: CoreGenerator, { application }
     this.removeFile(`${application.clientSrcDir}app/layouts/main/main.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/admin-routing.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/app.module.ts`);
-    if (!application.microfrontend) {
-      this.removeFile(`${application.clientSrcDir}app/entities/entity-routing.module.ts`);
-    }
+    this.removeFile(`${application.clientSrcDir}app/entities/entity-routing.module.ts`);
   }
 }

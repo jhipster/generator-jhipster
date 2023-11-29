@@ -71,10 +71,6 @@ export const files = {
     },
   ],
   angularMain: [
-    clientApplicationTemplatesBlock({
-      condition: ctx => ctx.microfrontend,
-      templates: ['entities/entity-routing.module.ts'],
-    }),
     {
       ...clientApplicationTemplatesBlock(),
       templates: [

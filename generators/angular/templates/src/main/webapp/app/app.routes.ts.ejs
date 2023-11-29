@@ -28,7 +28,7 @@ import NavbarComponent from './layouts/navbar/navbar.component';
 import LoginComponent from './login/login.component';
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { loadEntityModule } from './core/microfrontend';
+import { loadEntityRoutes } from './core/microfrontend';
 <%_ } _%>
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
@@ -75,7 +75,7 @@ const routes: Routes = [
   <%_ for (const remote of microfrontends) { _%>
   {
     path: '<%= remote.lowercaseBaseName %>',
-    loadChildren: () => loadEntityModule('<%= remote.lowercaseBaseName %>'),
+    loadChildren: () => loadEntityRoutes('<%= remote.lowercaseBaseName %>'),
   },
   <%_ } _%>
 <%_ } _%>

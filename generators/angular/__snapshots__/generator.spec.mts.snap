@@ -1674,9 +1674,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -2331,9 +2328,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-navbar-items.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-routing.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
