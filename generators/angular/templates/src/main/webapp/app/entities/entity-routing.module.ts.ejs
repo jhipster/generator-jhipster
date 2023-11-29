@@ -18,12 +18,11 @@
 -%>
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import entityRoutes from './entity.routes';
 
 @NgModule({
   imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
+    RouterModule.forChild(entityRoutes),
   ],
 })
 export class EntityRoutingModule {}

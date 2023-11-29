@@ -38,29 +38,11 @@ export default class extends needleClientBase {
   }
 
   addModule(appName, angularName, folderName, fileName, enableTranslation) {
-    const modulePath = `${this.clientSrcDir}app/app.module.ts`;
+    const modulePath = `${this.clientSrcDir}app/app.config.ts`;
     const importNeedle = 'jhipster-needle-angular-add-module-import';
     const moduleNeedle = 'jhipster-needle-angular-add-module';
 
     this._genericAddModule(appName, angularName, folderName, fileName, enableTranslation, ANGULAR, modulePath, importNeedle, moduleNeedle);
-  }
-
-  addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation) {
-    const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
-    const importNeedle = 'jhipster-needle-add-admin-module-import';
-    const moduleNeedle = 'jhipster-needle-add-admin-module';
-
-    this._genericAddModule(
-      appName,
-      adminAngularName,
-      adminFolderName,
-      adminFileName,
-      enableTranslation,
-      ANGULAR,
-      adminModulePath,
-      importNeedle,
-      moduleNeedle,
-    );
   }
 
   _genericAddModule(
@@ -193,7 +175,7 @@ export default class extends needleClientBase {
   }
 
   addAdminRoute(route, modulePath, moduleName, pageTitle) {
-    const adminModulePath = `${this.clientSrcDir}app/admin/admin-routing.module.ts`;
+    const adminModulePath = `${this.clientSrcDir}app/admin/admin.routes.ts`;
     this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath, pageTitle);
   }
 }

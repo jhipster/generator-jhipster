@@ -94,7 +94,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
           this.editFile(
-            `${application.srcMainWebapp}app/admin/admin-routing.module.ts`,
+            `${application.srcMainWebapp}app/admin/admin.routes.ts`,
             addRoute({
               needle: 'add-admin-route',
               ...args,
@@ -240,20 +240,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   /**
    * @private
-   * Add a new admin in the TS modules file.
-   *
-   * @param {string} appName - Angular2 application name.
-   * @param {string} adminAngularName - The name of the new admin item.
-   * @param {string} adminFolderName - The name of the folder.
-   * @param {string} adminFileName - The name of the file.
-   * @param {boolean} enableTranslation - If translations are enabled or not.
-   */
-  addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation) {
-    this.needleApi.clientAngular.addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation);
-  }
-
-  /**
-   * @private
    * Add a new lazy loaded module to admin routing file.
    *
    * @param {string} route - The route for the module. For example 'entity-audit'.
@@ -313,7 +299,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   addEntitiesToModule({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
-    const filePath = `${application.clientSrcDir}app/entities/entity-routing.module.ts`;
+    const filePath = `${application.clientSrcDir}app/entities/entity.routes.ts`;
     const ignoreNonExisting = chalk.yellow(`Route(s) not added to ${filePath}.`);
     const addRouteCallback = addEntitiesRoute({ application, entities });
     this.editFile(filePath, { ignoreNonExisting }, addRouteCallback);
