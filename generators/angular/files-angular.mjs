@@ -56,7 +56,7 @@ export const files = {
     },
     {
       ...clientApplicationTemplatesBlock(),
-      templates: ['app.module.ts', 'app-routing.module.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
+      templates: ['app.config.ts', 'app.component.ts', 'app.routes.ts', 'app.constants.ts', 'app-page-title-strategy.ts'],
     },
   ],
   microfrontend: [
@@ -71,12 +71,16 @@ export const files = {
     },
   ],
   angularMain: [
+    clientApplicationTemplatesBlock({
+      condition: ctx => ctx.microfrontend,
+      templates: ['entities/entity-routing.module.ts'],
+    }),
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
         // entities
         'entities/entity-navbar-items.ts',
-        'entities/entity-routing.module.ts',
+        'entities/entity.routes.ts',
         // home module
         'home/home.component.ts',
         'home/home.component.html',
@@ -86,7 +90,6 @@ export const files = {
         'layouts/profiles/profile-info.model.ts',
         'layouts/main/main.component.ts',
         'layouts/main/main.component.html',
-        'layouts/main/main.module.ts',
         'layouts/navbar/navbar-item.model.d.ts',
         'layouts/navbar/navbar.component.ts',
         'layouts/navbar/navbar.component.html',
@@ -172,7 +175,7 @@ export const files = {
       condition: generator => !generator.applicationTypeMicroservice,
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'admin/admin-routing.module.ts',
+        'admin/admin.routes.ts',
         'admin/docs/docs.component.ts',
         'admin/docs/docs.component.html',
         'admin/docs/docs.component.scss',

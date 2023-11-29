@@ -17,10 +17,9 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { errorRoute } from './layouts/error/error.route';
-import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/config/authority.constants';
 
 import HomeComponent from './home/home.component';
@@ -34,60 +33,53 @@ import { loadEntityModule } from './core/microfrontend';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
-@NgModule({
-  imports: [
-    RouterModule.forRoot(
-      [
-        {
-          path: '',
-          component: HomeComponent,
-          title: 'home.title',
-        },
-        {
-          path: '',
-          component: NavbarComponent,
-          outlet: 'navbar',
-        },
+const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent,
+    title: 'home.title',
+  },
+  {
+    path: '',
+    component: NavbarComponent,
+    outlet: 'navbar',
+  },
 <%_ if (!applicationTypeMicroservice) { _%>
-        {
-          path: 'admin',
-          data: {
-            authorities: [Authority.ADMIN],
-          },
-          canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./admin/admin-routing.module'),
-        },
+  {
+    path: 'admin',
+    data: {
+      authorities: [Authority.ADMIN],
+    },
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./admin/admin.routes'),
+  },
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-        {
-          path: 'account',
-          loadChildren: () => import('./account/account.route'),
-        },
+  {
+    path: 'account',
+    loadChildren: () => import('./account/account.route'),
+  },
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
-        {
-          path: 'login',
-          component: LoginComponent,
-          title: 'login.title',
-        },
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'login.title',
+  },
 <%_ } _%>
-        {
-          path: '<%= applicationTypeMicroservice ? lowercaseBaseName : '' %>',
-          loadChildren: () => import(`./entities/entity-routing.module`).then(({ EntityRoutingModule }) => EntityRoutingModule),
-        },
+  {
+    path: '<%= applicationTypeMicroservice ? lowercaseBaseName : '' %>',
+    loadChildren: () => import(`./entities/entity.routes`),
+  },
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-        {
-          path: '<%= remote.lowercaseBaseName %>',
-          loadChildren: () => loadEntityModule('<%= remote.lowercaseBaseName %>'),
-        },
+  {
+    path: '<%= remote.lowercaseBaseName %>',
+    loadChildren: () => loadEntityModule('<%= remote.lowercaseBaseName %>'),
+  },
   <%_ } _%>
 <%_ } _%>
-        ...errorRoute,
-      ],
-      { enableTracing: DEBUG_INFO_ENABLED, bindToComponentInputs: true }
-    ),
-  ],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
+  ...errorRoute,
+];
+
+export default routes;

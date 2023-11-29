@@ -55,10 +55,13 @@ describe('MainComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
+        imports: [
 <%_ if (enableTranslation) { _%>
-        imports: [TranslateModule.forRoot(), RouterTestingModule],
+          TranslateModule.forRoot(),
+          RouterTestingModule,
 <%_ } _%>
-        declarations: [MainComponent],
+          MainComponent,
+        ],
         providers: [
           Title,
 <%_ if (enableI18nRTL) { _%>

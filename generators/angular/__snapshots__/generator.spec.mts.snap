@@ -41,7 +41,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/admin-routing.module.ts": {
+  "clientRoot/src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/admin/docs/docs.component.html": {
@@ -68,13 +68,16 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app-routing.module.ts": {
+  "clientRoot/src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.module.ts": {
+  "clientRoot/src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/config/authority.constants.ts": {
@@ -185,9 +188,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -249,6 +249,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
@@ -411,9 +414,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
@@ -718,7 +718,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/admin/admin-routing.module.ts": {
+  "clientRoot/src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/admin/configuration/configuration.component.html": {
@@ -883,13 +883,16 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app-routing.module.ts": {
+  "clientRoot/src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.module.ts": {
+  "clientRoot/src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/config/authority.constants.ts": {
@@ -1000,9 +1003,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/entity-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -1064,6 +1064,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
@@ -1235,9 +1238,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/layouts/navbar/active-menu.directive.ts": {
@@ -1554,13 +1554,16 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app-routing.module.ts": {
+  "clientRoot/src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/app.module.ts": {
+  "clientRoot/src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/config/authority.constants.ts": {
@@ -1737,6 +1740,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/main/webapp/app/entities/entity.routes.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -1897,9 +1903,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
@@ -2210,13 +2213,16 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app-routing.module.ts": {
+  "src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app.module.ts": {
+  "src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/authority.constants.ts": {
@@ -2393,6 +2399,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/entity.routes.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -2562,9 +2571,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/active-menu.directive.ts": {
@@ -3001,7 +3007,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/account/settings/settings.route.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/admin-routing.module.ts": {
+  "src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/configuration/configuration.component.html": {
@@ -3202,13 +3208,16 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app-routing.module.ts": {
+  "src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app.module.ts": {
+  "src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/authority.constants.ts": {
@@ -3325,9 +3334,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entity-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -3389,6 +3395,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
@@ -3560,9 +3569,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/active-menu.directive.ts": {
@@ -3885,7 +3891,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/admin-routing.module.ts": {
+  "src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.html": {
@@ -3900,13 +3906,16 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app-routing.module.ts": {
+  "src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app.module.ts": {
+  "src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/authority.constants.ts": {
@@ -4011,9 +4020,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entity-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -4075,6 +4081,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
@@ -4246,9 +4255,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
@@ -4544,7 +4550,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/WEB-INF/web.xml": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/admin-routing.module.ts": {
+  "src/main/webapp/app/admin/admin.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.component.html": {
@@ -4559,13 +4565,16 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app-routing.module.ts": {
+  "src/main/webapp/app/app.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/app.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/app.module.ts": {
+  "src/main/webapp/app/app.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/authority.constants.ts": {
@@ -4670,9 +4679,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entity-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.component.html": {
     "stateCleared": "modified",
   },
@@ -4734,6 +4740,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/update/entity-with-custom-id-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/microservice/delete/microservice-delete-dialog.component.html": {
@@ -4896,9 +4905,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/main/main.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/layouts/main/main.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {

@@ -1,0 +1,73 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import locale from '@angular/common/locales/en';
+import dayjs from 'dayjs/esm';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { provideRouter } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import locale from '@angular/common/locales/en';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import dayjs from 'dayjs/esm';
+import appRoutes from './app.routes';
+// jhipster-needle-angular-add-module-import JHipster will add new module here
+
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { fontAwesomeIcons } from './config/font-awesome-icons';
+<%_ if (enableTranslation) { _%>
+import { TranslationModule } from 'app/shared/language/translation.module';
+<%_ } _%>
+import MainComponent from './layouts/main/main.component';
+<%_ if (communicationSpringWebsocket) { _%>
+import { TrackerService } from './core/tracker/tracker.service';
+<%_ } _%>
+
+@Component({
+  selector: '<%= jhiPrefixDashed %>-app',
+  standalone: true,
+  template: '<<%= jhiPrefixDashed %>-main></<%= jhiPrefixDashed %>-main>',
+  imports: [
+    MainComponent,
+    // jhipster-needle-angular-add-module JHipster will add new module here
+  ],
+})
+export default class AppComponent {
+  constructor(
+    applicationConfigService: ApplicationConfigService,
+    iconLibrary: FaIconLibrary,
+<%_ if (communicationSpringWebsocket) { _%>
+    trackerService: TrackerService,
+<%_ } _%>
+    dpConfig: NgbDatepickerConfig
+  ) {
+<%_ if (communicationSpringWebsocket) { _%>
+    trackerService.setup();
+<%_ } _%>
+<%_ if (applicationTypeMicroservice) { _%>
+    applicationConfigService.setMicrofrontend();
+<%_ } _%>
+    applicationConfigService.setEndpointPrefix(SERVER_API_URL);
+    registerLocaleData(locale);
+    iconLibrary.addIcons(...fontAwesomeIcons);
+    dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
+  }
+}

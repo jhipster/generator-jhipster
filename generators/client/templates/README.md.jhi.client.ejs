@@ -109,7 +109,7 @@ The service worker initialization code is commented out by default. To enable it
 Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
   <%_ } _%>
   <%_ if (clientFrameworkAngular) { _%>
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= clientSrcDir %>app/app.module.ts`:
+The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= clientSrcDir %>app/app.config.ts`:
 
 ```typescript
 ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
@@ -132,7 +132,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
   <%_ if (clientFrameworkAngular) { _%>
-Edit [<%= clientSrcDir %>app/app.module.ts](<%= clientSrcDir %>app/app.module.ts) file:
+Edit [<%= clientSrcDir %>app/app.config.ts](<%= clientSrcDir %>app/app.config.ts) file:
 
 ```
 import 'leaflet/dist/leaflet.js';
