@@ -72,7 +72,7 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
       async configuringEachEntity({ entityConfig }) {
         if (entityConfig.dto && entityConfig.dto !== 'no') {
           this.log.warn(
-            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constelation, DTO causes the constelation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
+            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constelation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
           );
         }
       },
