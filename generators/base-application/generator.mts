@@ -317,7 +317,7 @@ export default class BaseApplicationGenerator<
    */
   resetEntitiesFakeData(seed) {
     seed = `${this.sharedData.getApplication().baseName}-${seed}`;
-    this.log.debug(`Reseting entities seed with '${seed}'`);
+    this.log.debug(`Resetting entities seed with '${seed}'`);
     this.sharedData.getEntities().forEach(({ entity }) => {
       entity.resetFakerSeed(seed);
     });
