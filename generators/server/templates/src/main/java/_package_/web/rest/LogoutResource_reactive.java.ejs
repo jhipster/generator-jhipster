@@ -18,6 +18,7 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
@@ -28,15 +29,18 @@ import org.springframework.web.server.WebSession;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import reactor.core.publisher.Mono;
 import java.util.Map;
+import tech.jhipster.config.JHipsterProperties;
 
 /**
  * REST controller for managing global OIDC logout.
  */
 @RestController
 public class LogoutResource {
+    private final JHipsterProperties jhipsterProperties;
     private final Mono<ClientRegistration> registration;
 
-    public LogoutResource(ReactiveClientRegistrationRepository registrations) {
+    public LogoutResource(JHipsterProperties jhipsterProperties, ReactiveClientRegistrationRepository registrations) {
+        this.jhipsterProperties = jhipsterProperties;
         this.registration = registrations.findByRegistrationId("oidc");
     }
 
@@ -60,14 +64,14 @@ public class LogoutResource {
     private Map<String, String> prepareLogoutUri(ServerHttpRequest request, ClientRegistration clientRegistration, OidcIdToken idToken) {
         StringBuilder logoutUrl = new StringBuilder();
         String issuerUri = clientRegistration.getProviderDetails().getIssuerUri();
-        if (issuerUri.contains("auth0.com")) {
+        if (StringUtils.containsAny(issuerUri, jhipsterProperties.getSecurity().getOauth2().getAuth0IssuerUris().toArray(new String[]{}))) {
             logoutUrl.append(issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout");
         } else {
             logoutUrl.append(clientRegistration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
         }
 
         String originUrl = request.getHeaders().getOrigin();
-        if (issuerUri.contains("auth0.com")) {
+        if (StringUtils.containsAny(issuerUri, jhipsterProperties.getSecurity().getOauth2().getAuth0IssuerUris().toArray(new String[]{}))) {
             logoutUrl.append("?client_id=").append(clientRegistration.getClientId()).append("&returnTo=").append(originUrl);
         } else {
             logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);

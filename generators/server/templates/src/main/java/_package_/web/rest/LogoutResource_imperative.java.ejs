@@ -18,6 +18,7 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -28,15 +29,18 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import java.util.Map;
+import tech.jhipster.config.JHipsterProperties;
 
 /**
  * REST controller for managing global OIDC logout.
  */
 @RestController
 public class LogoutResource {
+    private final JHipsterProperties jhipsterProperties;
     private final ClientRegistration registration;
 
-    public LogoutResource(ClientRegistrationRepository registrations) {
+    public LogoutResource(JHipsterProperties jhipsterProperties, ClientRegistrationRepository registrations) {
+        this.jhipsterProperties = jhipsterProperties;
         this.registration = registrations.findByRegistrationId("oidc");
     }
 
@@ -53,7 +57,7 @@ public class LogoutResource {
         StringBuilder logoutUrl = new StringBuilder();
 
         String issuerUri = this.registration.getProviderDetails().getIssuerUri();
-        if (issuerUri.contains("auth0.com")) {
+        if (StringUtils.containsAny(issuerUri, jhipsterProperties.getSecurity().getOauth2().getAuth0IssuerUris().toArray(new String[]{}))) {
             logoutUrl.append(issuerUri.endsWith("/") ? issuerUri + "v2/logout" : issuerUri + "/v2/logout");
         } else {
             logoutUrl.append(this.registration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
@@ -61,7 +65,7 @@ public class LogoutResource {
 
         String originUrl = request.getHeader(HttpHeaders.ORIGIN);
 
-        if (issuerUri.contains("auth0.com")) {
+        if (StringUtils.containsAny(issuerUri, jhipsterProperties.getSecurity().getOauth2().getAuth0IssuerUris().toArray(new String[]{}))) {
             logoutUrl.append("?client_id=").append(this.registration.getClientId()).append("&returnTo=").append(originUrl);
         } else {
             logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);
