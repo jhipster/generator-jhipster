@@ -1171,7 +1171,7 @@ jhipster:
       - CONSUL_PORT=8500
   keycloak:
     image: keycloak-placeholder
-    command: ['start-dev --import-realm']
+    command: 'start-dev --import-realm'
     volumes:
       - ./realm-config:/opt/keycloak/data/import
       - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
