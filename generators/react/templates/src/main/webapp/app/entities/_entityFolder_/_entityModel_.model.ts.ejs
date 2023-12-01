@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%
-const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields, relationships, dto, 'string', embedded);
+const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded);
 const typeImports = this.generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
