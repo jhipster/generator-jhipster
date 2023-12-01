@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "6.5.0",
+    "@fortawesome/fontawesome-svg-core": "6.5.1",
     "@fortawesome/free-solid-svg-icons": "6.5.0",
     "@fortawesome/vue-fontawesome": "3.0.5",
     "@vuelidate/core": "2.0.3",
