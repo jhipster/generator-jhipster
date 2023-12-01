@@ -20,7 +20,7 @@ FROM mysql:8.2.0
 
 FROM mariadb:11.2.2
 
-FROM mongo:7.0.3
+FROM mongo:7.0.4
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.2.3
@@ -31,7 +31,7 @@ FROM cassandra:4.1.3
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.13.0
+FROM neo4j:5.14.0
 
 FROM hazelcast/management-center:5.3.3
 LABEL ALIAS=hazelcast

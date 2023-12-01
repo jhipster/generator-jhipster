@@ -1,0 +1,67 @@
+<%#
+ Copyright 2013-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { ApplicationConfig, LOCALE_ID, importProvidersFrom } from '@angular/core';
+import { BrowserModule, Title } from '@angular/platform-browser';
+import { RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing } from '@angular/router';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { HttpClientModule } from '@angular/common/http';
+
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+
+import { DEBUG_INFO_ENABLED } from 'app/app.constants';
+import './config/dayjs';
+<%_ if (enableTranslation) { _%>
+import { TranslationModule } from 'app/shared/language/translation.module';
+<%_ } _%>
+import { httpInterceptorProviders } from 'app/core/interceptor/index';
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
+import routes from './app.routes';
+// jhipster-needle-angular-add-module-import JHipster will add new module here
+import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
+import { AppPageTitleStrategy } from './app-page-title-strategy';
+
+const routerFeatures: Array<RouterFeatures> = [withComponentInputBinding()];
+if (DEBUG_INFO_ENABLED) {
+  routerFeatures.push(withDebugTracing());
+}
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes, ...routerFeatures),
+    importProvidersFrom(BrowserModule),
+    // Set this to true to enable service worker (PWA)
+    importProvidersFrom(ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })),
+<%_ if (enableTranslation) { _%>
+    importProvidersFrom(TranslationModule),
+<%_ } _%>
+    importProvidersFrom(HttpClientModule),
+    Title,
+<%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
+    CookieService,
+<%_ } _%>
+    { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
+    { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
+<%_ if (enableI18nRTL) { _%>
+    FindLanguageFromKeyPipe,
+<%_ } _%>
+    httpInterceptorProviders,
+    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
+    // jhipster-needle-angular-add-module JHipster will add new module here
+  ],
+};

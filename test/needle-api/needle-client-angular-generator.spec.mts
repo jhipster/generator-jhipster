@@ -85,12 +85,12 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
 
   it('entity module contains the microservice object added by needle api', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/entities/entity-routing.module.ts`,
-      '      {\n' +
-        "        path: 'entityUrl',\n" +
-        "        data: { pageTitle: 'entity.home.title' },\n" +
-        "        loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
-        '      }',
+      `${CLIENT_MAIN_SRC_DIR}app/entities/entity.routes.ts`,
+      '  {\n' +
+        "    path: 'entityUrl',\n" +
+        "    data: { pageTitle: 'entity.home.title' },\n" +
+        "    loadChildren: () => import('./entityFolderName/entityFileName.routes'),\n" +
+        '  }',
     );
   });
   it('should bail on any file change adding same needles again', async () => {
