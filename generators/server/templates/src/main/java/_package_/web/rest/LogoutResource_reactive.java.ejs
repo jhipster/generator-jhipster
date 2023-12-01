@@ -60,7 +60,7 @@ public class LogoutResource {
     private Map<String, String> prepareLogoutUri(ServerHttpRequest request, ClientRegistration clientRegistration, OidcIdToken idToken) {
         StringBuilder logoutUrl = new StringBuilder();
 
-        logoutUrl.append(clientRegistration..getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
+        logoutUrl.append(clientRegistration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
 
         String originUrl = request.getHeaders().getOrigin();
 
