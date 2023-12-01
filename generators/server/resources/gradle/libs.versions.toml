@@ -7,7 +7,7 @@ gradle-liquibase = { id = 'org.liquibase.gradle', version = '2.2.1' }
 
 gradle-sonarqube = { id = 'org.sonarqube', version = '4.4.1.3373' }
 
-spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '6.22.0' }
+spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '6.23.2' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.9.0' }
 

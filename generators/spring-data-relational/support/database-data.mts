@@ -116,6 +116,10 @@ const databaseData: Record<string, DatabaseDataSpec> = {
 
     constraintNameMaxLength: 64,
     tableNameMaxLength: 64,
+    r2dbc: {
+      // TODO switch to mariadb if r2dbc-mariadb is reinstated
+      protocolSuffix: 'mysql://',
+    },
   },
   [MYSQL]: {
     name: 'MySQL',

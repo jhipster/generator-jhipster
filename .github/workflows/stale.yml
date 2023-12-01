@@ -42,4 +42,4 @@ jobs:
           days-before-close: 7
           exempt-issue-labels: 'area: bug :bug:,status: work in progress,v8,$$ bug-bounty $$'
           exempt-pr-labels: 'pr: bug-fix,status: work in progress'
-          operations-per-run: 10
+          operations-per-run: 20

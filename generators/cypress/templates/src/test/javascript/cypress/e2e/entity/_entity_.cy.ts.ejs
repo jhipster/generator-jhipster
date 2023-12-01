@@ -335,7 +335,6 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ } _%>
   <%_ }); _%>
   <%_ for (relationship of requiredRelationships) {
-    const ownerSide = relationship.ownerSide;
     const relationshipName = relationship.relationshipName;
   _%>
        cy.get(`[data-cy="<%= relationship.relationshipFieldName %>"]`).select(<%= relationship.collection ? '[0]' : '1' %>);

@@ -5,3 +5,6 @@ Example:
     jhipster
 
     This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application
+
+More information:
+    https://github.com/jhipster/generator-jhipster/tree/main/generators/app

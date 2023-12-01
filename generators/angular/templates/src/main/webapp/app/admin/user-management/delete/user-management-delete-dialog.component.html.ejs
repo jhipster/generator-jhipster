@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<form *ngIf="user" name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
+@if (user) {
+<form name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
   <div class="modal-header">
     <h4 class="modal-title" <%= jhiPrefix %>Translate="entity.delete.title">__jhiTransformTranslate__('entity.delete.title')</h4>
 
@@ -39,3 +40,4 @@
     </button>
   </div>
 </form>
+}

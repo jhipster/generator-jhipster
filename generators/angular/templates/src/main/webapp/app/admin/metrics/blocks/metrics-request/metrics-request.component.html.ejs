@@ -18,7 +18,8 @@
 -%>
 <h3 id="requestMetrics" <%= jhiPrefix %>Translate="metrics.jvm.http.title">__jhiTransformTranslate__('metrics.jvm.http.title')</h3>
 
-<table class="table table-striped" *ngIf="!updating && requestMetrics" aria-describedby="requestMetrics">
+@if (!updating && requestMetrics) {
+<table class="table table-striped" aria-describedby="requestMetrics">
   <thead>
     <tr>
       <th scope="col" <%= jhiPrefix %>Translate="metrics.jvm.http.table.code">__jhiTransformTranslate__('metrics.jvm.http.table.code')</th>
@@ -28,7 +29,8 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let entry of requestMetrics['percode'] | keyvalue">
+  @for (entry of requestMetrics['percode'] | keyvalue; track entry.key) {
+    <tr>
       <td>{{ entry.key }}</td>
       <td>
         <ngb-progressbar [max]="requestMetrics['all'].count" [value]="entry.value.count" [striped]="true" [animated]="false" type="success">
@@ -40,5 +42,7 @@
       </td>
       <td class="text-end">{{ entry.value.max | number: '1.0-2' }}</td>
     </tr>
+  }
   </tbody>
 </table>
+}

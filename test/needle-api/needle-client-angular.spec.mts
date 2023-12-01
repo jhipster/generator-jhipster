@@ -25,7 +25,6 @@ const mockBlueprintSubGen = class extends AngularGenerator {
         this.addElementToMenu('routerName1', 'iconName1', true, ANGULAR);
       },
       addToModuleStep() {
-        this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
         this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
         this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'entityAudit.home.title');
       },
@@ -93,31 +92,23 @@ describe('needle API Angular: JHipster angular generator with blueprint', () => 
     runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/config/font-awesome-icons.ts`, '  faIconName1');
   });
 
-  it('admin module contains the import and the module added by needle api', () => {
+  it('admin routes contains the routing added by needle api', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-      "import { appNameadminAngularNameModule } from './adminFolderName/adminFileName.module';",
-    );
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`, 'appNameadminAngularNameModule,');
-  });
-
-  it('admin module contains the routing added by needle api', () => {
-    runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-      '      },\n' +
-        '      {\n' +
-        "        path: 'entity-audit',\n" +
-        "        data: { pageTitle: 'entityAudit.home.title' },\n" +
-        "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule),\n" +
-        '      },',
+      `${CLIENT_MAIN_SRC_DIR}app/admin/admin.routes.ts`,
+      '  },\n' +
+        '  {\n' +
+        "    path: 'entity-audit',\n" +
+        "    data: { pageTitle: 'entityAudit.home.title' },\n" +
+        "    loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule),\n" +
+        '  },',
     );
   });
 
   it('app module contains the import and the module added by needle api', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/app.config.ts`,
       "import { appNameangularNameModule } from './folderName/fileName.module';",
     );
-    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, 'appNameangularNameModule,');
+    runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/app.config.ts`, 'appNameangularNameModule,');
   });
 });

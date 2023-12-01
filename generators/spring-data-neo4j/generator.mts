@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.mjs';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_NEO4J } from '../generator-list.mjs';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_NEO4J } from '../generator-list.mjs';
 import writeTask from './files.mjs';
 import cleanupTask from './cleanup.mjs';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.mjs';
@@ -31,6 +31,8 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      const javaGenerator: any = await this.dependsOnJHipster(GENERATOR_JAVA);
+      javaGenerator.useJacksonIdentityInfo = true;
     }
   }
 
@@ -63,6 +65,56 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get configuringEachEntity() {
+    return this.asConfiguringEachEntityTaskGroup({
+      async configuringEachEntity({ entityConfig }) {
+        if (entityConfig.dto && entityConfig.dto !== 'no') {
+          this.log.warn(
+            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constelation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        entity.relationships.forEach(relationship => {
+          if (relationship.persistableRelationship === undefined) {
+            relationship.persistableRelationship = true;
+          }
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      async checkUserRelationship({ entities }) {
+        entities.forEach(entity => {
+          if (entity.relationships.some(relationship => relationship.otherEntity.builtInUser)) {
+            this.log.warn(
+              `Relationship with User entity should be avoided for Neo4j database. Neo4j persists the entire constelation, related User entity will be updated causing security problems. Relationship with User entity is found in entity ${entity.name}.`,
+            );
+          }
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {

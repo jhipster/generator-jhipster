@@ -176,7 +176,7 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   async commitPrettierConfig() {
     await this.commitSharedFs({
-      log: 'prettier configuration files commited to disk',
+      log: 'prettier configuration files committed to disk',
       filter: file => isPrettierConfigFilePath(file.path),
     });
   }
@@ -255,6 +255,6 @@ export default class BootstrapGenerator extends BaseGenerator {
       }),
       ...transformStreams,
     );
-    this.log.ok(log ?? 'files commited to disk');
+    this.log.ok(log ?? 'files committed to disk');
   }
 }

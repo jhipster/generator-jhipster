@@ -34,7 +34,6 @@
     },
     {
       "name": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
-      "skip-backend-tests": "r2dbc-mariadb fails at github ci, error cannot be reproduced locally",
       "jdl-samples": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true"

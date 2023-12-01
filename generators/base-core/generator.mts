@@ -310,7 +310,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       .forEach(([optionName, optionDesc]) => {
         if (!optionDesc?.type || !optionDesc.scope || (common && optionDesc.scope === 'generator')) return;
         let optionValue;
-        // Hidden options are test options, which doesn't rely on commoander for options parsing.
+        // Hidden options are test options, which doesn't rely on commander for options parsing.
         // We must parse environment variables manually
         if (this.options[optionDesc.name ?? optionName] === undefined && optionDesc.env && process.env[optionDesc.env]) {
           optionValue = process.env[optionDesc.env];
@@ -488,7 +488,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       if (await this.env.get(namespace)) {
         generator = namespace;
       } else {
-        // Keep test compatibily were jhipster lookup does not run.
+        // Keep test compatibility were jhipster lookup does not run.
         const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
           const pathToLook = join(__dirname, `../${generator}${extension}`);
           return existsSync(pathToLook) ? pathToLook : undefined;

@@ -51,9 +51,7 @@
                     <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%= field.fieldName%>')"<% } %>><span v-text="t$('<%=`${i18nKeyPrefix}.${field.fieldName}` %>')"><%= field.fieldNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName%>'"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
-  <%_ if (relationship.relationshipManyToOne
-    || (relationship.relationshipOneToOne && relationship.ownerSide)
-    || (relationship.relationshipManyToMany && relationship.ownerSide && paginationNo)) {
+  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) {
     const fieldName = "." + relationship.otherEntityField; _%>
                     <th scope="row"<% if (!paginationNo) { %> v-on:click="changeOrder('<%=relationship.relationshipName + (fieldName)%>')"<% } %>><span v-text="t$('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>')"><%= relationship.relationshipNameHumanized %></span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%=relationship.relationshipName + (fieldName)%>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
@@ -93,15 +91,12 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-    const ownerSide = relationship.ownerSide;
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const otherEntityName = relationship.otherEntityName;
     const otherEntityField = relationship.otherEntityField;
     const otherEntityAngularName = relationship.otherEntityAngularName; _%>
-    <%_ if (relationship.relationshipManyToOne
-    || (relationship.relationshipOneToOne && ownerSide)
-    || (relationship.relationshipManyToMany && ownerSide && paginationNo)) { _%>
+    <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
       <%_ if (relationship.otherEntityUser) { _%>
         <%_ if (relationship.relationshipManyToMany) { _%>

@@ -30,7 +30,7 @@
         <!-- Plugin versions -->
         <checkstyle.version>10.12.5</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
-        <frontend-maven-plugin.version>1.14.2</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.6.0</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>7.0.0</git-commit-id-maven-plugin.version>
         <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
@@ -55,7 +55,7 @@
         <openapi-generator-maven-plugin.version>7.1.0</openapi-generator-maven-plugin.version>
         <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
-        <spotless-maven-plugin.version>2.40.0</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>2.41.0</spotless-maven-plugin.version>
     </properties>
 
     <dependencyManagement>

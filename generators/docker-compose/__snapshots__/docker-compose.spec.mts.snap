@@ -364,11 +364,13 @@ jhipster:
     container_name: mscassandra-cassandra
     healthcheck:
       test:
-        - CMD-SHELL
-        - '[ $$(nodetool statusgossip) = running ]'
+        - CMD
+        - cqlsh
+        - '-e'
+        - describe keyspaces
       interval: 5s
       timeout: 25s
-      retries: 10
+      retries: 20
   
   consul:
     image: consul-placeholder

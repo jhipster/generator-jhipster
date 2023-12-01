@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+<%#
+ This is a fragment file, it will be merged into to root template if available.
+ EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
+-%>
+<&_ if (fragment.importSection) { -&>
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+<&_ } -&>
 
-@NgModule({
-  imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
-  ],
-})
-export class EntityRoutingModule {}
+<&_ if (fragment.annotationSection) { -&>
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "<%- primaryKey.name %>", scope = <%- persistClass %>.class)
+<&_ } -&>

@@ -163,7 +163,7 @@ export default class BaseApplicationGenerator<
   }
 
   /**
-   * get sorted list of entitiy names according to changelog date (i.e. the order in which they were added)
+   * get sorted list of entity names according to changelog date (i.e. the order in which they were added)
    */
   getExistingEntityNames(): string[] {
     return this.getExistingEntities().map(entity => entity.name);
@@ -317,7 +317,7 @@ export default class BaseApplicationGenerator<
    */
   resetEntitiesFakeData(seed) {
     seed = `${this.sharedData.getApplication().baseName}-${seed}`;
-    this.log.debug(`Reseting entities seed with '${seed}'`);
+    this.log.debug(`Resetting entities seed with '${seed}'`);
     this.sharedData.getEntities().forEach(({ entity }) => {
       entity.resetFakerSeed(seed);
     });
