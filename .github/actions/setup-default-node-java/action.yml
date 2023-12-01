@@ -24,7 +24,7 @@ runs:
   steps:
     - uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 18.19.0
     - uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
