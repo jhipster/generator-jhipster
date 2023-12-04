@@ -33,15 +33,25 @@ import org.springframework.context.MessageSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } else { _%>
+import org.springframework.scheduling.annotation.Async;
+<%_ } _%>
+<%_
+    const localSendEmailFromTemplateApi = reactive ? 'sendEmailFromTemplate' : 'sendEmailFromTemplateSync';
+_%>
+
 
 /**
- * Service for sending emails.
+ * Service for sending emails asynchronously.
+<%_ if (!reactive) { _%>
  * <p>
  * We use the {@link Async} annotation to send emails asynchronously.
+<%_ } _%>
  */
 @Service
 public class MailService {
@@ -69,12 +79,21 @@ public class MailService {
         this.templateEngine = templateEngine;
     }
 
+<%_ if (!reactive) { _%>
     @Async
+<%_ } _%>
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
-        this.internalSendEmail(to, subject, content, isMultipart, isHtml);
+<%_ if (reactive) { _%>
+        Mono.defer(() -> {
+            this.sendEmailSync(to, subject, content, isMultipart, isHtml);
+            return Mono.empty();
+        }).subscribe();
+<%_ } else { _%>
+        this.sendEmailSync(to, subject, content, isMultipart, isHtml);
+<%_ } _%>
     }
 
-    private void internalSendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
+    private void sendEmailSync(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         log.debug("Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
             isMultipart, isHtml, to, subject, content);
 
@@ -93,12 +112,21 @@ public class MailService {
         }
     }
 
+<%_ if (!reactive) { _%>
     @Async
+<%_ } _%>
     public void sendEmailFromTemplate(<%= user.persistClass %> user, String templateName, String titleKey) {
-        this.internalSendEmailFromTemplate(user, templateName, titleKey);
+<%_ if (reactive) { _%>
+        Mono.defer(() -> {
+            this.sendEmailFromTemplateSync(user, templateName, titleKey);
+            return Mono.empty();
+        }).subscribe();
+<%_ } else { _%>
+        this.sendEmailFromTemplateSync(user, templateName, titleKey);
+<%_ } _%>
     }
 
-    private void internalSendEmailFromTemplate(<%= user.persistClass %> user, String templateName, String titleKey) {
+    private void sendEmailFromTemplateSync(<%= user.persistClass %> user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -109,26 +137,32 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
-        this.internalSendEmail(user.getEmail(), subject, content, false, true);
+        this.sendEmailSync(user.getEmail(), subject, content, false, true);
     }
 <%_ if (!authenticationTypeOauth2) { _%>
 
+<%_ if (!reactive) { _%>
     @Async
+<%_ } _%>
     public void sendActivationEmail(<%= user.persistClass %> user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
-        this.internalSendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
+        this.<%- localSendEmailFromTemplateApi %>(user, "mail/activationEmail", "email.activation.title");
     }
 
+<%_ if (!reactive) { _%>
     @Async
+<%_ } _%>
     public void sendCreationEmail(<%= user.persistClass %> user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
-        this.internalSendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+        this.<%- localSendEmailFromTemplateApi %>(user, "mail/creationEmail", "email.activation.title");
     }
 
+<%_ if (!reactive) { _%>
     @Async
+<%_ } _%>
     public void sendPasswordResetMail(<%= user.persistClass %> user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
-        this.internalSendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
+        this.<%- localSendEmailFromTemplateApi %>(user, "mail/passwordResetEmail", "email.reset.title");
     }
 <%_ } _%>
 }
