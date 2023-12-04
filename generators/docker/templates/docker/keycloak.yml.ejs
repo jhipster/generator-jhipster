@@ -21,7 +21,7 @@ name: <%= baseName.toLowerCase() %>
 services:
   keycloak:
     image: <%- dockerContainers.keycloak %>
-    command: ['start-dev --import-realm']
+    command: 'start-dev --import-realm'
     volumes:
       - ./realm-config:/opt/keycloak/data/import
       - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
