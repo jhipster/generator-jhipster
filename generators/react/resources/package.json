@@ -31,7 +31,7 @@
     "@testing-library/react": "14.1.2",
     "@types/jest": "29.5.10",
     "@types/lodash": "4.14.202",
-    "@types/node": "18.19.0",
+    "@types/node": "18.19.2",
     "@types/react": "18.2.41",
     "@types/react-dom": "18.2.17",
     "@types/react-redux": "7.1.31",
