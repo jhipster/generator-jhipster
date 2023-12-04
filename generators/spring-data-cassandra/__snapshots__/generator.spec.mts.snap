@@ -529,12 +529,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/client/UserFeignClientInterceptor.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/client/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -548,9 +542,6 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/FeignConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {

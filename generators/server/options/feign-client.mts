@@ -17,6 +17,12 @@
  * limitations under the License.
  */
 
-export * from './database-migration.mjs';
-export * from './message-broker.mjs';
-export * from './feign-client.mjs';
+import { JHipsterOptionDefinition } from '../../../jdl/types/types.mjs';
+
+export const FEIGN_CLIENT = 'feignClient';
+
+export const feignClientDefinition: JHipsterOptionDefinition = {
+  name: FEIGN_CLIENT,
+  type: 'boolean',
+  tokenType: 'BOOLEAN',
+};

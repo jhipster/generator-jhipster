@@ -55,39 +55,6 @@ const reactiveConfigFiles = {
   ],
 };
 
-const feignFiles = {
-  microserviceFeignFiles: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/FeignConfiguration.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [
-        'security/oauth2/AuthorizationHeaderUtil.java',
-        'client/AuthorizedFeignClient.java',
-        'client/OAuth2InterceptedFeignConfiguration.java',
-        'client/TokenRelayRequestInterceptor.java',
-      ],
-    },
-    {
-      condition: generator => generator.authenticationTypeJwt,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['client/UserFeignClientInterceptor_jwt.java'],
-    },
-    {
-      condition: generator => generator.authenticationTypeOauth2,
-      path: `${SERVER_TEST_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['security/oauth2/AuthorizationHeaderUtilTest.java'],
-    },
-  ],
-};
-
 const oauth2Files = {
   oauth2Files: [
     {
@@ -600,7 +567,6 @@ export const serverFiles = mergeSections(
   addSectionsCondition(oauth2Files, context => context.authenticationTypeOauth2),
   addSectionsCondition(gatewayFiles, context => context.applicationTypeGateway),
   addSectionsCondition(accountFiles, context => context.generateAuthenticationApi),
-  addSectionsCondition(feignFiles, context => !context.reactive && context.applicationTypeMicroservice),
   addSectionsCondition(userManagementFiles, context => context.generateUserManagement),
   addSectionsCondition(imperativeConfigFiles, context => !context.reactive),
   addSectionsCondition(reactiveConfigFiles, context => context.reactive),

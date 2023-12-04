@@ -53,6 +53,7 @@ application {
     serverPort 8081
     serviceDiscoveryType consul
     testFrameworks [cypress]
+    feignClient true
   }
   entities Blog, Post, Tag
 }
@@ -74,6 +75,7 @@ application {
     packageName com.okta.developer.store
     serverPort 8082
     serviceDiscoveryType consul
+    feignClient true
   }
   entities Product
 }

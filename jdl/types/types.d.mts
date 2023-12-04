@@ -37,8 +37,8 @@ export type JHipsterOptionDefinition = {
   name: string;
   type: JDLApplicationOptionTypeValue;
   tokenType: JDLValidatorOptionType;
-  tokenValuePattern: RegExp;
-  knownChoices: string[];
+  tokenValuePattern?: RegExp;
+  knownChoices?: string[];
 };
 
 export { JDLValidatorOption };

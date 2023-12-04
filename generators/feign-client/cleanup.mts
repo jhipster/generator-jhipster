@@ -16,7 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type BaseGenerator from '../base-core/index.mjs';
 
-export * from './database-migration.mjs';
-export * from './message-broker.mjs';
-export * from './feign-client.mjs';
+/**
+ * Removes server files that where generated in previous JHipster versions and therefore
+ * need to be removed.
+ */
+export default function cleanupTask(this: BaseGenerator, { application }: any) {
+  if (this.isJhipsterVersionLessThan('8.0.1')) {
+    this.removeFile(`${application.javaPackageSrcDir}security/oauth2/AuthorizationHeaderUtil.java`);
+    this.removeFile(`${application.javaPackageTestDir}security/oauth2/AuthorizationHeaderUtilTest.java`);
+  }
+}

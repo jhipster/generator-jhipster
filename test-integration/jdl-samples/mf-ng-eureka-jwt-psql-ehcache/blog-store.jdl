@@ -56,6 +56,7 @@ application {
     serverPort 8081
     serviceDiscoveryType eureka
     testFrameworks [cypress]
+    feignClient true
   }
   entities Blog, Post, Tag
 }
@@ -80,6 +81,7 @@ application {
     serverPort 8082
     serviceDiscoveryType eureka
     testFrameworks [cypress]
+    feignClient true
   }
   entities Product
 }
