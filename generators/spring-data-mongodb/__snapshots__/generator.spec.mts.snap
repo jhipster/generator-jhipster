@@ -520,12 +520,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/client/UserFeignClientInterceptor.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/client/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -542,9 +536,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/FeignConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {

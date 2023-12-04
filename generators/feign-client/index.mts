@@ -16,7 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export * from './database-migration.mjs';
-export * from './message-broker.mjs';
-export * from './feign-client.mjs';
+export { default } from './generator.mjs';

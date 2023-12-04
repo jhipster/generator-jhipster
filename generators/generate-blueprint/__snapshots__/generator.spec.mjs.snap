@@ -374,6 +374,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/export-jdl/templates/template-file-export-jdl.ejs": {
     "stateCleared": "modified",
   },
+  "generators/feign-client/command.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/feign-client/generator.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/feign-client/generator.spec.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/feign-client/index.mjs": {
+    "stateCleared": "modified",
+  },
+  "generators/feign-client/templates/template-file-feign-client.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/gatling/command.mjs": {
     "stateCleared": "modified",
   },
