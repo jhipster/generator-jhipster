@@ -193,4 +193,10 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }
   }
+
+  if (this.isJhipsterVersionLessThan('8.0.1')) {
+    if (application.authenticationTypeOauth2) {
+      this.removeFile(`${application.javaPackageSrcDir}security/oauth2/OAuthIdpTokenResponseDTO.java`);
+    }
+  }
 }
