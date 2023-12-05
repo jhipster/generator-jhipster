@@ -147,6 +147,17 @@ const command: JHipsterCommandDefinition = {
         },
       ],
     },
+    feignClient: {
+      description: 'Generate a feign client',
+      cli: {
+        type: Boolean,
+      },
+      prompt: {
+        type: 'confirm',
+        message: 'Do you want to generate a feign client?',
+      },
+      default: false,
+    },
   },
   import: [GENERATOR_COMMON, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };

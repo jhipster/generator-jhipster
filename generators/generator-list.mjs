@@ -40,6 +40,7 @@ export const GENERATOR_DOCKER_COMPOSE = 'docker-compose';
 export const GENERATOR_ENTITIES = 'entities';
 export const GENERATOR_ENTITY = 'entity';
 export const GENERATOR_EXPORT_JDL = 'export-jdl';
+export const GENERATOR_FEIGN_CLIENT = 'feign-client';
 export const GENERATOR_GATLING = 'gatling';
 export const GENERATOR_GENERATE_BLUEPRINT = 'generate-blueprint';
 export const GENERATOR_GIT = 'git';

@@ -57,6 +57,7 @@ import {
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SPRING_DATA_RELATIONAL,
+  GENERATOR_FEIGN_CLIENT,
 } from '../generator-list.mjs';
 import BaseApplicationGenerator from '../base-application/index.mjs';
 import { writeFiles } from './files.mjs';
@@ -94,6 +95,7 @@ import {
   messageBrokerTypes,
   clientFrameworkTypes,
   testFrameworkTypes,
+  APPLICATION_TYPE_MICROSERVICE,
 } from '../../jdl/jhipster/index.mjs';
 import { stringifyApplicationData } from '../base-application/support/index.mjs';
 import { createBase64Secret, createSecret, createNeedleCallback } from '../base/support/index.mjs';
@@ -209,6 +211,25 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configure() {
         this._configureServer();
       },
+      feignMigration() {
+        const { reactive, applicationType, feignClient } = this.jhipsterConfigWithDefaults;
+        if (feignClient) {
+          if (reactive) {
+            this.handleCheckFailure('Feign client is not supported by reactive applications.');
+          }
+          if (applicationType !== APPLICATION_TYPE_MICROSERVICE) {
+            this.handleCheckFailure('Feign client is only supported by microservice applications.');
+          }
+        }
+        if (
+          feignClient === undefined &&
+          this.isJhipsterVersionLessThan('8.0.1') &&
+          reactive &&
+          applicationType === APPLICATION_TYPE_MICROSERVICE
+        ) {
+          this.jhipsterConfig.feignClient = true;
+        }
+      },
     });
   }
 
@@ -219,8 +240,18 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { buildTool, enableTranslation, databaseType, messageBroker, searchEngine, testFrameworks, websocket, cacheProvider } =
-          this.jhipsterConfigWithDefaults;
+        const {
+          buildTool,
+          enableTranslation,
+          databaseType,
+          messageBroker,
+          searchEngine,
+          testFrameworks,
+          websocket,
+          cacheProvider,
+          feignClient,
+        } = this.jhipsterConfigWithDefaults;
+
         if (buildTool === GRADLE) {
           await this.composeWithJHipster(GENERATOR_GRADLE);
         } else if (buildTool === MAVEN) {
@@ -262,6 +293,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         }
         if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider)) {
           await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
+        }
+        if (feignClient) {
+          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
         }
       },
     });

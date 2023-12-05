@@ -216,6 +216,19 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   /**
+   * Warn or throws check failure based on current skipChecks option.
+   * @param message
+   */
+  handleCheckFailure(message: string) {
+    if (this.skipChecks) {
+      this.log.warn(message);
+    } else {
+      throw new Error(`${message}
+You can ignore this error by passing '--skip-checks' to jhipster command.`);
+    }
+  }
+
+  /**
    * Check if the JHipster version used to generate an existing project is less than the passed version argument
    *
    * @param {string} version - A valid semver version string

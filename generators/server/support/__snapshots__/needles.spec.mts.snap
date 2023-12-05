@@ -89,6 +89,12 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/client/UserFeignClientInterceptor.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/client/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -108,6 +114,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/FeignConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
