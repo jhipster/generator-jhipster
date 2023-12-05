@@ -24,8 +24,9 @@ import type BaseGenerator from '../base-core/index.mjs';
  */
 export default function cleanupTask(this: BaseGenerator, { application }: any) {
   if (this.isJhipsterVersionLessThan('8.0.1')) {
-    this.removeFile(`${application.javaPackageSrcDir}security/oauth2/OAuthIdpTokenResponseDTO.java`);
-    this.removeFile(`${application.javaPackageSrcDir}security/oauth2/AuthorizationHeaderUtil.java`);
-    this.removeFile(`${application.javaPackageTestDir}security/oauth2/AuthorizationHeaderUtilTest.java`);
+    if (application.authenticationTypeOauth2) {
+      this.removeFile(`${application.javaPackageSrcDir}security/oauth2/AuthorizationHeaderUtil.java`);
+      this.removeFile(`${application.javaPackageTestDir}security/oauth2/AuthorizationHeaderUtilTest.java`);
+    }
   }
 }
