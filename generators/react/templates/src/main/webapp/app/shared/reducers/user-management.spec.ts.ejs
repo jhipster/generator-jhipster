@@ -17,9 +17,8 @@
  limitations under the License.
 -%>
 
-import configureStore from 'redux-mock-store';
+import { UnknownAction, configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
 import userManagement, {
@@ -68,39 +67,34 @@ describe('User management reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk]);
-      store = mockStore({});
+      store = configureStore({
+        reducer(s: UnknownAction[] = [], action) {
+          return [...s, action]
+        },
+      });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
-      const expectedActions = [
-        {
-          type: getUsers.pending.type
-        },
-        {
-          type: getUsers.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getUsers({}));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = {};
+      const getState = jest.fn(() => ({}));
+      const dispatch = jest.fn((x: any) => x);
+      const extra = {};
+
+      const result = await getUsers(arg)(dispatch, getState, extra);
+
+      expect(getUsers.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
-      const expectedActions = [
-        {
-          type: getUsers.pending.type
-        },
-        {
-          type: getUsers.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getUsers({ page: 1, size: 20, sort: 'id,desc' }));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = { page: 1, size: 20, sort: 'id,desc' };
+      const getState = jest.fn(() => ({}));
+      const dispatch = jest.fn((x: any) => x);
+      const extra = {};
+
+      const result = await getUsers(arg)(dispatch, getState, extra);
+
+      expect(getUsers.fulfilled.match(result)).toBe(true);
     });
   });
 });

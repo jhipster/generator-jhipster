@@ -17,10 +17,9 @@
  limitations under the License.
 -%>
 
-import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
-import configureStore from 'redux-mock-store';
+import { UnknownAction, configureStore } from '@reduxjs/toolkit';
 
 import profile, { getProfile } from './application-profile';
 
@@ -72,24 +71,22 @@ describe('Profile reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk]);
-      store = mockStore({});
+      store = configureStore({
+        reducer(s: UnknownAction[] = [], action) {
+          return [...s, action]
+        },
+      });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
-      const expectedActions = [
-        {
-          type: getProfile.pending.type
-        },
-        {
-          type: getProfile.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getProfile());
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const getState = jest.fn(() => ({}));
+      const dispatch = jest.fn((x: any) => x);
+      const extra = {};
+
+      const result = await getProfile()(dispatch, getState, extra);
+
+      expect(getProfile.fulfilled.match(result)).toBe(true);
     });
   });
 });

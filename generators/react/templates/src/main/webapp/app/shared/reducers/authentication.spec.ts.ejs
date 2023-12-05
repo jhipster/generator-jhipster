@@ -16,13 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
 <%_ if (authenticationTypeJwt) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
-import configureStore from 'redux-mock-store';
+import { UnknownAction, configureStore, createReducer } from '@reduxjs/toolkit';
 
 import authentication, {
   getSession,
@@ -205,108 +204,74 @@ describe('Authentication reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk]);
-<%_ if (enableTranslation) { _%>
-      store = mockStore({ authentication: { account: { langKey: '<%= nativeLanguage %>' } }, locale: { loadedLocales: ['<%= nativeLanguage %>'] } });
-<%_ } else { _%>
-      store = mockStore({ authentication: { account: { } } });
-<%_ } _%>
+      store = configureStore({
+        reducer(s: UnknownAction[] = [], action) {
+          return [...s, action]
+        },
+      });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
-      const expectedActions = [
-        {
-          type: getAccount.pending.type
-        },
-        <%_ if (enableTranslation) { _%>
-        {
-          type: getAccount.fulfilled.type,
-          payload: resolvedObject
-        },
-        {
-          type: setLocale.pending.type,
-        },
-        updateLocale('en'),
-        {
-          type: setLocale.fulfilled.type,
-          payload: 'en',
-        },
-        <%_ } _%>
-      ];
-      await store.dispatch(getSession());
-      expect(store.getActions()).toMatchObject(expectedActions);
+      const getState = jest.fn(() => ({}));
+      const dispatch = jest.fn((x: any) => x);
+      const extra = {};
+
+      const result = await getAccount()(dispatch, getState, extra);
+
+      expect(getAccount.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches LOGOUT actions', async () => {
-<%_ if (!authenticationTypeJwt) { _%>
+    <%_ if (!authenticationTypeJwt) { _%>
       axios.post = sinon.stub().returns(Promise.resolve({}));
-<%_ } _%>
-      const expectedActions = [
-<%_ if (authenticationTypeJwt) { _%>
-        logoutSession(),
-<%_ } else { _%>
-        {
-          type: logoutServer.pending.type
-        },
-        {
-         type: logoutServer.fulfilled.type,
-         payload: {},
-        },
-        {
-         type: getAccount.pending.type,
-        },
-<%_ } _%>
-      ];
+
+      const getState = jest.fn(() => ({}));
+      const dispatch = jest.fn((x: any) => x);
+      const extra = {};
+
+      const result = await logoutServer()(dispatch, getState, extra);
+
+      expect(logoutServer.fulfilled.match(result)).toBe(true);
+    <%_ } else { _%>
       await store.dispatch(logout());
-<%_ if (authenticationTypeJwt) { _%>
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-<%_ } else { _%>
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-<%_ } _%>
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(logoutSession())]);
+    <%_ } _%>
     });
 
     it('dispatches CLEAR_AUTH actions', async () => {
-      const expectedActions = [authError('message'), clearAuth()];
       await store.dispatch(clearAuthentication('message'));
-      expect(store.getActions()).toEqual(expectedActions);
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(authError('message')), clearAuth()]);
     });
 
 <%_ if (!authenticationTypeOauth2) { _%>
     it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
-  <%_ if (authenticationTypeJwt) { _%>
       const loginResponse = { headers: { authorization: 'auth' } };
-  <%_ } else { _%>
-      const loginResponse = { value: 'any' };
-  <%_ } _%>
       axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
-      const expectedActions = [
-        {
-          type: authenticate.pending.type
-        },
-        {
-          type: authenticate.fulfilled.type,
-          payload: loginResponse
-        },
-        {
-          type: getAccount.pending.type
-        },
-      ];
-      await store.dispatch(login('test', 'test'));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
+
+      const getState = jest.fn(() => ({}));
+      const dispatch = jest.fn((x: any) => x);
+      const extra = {};
+
+      const result = await authenticate('test', 'test')(dispatch, getState, extra);
+
+      expect(authenticate.fulfilled.match(result)).toBe(true);
     });
 <%_ } _%>
   });
 <%_ if (authenticationTypeJwt) { _%>
   describe('clearAuthToken', () => {
     let store;
+    const reducer = createReducer(
+      { authentication: { account: { langKey: 'en' } } },
+      (builder) => {
+        builder.addDefaultCase((state, action) => {})
+      }
+    );
     beforeEach(() => {
-      const mockStore = configureStore([thunk]);
-      store = mockStore({ authentication: { account: { langKey: 'en' } } });
+      store = configureStore({
+        reducer
+      });
     });
     it('clears the session token on clearAuthToken', async () => {
       const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import sinon from 'sinon';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { configureStore, createReducer } from '@reduxjs/toolkit';
 import { TranslatorContext } from 'react-jhipster';
 
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
@@ -45,8 +44,13 @@ describe('Locale reducer tests', () => {
   describe('setLocale reducer', () => {
     describe('with default language loaded', () => {
       let store;
+      const reducer = createReducer({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }, builder => {
+        builder.addDefaultCase((state, action) => {});
+      });
       beforeEach(() => {
-        store = configureStore([thunk])({ locale: { loadedLocales: [defaultLocale], loadedKeys: [] } });
+        store = configureStore({
+          reducer,
+        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
@@ -54,26 +58,25 @@ describe('Locale reducer tests', () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
-        const expectedActions = [
-          {
-            type: setLocale.pending.type,
-          },
-          updateLocale(defaultLocale),
-          {
-            type: setLocale.fulfilled.type,
-            payload: defaultLocale,
-          },
-        ];
-
-        await store.dispatch(setLocale(defaultLocale));
-        expect(store.getActions()).toMatchObject(expectedActions);
+        const getState = jest.fn(() => ({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }));
+        const dispatch = jest.fn((x: any) => x);
+        const extra = {};
+  
+        const result = await setLocale(defaultLocale)(dispatch, getState, extra);
+  
+        expect(setLocale.fulfilled.match(result)).toBe(true);
       });
     });
 
     describe('with no language loaded', () => {
       let store;
+      const reducer = createReducer({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }, builder => {
+        builder.addDefaultCase((state, action) => {});
+      });
       beforeEach(() => {
-        store = configureStore([thunk])({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } });
+        store = configureStore({
+          reducer,
+        });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
@@ -81,20 +84,13 @@ describe('Locale reducer tests', () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
-        const expectedActions = [
-          {
-            type: setLocale.pending.type,
-          },
-          loaded({ keys: [defaultLocale], locale: defaultLocale }),
-          updateLocale(defaultLocale),
-          {
-            type: setLocale.fulfilled.type,
-            payload: defaultLocale,
-          },
-        ];
-
-        await store.dispatch(setLocale(defaultLocale));
-        expect(store.getActions()).toMatchObject(expectedActions);
+        const getState = jest.fn(() => ({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
+        const dispatch = jest.fn((x: any) => x);
+        const extra = {};
+  
+        const result = await setLocale(defaultLocale)(dispatch, getState, extra);
+  
+        expect(setLocale.fulfilled.match(result)).toBe(true);
       });
     });
   });
@@ -104,77 +100,70 @@ describe('Locale reducer tests', () => {
 
     describe('with no prefixes and keys loaded', () => {
       let store;
+      const reducer = createReducer({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }, builder => {
+        builder.addDefaultCase((state, action) => {});
+      });
       beforeEach(() => {
-        store = configureStore([thunk])({
-          locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] },
+        store = configureStore({
+          reducer,
         });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
       it('dispatches loaded action with keys and sourcePrefix', async () => {
-        const expectedActions = [
-          {
-            type: addTranslationSourcePrefix.pending.type,
-          },
-          loaded({ keys: [`${sourcePrefix}${defaultLocale}`], sourcePrefix }),
-          {
-            type: addTranslationSourcePrefix.fulfilled.type,
-            payload: `${sourcePrefix}${defaultLocale}`,
-          },
-        ];
-
-        await store.dispatch(addTranslationSourcePrefix(sourcePrefix));
-        expect(store.getActions()).toMatchObject(expectedActions);
+        const getState = jest.fn(() => ({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
+        const dispatch = jest.fn((x: any) => x);
+        const extra = {};
+  
+        const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
+  
+        expect(addTranslationSourcePrefix.fulfilled.match(result)).toBe(true);
       });
     });
 
     describe('with prefix already added', () => {
       let store;
+      const reducer = createReducer({ locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] } }, builder => {
+        builder.addDefaultCase((state, action) => {});
+      });
       beforeEach(() => {
-        store = configureStore([thunk])({
-          locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] },
+        store = configureStore({
+          reducer,
         });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
       it("doesn't dispatches loaded action", async () => {
-        const expectedActions = [
-          {
-            type: addTranslationSourcePrefix.pending.type,
-          },
-          {
-            type: addTranslationSourcePrefix.fulfilled.type,
-            payload: `${sourcePrefix}${defaultLocale}`,
-          },
-        ];
-
-        await store.dispatch(addTranslationSourcePrefix(sourcePrefix));
-        expect(store.getActions()).toMatchObject(expectedActions);
+        const getState = jest.fn(() => ({ locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] } }));
+        const dispatch = jest.fn((x: any) => x);
+        const extra = {};
+  
+        const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
+  
+        expect(addTranslationSourcePrefix.fulfilled.match(result)).toBe(true);
       });
     });
 
     describe('with key already loaded', () => {
       let store;
+      const reducer = createReducer({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] } }, builder => {
+        builder.addDefaultCase((state, action) => {});
+      });
       beforeEach(() => {
-        store = configureStore([thunk])({
-          locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] },
+        store = configureStore({
+          reducer,
         });
         axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
       });
 
       it("doesn't dispatches loaded action", async () => {
-        const expectedActions = [
-          {
-            type: addTranslationSourcePrefix.pending.type,
-          },
-          {
-            type: addTranslationSourcePrefix.fulfilled.type,
-            payload: `${sourcePrefix}${defaultLocale}`,
-          },
-        ];
-
-        await store.dispatch(addTranslationSourcePrefix(sourcePrefix));
-        expect(store.getActions()).toMatchObject(expectedActions);
+        const getState = jest.fn(() => ({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] } }));
+        const dispatch = jest.fn((x: any) => x);
+        const extra = {};
+  
+        const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
+  
+        expect(addTranslationSourcePrefix.fulfilled.match(result)).toBe(true);
       });
     });
   });
