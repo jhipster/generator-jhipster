@@ -28,6 +28,9 @@ exports[`generator - feign-client with oauth2 should match generated files snaps
   "src/main/java/com/mycompany/myapp/client/OAuth2InterceptedFeignConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/client/OAuthIdpTokenResponseDTO.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/client/TokenRelayRequestInterceptor.java": {
     "stateCleared": "modified",
   },

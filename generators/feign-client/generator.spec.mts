@@ -6,7 +6,7 @@ import { checkEnforcements, defaultHelpers as helpers, runResult } from '../../t
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.mjs';
 import Generator from '../server/index.mjs';
 
-import { GENERATOR_FEIGN_CLIENT, GENERATOR_SERVER } from '../generator-list.mjs';
+import { GENERATOR_FEIGN_CLIENT } from '../generator-list.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

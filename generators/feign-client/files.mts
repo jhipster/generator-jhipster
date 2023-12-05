@@ -17,6 +17,7 @@ export const feignFiles = {
         'client/AuthorizedFeignClient.java',
         'client/OAuth2InterceptedFeignConfiguration.java',
         'client/TokenRelayRequestInterceptor.java',
+        'client/OAuthIdpTokenResponseDTO.java',
       ],
     },
     {
