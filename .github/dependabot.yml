@@ -86,6 +86,10 @@ updates:
       angular-eslint:
         patterns:
           - '@angular-eslint/*'
+      fortawesome:
+        patterns:
+          - '@fortawesome/fontawesome-svg-core'
+          - '@fortawesome/free-solid-svg-icons'
       typescript-eslint:
         patterns:
           - '@typescript-eslint/*'
@@ -135,6 +139,16 @@ updates:
       typescript-eslint:
         patterns:
           - '@typescript-eslint/*'
+      fortawesome:
+        patterns:
+          - '@fortawesome/fontawesome-svg-core'
+          - '@fortawesome/free-solid-svg-icons'
+      react:
+        patterns:
+          - '@reduxjs/*'
+          - '*-redux'
+          - 'redux'
+          - 'redux-*'
 
   - package-ecosystem: 'npm'
     directory: '/generators/vue/resources/'
@@ -159,6 +173,10 @@ updates:
       typescript-eslint:
         patterns:
           - '@typescript-eslint/*'
+      fortawesome:
+        patterns:
+          - '@fortawesome/fontawesome-svg-core'
+          - '@fortawesome/free-solid-svg-icons'
 
   - package-ecosystem: 'docker'
     directory: '/generators/server/resources/'
