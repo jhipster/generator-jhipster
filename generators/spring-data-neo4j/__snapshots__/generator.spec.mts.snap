@@ -1283,9 +1283,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2477,9 +2474,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2891,9 +2885,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {

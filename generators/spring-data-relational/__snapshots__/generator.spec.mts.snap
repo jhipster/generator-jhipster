@@ -1487,9 +1487,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -1868,9 +1865,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {
@@ -4330,9 +4324,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -4668,9 +4659,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -4956,9 +4944,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
@@ -5296,9 +5281,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -5617,9 +5599,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {
@@ -5948,9 +5927,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -6272,9 +6248,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {
@@ -10154,9 +10127,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -10534,9 +10504,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -10858,9 +10825,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
@@ -11234,9 +11198,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -11570,9 +11531,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
@@ -11952,9 +11910,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -12285,9 +12240,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
@@ -12664,9 +12616,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/package/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -12985,9 +12934,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
@@ -13359,9 +13305,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {
