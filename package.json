@@ -192,7 +192,7 @@
     "sinon": "17.0.1",
     "sinon-chai": "3.7.0",
     "sort-keys": "5.0.0",
-    "typescript": "5.3.2",
+    "typescript": "5.3.3",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "8.2.0"
   },
