@@ -35,9 +35,11 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.cloud.stream.binder.test.InputDestination;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
@@ -50,6 +52,7 @@ import org.springframework.util.MimeTypeUtils;
 @WithMockUser
 @EmbeddedKafka
 @IntegrationTest
+@ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
     private static String KAFKA_API = "/api/<%= dasherizedBaseName %>-kafka/{command}";
 
