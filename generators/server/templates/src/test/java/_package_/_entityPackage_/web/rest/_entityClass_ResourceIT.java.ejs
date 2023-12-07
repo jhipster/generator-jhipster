@@ -152,9 +152,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
   <%_ } _%>
 <%_ } _%>
-<%_ if (anyFieldIsBlobDerived) { _%>
-import org.springframework.util.Base64Utils;
-<%_ } _%>
 <%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -189,6 +186,9 @@ import java.time.temporal.ChronoUnit;
 <%_ } _%>
 <%_ if (!reactive && implementsEagerLoadApis) { _%>
 import java.util.ArrayList;
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+import java.util.Base64;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !reactive) { _%>
 import java.util.Collections;
@@ -933,7 +933,7 @@ _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%= !reactive ? ')' : '' %>
   <%_ } _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64Utils.encodeToString(<% } else
+  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
@@ -1020,7 +1020,7 @@ _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= field.fieldName %>ContentType").value(<%= reactive ? 'is(' : '' %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
   <%_ } _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= field.fieldName %>").value(<%= reactive ? 'is(' : '' %><%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64Utils.encodeToString(<% } else
+  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
@@ -1259,7 +1259,7 @@ _%>
             .jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
       <%_ } _%>
             .jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<% if
-      (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64Utils.encodeToString(<% } else
+      (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
       if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
       if (field.fieldTypeBinary && !field.blobContentTypeText) { %><% if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
@@ -1301,7 +1301,7 @@ _%>
             .andExpect(jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
     <%_ } _%>
             .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<%
-    if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64Utils.encodeToString(<% } else
+    if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
     if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
@@ -1831,7 +1831,7 @@ _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%= !reactive ? ')' : '' %>
   <%_ } _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64Utils.encodeToString(<% } else
+  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
   if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%

@@ -18,7 +18,7 @@
  */
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.0.1-SNAPSHOT';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.1.0-SNAPSHOT';
 // Version of Java
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
@@ -36,22 +36,22 @@ export const javaDependencies = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.1.5',
+  'spring-boot': '3.2.0',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
    */
-  hibernate: '6.2.13.Final',
+  hibernate: '6.3.1.Final',
   /*
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.
    */
-  cassandra: '4.15.0',
+  cassandra: '4.17.0',
 };
 Object.freeze(javaDependencies);
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.7.1';
+export const ELASTICSEARCH_TAG = '8.10.4';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
