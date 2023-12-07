@@ -18,27 +18,18 @@
 -%>
 package <%= packageName %>.client;
 
-import <%= packageName %>.security.oauth2.AuthorizationHeaderUtil;
+<%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.context.annotation.Bean;
 
 import feign.RequestInterceptor;
-import feign.RequestTemplate;
 
-import java.util.Optional;
+import <%= packageName %>.client.AuthorizationHeaderUtil;
 
-public class TokenRelayRequestInterceptor implements RequestInterceptor {
+public class OAuth2InterceptedFeignConfiguration {
 
-    public static final String AUTHORIZATION = "Authorization";
-
-    private final AuthorizationHeaderUtil authorizationHeaderUtil;
-
-    public TokenRelayRequestInterceptor(AuthorizationHeaderUtil authorizationHeaderUtil) {
-        super();
-        this.authorizationHeaderUtil = authorizationHeaderUtil;
-    }
-
-    @Override
-    public void apply(RequestTemplate template) {
-        Optional<String> authorizationHeader = authorizationHeaderUtil.getAuthorizationHeader();
-        authorizationHeader.ifPresent(s -> template.header(AUTHORIZATION, s));
+    @Bean(name = "oauth2RequestInterceptor")
+    public RequestInterceptor getOAuth2RequestInterceptor(AuthorizationHeaderUtil authorizationHeaderUtil) {
+        return new TokenRelayRequestInterceptor(authorizationHeaderUtil);
     }
 }
+<%_ } _%>

@@ -19,3 +19,4 @@
 
 export * from './database-migration.mjs';
 export * from './message-broker.mjs';
+export * from './feign-client.mjs';

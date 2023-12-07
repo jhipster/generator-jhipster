@@ -59,7 +59,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.ForwardedHeaderUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } else {_%>
@@ -133,7 +133,7 @@ public class PublicUserResource {
 
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
   <%_ } else { _%>
@@ -181,7 +181,7 @@ public class PublicUserResource {
      * @return the result of the search.
      */
     @GetMapping("/users/_search/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable("query") String query) {
   <%_ if (searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>
         return userSearchRepository.search(query).map(<%= user.dtoClass %>::new).collectList();

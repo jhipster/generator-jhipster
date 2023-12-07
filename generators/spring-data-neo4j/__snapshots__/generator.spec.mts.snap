@@ -526,12 +526,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/client/UserFeignClientInterceptor.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/client/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -545,9 +539,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/DateTimeFormatConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/FeignConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
@@ -1290,9 +1281,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {
@@ -2486,9 +2474,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/oauth2/OAuthIdpTokenResponseDTO.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2900,9 +2885,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/package/security/oauth2/OAuthIdpTokenResponseDTO.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/security/oauth2/package-info.java": {

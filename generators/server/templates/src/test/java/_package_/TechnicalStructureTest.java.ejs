@@ -28,7 +28,7 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongToAnyO
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 <%_
-  const hasClientLayer = !reactive && (applicationTypeMicroservice || applicationTypeGateway);
+  const hasClientLayer = feignClient;
   const hasDomainLayer = !databaseTypeNo;
   const hasConstants = !skipUserManagement || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j;
 _%>

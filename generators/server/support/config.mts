@@ -73,6 +73,7 @@ export const loadServerConfig = ({ config, application }: { config: any; applica
       'embeddableLaunchScript',
       'enableGradleEnterprise',
       'gradleEnterpriseHost',
+      'feignClient',
     ]),
     {
       packageFolder: ({ packageFolder }) => (packageFolder ? normalizePathEnd(packageFolder) : packageFolder),

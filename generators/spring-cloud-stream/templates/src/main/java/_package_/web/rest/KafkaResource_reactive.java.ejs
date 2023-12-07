@@ -44,7 +44,7 @@ public class <%= upperFirstCamelCaseBaseName %>KafkaResource {
     }
 
     @PostMapping("/publish")
-    public Mono<ResponseEntity<Void>> publish(@RequestParam String message) {
+    public Mono<ResponseEntity<Void>> publish(@RequestParam("message") String message) {
         log.debug("REST request the message : {} to send to Kafka topic", message);
         streamBridge.send(PRODUCER_BINDING_NAME, message);
         return Mono.just(ResponseEntity.noContent().build());

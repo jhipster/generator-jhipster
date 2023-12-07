@@ -20,10 +20,11 @@ import * as _ from 'lodash-es';
 import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.mjs';
 import databaseMigrationOption from '../options/database-migration.mjs';
 import messageBrokerOption from '../options/message-broker.mjs';
+import { feignClientDefinition } from '../options/index.mjs';
 
 const { upperCase, snakeCase } = _;
 
-const jdlOptions: JHipsterOptionDefinition[] = [databaseMigrationOption, messageBrokerOption];
+const jdlOptions: JHipsterOptionDefinition[] = [databaseMigrationOption, messageBrokerOption, feignClientDefinition];
 
 const applicationConfig: JDLApplicationConfig = {
   tokenConfigs: jdlOptions.map(option => ({
@@ -41,7 +42,9 @@ const applicationConfig: JDLApplicationConfig = {
     ]),
   ),
   optionsValues: Object.fromEntries(
-    jdlOptions.map(option => [option.name, Object.fromEntries(option.knownChoices.map(choice => [choice, choice]))]),
+    jdlOptions
+      .filter(option => option.knownChoices)
+      .map(option => [option.name, Object.fromEntries(option.knownChoices!.map(choice => [choice, choice]))]),
   ),
   optionsTypes: Object.fromEntries(
     jdlOptions.map(option => [

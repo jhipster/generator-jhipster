@@ -35,7 +35,7 @@ _%>
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
   <%_ } else { _%>
@@ -47,7 +47,7 @@ _%>
           ResponseEntity.ok()
               .headers(
                   PaginationUtil.generatePaginationHttpHeaders(
-                      UriComponentsBuilder.fromHttpRequest(request),
+                      ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
                       new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
                   )
               ).body(countWithEntities.getT2())
@@ -75,7 +75,7 @@ _%>
     }
 <%_ } else { _%>
   <%_ if (paginationNo) { _%>
-    public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");
     <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
@@ -96,7 +96,7 @@ _%>
             return <%= entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList()<% } %>;
     <%_ } _%>
   <%_ } else { _%>
-    public <% if (reactive) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public <% if (reactive) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get a page of <%= entityClassPlural %>");
     <%_ if (reactive) { _%>
         return <%= entityInstance %><%= viaService ? 'Service.countAll' : 'Repository.count' %>().zipWith(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<%= reactiveEntityToDto %>.collectList())
@@ -104,7 +104,7 @@ _%>
                     ResponseEntity.ok()
                         .headers(
                             PaginationUtil.generatePaginationHttpHeaders(
-                                UriComponentsBuilder.fromHttpRequest(request),
+                                ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
                                 new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
                             )
                         ).body(countWithEntities.getT2())
@@ -117,10 +117,10 @@ _%>
         } else {
             page = <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.findAll(pageable)<%= reactiveEntityToDto %>;
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>UriComponentsBuilder.fromHttpRequest(request)<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
       <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.findAll(pageable)<%= reactiveEntityToDto %>;
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>UriComponentsBuilder.fromHttpRequest(request)<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
       <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
