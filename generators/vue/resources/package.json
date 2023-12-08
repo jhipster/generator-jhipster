@@ -24,7 +24,7 @@
     "@tsconfig/node18": "18.2.2",
     "@types/node": "18.19.3",
     "@types/sinon": "17.0.2",
-    "@vitejs/plugin-vue": "4.5.1",
+    "@vitejs/plugin-vue": "4.5.2",
     "@vue/eslint-config-prettier": "8.0.0",
     "@vue/eslint-config-typescript": "10.0.0",
     "@vue/test-utils": "2.4.3",
