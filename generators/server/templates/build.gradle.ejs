@@ -266,7 +266,7 @@ dependencies {
     // to use a SNAPSHOT release instead of a stable release
     implementation "tech.jhipster:jhipster-framework"
     implementation "jakarta.annotation:jakarta.annotation-api"
-<%_ // This is useful for major Spring Boot migration
+<%_ /* This is useful for major Spring Boot migration */
 if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
