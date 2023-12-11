@@ -38,6 +38,10 @@ const command: JHipsterCommandDefinition = {
       type: Boolean,
       scope: 'generator',
     },
+    disableBlueprints: {
+      description: 'Disable blueprints support',
+      type: Boolean,
+    },
     debugEnabled: {
       name: 'debug',
       description: 'Enable debugger',
