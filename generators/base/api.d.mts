@@ -30,6 +30,7 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   ignoreErrors?: boolean;
   ignoreNeedlesError?: boolean;
   reproducible?: boolean;
+  reproducibleTests?: boolean;
   skipPriorities?: string[];
   skipWriting?: boolean;
   entities?: string[];
