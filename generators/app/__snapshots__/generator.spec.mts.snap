@@ -74,8 +74,7 @@ exports[`generator - app jdlStore with application and entities should match sna
     "contents": "{
   "generator-jhipster": {
     "creationTimestamp": 1577836800000,
-    "jdlStore": "app.jdl",
-    "jhipsterVersion": "8.0.0"
+    "jdlStore": "app.jdl"
   }
 }
 ",
@@ -108,8 +107,7 @@ exports[`generator - app jdlStore with application should match snapshot 1`] = `
     "contents": "{
   "generator-jhipster": {
     "creationTimestamp": 1577836800000,
-    "jdlStore": "app.jdl",
-    "jhipsterVersion": "8.0.0"
+    "jdlStore": "app.jdl"
   }
 }
 ",
@@ -160,8 +158,7 @@ exports[`generator - app jdlStore with incremental changelog application and ent
     "contents": "{
   "generator-jhipster": {
     "creationTimestamp": 1577836800000,
-    "jdlStore": "app.jdl",
-    "jhipsterVersion": "8.0.0"
+    "jdlStore": "app.jdl"
   }
 }
 ",
