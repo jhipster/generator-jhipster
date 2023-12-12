@@ -397,6 +397,10 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
                       <groupId>org.neo4j.driver</groupId>
                       <artifactId>neo4j-java-driver</artifactId>
                   </exclusion>
+                  <exclusion>
+                      <groupId>org.slf4j</groupId>
+                      <artifactId>slf4j-jdk14</artifactId>
+                  </exclusion>
               </exclusions>`,
             },
           ]);
