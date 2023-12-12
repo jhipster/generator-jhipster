@@ -28,7 +28,7 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@b69b346013879cedbf50c69f572cd85439a41936
+      - uses: actions/stale@28ca1036281a5e5922ead5184a1bbf96e5fc984e
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           ascending: true

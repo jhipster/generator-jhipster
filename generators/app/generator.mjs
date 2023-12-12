@@ -103,7 +103,10 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   get configuring() {
     return {
       setup() {
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
+        if (!this.options.reproducibleTests) {
+          this.jhipsterConfig.jhipsterVersion = packageJson.version;
+        }
+
         if (this.jhipsterConfig.applicationType === MICROSERVICE) {
           this.jhipsterConfig.skipUserManagement = true;
         }

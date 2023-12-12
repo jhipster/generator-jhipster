@@ -389,6 +389,19 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               artifactId: 'liquibase-neo4j',
               // eslint-disable-next-line no-template-curly-in-string
               version: '${liquibase.version}',
+              // Exclude current neo4j driver and use the one provided by spring-data
+              // See: https://github.com/jhipster/generator-jhipster/pull/24241
+              additionalContent: `
+              <exclusions>
+                  <exclusion>
+                      <groupId>org.neo4j.driver</groupId>
+                      <artifactId>neo4j-java-driver</artifactId>
+                  </exclusion>
+                  <exclusion>
+                      <groupId>org.slf4j</groupId>
+                      <artifactId>slf4j-jdk14</artifactId>
+                  </exclusion>
+              </exclusions>`,
             },
           ]);
         }

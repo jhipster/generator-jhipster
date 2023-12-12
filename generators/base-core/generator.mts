@@ -170,7 +170,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         this.options.namespace.startsWith('jhipster:') &&
         !this.options.namespace.startsWith('jhipster:bootstrap') &&
         this.getFeatures().storeJHipsterVersion !== false &&
-        !this.options.reproducible &&
+        !this.options.reproducibleTests &&
         !this.jhipsterConfig.jhipsterVersion
       ) {
         this.jhipsterConfig.jhipsterVersion = packageJson.version;
