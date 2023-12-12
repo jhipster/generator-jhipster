@@ -51,6 +51,14 @@ export default class extends BaseGenerator {
     return this.asDefaultTaskGroup({
       async generateSample() {
         const octokit = new Octokit();
+        // Gets the owner, repo and issue_number from a string such as, "jhipster/generator-jhipster#12345"
+        if (this.issue.includes('#')) {
+          let split = this.issue.split('/');
+          this.owner = split[0];
+          split = split[1].split('#');
+          this.repo = split[0];
+          this.issue = split[1];
+        }
         const issue = await octokit.request('GET /repos/{owner}/{repo}/issues/{issue_number}', {
           owner: this.owner,
           repo: this.repository,
