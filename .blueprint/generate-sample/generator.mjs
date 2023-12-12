@@ -1,10 +1,10 @@
 import { extname } from 'path';
 import { transform } from '@yeoman/transform';
-import BaseGenerator from '../../generators/base/index.mjs';
+import BaseGenerator from '../../generators/base/index.js';
 import command from './command.mjs';
 import { generateSample } from './support/generate-sample.js';
 import { promptSamplesFolder } from '../support.mjs';
-import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.mjs';
+import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.js';
 
 export default class extends BaseGenerator {
   sampleName;

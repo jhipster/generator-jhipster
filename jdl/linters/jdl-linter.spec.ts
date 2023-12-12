@@ -28,7 +28,7 @@ import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from '
 import Issues from './issues/issues.js';
 import EnumIssue from './issues/enum-issue.js';
 import relationshipIssue from './issues/relationship-issue.js';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

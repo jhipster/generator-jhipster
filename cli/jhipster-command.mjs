@@ -20,7 +20,7 @@
 import chalk from 'chalk';
 import { Command, Option } from 'commander';
 import lodash from 'lodash';
-import { convertConfigToOption } from '../lib/internal/index.mjs';
+import { convertConfigToOption } from '../lib/internal/index.js';
 
 const { kebabCase } = lodash;
 

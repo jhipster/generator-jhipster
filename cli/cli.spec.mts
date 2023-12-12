@@ -7,7 +7,7 @@ import { expect, mock, resetAllMocks, fn } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { BaseEnvironment } from '@yeoman/types';
 import { coerce } from 'semver';
-import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.mjs';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
 
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
@@ -157,7 +157,7 @@ describe('cli', () => {
     beforeEach(async () => {
       getCommand.mockImplementation(actualGetCommonand);
 
-      const BaseGenerator = (await import('../generators/base/index.mjs')).default;
+      const BaseGenerator = (await import('../generators/base/index.js')).default;
       env = await helpers.createTestEnv();
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, sharedData: {} });
       generator._options = {

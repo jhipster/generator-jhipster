@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 
 import JDLUnaryOption from '../models/jdl-unary-option.js';
-import { unaryOptions } from '../jhipster/index.mjs';
+import { unaryOptions } from '../jhipster/index.js';
 
 describe('jdl - JDLUnaryOption', () => {
   describe('new', () => {

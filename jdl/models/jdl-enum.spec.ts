@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { JDLEnum } from '../models/index.mjs';
+import { JDLEnum } from '../models/index.js';
 
 describe('jdl - JDLEnum', () => {
   describe('new', () => {

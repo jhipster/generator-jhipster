@@ -27,8 +27,8 @@ import { convertApplicationToJDL } from './json-to-jdl-application-converter.js'
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
 import { Entity } from './types.js';
-import { removeFieldsWithNullishValues } from '../../generators/base/support/config.mjs';
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
+import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 
 export default {
   convertToJDL,

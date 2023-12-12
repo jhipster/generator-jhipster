@@ -20,7 +20,7 @@
 import JDLEnums from './jdl-enums.js';
 import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';
-import { binaryOptions } from '../jhipster/index.mjs';
+import { binaryOptions } from '../jhipster/index.js';
 import JDLEntity from './jdl-entity.js';
 import JDLRelationship from './jdl-relationship.js';
 

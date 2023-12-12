@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 
 import parseFromDir from '../readers/json-reader.js';
-import { unaryOptions } from '../jhipster/index.mjs';
+import { unaryOptions } from '../jhipster/index.js';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 

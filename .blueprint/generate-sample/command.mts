@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../../generators/base/api.mjs';
-import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.mjs';
+import { JHipsterCommandDefinition } from '../../generators/base/api.js';
+import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 
 const command: JHipsterCommandDefinition = {
   arguments: {

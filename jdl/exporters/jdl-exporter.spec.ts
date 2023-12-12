@@ -23,11 +23,11 @@ import { expect } from 'chai';
 import { jestExpect } from 'esmocha';
 
 import JDLObject from '../models/jdl-object.js';
-import { JDLEntity } from '../models/index.mjs';
+import { JDLEntity } from '../models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../models/jdl-application.js';
-import { applicationOptions, clientFrameworkTypes } from '../jhipster/index.mjs';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { applicationOptions, clientFrameworkTypes } from '../jhipster/index.js';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {

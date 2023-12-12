@@ -18,7 +18,7 @@
  */
 import { upperFirst } from 'lodash-es';
 import { RelationshipSide, JDLRelationshipType } from '../basic-types/relationships.js';
-import { Validations } from '../jhipster/index.mjs';
+import { Validations } from '../jhipster/index.js';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
 
 const { REQUIRED } = Validations;

@@ -46,24 +46,24 @@
     },
     "./package.json": "./package.json",
     "./generators": {
-      "types": "./dist/types/generators/generator-list.d.mts",
-      "default": "./dist/generators/generator-list.mjs"
+      "types": "./dist/types/generators/generator-list.d.ts",
+      "default": "./dist/generators/generator-list.js"
     },
     "./generators/*": {
       "types": "./dist/types/generators/*/types-export.d.ts",
-      "default": "./dist/generators/*/index.mjs"
+      "default": "./dist/generators/*/index.js"
     },
     "./generators/*/support": {
-      "types": "./dist/types/generators/*/support/index.d.mts",
-      "default": "./dist/generators/*/support/index.mjs"
+      "types": "./dist/types/generators/*/support/index.d.ts",
+      "default": "./dist/generators/*/support/index.js"
     },
     "./jdl": {
       "types": "./dist/types/jdl/index.d.ts",
       "default": "./dist/jdl/index.js"
     },
     "./testing": {
-      "types": "./dist/types/testing/index.d.mts",
-      "default": "./dist/testing/index.mjs"
+      "types": "./dist/types/testing/index.d.ts",
+      "default": "./dist/testing/index.js"
     }
   },
   "main": "./dist/generators/index.js",

@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 
 import { createProgram } from './program.mjs';
-import { defaultHelpers as helpers } from '../test/support/index.mjs';
+import { defaultHelpers as helpers } from '../test/support/index.js';
 
 describe('cli - program', () => {
   beforeEach(async () => {

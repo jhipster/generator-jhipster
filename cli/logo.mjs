@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { packageJson } from '../lib/index.mjs';
+import { packageJson } from '../lib/index.js';
 
 export default `${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}
 ${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}

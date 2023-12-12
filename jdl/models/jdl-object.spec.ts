@@ -20,12 +20,12 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../jhipster/index.mjs';
+import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../jhipster/index.js';
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import JDLDeployment from '../models/jdl-deployment.js';
-import { JDLEntity, JDLEnum } from '../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship from '../models/jdl-relationship.js';

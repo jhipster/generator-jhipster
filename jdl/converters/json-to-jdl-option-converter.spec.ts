@@ -23,7 +23,7 @@ import { expect } from 'chai';
 import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
-import { unaryOptions } from '../jhipster/index.mjs';
+import { unaryOptions } from '../jhipster/index.js';
 
 const { SKIP_CLIENT } = unaryOptions;
 

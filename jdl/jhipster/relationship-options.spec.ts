@@ -20,7 +20,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { relationshipOptions } from '../jhipster/index.mjs';
+import { relationshipOptions } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY, exists } = relationshipOptions;
 

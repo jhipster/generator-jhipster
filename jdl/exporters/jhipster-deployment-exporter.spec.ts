@@ -25,8 +25,8 @@ import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../models/jdl-deployment.js';
-import { deploymentOptions } from '../jhipster/index.mjs';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { deploymentOptions } from '../jhipster/index.js';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },

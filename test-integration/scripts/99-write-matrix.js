@@ -2,7 +2,7 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { JAVA_VERSION, NODE_VERSION } from '../../generators/generator-constants.mjs';
+import { JAVA_VERSION, NODE_VERSION } from '../../generators/generator-constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const packageRoot = join(dirname(__filename), '../..');

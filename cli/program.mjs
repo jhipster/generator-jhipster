@@ -30,9 +30,9 @@ import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.mjs';
 import JHipsterCommand from './jhipster-command.mjs';
 import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
-import { packageJson } from '../lib/index.mjs';
-import { packageNameToNamespace } from '../generators/base/support/index.mjs';
-import command from '../generators/base/command.mjs';
+import { packageJson } from '../lib/index.js';
+import { packageNameToNamespace } from '../generators/base/support/index.js';
+import command from '../generators/base/command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

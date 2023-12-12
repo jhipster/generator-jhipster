@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 import JDLValidation from '../models/jdl-validation.js';
-import { validations } from '../jhipster/index.mjs';
+import { validations } from '../jhipster/index.js';
 
 const {
   Validations: { PATTERN },

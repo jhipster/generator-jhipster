@@ -18,7 +18,7 @@
  */
 
 import Validator from './validator.js';
-import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions, applicationOptions } from '../jhipster/index.mjs';
+import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions, applicationOptions } from '../jhipster/index.js';
 
 const { Options } = deploymentOptions;
 const { MICROSERVICE } = applicationTypes;

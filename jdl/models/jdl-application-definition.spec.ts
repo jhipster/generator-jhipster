@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from 'chai';
-import { applicationOptions } from '../jhipster/index.mjs';
+import { applicationOptions } from '../jhipster/index.js';
 import JDLApplicationDefinition from './jdl-application-definition.js';
 
 const { OptionNames } = applicationOptions;

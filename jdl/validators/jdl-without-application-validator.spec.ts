@@ -19,12 +19,12 @@
 
 import { expect } from 'chai';
 import JDLObject from '../models/jdl-object.js';
-import { JDLEntity } from '../models/index.mjs';
+import { JDLEntity } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { applicationTypes, databaseTypes, fieldTypes, validations, relationshipTypes, binaryOptions } from '../jhipster/index.mjs';
+import { applicationTypes, databaseTypes, fieldTypes, validations, relationshipTypes, binaryOptions } from '../jhipster/index.js';
 import createValidator from '../validators/jdl-without-application-validator.js';
 
 const { GATEWAY } = applicationTypes;

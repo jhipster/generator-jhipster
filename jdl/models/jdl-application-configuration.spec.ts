@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 import JDLApplicationConfiguration from '../models/jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
-import { applicationOptions } from '../jhipster/index.mjs';
+import { applicationOptions } from '../jhipster/index.js';
 
 const { OptionNames } = applicationOptions;
 

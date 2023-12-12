@@ -24,7 +24,7 @@ import { jestExpect } from 'esmocha';
 import fse from 'fs-extra';
 import { expect } from 'chai';
 
-import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.mjs';
+import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.js';
 import { createImporterFromFiles, createImporterFromContent } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;

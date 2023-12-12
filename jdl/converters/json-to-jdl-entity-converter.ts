@@ -18,7 +18,7 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions } from '../models/jdl-relationship.js';
@@ -27,7 +27,7 @@ import JDLBinaryOption from '../models/jdl-binary-option.js';
 
 import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
-import { fieldTypes, unaryOptions, binaryOptions, relationshipOptions } from '../jhipster/index.mjs';
+import { fieldTypes, unaryOptions, binaryOptions, relationshipOptions } from '../jhipster/index.js';
 import { Entity, Field, Relationship } from './types.js';
 import { asJdlRelationshipType } from '../jhipster/relationship-types.js';
 

@@ -20,7 +20,7 @@
 import RelationshipIssue from './issues/relationship-issue.js';
 
 import { rulesNames } from './rules.js';
-import { relationshipTypes } from '../jhipster/index.mjs';
+import { relationshipTypes } from '../jhipster/index.js';
 
 let issues: RelationshipIssue[];
 

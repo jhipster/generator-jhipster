@@ -1,6 +1,6 @@
 import { expect } from 'esmocha';
 import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
-import { FEIGN_CLIENT as optionName } from './index.mjs';
+import { FEIGN_CLIENT as optionName } from './index.js';
 
 describe(`generators - server - jdl - ${optionName}`, () => {
   [true, false].forEach(optionValue => {

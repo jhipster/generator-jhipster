@@ -18,10 +18,10 @@
  */
 
 import { expect } from 'chai';
-import { applicationTypes, fieldTypes, unaryOptions, relationshipTypes } from '../jhipster/index.mjs';
+import { applicationTypes, fieldTypes, unaryOptions, relationshipTypes } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
-import { JDLEntity, JDLEnum } from '../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';

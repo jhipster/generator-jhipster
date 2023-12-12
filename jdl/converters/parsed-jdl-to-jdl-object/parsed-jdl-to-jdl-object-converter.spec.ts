@@ -25,7 +25,7 @@ import { expect } from 'chai';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
-import { JDLEntity, JDLEnum } from '../../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
@@ -38,7 +38,7 @@ import {
   applicationOptions,
   entityOptions,
   binaryOptions,
-} from '../../jhipster/index.mjs';
+} from '../../jhipster/index.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { OptionNames } = applicationOptions;

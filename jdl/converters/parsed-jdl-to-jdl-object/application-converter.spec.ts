@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import { applicationTypes } from '../../jhipster/index.mjs';
+import { applicationTypes } from '../../jhipster/index.js';
 import createJDLApplication from '../../models/jdl-application-factory.js';
 import { convertApplications } from './application-converter.js';
 
