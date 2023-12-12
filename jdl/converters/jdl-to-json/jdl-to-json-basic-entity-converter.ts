@@ -20,7 +20,7 @@
 import JSONEntity from '../../jhipster/json-entity.js';
 import formatComment from '../../utils/format-utils.js';
 import getTableNameFromEntityName from '../../jhipster/entity-table-name-creator.js';
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 
 export default {
   convert,

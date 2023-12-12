@@ -19,7 +19,7 @@
 
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { unaryOptions, binaryOptions } from '../../jhipster/index.mjs';
+import { unaryOptions, binaryOptions } from '../../jhipster/index.js';
 
 const { OptionValues, getOptionName } = binaryOptions;
 export default { convertOptions };

@@ -25,10 +25,10 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { unaryOptions, binaryOptions } from '../../jhipster/index.mjs';
+import { unaryOptions, binaryOptions } from '../../jhipster/index.js';
 import { convert } from './jdl-to-json-option-converter.js';
 import logger from '../../utils/objects/logger.js';
 

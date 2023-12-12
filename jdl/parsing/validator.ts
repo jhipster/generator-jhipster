@@ -24,7 +24,7 @@ import { tokenMatcher as matchesToken } from 'chevrotain';
 import JDLParser from './jdl-parser.js';
 import { tokens as LexerTokens } from './lexer/lexer.js';
 import { checkConfigKeys } from './self-checks/parsing-system-checker.js';
-import jhipsterDefinition from '../../generators/app/jdl/index.mjs';
+import jhipsterDefinition from '../../generators/app/jdl/index.js';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;

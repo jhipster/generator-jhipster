@@ -34,10 +34,10 @@ import {
   binaryOptions,
   relationshipTypes,
   relationshipOptions,
-} from '../../jhipster/index.mjs';
+} from '../../jhipster/index.js';
 import createJDLApplication from '../../models/jdl-application-factory.js';
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
 import JDLRelationship from '../../models/jdl-relationship.js';

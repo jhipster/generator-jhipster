@@ -20,5 +20,5 @@
 
 // Executable should be written in commonjs https://github.com/nodejs/modules/issues/152.
 (async () => {
-  await import('./cli.mjs');
+  await import('./cli.js');
 })();

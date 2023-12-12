@@ -18,7 +18,7 @@
  */
 
 import { lowerFirst } from 'lodash-es';
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 import { formatComment } from '../../utils/format-utils.js';
 
 export default { convertEntities };

@@ -18,7 +18,7 @@
  */
 
 import Validator from './validator.js';
-import { validations } from '../jhipster/index.mjs';
+import { validations } from '../jhipster/index.js';
 
 const {
   Validations: { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES },

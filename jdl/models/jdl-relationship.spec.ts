@@ -21,7 +21,7 @@
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
-import { relationshipTypes, relationshipOptions } from '../jhipster/index.mjs';
+import { relationshipTypes, relationshipOptions } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 

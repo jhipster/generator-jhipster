@@ -19,11 +19,11 @@
 
 import { expect } from 'chai';
 
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipTypes, validations } from '../jhipster/index.mjs';
+import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipTypes, validations } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { JDLEntity } from '../models/index.mjs';
+import { JDLEntity } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLValidation from '../models/jdl-validation.js';

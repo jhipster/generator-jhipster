@@ -42,20 +42,20 @@
     },
     "./cli": {
       "types": "./dist/types/cli/index.d.mts",
-      "default": "./dist/cli/index.mjs"
+      "default": "./dist/cli/index.js"
     },
     "./package.json": "./package.json",
     "./generators": {
       "types": "./dist/types/generators/generator-list.d.mts",
-      "default": "./dist/generators/generator-list.mjs"
+      "default": "./dist/generators/generator-list.js"
     },
     "./generators/*": {
       "types": "./dist/types/generators/*/types-export.d.ts",
-      "default": "./dist/generators/*/index.mjs"
+      "default": "./dist/generators/*/index.js"
     },
     "./generators/*/support": {
       "types": "./dist/types/generators/*/support/index.d.mts",
-      "default": "./dist/generators/*/support/index.mjs"
+      "default": "./dist/generators/*/support/index.js"
     },
     "./jdl": {
       "types": "./dist/types/jdl/index.d.ts",
@@ -63,7 +63,7 @@
     },
     "./testing": {
       "types": "./dist/types/testing/index.d.mts",
-      "default": "./dist/testing/index.mjs"
+      "default": "./dist/testing/index.js"
     }
   },
   "main": "./dist/generators/index.js",

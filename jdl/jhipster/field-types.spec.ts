@@ -21,8 +21,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { expect } from 'chai';
 
-import { databaseTypes, fieldTypes, validations } from '../jhipster/index.mjs';
-import { JDLEnum } from '../models/index.mjs';
+import { databaseTypes, fieldTypes, validations } from '../jhipster/index.js';
+import { JDLEnum } from '../models/index.js';
 
 const {
   Validations: { MIN, MAXLENGTH, PATTERN },

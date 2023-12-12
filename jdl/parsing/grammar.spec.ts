@@ -22,7 +22,7 @@
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { parseFromContent } from '../readers/jdl-reader.js';
-import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../jhipster/index.mjs';
+import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../jhipster/index.js';
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 const {

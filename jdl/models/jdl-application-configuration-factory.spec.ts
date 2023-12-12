@@ -19,7 +19,7 @@
 
 import { expect } from 'esmocha';
 import createApplicationConfigurationFromObject from '../models/jdl-application-configuration-factory.js';
-import { applicationOptions } from '../jhipster/index.mjs';
+import { applicationOptions } from '../jhipster/index.js';
 
 const { OptionNames } = applicationOptions;
 

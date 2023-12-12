@@ -1,7 +1,7 @@
 import { expect } from 'esmocha';
 import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
-import { DATABASE_MIGRATION as optionName } from './index.mjs';
-import optionDefinition from './database-migration.mjs';
+import { DATABASE_MIGRATION as optionName } from './index.js';
+import optionDefinition from './database-migration.js';
 
 describe(`generators - server - jdl - ${optionName}`, () => {
   optionDefinition.knownChoices.forEach(optionValue => {

@@ -24,7 +24,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
-import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/index.mjs';
+import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

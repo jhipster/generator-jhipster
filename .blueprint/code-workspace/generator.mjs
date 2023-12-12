@@ -1,7 +1,7 @@
 import { join } from 'path';
 import * as _ from 'lodash-es';
-import BaseGenerator from '../../generators/base/index.mjs';
-import { getPackageRoot } from '../../lib/index.mjs';
+import BaseGenerator from '../../generators/base/index.js';
+import { getPackageRoot } from '../../lib/index.js';
 import command from './command.mjs';
 import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '../support.mjs';
 

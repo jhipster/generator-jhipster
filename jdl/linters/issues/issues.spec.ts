@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import Issues from './issues.js';
 import { rulesNames } from '../rules.js';
-import { relationshipTypes } from '../../jhipster/index.mjs';
+import { relationshipTypes } from '../../jhipster/index.js';
 import EntityIssue from './entity-issue.js';
 import FieldIssue from './field-issue.js';
 import EnumIssue from './enum-issue.js';

@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import { deploymentOptions, applicationTypes, databaseTypes, searchEngineTypes } from '../jhipster/index.mjs';
+import { deploymentOptions, applicationTypes, databaseTypes, searchEngineTypes } from '../jhipster/index.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
 

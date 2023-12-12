@@ -19,7 +19,7 @@
 import * as _ from 'lodash-es';
 import JDLObject from '../../models/jdl-object.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { applicationTypes, binaryOptions } from '../../jhipster/index.mjs';
+import { applicationTypes, binaryOptions } from '../../jhipster/index.js';
 
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';

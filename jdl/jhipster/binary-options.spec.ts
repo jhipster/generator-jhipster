@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { binaryOptions } from '../jhipster/index.mjs';
+import { binaryOptions } from '../jhipster/index.js';
 
 describe('jdl - BinaryOptions', () => {
   it('should match values', () => {

@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { getPackageRoot } from '../lib/index.mjs';
+import { getPackageRoot } from '../lib/index.js';
 
 const packageRoot = getPackageRoot();
 export const defaultSamplesFolder = join(packageRoot, '../jhipster-samples');

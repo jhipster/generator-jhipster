@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'esmocha';
-import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.mjs';
+import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.js';
 import { convertOptions } from './option-converter.js';
 
 const { MapperTypes, PaginationTypes } = entityOptions;

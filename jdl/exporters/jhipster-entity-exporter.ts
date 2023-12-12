@@ -19,7 +19,7 @@
 
 import path from 'path';
 
-import { applicationTypes } from '../jhipster/index.mjs';
+import { applicationTypes } from '../jhipster/index.js';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
 import { doesFileExist } from '../utils/file-utils.js';
 
