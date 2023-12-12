@@ -32,6 +32,7 @@ import {
   addGradlePluginCallback,
   addGradlePluginManagementCallback,
   addGradlePropertyCallback,
+  addGradleBuildSrcDependencyCallback,
 } from './internal/needles.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
@@ -73,6 +74,8 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
         source.addGradleProperty = property => this.editFile('gradle.properties', addGradlePropertyCallback(property));
+        source.addGradleBuildSrcDependency = dependency =>
+          this.editFile('buildSrc/build.gradle', addGradleBuildSrcDependencyCallback(dependency));
       },
     });
   }
