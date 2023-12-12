@@ -145,13 +145,34 @@ describe('generator - base - with scoped blueprint', () => {
     });
 
     it('should compose with blueprint', () => {
-      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called);
+      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called).toBe(true);
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', {
         'generator-jhipster': { blueprints: [{ name: '@jhipster/generator-jhipster-scoped-blueprint', version: '9.9.9' }] },
       });
+    });
+  });
+});
+
+describe('generator - base - with blueprints disabled', () => {
+  describe('should not compose with blueprint', () => {
+    let runResult: RunResult;
+    before(async () => {
+      runResult = await helpers
+        .runTestBlueprintGenerator()
+        .withFakeTestBlueprint('@jhipster/generator-jhipster-scoped-blueprint')
+        .withMockedGenerators(['@jhipster/jhipster-scoped-blueprint:test-blueprint'])
+        .withJHipsterConfig()
+        .withOptions({
+          blueprints: '@jhipster/generator-jhipster-scoped-blueprint',
+          disableBlueprints: true,
+        });
+    });
+
+    it('should compose with blueprint', () => {
+      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called).toBeFalsy;
     });
   });
 });
@@ -207,7 +228,7 @@ describe('generator - base - local blueprint', () => {
       constructor(args, opts, features) {
         super(args, opts, features);
       }
-  
+
       get [BaseGenerator.WRITING]() {
         return {
           write() {

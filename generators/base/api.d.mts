@@ -34,6 +34,7 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   skipPriorities?: string[];
   skipWriting?: boolean;
   entities?: string[];
+  disableBlueprints?: boolean;
 
   /* blueprint options */
   blueprints?: string;
