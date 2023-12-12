@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { expect, esmocha } from 'esmocha';
 import lodash from 'lodash';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import BaseGenerator from './index.js';
 import { defaultHelpers as helpers } from '../../test/support/index.js';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.js';

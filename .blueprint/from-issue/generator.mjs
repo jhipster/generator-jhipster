@@ -6,8 +6,8 @@ import { promptSamplesFolder } from '../support.mjs';
 import { join } from 'path';
 import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import { CLI_NAME } from '../../cli/utils.js';
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import { CLI_NAME } from '../../cli/utils.mjs';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';

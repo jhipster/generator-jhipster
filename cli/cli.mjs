@@ -24,8 +24,8 @@ import semver from 'semver';
 import chalk from 'chalk';
 
 import { packageJson } from '../lib/index.js';
-import { runJHipster } from './program.js';
-import { done, logger } from './utils.js';
+import { runJHipster } from './program.mjs';
+import { done, logger } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -21,7 +21,7 @@ import { get } from 'https';
 import path from 'path';
 import { inspect } from 'util';
 
-import { logger } from './utils.js';
+import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.js';
 
 const downloadFile = (url: string, filename: string): Promise<string> => {

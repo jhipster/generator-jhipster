@@ -4,7 +4,7 @@ import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'y
 import * as _ from 'lodash-es';
 
 import { basename, join } from 'path';
-import EnvironmentBuilder from '../cli/environment-builder.js';
+import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
 import getGenerator from './get-generator.js';

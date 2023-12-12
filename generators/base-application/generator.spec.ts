@@ -22,7 +22,7 @@ import { fileURLToPath } from 'url';
 import { expect, esmocha } from 'esmocha';
 import lodash from 'lodash';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.js';
 import type { BaseApplication } from '../base-application/types.js';
 import { defaultHelpers as helpers } from '../../test/support/index.js';

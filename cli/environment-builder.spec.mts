@@ -24,7 +24,7 @@ import sinon from 'sinon';
 import { jestExpect } from 'esmocha';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
 
-import EnvironmentBuilder from './environment-builder.js';
+import EnvironmentBuilder from './environment-builder.mjs';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {

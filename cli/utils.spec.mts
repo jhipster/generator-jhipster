@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { getCommand } from './utils.js';
+import { getCommand } from './utils.mjs';
 
 describe('cli - utils test', () => {
   describe('getCommand', () => {

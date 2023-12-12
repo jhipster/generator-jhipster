@@ -9,11 +9,11 @@ import { BaseEnvironment } from '@yeoman/types';
 import { coerce } from 'semver';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
 
-import { getCommand as actualGetCommonand } from './utils.js';
-import { createProgram } from './program.js';
+import { getCommand as actualGetCommonand } from './utils.mjs';
+import { createProgram } from './program.mjs';
 
-const { logger, getCommand } = await mock<typeof import('./utils.js')>('./utils.js');
-const { buildJHipster } = await import('./program.js');
+const { logger, getCommand } = await mock<typeof import('./utils.mjs')>('./utils.mjs');
+const { buildJHipster } = await import('./program.mjs');
 
 const __filename = fileURLToPath(import.meta.url);
 const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');

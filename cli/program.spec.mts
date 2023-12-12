@@ -2,7 +2,7 @@
 
 import { expect } from 'chai';
 
-import { createProgram } from './program.js';
+import { createProgram } from './program.mjs';
 import { defaultHelpers as helpers } from '../test/support/index.js';
 
 describe('cli - program', () => {

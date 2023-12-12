@@ -25,11 +25,11 @@ import { fileURLToPath } from 'url';
 import didYouMean from 'didyoumean';
 import chalk from 'chalk';
 
-import logo from './logo.js';
-import EnvironmentBuilder from './environment-builder.js';
-import SUB_GENERATORS from './commands.js';
-import JHipsterCommand from './jhipster-command.js';
-import { CLI_NAME, logger, getCommand, done } from './utils.js';
+import logo from './logo.mjs';
+import EnvironmentBuilder from './environment-builder.mjs';
+import SUB_GENERATORS from './commands.mjs';
+import JHipsterCommand from './jhipster-command.mjs';
+import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
