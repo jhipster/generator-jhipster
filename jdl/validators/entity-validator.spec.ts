@@ -18,7 +18,7 @@
  */
 
 import { expect } from 'chai';
-import { JDLEntity } from '../models/index.mjs';
+import { JDLEntity } from '../models/index.js';
 import EntityValidator from '../validators/entity-validator.js';
 
 describe('jdl - EntityValidator', () => {

@@ -1,11 +1,11 @@
 import { Octokit } from 'octokit';
 import { setOutput } from '@actions/core';
-import BaseGenerator from '../../generators/base/index.mjs';
+import BaseGenerator from '../../generators/base/index.js';
 import command from './command.mjs';
 import { promptSamplesFolder } from '../support.mjs';
 import { join } from 'path';
-import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.mjs';
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.mjs';
+import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.js';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { CLI_NAME } from '../../cli/utils.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 
@@ -51,6 +51,14 @@ export default class extends BaseGenerator {
     return this.asDefaultTaskGroup({
       async generateSample() {
         const octokit = new Octokit();
+        // Gets the owner, repo and issue_number from a string such as, "jhipster/generator-jhipster#12345"
+        if (this.issue.includes('#')) {
+          let split = this.issue.split('/');
+          this.owner = split[0];
+          split = split[1].split('#');
+          this.repo = split[0];
+          this.issue = split[1];
+        }
         const issue = await octokit.request('GET /repos/{owner}/{repo}/issues/{issue_number}', {
           owner: this.owner,
           repo: this.repository,

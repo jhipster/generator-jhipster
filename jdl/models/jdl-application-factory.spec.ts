@@ -19,7 +19,7 @@
 
 import { expect } from 'chai';
 import createJDLApplication from '../models/jdl-application-factory.js';
-import { applicationTypes } from '../jhipster/index.mjs';
+import { applicationTypes } from '../jhipster/index.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 

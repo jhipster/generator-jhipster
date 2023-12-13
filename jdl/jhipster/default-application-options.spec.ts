@@ -20,7 +20,7 @@
 
 import { expect } from 'chai';
 
-import { defaultApplicationOptions } from '../jhipster/index.mjs';
+import { defaultApplicationOptions } from '../jhipster/index.js';
 
 const {
   getConfigForMonolithApplication,

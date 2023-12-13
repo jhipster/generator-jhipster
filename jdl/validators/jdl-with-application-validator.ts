@@ -19,7 +19,7 @@
 
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationOptions, relationshipOptions } from '../jhipster/index.mjs';
+import { fieldTypes, applicationOptions, relationshipOptions } from '../jhipster/index.js';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';

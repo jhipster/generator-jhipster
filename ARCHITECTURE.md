@@ -29,8 +29,8 @@ Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is t
 ## Lifecycle
 
 - [CLI entry point](https://github.com/jhipster/generator-jhipster/blob/main/cli/jhipster.cjs)
-- [Basic environment validation](https://github.com/jhipster/generator-jhipster/blob/main/cli/cli.mjs)
-- [Cli arguments parsing and Environment bootstrap](https://github.com/jhipster/generator-jhipster/blob/main/cli/program.mjs)
+- [Basic environment validation](https://github.com/jhipster/generator-jhipster/blob/main/cli/cli.js)
+- [Cli arguments parsing and Environment bootstrap](https://github.com/jhipster/generator-jhipster/blob/main/cli/program.js)
   - Lookup for generators and blueprints
   - Build CLI options and arguments definition
   - Parse options and arguments

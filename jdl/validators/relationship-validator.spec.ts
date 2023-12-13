@@ -20,7 +20,7 @@
 import { expect } from 'chai';
 import JDLRelationship from '../models/jdl-relationship.js';
 import RelationshipValidator from '../validators/relationship-validator.js';
-import { relationshipOptions, relationshipTypes } from '../jhipster/index.mjs';
+import { relationshipOptions, relationshipTypes } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;

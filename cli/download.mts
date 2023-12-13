@@ -22,7 +22,7 @@ import path from 'path';
 import { inspect } from 'util';
 
 import { logger } from './utils.mjs';
-import { packageJson } from '../lib/index.mjs';
+import { packageJson } from '../lib/index.js';
 
 const downloadFile = (url: string, filename: string): Promise<string> => {
   return new Promise((resolve, reject) => {

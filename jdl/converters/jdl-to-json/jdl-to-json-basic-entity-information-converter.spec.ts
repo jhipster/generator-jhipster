@@ -24,7 +24,7 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 import { convert } from './jdl-to-json-basic-entity-converter.js';
 
 describe('jdl - JDLToJSONBasicEntityConverter', () => {

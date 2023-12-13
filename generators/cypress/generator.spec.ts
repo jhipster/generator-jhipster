@@ -1,0 +1,166 @@
+/**
+ * Copyright 2013-2023 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import path, { basename, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { expect } from 'esmocha';
+import lodash from 'lodash';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.js';
+import {
+  fromMatrix,
+  extendMatrix,
+  AuthenticationTypeMatrix,
+  checkEnforcements,
+  defaultHelpers as helpers,
+} from '../../test/support/index.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import Generator from './generator.js';
+import { GENERATOR_CYPRESS } from '../generator-list.js';
+
+const { CYPRESS } = testFrameworkTypes;
+const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
+const { snakeCase } = lodash;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const generator = basename(__dirname);
+
+const generatorPath = path.join(__dirname, 'index.ts');
+
+const e2eMatrix = extendMatrix(
+  fromMatrix({
+    ...AuthenticationTypeMatrix,
+    cypressAudit: [false, true],
+  }),
+  {
+    clientFramework: [ANGULAR, REACT, VUE],
+    withAdminUi: [false, true],
+    cypressCoverage: [false, true],
+    clientRootDir: [undefined, { value: 'clientRoot/' }, { value: '' }],
+  },
+);
+
+const e2eSamples = Object.fromEntries(
+  Object.entries(e2eMatrix).map(([name, sample]) => [
+    name,
+    {
+      ...sample,
+      testFrameworks: [CYPRESS],
+    },
+  ]),
+);
+const entities = [
+  {
+    name: 'EntityA',
+    changelogDate: '20220129025419',
+  },
+];
+
+describe(`generator - ${generator}`, () => {
+  it('generator-list constant matches folder name', async () => {
+    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
+  });
+  shouldSupportFeatures(Generator);
+  describe('blueprint support', () => testBlueprintSupport(generator));
+  checkEnforcements({ client: true }, GENERATOR_CYPRESS);
+
+  it('samples matrix should match snapshot', () => {
+    expect(e2eSamples).toMatchSnapshot();
+  });
+
+  Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
+    describe(name, () => {
+      let runResult;
+
+      before(async () => {
+        runResult = await helpers.run(generatorPath).withJHipsterConfig(sampleConfig, entities);
+      });
+
+      after(() => runResult.cleanup());
+
+      it('should match generated files snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+
+      it('contains cypress testFramework', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [CYPRESS] } });
+      });
+
+      describe('withAdminUi', () => {
+        const { applicationType, withAdminUi, clientRootDir = '' } = sampleConfig;
+        const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
+
+        if (applicationType !== 'microservice') {
+          const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
+          it(adminUiRoutingTitle, () => {
+            const assertion = (...args) =>
+              generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
+
+            assertion(
+              `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,
+              '  metricsPageHeadingSelector,\n' +
+                '  healthPageHeadingSelector,\n' +
+                '  logsPageHeadingSelector,\n' +
+                '  configurationPageHeadingSelector,',
+            );
+
+            assertion(
+              `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,
+              "  describe('/metrics', () => {\n" +
+                "    it('should load the page', () => {\n" +
+                "      cy.clickOnAdminMenuItem('metrics');\n" +
+                "      cy.get(metricsPageHeadingSelector).should('be.visible');\n" +
+                '    });\n' +
+                '  });\n' +
+                '\n' +
+                "  describe('/health', () => {\n" +
+                "    it('should load the page', () => {\n" +
+                "      cy.clickOnAdminMenuItem('health');\n" +
+                "      cy.get(healthPageHeadingSelector).should('be.visible');\n" +
+                '    });\n' +
+                '  });\n' +
+                '\n' +
+                "  describe('/logs', () => {\n" +
+                "    it('should load the page', () => {\n" +
+                "      cy.clickOnAdminMenuItem('logs');\n" +
+                "      cy.get(logsPageHeadingSelector).should('be.visible');\n" +
+                '    });\n' +
+                '  });\n' +
+                '\n' +
+                "  describe('/configuration', () => {\n" +
+                "    it('should load the page', () => {\n" +
+                "      cy.clickOnAdminMenuItem('configuration');\n" +
+                "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
+                '    });\n' +
+                '  });',
+            );
+
+            assertion(
+              `${clientRootDir}src/test/javascript/cypress/support/commands.ts`,
+              'export const metricsPageHeadingSelector = \'[data-cy="metricsPageHeading"]\';\n' +
+                'export const healthPageHeadingSelector = \'[data-cy="healthPageHeading"]\';\n' +
+                'export const logsPageHeadingSelector = \'[data-cy="logsPageHeading"]\';\n' +
+                'export const configurationPageHeadingSelector = \'[data-cy="configurationPageHeading"]\';',
+            );
+          });
+        }
+      });
+    });
+  });
+});

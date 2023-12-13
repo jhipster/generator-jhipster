@@ -18,7 +18,7 @@
  */
 
 import logger from '../../utils/objects/logger.js';
-import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.mjs';
+import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.js';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 

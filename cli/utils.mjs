@@ -19,7 +19,7 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
 
-import { createJHipsterLogger, CLI_LOGGER } from '../generators/base/support/index.mjs';
+import { createJHipsterLogger, CLI_LOGGER } from '../generators/base/support/index.js';
 
 export const CLI_NAME = 'jhipster';
 export const GENERATOR_NAME = 'generator-jhipster';

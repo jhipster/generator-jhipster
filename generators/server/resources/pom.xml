@@ -28,7 +28,7 @@
         <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>10.12.5</checkstyle.version>
+        <checkstyle.version>10.12.6</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.6.0</gatling-maven-plugin.version>

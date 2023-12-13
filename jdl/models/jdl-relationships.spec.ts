@@ -22,7 +22,7 @@ import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
-import { relationshipTypes } from '../jhipster/index.mjs';
+import { relationshipTypes } from '../jhipster/index.js';
 import JDLRelationships from '../models/jdl-relationships.js';
 
 describe('jdl - JDLRelationships', () => {

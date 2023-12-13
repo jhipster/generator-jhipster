@@ -21,11 +21,11 @@
 import { jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
-import { applicationTypes } from '../jhipster/index.mjs';
+import { applicationTypes } from '../jhipster/index.js';
 
 import entityOptions from '../jhipster/entity-options.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
 const { MONOLITH, MICROSERVICE } = applicationTypes;
