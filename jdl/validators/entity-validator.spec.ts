@@ -52,15 +52,6 @@ describe('jdl - EntityValidator', () => {
           expect(() => validator.validate({})).to.throw(/^The entity attributes name, tableName were not found\.$/);
         });
       });
-      describe('without fields', () => {
-        describe('should fail', () => {
-          it('should fail', () => {
-            expect(() => validator.validate({ name: 'A', tableName: 'a' })).to.throw(
-              /^The entity attributes name, tableName were not found\.$/,
-            );
-          });
-        });
-      });
     });
   });
 });

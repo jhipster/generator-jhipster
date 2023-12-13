@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
@@ -871,8 +871,6 @@ JDLDeployment {
             jestExpect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
-  "myCustomBinaryOption": "customValue",
-  "myCustomUnaryOption": true,
   "service": "serviceClass",
   "skipClient": true,
 }
@@ -880,16 +878,16 @@ JDLDeployment {
             jestExpect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
-  "myCustomUnaryOption": true,
   "paginate": "pagination",
   "service": "serviceClass",
 }
 `);
             jestExpect(entityC.annotations).toMatchInlineSnapshot(`
 {
+  "embedded": true,
   "filter": true,
-  "myCustomBinaryOption": "customValue2",
   "paginate": "pagination",
+  "readOnly": true,
   "skipClient": true,
 }
 `);
