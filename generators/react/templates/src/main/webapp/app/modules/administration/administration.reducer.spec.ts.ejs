@@ -263,6 +263,9 @@ describe('Administration reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
 <%_ if (applicationTypeGateway && serviceDiscoveryAny || withAdminUi) { _%>
     beforeEach(() => {
       store = configureStore({
@@ -276,10 +279,6 @@ describe('Administration reducer tests', () => {
 <%_ } _%>
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getGatewayRoutes()(dispatch, getState, extra);
 
       expect(getGatewayRoutes.fulfilled.match(result)).toBe(true);
@@ -288,65 +287,37 @@ describe('Administration reducer tests', () => {
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getSystemHealth()(dispatch, getState, extra);
 
       expect(getSystemHealth.fulfilled.match(result)).toBe(true);
       expect(result.payload).toBe(resolvedObject);
     });
     it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getSystemMetrics()(dispatch, getState, extra);
 
       expect(getSystemMetrics.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_THREAD_DUMP_PENDING and FETCH_THREAD_DUMP_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getSystemThreadDump()(dispatch, getState, extra);
 
       expect(getSystemThreadDump.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getLoggers()(dispatch, getState, extra);
 
       expect(getLoggers.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_LOGS_CHANGE_LEVEL_PENDING and FETCH_LOGS_CHANGE_LEVEL_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await setLoggers({ name: 'ROOT', configuredLevel: 'DEBUG' })(dispatch, getState, extra);
 
       expect(setLoggers.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_CONFIGURATIONS_PENDING and FETCH_CONFIGURATIONS_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getConfigurations()(dispatch, getState, extra);
 
       expect(getConfigurations.fulfilled.match(result)).toBe(true);
     });
     it('dispatches FETCH_ENV_PENDING and FETCH_ENV_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getEnv()(dispatch, getState, extra);
 
       expect(getEnv.fulfilled.match(result)).toBe(true);

@@ -269,6 +269,9 @@ describe('Entities reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer(s: UnknownAction[] = [], action) {
@@ -284,9 +287,6 @@ describe('Entities reducer tests', () => {
 
     it('dispatches FETCH_<%= entityActionName %>_LIST actions', async () => {
       const arg = {};
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getEntities(arg)(dispatch, getState, extra);
 
@@ -295,9 +295,6 @@ describe('Entities reducer tests', () => {
 <%_ if (searchEngineAny) { _%>
     it('dispatches SEARCH_<%= entityActionNamePlural %> actions', async () => {
       const arg = {};
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await searchEntities(arg)(dispatch, getState, extra);
 
@@ -307,9 +304,6 @@ describe('Entities reducer tests', () => {
 
     it('dispatches FETCH_<%= entityActionName %> actions', async () => {
       const arg = 42666;
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getEntity(arg)(dispatch, getState, extra);
 
@@ -319,9 +313,6 @@ describe('Entities reducer tests', () => {
 <%_ if (!readOnly) { _%>
     it('dispatches CREATE_<%= entityActionName %> actions', async () => {
       const arg = <%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>;
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await createEntity(arg)(dispatch, getState, extra);
 
@@ -330,9 +321,6 @@ describe('Entities reducer tests', () => {
 
     it('dispatches UPDATE_<%= entityActionName %> actions', async () => {
       const arg = <%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>;
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await updateEntity(arg)(dispatch, getState, extra);
 
@@ -341,9 +329,6 @@ describe('Entities reducer tests', () => {
 
     it('dispatches PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
       const arg = { <%- primaryKey.name %>: <%- this.generateTestEntityId(primaryKey.type) %> };
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await partialUpdateEntity(arg)(dispatch, getState, extra);
 
@@ -352,9 +337,6 @@ describe('Entities reducer tests', () => {
 
     it('dispatches DELETE_<%= entityActionName %> actions', async () => {
       const arg = 42666;
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await deleteEntity(arg)(dispatch, getState, extra);
 

@@ -89,6 +89,9 @@ describe('Settings reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer(s: UnknownAction[] = [], action) {
@@ -101,9 +104,6 @@ describe('Settings reducer tests', () => {
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
       const arg = '';
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await updateAccount(arg)(dispatch, getState, extra);
 

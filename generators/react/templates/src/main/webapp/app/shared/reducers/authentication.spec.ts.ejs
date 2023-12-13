@@ -203,6 +203,9 @@ describe('Authentication reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer(s: UnknownAction[] = [], action) {
@@ -213,10 +216,6 @@ describe('Authentication reducer tests', () => {
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getAccount()(dispatch, getState, extra);
 
       expect(getAccount.fulfilled.match(result)).toBe(true);
@@ -225,10 +224,6 @@ describe('Authentication reducer tests', () => {
     it('dispatches LOGOUT actions', async () => {
     <%_ if (!authenticationTypeJwt) { _%>
       axios.post = sinon.stub().returns(Promise.resolve({}));
-
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await logoutServer()(dispatch, getState, extra);
 
@@ -248,10 +243,6 @@ describe('Authentication reducer tests', () => {
     it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
       const loginResponse = { headers: { authorization: 'auth' } };
       axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
-
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await authenticate('test', 'test')(dispatch, getState, extra);
 

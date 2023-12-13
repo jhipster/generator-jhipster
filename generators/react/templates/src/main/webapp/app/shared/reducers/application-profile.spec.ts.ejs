@@ -70,6 +70,9 @@ describe('Profile reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer(s: UnknownAction[] = [], action) {
@@ -80,10 +83,6 @@ describe('Profile reducer tests', () => {
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getProfile()(dispatch, getState, extra);
 
       expect(getProfile.fulfilled.match(result)).toBe(true);

@@ -6,6 +6,8 @@ import { TranslatorContext } from 'react-jhipster';
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
 
 const defaultLocale = '<%= nativeLanguage %>';
+const dispatch = jest.fn((x: any) => x);
+const extra = {};
 
 describe('Locale reducer tests', () => {
   it('should return the initial state', () => {
@@ -59,8 +61,6 @@ describe('Locale reducer tests', () => {
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
         const getState = jest.fn(() => ({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }));
-        const dispatch = jest.fn((x: any) => x);
-        const extra = {};
   
         const result = await setLocale(defaultLocale)(dispatch, getState, extra);
   
@@ -85,8 +85,6 @@ describe('Locale reducer tests', () => {
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
         const getState = jest.fn(() => ({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
-        const dispatch = jest.fn((x: any) => x);
-        const extra = {};
   
         const result = await setLocale(defaultLocale)(dispatch, getState, extra);
   
@@ -112,8 +110,6 @@ describe('Locale reducer tests', () => {
 
       it('dispatches loaded action with keys and sourcePrefix', async () => {
         const getState = jest.fn(() => ({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
-        const dispatch = jest.fn((x: any) => x);
-        const extra = {};
   
         const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
   
@@ -135,8 +131,6 @@ describe('Locale reducer tests', () => {
 
       it("doesn't dispatches loaded action", async () => {
         const getState = jest.fn(() => ({ locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] } }));
-        const dispatch = jest.fn((x: any) => x);
-        const extra = {};
   
         const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
   
@@ -158,8 +152,6 @@ describe('Locale reducer tests', () => {
 
       it("doesn't dispatches loaded action", async () => {
         const getState = jest.fn(() => ({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] } }));
-        const dispatch = jest.fn((x: any) => x);
-        const extra = {};
   
         const result = await addTranslationSourcePrefix(sourcePrefix)(dispatch, getState, extra);
   

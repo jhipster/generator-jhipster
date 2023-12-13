@@ -66,6 +66,9 @@ describe('User management reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer(s: UnknownAction[] = [], action) {
@@ -77,9 +80,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
       const arg = {};
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getUsers(arg)(dispatch, getState, extra);
 
@@ -88,9 +88,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
       const arg = { page: 1, size: 20, sort: 'id,desc' };
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getUsers(arg)(dispatch, getState, extra);
 

@@ -218,6 +218,9 @@ describe('User management reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn(() => ({}));
+    const dispatch = jest.fn((x: any) => x);
+    const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer(s: UnknownAction[] = [], action) {
@@ -232,9 +235,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions', async () => {
       const arg = {};
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getUsersAsAdmin(arg)(dispatch, getState, extra);
 
@@ -243,9 +243,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions with pagination options', async () => {
       const arg = { page: 1, size: 20, sort: 'id,desc' };
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getUsersAsAdmin(arg)(dispatch, getState, extra);
 
@@ -254,9 +251,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
       const arg = {};
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getUsers(arg)(dispatch, getState, extra);
 
@@ -265,9 +259,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
       const arg = { page: 1, size: 20, sort: 'id,desc' };
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await getUsers(arg)(dispatch, getState, extra);
 
@@ -275,20 +266,12 @@ describe('User management reducer tests', () => {
     });
 
     it('dispatches FETCH_ROLES_PENDING and FETCH_ROLES_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getRoles()(dispatch, getState, extra);
 
       expect(getRoles.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_USER_PENDING and FETCH_USER_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await getUser(username)(dispatch, getState, extra);
 
       expect(getUser.fulfilled.match(result)).toBe(true);
@@ -296,9 +279,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches CREATE_USER_PENDING and CREATE_USER_FULFILLED actions', async () => {
       const arg = {};
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await createUser(arg)(dispatch, getState, extra);
 
@@ -307,9 +287,6 @@ describe('User management reducer tests', () => {
 
     it('dispatches UPDATE_USER_PENDING and UPDATE_USER_FULFILLED actions', async () => {
       const arg = { login: username };
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
 
       const result = await updateUser(arg)(dispatch, getState, extra);
 
@@ -317,10 +294,6 @@ describe('User management reducer tests', () => {
     });
 
     it('dispatches DELETE_USER_PENDING and DELETE_USER_FULFILLED actions', async () => {
-      const getState = jest.fn(() => ({}));
-      const dispatch = jest.fn((x: any) => x);
-      const extra = {};
-
       const result = await deleteUser(username)(dispatch, getState, extra);
 
       expect(deleteUser.fulfilled.match(result)).toBe(true);
