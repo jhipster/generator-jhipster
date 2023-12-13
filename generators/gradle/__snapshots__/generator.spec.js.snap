@@ -6,8 +6,8 @@ exports[`generator - gradle with empty configuration should generate only gradle
     "stateCleared": "modified",
   },
   "buildSrc/build.gradle": {
-    "stateCleared": "modified"
-  }
+    "stateCleared": "modified",
+  },
   "gradle/wrapper/gradle-wrapper.jar": {
     "stateCleared": "modified",
   },
@@ -29,8 +29,8 @@ exports[`generator - gradle with valid configuration should generate only gradle
     "stateCleared": "modified",
   },
   "buildSrc/build.gradle": {
-    "stateCleared": "modified"
-  }
+    "stateCleared": "modified",
+  },
   "gradle/wrapper/gradle-wrapper.jar": {
     "stateCleared": "modified",
   },
