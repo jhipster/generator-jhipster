@@ -18,26 +18,27 @@
  */
 /* eslint-disable no-unused-expressions */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { getRule, rules, rulesNames } from './rules.js';
 
 describe('jdl - Rules', () => {
   describe('getRules', () => {
-    context('when not passing a rule name', () => {
+    describe('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
       });
     });
-    context('when passing a rule name', () => {
-      context('of an absent rule', () => {
+    describe('when passing a rule name', () => {
+      describe('of an absent rule', () => {
         it('should return undefined', () => {
           // @ts-expect-error
           expect(getRule('toto')).to.be.undefined;
         });
       });
       (Object.keys(rulesNames) as Array<keyof typeof rulesNames>).forEach(ruleName => {
-        context(`for rule name ${ruleName}`, () => {
+        describe(`for rule name ${ruleName}`, () => {
           it('should return the corresponding rule', () => {
             expect(getRule(ruleName)).to.deep.equal(rules[ruleName]);
           });

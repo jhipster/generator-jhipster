@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import assert from 'assert';
 import { getEnumInfo } from './enum.js';
 

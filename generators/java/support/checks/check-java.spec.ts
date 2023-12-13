@@ -1,4 +1,4 @@
-import { expect, mock, resetAllMocks } from 'esmocha';
+import { before, it, describe, expect, mock, resetAllMocks } from 'esmocha';
 import { ExecaSyncReturnValue } from 'execa';
 
 const execa = await mock<typeof import('execa')>('execa');

@@ -21,7 +21,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { expect } from 'esmocha';
+import { it, describe, expect, beforeEach } from 'esmocha';
 import { writeConfigFile } from '../exporters/export-utils.js';
 import { basicHelpers as helpers } from '../../test/support/index.js';
 
@@ -33,7 +33,7 @@ describe('jdl - ExportUtils', () => {
     await helpers.prepareTemporaryDir();
   });
   describe('writeConfigFile', () => {
-    context('when there is no .yo-rc.json file present', () => {
+    describe('when there is no .yo-rc.json file present', () => {
       let exportedConfig;
 
       beforeEach(() => {
@@ -56,7 +56,7 @@ describe('jdl - ExportUtils', () => {
 `);
       });
     });
-    context('when there is a .yo-rc.json file present', () => {
+    describe('when there is a .yo-rc.json file present', () => {
       let exportedConfig;
 
       beforeEach(() => {
@@ -98,7 +98,7 @@ describe('jdl - ExportUtils', () => {
       });
     });
 
-    context('when there is a .yo-rc.json file present with creationTimestamp', () => {
+    describe('when there is a .yo-rc.json file present with creationTimestamp', () => {
       let exportedConfig;
 
       beforeEach(() => {
@@ -143,7 +143,7 @@ describe('jdl - ExportUtils', () => {
       });
     });
 
-    context('when there is a .yo-rc.json file present without creationTimestamp', () => {
+    describe('when there is a .yo-rc.json file present without creationTimestamp', () => {
       let exportedConfig;
 
       beforeEach(() => {

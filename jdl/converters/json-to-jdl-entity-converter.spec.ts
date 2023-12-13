@@ -19,6 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
+import { before, it, describe } from 'esmocha';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -43,12 +44,12 @@ const {
 
 describe('jdl - JSONToJDLEntityConverter', () => {
   describe('convertEntitiesToJDL', () => {
-    context('when not passing entities', () => {
+    describe('when not passing entities', () => {
       it('should fail', () => {
         expect(() => convertEntitiesToJDL({})).to.throw('Entities have to be passed to be converted.');
       });
     });
-    context('when passing entities', () => {
+    describe('when passing entities', () => {
       let jdlObject;
 
       before(() => {
@@ -65,7 +66,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         jdlObject = convertEntitiesToJDL({ entities });
       });
 
-      context('when parsing a JSON entity to JDL', () => {
+      describe('when parsing a JSON entity to JDL', () => {
         it('should parse entity documentation', () => {
           expect(jdlObject.entities.Employee.comment).eq('The Employee entity.');
         });
@@ -146,7 +147,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
       });
 
-      context('when parsing JSON entities to JDL', () => {
+      describe('when parsing JSON entities to JDL', () => {
         it('should parse unidirectional OneToOne relationships', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.to.be.undefined;
         });
@@ -192,9 +193,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
       });
 
-      context('when parsing entities with relationships to User', () => {
-        context('when skipUserManagement flag is not set', () => {
-          context('when there is no User.json entity', () => {
+      describe('when parsing entities with relationships to User', () => {
+        describe('when skipUserManagement flag is not set', () => {
+          describe('when there is no User.json entity', () => {
             let jdlObject;
 
             before(() => {
@@ -206,7 +207,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             });
           });
         });
-        context('without relationship', () => {
+        describe('without relationship', () => {
           let jdlObject;
 
           before(() => {
@@ -221,8 +222,8 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
       });
 
-      context('when parsing relationships with options', () => {
-        context('such as builtInEntity', () => {
+      describe('when parsing relationships with options', () => {
+        describe('such as builtInEntity', () => {
           it('should accept it', () => {
             expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}').options.global[BUILT_IN_ENTITY]).to.be
               .true;
@@ -230,7 +231,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
       });
 
-      context('when parsing an unrecognised blob-typed field', () => {
+      describe('when parsing an unrecognised blob-typed field', () => {
         it('should fail', () => {
           expect(() => convertEntitiesToJDL({ entities: new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]) })).to.throw(
             "Unrecognised blob type: 'unknown'",
@@ -238,7 +239,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         });
       });
     });
-    context('when parsing relationships including the User entity', () => {
+    describe('when parsing relationships including the User entity', () => {
       let entities;
 
       before(() => {
@@ -261,7 +262,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         expect(() => convertEntitiesToJDL({ entities })).not.to.throw();
       });
     });
-    context('when parsing relationships including the Authority entity', () => {
+    describe('when parsing relationships including the Authority entity', () => {
       let entities;
 
       before(() => {

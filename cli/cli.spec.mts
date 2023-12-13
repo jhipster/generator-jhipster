@@ -3,7 +3,7 @@ import assert from 'assert';
 import { fork } from 'child_process';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { expect, mock, resetAllMocks, fn } from 'esmocha';
+import { before, it, describe, expect, mock, resetAllMocks, esmocha } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { BaseEnvironment } from '@yeoman/types';
 import { coerce } from 'semver';
@@ -168,13 +168,13 @@ describe('cli', () => {
           description: 'Foo bar',
         },
       };
-      env.run = fn<typeof env.run>((...args) => {
+      env.run = esmocha.fn<typeof env.run>((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
-      env.composeWith = fn<typeof env.composeWith>();
+      env.composeWith = esmocha.fn<typeof env.composeWith>();
       const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
-      env.getGeneratorMeta = fn<typeof env.create>().mockImplementation((namespace, args, options) => {
+      env.getGeneratorMeta = esmocha.fn<typeof env.create>().mockImplementation((namespace, args, options) => {
         if (namespace === 'jhipster:mocked') {
           return {
             importModule: () => ({}),

@@ -19,6 +19,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 
 import { databaseTypes, fieldTypes, validations } from '../jhipster/index.js';
@@ -30,7 +31,7 @@ const {
 
 describe('jdl - FieldTypes', () => {
   describe('isCommonDBType', () => {
-    context('when passing an invalid argument', () => {
+    describe('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
           fieldTypes.isCommonDBType(null);
@@ -40,24 +41,24 @@ describe('jdl - FieldTypes', () => {
         }).to.throw(/^The passed type must not be nil\.$/);
       });
     });
-    context('when passing a false type', () => {
+    describe('when passing a false type', () => {
       it('should return false', () => {
         expect(fieldTypes.isCommonDBType('UNKNOWN-TYPE')).to.be.false;
       });
     });
-    context('when passing a valid type', () => {
+    describe('when passing a valid type', () => {
       it('should return true', () => {
         expect(fieldTypes.isCommonDBType(fieldTypes.CommonDBTypes.BIG_DECIMAL)).to.be.true;
       });
     });
-    context('when passing an enum', () => {
+    describe('when passing an enum', () => {
       it('should return true', () => {
         expect(fieldTypes.isCommonDBType(new JDLEnum({ name: 'MyEnum' }))).to.be.true;
       });
     });
   });
   describe('getIsType', () => {
-    context('when passing an invalid argument', () => {
+    describe('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
           fieldTypes.getIsType(null);
@@ -69,12 +70,12 @@ describe('jdl - FieldTypes', () => {
         }).to.throw(/^The passed type must not be nil\.$/);
       });
     });
-    context('when passing a valid argument without callback', () => {
+    describe('when passing a valid argument without callback', () => {
       it('should return isType', () => {
         expect(fieldTypes.getIsType('mysql')).to.equal(fieldTypes.isCommonDBType);
       });
     });
-    context('when passing a valid argument and callback', () => {
+    describe('when passing a valid argument and callback', () => {
       it('should return true', () => {
         expect(
           fieldTypes.getIsType('sql', () => {
@@ -83,7 +84,7 @@ describe('jdl - FieldTypes', () => {
         ).to.equal(fieldTypes.isCommonDBType);
       });
     });
-    context('when passing an invalid argument', () => {
+    describe('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
           fieldTypes.getIsType('thing', () => {});
@@ -93,7 +94,7 @@ describe('jdl - FieldTypes', () => {
         );
       });
     });
-    context("when passing 'no' as argument", () => {
+    describe("when passing 'no' as argument", () => {
       it('should not fail', () => {
         expect(() => {
           fieldTypes.getIsType(databaseTypes.NO, () => {});
@@ -102,7 +103,7 @@ describe('jdl - FieldTypes', () => {
     });
   });
   describe('hasValidation', () => {
-    context('when passing an invalid argument', () => {
+    describe('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -117,31 +118,31 @@ describe('jdl - FieldTypes', () => {
         }).to.throw(/^The passed type and value must not be nil\.$/);
       });
     });
-    context('when passing a false argument', () => {
+    describe('when passing a false argument', () => {
       it('should return false', () => {
         expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, PATTERN)).to.be.false;
       });
     });
-    context('when passing a valid argument', () => {
+    describe('when passing a valid argument', () => {
       it('should return true', () => {
         expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, MIN)).to.be.true;
       });
     });
   });
   describe('isBlobType', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should return false', () => {
         expect(fieldTypes.isBlobType()).to.be.false;
       });
     });
-    context('when passing a type containing blob without it being one', () => {
+    describe('when passing a type containing blob without it being one', () => {
       it('should return false', () => {
         expect(fieldTypes.isBlobType('NotABlob')).to.be.false;
       });
     });
     Object.keys(fieldTypes.CommonDBTypes).forEach(dbTypeKey => {
       const commonDBType = fieldTypes.CommonDBTypes[dbTypeKey];
-      context(`when passing ${commonDBType}`, () => {
+      describe(`when passing ${commonDBType}`, () => {
         const typeHasBlobInItsName = commonDBType.toLowerCase().includes('blob');
         it(`should return ${typeHasBlobInItsName}`, () => {
           expect(fieldTypes.isBlobType(commonDBType)).to.equal(typeHasBlobInItsName);

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLObject from '../models/jdl-object.js';
 import { JDLEntity } from '../models/index.js';
@@ -34,7 +35,7 @@ const {
 
 describe('jdl - JDLWithoutApplicationValidator', () => {
   describe('createValidator', () => {
-    context('when not passing a JDL object', () => {
+    describe('when not passing a JDL object', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createValidator()).to.throw(/^A JDL object must be passed to check for business errors.$/);
@@ -42,7 +43,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
     });
   });
   describe('checkForErrors', () => {
-    context('when having an entity with a reserved name', () => {
+    describe('when having an entity with a reserved name', () => {
       let validator;
 
       before(() => {
@@ -61,7 +62,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         }).to.throw(/^The name 'Continue' is a reserved keyword and can not be used as an entity class name.$/);
       });
     });
-    context('when having an entity with a reserved table name', () => {
+    describe('when having an entity with a reserved table name', () => {
       let parameter;
 
       before(() => {
@@ -93,7 +94,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         );
       });
     });
-    context('when having a field reserved name', () => {
+    describe('when having a field reserved name', () => {
       let parameter;
 
       before(() => {
@@ -127,8 +128,8 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         expect(parameter).to.equal("The name 'catch' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'.");
       });
     });
-    context('when passing gateway as application type', () => {
-      context('with incompatible database type and field type', () => {
+    describe('when passing gateway as application type', () => {
+      describe('with incompatible database type and field type', () => {
         let validator;
 
         before(() => {
@@ -156,7 +157,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         });
       });
     });
-    context('when having a field type that is invalid for a database type', () => {
+    describe('when having a field type that is invalid for a database type', () => {
       let validator;
 
       before(() => {
@@ -182,7 +183,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
       });
     });
-    context('when passing an unsupported validation for a field', () => {
+    describe('when passing an unsupported validation for a field', () => {
       let validator;
 
       before(() => {
@@ -213,7 +214,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         }).to.throw("The validation 'min' isn't supported for the type 'String'.");
       });
     });
-    context('when the source entity of a relationship is missing', () => {
+    describe('when the source entity of a relationship is missing', () => {
       let validator;
 
       before(() => {
@@ -242,8 +243,8 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         );
       });
     });
-    context('when the destination entity of a relationship is missing', () => {
-      context('if it has builtInEntity annotation', () => {
+    describe('when the destination entity of a relationship is missing', () => {
+      describe('if it has builtInEntity annotation', () => {
         let validator;
 
         before(() => {
@@ -277,7 +278,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
           }).not.to.throw();
         });
       });
-      context('if it is not the User entity', () => {
+      describe('if it is not the User entity', () => {
         let checker;
 
         before(() => {
@@ -307,7 +308,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         });
       });
     });
-    context('when having a JDL with pagination and Cassandra as database type', () => {
+    describe('when having a JDL with pagination and Cassandra as database type', () => {
       let validator;
 
       before(() => {
@@ -327,7 +328,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         }).to.throw("Pagination isn't allowed when the application uses Cassandra.");
       });
     });
-    context('when having DTOs without services', () => {
+    describe('when having DTOs without services', () => {
       let validator;
 
       before(() => {
@@ -355,7 +356,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         }).not.to.throw();
       });
     });
-    context('when having DTOs with services', () => {
+    describe('when having DTOs with services', () => {
       let validator;
 
       before(() => {
@@ -397,7 +398,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         }).not.to.throw();
       });
     });
-    context('when having a relationship with the User entity as source', () => {
+    describe('when having a relationship with the User entity as source', () => {
       let validator;
 
       before(() => {
@@ -424,7 +425,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         expect(() => validator.checkForErrors()).not.to.throw();
       });
     });
-    context('when having a relationship with the User entity as destination', () => {
+    describe('when having a relationship with the User entity as destination', () => {
       let validator;
 
       before(() => {
@@ -451,7 +452,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         expect(() => validator.checkForErrors()).not.to.throw();
       });
     });
-    context('when blueprints is used', () => {
+    describe('when blueprints is used', () => {
       let parameter;
 
       before(() => {

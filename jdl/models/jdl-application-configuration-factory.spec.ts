@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import createApplicationConfigurationFromObject from '../models/jdl-application-configuration-factory.js';
 import { applicationOptions } from '../jhipster/index.js';
 
@@ -25,7 +25,7 @@ const { OptionNames } = applicationOptions;
 
 describe('jdl - JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {
-    context('when passing no configuration', () => {
+    describe('when passing no configuration', () => {
       let createdConfiguration;
 
       before(() => {
@@ -41,8 +41,8 @@ JDLApplicationConfiguration {
 `);
       });
     });
-    context('when passing a configuration', () => {
-      context('containing a string option', () => {
+    describe('when passing a configuration', () => {
+      describe('containing a string option', () => {
         let createdConfiguration;
 
         before(() => {
@@ -66,7 +66,7 @@ JDLApplicationConfiguration {
 `);
         });
       });
-      context('containing a integer option', () => {
+      describe('containing a integer option', () => {
         let createdConfiguration;
 
         before(() => {
@@ -89,7 +89,7 @@ JDLApplicationConfiguration {
 `);
         });
       });
-      context('containing a boolean option', () => {
+      describe('containing a boolean option', () => {
         let createdConfiguration;
 
         before(() => {
@@ -112,7 +112,7 @@ JDLApplicationConfiguration {
 `);
         });
       });
-      context('containing a list-based option', () => {
+      describe('containing a list-based option', () => {
         let createdConfiguration;
 
         before(() => {

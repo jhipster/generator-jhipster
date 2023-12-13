@@ -18,18 +18,19 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { relationshipTypes } from '../jhipster/index.js';
 import { relationshipTypeExists } from './relationship-types.js';
 
 describe('jdl - RelationshipTypes', () => {
   describe('exists', () => {
-    context('when checking for a valid unary relationship type', () => {
+    describe('when checking for a valid unary relationship type', () => {
       it('should return true', () => {
         expect(relationshipTypeExists(relationshipTypes.MANY_TO_ONE)).to.be.true;
       });
     });
-    context('when checking for an invalid relationship type', () => {
+    describe('when checking for an invalid relationship type', () => {
       it('should return false', () => {
         expect(relationshipTypeExists('NOTHING')).to.be.false;
       });

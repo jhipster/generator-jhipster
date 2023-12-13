@@ -1,8 +1,7 @@
 import path, { basename, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { expect } from 'esmocha';
-
+import { before, it, describe, after, expect } from 'esmocha';
 import { skipPrettierHelpers as helpers, runResult } from '../../test/support/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { createImporterFromContent } from '../../jdl/jdl-importer.js';
@@ -113,7 +112,7 @@ describe('generator - app - --incremental-changelog', function () {
     skipClient: true,
     force: true,
   };
-  context('when creating a new application', () => {
+  describe('when creating a new application', () => {
     let runResult;
     before(async () => {
       runResult = await helpers.run(generatorPath).withJHipsterConfig(config).withOptions(options).withMockedGenerators(mockedGenerators);
@@ -130,8 +129,8 @@ describe('generator - app - --incremental-changelog', function () {
     });
   });
 
-  context('when incremental liquibase files exists', () => {
-    context('with default options', () => {
+  describe('when incremental liquibase files exists', () => {
+    describe('with default options', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
@@ -168,7 +167,7 @@ describe('generator - app - --incremental-changelog', function () {
       });
     });
 
-    context('with --recreate-initial-changelog', () => {
+    describe('with --recreate-initial-changelog', () => {
       let runResult;
       before(async () => {
         runResult = await helpers
@@ -206,7 +205,7 @@ describe('generator - app - --incremental-changelog', function () {
     });
   });
 
-  context('regenerating the application', () => {
+  describe('regenerating the application', () => {
     let runResult;
     before(async () => {
       const initialState = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
@@ -268,7 +267,7 @@ describe('generator - app - --incremental-changelog', function () {
     });
   });
 
-  context('when adding a field without constraints', () => {
+  describe('when adding a field without constraints', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -352,7 +351,7 @@ entity Customer {
     });
   });
 
-  context('when adding a field with constraints', () => {
+  describe('when adding a field with constraints', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -437,7 +436,7 @@ entity Customer {
     });
   });
 
-  context('when removing a field without constraints', () => {
+  describe('when removing a field without constraints', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -521,7 +520,7 @@ entity Customer {
     });
   });
 
-  context('when removing a field with constraints', () => {
+  describe('when removing a field with constraints', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -605,7 +604,7 @@ entity Customer {
     });
   });
 
-  context('when adding a relationship', () => {
+  describe('when adding a relationship', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -671,7 +670,7 @@ entity Customer {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
     });
   });
-  context('when adding a relationship with on handlers', () => {
+  describe('when adding a relationship with on handlers', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -747,7 +746,7 @@ entity Customer {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/changelog/**')).toMatchSnapshot();
     });
   });
-  context('when modifying a relationship with on handlers, only at these handlers', () => {
+  describe('when modifying a relationship with on handlers, only at these handlers', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -870,7 +869,7 @@ entity Customer {
     });
   });
 
-  context('when modifying an existing relationship', () => {
+  describe('when modifying an existing relationship', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -1003,7 +1002,7 @@ entity Customer {
     });
   });
 
-  context('when initially creating an application with entities with relationships having on handlers', () => {
+  describe('when initially creating an application with entities with relationships having on handlers', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -1066,7 +1065,7 @@ entity Customer {
     });
   });
 
-  context('when removing a relationship', () => {
+  describe('when removing a relationship', () => {
     let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
@@ -1136,7 +1135,7 @@ entity Customer {
     });
   });
 
-  context('entities with/without byte fields should create fake data', () => {
+  describe('entities with/without byte fields should create fake data', () => {
     [
       {
         entity: jdlApplicationEntityWithByteTypes,

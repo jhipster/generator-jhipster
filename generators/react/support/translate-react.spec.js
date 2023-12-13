@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect, esmocha } from 'esmocha';
-
+import { beforeEach, it, describe, expect, esmocha } from 'esmocha';
 import { createTranslationReplacer } from './translate-react.js';
 
 describe('generator - react - transform', () => {

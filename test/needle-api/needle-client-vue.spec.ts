@@ -1,3 +1,4 @@
+import { before, describe } from 'esmocha';
 import { basicHelpers as helpers, getGenerator } from '../support/index.js';
 
 import ClientGenerator from '../../generators/client/index.js';

@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { jestExpect } from 'esmocha';
+import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
 import fse from 'fs-extra';
 import { expect } from 'chai';
 
@@ -35,7 +35,7 @@ const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
 describe('jdl - JDLImporter', () => {
   describe('createImporterFromFiles', () => {
-    context('when not passing files', () => {
+    describe('when not passing files', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createImporterFromFiles()).to.throw(/^Files must be passed to create a new JDL importer\.$/);
@@ -43,7 +43,7 @@ describe('jdl - JDLImporter', () => {
     });
   });
   describe('createImporterFromContent', () => {
-    context('when not passing any content', () => {
+    describe('when not passing any content', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createImporterFromContent()).to.throw(/^A JDL content must be passed to create a new JDL importer\.$/);
@@ -51,7 +51,7 @@ describe('jdl - JDLImporter', () => {
     });
   });
   describe('import', () => {
-    context('parsing a relationship with builtInEntity', () => {
+    describe('parsing a relationship with builtInEntity', () => {
       it('import and add relationshipWithBuiltInEntity to the relationship', () => {
         const importState = createImporterFromContent(
           `
@@ -65,7 +65,7 @@ relationship OneToMany {
         jestExpect(importState.exportedEntities[0].relationships[0].relationshipWithBuiltInEntity).toBe(true);
       });
     });
-    context('when not parsing applications', () => {
+    describe('when not parsing applications', () => {
       let returned;
 
       before(() => {
@@ -92,7 +92,7 @@ relationship OneToMany {
         jestExpect(returned).toMatchSnapshot();
       });
     });
-    context('when passing an existing application config', () => {
+    describe('when passing an existing application config', () => {
       let importer;
 
       before(() => {
@@ -113,7 +113,7 @@ relationship OneToOne {
         expect(() => importer.import()).not.to.throw();
       });
     });
-    context('when parsing one JDL application and entities', () => {
+    describe('when parsing one JDL application and entities', () => {
       let returned;
 
       before(() => {
@@ -137,7 +137,7 @@ relationship OneToOne {
         });
       });
     });
-    context('when parsing two JDL applications with and without entities ', () => {
+    describe('when parsing two JDL applications with and without entities ', () => {
       let returned;
       const APPLICATION_NAMES = ['app1', 'app2'];
 
@@ -173,7 +173,7 @@ relationship OneToOne {
         });
       });
     });
-    context('when parsing one JDL application and entities passed as string', () => {
+    describe('when parsing one JDL application and entities passed as string', () => {
       let returned;
 
       before(() => {
@@ -211,7 +211,7 @@ relationship OneToOne {
         });
       });
     });
-    context('when parsing one JDL application and entities with entity and dto suffixes', () => {
+    describe('when parsing one JDL application and entities with entity and dto suffixes', () => {
       let returned;
 
       before(() => {
@@ -235,7 +235,7 @@ relationship OneToOne {
         });
       });
     });
-    context('when parsing JDL applications and exporting them', () => {
+    describe('when parsing JDL applications and exporting them', () => {
       let contents: any;
 
       before(() => {
@@ -247,7 +247,7 @@ relationship OneToOne {
         jestExpect(contents).toMatchSnapshot();
       });
     });
-    context('when parsing multiple JDL files with applications and entities', () => {
+    describe('when parsing multiple JDL files with applications and entities', () => {
       let importState;
       before(() => {
         const importer = createImporterFromFiles([
@@ -275,10 +275,10 @@ relationship OneToOne {
         });
       });
     });
-    context("when choosing 'no' as database type", () => {
+    describe("when choosing 'no' as database type", () => {
       let importer;
 
-      before("importing a JDL file with the 'no' database type", () => {
+      before(() => {
         importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'simple.jdl')], {
           applicationName: 'MyApp',
           applicationType: MONOLITH,
@@ -290,7 +290,7 @@ relationship OneToOne {
         importer.import();
       });
     });
-    context('when parsing a JDL with annotations', () => {
+    describe('when parsing a JDL with annotations', () => {
       let returned;
 
       before(() => {
@@ -318,7 +318,7 @@ relationship OneToOne {
         expect(returned.exportedEntities[0].fields[0].options.multiValue).to.deep.equal(['value1', 'value2', 'value3']);
       });
     });
-    context('when parsing a JDL with a pattern validation', () => {
+    describe('when parsing a JDL with a pattern validation', () => {
       let returned;
 
       before(() => {
@@ -334,7 +334,7 @@ relationship OneToOne {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
       });
     });
-    context('when parsing a JDL with a pattern validation containing a quote', () => {
+    describe('when parsing a JDL with a pattern validation containing a quote', () => {
       let returned;
 
       before(() => {
@@ -350,7 +350,7 @@ relationship OneToOne {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
       });
     });
-    context('when parsing JDL applications and deployment config', () => {
+    describe('when parsing JDL applications and deployment config', () => {
       let importState: any;
 
       before(() => {
@@ -362,7 +362,7 @@ relationship OneToOne {
         jestExpect(importState).toMatchSnapshot();
       });
     });
-    context('when parsing deployment config', () => {
+    describe('when parsing deployment config', () => {
       const contents: any[] = [];
       const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
 
@@ -384,7 +384,7 @@ relationship OneToOne {
         jestExpect(contents).toMatchSnapshot();
       });
     });
-    context('when parsing entities and enums with custom values', () => {
+    describe('when parsing entities and enums with custom values', () => {
       let importState;
 
       before(() => {
@@ -402,7 +402,7 @@ relationship OneToOne {
         );
       });
     });
-    context('when passing the unidirectionalRelationships option', () => {
+    describe('when passing the unidirectionalRelationships option', () => {
       const entities = `
 entity A
 entity B
@@ -424,7 +424,7 @@ relationship ManyToMany {
   A{biManyToManyB} to B{biManyToManyA}
 }
 `;
-      context('when passing without application config', () => {
+      describe('when passing without application config', () => {
         let importer;
 
         before(() => {
@@ -442,7 +442,7 @@ relationship ManyToMany {
           expect(() => importer.import()).not.to.throw();
         });
       });
-      context('when parsing one JDL application and entities', () => {
+      describe('when parsing one JDL application and entities', () => {
         let returned;
 
         before(() => {
@@ -479,7 +479,7 @@ ${entities}`,
         });
       });
     });
-    context('when importing a JDL application with blueprints', () => {
+    describe('when importing a JDL application with blueprints', () => {
       let importState;
       let parameter;
 
@@ -501,7 +501,7 @@ ${entities}`,
         expect(parameter).to.equal('Blueprints are being used, the JDL validation phase is skipped.');
       });
     });
-    context('when choosing neo4j as database type', () => {
+    describe('when choosing neo4j as database type', () => {
       let importState;
 
       before(() => {
@@ -523,7 +523,7 @@ relationship OneToMany {
         expect(importState.exportedEntities[0].relationships).to.have.length(1);
       });
     });
-    context('when having the use-options', () => {
+    describe('when having the use-options', () => {
       let importState;
 
       before(() => {
@@ -559,7 +559,7 @@ use mapstruct, elasticsearch for A, B except C`;
         expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
       });
     });
-    context('when parsing a JDL content with invalid tokens', () => {
+    describe('when parsing a JDL content with invalid tokens', () => {
       let caughtError;
 
       before(() => {
@@ -588,7 +588,7 @@ entity A
         );
       });
     });
-    context('when parsing relationships with annotations and options', () => {
+    describe('when parsing relationships with annotations and options', () => {
       let relationshipOnSource;
       let relationshipOnDestination;
 
@@ -636,7 +636,7 @@ relationship OneToOne {
         `);
       });
     });
-    context('when importing a JDL application with microfrontends', () => {
+    describe('when importing a JDL application with microfrontends', () => {
       it('should return the microfrontends attributes in the application', () => {
         const importer = createImporterFromContent(
           `application {
@@ -659,7 +659,7 @@ relationship OneToOne {
         `);
       });
     });
-    context('when importing a JDL application with clientFramework no', () => {
+    describe('when importing a JDL application with clientFramework no', () => {
       it('should return the clientFramework attribute in the application', () => {
         const importer = createImporterFromContent(
           `application {

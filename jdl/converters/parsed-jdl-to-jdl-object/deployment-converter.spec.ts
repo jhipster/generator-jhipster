@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { convertDeployments } from './deployment-converter.js';
 
 describe('jdl - DeploymentConverter', () => {
   describe('convertDeployments', () => {
-    context('when not passing deployments', () => {
+    describe('when not passing deployments', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertDeployments()).toThrow(/^Deployments have to be passed so as to be converted\.$/);
       });
     });
-    context('when passing deployments', () => {
+    describe('when passing deployments', () => {
       let convertedDeployments;
 
       before(() => {

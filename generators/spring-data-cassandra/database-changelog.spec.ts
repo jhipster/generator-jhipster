@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import { dryRunHelpers as helpers } from '../../test/support/index.js';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
@@ -6,7 +7,7 @@ import { GENERATOR_SPRING_DATA_CASSANDRA } from '../generator-list.js';
 const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 
 describe('generator - app - database changelogs', () => {
-  context('when regenerating the application', () => {
+  describe('when regenerating the application', () => {
     describe('with cassandra database', () => {
       let runResult;
       before(async () => {

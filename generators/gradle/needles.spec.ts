@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import { dryRunHelpers as helpers, result as runResult } from '../../test/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';

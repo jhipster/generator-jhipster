@@ -18,12 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLEnumValue from '../models/jdl-enum-value.js';
 
 describe('jdl - JDLEnumValue', () => {
   describe('new', () => {
-    context('when not passing an enum value name', () => {
+    describe('when not passing an enum value name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new JDLEnumValue()).to.throw(/^The enum value name has to be passed to create an enum\.$/);
@@ -31,7 +32,7 @@ describe('jdl - JDLEnumValue', () => {
     });
   });
   describe('toString', () => {
-    context('without a specified enum value', () => {
+    describe('without a specified enum value', () => {
       let enumValue;
 
       before(() => {
@@ -43,7 +44,7 @@ describe('jdl - JDLEnumValue', () => {
         expect(enumValue.toString()).to.equal('FRENCH');
       });
     });
-    context('with a specified enum value', () => {
+    describe('with a specified enum value', () => {
       let enumValue;
 
       before(() => {

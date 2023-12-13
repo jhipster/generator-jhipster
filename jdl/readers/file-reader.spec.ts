@@ -18,7 +18,7 @@
  */
 
 import fs from 'fs';
-import { jestExpect } from 'esmocha';
+import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import { readFile, readFiles } from '../readers/file-reader.js';
 import { basicHelpers as helpers } from '../../test/support/index.js';
@@ -29,7 +29,7 @@ describe('jdl - FileReader', () => {
   });
 
   describe('readFile', () => {
-    context('when passing a nil path', () => {
+    describe('when passing a nil path', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -37,14 +37,14 @@ describe('jdl - FileReader', () => {
         }).to.throw(/^The passed file must not be nil to be read\.$/);
       });
     });
-    context('when passing a directory', () => {
+    describe('when passing a directory', () => {
       it('should fail', () => {
         expect(() => {
           readFile('.');
         }).to.throw(/^The passed file '.' must exist and must not be a directory to be read\.$/);
       });
     });
-    context('when passing a valid text file', () => {
+    describe('when passing a valid text file', () => {
       let content: string;
 
       beforeEach(() => {
@@ -58,7 +58,7 @@ describe('jdl - FileReader', () => {
     });
   });
   describe('readFiles', () => {
-    context('when passing a nil iterable', () => {
+    describe('when passing a nil iterable', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -66,14 +66,14 @@ describe('jdl - FileReader', () => {
         }).to.throw(/^The passed files must not be nil\.$/);
       });
     });
-    context('when passing a directory among the files', () => {
+    describe('when passing a directory among the files', () => {
       it('should fail', () => {
         expect(() => {
           readFiles(['.']);
         }).to.throw(/^The passed file '.' must exist and must not be a directory to be read\.$/);
       });
     });
-    context('when passing valid text files', () => {
+    describe('when passing valid text files', () => {
       let content: string[];
 
       beforeEach(() => {

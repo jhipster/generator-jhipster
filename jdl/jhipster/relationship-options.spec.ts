@@ -19,6 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { relationshipOptions } from '../jhipster/index.js';
 

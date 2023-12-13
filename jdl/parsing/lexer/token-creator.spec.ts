@@ -17,20 +17,21 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { NAME, KEYWORD } from '../../parsing/lexer/shared-tokens.js';
 import createTokenFromConfig from '../../parsing/lexer/token-creator.js';
 
 describe('jdl - TokenCreator', () => {
   describe('createTokenFromConfig', () => {
-    context('when not passing a config', () => {
+    describe('when not passing a config', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createTokenFromConfig()).to.throw(/^Can't create a token without the proper config\.$/);
       });
     });
-    context('when passing a config', () => {
-      context('with just a name', () => {
+    describe('when passing a config', () => {
+      describe('with just a name', () => {
         let token;
 
         before(() => {
@@ -44,7 +45,7 @@ describe('jdl - TokenCreator', () => {
           expect(token.CATEGORIES).to.deep.equal([]);
         });
       });
-      context('when the pattern is a keyword', () => {
+      describe('when the pattern is a keyword', () => {
         let token;
 
         before(() => {
@@ -58,7 +59,7 @@ describe('jdl - TokenCreator', () => {
           expect(token.CATEGORIES).to.deep.equal([KEYWORD]);
         });
       });
-      context('if there is no label but a pattern', () => {
+      describe('if there is no label but a pattern', () => {
         let token;
 
         before(() => {

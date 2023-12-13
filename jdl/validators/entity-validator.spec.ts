@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { JDLEntity } from '../models/index.js';
 import EntityValidator from '../validators/entity-validator.js';
@@ -29,13 +30,13 @@ describe('jdl - EntityValidator', () => {
   });
 
   describe('validate', () => {
-    context('when not passing an entity', () => {
+    describe('when not passing an entity', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No entity\.$/);
       });
     });
-    context('when passing an entity', () => {
-      context('with every required attribute', () => {
+    describe('when passing an entity', () => {
+      describe('with every required attribute', () => {
         it('should not fail', () => {
           expect(() =>
             validator.validate(
@@ -46,18 +47,9 @@ describe('jdl - EntityValidator', () => {
           ).not.to.throw();
         });
       });
-      context('without any attribute', () => {
+      describe('without any attribute', () => {
         it('should fail', () => {
           expect(() => validator.validate({})).to.throw(/^The entity attributes name, tableName were not found\.$/);
-        });
-      });
-      context('without fields', () => {
-        it('should fail', () => {
-          it('should fail', () => {
-            expect(() => validator.validate({ name: 'A', tableName: 'a' })).to.throw(
-              /^The entity attributes name, tableName were not found\.$/,
-            );
-          });
         });
       });
     });

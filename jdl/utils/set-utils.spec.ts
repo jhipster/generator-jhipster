@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { addAll, join } from '../utils/set-utils.js';
 
 describe('jdl - SetUtils', () => {
   describe('addAll', () => {
-    context('when not passing a set', () => {
+    describe('when not passing a set', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => addAll()).toThrow(/^A Set must be passed so as to insert elements\.$/);
       });
     });
-    context('when not passing elements', () => {
+    describe('when not passing elements', () => {
       let set: Set<unknown>;
 
       before(() => {
@@ -47,7 +47,7 @@ Set {
 `);
       });
     });
-    context('when passing an empty list as elements', () => {
+    describe('when passing an empty list as elements', () => {
       let set: Set<any>;
 
       before(() => {
@@ -65,7 +65,7 @@ Set {
 `);
       });
     });
-    context('when passing elements', () => {
+    describe('when passing elements', () => {
       let set: Set<number>;
 
       before(() => {
@@ -86,13 +86,13 @@ Set {
     });
   });
   describe('join', () => {
-    context('when not passing a set', () => {
+    describe('when not passing a set', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => join()).toThrow(/^A Set must be passed so as to join elements\.$/);
       });
     });
-    context('when not passing the separator', () => {
+    describe('when not passing the separator', () => {
       let result: string;
 
       before(() => {
@@ -106,8 +106,8 @@ Set {
         expect(result).toEqual('42,a');
       });
     });
-    context('when passing a separator', () => {
-      it('should use it', () => {
+    describe('when passing a separator', () => {
+      describe('should use it', () => {
         let result: string;
 
         before(() => {

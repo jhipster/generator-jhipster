@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 
 import matchField from '../matchers/field-matcher.js';
@@ -31,7 +32,7 @@ const {
 
 describe('jdl - JDLField', () => {
   describe('new', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -39,21 +40,21 @@ describe('jdl - JDLField', () => {
         }).to.throw('The field name and type are mandatory to create a field.');
       });
     });
-    context('when not passing the name', () => {
+    describe('when not passing the name', () => {
       it('should fail', () => {
         expect(() => {
           new JDLField({ name: null, type: 'String' });
         }).to.throw('The field name and type are mandatory to create a field.');
       });
     });
-    context('when not passing the type', () => {
+    describe('when not passing the type', () => {
       it('should fail', () => {
         expect(() => {
           new JDLField({ name: 'abc', type: null });
         }).to.throw('The field name and type are mandatory to create a field.');
       });
     });
-    context('when passing arguments', () => {
+    describe('when passing arguments', () => {
       let args = {};
       let field;
 
@@ -84,8 +85,8 @@ describe('jdl - JDLField', () => {
       });
     });
 
-    context('when adding an invalid validation', () => {
-      context('because it is null', () => {
+    describe('when adding an invalid validation', () => {
+      describe('because it is null', () => {
         it('should fail', () => {
           expect(() => {
             field.addValidation(null);
@@ -93,7 +94,7 @@ describe('jdl - JDLField', () => {
         });
       });
     });
-    context('when adding a valid validation', () => {
+    describe('when adding a valid validation', () => {
       let validation;
 
       before(() => {
@@ -110,7 +111,7 @@ describe('jdl - JDLField', () => {
     });
   });
   describe('forEachValidation', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       let field;
 
       before(() => {
@@ -124,7 +125,7 @@ describe('jdl - JDLField', () => {
         expect(() => field.forEachValidation()).to.throw();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {
@@ -151,7 +152,7 @@ describe('jdl - JDLField', () => {
     });
   });
   describe('toString', () => {
-    context('without comment', () => {
+    describe('without comment', () => {
       let args: any = {};
       let field;
 
@@ -167,7 +168,7 @@ describe('jdl - JDLField', () => {
         expect(field.toString()).to.equal(`${args.name} ${args.type}`);
       });
     });
-    context('without any validation', () => {
+    describe('without any validation', () => {
       let args: any = {};
       let field;
 
@@ -184,7 +185,7 @@ describe('jdl - JDLField', () => {
         expect(field.toString()).to.equal(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
       });
     });
-    context('with everything', () => {
+    describe('with everything', () => {
       let args: any = {};
       let field;
 

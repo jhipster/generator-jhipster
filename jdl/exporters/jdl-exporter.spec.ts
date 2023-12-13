@@ -20,8 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 import fs from 'fs';
 import { expect } from 'chai';
-import { jestExpect } from 'esmocha';
-
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import JDLObject from '../models/jdl-object.js';
 import { JDLEntity } from '../models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
@@ -39,8 +38,8 @@ describe('jdl - JDLExporter', () => {
     await helpers.prepareTemporaryDir();
   });
   describe('exportToJDL', () => {
-    context('when passing invalid parameters', () => {
-      context('such as undefined', () => {
+    describe('when passing invalid parameters', () => {
+      describe('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
@@ -49,8 +48,8 @@ describe('jdl - JDLExporter', () => {
         });
       });
     });
-    context('when passing valid parameters', () => {
-      context('with a path', () => {
+    describe('when passing valid parameters', () => {
+      describe('with a path', () => {
         const PATH = 'myPath.jdl';
         let fileExistence;
         let jdlContent = '';
@@ -74,8 +73,8 @@ describe('jdl - JDLExporter', () => {
           expect(jdlContent).to.equal('entity Toto\n');
         });
       });
-      context('without a path', () => {
-        context('exports entity', () => {
+      describe('without a path', () => {
+        describe('exports entity', () => {
           const DEFAULT_PATH = 'app.jdl';
           let fileExistence;
           let jdlContent = '';
@@ -99,8 +98,8 @@ describe('jdl - JDLExporter', () => {
             expect(jdlContent).to.equal('entity Toto\n');
           });
         });
-        context('exports application', () => {
-          context('with clientFramework no', () => {
+        describe('exports application', () => {
+          describe('with clientFramework no', () => {
             let jdlObject;
             beforeEach(() => {
               jdlObject = new JDLObject();

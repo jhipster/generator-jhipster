@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import { basicHelpers as helpers, result as runResult, getGenerator } from '../support/index.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 
