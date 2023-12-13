@@ -51,26 +51,14 @@ describe('generator - base - internal - blueprint', () => {
       });
     });
     describe('passing undefined', () => {
-      it('throws an error', done => {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          mergeBlueprints(undefined as any);
-        } catch (error) {
-          assert.equal(error.message, 'Only arrays are supported.');
-          done();
-        }
+      it('throws an error', () => {
+        expect(() => mergeBlueprints(undefined as any)).toThrowError(/Only arrays are supported./);
       });
     });
     describe('passing array and undefined', () => {
       const argumentsToPass = [[], undefined];
-      it('throws an error', done => {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (mergeBlueprints as any)(...argumentsToPass);
-        } catch (error) {
-          assert.equal(error.message, 'Only arrays are supported.');
-          done();
-        }
+      it('throws an error', () => {
+        expect(() => (mergeBlueprints as any)(...argumentsToPass)).toThrowError(/Only arrays are supported./);
       });
     });
     describe('passing unique blueprints', () => {

@@ -46,8 +46,6 @@ describe('jdl - BinaryOptionValidator', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
         });
       });
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      describe('without any of its required attributes', () => {});
       describe('with an invalid value', () => {
         it('should fail', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(

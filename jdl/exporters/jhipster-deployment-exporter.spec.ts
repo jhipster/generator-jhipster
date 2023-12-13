@@ -52,7 +52,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
       describe('when exporting deployments to JSON', () => {
         let returned;
 
-        beforeEach('common setup for both deployments', () => {
+        beforeEach(() => {
           returned = exportDeployments({
             'docker-compose': new JDLDeployment({
               deploymentType: DOCKERCOMPOSE,
@@ -73,18 +73,13 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         describe('for the first deployment', () => {
           let content;
 
-          beforeEach('setup for the first deployment', done => {
-            fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-              if (err) {
-                return done(err);
-              }
-              content = JSON.parse(data);
-              return done();
-            });
+          beforeEach(() => {
+            const data = fs.readFileSync(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' });
+            content = JSON.parse(data);
           });
 
-          it('should exports it', done => {
-            fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, done);
+          it('should exports it', () => {
+            fs.readFileSync(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' });
           });
 
           it('should format it', () => {
@@ -110,18 +105,13 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         describe('for the second deployment', () => {
           let content;
 
-          beforeEach('setup for the first deployment', done => {
-            fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-              if (err) {
-                return done(err);
-              }
-              content = JSON.parse(data);
-              return done();
-            });
+          beforeEach(() => {
+            const data = fs.readFileSync(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' });
+            content = JSON.parse(data);
           });
 
-          it('should exports it', done => {
-            fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, done);
+          it('should exports it', () => {
+            fs.readFileSync(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' });
           });
 
           it('should format it', () => {

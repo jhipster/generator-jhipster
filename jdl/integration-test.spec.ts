@@ -402,7 +402,7 @@ application {
 
       it('should throw error', () => {
         const importer = createImporterFromContent(jdl);
-        jestExpect(() => importer.import()).toThrowError({ message: 'Blueprint namespace config foo requires the blueprint foo' });
+        jestExpect(() => importer.import()).toThrowError(/Blueprint namespace config foo requires the blueprint foo/);
       });
     });
 

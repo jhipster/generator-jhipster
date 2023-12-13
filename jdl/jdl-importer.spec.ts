@@ -278,7 +278,7 @@ relationship OneToOne {
     describe("when choosing 'no' as database type", () => {
       let importer;
 
-      before("importing a JDL file with the 'no' database type", () => {
+      before(() => {
         importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'simple.jdl')], {
           applicationName: 'MyApp',
           applicationType: MONOLITH,

@@ -866,7 +866,7 @@ JDLDeployment {
           entityC = jdlObject.entities.C;
         });
 
-        it('correctly should set the options', () => {
+        describe('correctly should set the options', () => {
           it('should set the annotations as options with lower-case letters first', () => {
             jestExpect(entityA.annotations).toMatchInlineSnapshot(`
 {

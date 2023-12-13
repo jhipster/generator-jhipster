@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, after, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';

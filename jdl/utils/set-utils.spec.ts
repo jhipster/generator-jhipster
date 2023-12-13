@@ -107,7 +107,7 @@ Set {
       });
     });
     describe('when passing a separator', () => {
-      it('should use it', () => {
+      describe('should use it', () => {
         let result: string;
 
         before(() => {

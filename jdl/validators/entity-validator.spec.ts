@@ -53,7 +53,7 @@ describe('jdl - EntityValidator', () => {
         });
       });
       describe('without fields', () => {
-        it('should fail', () => {
+        describe('should fail', () => {
           it('should fail', () => {
             expect(() => validator.validate({ name: 'A', tableName: 'a' })).to.throw(
               /^The entity attributes name, tableName were not found\.$/,

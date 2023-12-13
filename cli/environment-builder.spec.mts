@@ -21,7 +21,7 @@ import assert from 'assert';
 import fs from 'fs';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { before, it, describe, after, expect as jestExpect } from 'esmocha';
+import { before, it, describe, after, expect as jestExpect, beforeEach } from 'esmocha';
 import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
 
 import EnvironmentBuilder from './environment-builder.mjs';
