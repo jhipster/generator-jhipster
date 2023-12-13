@@ -20,6 +20,7 @@
 /* eslint-disable no-new */
 /* eslint-disable no-unused-expressions */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { deploymentOptions } from '../jhipster/index.js';
 
@@ -28,17 +29,17 @@ const { DeploymentTypes, Options } = deploymentOptions;
 describe('jdl - DeploymentOptions', () => {
   describe('DeploymentTypes', () => {
     describe('exists', () => {
-      context('when passing a nil arg', () => {
+      describe('when passing a nil arg', () => {
         it('should return false', () => {
           expect(DeploymentTypes.exists()).to.be.false;
         });
       });
-      context('when passing an invalid type', () => {
+      describe('when passing an invalid type', () => {
         it('should return false', () => {
           expect(DeploymentTypes.exists('NotAType')).to.be.false;
         });
       });
-      context('when passing a valid type', () => {
+      describe('when passing a valid type', () => {
         it('should return true', () => {
           expect(DeploymentTypes.exists(DeploymentTypes.DOCKERCOMPOSE)).to.be.true;
           expect(DeploymentTypes.exists(DeploymentTypes.KUBERNETES)).to.be.true;
@@ -49,7 +50,7 @@ describe('jdl - DeploymentOptions', () => {
 
   describe('Options', () => {
     describe('defaults', () => {
-      context('when passing no args', () => {
+      describe('when passing no args', () => {
         it('should return docker deployment config', () => {
           expect(Options.defaults()).to.eql({
             appsFolders: [],
@@ -61,7 +62,7 @@ describe('jdl - DeploymentOptions', () => {
           });
         });
       });
-      context('when passing kubernetes as arg', () => {
+      describe('when passing kubernetes as arg', () => {
         it('should return kubernetes deployment config', () => {
           expect(Options.defaults('kubernetes')).to.eql({
             appsFolders: [],
@@ -80,7 +81,7 @@ describe('jdl - DeploymentOptions', () => {
           });
         });
       });
-      context('when passing openshift as arg', () => {
+      describe('when passing openshift as arg', () => {
         it('should return openshift deployment config', () => {
           expect(Options.defaults('openshift')).to.eql({
             appsFolders: [],

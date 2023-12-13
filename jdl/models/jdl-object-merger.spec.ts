@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { applicationTypes, fieldTypes, unaryOptions, relationshipTypes } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
@@ -31,17 +32,17 @@ const { MONOLITH } = applicationTypes;
 
 describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
-    context('when not passing the first object', () => {
+    describe('when not passing the first object', () => {
       it('should fail', () => {
         expect(() => mergeJDLObjects(undefined, {})).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });
-    context('when not passing the second object', () => {
+    describe('when not passing the second object', () => {
       it('should fail', () => {
         expect(() => mergeJDLObjects({}, undefined)).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });
-    context('when passing two jdl objects', () => {
+    describe('when passing two jdl objects', () => {
       let merged;
       let firstJDLObject;
       let secondJDLObject;

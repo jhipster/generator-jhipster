@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import { convertApplicationsToJDL } from '../converters/json-to-jdl-application-converter.js';
@@ -27,7 +28,7 @@ const { MONOLITH } = applicationTypes;
 
 describe('jdl - JSONToJDLApplicationConverter', () => {
   describe('convert', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       let jdlObject;
 
       before(() => {
@@ -38,7 +39,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(0);
       });
     });
-    context('when not passing a jdl object', () => {
+    describe('when not passing a jdl object', () => {
       let jdlObject;
 
       before(() => {
@@ -51,7 +52,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
         expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' }));
       });
     });
-    context('when passing a jdl object', () => {
+    describe('when passing a jdl object', () => {
       let jdlObject;
 
       before(() => {

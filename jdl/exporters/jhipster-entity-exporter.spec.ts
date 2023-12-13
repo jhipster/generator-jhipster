@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../jhipster/index.js';
@@ -40,8 +40,8 @@ describe('jdl - JHipsterEntityExporter', () => {
   });
 
   describe('exportEntities', () => {
-    context('when passing invalid parameters', () => {
-      context('such as undefined', () => {
+    describe('when passing invalid parameters', () => {
+      describe('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
@@ -50,8 +50,8 @@ describe('jdl - JHipsterEntityExporter', () => {
         });
       });
     });
-    context('when passing valid arguments', () => {
-      context('for only entities and a monolith app', () => {
+    describe('when passing valid arguments', () => {
+      describe('for only entities and a monolith app', () => {
         let entities;
         let returned;
 
@@ -91,7 +91,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           expect(returned).to.deep.equal(entities);
         });
       });
-      context('when not exporting entities', () => {
+      describe('when not exporting entities', () => {
         let returned;
 
         beforeEach(() => {
@@ -110,7 +110,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           expect(doesDirectoryExist('.jhipster')).to.be.false;
         });
       });
-      context('when exporting the same entity', () => {
+      describe('when exporting the same entity', () => {
         let entities;
         let returned;
 
@@ -173,8 +173,8 @@ describe('jdl - JHipsterEntityExporter', () => {
 `);
         });
       });
-      context('when passing an application name and application type', () => {
-        context('inside a monolith', () => {
+      describe('when passing an application name and application type', () => {
+        describe('inside a monolith', () => {
           let entities;
           let returned;
 
@@ -371,8 +371,8 @@ describe('jdl - JHipsterEntityExporter', () => {
 `);
           });
         });
-        context('inside a microservice', () => {
-          context('and when entities without the microservice option are passed', () => {
+        describe('inside a microservice', () => {
+          describe('and when entities without the microservice option are passed', () => {
             let entities;
             let returnedContent;
 
@@ -486,7 +486,7 @@ describe('jdl - JHipsterEntityExporter', () => {
               });
             });
           });
-          context('and when microservice entities are passed', () => {
+          describe('and when microservice entities are passed', () => {
             let entities;
             let returnedContent;
 

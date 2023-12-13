@@ -19,6 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
+import { before, it, describe, after } from 'esmocha';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -30,19 +31,19 @@ const __dirname = dirname(__filename);
 
 describe('jdl - FileUtils', () => {
   describe('doesFileExist', () => {
-    context('when checking a file path', () => {
-      context('with a nil file path', () => {
+    describe('when checking a file path', () => {
+      describe('with a nil file path', () => {
         it('should return false', () => {
           // @ts-expect-error
           expect(doesFileExist()).to.be.false;
         });
       });
-      context('with an invalid file path', () => {
+      describe('with an invalid file path', () => {
         it('should return false', () => {
           expect(doesFileExist('someInvalidPath')).to.be.false;
         });
       });
-      context('with a valid file path', () => {
+      describe('with a valid file path', () => {
         it('should return true', () => {
           expect(doesFileExist(path.join(__dirname, '..', '__test-files__', 'MyEntity.json'))).to.be.true;
         });
@@ -50,19 +51,19 @@ describe('jdl - FileUtils', () => {
     });
   });
   describe('doesDirectoryExist', () => {
-    context('when checking a directory path', () => {
-      context('with a nil directory path', () => {
+    describe('when checking a directory path', () => {
+      describe('with a nil directory path', () => {
         it('return false', () => {
           // @ts-expect-error
           expect(doesDirectoryExist()).to.be.false;
         });
       });
-      context('with an invalid directory path', () => {
+      describe('with an invalid directory path', () => {
         it('should return false', () => {
           expect(doesDirectoryExist(path.join(__dirname, 'invalid-folder'))).to.be.false;
         });
       });
-      context('with a valid directory path', () => {
+      describe('with a valid directory path', () => {
         it('should return true', () => {
           expect(doesDirectoryExist(__dirname)).to.be.true;
         });
@@ -70,7 +71,7 @@ describe('jdl - FileUtils', () => {
     });
   });
   describe('createFolderIfItDoesNotExist', () => {
-    context('when not passing a directory', () => {
+    describe('when not passing a directory', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -78,7 +79,7 @@ describe('jdl - FileUtils', () => {
         }).to.throw(/^A directory must be passed to be created\.$/);
       });
     });
-    context('when passing a directory that does not yet exist', () => {
+    describe('when passing a directory that does not yet exist', () => {
       before(() => {
         createFolderIfItDoesNotExist('./here');
       });
@@ -91,14 +92,14 @@ describe('jdl - FileUtils', () => {
         expect(fs.statSync('./here').isDirectory()).to.be.true;
       });
     });
-    context('when passing a file that exists', () => {
+    describe('when passing a file that exists', () => {
       it('should fail', () => {
         expect(() => {
           createFolderIfItDoesNotExist(path.join(__dirname, '..', '..', 'package.json'));
         }).to.throw(/^The directory to create '.*?package\.json' is a file\.$/);
       });
     });
-    context('when passing a directory that exists', () => {
+    describe('when passing a directory that exists', () => {
       before(() => {
         createFolderIfItDoesNotExist('./test');
       });
@@ -107,7 +108,7 @@ describe('jdl - FileUtils', () => {
         expect(fs.statSync('./test').isDirectory()).to.be.true;
       });
     });
-    context('when passing a path that does not contain more than one directory', () => {
+    describe('when passing a path that does not contain more than one directory', () => {
       before(() => {
         createFolderIfItDoesNotExist(path.join('toto', 'titi', 'tutu'));
       });

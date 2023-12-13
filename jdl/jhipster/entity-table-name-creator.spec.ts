@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { entityTableNameCreator } from '../jhipster/index.js';
 
@@ -24,29 +25,29 @@ const getTableNameFromEntityName = entityTableNameCreator;
 
 describe('jdl - EntityTableNameCreator', () => {
   describe('getTableNameFromEntityName', () => {
-    context('when not passing an entity name', () => {
+    describe('when not passing an entity name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => getTableNameFromEntityName(undefined)).to.throw(/^An entity name must be passed to get a table name.$/);
       });
     });
-    context('when passing an entity name', () => {
-      context("like 'Aabcd'", () => {
+    describe('when passing an entity name', () => {
+      describe("like 'Aabcd'", () => {
         it('should just lowercase the first letter', () => {
           expect(getTableNameFromEntityName('Toto')).to.equal('toto');
         });
       });
-      context("like 'AaBbc", () => {
+      describe("like 'AaBbc", () => {
         it('should add underscores before each capitalized letters and lowercase everything', () => {
           expect(getTableNameFromEntityName('TotoTata')).to.equal('toto_tata');
         });
       });
-      context('like ABabc', () => {
+      describe('like ABabc', () => {
         it('should add underscores before each capitalized letters and lowercase everything', () => {
           expect(getTableNameFromEntityName('TTotoTata')).to.equal('t_toto_tata');
         });
       });
-      context('for already converted names', () => {
+      describe('for already converted names', () => {
         it('should keep them the same', () => {
           expect(getTableNameFromEntityName('t_toto_tata')).to.equal('t_toto_tata');
         });

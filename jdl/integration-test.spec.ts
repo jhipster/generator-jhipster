@@ -21,8 +21,7 @@
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
-import { jestExpect } from 'esmocha';
-
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { applicationTypes } from './jhipster/index.js';
 import { parseFromContent, parseFromFiles } from './readers/jdl-reader.js';
 import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
@@ -40,7 +39,7 @@ describe('jdl - integration tests', () => {
     await helpers.prepareTemporaryDir();
   });
 
-  context('when parsing and exporting a JDL', () => {
+  describe('when parsing and exporting a JDL', () => {
     let originalContent;
     let writtenContent;
 
@@ -61,10 +60,10 @@ describe('jdl - integration tests', () => {
     });
   });
 
-  context('when parsing entities JDL', () => {
+  describe('when parsing entities JDL', () => {
     const applicationName = 'jhipster';
 
-    context('with annotations', () => {
+    describe('with annotations', () => {
       let result: Map<any, any[]>;
       let convertedJdl: string;
       const jdl = `@BooleanTrue(true)
@@ -128,7 +127,7 @@ Map {
       });
     });
 
-    context('with bidirectional relationship', () => {
+    describe('with bidirectional relationship', () => {
       let result: Map<any, any[]>;
       const jdl = `
 entity A {}
@@ -212,7 +211,7 @@ Map {
       });
     });
 
-    context('with unidirectional relationship and annotation at destination', () => {
+    describe('with unidirectional relationship and annotation at destination', () => {
       let result: Map<any, any[]>;
       let convertedJdl: string;
       const jdl = `entity A
@@ -296,7 +295,7 @@ Map {
       });
     });
 
-    context('with unidirectional relationship and annotation at both sides', () => {
+    describe('with unidirectional relationship and annotation at both sides', () => {
       let result: Map<any, any[]>;
       const jdl = `
 entity A {}
@@ -386,10 +385,10 @@ Map {
     });
   });
 
-  context('when parsing JDL with blueprint configs', () => {
+  describe('when parsing JDL with blueprint configs', () => {
     const applicationName = 'jhipster';
 
-    context('without blueprint', () => {
+    describe('without blueprint', () => {
       const jdl = `
 application {
   config {
@@ -407,7 +406,7 @@ application {
       });
     });
 
-    context('with blueprint', () => {
+    describe('with blueprint', () => {
       let result: Record<string, ApplicationWithEntities>;
       const jdl = `
 application {

@@ -18,7 +18,7 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { expect } from 'esmocha';
+import { it, describe, expect } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.js';

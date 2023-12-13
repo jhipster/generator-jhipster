@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { convertEnums } from './enum-converter.js';
 
 describe('jdl - EnumConverter', () => {
   describe('convertEnums', () => {
-    context('when not passing enumerations', () => {
+    describe('when not passing enumerations', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertEnums()).toThrow(/^Enumerations have to be passed so as to be converted.$/);
       });
     });
-    context('when passing enumerations', () => {
+    describe('when passing enumerations', () => {
       let convertedEnums;
 
       before(() => {

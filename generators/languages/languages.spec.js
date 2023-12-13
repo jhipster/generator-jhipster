@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { before, it, describe } from 'esmocha';
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../test/support/index.js';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
@@ -91,7 +92,7 @@ const containsLanguageInVueStore = languageValue => {
 };
 
 describe('generator - languages', () => {
-  context('Creates default i18n files', () => {
+  describe('Creates default i18n files', () => {
     supportedLanguages.forEach(language => {
       describe(`with prompts for ${language.name}`, () => {
         before(() =>
@@ -119,7 +120,7 @@ describe('generator - languages', () => {
       });
     });
   });
-  context('should not create i18n files', () => {
+  describe('should not create i18n files', () => {
     describe('for already generated native language', () => {
       before(() =>
         helpers
@@ -140,7 +141,7 @@ describe('generator - languages', () => {
       noLanguageFiles('en');
     });
   });
-  context('should create default i18n files for the native language', () => {
+  describe('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
       before(() =>
         helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withAnswers({
@@ -172,7 +173,7 @@ describe('generator - languages', () => {
       containsLanguageFiles('fr');
     });
   });
-  context('should create default i18n files for the native language and an additional language', () => {
+  describe('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
       before(() => helpers.run(generatorPath).withJHipsterConfig().withOptions({ ignoreNeedlesError: true }));
       containsLanguageFiles('en');
@@ -233,7 +234,7 @@ describe('generator - languages', () => {
       containsLanguageFiles('en');
     });
   });
-  context('Creates default i18n files for more than one language', () => {
+  describe('Creates default i18n files for more than one language', () => {
     describe('with prompts', () => {
       before(() =>
         helpers
@@ -271,7 +272,7 @@ describe('generator - languages', () => {
     });
   });
 
-  context('Creates default i18n files for Vue applications', () => {
+  describe('Creates default i18n files for Vue applications', () => {
     describe('using prompts', () => {
       before(async () => {
         const result = await createClientProject().withJHipsterConfig({

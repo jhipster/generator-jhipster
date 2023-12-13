@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { convertRelationships } from './relationship-converter.js';
 
 describe('jdl - RelationshipConverter', () => {
   describe('convertRelationships', () => {
-    context('when not passing relationships', () => {
+    describe('when not passing relationships', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertRelationships()).toThrow(/^Relationships have to be passed so as to be converted\.$/);
       });
     });
-    context('when passing relationships', () => {
-      context('with all the fields', () => {
+    describe('when passing relationships', () => {
+      describe('with all the fields', () => {
         let convertedRelationships;
 
         before(() => {
@@ -91,7 +91,7 @@ describe('jdl - RelationshipConverter', () => {
           `);
         });
       });
-      context('when there is no injected field in both sides', () => {
+      describe('when there is no injected field in both sides', () => {
         let convertedRelationships;
 
         before(() => {

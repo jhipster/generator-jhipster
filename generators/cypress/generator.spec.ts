@@ -18,7 +18,7 @@
  */
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { expect } from 'esmocha';
+import { before, it, describe, after, expect } from 'esmocha';
 import lodash from 'lodash';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.js';
 import {

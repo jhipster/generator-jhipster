@@ -18,13 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 import { binaryOptions } from '../jhipster/index.js';
 
 describe('jdl - AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {
-    context('when not passing entity names', () => {
+    describe('when not passing entity names', () => {
       it('should fail', () => {
         expect(() => {
           new JDLBinaryOption({
@@ -35,7 +35,7 @@ describe('jdl - AbstractJDLOption', () => {
         }).toThrow(/^Entity names have to be passed to resolve the option's entities\.$/);
       });
     });
-    context('when passing entity names', () => {
+    describe('when passing entity names', () => {
       let result;
 
       before(() => {

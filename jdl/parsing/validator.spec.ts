@@ -18,14 +18,15 @@
  */
 /* eslint-disable no-useless-escape */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { parse } from './api.js';
 
 describe('jdl - JDLSyntaxValidatorVisitor', () => {
-  context('when declaring an application', () => {
+  describe('when declaring an application', () => {
     for (const booleanOption of ['microfrontend']) {
-      context(`and using for ${booleanOption}`, () => {
-        context('a valid value', () => {
+      describe(`and using for ${booleanOption}`, () => {
+        describe('a valid value', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -37,7 +38,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('an invalid value', () => {
+        describe('an invalid value', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -52,8 +53,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
       });
     }
     for (const integerOption of ['gatewayServerPort']) {
-      context(`and using for ${integerOption}`, () => {
-        context('a valid value', () => {
+      describe(`and using for ${integerOption}`, () => {
+        describe('a valid value', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -66,8 +67,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('an invalid value', () => {
-          context('such as letters', () => {
+        describe('an invalid value', () => {
+          describe('such as letters', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -83,8 +84,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
       });
     }
 
-    context('and using for applicationType', () => {
-      context('a valid value', () => {
+    describe('and using for applicationType', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
@@ -96,8 +97,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as a number', () => {
+      describe('an invalid value', () => {
+        describe('such as a number', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -109,7 +110,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
-        context('such as an invalid character', () => {
+        describe('such as an invalid character', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -121,7 +122,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
-        context('such as a capitalized letters', () => {
+        describe('such as a capitalized letters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -134,7 +135,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('having illegal characters', () => {
+        describe('having illegal characters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -148,9 +149,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for authenticationType', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for authenticationType', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -162,7 +163,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -175,8 +176,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -188,7 +189,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""jwt""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -202,9 +203,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for baseName', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for baseName', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -216,7 +217,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -229,8 +230,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -242,7 +243,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""mySuperApp""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -256,8 +257,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for blueprints', () => {
-      context('an empty blueprint name', () => {
+    describe('and using for blueprints', () => {
+      describe('an empty blueprint name', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -268,7 +269,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name with uppercase letters', () => {
+      describe('a blueprint name with uppercase letters', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -279,7 +280,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name starting with .', () => {
+      describe('a blueprint name starting with .', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -290,7 +291,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name starting with _', () => {
+      describe('a blueprint name starting with _', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -301,7 +302,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name with a whitespace inside', () => {
+      describe('a blueprint name with a whitespace inside', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -312,7 +313,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing ~', () => {
+      describe('a blueprint name containing ~', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -323,7 +324,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing ~', () => {
+      describe('a blueprint name containing ~', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -334,7 +335,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing \\', () => {
+      describe('a blueprint name containing \\', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -345,7 +346,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context("a blueprint name containing '", () => {
+      describe("a blueprint name containing '", () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -356,7 +357,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing !', () => {
+      describe('a blueprint name containing !', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -367,7 +368,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing (', () => {
+      describe('a blueprint name containing (', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -378,7 +379,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing )', () => {
+      describe('a blueprint name containing )', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -389,7 +390,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).to.throw();
         });
       });
-      context('a blueprint name containing *', () => {
+      describe('a blueprint name containing *', () => {
         it('should fail', () => {
           expect(() =>
             parse(`application {
@@ -401,9 +402,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for buildTool', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for buildTool', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -415,7 +416,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -428,8 +429,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -441,7 +442,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""maven""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -455,9 +456,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for cacheProvider', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for cacheProvider', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -469,7 +470,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -482,8 +483,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -495,7 +496,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -509,9 +510,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for clientFramework', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for clientFramework', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -523,7 +524,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -536,8 +537,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -549,7 +550,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""react""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -563,8 +564,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for withAdminUi', () => {
-      context('a valid value', () => {
+    describe('and using for withAdminUi', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -577,7 +578,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -590,9 +591,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for clientPackageManager', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for clientPackageManager', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -604,7 +605,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -617,8 +618,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -630,7 +631,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""npm""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -644,9 +645,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for databaseType', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for databaseType', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -658,7 +659,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -671,8 +672,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -684,7 +685,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""sql""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -698,9 +699,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for devDatabaseType', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for devDatabaseType', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -712,7 +713,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -725,8 +726,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -738,7 +739,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""postgresql""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -752,8 +753,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for enableHibernateCache', () => {
-      context('a valid value', () => {
+    describe('and using for enableHibernateCache', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -766,7 +767,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -779,8 +780,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for enableSwaggerCodegen', () => {
-      context('a valid value', () => {
+    describe('and using for enableSwaggerCodegen', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -793,7 +794,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -806,8 +807,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for enableTranslation', () => {
-      context('a valid value', () => {
+    describe('and using for enableTranslation', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -820,7 +821,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -833,8 +834,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for frontendBuilder', () => {
-      context('a valid value', () => {
+    describe('and using for frontendBuilder', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
@@ -846,8 +847,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as a number', () => {
+      describe('an invalid value', () => {
+        describe('such as a number', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -859,7 +860,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
-        context('such as an invalid character', () => {
+        describe('such as an invalid character', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -872,7 +873,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('having illegal characters', () => {
+        describe('having illegal characters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -886,8 +887,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for jhipsterVersion', () => {
-      context('a valid value', () => {
+    describe('and using for jhipsterVersion', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -900,7 +901,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -913,8 +914,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for jhiPrefix', () => {
-      context('a valid value', () => {
+    describe('and using for jhiPrefix', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -926,8 +927,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('when the prefix begins by a digit', () => {
+      describe('an invalid value', () => {
+        describe('when the prefix begins by a digit', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -939,7 +940,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw("MismatchedTokenException: Found an invalid token 'abc', at line: 4 and column: 29.");
           });
         });
-        context('when the prefix begins by a dash', () => {
+        describe('when the prefix begins by a dash', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -953,8 +954,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for languages', () => {
-      context('a valid value', () => {
+    describe('and using for languages', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -967,8 +968,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
-        context('such as having numbers inside the list', () => {
+      describe('an invalid value', () => {
+        describe('such as having numbers inside the list', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -980,7 +981,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
           });
         });
-        context('such as not a list', () => {
+        describe('such as not a list', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -994,9 +995,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for messageBroker', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for messageBroker', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1008,7 +1009,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1021,8 +1022,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1034,7 +1035,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1048,8 +1049,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for microfrontends', () => {
-      context('a valid value', () => {
+    describe('and using for microfrontends', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1062,8 +1063,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
-        context('such as having numbers inside the list', () => {
+      describe('an invalid value', () => {
+        describe('such as having numbers inside the list', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1075,7 +1076,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^The microfrontends property name must match: (.*), got mf-1.\n(.*)at line: (\d*), column: (\d*)/);
           });
         });
-        context('such as not a list', () => {
+        describe('such as not a list', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1089,8 +1090,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for nativeLanguage', () => {
-      context('a valid value', () => {
+    describe('and using for nativeLanguage', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
@@ -1102,8 +1103,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as a number', () => {
+      describe('an invalid value', () => {
+        describe('such as a number', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1115,7 +1116,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
-        context('such as an invalid character', () => {
+        describe('such as an invalid character', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1127,7 +1128,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
-        context('such as a capitalized letters', () => {
+        describe('such as a capitalized letters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1140,7 +1141,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('having illegal characters', () => {
+        describe('having illegal characters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1154,8 +1155,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for packageName', () => {
-      context('a valid value', () => {
+    describe('and using for packageName', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
@@ -1167,8 +1168,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as an invalid character', () => {
+      describe('an invalid value', () => {
+        describe('such as an invalid character', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1180,7 +1181,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
-        context('such as a capitalized letters', () => {
+        describe('such as a capitalized letters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1194,9 +1195,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for prodDatabaseType', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for prodDatabaseType', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1208,7 +1209,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1221,8 +1222,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1234,7 +1235,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1248,8 +1249,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for rememberMeKey', () => {
-      context('a valid value', () => {
+    describe('and using for rememberMeKey', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1262,9 +1263,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for searchEngine', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for searchEngine', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1276,7 +1277,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1289,8 +1290,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1302,7 +1303,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1316,8 +1317,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for serverPort', () => {
-      context('a valid value', () => {
+    describe('and using for serverPort', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1330,8 +1331,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
-        context('such as letters', () => {
+      describe('an invalid value', () => {
+        describe('such as letters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1345,9 +1346,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for serviceDiscoveryType', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for serviceDiscoveryType', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1360,8 +1361,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1373,7 +1374,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1385,7 +1386,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^The serviceDiscoveryType property name must match: /);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1399,8 +1400,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for skipClient', () => {
-      context('a valid value', () => {
+    describe('and using for skipClient', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1413,7 +1414,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1426,8 +1427,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for skipServer', () => {
-      context('a valid value', () => {
+    describe('and using for skipServer', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1440,7 +1441,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1453,8 +1454,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for skipUserManagement', () => {
-      context('a valid value', () => {
+    describe('and using for skipUserManagement', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1467,7 +1468,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
+      describe('an invalid value', () => {
         it('should report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1480,8 +1481,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for testFrameworks', () => {
-      context('a valid value', () => {
+    describe('and using for testFrameworks', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1494,8 +1495,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalid value', () => {
-        context('such as having numbers inside the list', () => {
+      describe('an invalid value', () => {
+        describe('such as having numbers inside the list', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1507,7 +1508,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^MismatchedTokenException: Found an invalid token '42', at line: \d+ and column: \d+\./);
           });
         });
-        context('such as not a list', () => {
+        describe('such as not a list', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1521,9 +1522,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for websocket', () => {
-      context('a valid value', () => {
-        context('with only letters', () => {
+    describe('and using for websocket', () => {
+      describe('a valid value', () => {
+        describe('with only letters', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1535,7 +1536,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('with both letters and numbers', () => {
+        describe('with both letters and numbers', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1548,8 +1549,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
       });
-      context('an invalid value', () => {
-        context('such as quotes', () => {
+      describe('an invalid value', () => {
+        describe('such as quotes', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1561,7 +1562,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: ""ehcache""/);
           });
         });
-        context('such as numbers', () => {
+        describe('such as numbers', () => {
           it('should fail', () => {
             expect(() =>
               parse(`
@@ -1576,9 +1577,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
       });
     });
   });
-  context('when declaring a deployment', () => {
-    context('and using for deploymentType', () => {
-      context('a valid value', () => {
+  describe('when declaring a deployment', () => {
+    describe('and using for deploymentType', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
@@ -1588,8 +1589,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as a number', () => {
+      describe('an invalid value', () => {
+        describe('such as a number', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1599,7 +1600,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A name is expected, but found: "666"/);
           });
         });
-        context('such as an invalid character', () => {
+        describe('such as an invalid character', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1609,7 +1610,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
-        context('such as a capitalized letters', () => {
+        describe('such as a capitalized letters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1620,7 +1621,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('having illegal characters', () => {
+        describe('having illegal characters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1634,8 +1635,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
     });
     const ALPHABETIC_LOWER = ['monitoring', 'serviceDiscoveryType', 'storageType'];
     ALPHABETIC_LOWER.forEach(type => {
-      context(`and using for ${type}`, () => {
-        context('a valid value', () => {
+      describe(`and using for ${type}`, () => {
+        describe('a valid value', () => {
           it('should not report a syntax error for name', () => {
             expect(() =>
               parse(`
@@ -1645,8 +1646,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).not.to.throw();
           });
         });
-        context('an invalid value', () => {
-          context('such as a number', () => {
+        describe('an invalid value', () => {
+          describe('such as a number', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1656,7 +1657,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).to.throw(/^A name is expected, but found: "666"/);
             });
           });
-          context('such as an invalid character', () => {
+          describe('such as an invalid character', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1666,7 +1667,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).to.throw(/^unexpected character: ->-<-/);
             });
           });
-          context('such as a capitalized letters', () => {
+          describe('such as a capitalized letters', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1677,7 +1678,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             });
           });
 
-          context('having illegal characters', () => {
+          describe('having illegal characters', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1690,8 +1691,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for directoryPath', () => {
-      context('a valid value', () => {
+    describe('and using for directoryPath', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
@@ -1701,8 +1702,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as a number', () => {
+      describe('an invalid value', () => {
+        describe('such as a number', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1712,7 +1713,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^A string literal is expected, but found: "666"/);
           });
         });
-        context('such as an invalid character', () => {
+        describe('such as an invalid character', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1722,7 +1723,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).to.throw(/^unexpected character: ->-<-/);
           });
         });
-        context('such as a invalid pattern', () => {
+        describe('such as a invalid pattern', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1733,7 +1734,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('having illegal characters', () => {
+        describe('having illegal characters', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1748,8 +1749,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
     const ALPHANUMERIC_LIST = ['appsFolders', 'clusteredDbApps'];
 
     ALPHANUMERIC_LIST.forEach(type => {
-      context(`and using for ${type}`, () => {
-        context('a valid value', () => {
+      describe(`and using for ${type}`, () => {
+        describe('a valid value', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1760,8 +1761,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('an invalid value', () => {
-          context('such as having special character inside the list', () => {
+        describe('an invalid value', () => {
+          describe('such as having special character inside the list', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1771,7 +1772,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).to.throw(/^MismatchedTokenException: Found an invalid token '@', at line: \d+ and column: \d+\./);
             });
           });
-          context('such as not a list', () => {
+          describe('such as not a list', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1787,9 +1788,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
     const ALPHANUMERIC_NAME = ['gatewayType', 'kubernetesServiceType'];
 
     ALPHANUMERIC_NAME.forEach(type => {
-      context(`and using for ${type}`, () => {
-        context('a valid value', () => {
-          context('a valid value for gatewayType', () => {
+      describe(`and using for ${type}`, () => {
+        describe('a valid value', () => {
+          describe('a valid value for gatewayType', () => {
             it('should not report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1799,7 +1800,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).not.to.throw();
             });
           });
-          context('a valid value for kubernetesServiceType', () => {
+          describe('a valid value for kubernetesServiceType', () => {
             it('should not report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1810,8 +1811,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             });
           });
         });
-        context('an invalid value', () => {
-          context('an invalid value', () => {
+        describe('an invalid value', () => {
+          describe('an invalid value', () => {
             it('should not report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1821,7 +1822,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
-          context('such as having special character', () => {
+          describe('such as having special character', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1831,7 +1832,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
-          context('such as not a name', () => {
+          describe('such as not a name', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1847,8 +1848,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
     const ALPHANUMERIC_DASH_NAME = ['kubernetesNamespace', 'openshiftNamespace'];
 
     ALPHANUMERIC_DASH_NAME.forEach(type => {
-      context(`and using for ${type}`, () => {
-        context('a valid value', () => {
+      describe(`and using for ${type}`, () => {
+        describe('a valid value', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1859,8 +1860,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('an invalid value', () => {
-          context('such as having special character', () => {
+        describe('an invalid value', () => {
+          describe('such as having special character', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1870,7 +1871,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
-          context('such as not a name', () => {
+          describe('such as not a name', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1886,8 +1887,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
 
     const URL_TYPE = ['ingressDomain', 'dockerRepositoryName'];
     URL_TYPE.forEach(type => {
-      context(`and using for ${type}`, () => {
-        context('a valid value', () => {
+      describe(`and using for ${type}`, () => {
+        describe('a valid value', () => {
           it('should not report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1907,8 +1908,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('an invalid value', () => {
-          context('such as having invalid url', () => {
+        describe('an invalid value', () => {
+          describe('such as having invalid url', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1920,7 +1921,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               );
             });
           });
-          context('such as not a name', () => {
+          describe('such as not a name', () => {
             it('should report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1933,7 +1934,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('such as having special chars', () => {
+    describe('such as having special chars', () => {
       it('should report a syntax error', () => {
         expect(() =>
           parse(`
@@ -1943,8 +1944,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         ).to.throw(/^The dockerPushCommand property name must match:/);
       });
     });
-    context('and using for dockerPushCommand', () => {
-      context('a valid value', () => {
+    describe('and using for dockerPushCommand', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1954,8 +1955,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
           ).not.to.throw();
         });
       });
-      context('an invalid value', () => {
-        context('such as not a name', () => {
+      describe('an invalid value', () => {
+        describe('such as not a name', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(`
@@ -1967,8 +1968,8 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    context('and using for ingressType', () => {
-      context('a valid value', () => {
+    describe('and using for ingressType', () => {
+      describe('a valid value', () => {
         it('should not report a syntax error', () => {
           expect(() =>
             parse(`
@@ -1980,9 +1981,9 @@ ingressType nginx
       });
     });
   });
-  context('when declaring an enum', () => {
-    context('with specific values', () => {
-      context('that contain whitespaces', () => {
+  describe('when declaring an enum', () => {
+    describe('with specific values', () => {
+      describe('that contain whitespaces', () => {
         it('should not fail', () => {
           expect(() =>
             parse(`enum MyEnum {
@@ -1992,7 +1993,7 @@ ingressType nginx
           ).not.to.throw();
         });
       });
-      context('that contain quotes', () => {
+      describe('that contain quotes', () => {
         it('should fail', () => {
           expect(() =>
             parse(`enum MyEnum {

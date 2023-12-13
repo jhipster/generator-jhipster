@@ -1,3 +1,4 @@
+import { it, describe } from 'esmocha';
 import assert from 'assert';
 import { stringHashCode } from './string.js';
 

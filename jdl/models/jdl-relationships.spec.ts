@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
@@ -27,8 +27,8 @@ import JDLRelationships from '../models/jdl-relationships.js';
 
 describe('jdl - JDLRelationships', () => {
   describe('add', () => {
-    context('when passing an invalid relationship', () => {
-      context('because it is nil', () => {
+    describe('when passing an invalid relationship', () => {
+      describe('because it is nil', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
@@ -37,7 +37,7 @@ describe('jdl - JDLRelationships', () => {
         });
       });
     });
-    context('when passing a valid relationship', () => {
+    describe('when passing a valid relationship', () => {
       let relationships;
 
       before(() => {
@@ -66,14 +66,14 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('get', () => {
-    context('when passing an invalid type', () => {
+    describe('when passing an invalid type', () => {
       it('should fail', () => {
         expect(() => {
           new JDLRelationships().get('oops', 42);
         }).to.throw("A valid relationship type must be passed so as to retrieve the relationship, got 'oops'.");
       });
     });
-    context('when passing an invalid id', () => {
+    describe('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -81,13 +81,13 @@ describe('jdl - JDLRelationships', () => {
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
-    context('when passing valid arguments', () => {
-      context('but there is no relationship', () => {
+    describe('when passing valid arguments', () => {
+      describe('but there is no relationship', () => {
         it('should return null', () => {
           expect(new JDLRelationships().get(relationshipTypes.ONE_TO_MANY, 42)).to.be.undefined;
         });
       });
-      context('for an existing relationship', () => {
+      describe('for an existing relationship', () => {
         let relationships;
         let relationship;
 
@@ -109,7 +109,7 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('getOneToOne', () => {
-    context('when passing an invalid id', () => {
+    describe('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -117,13 +117,13 @@ describe('jdl - JDLRelationships', () => {
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
-    context('when passing valid arguments', () => {
-      context('but there is no relationship', () => {
+    describe('when passing valid arguments', () => {
+      describe('but there is no relationship', () => {
         it('should return null', () => {
           expect(new JDLRelationships().getOneToOne(42)).to.be.undefined;
         });
       });
-      context('for an existing relationship', () => {
+      describe('for an existing relationship', () => {
         let relationships;
         let relationship;
 
@@ -145,7 +145,7 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('getOneToMany', () => {
-    context('when passing an invalid id', () => {
+    describe('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -153,13 +153,13 @@ describe('jdl - JDLRelationships', () => {
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
-    context('when passing valid arguments', () => {
-      context('but there is no relationship', () => {
+    describe('when passing valid arguments', () => {
+      describe('but there is no relationship', () => {
         it('should return null', () => {
           expect(new JDLRelationships().getOneToMany(42)).to.be.undefined;
         });
       });
-      context('for an existing relationship', () => {
+      describe('for an existing relationship', () => {
         let relationships;
         let relationship;
 
@@ -181,7 +181,7 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('getManyToOne', () => {
-    context('when passing an invalid id', () => {
+    describe('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -189,13 +189,13 @@ describe('jdl - JDLRelationships', () => {
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
-    context('when passing valid arguments', () => {
-      context('but there is no relationship', () => {
+    describe('when passing valid arguments', () => {
+      describe('but there is no relationship', () => {
         it('should return null', () => {
           expect(new JDLRelationships().getManyToOne(42)).to.be.undefined;
         });
       });
-      context('for an existing relationship', () => {
+      describe('for an existing relationship', () => {
         let relationships;
         let relationship;
 
@@ -217,7 +217,7 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('getManyToMany', () => {
-    context('when passing an invalid id', () => {
+    describe('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -225,13 +225,13 @@ describe('jdl - JDLRelationships', () => {
         }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
-    context('when passing valid arguments', () => {
-      context('but there is no relationship', () => {
+    describe('when passing valid arguments', () => {
+      describe('but there is no relationship', () => {
         it('should return null', () => {
           expect(new JDLRelationships().getManyToMany(42)).to.be.undefined;
         });
       });
-      context('for an existing relationship', () => {
+      describe('for an existing relationship', () => {
         let relationships;
         let relationship;
 
@@ -283,12 +283,12 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('oneToOneQuantity', () => {
-    context('when there is no OtO relationship', () => {
+    describe('when there is no OtO relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().oneToOneQuantity()).to.equal(0);
       });
     });
-    context('when there are OtO relationships', () => {
+    describe('when there are OtO relationships', () => {
       let relationships;
 
       before(() => {
@@ -309,12 +309,12 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('oneToManyQuantity', () => {
-    context('when there is no OtM relationship', () => {
+    describe('when there is no OtM relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().oneToManyQuantity()).to.equal(0);
       });
     });
-    context('when there are OtM relationships', () => {
+    describe('when there are OtM relationships', () => {
       let relationships;
 
       before(() => {
@@ -335,12 +335,12 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('manyToOneQuantity', () => {
-    context('when there is no MtO relationship', () => {
+    describe('when there is no MtO relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().manyToOneQuantity()).to.equal(0);
       });
     });
-    context('when there are MtO relationships', () => {
+    describe('when there are MtO relationships', () => {
       let relationships;
 
       before(() => {
@@ -361,12 +361,12 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('manyToManyQuantity', () => {
-    context('when there is no OtO relationship', () => {
+    describe('when there is no OtO relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().manyToManyQuantity()).to.equal(0);
       });
     });
-    context('when there are OtO relationships', () => {
+    describe('when there are OtO relationships', () => {
       let relationships;
 
       before(() => {
@@ -414,12 +414,12 @@ describe('jdl - JDLRelationships', () => {
       jdlRelationships = new JDLRelationships();
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlRelationships.forEach();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -463,12 +463,12 @@ describe('jdl - JDLRelationships', () => {
     });
   });
   describe('toString', () => {
-    context('when there is no relationship', () => {
+    describe('when there is no relationship', () => {
       it('should return an emptry string', () => {
         expect(new JDLRelationships().toString()).to.equal('');
       });
     });
-    context('when having one relationship per type', () => {
+    describe('when having one relationship per type', () => {
       let relationships;
       let oneToOneRelationship;
       let oneToManyRelationship;
@@ -502,7 +502,7 @@ relationship ${oneToManyRelationship.type} {
 }`);
       });
     });
-    context('when having more than one relationship per type', () => {
+    describe('when having more than one relationship per type', () => {
       let relationships;
       let oneToOneRelationship1;
       let oneToOneRelationship2;

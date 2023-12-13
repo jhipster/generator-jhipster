@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { it, describe, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.js';
 import prepareFieldForTemplates, { getEnumValuesWithCustomValues } from './prepare-field.js';

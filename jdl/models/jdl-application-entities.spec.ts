@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLApplicationEntities from '../models/jdl-application-entities.js';
 
 describe('jdl - JDLApplicationEntities', () => {
   describe('addEntityNames', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -33,8 +34,8 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(() => jdlApplicationEntities.add()).to.throw(/^An entity name has to be passed so as to be added\.$/);
       });
     });
-    context('when passing an entity name', () => {
-      context('that is already present', () => {
+    describe('when passing an entity name', () => {
+      describe('that is already present', () => {
         let jdlApplicationEntities;
 
         before(() => {
@@ -46,7 +47,7 @@ describe('jdl - JDLApplicationEntities', () => {
           expect(jdlApplicationEntities.size()).to.equal(1);
         });
       });
-      context('that is not already present', () => {
+      describe('that is not already present', () => {
         let jdlApplicationEntities;
 
         before(() => {
@@ -61,7 +62,7 @@ describe('jdl - JDLApplicationEntities', () => {
     });
   });
   describe('addEntityNames', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -73,7 +74,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(jdlApplicationEntities.size()).to.equal(1);
       });
     });
-    context('when passing a falsy name', () => {
+    describe('when passing a falsy name', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -85,7 +86,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(jdlApplicationEntities.size()).to.equal(1);
       });
     });
-    context('when passing entity names', () => {
+    describe('when passing entity names', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -99,7 +100,7 @@ describe('jdl - JDLApplicationEntities', () => {
     });
   });
   describe('forEach', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -110,7 +111,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(() => jdlApplicationEntities.forEach()).not.to.throw();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {
@@ -126,7 +127,7 @@ describe('jdl - JDLApplicationEntities', () => {
     });
   });
   describe('toArray', () => {
-    context('when there is no entity', () => {
+    describe('when there is no entity', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -137,7 +138,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(jdlApplicationEntities.toArray()).to.deep.equal([]);
       });
     });
-    context('when there are entities', () => {
+    describe('when there are entities', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -150,7 +151,7 @@ describe('jdl - JDLApplicationEntities', () => {
     });
   });
   describe('size', () => {
-    context('when there is no entity', () => {
+    describe('when there is no entity', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -161,7 +162,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(jdlApplicationEntities.size()).to.equal(0);
       });
     });
-    context('when there are entities', () => {
+    describe('when there are entities', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -174,7 +175,7 @@ describe('jdl - JDLApplicationEntities', () => {
     });
   });
   describe('toString', () => {
-    context('when there is no entity', () => {
+    describe('when there is no entity', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -185,7 +186,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(jdlApplicationEntities.toString()).to.equal('');
       });
     });
-    context('when there is an entity', () => {
+    describe('when there is an entity', () => {
       let jdlApplicationEntities;
 
       before(() => {
@@ -196,7 +197,7 @@ describe('jdl - JDLApplicationEntities', () => {
         expect(jdlApplicationEntities.toString()).to.equal('entities A');
       });
     });
-    context('when there are entities', () => {
+    describe('when there are entities', () => {
       let jdlApplicationEntities;
 
       before(() => {

@@ -2,8 +2,7 @@ import path, { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import fse from 'fs-extra';
 import * as _ from 'lodash-es';
-import { expect } from 'esmocha';
-
+import { before, it, describe, expect } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
 import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.js';

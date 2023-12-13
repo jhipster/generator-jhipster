@@ -18,6 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { applicationOptions } from '../jhipster/index.js';
 import JDLApplicationDefinition from './jdl-application-definition.js';
@@ -28,52 +29,52 @@ const applicationDefinition = new JDLApplicationDefinition();
 
 describe('jdl - ApplicationOptions', () => {
   describe('doesOptionExist', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should return false', () => {
         // @ts-expect-error
         expect(applicationDefinition.doesOptionExist()).to.be.false;
       });
     });
-    context('when passing an option that does not exist', () => {
+    describe('when passing an option that does not exist', () => {
       it('should return false', () => {
         expect(applicationDefinition.doesOptionExist('toto')).to.be.false;
       });
     });
-    context('when passing an option that exists', () => {
+    describe('when passing an option that exists', () => {
       it('should return true', () => {
         expect(applicationDefinition.doesOptionExist('baseName')).to.be.true;
       });
     });
   });
   describe('getTypeForOption', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => applicationDefinition.getTypeForOption()).to.throw(/^A name has to be passed to get the option type.$/);
       });
     });
-    context('when passing an unknown option name', () => {
+    describe('when passing an unknown option name', () => {
       it('should fail', () => {
         expect(() => applicationDefinition.getTypeForOption('tutu')).to.throw(/^Unrecognised application option name: tutu.$/);
       });
     });
-    context('when passing an option', () => {
-      context('that has the string type', () => {
+    describe('when passing an option', () => {
+      describe('that has the string type', () => {
         it("should return 'string'", () => {
           expect(applicationDefinition.getTypeForOption('baseName')).to.equal('string');
         });
       });
-      context('that has the integer type', () => {
+      describe('that has the integer type', () => {
         it("should return 'integer'", () => {
           expect(applicationDefinition.getTypeForOption('serverPort')).to.equal('integer');
         });
       });
-      context('that has the boolean type', () => {
+      describe('that has the boolean type', () => {
         it("should return 'boolean'", () => {
           expect(applicationDefinition.getTypeForOption('skipServer')).to.equal('boolean');
         });
       });
-      context('that has the list type', () => {
+      describe('that has the list type', () => {
         it("should return 'list'", () => {
           expect(applicationDefinition.getTypeForOption('testFrameworks')).to.equal('list');
         });
@@ -91,7 +92,7 @@ describe('jdl - ApplicationOptions', () => {
       Object.values(OptionNames).filter(optionName => !optionsThatShouldBeQuoted.has(optionName)),
     );
 
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => applicationDefinition.shouldTheValueBeQuoted()).to.throw(
@@ -99,18 +100,18 @@ describe('jdl - ApplicationOptions', () => {
         );
       });
     });
-    context('when passing an option for which the value should not be quoted', () => {
+    describe('when passing an option for which the value should not be quoted', () => {
       optionsThatShouldNotBeQuoted.forEach(optionName => {
-        context(`such as ${optionName}`, () => {
+        describe(`such as ${optionName}`, () => {
           it('should return false', () => {
             expect(applicationDefinition.shouldTheValueBeQuoted(optionName)).to.be.false;
           });
         });
       });
     });
-    context('when passing an option for which the value should be quoted', () => {
+    describe('when passing an option for which the value should be quoted', () => {
       optionsThatShouldBeQuoted.forEach(optionName => {
-        context(`such as ${optionName}`, () => {
+        describe(`such as ${optionName}`, () => {
           it('should return true', () => {
             expect(applicationDefinition.shouldTheValueBeQuoted(optionName)).to.be.true;
           });

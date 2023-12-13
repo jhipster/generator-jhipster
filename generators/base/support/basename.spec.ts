@@ -1,4 +1,4 @@
-import { expect, describe, it } from 'esmocha';
+import { it, describe, expect } from 'esmocha';
 import { getFrontendAppName } from './basename.js';
 
 describe('generator > base', () => {

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import UnaryOptionValidator from '../validators/unary-option-validator.js';
@@ -29,18 +30,18 @@ describe('jdl - UnaryOptionValidator', () => {
   });
 
   describe('validate', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No unary option\.$/);
       });
     });
-    context('when passing an unary option', () => {
-      context('with all its required attributes', () => {
+    describe('when passing an unary option', () => {
+      describe('with all its required attributes', () => {
         it('should not fail', () => {
           expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
         });
       });
-      context('without any of its required attributes', () => {
+      describe('without any of its required attributes', () => {
         it('should fail', () => {
           expect(() => validator.validate({})).to.throw(
             /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/,

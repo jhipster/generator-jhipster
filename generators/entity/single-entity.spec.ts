@@ -1,5 +1,4 @@
-import { expect } from 'esmocha';
-
+import { before, it, describe, after, expect } from 'esmocha';
 import { skipPrettierHelpers as helpers, result as runResult } from '../../test/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/generator.js';
@@ -19,7 +18,7 @@ const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 const entityBar = { name: 'Bar', changelogDate: '20160926101211' };
 
 describe('generator - entity --single-entity', () => {
-  context('when regenerating', () => {
+  describe('when regenerating', () => {
     describe('with default configuration', () => {
       before(async () => {
         await helpers

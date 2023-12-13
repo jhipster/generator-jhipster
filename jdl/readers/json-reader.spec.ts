@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe, after } from 'esmocha';
 import { renameSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -33,15 +34,15 @@ const __dirname = dirname(__filename);
 
 describe('jdl - JSONReader', () => {
   describe('parseFromDir', () => {
-    context('when passing invalid parameters', () => {
-      context('such as nil', () => {
+    describe('when passing invalid parameters', () => {
+      describe('such as nil', () => {
         it('should fail', () => {
           expect(() => {
             parseFromDir(null);
           }).to.throw(/^The app directory must be passed to read JSON files\.$/);
         });
       });
-      context('such as a file', () => {
+      describe('such as a file', () => {
         it('should fail', () => {
           expect(() => {
             parseFromDir('../../__test-files__/invalid_file.txt');
@@ -52,7 +53,7 @@ describe('jdl - JSONReader', () => {
           );
         });
       });
-      context('such as a dir that does not exist', () => {
+      describe('such as a dir that does not exist', () => {
         it('should fail', () => {
           expect(() => {
             parseFromDir('nodir');
@@ -60,8 +61,8 @@ describe('jdl - JSONReader', () => {
         });
       });
     });
-    context('when passing valid arguments', () => {
-      context('when reading a jhipster app dir', () => {
+    describe('when passing valid arguments', () => {
+      describe('when reading a jhipster app dir', () => {
         let content;
 
         before(() => {

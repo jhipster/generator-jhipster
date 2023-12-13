@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLUnaryOption from '../models/jdl-unary-option.js';
@@ -25,7 +26,7 @@ import { unaryOptions } from '../jhipster/index.js';
 
 describe('jdl - JDLUnaryOption', () => {
   describe('new', () => {
-    context('when passing no argument', () => {
+    describe('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -33,7 +34,7 @@ describe('jdl - JDLUnaryOption', () => {
         }).to.throw("The option's name must be passed to create an option.");
       });
     });
-    context('when passing a name at least', () => {
+    describe('when passing a name at least', () => {
       let option;
 
       before(() => {
@@ -44,7 +45,7 @@ describe('jdl - JDLUnaryOption', () => {
         expect(option.name).to.equal(unaryOptions.SKIP_CLIENT);
       });
     });
-    context('when passing a list of entity names and excluded names with some of them being repeated', () => {
+    describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
       let option;
 
       before(() => {
@@ -83,7 +84,7 @@ describe('jdl - JDLUnaryOption', () => {
     });
   });
   describe('addEntityName', () => {
-    context('when passing a nil name', () => {
+    describe('when passing a nil name', () => {
       let option;
 
       before(() => {
@@ -96,7 +97,7 @@ describe('jdl - JDLUnaryOption', () => {
         }).to.throw('An entity name has to be passed so as to be added to the option.');
       });
     });
-    context("when passing a name that hasn't been added yet", () => {
+    describe("when passing a name that hasn't been added yet", () => {
       let option;
 
       before(() => {
@@ -108,7 +109,7 @@ describe('jdl - JDLUnaryOption', () => {
         expect(option.entityNames.size).to.equal(1);
       });
     });
-    context('when passing a name that has already been added', () => {
+    describe('when passing a name that has already been added', () => {
       let option;
 
       before(() => {
@@ -121,7 +122,7 @@ describe('jdl - JDLUnaryOption', () => {
         expect(option.entityNames.size).to.equal(1);
       });
     });
-    context('when passing an excluded name', () => {
+    describe('when passing an excluded name', () => {
       let option;
 
       before(() => {
@@ -147,12 +148,12 @@ describe('jdl - JDLUnaryOption', () => {
       });
     });
 
-    context('when passing an invalid option', () => {
+    describe('when passing an invalid option', () => {
       it('should return false', () => {
         expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
       });
     });
-    context('when passing a valid option', () => {
+    describe('when passing a valid option', () => {
       let returned;
 
       before(() => {
@@ -176,7 +177,7 @@ describe('jdl - JDLUnaryOption', () => {
     });
   });
   describe('excludeEntityName', () => {
-    context('when passing a nil name', () => {
+    describe('when passing a nil name', () => {
       let option;
 
       before(() => {
@@ -189,7 +190,7 @@ describe('jdl - JDLUnaryOption', () => {
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
       });
     });
-    context("when passing a name that hasn't been excluded yet", () => {
+    describe("when passing a name that hasn't been excluded yet", () => {
       let option;
 
       before(() => {
@@ -201,7 +202,7 @@ describe('jdl - JDLUnaryOption', () => {
         expect(option.excludedNames.size).to.equal(1);
       });
     });
-    context('when passing a name that has already been excluded', () => {
+    describe('when passing a name that has already been excluded', () => {
       let option;
 
       before(() => {
@@ -214,7 +215,7 @@ describe('jdl - JDLUnaryOption', () => {
         expect(option.excludedNames.size).to.equal(1);
       });
     });
-    context('when passing an added name', () => {
+    describe('when passing an added name', () => {
       let option;
 
       before(() => {

@@ -21,7 +21,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { jestExpect } from 'esmocha';
+import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../models/jdl-deployment.js';
@@ -38,8 +38,8 @@ describe('jdl - JHipsterDeploymentExporter', () => {
   });
 
   describe('exportDeployments', () => {
-    context('when passing invalid parameters', () => {
-      context('such as undefined', () => {
+    describe('when passing invalid parameters', () => {
+      describe('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
@@ -48,8 +48,8 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         });
       });
     });
-    context('when passing valid arguments', () => {
-      context('when exporting deployments to JSON', () => {
+    describe('when passing valid arguments', () => {
+      describe('when exporting deployments to JSON', () => {
         let returned;
 
         beforeEach('common setup for both deployments', () => {
@@ -70,7 +70,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         it('should return the exported deployments', () => {
           expect(returned).to.have.lengthOf(2);
         });
-        context('for the first deployment', () => {
+        describe('for the first deployment', () => {
           let content;
 
           beforeEach('setup for the first deployment', done => {
@@ -107,7 +107,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
 `);
           });
         });
-        context('for the second deployment', () => {
+        describe('for the second deployment', () => {
           let content;
 
           beforeEach('setup for the first deployment', done => {

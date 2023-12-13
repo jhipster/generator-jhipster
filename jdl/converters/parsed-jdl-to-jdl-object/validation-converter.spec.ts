@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { convertValidations } from './validation-converter.js';
 
 describe('jdl - ValidationConverter', () => {
   describe('convertValidations', () => {
-    context('when not passing validations', () => {
+    describe('when not passing validations', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertValidations()).toThrow(/^Validations have to be passed so as to be converted.$/);
       });
     });
-    context('when passing validations', () => {
-      context('with all the attributes', () => {
+    describe('when passing validations', () => {
+      describe('with all the attributes', () => {
         let convertedJDLValidations;
 
         before(() => {
@@ -47,7 +47,7 @@ describe('jdl - ValidationConverter', () => {
 `);
         });
       });
-      context('having for value a constant', () => {
+      describe('having for value a constant', () => {
         let valueFromTheConvertedValidation;
 
         before(() => {
@@ -60,8 +60,8 @@ describe('jdl - ValidationConverter', () => {
           expect(valueFromTheConvertedValidation).toEqual(42);
         });
       });
-      context('having for name the pattern validation', () => {
-        context('with the pattern not having single quotes', () => {
+      describe('having for name the pattern validation', () => {
+        describe('with the pattern not having single quotes', () => {
           let valueFromTheConvertedValidation;
 
           before(() => {
@@ -81,7 +81,7 @@ describe('jdl - ValidationConverter', () => {
             expect(valueFromTheConvertedValidation).toMatch('/d+/');
           });
         });
-        context('with the pattern having single quotes', () => {
+        describe('with the pattern having single quotes', () => {
           let valueFromTheConvertedValidation;
 
           before(() => {
@@ -102,7 +102,7 @@ describe('jdl - ValidationConverter', () => {
           });
         });
       });
-      context('having one falsy element', () => {
+      describe('having one falsy element', () => {
         let convertedJDLValidations;
 
         before(() => {

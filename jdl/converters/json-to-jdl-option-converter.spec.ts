@@ -19,6 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter.js';
 import JDLObject from '../models/jdl-object.js';
@@ -29,7 +30,7 @@ const { SKIP_CLIENT } = unaryOptions;
 
 describe('jdl - JSONToJDLOptionConverter', () => {
   describe('convertToServerOptions', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       let jdlObject;
 
       before(() => {
@@ -41,7 +42,7 @@ describe('jdl - JSONToJDLOptionConverter', () => {
         expect(jdlObject.getOptionQuantity()).to.equal(0);
       });
     });
-    context('when passing a jdl object', () => {
+    describe('when passing a jdl object', () => {
       let jdlObject;
 
       before(() => {

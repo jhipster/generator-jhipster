@@ -18,12 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe, after } from 'esmocha';
 import { expect } from 'chai';
 import { areEntitiesEqual, merge } from '../utils/object-utils.js';
 
 describe('jdl - ObjectUtils', () => {
   describe('merge', () => {
-    context('when merging a nil object with a not-empty one', () => {
+    describe('when merging a nil object with a not-empty one', () => {
       let merged: any;
 
       before(() => {
@@ -34,7 +35,7 @@ describe('jdl - ObjectUtils', () => {
         expect(merged).to.deep.equal({ a: 1 });
       });
     });
-    context('when merging a not-empty object with a nil one', () => {
+    describe('when merging a not-empty object with a nil one', () => {
       let merged: Record<string, never> | { a: number };
 
       before(() => {
@@ -45,7 +46,7 @@ describe('jdl - ObjectUtils', () => {
         expect(merged).to.deep.equal({ a: 1 });
       });
     });
-    context('when merging two not-empty objects', () => {
+    describe('when merging two not-empty objects', () => {
       let merged: { a: number; b: number } | { b: number; c: number };
 
       before(() => {
@@ -66,8 +67,8 @@ describe('jdl - ObjectUtils', () => {
     });
   });
   describe('areEntitiesEqual', () => {
-    context('when comparing two equal objects', () => {
-      context('as they are empty', () => {
+    describe('when comparing two equal objects', () => {
+      describe('as they are empty', () => {
         let result: boolean;
 
         before(() => {
@@ -86,7 +87,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.true;
         });
       });
-      context('as they have no fields, but only relationships', () => {
+      describe('as they have no fields, but only relationships', () => {
         let result: boolean;
 
         before(() => {
@@ -123,7 +124,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.true;
         });
       });
-      context('as they have fields but no relationships', () => {
+      describe('as they have fields but no relationships', () => {
         let result: boolean;
 
         before(() => {
@@ -162,7 +163,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.true;
         });
       });
-      context('they have both fields and relationships', () => {
+      describe('they have both fields and relationships', () => {
         let result: boolean;
 
         before(() => {
@@ -217,7 +218,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.true;
         });
       });
-      context('when one attribute in the object is missing from the other', () => {
+      describe('when one attribute in the object is missing from the other', () => {
         let result: boolean;
 
         before(() => {
@@ -240,8 +241,8 @@ describe('jdl - ObjectUtils', () => {
         });
       });
     });
-    context('when comparing two unequal objects', () => {
-      context('as one of them is not empty', () => {
+    describe('when comparing two unequal objects', () => {
+      describe('as one of them is not empty', () => {
         let result: boolean;
 
         before(() => {
@@ -269,7 +270,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as both of them have different fields', () => {
+      describe('as both of them have different fields', () => {
         let result: boolean;
 
         before(() => {
@@ -306,7 +307,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as both of them have different relationships', () => {
+      describe('as both of them have different relationships', () => {
         let result: boolean;
 
         before(() => {
@@ -353,7 +354,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as they do not possess the same number of fields', () => {
+      describe('as they do not possess the same number of fields', () => {
         let result: boolean;
 
         before(() => {
@@ -391,7 +392,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as they do not have the same number of keys in fields', () => {
+      describe('as they do not have the same number of keys in fields', () => {
         let result: boolean;
 
         before(() => {
@@ -439,7 +440,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as they do not possess the same number of relationships', () => {
+      describe('as they do not possess the same number of relationships', () => {
         let result: boolean;
 
         before(() => {
@@ -489,7 +490,7 @@ describe('jdl - ObjectUtils', () => {
         it('should return false', () => {
           expect(result).to.be.false;
         });
-        context('as they do not have the same number of fields in a relationship', () => {
+        describe('as they do not have the same number of fields in a relationship', () => {
           let result: boolean;
 
           before(() => {
@@ -538,7 +539,7 @@ describe('jdl - ObjectUtils', () => {
           });
         });
       });
-      context('as they do not have the options', () => {
+      describe('as they do not have the options', () => {
         const firstObject: any = {
           fields: [{ id: 1, theAnswer: 42 }],
           relationships: [{ id: 1, anotherField: 44 }],
@@ -558,7 +559,7 @@ describe('jdl - ObjectUtils', () => {
           jpaMetamodelFiltering: 'no',
         };
 
-        context('when not having the same DTO option value', () => {
+        describe('when not having the same DTO option value', () => {
           before(() => {
             secondObject.dto = 'mapstruct';
           });
@@ -570,7 +571,7 @@ describe('jdl - ObjectUtils', () => {
             expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
-        context('when not having the same pagination option value', () => {
+        describe('when not having the same pagination option value', () => {
           before(() => {
             secondObject.pagination = 'pagination';
           });
@@ -582,7 +583,7 @@ describe('jdl - ObjectUtils', () => {
             expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
-        context('when not having the same service option value', () => {
+        describe('when not having the same service option value', () => {
           before(() => {
             secondObject.service = 'serviceImpl';
           });
@@ -594,7 +595,7 @@ describe('jdl - ObjectUtils', () => {
             expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
-        context('when not having the same search engine', () => {
+        describe('when not having the same search engine', () => {
           before(() => {
             secondObject.searchEngine = 'elasticsearch';
           });
@@ -606,8 +607,8 @@ describe('jdl - ObjectUtils', () => {
             expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
-        context('when not having the same jpaMetamodelFiltering option value', () => {
-          context("when one entity has 'no' and the other has 'false'", () => {
+        describe('when not having the same jpaMetamodelFiltering option value', () => {
+          describe("when one entity has 'no' and the other has 'false'", () => {
             before(() => {
               secondObject.jpaMetamodelFiltering = false;
             });
@@ -619,7 +620,7 @@ describe('jdl - ObjectUtils', () => {
               expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
             });
           });
-          context('when they have opposite values', () => {
+          describe('when they have opposite values', () => {
             before(() => {
               secondObject.jpaMetamodelFiltering = true;
             });
@@ -633,7 +634,7 @@ describe('jdl - ObjectUtils', () => {
           });
         });
       });
-      context('as they do not have the same table name', () => {
+      describe('as they do not have the same table name', () => {
         let result: boolean;
 
         before(() => {
@@ -696,7 +697,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as they do not have the same comments', () => {
+      describe('as they do not have the same comments', () => {
         let result: boolean;
 
         before(() => {
@@ -759,7 +760,7 @@ describe('jdl - ObjectUtils', () => {
           expect(result).to.be.false;
         });
       });
-      context('as they do not have the same number of attributes', () => {
+      describe('as they do not have the same number of attributes', () => {
         type ObjectType = {
           documentation: string;
           fields: (

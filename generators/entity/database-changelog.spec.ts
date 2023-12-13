@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import { defaultHelpers as helpers, runResult, getGenerator } from '../../test/support/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/generator.js';
@@ -15,7 +16,7 @@ class MockedLanguagesGenerator extends BaseApplicationGenerator<any> {
 const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 
 describe('generator - entity database changelogs', () => {
-  context('when regenerating the entity', () => {
+  describe('when regenerating the entity', () => {
     describe('with cassandra database', () => {
       before(async () => {
         await helpers

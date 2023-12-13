@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { expect } from 'esmocha';
+import { it, describe, expect } from 'esmocha';
 import { mergeBlueprints, normalizeBlueprintName, parseBluePrints, removeBlueprintDuplicates } from './blueprint.js';
 
 describe('generator - base - internal - blueprint', () => {

@@ -18,6 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLApplicationConfiguration from '../models/jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
@@ -27,7 +28,7 @@ const { OptionNames } = applicationOptions;
 
 describe('jdl - JDLApplicationConfiguration', () => {
   describe('hasOption', () => {
-    context('when not passing an option name', () => {
+    describe('when not passing an option name', () => {
       let configuration;
 
       before(() => {
@@ -38,7 +39,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(configuration.hasOption()).to.be.false;
       });
     });
-    context('when the configuration does not have the option', () => {
+    describe('when the configuration does not have the option', () => {
       let configuration;
 
       before(() => {
@@ -49,7 +50,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(configuration.hasOption(OptionNames.BASE_NAME)).to.be.false;
       });
     });
-    context('when the configuration has the option', () => {
+    describe('when the configuration has the option', () => {
       let configuration;
 
       before(() => {
@@ -63,7 +64,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
     });
   });
   describe('getOption', () => {
-    context('when not passing an option name', () => {
+    describe('when not passing an option name', () => {
       let configuration;
 
       before(() => {
@@ -74,7 +75,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(() => configuration.getOption()).to.throw(/^An option name has to be passed to get the option\.$/);
       });
     });
-    context('when the configuration does not have the option', () => {
+    describe('when the configuration does not have the option', () => {
       let configuration;
 
       before(() => {
@@ -85,7 +86,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(configuration.getOption(OptionNames.BASE_NAME)).to.be.undefined;
       });
     });
-    context('when the configuration has the option', () => {
+    describe('when the configuration has the option', () => {
       let configuration;
 
       before(() => {
@@ -101,7 +102,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
     });
   });
   describe('setOption', () => {
-    context('when not passing an option', () => {
+    describe('when not passing an option', () => {
       let configuration;
 
       before(() => {
@@ -112,7 +113,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(() => configuration.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
       });
     });
-    context('when setting a new option', () => {
+    describe('when setting a new option', () => {
       let createdConfiguration;
 
       before(() => {
@@ -124,7 +125,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(createdConfiguration.hasOption(OptionNames.BASE_NAME)).to.be.true;
       });
     });
-    context('when setting an already present option', () => {
+    describe('when setting an already present option', () => {
       let createdConfiguration;
 
       before(() => {
@@ -139,7 +140,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
     });
   });
   describe('forEachOption', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       let configuration;
 
       before(() => {
@@ -150,7 +151,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         expect(() => configuration.forEachOption()).not.to.throw();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {
@@ -170,25 +171,25 @@ describe('jdl - JDLApplicationConfiguration', () => {
     });
   });
   describe('toString', () => {
-    context('when there is no option', () => {
+    describe('when there is no option', () => {
       let configuration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
       });
 
-      context('when not passing an indentation', () => {
+      describe('when not passing an indentation', () => {
         it('should stringify it without indentation', () => {
           expect(configuration.toString()).to.equal('config {}');
         });
       });
-      context('when passing an indentation', () => {
+      describe('when passing an indentation', () => {
         it('should stringify it with indentation', () => {
           expect(configuration.toString(2)).to.equal('  config {}');
         });
       });
     });
-    context('when there are options', () => {
+    describe('when there are options', () => {
       let configuration;
 
       before(() => {
@@ -197,7 +198,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
         configuration.setOption(new StringJDLApplicationConfigurationOption(OptionNames.JHI_PREFIX, 'prefix'));
       });
 
-      context('when not passing an indentation', () => {
+      describe('when not passing an indentation', () => {
         it('should stringify it without indentation', () => {
           expect(configuration.toString()).to.equal(`config {
 baseName toto
@@ -205,7 +206,7 @@ jhiPrefix prefix
 }`);
         });
       });
-      context('when passing an indentation', () => {
+      describe('when passing an indentation', () => {
         it('should stringify it with indentation', () => {
           expect(configuration.toString(2)).to.equal(`  config {
     baseName toto
@@ -214,8 +215,8 @@ jhiPrefix prefix
         });
       });
     });
-    context('when the configuration has the dto suffix option', () => {
-      context('without a value', () => {
+    describe('when the configuration has the dto suffix option', () => {
+      describe('without a value', () => {
         let configuration;
 
         before(() => {
@@ -227,7 +228,7 @@ jhiPrefix prefix
           expect(configuration.toString()).not.to.include('dtoSuffix');
         });
       });
-      context('with a value', () => {
+      describe('with a value', () => {
         let configuration;
 
         before(() => {
@@ -240,8 +241,8 @@ jhiPrefix prefix
         });
       });
     });
-    context('when the configuration has the entity suffix option', () => {
-      context('without a value', () => {
+    describe('when the configuration has the entity suffix option', () => {
+      describe('without a value', () => {
         let configuration;
 
         before(() => {
@@ -253,7 +254,7 @@ jhiPrefix prefix
           expect(configuration.toString()).not.to.include('entitySuffix');
         });
       });
-      context('with a value', () => {
+      describe('with a value', () => {
         let configuration;
 
         before(() => {
@@ -266,8 +267,8 @@ jhiPrefix prefix
         });
       });
     });
-    context('when the configuration has the client theme variant option', () => {
-      context('without a value', () => {
+    describe('when the configuration has the client theme variant option', () => {
+      describe('without a value', () => {
         let configuration;
 
         before(() => {
@@ -279,7 +280,7 @@ jhiPrefix prefix
           expect(configuration.toString()).not.to.include('clientThemeVariant');
         });
       });
-      context('with a value', () => {
+      describe('with a value', () => {
         let configuration;
 
         before(() => {
@@ -292,7 +293,7 @@ jhiPrefix prefix
         });
       });
     });
-    context('when the configuration has the package folder option', () => {
+    describe('when the configuration has the package folder option', () => {
       let configuration;
 
       before(() => {

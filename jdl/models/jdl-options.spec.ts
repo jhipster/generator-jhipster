@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { unaryOptions, binaryOptions } from '../jhipster/index.js';
 import JDLOptions from '../models/jdl-options.js';
@@ -27,7 +27,7 @@ import JDLBinaryOption from '../models/jdl-binary-option.js';
 
 describe('jdl - JDLOptions', () => {
   describe('addOption', () => {
-    context('when passing an invalid option', () => {
+    describe('when passing an invalid option', () => {
       let options;
 
       before(() => {
@@ -40,7 +40,7 @@ describe('jdl - JDLOptions', () => {
         }).to.throw(/^Can't add nil option.$/);
       });
     });
-    context('when passing a valid option', () => {
+    describe('when passing a valid option', () => {
       let options;
       let option1;
       let option2;
@@ -57,14 +57,14 @@ describe('jdl - JDLOptions', () => {
         options.addOption(option2);
       });
 
-      context('that has not been added before', () => {
+      describe('that has not been added before', () => {
         it('should add it', () => {
           expect(options.getOptions()[0]).to.deep.eq(option1);
           expect(options.getOptions()[1]).to.deep.eq(option2);
         });
       });
 
-      context('that has been added before', () => {
+      describe('that has been added before', () => {
         before(() => {
           options.addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT, entityNames: ['A', 'J'], excludedNames: ['N', 'O'] }));
         });
@@ -85,12 +85,12 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('has', () => {
-    context('with an invalid input', () => {
+    describe('with an invalid input', () => {
       it('should return false', () => {
         expect(new JDLOptions().has(null)).to.be.false;
       });
     });
-    context('with a valid input', () => {
+    describe('with a valid input', () => {
       let options;
 
       before(() => {
@@ -145,12 +145,12 @@ describe('jdl - JDLOptions', () => {
       );
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlOptions.forEach();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -180,17 +180,17 @@ describe('jdl - JDLOptions', () => {
       jdlOptions = new JDLOptions();
     });
 
-    context('when passing an invalid name', () => {
+    describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
         expect(jdlOptions.getOptionsForName()).to.be.empty;
       });
     });
-    context('when checking for an absent option', () => {
+    describe('when checking for an absent option', () => {
       it('should return an empty array', () => {
         expect(jdlOptions.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.be.empty;
       });
     });
-    context('when checking for a present option', () => {
+    describe('when checking for a present option', () => {
       let option1;
       let option2;
       let option3;
@@ -240,12 +240,12 @@ describe('jdl - JDLOptions', () => {
       );
     });
 
-    context('when not passing an indentation level', () => {
+    describe('when not passing an indentation level', () => {
       it('should stringify the options without indent', () => {
         expect(options.toString()).to.equal('skipClient A, B, C, J except M, N, O\nskipServer D');
       });
     });
-    context('when passing an indentation level', () => {
+    describe('when passing an indentation level', () => {
       it('should stringify the options with indent', () => {
         expect(options.toString(2)).to.equal('  skipClient A, B, C, J except M, N, O\n  skipServer D');
       });

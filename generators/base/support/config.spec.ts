@@ -1,4 +1,4 @@
-import { expect } from 'esmocha';
+import { it, describe, expect } from 'esmocha';
 import { removeFieldsWithNullishValues } from './config.js';
 
 describe('generator - base - support - config', () => {

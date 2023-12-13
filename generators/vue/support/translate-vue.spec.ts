@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { expect } from 'esmocha';
-
+import { it, describe, expect } from 'esmocha';
 import { replaceTranslationTags, replaceTranslations, removeDeclarations } from './translate-vue.js';
 
 const FULL_BODY = `
