@@ -155,7 +155,7 @@ const command: JHipsterCommandDefinition = {
       prompt: {
         type: 'confirm',
         message: 'Do you want to generate a feign client?',
-        when: (currentAnswers) => currentAnswers.applicationType != APPLICATION_TYPE_MONOLITH,
+        when: (currentAnswer) => currentAnswer.applicationType != APPLICATION_TYPE_MONOLITH,
       },
       default: false,
     },
