@@ -22,7 +22,7 @@ import { JHipsterCommandDefinition } from '../base/api.js';
 
 const { kebabCase, intersection } = _;
 
-const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values);
+const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
 const command: JHipsterCommandDefinition = {
   options: {},
