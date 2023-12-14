@@ -128,7 +128,7 @@ if (ciCdIntegrationsHeroku) { _%>
               run: |
                   if [ ! -z "$HEROKU_API_KEY" ]; then
     <%_ if (buildToolMaven) { _%>
-                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
     <%_ } else if (buildToolGradle) { _%>
                       ./gradlew deployHeroku --no-daemon
     <%_ } _%>

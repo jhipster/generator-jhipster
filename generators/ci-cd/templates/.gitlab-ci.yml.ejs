@@ -299,7 +299,7 @@ maven-package:
 deploy-to-production:
     stage: deploy
     script:
-      - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
+      - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
     environment:
         name: production
     when: manual
