@@ -93,7 +93,7 @@ jobs:
                 <%_ if (ciCdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
-                command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
+                command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
                 <%_ } _%>
             <%_ } else if (buildToolGradle) { _%>
                 <%_ if (ciCdIntegrationsHeroku) { _%>
