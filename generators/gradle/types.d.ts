@@ -15,4 +15,5 @@ export type GradleSourceType = {
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
   addGradleProperty?(property: GradleProperty): void;
   addGradleMavenRepository?(repository: GradleRepository): void;
+  addGradleBuildSrcDependency?(dependency: GradleDependency): void;
 };

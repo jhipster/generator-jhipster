@@ -20,7 +20,7 @@
 export default {
   gradle: [
     {
-      templates: ['.prettierignore.jhi.gradle', 'gradle/wrapper/gradle-wrapper.properties'],
+      templates: ['.prettierignore.jhi.gradle', 'gradle/wrapper/gradle-wrapper.properties', 'buildSrc/build.gradle'],
     },
     {
       transform: false,
