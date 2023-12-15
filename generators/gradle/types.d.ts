@@ -8,6 +8,8 @@ export type GradleProperty = { property: string; value: string };
 
 export type GradleRepository = { url: string; username?: string; password?: string };
 
+export type GradleTomlVersion = { name: string; version: string };
+
 export type GradleSourceType = {
   applyFromGradle?(script: GradleScript): void;
   addGradleDependency?(dependency: GradleDependency): void;
@@ -16,4 +18,5 @@ export type GradleSourceType = {
   addGradleProperty?(property: GradleProperty): void;
   addGradleMavenRepository?(repository: GradleRepository): void;
   addGradleBuildSrcDependency?(dependency: GradleDependency): void;
+  addGradleBuildSrcCatalogVersion?(catalogVersion: GradleTomlVersion): void;
 };
