@@ -133,7 +133,7 @@ const command: JHipsterCommandDefinition = {
     },
     sonarName: {
       prompt: {
-        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['ciCdIntegrations'])(answers),
+        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['sonar'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
       },
@@ -142,7 +142,9 @@ const command: JHipsterCommandDefinition = {
     },
     sonarUrl: {
       prompt: {
-        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['ciCdIntegrations'])(answers),
+        when: answers =>
+          includesValue('ciCd', ['jenkins', 'github', 'gitlab', 'travis'])(answers) &&
+          includesValue('ciCdIntegrations', ['sonar'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
       },
@@ -151,7 +153,9 @@ const command: JHipsterCommandDefinition = {
     },
     sonarOrga: {
       prompt: {
-        when: answers => includesValue('ciCd', ['jenkins'])(answers) && includesValue('ciCdIntegrations', ['ciCdIntegrations'])(answers),
+        when: answers =>
+          includesValue('ciCd', ['jenkins', 'github', 'gitlab', 'travis'])(answers) &&
+          includesValue('ciCdIntegrations', ['sonar'])(answers),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
       },
