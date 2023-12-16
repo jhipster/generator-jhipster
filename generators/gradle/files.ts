@@ -25,6 +25,7 @@ export default {
         'gradle/wrapper/gradle-wrapper.properties',
         'buildSrc/build.gradle',
         'buildSrc/gradle/libs.versions.toml',
+        'gradle/libs.versions.toml',
       ],
     },
     {

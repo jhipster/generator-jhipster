@@ -37,12 +37,17 @@ export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, versi
     contentToAdd: `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
   });
 
-export const addGradleBuildSrcCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
+export const addGradleDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
   createNeedleCallback({
-    needle: 'gradle-build-src-catalog-version',
+    needle: 'gradle-dependency-catalog-version',
     contentToAdd: `${name} = "${version}"`,
   });
 
+export const addGradleBuildSrcDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
+  createNeedleCallback({
+    needle: 'gradle-build-src-dependency-catalog-version',
+    contentToAdd: `${name} = "${version}"`,
+  });
 export const addGradlePluginCallback = ({ id, version }: GradlePlugin) =>
   createNeedleCallback({
     needle: 'gradle-plugins',

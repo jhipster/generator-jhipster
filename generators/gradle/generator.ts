@@ -24,6 +24,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_GRADLE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import files from './files.js';
 import { GRADLE } from './constants.js';
+import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import {
   applyFromGradleCallback,
@@ -33,7 +34,8 @@ import {
   addGradlePluginManagementCallback,
   addGradlePropertyCallback,
   addGradleBuildSrcDependencyCallback,
-  addGradleBuildSrcCatalogVersionCallback,
+  addGradleDependencyCatalogVersionCallback,
+  addGradleBuildSrcDependencyCatalogVersionCallback,
 } from './internal/needles.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
@@ -76,9 +78,11 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
         source.addGradleProperty = property => this.editFile('gradle.properties', addGradlePropertyCallback(property));
         source.addGradleBuildSrcDependency = dependency =>
-          this.editFile('buildSrc/build.gradle', addGradleBuildSrcDependencyCallback(dependency));
-        source.addGradleBuildSrcCatalogVersion = version =>
-          this.editFile('buildSrc/gradle/libs.versions.toml', addGradleBuildSrcCatalogVersionCallback(version));
+          this.editFile(`${GRADLE_BUILD_SRC_DIR}/build.gradle`, addGradleBuildSrcDependencyCallback(dependency));
+        source.addGradleDependencyCatalogVersion = version =>
+          this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogVersionCallback(version));
+        source.addGradleBuildSrcDependencyCatalogVersion = version =>
+          this.editFile(`${GRADLE_BUILD_SRC_DIR}/gradle/libs.versions.toml`, addGradleBuildSrcDependencyCatalogVersionCallback(version));
       },
     });
   }
