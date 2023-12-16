@@ -88,6 +88,7 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
         }
         if (application.buildToolGradle) {
           source.addGradleBuildSrcCatalogVersion?.({ name: 'gatling-plugin', version: javaDependencies?.['gatling-gradle'] });
+          source.addGradleBuildSrcCatalogVersion?.({ name: 'gatling', version: javaDependencies?.gatling });
           source.addGradleBuildSrcDependency?.({
             groupId: 'gradle.plugin.io.gatling.gradle',
             artifactId: 'gatling-gradle-plugi',
