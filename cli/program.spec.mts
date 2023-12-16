@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions, no-console */
 
 import { expect } from 'chai';
+import { describe, it, beforeEach } from 'esmocha';
 
 import { createProgram } from './program.mjs';
 import { defaultHelpers as helpers } from '../test/support/index.js';

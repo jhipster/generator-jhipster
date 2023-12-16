@@ -3,25 +3,15 @@ import assert from 'assert';
 import { fork } from 'child_process';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { expect, mock, resetAllMocks, fn } from 'esmocha';
+import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { BaseEnvironment } from '@yeoman/types';
 import { coerce } from 'semver';
-import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
+import quibble from 'quibble';
 
+import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
-
-const { logger, getCommand } = await mock<typeof import('./utils.mjs')>('./utils.mjs');
-const { buildJHipster } = await import('./program.mjs');
-
-const __filename = fileURLToPath(import.meta.url);
-const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
-
-const mockCli = async (argv: string[], opts = {}) => {
-  const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
-  return program.parseAsync(argv);
-};
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -97,7 +87,26 @@ const cliSharedBlueprintFiles = {
 };
 
 describe('cli', () => {
+  const __filename = fileURLToPath(import.meta.url);
+  const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
+  const logger = { verboseInfo: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
+  const getCommand = esmocha.fn();
+  let mockCli;
   let argv;
+
+  before(async () => {
+    await quibble.esm('./utils.mjs', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} });
+    const { buildJHipster } = await import('./program.mjs');
+
+    mockCli = async (argv: string[], opts = {}) => {
+      const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
+      return program.parseAsync(argv);
+    };
+  });
+  after(() => {
+    quibble.reset();
+  });
+
   beforeEach(async () => {
     await helpers.prepareTemporaryDir();
   });
@@ -168,13 +177,13 @@ describe('cli', () => {
           description: 'Foo bar',
         },
       };
-      env.run = fn<typeof env.run>((...args) => {
+      env.run = esmocha.fn<typeof env.run>((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
-      env.composeWith = fn<typeof env.composeWith>();
+      env.composeWith = esmocha.fn<typeof env.composeWith>();
       const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
-      env.getGeneratorMeta = fn<typeof env.create>().mockImplementation((namespace, args, options) => {
+      env.getGeneratorMeta = esmocha.fn<typeof env.create>().mockImplementation((namespace, args, options) => {
         if (namespace === 'jhipster:mocked') {
           return {
             importModule: () => ({}),

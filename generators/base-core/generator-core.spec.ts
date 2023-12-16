@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { basicHelpers as helpers } from '../../test/support/index.js';
 
 import Base from './index.js';

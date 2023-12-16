@@ -17,19 +17,19 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { convertField } from './field-converter.js';
 
 describe('jdl - FieldConverter', () => {
   describe('convertField', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertField()).toThrow(/^A field has to be passed so as to be converted.$/);
       });
     });
-    context('when passing a parsed field', () => {
-      context('with all the attributes', () => {
+    describe('when passing a parsed field', () => {
+      describe('with all the attributes', () => {
         let convertedField;
 
         before(() => {
@@ -52,7 +52,7 @@ JDLField {
 `);
         });
       });
-      context('with a capitalized name', () => {
+      describe('with a capitalized name', () => {
         let nameFromConvertedField;
 
         before(() => {
@@ -67,7 +67,7 @@ JDLField {
           expect(nameFromConvertedField).toEqual('anAwesomeField');
         });
       });
-      context('with a comment', () => {
+      describe('with a comment', () => {
         let commentFromConvertedField;
 
         before(() => {

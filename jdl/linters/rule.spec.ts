@@ -17,25 +17,26 @@
  * limitations under the License.
  */
 
+import { before, it, describe, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import Rule from './rule.js';
 import { INFO, ERROR } from './rule-levels.js';
 
 describe('jdl - Rule', () => {
   describe('new', () => {
-    context('when not passing any arg', () => {
+    describe('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
       });
     });
-    context('when not passing any name', () => {
+    describe('when not passing any name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
       });
     });
-    context('when not passing a level', () => {
+    describe('when not passing a level', () => {
       let rule: Rule;
 
       before(() => {
@@ -60,7 +61,7 @@ describe('jdl - Rule', () => {
       otherRule = new Rule({ name: 'Tata' });
     });
 
-    context('when comparing to no rule', () => {
+    describe('when comparing to no rule', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -68,12 +69,12 @@ describe('jdl - Rule', () => {
         }).to.throw(/^A rule has to be passed so as to be compared\.$/);
       });
     });
-    context('when comparing two equal rules', () => {
+    describe('when comparing two equal rules', () => {
       it('should return 0', () => {
         expect(rule.compareTo(otherRule)).to.equal(0);
       });
     });
-    context('when the first rule is more important than the other', () => {
+    describe('when the first rule is more important than the other', () => {
       beforeEach(() => {
         rule.level = ERROR;
       });
@@ -82,7 +83,7 @@ describe('jdl - Rule', () => {
         expect(rule.compareTo(otherRule)).to.equal(1);
       });
     });
-    context('when the first rule is less important than the other', () => {
+    describe('when the first rule is less important than the other', () => {
       beforeEach(() => {
         otherRule.level = ERROR;
       });

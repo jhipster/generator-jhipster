@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { deploymentOptions, applicationTypes, databaseTypes, searchEngineTypes } from '../jhipster/index.js';
 
@@ -34,14 +35,14 @@ describe('jdl - DeploymentValidator', () => {
   });
 
   describe('validate', () => {
-    context('when no deployment is passed', () => {
+    describe('when no deployment is passed', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No deployment\.$/);
       });
     });
-    context('when a deployment is passed', () => {
-      context('when having a docker-compose-related deployment', () => {
-        context('without appFolders', () => {
+    describe('when a deployment is passed', () => {
+      describe('when having a docker-compose-related deployment', () => {
+        describe('without appFolders', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -54,7 +55,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
           });
         });
-        context('without directoryPath', () => {
+        describe('without directoryPath', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -67,7 +68,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
           });
         });
-        context('without monitoring', () => {
+        describe('without monitoring', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
@@ -80,8 +81,8 @@ describe('jdl - DeploymentValidator', () => {
             ).not.to.throw();
           });
         });
-        context('with microservices', () => {
-          context('without gatewayType', () => {
+        describe('with microservices', () => {
+          describe('without gatewayType', () => {
             it('should fail', () => {
               expect(() =>
                 validator.validate(
@@ -100,7 +101,7 @@ describe('jdl - DeploymentValidator', () => {
             });
           });
         });
-        context('without serviceDiscoveryType', () => {
+        describe('without serviceDiscoveryType', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
@@ -113,8 +114,8 @@ describe('jdl - DeploymentValidator', () => {
           });
         });
       });
-      context('when having a kubernetes-related deployment', () => {
-        context('without appFolders', () => {
+      describe('when having a kubernetes-related deployment', () => {
+        describe('without appFolders', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -127,7 +128,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
           });
         });
-        context('without directoryPath', () => {
+        describe('without directoryPath', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -140,23 +141,20 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
           });
         });
-        context(
-          'without monitoring, dockerPushCommand, dockerRepositoryName, kubernetesNamespace, kubernetesUseDynamicStorage, kubernetesStorageClassName or istio and an ingressDomain',
-          () => {
-            it('should not fail', () => {
-              expect(() =>
-                validator.validate({
-                  deploymentType: Options.deploymentType.kubernetes,
-                  appsFolders: ['beers', 'burgers'],
-                  directoryPath: '../',
-                  kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
-                  serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
-                }),
-              ).not.to.throw();
-            });
-          },
-        );
-        context('without kubernetesServiceType', () => {
+        describe('without monitoring, dockerPushCommand, dockerRepositoryName, kubernetesNamespace, kubernetesUseDynamicStorage, kubernetesStorageClassName or istio and an ingressDomain', () => {
+          it('should not fail', () => {
+            expect(() =>
+              validator.validate({
+                deploymentType: Options.deploymentType.kubernetes,
+                appsFolders: ['beers', 'burgers'],
+                directoryPath: '../',
+                kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
+              }),
+            ).not.to.throw();
+          });
+        });
+        describe('without kubernetesServiceType', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -168,8 +166,8 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
           });
         });
-        context('with istio', () => {
-          context('without an ingressDomain', () => {
+        describe('with istio', () => {
+          describe('without an ingressDomain', () => {
             it('should fail', () => {
               expect(() =>
                 validator.validate({
@@ -186,8 +184,8 @@ describe('jdl - DeploymentValidator', () => {
             });
           });
         });
-        context('with the kubernetesServiceType being Ingress', () => {
-          context('without an ingressType', () => {
+        describe('with the kubernetesServiceType being Ingress', () => {
+          describe('without an ingressType', () => {
             it('should fail', () => {
               expect(() =>
                 validator.validate({
@@ -204,8 +202,8 @@ describe('jdl - DeploymentValidator', () => {
           });
         });
       });
-      context('when having an openshift-related deployment', () => {
-        context('without appFolders', () => {
+      describe('when having an openshift-related deployment', () => {
+        describe('without appFolders', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -217,7 +215,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
           });
         });
-        context('without directoryPath', () => {
+        describe('without directoryPath', () => {
           it('should fail', () => {
             expect(() =>
               validator.validate({
@@ -229,7 +227,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
           });
         });
-        context('without monitoring', () => {
+        describe('without monitoring', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
@@ -241,7 +239,7 @@ describe('jdl - DeploymentValidator', () => {
             ).not.to.throw();
           });
         });
-        context('without openshiftNamespace', () => {
+        describe('without openshiftNamespace', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate({
@@ -252,7 +250,7 @@ describe('jdl - DeploymentValidator', () => {
             ).not.to.throw();
           });
         });
-        context('when there is no prodDatabaseType', () => {
+        describe('when there is no prodDatabaseType', () => {
           it('should fail if there is a storageType', () => {
             expect(() =>
               validator.validate(
@@ -267,7 +265,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^Can't have the storageType option set when there is no prodDatabaseType.$/);
           });
         });
-        context('when the search engine is elasticsearch', () => {
+        describe('when the search engine is elasticsearch', () => {
           it('should fail if there is a storageType', () => {
             expect(() =>
               validator.validate(
@@ -282,7 +280,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^Can't have the storageType option set when elasticsearch is the search engine.$/);
           });
         });
-        context('when the monitoring is done with prometheus', () => {
+        describe('when the monitoring is done with prometheus', () => {
           it('should fail if there is a storageType', () => {
             expect(() =>
               validator.validate({
@@ -295,7 +293,7 @@ describe('jdl - DeploymentValidator', () => {
             ).to.throw(/^Can't have the storageType option set when the monitoring is done with prometheus.$/);
           });
         });
-        context('when the prodDatabaseType is set and the storageType is not set', () => {
+        describe('when the prodDatabaseType is set and the storageType is not set', () => {
           it('should not fail', () => {
             expect(() =>
               validator.validate(
@@ -311,7 +309,7 @@ describe('jdl - DeploymentValidator', () => {
         });
       });
     });
-    context('when passing an unknown deployment type', () => {
+    describe('when passing an unknown deployment type', () => {
       it('should fail', () => {
         expect(() =>
           validator.validate({

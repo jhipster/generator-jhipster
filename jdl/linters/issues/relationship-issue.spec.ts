@@ -17,18 +17,19 @@
  * limitations under the License.
  */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import RelationshipIssue from './relationship-issue.js';
 
 describe('jdl - RelationshipIssue', () => {
   describe('new', () => {
-    context('when not passing any arg', () => {
+    describe('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
-    context('when not passing a rule name', () => {
+    describe('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
@@ -37,7 +38,7 @@ describe('jdl - RelationshipIssue', () => {
         expect(() => new RelationshipIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
-    context('when not passing a source', () => {
+    describe('when not passing a source', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' })).to.throw(
@@ -45,7 +46,7 @@ describe('jdl - RelationshipIssue', () => {
         );
       });
     });
-    context('when not passing a destination', () => {
+    describe('when not passing a destination', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' })).to.throw(
@@ -54,7 +55,7 @@ describe('jdl - RelationshipIssue', () => {
       });
     });
   });
-  context('when not passing a type', () => {
+  describe('when not passing a type', () => {
     it('should fail', () => {
       // @ts-expect-error
       expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' })).to.throw(

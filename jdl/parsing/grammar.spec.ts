@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { parseFromContent } from '../readers/jdl-reader.js';
 import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../jhipster/index.js';
@@ -35,8 +35,8 @@ const { Options, Values, OptionValues } = binaryOptions;
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 
 describe('jdl - Grammar tests', () => {
-  context('when parsing constants', () => {
-    context('with integer values', () => {
+  describe('when parsing constants', () => {
+    describe('with integer values', () => {
       let constants;
 
       before(() => {
@@ -54,7 +54,7 @@ MAX = 43`);
 `);
       });
     });
-    context('with decimal values', () => {
+    describe('with decimal values', () => {
       let constants;
 
       before(() => {
@@ -71,8 +71,8 @@ MAX = 43`);
       });
     });
   });
-  context('when parsing applications', () => {
-    context('with no custom configuration', () => {
+  describe('when parsing applications', () => {
+    describe('with no custom configuration', () => {
       let application;
 
       before(() => {
@@ -92,8 +92,8 @@ MAX = 43`);
 `);
       });
     });
-    context('with a custom configuration', () => {
-      context('when setting the applicationType', () => {
+    describe('with a custom configuration', () => {
+      describe('when setting the applicationType', () => {
         let application;
 
         before(() => {
@@ -119,7 +119,7 @@ MAX = 43`);
 `);
         });
       });
-      context('when setting the baseName', () => {
+      describe('when setting the baseName', () => {
         let application;
 
         before(() => {
@@ -145,7 +145,7 @@ MAX = 43`);
 `);
         });
       });
-      context('when setting the blueprints', () => {
+      describe('when setting the blueprints', () => {
         let application;
 
         before(() => {
@@ -175,7 +175,7 @@ MAX = 43`);
         });
       });
     });
-    context('with more than one application', () => {
+    describe('with more than one application', () => {
       let applications;
 
       before(() => {
@@ -223,8 +223,8 @@ application {
 `);
       });
     });
-    context('when having entities', () => {
-      context('without exclusions', () => {
+    describe('when having entities', () => {
+      describe('without exclusions', () => {
         let application;
 
         before(() => {
@@ -247,8 +247,8 @@ entity C
           expect(application.entities).to.deep.equal(['A', 'B', 'C']);
         });
       });
-      context('with exclusions', () => {
-        context("using the 'all' keyword", () => {
+      describe('with exclusions', () => {
+        describe("using the 'all' keyword", () => {
           let application;
 
           before(() => {
@@ -270,7 +270,7 @@ entity C
             expect(application.entities).to.deep.equal(['B', 'C']);
           });
         });
-        context("using the '*' keyword", () => {
+        describe("using the '*' keyword", () => {
           let application;
 
           before(() => {
@@ -294,7 +294,7 @@ entity C
         });
       });
     });
-    context('when having options', () => {
+    describe('when having options', () => {
       let application;
 
       before(() => {
@@ -336,7 +336,7 @@ entity C
         });
       });
     });
-    context('when having options in the use form', () => {
+    describe('when having options in the use form', () => {
       let application;
 
       before(() => {
@@ -372,8 +372,8 @@ entity C
       });
     });
   });
-  context('when parsing an entity', () => {
-    context('with a name', () => {
+  describe('when parsing an entity', () => {
+    describe('with a name', () => {
       let parsedEntity;
 
       before(() => {
@@ -393,7 +393,7 @@ entity C
 `);
       });
     });
-    context('with a name and a table name', () => {
+    describe('with a name and a table name', () => {
       let parsedEntity;
 
       before(() => {
@@ -413,8 +413,8 @@ entity C
 `);
       });
     });
-    context('without fields', () => {
-      context('if using curly braces or not', () => {
+    describe('without fields', () => {
+      describe('if using curly braces or not', () => {
         let firstDeclaration;
         let secondDeclaration;
 
@@ -430,7 +430,7 @@ entity C
         });
       });
     });
-    context('with annotations', () => {
+    describe('with annotations', () => {
       let parsedEntity;
 
       before(() => {
@@ -492,8 +492,8 @@ entity A`);
 `);
       });
     });
-    context('with comments', () => {
-      context('with single-line comments', () => {
+    describe('with comments', () => {
+      describe('with single-line comments', () => {
         let parsedEntity;
 
         before(() => {
@@ -513,7 +513,7 @@ entity A`);
 `);
         });
       });
-      context('with multi-line comments', () => {
+      describe('with multi-line comments', () => {
         let parsedEntity;
 
         before(() => {
@@ -541,8 +541,8 @@ entity A`);
         });
       });
     });
-    context('with annotations and comments', () => {
-      context('when comments appear before annotations', () => {
+    describe('with annotations and comments', () => {
+      describe('when comments appear before annotations', () => {
         let parsedEntity;
 
         before(() => {
@@ -572,7 +572,7 @@ entity A`);
 `);
         });
       });
-      context('when comments appear after annotations', () => {
+      describe('when comments appear after annotations', () => {
         it('should fail', () => {
           expect(() => {
             parseFromContent(
@@ -585,9 +585,9 @@ entity A`);
         });
       });
     });
-    context('with fields', () => {
-      context('having annotations and comments', () => {
-        context('when comments appear before annotations', () => {
+    describe('with fields', () => {
+      describe('having annotations and comments', () => {
+        describe('when comments appear before annotations', () => {
           let parsedEntity;
 
           before(() => {
@@ -627,7 +627,7 @@ entity A`);
 `);
           });
         });
-        context('when comments appear after annotations', () => {
+        describe('when comments appear after annotations', () => {
           it('should fail', () => {
             expect(() => {
               parseFromContent(`entity A {
@@ -640,8 +640,8 @@ entity A`);
           });
         });
       });
-      context('with validations', () => {
-        context(`with the ${REQUIRED} validation`, () => {
+      describe('with validations', () => {
+        describe(`with the ${REQUIRED} validation`, () => {
           let parsedEntity;
 
           before(() => {
@@ -663,8 +663,8 @@ entity A`);
             ]);
           });
         });
-        context(`with the ${MINLENGTH} validation`, () => {
-          context('using an integer value', () => {
+        describe(`with the ${MINLENGTH} validation`, () => {
+          describe('using an integer value', () => {
             let parsedEntity;
 
             before(() => {
@@ -686,7 +686,7 @@ entity A`);
               ]);
             });
           });
-          context('using a decimal value', () => {
+          describe('using a decimal value', () => {
             let parsedEntity;
 
             before(() => {
@@ -709,8 +709,8 @@ entity A`);
             });
           });
         });
-        context(`with the ${MAXLENGTH} validation`, () => {
-          context('using an integer value', () => {
+        describe(`with the ${MAXLENGTH} validation`, () => {
+          describe('using an integer value', () => {
             let parsedEntity;
 
             before(() => {
@@ -732,7 +732,7 @@ entity A`);
               ]);
             });
           });
-          context('using a decimal value', () => {
+          describe('using a decimal value', () => {
             let parsedEntity;
 
             before(() => {
@@ -755,7 +755,7 @@ entity A`);
             });
           });
         });
-        context(`with the ${PATTERN} validation`, () => {
+        describe(`with the ${PATTERN} validation`, () => {
           let parsedEntity;
 
           before(() => {
@@ -777,7 +777,7 @@ entity A`);
             ]);
           });
         });
-        context(`with the ${UNIQUE} validation`, () => {
+        describe(`with the ${UNIQUE} validation`, () => {
           let parsedEntity;
 
           before(() => {
@@ -799,8 +799,8 @@ entity A`);
             ]);
           });
         });
-        context(`with the ${MIN} validation`, () => {
-          context('using an integer value', () => {
+        describe(`with the ${MIN} validation`, () => {
+          describe('using an integer value', () => {
             let parsedEntity;
 
             before(() => {
@@ -822,7 +822,7 @@ entity A`);
               ]);
             });
           });
-          context('using a decimal value', () => {
+          describe('using a decimal value', () => {
             let parsedEntity;
 
             before(() => {
@@ -845,8 +845,8 @@ entity A`);
             });
           });
         });
-        context(`with the ${MAX} validation`, () => {
-          context('using an integer value', () => {
+        describe(`with the ${MAX} validation`, () => {
+          describe('using an integer value', () => {
             let parsedEntity;
 
             before(() => {
@@ -868,7 +868,7 @@ entity A`);
               ]);
             });
           });
-          context('using a decimal value', () => {
+          describe('using a decimal value', () => {
             let parsedEntity;
 
             before(() => {
@@ -891,8 +891,8 @@ entity A`);
             });
           });
         });
-        context(`with the ${MINBYTES} validation`, () => {
-          context('using an integer value', () => {
+        describe(`with the ${MINBYTES} validation`, () => {
+          describe('using an integer value', () => {
             let parsedEntity;
 
             before(() => {
@@ -914,7 +914,7 @@ entity A`);
               ]);
             });
           });
-          context('using a decimal value', () => {
+          describe('using a decimal value', () => {
             let parsedEntity;
 
             before(() => {
@@ -937,8 +937,8 @@ entity A`);
             });
           });
         });
-        context(`with the ${MAXBYTES} validation`, () => {
-          context('using an integer value', () => {
+        describe(`with the ${MAXBYTES} validation`, () => {
+          describe('using an integer value', () => {
             let parsedEntity;
 
             before(() => {
@@ -960,7 +960,7 @@ entity A`);
               ]);
             });
           });
-          context('using a decimal value', () => {
+          describe('using a decimal value', () => {
             let parsedEntity;
 
             before(() => {
@@ -983,7 +983,7 @@ entity A`);
             });
           });
         });
-        context('using constants', () => {
+        describe('using constants', () => {
           let parsedEntity;
 
           before(() => {
@@ -1010,8 +1010,8 @@ entity A {
       });
     });
   });
-  context('when parsing enums', () => {
-    context('with values separated by commas', () => {
+  describe('when parsing enums', () => {
+    describe('with values separated by commas', () => {
       let parsedEnum;
 
       before(() => {
@@ -1046,7 +1046,7 @@ entity A {
 `);
       });
     });
-    context('with values separated by whitespaces', () => {
+    describe('with values separated by whitespaces', () => {
       let parsedEnum;
 
       before(() => {
@@ -1084,7 +1084,7 @@ entity A {
 `);
       });
     });
-    context('without custom values', () => {
+    describe('without custom values', () => {
       let parsedEnum;
 
       before(() => {
@@ -1120,7 +1120,7 @@ entity A {
       });
     });
 
-    context('without custom values but with comments', () => {
+    describe('without custom values but with comments', () => {
       let parsedEnum;
 
       before(() => {
@@ -1176,7 +1176,7 @@ entity A {
       });
     });
 
-    context('with custom values containing spaces and with comments', () => {
+    describe('with custom values containing spaces and with comments', () => {
       let parsedEnum;
 
       before(() => {
@@ -1233,7 +1233,7 @@ entity A {
       });
     });
 
-    context('with custom values containing underscores and with comments', () => {
+    describe('with custom values containing underscores and with comments', () => {
       let parsedEnum;
 
       before(() => {
@@ -1289,8 +1289,8 @@ entity A {
       });
     });
 
-    context('without values', () => {
-      context('without spaces', () => {
+    describe('without values', () => {
+      describe('without spaces', () => {
         let parsedEnum;
 
         before(() => {
@@ -1327,7 +1327,7 @@ entity A {
 `);
         });
       });
-      context('with spaces', () => {
+      describe('with spaces', () => {
         let parsedEnum;
 
         before(() => {
@@ -1366,9 +1366,9 @@ entity A {
       });
     });
   });
-  context('when parsing a relationship', () => {
+  describe('when parsing a relationship', () => {
     [ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY].forEach(relationshipType => {
-      context(`for a ${relationshipType} relationship`, () => {
+      describe(`for a ${relationshipType} relationship`, () => {
         let relationship;
 
         before(() => {
@@ -1381,7 +1381,7 @@ entity A {
         });
       });
     });
-    context('with only source & destination entities', () => {
+    describe('with only source & destination entities', () => {
       let relationship;
 
       before(() => {
@@ -1412,8 +1412,8 @@ entity A {
 `);
       });
     });
-    context('with an injected field in the source', () => {
-      context('that is not required', () => {
+    describe('with an injected field in the source', () => {
+      describe('that is not required', () => {
         let relationship;
 
         before(() => {
@@ -1428,7 +1428,7 @@ entity A {
           expect(relationship.from.required).to.be.false;
         });
       });
-      context('that is required', () => {
+      describe('that is required', () => {
         let relationship;
 
         before(() => {
@@ -1444,8 +1444,8 @@ entity A {
         });
       });
     });
-    context('with an injected field in the destination', () => {
-      context('that is not required', () => {
+    describe('with an injected field in the destination', () => {
+      describe('that is not required', () => {
         let relationship;
 
         before(() => {
@@ -1460,7 +1460,7 @@ entity A {
           expect(relationship.to.required).to.be.false;
         });
       });
-      context('that is required', () => {
+      describe('that is required', () => {
         let relationship;
 
         before(() => {
@@ -1476,8 +1476,8 @@ entity A {
         });
       });
     });
-    context('with an injected field in both sides', () => {
-      context('without them being required', () => {
+    describe('with an injected field in both sides', () => {
+      describe('without them being required', () => {
         let relationship;
 
         before(() => {
@@ -1498,7 +1498,7 @@ entity A {
           expect(relationship.to.required).to.be.false;
         });
       });
-      context('with them being required', () => {
+      describe('with them being required', () => {
         let relationship;
 
         before(() => {
@@ -1514,7 +1514,7 @@ entity A {
         });
       });
     });
-    context('with an explicit join field in the source', () => {
+    describe('with an explicit join field in the source', () => {
       let relationship;
 
       before(() => {
@@ -1526,7 +1526,7 @@ entity A {
         expect(relationship.from.injectedField).to.equal('b(name)');
       });
     });
-    context('with an explicit join field in the destination', () => {
+    describe('with an explicit join field in the destination', () => {
       let relationship;
 
       before(() => {
@@ -1538,7 +1538,7 @@ entity A {
         expect(relationship.to.injectedField).to.equal('a(name)');
       });
     });
-    context('with an explicit join field in both sides', () => {
+    describe('with an explicit join field in both sides', () => {
       let relationship;
 
       before(() => {
@@ -1553,7 +1553,7 @@ entity A {
         expect(relationship.to.injectedField).to.equal('a(name)');
       });
     });
-    context('with a method', () => {
+    describe('with a method', () => {
       let relationship;
 
       before(() => {
@@ -1574,8 +1574,8 @@ entity A {
         });
       });
     });
-    context('when parsing more than one relationship', () => {
-      context('with methods', () => {
+    describe('when parsing more than one relationship', () => {
+      describe('with methods', () => {
         let relationships;
 
         before(() => {
@@ -1660,8 +1660,8 @@ entity A {
         });
       });
     });
-    context('with annotations', () => {
-      context('only in the source side', () => {
+    describe('with annotations', () => {
+      describe('only in the source side', () => {
         let relationships;
 
         before(() => {
@@ -1699,7 +1699,7 @@ entity A {
 `);
         });
       });
-      context('only in the destination side', () => {
+      describe('only in the destination side', () => {
         let relationships;
 
         before(() => {
@@ -1737,7 +1737,7 @@ entity A {
 `);
         });
       });
-      context('in both sides', () => {
+      describe('in both sides', () => {
         let relationships;
 
         before(() => {
@@ -1782,9 +1782,9 @@ entity A {
       });
     });
   });
-  context('when parsing an option', () => {
-    context('being unary', () => {
-      context('with exclusions', () => {
+  describe('when parsing an option', () => {
+    describe('being unary', () => {
+      describe('with exclusions', () => {
         let parsedOption;
 
         before(() => {
@@ -1806,7 +1806,7 @@ entity A {
         });
       });
       [READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER, FILTER, NO_FLUENT_METHOD].forEach(option => {
-        context(option, () => {
+        describe(option, () => {
           let parsedOption;
 
           before(() => {
@@ -1823,9 +1823,9 @@ entity A {
         });
       });
     });
-    context('being binary', () => {
-      context('being clientRootFolder', () => {
-        context('in the regular form', () => {
+    describe('being binary', () => {
+      describe('being clientRootFolder', () => {
+        describe('in the regular form', () => {
           let parsedOption;
 
           before(() => {
@@ -1846,7 +1846,7 @@ entity A {
 `);
           });
         });
-        context('in the path form', () => {
+        describe('in the path form', () => {
           let parsedOption;
 
           before(() => {
@@ -1868,7 +1868,7 @@ entity A {
           });
         });
       });
-      context('with exclusions', () => {
+      describe('with exclusions', () => {
         let parsedOption;
 
         before(() => {
@@ -1892,7 +1892,7 @@ entity A {
         });
       });
       [SEARCH, SERVICE, PAGINATION, DTO].forEach(option => {
-        context(option, () => {
+        describe(option, () => {
           Object.keys(Values[option]).forEach(key => {
             let parsedOption;
             const value = Values[option][key];
@@ -1912,7 +1912,7 @@ entity A {
         });
       });
       [MICROSERVICE, ANGULAR_SUFFIX].forEach(option => {
-        context(option, () => {
+        describe(option, () => {
           let parsedOption;
 
           before(() => {
@@ -1929,7 +1929,7 @@ entity A {
         });
       });
     });
-    context("using the 'all' keyword", () => {
+    describe("using the 'all' keyword", () => {
       let parsedOption;
 
       before(() => {
@@ -1950,7 +1950,7 @@ entity A {
 `);
       });
     });
-    context("using the '*' keyword", () => {
+    describe("using the '*' keyword", () => {
       let parsedOption;
 
       before(() => {
@@ -1971,9 +1971,9 @@ entity A {
 `);
       });
     });
-    context('using the use-form', () => {
+    describe('using the use-form', () => {
       Object.keys(OptionValues).forEach(optionValue => {
-        context(`of ${optionValue}`, () => {
+        describe(`of ${optionValue}`, () => {
           let parsedOptions;
 
           before(() => {
@@ -1994,9 +1994,9 @@ entity A {
       });
     });
   });
-  context('when parsing deployments', () => {
-    context('with kubernetesStorageClassName', () => {
-      context('being empty', () => {
+  describe('when parsing deployments', () => {
+    describe('with kubernetesStorageClassName', () => {
+      describe('being empty', () => {
         let parsedDeployment;
 
         before(() => {
@@ -2017,7 +2017,7 @@ entity A {
 `);
         });
       });
-      context('being set', () => {
+      describe('being set', () => {
         let parsedDeployment;
 
         before(() => {

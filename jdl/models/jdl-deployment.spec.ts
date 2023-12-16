@@ -18,12 +18,12 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import JDLDeployment from '../models/jdl-deployment.js';
 
 describe('jdl - JDLDeployment', () => {
   describe('new', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -31,14 +31,14 @@ describe('jdl - JDLDeployment', () => {
         }).toThrow(/^The deploymentType is mandatory to create a deployment\.$/);
       });
     });
-    context('when not passing the deploymentType', () => {
+    describe('when not passing the deploymentType', () => {
       it('should fail', () => {
         expect(() => {
           new JDLDeployment({ deploymentType: null });
         }).toThrow(/^The deploymentType is mandatory to create a deployment\.$/);
       });
     });
-    context('when passing arguments', () => {
+    describe('when passing arguments', () => {
       let deployment;
       let args: any = {};
 
@@ -59,7 +59,7 @@ describe('jdl - JDLDeployment', () => {
     });
   });
   describe('toString', () => {
-    context('with some default options', () => {
+    describe('with some default options', () => {
       let deployment;
       let args;
 
@@ -85,7 +85,7 @@ describe('jdl - JDLDeployment', () => {
 `);
       });
     });
-    context('with some non default options', () => {
+    describe('with some non default options', () => {
       let deployment;
       let args;
 

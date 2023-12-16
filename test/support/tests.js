@@ -2,8 +2,7 @@ import path, { dirname } from 'path';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import sinon from 'sinon';
-import { expect } from 'esmocha';
-
+import { before, it, describe, after, expect } from 'esmocha';
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { skipPrettierHelpers as helpers } from '../../testing/index.js';

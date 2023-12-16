@@ -5,6 +5,9 @@ exports[`generator - gradle with empty configuration should generate only gradle
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/wrapper/gradle-wrapper.jar": {
     "stateCleared": "modified",
   },
@@ -23,6 +26,9 @@ exports[`generator - gradle with empty configuration should generate only gradle
 exports[`generator - gradle with valid configuration should generate only gradle files 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
     "stateCleared": "modified",
   },
   "gradle/wrapper/gradle-wrapper.jar": {

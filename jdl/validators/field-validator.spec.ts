@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLField from '../models/jdl-field.js';
 import FieldValidator from '../validators/field-validator.js';
@@ -29,13 +30,13 @@ describe('jdl - FieldValidator', () => {
   });
 
   describe('validate', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No field\.$/);
       });
     });
-    context('when passing a field', () => {
-      context('with all its required attributes', () => {
+    describe('when passing a field', () => {
+      describe('with all its required attributes', () => {
         let field;
 
         before(() => {
@@ -49,7 +50,7 @@ describe('jdl - FieldValidator', () => {
           expect(() => validator.validate(field)).not.to.throw();
         });
       });
-      context('when not passing any attribute', () => {
+      describe('when not passing any attribute', () => {
         it('should fail', () => {
           expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
         });

@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import { defaultHelpers as helpers, result as runResult, getGenerator } from '../../test/support/index.js';
 
 import LanguagesGenerator from './index.js';

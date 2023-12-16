@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLValidation from '../models/jdl-validation.js';
 import { validations } from '../jhipster/index.js';
@@ -28,7 +29,7 @@ const {
 
 describe('jdl - JDLValidation', () => {
   describe('new', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       let validation;
 
       before(() => {
@@ -41,7 +42,7 @@ describe('jdl - JDLValidation', () => {
         expect(validation.value).to.equal('');
       });
     });
-    context('when passing arguments', () => {
+    describe('when passing arguments', () => {
       let validation;
 
       before(() => {
@@ -58,7 +59,7 @@ describe('jdl - JDLValidation', () => {
     });
   });
   describe('toString', () => {
-    context('with no value', () => {
+    describe('with no value', () => {
       let validation;
 
       before(() => {
@@ -70,7 +71,7 @@ describe('jdl - JDLValidation', () => {
         expect(validation.toString()).to.equal('required');
       });
     });
-    context('with a value', () => {
+    describe('with a value', () => {
       let validation;
       let args: any = {};
 
@@ -86,7 +87,7 @@ describe('jdl - JDLValidation', () => {
         expect(validation.toString()).to.equal(`${args.name}(${args.value})`);
       });
     });
-    context('when exporting a regexp pattern', () => {
+    describe('when exporting a regexp pattern', () => {
       it('should format it', () => {
         expect(
           new JDLValidation({

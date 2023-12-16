@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { expect, esmocha } from 'esmocha';
-
+import { it, describe, expect, esmocha } from 'esmocha';
 import { joinCallbacks } from './write-files.js';
 import { EditFileCallback } from '../api.js';
 

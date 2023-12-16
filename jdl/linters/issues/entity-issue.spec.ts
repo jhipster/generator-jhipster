@@ -17,24 +17,25 @@
  * limitations under the License.
  */
 
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import EntityIssue from './entity-issue.js';
 
 describe('jdl - EntityIssue', () => {
   describe('new', () => {
-    context('when not passing any arg', () => {
+    describe('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new EntityIssue()).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
-    context('when not passing a rule name', () => {
+    describe('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new EntityIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
-    context('when not passing an entity name', () => {
+    describe('when not passing an entity name', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => new EntityIssue({ ruleName: 'Toto' })).to.throw(/^An entity name must be passed\.$/);

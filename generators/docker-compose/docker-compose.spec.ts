@@ -1,5 +1,4 @@
-import { expect } from 'esmocha';
-
+import { before, it, describe, expect } from 'esmocha';
 import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
 import applicationTypes from '../../jdl/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';

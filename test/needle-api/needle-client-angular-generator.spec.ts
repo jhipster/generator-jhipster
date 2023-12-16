@@ -1,3 +1,4 @@
+import { before, it, describe } from 'esmocha';
 import { defaultHelpers as helpers, runResult } from '../support/index.js';
 
 import AngularGenerator from '../../generators/angular/index.js';

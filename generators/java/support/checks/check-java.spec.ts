@@ -1,7 +1,8 @@
-import { expect, mock, resetAllMocks } from 'esmocha';
+import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
 import { ExecaSyncReturnValue } from 'execa';
+import quibble from 'quibble';
 
-const execa = await mock<typeof import('execa')>('execa');
+const execa = { execa: esmocha.fn(), execaSync: esmocha.fn(), execaCommandSync: esmocha.fn(), execaCommand: esmocha.fn() };
 
 const baseResult: ExecaSyncReturnValue<string> = {
   command: 'java',
@@ -15,6 +16,13 @@ const baseResult: ExecaSyncReturnValue<string> = {
 };
 
 describe('generator - server - checkJava', () => {
+  before(async () => {
+    await quibble.esm('execa', execa);
+  });
+  after(() => {
+    quibble.reset();
+  });
+
   afterEach(() => {
     resetAllMocks();
   });

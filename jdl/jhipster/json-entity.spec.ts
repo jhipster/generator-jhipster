@@ -18,13 +18,13 @@
  */
 
 /* eslint-disable no-new,no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { jsonEntity as JSONEntity } from '../jhipster/index.js';
 
 describe('jdl - JSONEntity', () => {
   describe('new', () => {
-    context('when not passing a configuration', () => {
+    describe('when not passing a configuration', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -32,14 +32,14 @@ describe('jdl - JSONEntity', () => {
         }).to.throw(/^At least an entity name must be passed\.$/);
       });
     });
-    context('when not passing an entity name', () => {
+    describe('when not passing an entity name', () => {
       it('should fail', () => {
         expect(() => {
           new JSONEntity({});
         }).to.throw(/^At least an entity name must be passed\.$/);
       });
     });
-    context('when only passing an entity name', () => {
+    describe('when only passing an entity name', () => {
       let entity;
 
       before(() => {
@@ -69,7 +69,7 @@ JSONEntity {
 `);
       });
     });
-    context('when passing values', () => {
+    describe('when passing values', () => {
       let entity;
 
       before(() => {
@@ -136,7 +136,7 @@ JSONEntity {
       });
     });
 
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       before(() => {
         entity.addField();
       });
@@ -145,7 +145,7 @@ JSONEntity {
         expect(entity.fields).to.deep.equal([]);
       });
     });
-    context('when passing something', () => {
+    describe('when passing something', () => {
       before(() => {
         entity.addField(42);
       });
@@ -164,7 +164,7 @@ JSONEntity {
       });
     });
 
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       before(() => {
         entity.addFields();
       });
@@ -173,7 +173,7 @@ JSONEntity {
         expect(entity.fields).to.deep.equal([]);
       });
     });
-    context('when passing something', () => {
+    describe('when passing something', () => {
       before(() => {
         entity.addFields([42, 43]);
       });
@@ -192,7 +192,7 @@ JSONEntity {
       });
     });
 
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       before(() => {
         entity.addRelationship();
       });
@@ -201,7 +201,7 @@ JSONEntity {
         expect(entity.relationships).to.deep.equal([]);
       });
     });
-    context('when passing something', () => {
+    describe('when passing something', () => {
       before(() => {
         entity.addRelationship(42);
       });
@@ -220,7 +220,7 @@ JSONEntity {
       });
     });
 
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       before(() => {
         entity.addRelationships();
       });
@@ -229,7 +229,7 @@ JSONEntity {
         expect(entity.relationships).to.deep.equal([]);
       });
     });
-    context('when passing something', () => {
+    describe('when passing something', () => {
       before(() => {
         entity.addRelationships([42, 43]);
       });
@@ -240,7 +240,7 @@ JSONEntity {
     });
   });
   describe('setOptions', () => {
-    context('when not passing options', () => {
+    describe('when not passing options', () => {
       let originalJSONEntity;
       let touchedJSONEntity;
 
@@ -258,7 +258,7 @@ JSONEntity {
         expect(touchedJSONEntity).to.deep.equal(originalJSONEntity);
       });
     });
-    context('when passing options', () => {
+    describe('when passing options', () => {
       let jsonEntity;
 
       before(() => {

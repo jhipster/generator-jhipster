@@ -250,7 +250,7 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
   const callback = callbacks.length === 1 ? callbacks[0] : joinCallbacks(...callbacks);
 
   if (filePath) {
-    assert(this, 'when passing filePath, the generator is required');
+    assert(this?.editFile, 'when passing filePath, the generator is required');
 
     return this.editFile(filePath, callback);
   }

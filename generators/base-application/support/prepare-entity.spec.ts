@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { it, describe, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
 import { prepareEntityPrimaryKeyForTemplates, entityDefaultConfig } from './prepare-entity.js';

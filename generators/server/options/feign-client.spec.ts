@@ -1,4 +1,4 @@
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
 import { FEIGN_CLIENT as optionName } from './index.js';
 

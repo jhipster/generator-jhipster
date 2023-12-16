@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { it, describe, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import Issues from './issues.js';
 import { rulesNames } from '../rules.js';

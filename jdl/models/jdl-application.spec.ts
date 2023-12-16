@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { applicationOptions, binaryOptions } from '../jhipster/index.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
@@ -29,7 +29,7 @@ const { OptionNames } = applicationOptions;
 
 describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {
-    context('when the application does not have the option', () => {
+    describe('when the application does not have the option', () => {
       let application;
 
       before(() => {
@@ -40,7 +40,7 @@ describe('jdl - JDLApplication', () => {
         expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.false;
       });
     });
-    context('when the application has the option', () => {
+    describe('when the application has the option', () => {
       let application;
 
       before(() => {
@@ -54,7 +54,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('setConfigurationOption', () => {
-    context('when not passing an option', () => {
+    describe('when not passing an option', () => {
       let application;
 
       before(() => {
@@ -65,7 +65,7 @@ describe('jdl - JDLApplication', () => {
         expect(() => application.setConfigurationOption()).to.throw(/^An option has to be passed to set an option\.$/);
       });
     });
-    context('when setting a new option', () => {
+    describe('when setting a new option', () => {
       let application;
 
       before(() => {
@@ -77,7 +77,7 @@ describe('jdl - JDLApplication', () => {
         expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.true;
       });
     });
-    context('when setting an already present option', () => {
+    describe('when setting an already present option', () => {
       let application;
 
       before(() => {
@@ -92,7 +92,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('getConfigurationOptionValue', () => {
-    context('when not passing an option name', () => {
+    describe('when not passing an option name', () => {
       let application;
 
       before(() => {
@@ -103,7 +103,7 @@ describe('jdl - JDLApplication', () => {
         expect(() => application.getConfigurationOptionValue()).to.throw(/^An option name has to be passed to get a value\.$/);
       });
     });
-    context('when the application does not have the option', () => {
+    describe('when the application does not have the option', () => {
       let application;
 
       before(() => {
@@ -114,7 +114,7 @@ describe('jdl - JDLApplication', () => {
         expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.be.undefined;
       });
     });
-    context('when the application has the option', () => {
+    describe('when the application has the option', () => {
       let application;
 
       before(() => {
@@ -128,7 +128,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('forEachConfigurationOption', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       let application;
 
       before(() => {
@@ -139,7 +139,7 @@ describe('jdl - JDLApplication', () => {
         expect(() => application.forEachConfigurationOption()).not.to.throw();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {
@@ -159,7 +159,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('addEntityName', () => {
-    context('when not passing an entity name', () => {
+    describe('when not passing an entity name', () => {
       let application;
 
       before(() => {
@@ -170,8 +170,8 @@ describe('jdl - JDLApplication', () => {
         expect(() => application.addEntityName()).to.throw(/^An entity name has to be passed so as to be added to the application\.$/);
       });
     });
-    context('when passing an entity name', () => {
-      context('that has not already been added', () => {
+    describe('when passing an entity name', () => {
+      describe('that has not already been added', () => {
         let entityNames;
 
         before(() => {
@@ -184,7 +184,7 @@ describe('jdl - JDLApplication', () => {
           expect(entityNames.length).to.equal(1);
         });
       });
-      context('that has already been added', () => {
+      describe('that has already been added', () => {
         let entityNames;
 
         before(() => {
@@ -201,7 +201,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('addEntityNames', () => {
-    context('when not passing entity names', () => {
+    describe('when not passing entity names', () => {
       let entityNames;
 
       before(() => {
@@ -219,7 +219,7 @@ describe('jdl - JDLApplication', () => {
         expect(entityNames.length).to.equal(2);
       });
     });
-    context('when passing an empty list', () => {
+    describe('when passing an empty list', () => {
       let entityNames;
 
       before(() => {
@@ -237,7 +237,7 @@ describe('jdl - JDLApplication', () => {
         expect(entityNames.length).to.equal(2);
       });
     });
-    context('when passing entity names', () => {
+    describe('when passing entity names', () => {
       let application;
 
       before(() => {
@@ -256,7 +256,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('getEntityNames', () => {
-    context('when there is no entity', () => {
+    describe('when there is no entity', () => {
       let entityNames;
 
       before(() => {
@@ -268,7 +268,7 @@ describe('jdl - JDLApplication', () => {
         expect(entityNames.length).to.equal(0);
       });
     });
-    context('when there are entities', () => {
+    describe('when there are entities', () => {
       let entityNames;
 
       before(() => {
@@ -291,12 +291,12 @@ describe('jdl - JDLApplication', () => {
       application = new JDLApplication({ entityNames: ['A', 'B'] });
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('does not fail', () => {
         application.forEachEntityName();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -316,7 +316,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('addOption', () => {
-    context('when not passing an option', () => {
+    describe('when not passing an option', () => {
       let application;
 
       before(() => {
@@ -327,7 +327,7 @@ describe('jdl - JDLApplication', () => {
         expect(() => application.addOption()).to.throw(/^Can't add a nil option\.$/);
       });
     });
-    context('when passing an option', () => {
+    describe('when passing an option', () => {
       let result;
 
       before(() => {
@@ -348,7 +348,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('getOptionQuantity', () => {
-    context('when there is no option', () => {
+    describe('when there is no option', () => {
       let application;
 
       before(() => {
@@ -359,7 +359,7 @@ describe('jdl - JDLApplication', () => {
         expect(application.getOptionQuantity()).to.equal(0);
       });
     });
-    context('when there are options', () => {
+    describe('when there are options', () => {
       let application;
 
       before(() => {
@@ -386,7 +386,7 @@ describe('jdl - JDLApplication', () => {
     });
   });
   describe('toString', () => {
-    context('when there is no entity', () => {
+    describe('when there is no entity', () => {
       let jdlApplication;
 
       before(() => {
@@ -401,7 +401,7 @@ describe('jdl - JDLApplication', () => {
 }`);
       });
     });
-    context('when there are listed entities', () => {
+    describe('when there are listed entities', () => {
       let jdlApplication;
 
       before(() => {
@@ -418,8 +418,8 @@ describe('jdl - JDLApplication', () => {
         );
       });
     });
-    context('when the jhipsterVersion option is there', () => {
-      context('when it is not quoted', () => {
+    describe('when the jhipsterVersion option is there', () => {
+      describe('when it is not quoted', () => {
         let result;
 
         before(() => {
@@ -431,7 +431,7 @@ describe('jdl - JDLApplication', () => {
           expect(result).to.include('jhipsterVersion "6.5.1"');
         });
       });
-      context('when it is quoted', () => {
+      describe('when it is quoted', () => {
         let result;
 
         before(() => {
@@ -444,8 +444,8 @@ describe('jdl - JDLApplication', () => {
         });
       });
     });
-    context('when the jwtSecretKey option is there', () => {
-      context('when it is not quoted', () => {
+    describe('when the jwtSecretKey option is there', () => {
+      describe('when it is not quoted', () => {
         let result;
 
         before(() => {
@@ -457,7 +457,7 @@ describe('jdl - JDLApplication', () => {
           expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
         });
       });
-      context('when it is quoted', () => {
+      describe('when it is quoted', () => {
         let result;
 
         before(() => {
@@ -470,8 +470,8 @@ describe('jdl - JDLApplication', () => {
         });
       });
     });
-    context('when the rememberMeKey option is there', () => {
-      context('when it is not quoted', () => {
+    describe('when the rememberMeKey option is there', () => {
+      describe('when it is not quoted', () => {
         let result;
 
         before(() => {
@@ -483,7 +483,7 @@ describe('jdl - JDLApplication', () => {
           expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
         });
       });
-      context('when it is quoted', () => {
+      describe('when it is quoted', () => {
         let result;
 
         before(() => {
@@ -496,8 +496,8 @@ describe('jdl - JDLApplication', () => {
         });
       });
     });
-    context('when the entitySuffix is present', () => {
-      context('without a value', () => {
+    describe('when the entitySuffix is present', () => {
+      describe('without a value', () => {
         let result;
 
         before(() => {
@@ -509,7 +509,7 @@ describe('jdl - JDLApplication', () => {
           expect(result).not.to.include('entitySuffix');
         });
       });
-      context('with a value', () => {
+      describe('with a value', () => {
         let result;
 
         before(() => {
@@ -522,8 +522,8 @@ describe('jdl - JDLApplication', () => {
         });
       });
     });
-    context('when the dtoSuffix is present', () => {
-      context('without a value', () => {
+    describe('when the dtoSuffix is present', () => {
+      describe('without a value', () => {
         let result;
 
         before(() => {
@@ -535,7 +535,7 @@ describe('jdl - JDLApplication', () => {
           expect(result).not.to.include('dtoSuffix');
         });
       });
-      context('with a value', () => {
+      describe('with a value', () => {
         let result;
 
         before(() => {
@@ -548,8 +548,8 @@ describe('jdl - JDLApplication', () => {
         });
       });
     });
-    context('when the clientThemeVariant is present', () => {
-      context('without a value', () => {
+    describe('when the clientThemeVariant is present', () => {
+      describe('without a value', () => {
         let result;
 
         before(() => {
@@ -561,7 +561,7 @@ describe('jdl - JDLApplication', () => {
           expect(result).not.to.include('clientThemeVariant');
         });
       });
-      context('with a value', () => {
+      describe('with a value', () => {
         let result;
 
         before(() => {
@@ -574,7 +574,7 @@ describe('jdl - JDLApplication', () => {
         });
       });
     });
-    context('when the packageFolder option is present', () => {
+    describe('when the packageFolder option is present', () => {
       let result;
 
       before(() => {
@@ -586,7 +586,7 @@ describe('jdl - JDLApplication', () => {
         expect(result).not.to.include('packageFolder');
       });
     });
-    context('when there are options', () => {
+    describe('when there are options', () => {
       let result;
 
       before(() => {

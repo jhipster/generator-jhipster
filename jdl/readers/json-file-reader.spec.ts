@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import path from 'path';
 import { expect } from 'chai';
 
@@ -25,8 +26,8 @@ import * as JSONFileReader from '../readers/json-file-reader.js';
 
 describe('jdl - JSONFileReader', () => {
   describe('toFilePath', () => {
-    context('when converting an entity name to a path', () => {
-      context('with a nil entity name', () => {
+    describe('when converting an entity name to a path', () => {
+      describe('with a nil entity name', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
@@ -34,19 +35,19 @@ describe('jdl - JSONFileReader', () => {
           }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
         });
       });
-      context('with an empty entity name', () => {
+      describe('with an empty entity name', () => {
         it('should fail', () => {
           expect(() => {
             JSONFileReader.toFilePath('');
           }).to.throw(/^The passed entity name must not be nil to be converted to file path\.$/);
         });
       });
-      context('with a valid entity name', () => {
+      describe('with a valid entity name', () => {
         it('should return the path', () => {
           expect(JSONFileReader.toFilePath('MyEntity')).to.equal(`.jhipster${path.sep}${'MyEntity'}.json`);
         });
       });
-      context('with a valid entity name with the first letter lowercase', () => {
+      describe('with a valid entity name with the first letter lowercase', () => {
         it('should return the path, with the first letter upper-cased', () => {
           expect(JSONFileReader.toFilePath('myEntity')).to.equal(`.jhipster${path.sep}MyEntity.json`);
         });

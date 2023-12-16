@@ -235,6 +235,13 @@ configurations {
     implementation.exclude module: "spring-boot-starter-tomcat"
 }
 
+// workaround for https://github.com/checkstyle/checkstyle/issues/14123
+configurations.checkstyle {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+      select("com.google.guava:guava:0")
+    }
+}
+
 repositories {
     // Local maven repository is required for libraries built locally with maven like development jhipster-bom.
     <%= !jhipsterDependenciesVersion.includes('-SNAPSHOT') && !jhipsterDependenciesVersion.includes('-CICD') ? '// ' : '' %>mavenLocal()

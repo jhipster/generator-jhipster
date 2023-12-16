@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { binaryOptions } from '../jhipster/index.js';
 
@@ -49,12 +49,12 @@ describe('jdl - BinaryOptions', () => {
 `);
   });
   describe('exists', () => {
-    context('when checking for a valid binary option', () => {
+    describe('when checking for a valid binary option', () => {
       it('should return true', () => {
         expect(binaryOptions.exists(binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
       });
     });
-    context('when checking for a custom binary option', () => {
+    describe('when checking for a custom binary option', () => {
       it('should return true', () => {
         expect(binaryOptions.exists('customOption')).to.be.true;
         expect(binaryOptions.exists('customOption', 'customValue')).to.be.true;
@@ -62,13 +62,13 @@ describe('jdl - BinaryOptions', () => {
     });
   });
   describe('forEach', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => binaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {

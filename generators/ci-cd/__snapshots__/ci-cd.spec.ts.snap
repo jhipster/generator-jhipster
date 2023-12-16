@@ -1295,7 +1295,7 @@ jobs:
           HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
         run: |
           if [ ! -z "$HEROKU_API_KEY" ]; then
-              ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
+              ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
           else
               echo No HEROKU_API_KEY, skipping...
           fi
@@ -1688,7 +1688,7 @@ maven-package:
 deploy-to-production:
   stage: deploy
   script:
-    - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
   environment:
     name: production
   when: manual
@@ -1936,7 +1936,7 @@ maven-package:
 deploy-to-production:
   stage: deploy
   script:
-    - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
   environment:
     name: production
   when: manual
@@ -2486,7 +2486,7 @@ node {
         }
 
         stage('package and deploy') {
-            sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql"
+            sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql"
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
         }
         stage('quality analysis') {
@@ -2945,7 +2945,7 @@ node {
     }
 
     stage('package and deploy') {
-        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql"
+        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql"
         archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
     }
     stage('quality analysis') {
@@ -3339,7 +3339,7 @@ script:
   - npm run ci:frontend:test
   - npm run java:jar:prod
   - if [ $TRAVIS_PULL_REQUEST == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN; fi
-  - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
+  - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
   - npm run ci:e2e:package
   - npm run ci:e2e:prepare
   - npm run ci:e2e:run

@@ -18,11 +18,12 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { JDLLexer } from './lexer.js';
 
 describe('jdl - JDLLexer', () => {
-  context('when passing a valid JDL input', () => {
+  describe('when passing a valid JDL input', () => {
     let lexingResult;
 
     before(() => {
@@ -61,7 +62,7 @@ describe('jdl - JDLLexer', () => {
     });
   });
 
-  context('when passing an invalid JDL input', () => {
+  describe('when passing an invalid JDL input', () => {
     let lexingResult;
 
     before(() => {

@@ -18,6 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { JDLEntity } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
@@ -25,7 +26,7 @@ import JDLValidation from '../models/jdl-validation.js';
 
 describe('jdl - JDLEntity', () => {
   describe('new', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -33,14 +34,14 @@ describe('jdl - JDLEntity', () => {
         }).to.throw('The entity name is mandatory to create an entity.');
       });
     });
-    context('when not passing the name', () => {
+    describe('when not passing the name', () => {
       it('should fail', () => {
         expect(() => {
           new JDLEntity({ name: null, comment: 'My entity' });
         }).to.throw('The entity name is mandatory to create an entity.');
       });
     });
-    context('when not passing the table name', () => {
+    describe('when not passing the table name', () => {
       let entity;
 
       before(() => {
@@ -51,7 +52,7 @@ describe('jdl - JDLEntity', () => {
         expect(entity.tableName).to.equal('Abc');
       });
     });
-    context('when passing arguments', () => {
+    describe('when passing arguments', () => {
       let entity;
       let args: any = {};
 
@@ -91,8 +92,8 @@ describe('jdl - JDLEntity', () => {
       });
     });
 
-    context('when adding an invalid field', () => {
-      context('because it is nil', () => {
+    describe('when adding an invalid field', () => {
+      describe('because it is nil', () => {
         it('should fail', () => {
           expect(() => {
             entity.addField(null);
@@ -100,7 +101,7 @@ describe('jdl - JDLEntity', () => {
         });
       });
     });
-    context('when adding a valid field', () => {
+    describe('when adding a valid field', () => {
       let validField;
 
       before(() => {
@@ -114,7 +115,7 @@ describe('jdl - JDLEntity', () => {
     });
   });
   describe('addFields', () => {
-    context('when not passing fields', () => {
+    describe('when not passing fields', () => {
       let entity;
 
       before(() => {
@@ -128,7 +129,7 @@ describe('jdl - JDLEntity', () => {
         expect(entity.toString()).to.equal('entity Toto');
       });
     });
-    context('when passing fields', () => {
+    describe('when passing fields', () => {
       let entity;
 
       before(() => {
@@ -156,7 +157,7 @@ describe('jdl - JDLEntity', () => {
     });
   });
   describe('forEachField', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       let entity;
 
       before(() => {
@@ -169,7 +170,7 @@ describe('jdl - JDLEntity', () => {
         expect(() => entity.forEachField()).to.throw();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {
@@ -200,7 +201,7 @@ describe('jdl - JDLEntity', () => {
     });
   });
   describe('toString', () => {
-    context('without a comment', () => {
+    describe('without a comment', () => {
       let entity;
       let args;
 
@@ -216,7 +217,7 @@ describe('jdl - JDLEntity', () => {
         expect(entity.toString()).to.equal(`entity ${args.name} (${args.tableName})`);
       });
     });
-    context('with a table equal to the name (snakecase)', () => {
+    describe('with a table equal to the name (snakecase)', () => {
       let entity;
       let args;
 
@@ -232,7 +233,7 @@ describe('jdl - JDLEntity', () => {
         expect(entity.toString()).to.equal(`entity ${args.name}`);
       });
     });
-    context('with a table name not equal to the name (snakecase)', () => {
+    describe('with a table name not equal to the name (snakecase)', () => {
       let entity;
       let args;
 
@@ -248,7 +249,7 @@ describe('jdl - JDLEntity', () => {
         expect(entity.toString()).to.equal(`entity ${args.name} (MyTableName)`);
       });
     });
-    context('without fields', () => {
+    describe('without fields', () => {
       let entity;
       let args;
 
@@ -270,7 +271,7 @@ entity ${args.name} (${args.tableName})`,
         );
       });
     });
-    context('with fields', () => {
+    describe('with fields', () => {
       let entity;
       let field1;
       let field2;

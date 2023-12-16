@@ -19,39 +19,40 @@
 
 /* define global expect */
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 
 import { lowerFirst, camelCase, upperFirst } from '../utils/string-utils.js';
 
 describe('jdl - StringUtils', () => {
   describe('camelCase', () => {
-    context('when passing a valid string', () => {
-      context('with only one letter', () => {
+    describe('when passing a valid string', () => {
+      describe('with only one letter', () => {
         it('should keep it as it is', () => {
           expect(camelCase('e')).to.equal('e');
         });
       });
-      context('with only lowercase letters', () => {
+      describe('with only lowercase letters', () => {
         it('should keep it as it is', () => {
           expect(camelCase('entity')).to.equal('entity');
         });
       });
-      context('with an uppercase first letter', () => {
+      describe('with an uppercase first letter', () => {
         it('should lowercase the first letter', () => {
           expect(camelCase('Entity')).to.equal('entity');
         });
       });
-      context('with an uppercase first letter and ending with an uppercase letter', () => {
+      describe('with an uppercase first letter and ending with an uppercase letter', () => {
         it('should lowercase the first letter', () => {
           expect(camelCase('EntityA')).to.equal('entityA');
         });
       });
-      context('with an uppercase first letter and ending with more than one uppercase letter', () => {
+      describe('with an uppercase first letter and ending with more than one uppercase letter', () => {
         it('should lowercase the first letter', () => {
           expect(camelCase('EntityAN')).to.equal('entityAN');
         });
       });
-      context('with an underscore inside the word', () => {
+      describe('with an underscore inside the word', () => {
         it('should remove it', () => {
           expect(camelCase('Entity_AN')).not.to.include('_');
         });
@@ -59,7 +60,7 @@ describe('jdl - StringUtils', () => {
           expect(camelCase('Entity_AN')).to.equal('entityAN');
         });
       });
-      context('beginning with an underscore and having one inside', () => {
+      describe('beginning with an underscore and having one inside', () => {
         it('should remove the two underscores', () => {
           expect(camelCase('_entity_AN')).not.to.include('_');
         });
@@ -67,7 +68,7 @@ describe('jdl - StringUtils', () => {
           expect(camelCase('_entity_AN')).to.equal('entityAN');
         });
       });
-      context('with dashes inside', () => {
+      describe('with dashes inside', () => {
         it('should remove them', () => {
           expect(camelCase('_entit--y_AN---')).not.to.include('-');
         });
@@ -75,7 +76,7 @@ describe('jdl - StringUtils', () => {
           expect(camelCase('_entit--y_AN---')).to.equal('entityAN');
         });
       });
-      context('with spaces inside', () => {
+      describe('with spaces inside', () => {
         it('should remove them', () => {
           expect(camelCase('En tity_AN ')).not.to.include(' ');
         });
@@ -84,8 +85,8 @@ describe('jdl - StringUtils', () => {
         });
       });
     });
-    context('when passing an invalid parameter', () => {
-      context('as it is nil', () => {
+    describe('when passing an invalid parameter', () => {
+      describe('as it is nil', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
@@ -93,7 +94,7 @@ describe('jdl - StringUtils', () => {
           }).to.throw(/^The passed string cannot be nil\.$/);
         });
       });
-      context('as it is empty', () => {
+      describe('as it is empty', () => {
         it('should return it', () => {
           expect(camelCase('')).to.equal('');
         });
@@ -101,7 +102,7 @@ describe('jdl - StringUtils', () => {
     });
   });
   describe('lowerFirst', () => {
-    context('when passing a nil string', () => {
+    describe('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -109,19 +110,19 @@ describe('jdl - StringUtils', () => {
         }).to.throw(/^The passed string cannot be nil.$/);
       });
     });
-    context('when passing an empty string', () => {
+    describe('when passing an empty string', () => {
       it('should return it', () => {
         expect(lowerFirst('')).to.equal('');
       });
     });
-    context('when passing a valid string', () => {
+    describe('when passing a valid string', () => {
       it('should lower the first letter', () => {
         expect(lowerFirst('Abc')).to.equal('abc');
       });
     });
   });
   describe('upperFirst', () => {
-    context('when passing a nil string', () => {
+    describe('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -129,12 +130,12 @@ describe('jdl - StringUtils', () => {
         }).to.throw(/^The passed string cannot be nil\.$/);
       });
     });
-    context('when passing an empty string', () => {
+    describe('when passing an empty string', () => {
       it('should return it', () => {
         expect(upperFirst('')).to.equal('');
       });
     });
-    context('when passing a valid string', () => {
+    describe('when passing a valid string', () => {
       it('should upper the first letter', () => {
         expect(upperFirst('abc')).to.equal('Abc');
       });
