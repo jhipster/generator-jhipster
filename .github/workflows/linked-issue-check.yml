@@ -48,7 +48,9 @@ jobs:
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
-    if: ${{ fromJSON(needs.linked-issue-check.outputs.linked-issues-count) > 0 }}
+    if: >-
+      fromJSON(needs.linked-issue-check.outputs.linked-issues-count) > 0 &&
+      !contains(github.event.pull_request.labels.*.name, 'pr: skip-closing-issues-check')
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
