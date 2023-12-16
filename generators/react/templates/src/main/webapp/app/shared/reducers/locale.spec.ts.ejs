@@ -6,7 +6,7 @@ import { TranslatorContext } from 'react-jhipster';
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
 
 const defaultLocale = '<%= nativeLanguage %>';
-const dispatch = jest.fn((x: any) => x);
+const dispatch = jest.fn();
 const extra = {};
 
 describe('Locale reducer tests', () => {

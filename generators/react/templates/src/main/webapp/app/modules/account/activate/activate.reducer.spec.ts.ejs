@@ -73,8 +73,8 @@ describe('Activate reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn(() => ({}));
-    const dispatch = jest.fn((x: any) => x);
+    const getState = jest.fn();
+    const dispatch = jest.fn();
     const extra = {};
     beforeEach(() => {
       store = configureStore({
