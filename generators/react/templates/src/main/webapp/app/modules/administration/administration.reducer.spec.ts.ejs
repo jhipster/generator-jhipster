@@ -19,7 +19,7 @@
 
 import axios from 'axios';
 import sinon from 'sinon';
-import { UnknownAction, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 
 import administration, {
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
@@ -269,9 +269,7 @@ describe('Administration reducer tests', () => {
 <%_ if (applicationTypeGateway && serviceDiscoveryAny || withAdminUi) { _%>
     beforeEach(() => {
       store = configureStore({
-        reducer(s: UnknownAction[] = [], action) {
-          return [...s, action]
-        },
+        reducer: (state = [], action) => [...state, action],
       });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));

@@ -22,7 +22,7 @@ let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
 
-import { UnknownAction, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import sinon from 'sinon';
 <%_ if (paginationInfiniteScroll) { _%>
 import { parseHeaderForLinks } from 'react-jhipster';
@@ -274,9 +274,7 @@ describe('Entities reducer tests', () => {
     const extra = {};
     beforeEach(() => {
       store = configureStore({
-        reducer(s: UnknownAction[] = [], action) {
-          return [...s, action];
-        },
+        reducer: (state = [], action) => [...state, action],
       });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));

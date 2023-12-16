@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { UnknownAction, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import sinon from 'sinon';
 <%_ if (enableTranslation) { _%>
@@ -94,9 +94,7 @@ describe('Settings reducer tests', () => {
     const extra = {};
     beforeEach(() => {
       store = configureStore({
-        reducer(s: UnknownAction[] = [], action) {
-          return [...s, action]
-        },
+        reducer: (state = [], action) => [...state, action],
       });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));

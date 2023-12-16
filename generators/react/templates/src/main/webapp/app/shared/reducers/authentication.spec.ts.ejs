@@ -21,7 +21,7 @@ import sinon from 'sinon';
 <%_ if (authenticationTypeJwt) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
-import { UnknownAction, configureStore, createReducer } from '@reduxjs/toolkit';
+import { configureStore, createReducer } from '@reduxjs/toolkit';
 
 import authentication, {
   getSession,
@@ -208,9 +208,7 @@ describe('Authentication reducer tests', () => {
     const extra = {};
     beforeEach(() => {
       store = configureStore({
-        reducer(s: UnknownAction[] = [], action) {
-          return [...s, action]
-        },
+        reducer: (state = [], action) => [...state, action],
       });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
     });

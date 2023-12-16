@@ -19,7 +19,7 @@
 
 import axios from 'axios';
 import sinon from 'sinon';
-import { UnknownAction, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
@@ -102,9 +102,7 @@ describe('Creating account tests', () => {
     const extra = {};
     beforeEach(() => {
       store = configureStore({
-        reducer(s: UnknownAction[] = [], action) {
-          return [...s, action]
-        },
+        reducer: (state = [], action) => [...state, action],
       });
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
