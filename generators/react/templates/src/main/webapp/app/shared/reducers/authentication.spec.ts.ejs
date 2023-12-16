@@ -260,7 +260,7 @@ describe('Authentication reducer tests', () => {
     const reducer = createReducer(
       { authentication: { account: { langKey: 'en' } } },
       (builder) => {
-        builder.addDefaultCase((state, action) => {})
+        builder.addDefaultCase(() => {})
       }
     );
     beforeEach(() => {

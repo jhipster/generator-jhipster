@@ -47,7 +47,7 @@ describe('Locale reducer tests', () => {
     describe('with default language loaded', () => {
       let store;
       const reducer = createReducer({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }, builder => {
-        builder.addDefaultCase((state, action) => {});
+        builder.addDefaultCase(() => {});
       });
       beforeEach(() => {
         store = configureStore({
@@ -73,7 +73,7 @@ describe('Locale reducer tests', () => {
     describe('with no language loaded', () => {
       let store;
       const reducer = createReducer({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }, builder => {
-        builder.addDefaultCase((state, action) => {});
+        builder.addDefaultCase(() => {});
       });
       beforeEach(() => {
         store = configureStore({
@@ -103,7 +103,7 @@ describe('Locale reducer tests', () => {
     describe('with no prefixes and keys loaded', () => {
       let store;
       const reducer = createReducer({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }, builder => {
-        builder.addDefaultCase((state, action) => {});
+        builder.addDefaultCase(() => {});
       });
       beforeEach(() => {
         store = configureStore({
@@ -126,7 +126,7 @@ describe('Locale reducer tests', () => {
     describe('with prefix already added', () => {
       let store;
       const reducer = createReducer({ locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] } }, builder => {
-        builder.addDefaultCase((state, action) => {});
+        builder.addDefaultCase(() => {});
       });
       beforeEach(() => {
         store = configureStore({
@@ -149,7 +149,7 @@ describe('Locale reducer tests', () => {
     describe('with key already loaded', () => {
       let store;
       const reducer = createReducer({ locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] } }, builder => {
-        builder.addDefaultCase((state, action) => {});
+        builder.addDefaultCase(() => {});
       });
       beforeEach(() => {
         store = configureStore({
