@@ -90,7 +90,7 @@ runs:
   steps:
     - uses: actions/setup-node@v4
       with:
-        node-version: 18.19.0
+        node-version: 20.10.0
     - name: 'Check changes'
       id: build-changes
       run: |

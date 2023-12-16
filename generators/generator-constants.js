@@ -26,7 +26,7 @@ export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = '18.18.2';
+export const NODE_VERSION = '20.10.0';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
 
 /**
