@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { Subscription, Observer } from 'rxjs';
@@ -43,16 +43,14 @@ export class TrackerService {
   private rxStomp?: RxStomp;
   private routerSubscription: Subscription | null = null;
 
-  constructor(
-    private router: Router,
-    private accountService: AccountService,
+  private router = inject(Router);
+  private accountService = inject(AccountService);
 <%_ if (authenticationTypeSession) { _%>
-    private csrfService: CSRFService,
+  private csrfService = inject(CSRFService);
 <%_ } else if (authenticationTypeJwt) { _%>
-    private authServerProvider: AuthServerProvider,
+  private authServerProvider = inject(AuthServerProvider);
 <%_ } _%>
-    private location: Location
-  ) {}
+  private location = inject(Location);
 
   setup(): void {
     this.rxStomp = new RxStomp();

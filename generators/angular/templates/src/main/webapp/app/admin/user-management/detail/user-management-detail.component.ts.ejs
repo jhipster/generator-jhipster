@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 
@@ -31,7 +31,7 @@ import { User } from '../user-management.model';
 export default class UserManagementDetailComponent implements OnInit {
   user: User | null = null;
 
-  constructor(private route: ActivatedRoute) {}
+  private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {

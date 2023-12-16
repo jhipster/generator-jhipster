@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Directive, inject, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -42,7 +42,9 @@ export default class HasAnyAuthorityDirective implements OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
-  constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
+  private accountService = inject(AccountService);
+  private templateRef = inject(TemplateRef<any>);
+  private viewContainerRef = inject(ViewContainerRef);
 
   @Input()
   set <%= jhiPrefix %>HasAnyAuthority(value: string | string[]) {

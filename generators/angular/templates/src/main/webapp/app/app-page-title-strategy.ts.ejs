@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { RouterStateSnapshot, TitleStrategy } from "@angular/router";
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from "@ngx-translate/core";
@@ -24,8 +24,8 @@ import { TranslateService } from "@ngx-translate/core";
 
 @Injectable()
 export class AppPageTitleStrategy extends TitleStrategy {
-
-  constructor(<%_ if (enableTranslation) { _%>private translateService: TranslateService<%_ } _%>) {
+  <%_ if (enableTranslation) { _%>private translateService = inject(TranslateService);<%_ } _%>
+  constructor() {
     super();
   }
 

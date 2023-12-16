@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/en';
 import dayjs from 'dayjs/esm';
@@ -51,23 +51,23 @@ import { TrackerService } from './core/tracker/tracker.service';
   ],
 })
 export default class AppComponent {
-  constructor(
-    applicationConfigService: ApplicationConfigService,
-    iconLibrary: FaIconLibrary,
+  private applicationConfigService = inject(ApplicationConfigService);
+  private iconLibrary = inject(FaIconLibrary);
 <%_ if (communicationSpringWebsocket) { _%>
-    trackerService: TrackerService,
+  private trackerService = inject(TrackerService);
 <%_ } _%>
-    dpConfig: NgbDatepickerConfig
-  ) {
+  private dpConfig = inject(NgbDatepickerConfig);
+
+  constructor() {
 <%_ if (communicationSpringWebsocket) { _%>
-    trackerService.setup();
+    this.trackerService.setup();
 <%_ } _%>
 <%_ if (applicationTypeMicroservice) { _%>
-    applicationConfigService.setMicrofrontend();
+    this.applicationConfigService.setMicrofrontend();
 <%_ } _%>
-    applicationConfigService.setEndpointPrefix(SERVER_API_URL);
+    this.applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);
-    iconLibrary.addIcons(...fontAwesomeIcons);
-    dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
+    this.iconLibrary.addIcons(...fontAwesomeIcons);
+    this.dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
   }
 }
