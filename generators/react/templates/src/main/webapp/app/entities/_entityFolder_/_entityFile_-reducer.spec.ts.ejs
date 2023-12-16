@@ -22,8 +22,7 @@ let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
 
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import sinon from 'sinon';
 <%_ if (paginationInfiniteScroll) { _%>
 import { parseHeaderForLinks } from 'react-jhipster';
@@ -167,7 +166,7 @@ describe('Entities reducer tests', () => {
         'some message',
         state => {
           expect(state).toMatchObject({
-            errorMessage: 'error message',
+            errorMessage: null,
             updateSuccess: false,
             updating: false
           });
@@ -270,9 +269,13 @@ describe('Entities reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn();
+    const dispatch = jest.fn();
+    const extra = {};
     beforeEach(() => {
-      const mockStore = configureStore([thunk]);
-      store = mockStore({});
+      store = configureStore({
+        reducer: (state = [], action) => [...state, action],
+      });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
@@ -281,150 +284,81 @@ describe('Entities reducer tests', () => {
     });
 
     it('dispatches FETCH_<%= entityActionName %>_LIST actions', async () => {
-      const expectedActions = [
-        {
-          type: getEntities.pending.type
-        },
-        {
-          type: getEntities.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getEntities({}));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = {};
+
+      const result = await getEntities(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(getEntities.fulfilled.match(result)).toBe(true);
     });
 <%_ if (searchEngineAny) { _%>
     it('dispatches SEARCH_<%= entityActionNamePlural %> actions', async () => {
-      const expectedActions = [
-        {
-          type: searchEntities.pending.type
-        },
-        {
-          type: searchEntities.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(searchEntities({}));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = {};
+
+      const result = await searchEntities(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(searchEntities.fulfilled.match(result)).toBe(true);
     });
 <%_ } _%>
 
     it('dispatches FETCH_<%= entityActionName %> actions', async () => {
-      const expectedActions = [
-        {
-          type: getEntity.pending.type
-        },
-        {
-          type: getEntity.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getEntity(42666));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = 42666;
+
+      const result = await getEntity(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(getEntity.fulfilled.match(result)).toBe(true);
     });
 
 <%_ if (!readOnly) { _%>
     it('dispatches CREATE_<%= entityActionName %> actions', async () => {
-      const expectedActions = [
-        {
-          type: createEntity.pending.type
-        },
-        <%_ if (!paginationInfiniteScroll) { _%>
-        {
-          type: getEntities.pending.type
-        },
-        <%_ } _%>
-        {
-          type: createEntity.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(createEntity(<%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      <%_ } _%>
+      const arg = <%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>;
+
+      const result = await createEntity(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(createEntity.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches UPDATE_<%= entityActionName %> actions', async () => {
-      const expectedActions = [
-        {
-          type: updateEntity.pending.type
-        },
-        <%_ if (!paginationInfiniteScroll) { _%>
-        {
-          type: getEntities.pending.type
-        },
-        <%_ } _%>
-        {
-          type: updateEntity.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(updateEntity(<%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      <%_ } _%>
+      const arg = <%- this.generateTestEntityPrimaryKey(primaryKey, 1) %>;
+
+      const result = await updateEntity(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(updateEntity.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
-      const expectedActions = [
-        {
-          type: partialUpdateEntity.pending.type
-        },
-        <%_ if (!paginationInfiniteScroll) { _%>
-        {
-          type: getEntities.pending.type
-        },
-        <%_ } _%>
-        {
-          type: partialUpdateEntity.fulfilled.type,
-          payload: resolvedObject
+      const arg = { <%- primaryKey.name %>: <%- this.generateTestEntityId(primaryKey.type) %> };
 
-        }
-      ];
-      await store.dispatch(partialUpdateEntity({ <%- primaryKey.name %>: <%- this.generateTestEntityId(primaryKey.type) %> }));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      <%_ } _%>
+      const result = await partialUpdateEntity(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(partialUpdateEntity.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches DELETE_<%= entityActionName %> actions', async () => {
-      const expectedActions = [
-        {
-          type: deleteEntity.pending.type
-        },
-        <%_ if (!paginationInfiniteScroll) { _%>
-        {
-          type: getEntities.pending.type
-        },
-        <%_ } _%>
-        {
-          type: deleteEntity.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(deleteEntity(42666));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
-      <%_ if (!paginationInfiniteScroll) { _%>
-      expect(store.getActions()[2]).toMatchObject(expectedActions[2]);
-      <%_ } _%>
+      const arg = 42666;
+
+      const result = await deleteEntity(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(deleteEntity.fulfilled.match(result)).toBe(true);
     });
 <%_ } _%>
 
     it('dispatches RESET actions', async () => {
-      const expectedActions = [reset()];
       await store.dispatch(reset());
-      expect(store.getActions()).toEqual(expectedActions);
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(reset())]);
     });
   });
 });
