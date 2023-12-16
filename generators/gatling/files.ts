@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import Generator from './generator.js';
-import { TEST_DIR } from '../generator-constants.js';
+import { TEST_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.js';
 import { WriteFileSection } from '../base/api.js';
 import { SpringBootApplication } from '../server/types.js';
 
@@ -25,6 +25,11 @@ const gatlingFiles: WriteFileSection<Generator, SpringBootApplication> = {
   gatlingFiles: [
     {
       templates: ['README.md.jhi.gatling'],
+    },
+    {
+      condition: generator => generator.buildToolGradle,
+      path: GRADLE_BUILD_SRC_MAIN_DIR,
+      templates: ['jhipster.gatling-conventions.gradle'],
     },
     {
       path: TEST_DIR,

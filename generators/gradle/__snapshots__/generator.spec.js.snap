@@ -35,7 +35,7 @@ exports[`generator - gradle with valid configuration should generate only gradle
     "stateCleared": "modified",
   },
   "buildSrc/gradle/libs.versions.toml": {
-     "stateCleared": "modified",
+    "stateCleared": "modified",
   },
   "gradle/wrapper/gradle-wrapper.jar": {
     "stateCleared": "modified",

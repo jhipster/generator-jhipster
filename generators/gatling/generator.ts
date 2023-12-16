@@ -86,6 +86,9 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
             ],
           });
         }
+        if (application.buildToolGradle) {
+          source.addGradlePlugin?.({ id: 'jhipster.gatling-conventions' });
+        }
       },
     });
   }
