@@ -8,7 +8,7 @@ export type GradleProperty = { property: string; value: string };
 
 export type GradleRepository = { url: string; username?: string; password?: string };
 
-export type GradleTomlVersion = { name: string; version: string };
+export type GradleTomlVersion = { name: string; version?: string };
 
 export type GradleSourceType = {
   applyFromGradle?(script: GradleScript): void;
