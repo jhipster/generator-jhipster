@@ -92,6 +92,7 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
           source.addGradleBuildSrcDependency?.({
             groupId: 'gradle.plugin.io.gatling.gradle',
             artifactId: 'gatling-gradle-plugi',
+            // eslint-disable-next-line no-template-curly-in-string
             version: '${libs.versions.gatling.plugin.get()}',
             scope: 'implementation',
           });
