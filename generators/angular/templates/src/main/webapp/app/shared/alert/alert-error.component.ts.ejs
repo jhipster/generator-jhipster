@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -40,13 +40,19 @@ export class AlertErrorComponent implements OnDestroy {
   errorListener: Subscription;
   httpErrorListener: Subscription;
 
-  constructor(private alertService: AlertService, private eventManager: EventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-    this.errorListener = eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
+  private alertService = inject(AlertService);
+  private eventManager = inject(EventManager);
+<% if (enableTranslation) { %>
+  private translateService = inject(TranslateService);
+<% } %>
+
+  constructor() {
+    this.errorListener = this.eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
       const errorResponse = (response as EventWithContent<AlertError>).content;
       this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
     });
 
-    this.httpErrorListener = eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
+    this.httpErrorListener = this.eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
       const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
       switch (httpErrorResponse.status) {
         // connection refused, server not reachable
@@ -71,7 +77,7 @@ export class AlertErrorComponent implements OnDestroy {
           }
           if (errorHeader) {
 <%_ if (enableTranslation) { _%>
-            const alertData = entityKey ? { entityName: translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
+            const alertData = entityKey ? { entityName: this.translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
 <%_ } _%>
             this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
@@ -84,7 +90,7 @@ export class AlertErrorComponent implements OnDestroy {
               const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
               const fieldName: string =
 <%_ if (enableTranslation) { _%>
-                translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
+                this.translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
 <%_ } else { _%>
                 convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>

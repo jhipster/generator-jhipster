@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -33,7 +33,8 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>?: I<%= entityAngularName %>;
 
-    constructor(protected <%= entityInstance %>Service: <%= entityAngularName %>Service, protected activeModal: NgbActiveModal) {}
+    protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected activeModal = inject(NgbActiveModal);
 
     cancel(): void {
         this.activeModal.dismiss();

@@ -22,7 +22,7 @@ if (paginationPagination || paginationInfiniteScroll) {
     searchType = 'SearchWithPagination';
 }
 _%>
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable<%_ if (searchEngineAny) { _%>, asapScheduler, scheduled<%_ } _%> } from 'rxjs';
 
@@ -75,12 +75,13 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
+    protected http = inject(HttpClient);
+    protected applicationConfigService = inject(ApplicationConfigService);
+
     protected resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
 <%_ if (searchEngineAny) { _%>
     protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>/_search'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
 <%_ } _%>
-
-    constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
 <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: New<%= entityAngularName %>): Observable<EntityResponseType> {

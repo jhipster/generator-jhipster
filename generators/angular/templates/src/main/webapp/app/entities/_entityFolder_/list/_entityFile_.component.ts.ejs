@@ -29,7 +29,7 @@
 
   const componentName = entityAngularName + 'Component';
 _%>
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
@@ -139,22 +139,20 @@ export class <%= componentName %> implements OnInit {
 <%- include('infinite-scroll-template'); -%>
 <%_ } _%>
 
-    constructor(
-      protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-      protected activatedRoute: ActivatedRoute,
-      public router: Router,
+    public router = inject(Router);
+    protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected activatedRoute = inject(ActivatedRoute);
 <%_ if (paginationNo) { _%>
-      protected sortService: SortService,
+    protected sortService = inject(SortService);
 <%_ } else if (paginationInfiniteScroll) { _%>
-      protected parseLinks: ParseLinks,
+    protected parseLinks = inject(ParseLinks);
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
-      protected dataUtils: DataUtils,
+    protected dataUtils = inject(DataUtils);
 <%_ } _%>
 <%_ if (!readOnly) { _%>
-      protected modalService: NgbModal
+    protected modalService = inject(NgbModal);
 <%_ } _%>
-    ) {}
 
 <%_ if (paginationInfiniteScroll) { _%>
     reset(): void {
