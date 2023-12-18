@@ -10,7 +10,7 @@ interface IOwnProps extends PathRouteProps {
   children: React.ReactNode;
 }
 
-export const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
+const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const sessionHasBeenFetched = useAppSelector(state => state.authentication.sessionHasBeenFetched);
   const account = useAppSelector(state => state.authentication.account);
