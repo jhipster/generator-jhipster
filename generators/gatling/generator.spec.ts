@@ -32,4 +32,13 @@ describe(`generator - ${generator}`, () => {
       expect(result.getSnapshot()).toMatchSnapshot();
     });
   });
+  describe('with gradle build tool', () => {
+    before(async () => {
+      await helpers.runJHipster(GENERATOR_GATLING).withJHipsterConfig({ buildTool: 'gradle' });
+    });
+
+    it('should match files snapshot', () => {
+      expect(result.getSnapshot()).toMatchSnapshot();
+    });
+  });
 });

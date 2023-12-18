@@ -86,6 +86,20 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
             ],
           });
         }
+        if (application.buildToolGradle) {
+          source.addGradleDependencyCatalogVersion?.({ name: 'gatling-plugin', version: javaDependencies?.['gatling-gradle'] });
+          source.addGradleDependencyCatalogVersion?.({ name: 'gatling-highcharts', version: javaDependencies?.gatling });
+          source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'gatling-plugin', version: javaDependencies?.['gatling-gradle'] });
+          source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'gatling-highcharts', version: javaDependencies?.gatling });
+          source.addGradleBuildSrcDependency?.({
+            groupId: 'gradle.plugin.io.gatling.gradle',
+            artifactId: 'gatling-gradle-plugin',
+            // eslint-disable-next-line no-template-curly-in-string
+            version: '${libs.versions.gatling.plugin.get()}',
+            scope: 'implementation',
+          });
+          source.addGradlePlugin?.({ id: 'jhipster.gatling-conventions' });
+        }
       },
     });
   }

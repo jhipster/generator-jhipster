@@ -20,6 +20,8 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
         source.applyFromGradle?.({ script: 'name.gradle' });
         source.addGradleMavenRepository?.({ url: 'url', username: 'username', password: 'password' });
         source.addGradleBuildSrcDependency?.({ scope: 'scope5', groupId: 'group5', artifactId: 'name5', version: 'version5' });
+        source.addGradleDependencyCatalogVersion?.({ name: 'version-name', version: 'version' });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'version-name', version: 'version' });
       },
     });
   }
@@ -76,5 +78,13 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
 
   it('Assert buildSrc/build.gradle has the Dependency with version added', () => {
     runResult.assertFileContent('buildSrc/build.gradle', 'scope5 "group5:name5:version5"');
+  });
+
+  it('Assert gradle/libs.versions.toml has the version added', () => {
+    runResult.assertFileContent('gradle/libs.versions.toml', 'version-name = "version"');
+  });
+
+  it('Assert buildSrc/gradle/libs.versions.toml has the version added', () => {
+    runResult.assertFileContent('buildSrc/gradle/libs.versions.toml', 'version-name = "version"');
   });
 });

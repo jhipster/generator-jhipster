@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../base/support/index.js';
-import { GradleScript, GradleDependency, GradlePlugin, GradleProperty, GradleRepository } from '../types.js';
+import { GradleScript, GradleDependency, GradlePlugin, GradleProperty, GradleRepository, GradleTomlVersion } from '../types.js';
 
 export const applyFromGradleCallback = ({ script }: GradleScript) =>
   createNeedleCallback({
@@ -37,6 +37,17 @@ export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, versi
     contentToAdd: `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
   });
 
+export const addGradleDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
+  createNeedleCallback({
+    needle: 'gradle-dependency-catalog-version',
+    contentToAdd: `${name} = "${version}"`,
+  });
+
+export const addGradleBuildSrcDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
+  createNeedleCallback({
+    needle: 'gradle-build-src-dependency-catalog-version',
+    contentToAdd: `${name} = "${version}"`,
+  });
 export const addGradlePluginCallback = ({ id, version }: GradlePlugin) =>
   createNeedleCallback({
     needle: 'gradle-plugins',

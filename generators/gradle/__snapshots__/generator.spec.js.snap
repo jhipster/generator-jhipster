@@ -8,6 +8,12 @@ exports[`generator - gradle with empty configuration should generate only gradle
   "buildSrc/build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle/wrapper/gradle-wrapper.jar": {
     "stateCleared": "modified",
   },
@@ -29,6 +35,12 @@ exports[`generator - gradle with valid configuration should generate only gradle
     "stateCleared": "modified",
   },
   "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/wrapper/gradle-wrapper.jar": {
