@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit<% if (enableTranslation) { %>, RendererFactory2, Renderer2<% } %> } from '@angular/core';
+import { Component, inject, OnInit<% if (enableTranslation) { %>, RendererFactory2, Renderer2<% } %> } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -43,20 +43,20 @@ export default class MainComponent implements OnInit {
   private renderer: Renderer2;
 <%_ } _%>
 
-  constructor(
-    private router: Router,
-    private appPageTitleStrategy: AppPageTitleStrategy,
-    private accountService: AccountService,
+  private router = inject(Router);
+  private appPageTitleStrategy = inject(AppPageTitleStrategy);
+  private accountService = inject(AccountService);
 <%_ if (enableI18nRTL) { _%>
-    private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
+  private findLanguageFromKeyPipe = inject(FindLanguageFromKeyPipe);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-    private translateService: TranslateService,
-    rootRenderer: RendererFactory2
+  private translateService = inject(TranslateService);
+  private rootRenderer = inject(RendererFactory2);
 <%_ } _%>
-  ) {
+
+  constructor() {
 <%_ if (enableTranslation) { _%>
-    this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
+    this.renderer = this.rootRenderer.createRenderer(document.querySelector('html'), null);
 <%_ } _%>
   }
 

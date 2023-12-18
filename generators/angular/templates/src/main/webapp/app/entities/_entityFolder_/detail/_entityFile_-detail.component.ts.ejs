@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -35,12 +35,10 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class <%= entityAngularName %>DetailComponent {
     @Input() <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
-    constructor(
 <%_ if (anyFieldIsBlobDerived) { _%>
-        protected dataUtils: DataUtils,
+    protected dataUtils = inject(DataUtils);
 <%_ } _%>
-        protected activatedRoute: ActivatedRoute
-    ) {}
+    protected activatedRoute = inject(ActivatedRoute);
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {

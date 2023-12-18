@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector<% } %> } from '@angular/core';
+import { Component, inject, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector<% } %> } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -70,19 +70,19 @@ export default class NavbarComponent implements OnInit {
   <%_ } _%>
 <%_ } _%>
 
-  constructor(
-    private loginService: LoginService,
+  private loginService = inject(LoginService);
 <%_ if (enableTranslation) { _%>
-    private translateService: TranslateService,
-    private stateStorageService: StateStorageService,
+  private translateService = inject(TranslateService);
+  private stateStorageService = inject(StateStorageService);
   <%_ if (applicationTypeGateway && microfrontend) { _%>
-    private injector: Injector,
+  private injector = inject(Injector);
   <%_ } _%>
 <%_ } _%>
-    private accountService: AccountService,
-    private profileService: ProfileService,
-    private router: Router
-  ) {
+  private accountService = inject(AccountService);
+  private profileService = inject(ProfileService);
+  private router = inject(Router);
+
+  constructor() {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`;
     }

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 <%_ if (authenticationTypeOauth2) { _%>
 import { Location } from '@angular/common';
 
@@ -43,17 +43,15 @@ import { Login } from './login.model';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  constructor(
 <%_ if (authenticationTypeSession) { _%>
-    private applicationConfigService: ApplicationConfigService,
+  private applicationConfigService = inject(ApplicationConfigService);
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-    private location: Location,
+  private location = inject(Location);
 <%_ } else { _%>
-    private accountService: AccountService,
+  private accountService = inject(AccountService);
 <%_ } _%>
-    private authServerProvider: AuthServerProvider
-  ) {}
+  private authServerProvider = inject(AuthServerProvider);
 
 <%_ if (authenticationTypeOauth2) { _%>
   login(): void {

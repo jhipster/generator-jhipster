@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -64,12 +64,10 @@ export default class SettingsComponent implements OnInit {
     login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
-  constructor(
-    private accountService: AccountService,
+  private accountService = inject(AccountService);
 <%_ if (enableTranslation) { _%>
-    private translateService: TranslateService,
+  private translateService = inject(TranslateService);
 <%_ } _%>
-  ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable, SecurityContext, NgZone } from '@angular/core';
+import { inject, Injectable, SecurityContext, NgZone } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -52,13 +52,11 @@ export class AlertService {
   private alertId = 0;
   private alerts: Alert[] = [];
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    private ngZone: NgZone,
+  private sanitizer = inject(DomSanitizer);
+  private ngZone = inject(NgZone);
 <%_ if (enableTranslation) { _%>
-    private translateService: TranslateService,
+  private translateService = inject(TranslateService);
 <%_ } _%>
-  ) {}
 
   clear(): void {
     this.alerts = [];

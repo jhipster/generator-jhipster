@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -37,7 +37,7 @@ export default class ConfigurationComponent implements OnInit {
   beansAscending = true;
   propertySources: PropertySource[] = [];
 
-  constructor(private configurationService: ConfigurationService) {}
+  private configurationService = inject(ConfigurationService);
 
   ngOnInit(): void {
     this.configurationService.getBeans().subscribe(beans => {

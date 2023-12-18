@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -42,9 +42,11 @@ class TestSortByDirectiveComponent {
   sortAllowed = true;
   transition = jest.fn();
 
-  constructor(library: FaIconLibrary) {
-    library.addIconPacks(fas);
-    library.addIcons(faSort, faSortDown, faSortUp);
+  private library = inject(FaIconLibrary);
+
+  constructor() {
+    this.library.addIconPacks(fas);
+    this.library.addIcons(faSort, faSortDown, faSortUp);
   }
 }
 
