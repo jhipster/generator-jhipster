@@ -114,7 +114,6 @@ _%>
     // eslint-disable-next-line @typescript-eslint/member-ordering
     editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
 
-    constructor() {}
 <%_ for (const relationshipsByEntity of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.persistableRelationship && rel.otherEntity.primaryKey))) {
       const { otherEntity } = relationshipsByEntity[0];
 _%>
