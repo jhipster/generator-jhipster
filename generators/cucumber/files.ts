@@ -18,7 +18,7 @@
  */
 import Generator from './generator.js';
 import { moveToJavaPackageTestDir } from '../server/support/index.js';
-import { SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
+import { SERVER_TEST_SRC_DIR, SERVER_TEST_RES_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.js';
 import { WriteFileSection } from '../base/api.js';
 import { CommonClientServerApplication } from '../base-application/types.js';
 
@@ -50,6 +50,11 @@ const cucumberFiles: WriteFileSection<Generator, CommonClientServerApplication> 
       path: `${SERVER_TEST_RES_DIR}_package_/`,
       renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
       templates: ['cucumber/user.feature'],
+    },
+    {
+      condition: generator => generator.buildToolGradle,
+      path: GRADLE_BUILD_SRC_MAIN_DIR,
+      templates: ['jhipster.cucumber-conventions.gradle'],
     },
   ],
 };

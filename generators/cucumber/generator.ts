@@ -98,6 +98,10 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
             ],
           });
         }
+
+        if (application.buildToolGradle) {
+          source.addGradlePlugin?.({ id: 'jhipster.cucumber-conventions' });
+        }
       },
     });
   }
