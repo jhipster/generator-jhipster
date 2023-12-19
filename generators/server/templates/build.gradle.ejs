@@ -149,35 +149,6 @@ modernizer {
     includeTestClasses = true
 }
 
-
-<%_ if (cucumberTests) { _%>
-
-task consoleLauncherTest(type: JavaExec) {
-    dependsOn(testClasses)
-    String cucumberReportsDir = file("$buildDir/reports/tests")
-    outputs.dir(reportsDir)
-    classpath = sourceSets["test"].runtimeClasspath
-    main = "org.junit.platform.console.ConsoleLauncher"
-    args("--scan-classpath")
-    args("--include-engine", "cucumber")
-    args("--reports-dir", cucumberReportsDir)
-}
-
-task cucumberTest(type: Test) {
-    dependsOn(consoleLauncherTest)
-    description = "Execute cucumber BDD tests."
-    group = "verification"
-    include "**/*CucumberIT*"
-
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.required = false
-}
-
-check.dependsOn cucumberTest
-<%_ } _%>
-
 check.dependsOn integrationTest
 task testReport(type: TestReport) {
     destinationDirectory = file("$buildDir/reports/tests")
@@ -189,13 +160,6 @@ task integrationTestReport(type: TestReport) {
     testResults.from(integrationTest)
 }
 
-<%_ if (cucumberTests) { _%>
-task cucumberTestReport(type: TestReport) {
-    destinationDirectory = file("$buildDir/reports/tests")
-    testResults.from(cucumberTest)
-}
-
-<%_ } _%>
 gitProperties {
     failOnNoGitDirectory = false
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
@@ -428,13 +392,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "io.dropwizard.metrics:metrics-core"
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
-<%_ } _%>
-<%_ if (cucumberTests) { _%>
-    testImplementation "io.cucumber:cucumber-junit-platform-engine"
-    testImplementation "io.cucumber:cucumber-java"
-    testImplementation "io.cucumber:cucumber-spring"
-    testImplementation "org.junit.platform:junit-platform-console"
-    testImplementation "org.testng:testng"
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"

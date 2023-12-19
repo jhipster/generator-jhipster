@@ -32,4 +32,14 @@ describe(`generator - ${generator}`, () => {
       expect(result.getSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('with gradle build tool', () => {
+    before(async () => {
+      await helpers.runJHipster(GENERATOR_CUCUMBER).withJHipsterConfig({ buildTool: 'gradle', testFrameworks: ['cucumber'] });
+    });
+
+    it('should match files snapshot', () => {
+      expect(result.getSnapshot()).toMatchSnapshot();
+    });
+  });
 });
