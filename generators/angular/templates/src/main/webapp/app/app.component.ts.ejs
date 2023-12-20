@@ -18,14 +18,13 @@
 -%>
 import { Component, inject } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import locale from '@angular/common/locales/en';
 import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { provideRouter } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import locale from '@angular/common/locales/en';
+import locale from '@angular/common/locales/<%= angularLocaleId %>';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import dayjs from 'dayjs/esm';
 import appRoutes from './app.routes';
