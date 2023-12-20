@@ -49,6 +49,7 @@ Options:
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --feign-client                           Generate a feign client
+  --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
@@ -737,6 +738,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
+  "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
   "testJavaDir": "src/test/java/",
@@ -1307,6 +1309,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
+  "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
   "testJavaDir": "src/test/java/",
@@ -1584,8 +1587,8 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "gatewayServerPort": undefined,
   "gatlingTests": false,
   "generateAuthenticationApi": false,
-  "generateBuiltInAuthorityEntity": false,
-  "generateBuiltInUserEntity": false,
+  "generateBuiltInAuthorityEntity": undefined,
+  "generateBuiltInUserEntity": undefined,
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "gradleEnterpriseHost": undefined,
@@ -1820,6 +1823,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
+  "syncUserWithIdp": undefined,
   "temporaryDir": "target/",
   "testFrameworks": [],
   "testJavaDir": "src/test/java/",

@@ -31,7 +31,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.generateBuiltInUserEntity || generator.authenticationTypeOauth2,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/search/UserSearchRepository.java'],

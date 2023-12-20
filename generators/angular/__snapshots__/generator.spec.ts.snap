@@ -1195,15 +1195,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/user/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/main/webapp/app/entities/user/user.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/main/webapp/app/entities/user/user.service.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/main/webapp/app/home/home.component.html": {
     "stateCleared": "modified",
   },
@@ -2520,15 +2511,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/home/home.component.html": {
@@ -4204,15 +4186,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/home/home.component.html": {

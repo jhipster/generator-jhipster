@@ -233,7 +233,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           (application as any).user = user;
         }
       },
-      loadingEntities({ entitiesToLoad }) {
+      loadingEntities({ application, entitiesToLoad }) {
         for (const { entityName, entityStorage } of entitiesToLoad) {
           if (this.sharedData.hasEntity(entityName)) {
             const existingEntity = this.sharedData.getEntity(entityName);
@@ -250,7 +250,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
         const entities = this.sharedData.getEntities().map(({ entity }) => entity);
         loadEntitiesAnnotations(entities);
-        this.validateResult(loadEntitiesOtherSide(entities));
+        this.validateResult(loadEntitiesOtherSide(entities, { application }));
 
         for (const entity of entities) {
           for (const relationship of entity.relationships) {

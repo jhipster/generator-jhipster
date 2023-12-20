@@ -83,6 +83,8 @@ export type SpringBootApplication = JavaApplication &
     skipCheckLengthOfIdentifier: boolean;
 
     imperativeOrReactive: string;
+    generateAuthenticationApi?: boolean;
+    generateInMemoryUserCredentials?: boolean;
 
     databaseMigration: string;
     databaseMigrationLiquibase: boolean;
