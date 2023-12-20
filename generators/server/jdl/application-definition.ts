@@ -20,11 +20,16 @@ import * as _ from 'lodash-es';
 import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.js';
 import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';
-import { feignClientDefinition } from '../options/index.js';
+import { feignClientDefinition, syncUserWithIdpDefinition } from '../options/index.js';
 
 const { upperCase, snakeCase } = _;
 
-const jdlOptions: JHipsterOptionDefinition[] = [databaseMigrationOption, messageBrokerOption, feignClientDefinition];
+const jdlOptions: JHipsterOptionDefinition[] = [
+  databaseMigrationOption,
+  messageBrokerOption,
+  feignClientDefinition,
+  syncUserWithIdpDefinition,
+];
 
 const applicationConfig: JDLApplicationConfig = {
   tokenConfigs: jdlOptions.map(option => ({
