@@ -170,7 +170,7 @@ _%>
 <%_ }) _%>
 <%_ relFieldNames.forEach(rel => { _%>
 <%_ if (rel.persistableRelationship && !rel.collection)  { _%>
-        <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>.toString()),
+        <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>?.toString()),
 <%_ } _%>
 <%_ }) _%>
     }
