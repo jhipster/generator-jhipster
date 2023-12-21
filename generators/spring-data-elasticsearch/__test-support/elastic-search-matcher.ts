@@ -11,7 +11,9 @@ const expectedElasticsearchFiles = () => {
 
 const expectedElasticsearchUserFiles = (resultGetter: () => RunResult) => {
   const application = ((resultGetter() as any).generator as BaseApplicationGenerator<SpringBootApplication>).sharedData.getApplication();
-  return [`${SERVER_MAIN_SRC_DIR}${application.packageFolder}/repository/search/UserSearchRepository.java`];
+  return application.generateBuiltInUserEntity
+    ? [`${SERVER_MAIN_SRC_DIR}${application.packageFolder}/repository/search/UserSearchRepository.java`]
+    : [];
 };
 
 const desiredConfig = {

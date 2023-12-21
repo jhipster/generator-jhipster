@@ -754,9 +754,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/main/webapp/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/main/webapp/app/entities/user/user.service.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/main/webapp/app/locale/translation.service.ts": {
     "stateCleared": "modified",
   },
@@ -1683,9 +1680,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/index.ts": {
@@ -2773,9 +2767,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/simple/simple.vue": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/main.ts": {

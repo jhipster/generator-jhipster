@@ -139,6 +139,7 @@ entity Notification {
 
 relationship ManyToOne {
   Blog{user(login)} to User with builtInEntity
+  Notification{user(login)} to User with builtInEntity
   Post{blog(name)} to Blog
 }
 

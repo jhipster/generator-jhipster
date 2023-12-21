@@ -27,12 +27,12 @@ export default function cleanupElasticsearchFilesTask({ application }) {
     this.removeFile(`${application.javaPackageTestDir}config/ElasticsearchTestConfiguration.java`);
   }
   if (this.isJhipsterVersionLessThan('7.7.1')) {
-    if (this.generateUserManagement) {
+    if (application.generateUserManagement) {
       this.removeFile(`${application.javaPackageTestDir}repository/search/UserSearchRepositoryMockConfiguration.java`);
     }
   }
   if (this.isJhipsterVersionLessThan('7.9.3')) {
-    if (this.reactive) {
+    if (application.reactive) {
       this.removeFile(`${application.javaPackageTestDir}config/ElasticsearchReactiveTestConfiguration.java`);
     }
   }

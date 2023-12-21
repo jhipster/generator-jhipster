@@ -63,12 +63,22 @@ export const loadEntitiesAnnotations = (entities: Entity[]) => {
   }
 };
 
-export const loadEntitiesOtherSide = (entities: Entity[]): ValidationResult => {
+export const loadEntitiesOtherSide = (entities: Entity[], { application }: { application?: any } = {}): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
       const otherEntity = findEntityInEntities(upperFirst(relationship.otherEntityName), entities);
       if (!otherEntity) {
+        if (upperFirst(relationship.otherEntityName) === 'User') {
+          const errors: string[] = [];
+          if (!application || application.authenticationTypeOauth2) {
+            errors.push("oauth2 applications with database and '--sync-user-with-idp' option");
+          }
+          if (!application || !application.authenticationTypeOauth2) {
+            errors.push('jwt and session authentication types in monolith or gateway applications with database');
+          }
+          throw new Error(`Error at entity ${entity.name}: relationships with built-in User entity is supported in ${errors}.`);
+        }
         throw new Error(`Error at entity ${entity.name}: could not find the entity ${relationship.otherEntityName}`);
       }
       otherEntity.otherRelationships = otherEntity.otherRelationships || [];

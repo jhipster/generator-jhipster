@@ -118,6 +118,7 @@ export const loadAppConfig = ({
       'skipUserManagement',
       'blueprints',
       'testFrameworks',
+      'syncUserWithIdp',
     ]),
     {
       jhipsterVersion: packageJson.version,
@@ -182,11 +183,7 @@ export const loadDerivedAppConfig = ({ application }: { application: any }) => {
     !application.skipUserManagement && application.databaseType !== NO_DATABASE && authenticationApiWithUserManagement;
   application.generateInMemoryUserCredentials = !application.generateUserManagement && authenticationApiWithUserManagement;
 
-  // TODO make UserEntity optional on relationships for microservices and oauth2
-  // TODO check if we support syncWithIdp using jwt authentication
-  // Used for relationships and syncWithIdp
-  const usesSyncWithIdp = application.authenticationType === OAUTH2 && application.databaseType !== NO_DATABASE;
-  application.generateBuiltInUserEntity = application.generateUserManagement || usesSyncWithIdp;
+  application.generateBuiltInUserEntity = application.generateUserManagement || application.syncUserWithIdp;
 
   application.generateBuiltInAuthorityEntity = application.generateBuiltInUserEntity && application.databaseType !== CASSANDRA;
 };

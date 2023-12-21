@@ -110,6 +110,7 @@ export type CommonClientServerApplication = BaseApplication &
     dockerServices?: string[];
     prettierExtensions?: string;
 
+    skipUserManagement?: boolean;
     generateUserManagement?: boolean;
     generateBuiltInUserEntity?: boolean;
     generateBuiltInAuthorityEntity?: boolean;

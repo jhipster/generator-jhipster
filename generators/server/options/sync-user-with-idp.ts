@@ -17,7 +17,12 @@
  * limitations under the License.
  */
 
-export * from './database-migration.js';
-export * from './message-broker.js';
-export * from './feign-client.js';
-export * from './sync-user-with-idp.js';
+import { JHipsterOptionDefinition } from '../../../jdl/types/types.js';
+
+export const SYNC_USER_WITH_IDP = 'syncUserWithIdp';
+
+export const syncUserWithIdpDefinition: JHipsterOptionDefinition = {
+  name: SYNC_USER_WITH_IDP,
+  type: 'boolean',
+  tokenType: 'BOOLEAN',
+};

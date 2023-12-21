@@ -162,6 +162,18 @@ const command: JHipsterCommandDefinition = {
       },
       default: false,
     },
+    syncUserWithIdp: {
+      description: 'Allow relationships with User for oauth2 applications',
+      cli: {
+        type: Boolean,
+      },
+      prompt: gen => ({
+        type: 'confirm',
+        message: 'Do you want to allow relationships with User entity?',
+        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
+      }),
+      default: false,
+    },
   },
   import: [GENERATOR_COMMON, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };
