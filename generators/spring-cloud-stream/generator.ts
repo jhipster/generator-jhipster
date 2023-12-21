@@ -74,10 +74,10 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
           });
         }
       },
-      applyKafkaGradleScript({ source, application }) {
+      applyKafkaGradleConventionPlugin({ source, application }) {
         if (application.buildToolGradle && application.messageBrokerKafka) {
           if (application.messageBrokerKafka) {
-            source.applyFromGradle?.({ script: 'gradle/kafka.gradle' });
+            source.addGradlePlugin?.({ id: 'jhipster.kafka-conventions' });
           }
         }
       },
@@ -126,9 +126,9 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
           });
         }
       },
-      applyPulsarGradleScript({ source, application }) {
+      applyPulsarGradleConventionPlugin({ source, application }) {
         if (application.buildToolGradle && application.messageBrokerPulsar) {
-          source.applyFromGradle?.({ script: 'gradle/pulsar.gradle' });
+          source.addGradlePlugin?.({ id: 'jhipster.pulsar-conventions' });
         }
       },
       addPulsarMavenDependencies({ application, source }) {

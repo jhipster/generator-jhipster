@@ -5,7 +5,7 @@ exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(tr
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/kafka.gradle": {
+  "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/broker/KafkaConsumer.java": {
@@ -95,7 +95,7 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/kafka.gradle": {
+  "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/broker/KafkaConsumer.java": {
@@ -156,7 +156,7 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-grad
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/kafka.gradle": {
+  "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/broker/KafkaConsumer.java": {
@@ -217,7 +217,7 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enab
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/kafka.gradle": {
+  "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/broker/KafkaConsumer.java": {
@@ -278,7 +278,7 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-e
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/kafka.gradle": {
+  "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/broker/KafkaConsumer.java": {
@@ -339,7 +339,7 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/kafka.gradle": {
+  "buildSrc/src/main/groovy/jhipster.kafka-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/package/broker/KafkaConsumer.java": {

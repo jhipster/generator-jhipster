@@ -17,8 +17,15 @@
  * limitations under the License.
  */
 
+import type GatlingGenerator from './generator.js';
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupTask() {}
+export default function cleanupTask(this: GatlingGenerator, { application }) {
+  if (this.isJhipsterVersionLessThan('8.1.0')) {
+    if (application.buildToolGradle) {
+      this.removeFile('gradle/gatling.gradle');
+    }
+  }
+}
