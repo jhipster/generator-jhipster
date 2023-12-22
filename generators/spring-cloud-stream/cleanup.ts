@@ -34,4 +34,12 @@ export default function cleanupKafkaFilesTask(this: KafkaGenerator, { applicatio
     this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
+  if (this.isJhipsterVersionLessThan('8.1.0')) {
+    if (application.messageBrokerPulsar) {
+      this.removeFile('gradle/pulsar.gradle');
+    }
+    if (application.messageBrokerKafka) {
+      this.removeFile('gradle/kafka.gradle');
+    }
+  }
 }

@@ -5,7 +5,7 @@ exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(tr
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/pulsar.gradle": {
+  "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
@@ -77,7 +77,7 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/pulsar.gradle": {
+  "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
@@ -126,7 +126,7 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-grad
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/pulsar.gradle": {
+  "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
@@ -175,7 +175,7 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enab
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/pulsar.gradle": {
+  "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
@@ -224,7 +224,7 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-e
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/pulsar.gradle": {
+  "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
@@ -273,7 +273,7 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/pulsar.gradle": {
+  "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/test/java/com/package/broker/PulsarIT.java": {
