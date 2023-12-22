@@ -62,7 +62,11 @@
             "status": "Ҳолат"
         },
         "status": {
+            "UNKNOWN": "UNKNOWN",
             "UP": "ФАОЛ",
+<%_ if (clientFrameworkAngular) { _%>
+            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+<%_ } _%>
             "DOWN": "ФАОЛ ЭМАС"
         }
     }
