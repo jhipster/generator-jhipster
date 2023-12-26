@@ -51,7 +51,7 @@
     "rimraf": "5.0.5",
     "rollup-plugin-copy": "3.5.0",
     "sass": "1.69.5",
-    "sass-loader": "13.3.2",
+    "sass-loader": "13.3.3",
     "sinon": "17.0.1",
     "terser-webpack-plugin": "5.3.9",
     "ts-loader": "9.5.1",
