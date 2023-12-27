@@ -143,6 +143,7 @@ runs:
         echo "JHI_E2E=1" >> $GITHUB_ENV
         echo "FORCE_COLOR=1" >> $GITHUB_ENV
 
+        echo "JAVA_OPTS=-Djava.net.preferIPv4Stack=true" >> $GITHUB_ENV
         echo "SPRING_OUTPUT_ANSI_ENABLED=ALWAYS" >> $GITHUB_ENV
         echo "SPRING_JPA_SHOW_SQL=false" >> $GITHUB_ENV
         echo "NG_CLI_ANALYTICS=ci" >> $GITHUB_ENV
