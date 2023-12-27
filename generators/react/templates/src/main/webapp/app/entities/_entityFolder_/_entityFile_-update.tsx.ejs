@@ -42,52 +42,30 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 <%_
-let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
-let manyToManyOwners = new Set();
-let relFieldNames = new Set();
-let uniqueRelationFields = new Set();
 
-Object.keys(differentRelationships).forEach(key => {
-
-  const hasAnyRelationshipQuery = differentRelationships[key].some(rel => rel.persistableRelationship);
-  if (hasAnyRelationshipQuery) {
-    hasRelationshipQuery = true;
-    differentRelationships[key].forEach(rel => {
-      if (rel.persistableRelationship) {
-        if (rel.relationshipManyToMany) {
-          manyToManyOwners.add(rel);
-        } else {
-          relFieldNames.add(rel);
-        }
-      }
-    });
-  }
-  if (differentRelationships[key].some(rel => !rel.relationshipOneToMany)) {
-    const uniqueRel = differentRelationships[key][0];
-    uniqueRelationFields.add(uniqueRel.otherEntityNamePlural);
+for (const otherEntity of otherEntitiesWithPersistableRelationship) {
     otherEntityActions.add({
-      action: `get${this.upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
-      instance: `${uniqueRel.otherEntityNamePlural}`,
-      entity: uniqueRel.otherEntityAngularName,
-      reducer: uniqueRel.otherEntity.builtInUser ? `userManagement.${uniqueRel.otherEntityNamePlural}` : `${uniqueRel.otherEntity.entityReactState}.entities`,
+      action: `get${otherEntity.entityNamePlural}`,
+      instance: otherEntity.entityInstancePlural,
+      entity: otherEntity.entityAngularName,
+      reducer: otherEntity.builtInUser ? `userManagement.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`,
     });
-    if (uniqueRel.otherEntityAngularName === 'User') {
+  if (otherEntity.builtInUser) {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
-      <%_ if (authenticationTypeOauth2) { _%>
+import { I<%= otherEntity.entityAngularName %> } from 'app/shared/model/user.model';
+    <%_ if (authenticationTypeOauth2) { _%>
 import { getUsers } from 'app/shared/reducers/user-management';
-      <%_ } else { _%>
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
-      <%_ } _%>
     <%_ } else { _%>
-      <%_ if (uniqueRel.otherEntityAngularName !== entityReactName) { _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-      <%_ } _%>
-import { getEntities as get<%= this.upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
+import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
     <%_ } _%>
+  <%_ } else { _%>
+    <%_ if (otherEntity.entityAngularName !== entityReactName) { _%>
+import { I<%= otherEntity.entityAngularName %> } from 'app/shared/model/<%= otherEntity.entityModelFileName %>.model';
+    <%_ } _%>
+import { getEntities as get<%= otherEntity.entityNamePlural %> } from 'app/entities/<%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.reducer';
   <%_ } _%>
-<%_ }); _%>
+<%_ } _%>
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 <%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
@@ -159,20 +137,19 @@ _%>
     if (values.<%= fieldName %> !== undefined && typeof values.<%= fieldName %> !== 'number') {
       values.<%= fieldName %> = Number(values.<%= fieldName %>);
     }
-  <%_ } _%>  
+  <%_ } _%>
 <%_ } _%>
 
     const entity = {
       ...<%= entityInstance %>Entity,
       ...values,
-<%_ manyToManyOwners.forEach(rel => { _%>
-      <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>),
-<%_ }) _%>
-<%_ relFieldNames.forEach(rel => { _%>
-<%_ if (rel.persistableRelationship && !rel.collection)  { _%>
-        <%= rel.relationshipFieldName %>: <%= rel.otherEntityNamePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.relationshipFieldName %>?.toString()),
+<%_ for (const rel of persistableRelationships) { _%>
+  <%_ if (rel.collection) { _%>
+      <%= rel.propertyName %>: mapIdList(values.<%= rel.propertyName %>),
+  <%_ } else { _%>
+      <%= rel.propertyName %>: <%= rel.otherEntity.entityInstancePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.propertyName %>?.toString()),
+  <%_ } _%>
 <%_ } _%>
-<%_ }) _%>
     }
 
     if (isNew) {
@@ -209,16 +186,16 @@ _%>
           <%= fieldName %>: convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>),
   <%_ } _%>
 <%_ } _%>
-<%_ relationships.forEach(rel => {
+<%_ for (const rel of persistableRelationships) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-  if (rel.persistableRelationship && !rel.collection) { _%>
+  if (!rel.collection) { _%>
           <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.<%= otherEntityPkName %>,
-  <%_ } else if (rel.persistableRelationship) { _%>
+  <%_ } else { _%>
           <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
   <%_ } _%>
-<%_ }) _%>
+<%_ } _%>
         };
 
   return (
@@ -320,7 +297,7 @@ _%>
           </UncontrolledTooltip>
   <%_ } _%>
 <%_ } _%>
-<%_ relationships.forEach(rel => {
+<%_ for (const rel of persistableRelationships) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const otherEntityNamePlural = rel.otherEntityNamePlural;
     const relationshipName = rel.relationshipName;
@@ -330,7 +307,7 @@ _%>
     const otherEntityField = rel.otherEntityField;
     const relationshipRequired = rel.relationshipRequired;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
-  <%_ if (rel.persistableRelationship && !rel.collection) { _%>
+  <%_ if (!rel.collection) { _%>
           <ValidatedField
             id="<%= entityFileName %>-<%= relationshipName %>"
             name="<%= relationshipFieldName %>"
@@ -359,7 +336,7 @@ _%>
     <%_ if (relationshipRequired) { _%>
             <FormText><Translate contentKey="entity.validation.required">This field is required.</Translate></FormText>
     <%_ } _%>
-  <%_ } else if (rel.persistableRelationship) { _%>
+  <%_ } else { _%>
           <ValidatedField
         <%_ if (enableTranslation) { _%>
             label={translate('<%= i18nKeyPrefix %>.<%= relationshipName %>')}
@@ -384,7 +361,7 @@ _%>
               }
           </ValidatedField>
   <%_ } _%>
-<%_ }) _%>
+<%_ } _%>
           <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityPage %>" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
