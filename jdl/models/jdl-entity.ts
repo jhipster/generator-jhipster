@@ -21,7 +21,7 @@ import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
 import getTableNameFromEntityName from '../jhipster/entity-table-name-creator.js';
 import JDLField from './jdl-field.js';
-import { JDLSecure } from './index.mjs';
+import { JDLSecure } from './index.js';
 import { IJDLSecure } from './jdl-secure.js';
 
 export default class JDLEntity {

@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import createJDLApplication from '../models/jdl-application-factory.js';
-import { applicationTypes } from '../jhipster/index.mjs';
+import { applicationTypes } from '../jhipster/index.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
-    context(`when passing a ${MICROSERVICE} config`, () => {
+    describe(`when passing a ${MICROSERVICE} config`, () => {
       let application;
 
       before(() => {
@@ -36,7 +37,7 @@ describe('jdl - JDLApplicationFactory', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(MICROSERVICE);
       });
     });
-    context(`when passing a ${GATEWAY} config`, () => {
+    describe(`when passing a ${GATEWAY} config`, () => {
       let application;
 
       before(() => {
@@ -47,7 +48,7 @@ describe('jdl - JDLApplicationFactory', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(GATEWAY);
       });
     });
-    context(`when passing a ${MONOLITH} config`, () => {
+    describe(`when passing a ${MONOLITH} config`, () => {
       let application;
 
       before(() => {

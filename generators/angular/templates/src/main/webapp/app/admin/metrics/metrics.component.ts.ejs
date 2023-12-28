@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
 import SharedModule from 'app/shared/shared.module';
@@ -55,7 +55,8 @@ export default class MetricsComponent implements OnInit {
   threads?: Thread[];
   updatingMetrics = true;
 
-  constructor(private metricsService: MetricsService, private changeDetector: ChangeDetectorRef) {}
+  private metricsService = inject(MetricsService);
+  private changeDetector = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.refresh();

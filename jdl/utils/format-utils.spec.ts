@@ -18,12 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import formatComment from '../utils/format-utils.js';
 
 describe('jdl - FormatUtils', () => {
   describe('formatComment', () => {
-    context('when the comment is in the one-line form', () => {
+    describe('when the comment is in the one-line form', () => {
       const oneLineComment1 = ' comment ';
       const oneLineComment2 = 'comment';
       const oneLineComment3 = ' * a one line comment. ';
@@ -33,33 +34,33 @@ describe('jdl - FormatUtils', () => {
       const expectedResult2 = 'a one line comment.';
       const expectedResult3 = 'multi word\tcomment';
 
-      context(buildTestTitle(oneLineComment1), () => {
+      describe(buildTestTitle(oneLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(oneLineComment1)).to.equal(expectedResult1);
         });
       });
-      context(buildTestTitle(oneLineComment2), () => {
+      describe(buildTestTitle(oneLineComment2), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(oneLineComment2)).to.equal(expectedResult1);
         });
       });
-      context(buildTestTitle(oneLineComment3), () => {
+      describe(buildTestTitle(oneLineComment3), () => {
         it(`should return ${buildTestTitle(expectedResult2)}`, () => {
           expect(formatComment(oneLineComment3)).to.equal(expectedResult2);
         });
       });
-      context(buildTestTitle(oneLineComment4), () => {
+      describe(buildTestTitle(oneLineComment4), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(oneLineComment4)).to.equal(expectedResult3);
         });
       });
-      context(buildTestTitle(oneLineComment5), () => {
+      describe(buildTestTitle(oneLineComment5), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(oneLineComment5)).to.equal(expectedResult3);
         });
       });
     });
-    context('when the comment is in the multi-line form', () => {
+    describe('when the comment is in the multi-line form', () => {
       const multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       const multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
       const multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
@@ -67,17 +68,17 @@ describe('jdl - FormatUtils', () => {
       const expectedResult2 = '<p>first line of comment</p><br/>\\n*<p>second line</p>';
       const expectedResult3 = 'abcde\\nfghij\\nnothing';
 
-      context(buildTestTitle(multiLineComment1), () => {
+      describe(buildTestTitle(multiLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
           expect(formatComment(multiLineComment1)).to.equal(expectedResult1);
         });
       });
-      context(buildTestTitle(multiLineComment2), () => {
+      describe(buildTestTitle(multiLineComment2), () => {
         it(`should return ${buildTestTitle(expectedResult2)}`, () => {
           expect(formatComment(multiLineComment2)).to.equal(expectedResult2);
         });
       });
-      context(buildTestTitle(multiLineComment3), () => {
+      describe(buildTestTitle(multiLineComment3), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
           expect(formatComment(multiLineComment3)).to.equal(expectedResult3);
         });

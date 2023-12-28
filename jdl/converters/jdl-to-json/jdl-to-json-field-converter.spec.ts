@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
-import { fieldTypes, validations } from '../../jhipster/index.mjs';
+import { fieldTypes, validations } from '../../jhipster/index.js';
 import { convert } from './jdl-to-json-field-converter.js';
 
 const { CommonDBTypes } = fieldTypes;
@@ -34,14 +34,14 @@ const {
 
 describe('jdl - JDLToJSONFieldConverter', () => {
   describe('convert', () => {
-    context('when not passing a JDL object', () => {
+    describe('when not passing a JDL object', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convert()).to.throw(/^A JDL Object must be passed to convert JDL fields to JSON\.$/);
       });
     });
-    context('when passing a JDL object', () => {
-      context('without validation, comment or option', () => {
+    describe('when passing a JDL object', () => {
+      describe('without validation, comment or option', () => {
         let convertedField;
 
         before(() => {
@@ -70,8 +70,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 `);
         });
       });
-      context('when having blobs', () => {
-        context('that are recognised', () => {
+      describe('when having blobs', () => {
+        describe('that are recognised', () => {
           let convertedFields;
 
           before(() => {
@@ -136,7 +136,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           it('should convert the blob content', () => {});
         });
       });
-      context('with field types being enums', () => {
+      describe('with field types being enums', () => {
         let convertedField;
 
         before(() => {
@@ -167,7 +167,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 `);
         });
       });
-      context('with field types being enums with comments', () => {
+      describe('with field types being enums with comments', () => {
         let convertedField;
 
         before(() => {
@@ -207,7 +207,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 `);
         });
       });
-      context('with comments', () => {
+      describe('with comments', () => {
         let convertedField;
 
         before(() => {
@@ -238,7 +238,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 `);
         });
       });
-      context('with validations', () => {
+      describe('with validations', () => {
         let convertedFields;
 
         before(() => {
@@ -356,7 +356,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
 `);
         });
       });
-      context('with options', () => {
+      describe('with options', () => {
         let convertedField;
 
         before(() => {

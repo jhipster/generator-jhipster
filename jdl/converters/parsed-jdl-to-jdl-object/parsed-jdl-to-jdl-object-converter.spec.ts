@@ -20,12 +20,12 @@
 /* eslint-disable no-new, no-unused-expressions */
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
-import { JDLEntity, JDLEnum } from '../../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
@@ -38,7 +38,7 @@ import {
   applicationOptions,
   entityOptions,
   binaryOptions,
-} from '../../jhipster/index.mjs';
+} from '../../jhipster/index.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { OptionNames } = applicationOptions;
@@ -60,8 +60,8 @@ const {
 
 describe('jdl - ParsedJDLToJDLObjectConverter', () => {
   describe('parse', () => {
-    context('when passing invalid args', () => {
-      context('because there is no parsedContent', () => {
+    describe('when passing invalid args', () => {
+      describe('because there is no parsedContent', () => {
         it('should fail', () => {
           expect(() => {
             ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({});
@@ -69,8 +69,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
       });
     });
-    context('when passing valid args', () => {
-      context('with no error', () => {
+    describe('when passing valid args', () => {
+      describe('with no error', () => {
         let jdlObject;
 
         before(() => {
@@ -210,7 +210,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           ]);
         });
       });
-      context('with an application type', () => {
+      describe('with an application type', () => {
         let input;
 
         before(() => {
@@ -224,7 +224,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           });
         });
       });
-      context('with a required relationship', () => {
+      describe('with a required relationship', () => {
         let jdlObject;
         let relationship;
 
@@ -241,7 +241,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(relationship.isInjectedFieldInToRequired).to.be.false;
         });
       });
-      context("with a field name 'id'", () => {
+      describe("with a field name 'id'", () => {
         let jdlObject;
 
         before(() => {
@@ -267,7 +267,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           );
         });
       });
-      context('with User entity as destination for a relationship', () => {
+      describe('with User entity as destination for a relationship', () => {
         let jdlObject;
 
         before(() => {
@@ -282,7 +282,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.equal('User');
         });
       });
-      context('with Authority entity as destination for a relationship', () => {
+      describe('with Authority entity as destination for a relationship', () => {
         let jdlObject;
 
         before(() => {
@@ -299,7 +299,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority').to).to.equal('Authority');
         });
       });
-      context('with an invalid option', () => {
+      describe('with an invalid option', () => {
         let input;
 
         before(() => {
@@ -312,7 +312,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           });
         });
       });
-      context('with a required enum', () => {
+      describe('with a required enum', () => {
         let jdlObject;
         let enumField;
 
@@ -342,7 +342,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
-      context('when using the noFluentMethods option', () => {
+      describe('when using the noFluentMethods option', () => {
         let input;
         let jdlObject;
 
@@ -362,7 +362,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           ]);
         });
       });
-      context('when having following comments', () => {
+      describe('when having following comments', () => {
         let jdlObject;
 
         before(() => {
@@ -377,19 +377,19 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.A.fields.thing.comment).to.equal('def');
           expect(jdlObject.entities.A.fields.another.comment).to.equal(undefined);
         });
-        context('when having both forms of comments', () => {
+        describe('when having both forms of comments', () => {
           it('should accept the one defined first', () => {
             expect(jdlObject.entities.B.fields.name.comment).to.equal('xyz');
           });
         });
-        context('when using commas', () => {
+        describe('when using commas', () => {
           it('should assign the comment to the next field', () => {
             expect(jdlObject.entities.C.fields.name.comment).to.be.undefined;
             expect(jdlObject.entities.C.fields.thing.comment).to.equal('abc');
           });
         });
       });
-      context('when parsing another complex JDL file', () => {
+      describe('when parsing another complex JDL file', () => {
         let jdlObject;
         let options;
 
@@ -401,14 +401,14 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           options = jdlObject.getOptions();
         });
 
-        context('checking the entities', () => {
+        describe('checking the entities', () => {
           it('should parse them', () => {
             ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
               expect(jdlObject.entities[entityName]).to.satisfy(matchEntity);
             });
           });
         });
-        context('checking the options', () => {
+        describe('checking the options', () => {
           it('should parse them', () => {
             expect(options.length).to.equal(7);
             expect(options[0].name).to.equal(SKIP_CLIENT);
@@ -426,7 +426,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           });
         });
       });
-      context('when having two consecutive comments for fields', () => {
+      describe('when having two consecutive comments for fields', () => {
         let jdlObject;
 
         before(() => {
@@ -443,7 +443,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.TestEntity2.fields.second.comment).to.equal('second comment');
         });
       });
-      context('when having constants', () => {
+      describe('when having constants', () => {
         let jdlObject;
 
         before(() => {
@@ -486,7 +486,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           });
         });
       });
-      context('when having a cassandra app with paginated entities', () => {
+      describe('when having a cassandra app with paginated entities', () => {
         let input;
 
         before(() => {
@@ -503,7 +503,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           }
         });
       });
-      context('when parsing applications', () => {
+      describe('when parsing applications', () => {
         let parsedConfig;
 
         before(() => {
@@ -557,7 +557,7 @@ JDLApplication {
 `);
         });
       });
-      context('when parsing deployments', () => {
+      describe('when parsing deployments', () => {
         let deployment;
 
         before(() => {
@@ -585,7 +585,7 @@ JDLDeployment {
 `);
         });
       });
-      context('when parsing filtered entities', () => {
+      describe('when parsing filtered entities', () => {
         let jdlObject;
         let filterOption;
 
@@ -602,8 +602,8 @@ JDLDeployment {
           expect(filterOption.excludedNames.has('B')).to.be.true;
         });
       });
-      context('when parsing entities with a custom client root folder', () => {
-        context('inside a microservice app', () => {
+      describe('when parsing entities with a custom client root folder', () => {
+        describe('inside a microservice app', () => {
           let jdlObject;
           let clientRootFolderOption;
 
@@ -621,7 +621,7 @@ JDLDeployment {
             expect(clientRootFolderOption.value).to.equal('ms');
           });
         });
-        context('inside any other app', () => {
+        describe('inside any other app', () => {
           let jdlObject;
           let clientRootFolderOption;
 
@@ -641,8 +641,8 @@ JDLDeployment {
           });
         });
       });
-      context('when parsing a JDL inside a microservice app', () => {
-        context('without the microservice option in the JDL', () => {
+      describe('when parsing a JDL inside a microservice app', () => {
+        describe('without the microservice option in the JDL', () => {
           let jdlObject;
           let microserviceOption;
 
@@ -661,7 +661,7 @@ JDLDeployment {
             expect(microserviceOption.entityNames).to.deep.equal(new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']));
           });
         });
-        context('with the microservice option in the JDL', () => {
+        describe('with the microservice option in the JDL', () => {
           let jdlObject;
           let microserviceOption;
 
@@ -681,7 +681,7 @@ JDLDeployment {
           });
         });
       });
-      context('when parsing a JDL microservice application with entities', () => {
+      describe('when parsing a JDL microservice application with entities', () => {
         let entityNames;
 
         before(() => {
@@ -700,7 +700,7 @@ JDLDeployment {
 `);
         });
       });
-      context('when parsing a relationship with no injected field', () => {
+      describe('when parsing a relationship with no injected field', () => {
         let jdlObject;
         let relationshipOneToOne;
         let relationshipOneToMany;
@@ -726,8 +726,8 @@ JDLDeployment {
           expect(relationshipManyToMany.injectedFieldInFrom).to.equal('b');
         });
       });
-      context('when parsing entities with annotations', () => {
-        context('that are not capitalized', () => {
+      describe('when parsing entities with annotations', () => {
+        describe('that are not capitalized', () => {
           let entityA;
           let entityB;
           let entityC;
@@ -788,7 +788,7 @@ JDLDeployment {
 `);
           });
         });
-        context('that are capitalized', () => {
+        describe('that are capitalized', () => {
           let entityA;
           let entityB;
           let entityC;
@@ -850,7 +850,7 @@ JDLDeployment {
           });
         });
       });
-      context('when parsing a mix between annotations and regular options', () => {
+      describe('when parsing a mix between annotations and regular options', () => {
         let entityA;
         let entityB;
         let entityC;
@@ -866,13 +866,11 @@ JDLDeployment {
           entityC = jdlObject.entities.C;
         });
 
-        it('correctly should set the options', () => {
+        describe('correctly should set the options', () => {
           it('should set the annotations as options with lower-case letters first', () => {
             jestExpect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
-  "myCustomBinaryOption": "customValue",
-  "myCustomUnaryOption": true,
   "service": "serviceClass",
   "skipClient": true,
 }
@@ -880,23 +878,23 @@ JDLDeployment {
             jestExpect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
-  "myCustomUnaryOption": true,
   "paginate": "pagination",
   "service": "serviceClass",
 }
 `);
             jestExpect(entityC.annotations).toMatchInlineSnapshot(`
 {
+  "embedded": true,
   "filter": true,
-  "myCustomBinaryOption": "customValue2",
   "paginate": "pagination",
+  "readOnly": true,
   "skipClient": true,
 }
 `);
           });
         });
       });
-      context('when having a pattern validation with a quote in it', () => {
+      describe('when having a pattern validation with a quote in it', () => {
         let jdlObject;
 
         before(() => {
@@ -911,7 +909,7 @@ JDLDeployment {
           expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes("\\'")).be.true;
         });
       });
-      context('when parsing a JDL with the unique constraint', () => {
+      describe('when parsing a JDL with the unique constraint', () => {
         let jdlObject;
 
         before(() => {
@@ -927,7 +925,7 @@ JDLDeployment {
           expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
         });
       });
-      context('when parsing a JDL relationship with built in entity enabled', () => {
+      describe('when parsing a JDL relationship with built in entity enabled', () => {
         let jdlObject;
 
         before(() => {
@@ -944,8 +942,8 @@ JDLDeployment {
           });
         });
       });
-      context('when parsing entity options in applications', () => {
-        context('if the entity list does not contain some entities mentioned in options', () => {
+      describe('when parsing entity options in applications', () => {
+        describe('if the entity list does not contain some entities mentioned in options', () => {
           let parsedContent;
 
           before(() => {
@@ -970,7 +968,7 @@ entity B
             ).to.throw(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
           });
         });
-        context('if the entity list contains all the entities mentioned in options', () => {
+        describe('if the entity list contains all the entities mentioned in options', () => {
           let optionsForFirstApplication;
           let optionsForSecondApplication;
 

@@ -63,7 +63,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, <%= persistClass %>> {
 <%_ if (!embedded) { _%>
-  <%_ var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conversion? _%>
+  <%_ var renMapAnotEnt = false; /*Render Mapping Annotation during Entity to DTO conversion?*/ _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_
       renMapAnotEnt = true;
@@ -80,7 +80,7 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, 
     <%= dtoClass %> toDto(<%= persistClass %> s);
   <%_ } _%>
 
-  <%_ var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion? _%>
+  <%_ var renMapAnotDto = false;  /*Render Mapping Annotation during DTO to Entity conversion?*/ _%>
   <%_ if(primaryKey.ids.length > 1) { _%>
     <%_ renMapAnotDto = true; _%>
     <%_ for (const id of primaryKey.ids) { _%>

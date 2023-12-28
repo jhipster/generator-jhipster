@@ -19,7 +19,7 @@
 import JDLParser from './jdl-parser.js';
 import deduplicate from '../utils/array-utils.js';
 
-import { applicationOptions, entityOptions, validations, relationshipOptions } from '../jhipster/index.mjs';
+import { applicationOptions, entityOptions, validations, relationshipOptions } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { OptionNames } = applicationOptions;

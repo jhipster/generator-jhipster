@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { tokens } from './lexer/lexer.js';
 
 import { getSyntacticAutoCompleteSuggestions, parse } from './api.js';
 
 describe('jdl - JDL DSL API', () => {
-  context('when wanting an AST', () => {
-    context('with a valid input', () => {
+  describe('when wanting an AST', () => {
+    describe('with a valid input', () => {
       let ast;
 
       before(() => {
@@ -51,7 +52,7 @@ describe('jdl - JDL DSL API', () => {
       });
     });
 
-    context('with a lexing error', () => {
+    describe('with a lexing error', () => {
       let parseInvalidToken;
 
       before(() => {
@@ -67,8 +68,8 @@ describe('jdl - JDL DSL API', () => {
       });
     });
 
-    context('with a parsing error', () => {
-      context('with an unexpected token', () => {
+    describe('with a parsing error', () => {
+      describe('with an unexpected token', () => {
         let parseWrongClosingBraces;
 
         before(() => {
@@ -84,7 +85,7 @@ describe('jdl - JDL DSL API', () => {
         });
       });
 
-      context('with a missing token at EOF', () => {
+      describe('with a missing token at EOF', () => {
         let parseMissingClosingBraces;
 
         before(() => {
@@ -104,7 +105,7 @@ describe('jdl - JDL DSL API', () => {
       });
     });
 
-    context('with a semantic validation error', () => {
+    describe('with a semantic validation error', () => {
       it('should throw an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
@@ -113,8 +114,8 @@ describe('jdl - JDL DSL API', () => {
     });
   });
 
-  context('when wanting an auto-completion', () => {
-    context('with an empty text', () => {
+  describe('when wanting an auto-completion', () => {
+    describe('with an empty text', () => {
       let result;
 
       before(() => {
@@ -139,7 +140,7 @@ describe('jdl - JDL DSL API', () => {
         ]);
       });
     });
-    context('with a custom start rule', () => {
+    describe('with a custom start rule', () => {
       let result;
 
       before(() => {
@@ -154,7 +155,7 @@ describe('jdl - JDL DSL API', () => {
         expect(result).to.have.members([tokens.REQUIRED, tokens.UNIQUE, tokens.MIN_MAX_KEYWORD, tokens.PATTERN, tokens.JAVADOC]);
       });
     });
-    context('with a default start rule', () => {
+    describe('with a default start rule', () => {
       let result;
 
       before(() => {

@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-expressions, no-console */
 
 import { expect } from 'chai';
+import { describe, it, beforeEach } from 'esmocha';
 
 import { createProgram } from './program.mjs';
-import { defaultHelpers as helpers } from '../test/support/index.mjs';
+import { defaultHelpers as helpers } from '../test/support/index.js';
 
 describe('cli - program', () => {
   beforeEach(async () => {

@@ -1,0 +1,17 @@
+plugins {
+    id "io.gatling.gradle"
+}
+
+dependencies {
+    testImplementation "io.gatling.highcharts:gatling-charts-highcharts:${libs.versions.gatling.highcharts.get()}"
+}
+sourceSets {
+    gatling {
+        java.srcDirs = ["src/test/java/gatling/simulations"]
+        resources.srcDirs = ["src/test/gatling/conf"]
+    }
+}
+
+gatling {
+    simulations = { include "**/*Test*.java" }
+}

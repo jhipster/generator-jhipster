@@ -17,18 +17,18 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { convertEntities } from './entity-converter.js';
 
 describe('jdl - EntityConverter', () => {
   describe('convertEntities', () => {
-    context('when not passing entities', () => {
+    describe('when not passing entities', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertEntities()).toThrow(/^Entities have to be passed so as to be converted\.$/);
       });
     });
-    context('when passing entities', () => {
+    describe('when passing entities', () => {
       let convertedEntities;
 
       before(() => {

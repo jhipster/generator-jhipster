@@ -1,0 +1,37 @@
+dependencies {
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
+    testImplementation "io.cucumber:cucumber-java"
+    testImplementation "io.cucumber:cucumber-spring"
+    testImplementation "org.junit.platform:junit-platform-console"
+    testImplementation "org.testng:testng"
+}
+
+tasks.register('consoleLauncherTest', JavaExec) {
+    dependsOn(testClasses)
+    String cucumberReportsDir = file("$buildDir/reports/tests")
+    outputs.dir(reportsDir)
+    classpath = sourceSets["test"].runtimeClasspath
+    main = "org.junit.platform.console.ConsoleLauncher"
+    args("--scan-classpath")
+    args("--include-engine", "cucumber")
+    args("--reports-dir", cucumberReportsDir)
+}
+
+tasks.register('cucumberTest', Test) {
+    dependsOn(consoleLauncherTest)
+    description = "Execute cucumber BDD tests."
+    group = "verification"
+    include "**/*CucumberIT*"
+
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.required = false
+}
+
+tasks.register('cucumberTestReport', TestReport) {
+    destinationDirectory = file("$buildDir/reports/tests")
+    testResults.from(cucumberTest)
+}
+
+check.dependsOn cucumberTest

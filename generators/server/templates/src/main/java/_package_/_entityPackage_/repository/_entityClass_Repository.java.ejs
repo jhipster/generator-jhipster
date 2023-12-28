@@ -70,7 +70,7 @@ public interface <%= entityClass %>Repository extends <% if (containsBagRelation
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
 
-    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{principal.<% if (authenticationTypeOauth2) { %>preferredUsername<% } else { %>username<% } %>}")
+    @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{authentication.name}")
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
   <%_ } _%>
 <%_ } _%>

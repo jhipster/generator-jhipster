@@ -18,7 +18,7 @@
  */
 
 import { lowerFirst } from 'lodash-es';
-import { JDLEntity, JDLSecure } from '../../models/index.mjs';
+import { JDLEntity, JDLSecure } from '../../models/index.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { JDLSecurityType } from '../../models/jdl-security-type.js';
 

@@ -25,7 +25,7 @@ import { mergeMap } from 'rxjs/operators';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
-export const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%= entityAngularName %>> => {
+const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%= entityAngularName %>> => {
   const id = route.params['<%= primaryKey.name %>'];
   if (id) {
     return inject(<%= entityAngularName %>Service)

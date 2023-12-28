@@ -21,10 +21,10 @@ export {
   SERVER_TEST_RES_DIR as TEMPLATES_TEST_RESOURCES_DIR,
   CLIENT_MAIN_SRC_DIR as TEMPLATES_WEBAPP_SOURCES_DIR,
   CLIENT_TEST_SRC_DIR as TEMPLATES_JAVASCRIPT_TEST_DIR,
-} from './generator-constants.mjs';
+} from './generator-constants.js';
 
-export type { JHipsterCommandDefinition } from './base/api.mjs';
+export type { JHipsterCommandDefinition } from './base/api.js';
 
-export { default as GeneratorBase } from './base/index.mjs';
-export { default as GeneratorBaseCore } from './base-core/index.mjs';
-export { default as GeneratorBaseApplication } from './base-application/index.mjs';
+export { default as GeneratorBase } from './base/index.js';
+export { default as GeneratorBaseCore } from './base-core/index.js';
+export { default as GeneratorBaseApplication } from './base-application/index.js';

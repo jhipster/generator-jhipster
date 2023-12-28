@@ -18,24 +18,25 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
-import { reservedKeywords } from '../jhipster/index.mjs';
+import { reservedKeywords } from '../jhipster/index.js';
 
 describe('jdl - ReservedKeywords', () => {
   describe('isReserved', () => {
-    context('when passing a nil or empty keyword', () => {
+    describe('when passing a nil or empty keyword', () => {
       it('should return false', () => {
         expect(reservedKeywords.isReserved()).to.be.false;
         expect(reservedKeywords.isReserved('', '')).to.be.false;
       });
     });
-    context('when passing a valid keyword', () => {
+    describe('when passing a valid keyword', () => {
       it('should return false', () => {
         expect(reservedKeywords.isReserved('ValidKeyword', 'JHIPSTER')).to.be.false;
         expect(reservedKeywords.isReserved('ACCOUNT', 'JAVA')).to.be.false;
       });
     });
-    context('when passing an invalid jhipster keyword, no matter the case', () => {
+    describe('when passing an invalid jhipster keyword, no matter the case', () => {
       it('should return true', () => {
         expect(reservedKeywords.isReserved('Account', 'JHIPSTER')).to.be.true;
         expect(reservedKeywords.isReserved('account', 'jhipster')).to.be.true;
@@ -43,7 +44,7 @@ describe('jdl - ReservedKeywords', () => {
         expect(reservedKeywords.isReserved('ACCOUNT', 'jhipster')).to.be.true;
       });
     });
-    context('when passing an invalid keyword for different types', () => {
+    describe('when passing an invalid keyword for different types', () => {
       it('should return true', () => {
         expect(reservedKeywords.isReserved('ACCOUNT', 'jhipster')).to.be.true;
         expect(reservedKeywords.isReserved('SUPER', 'JAVA')).to.be.true;
@@ -57,13 +58,13 @@ describe('jdl - ReservedKeywords', () => {
     });
   });
   describe('isReservedClassName', () => {
-    context('when passing a valid entity name', () => {
+    describe('when passing a valid entity name', () => {
       it('should return false', () => {
         expect(reservedKeywords.isReservedClassName('document')).to.be.false;
         expect(reservedKeywords.isReservedClassName('region')).to.be.false;
       });
     });
-    context('when passing an invalid entity name', () => {
+    describe('when passing an invalid entity name', () => {
       it('should return true', () => {
         expect(reservedKeywords.isReservedClassName('CONTINUE')).to.be.true;
         expect(reservedKeywords.isReservedClassName('ACCOUNT')).to.be.true;
@@ -71,19 +72,19 @@ describe('jdl - ReservedKeywords', () => {
     });
   });
   describe('isReservedFieldName', () => {
-    context('when passing a valid field name', () => {
+    describe('when passing a valid field name', () => {
       it('should return false', () => {
         expect(reservedKeywords.isReservedFieldName('item')).to.be.false;
         expect(reservedKeywords.isReservedFieldName('mySuperField')).to.be.false;
       });
     });
-    context('when passing an invalid Java field name', () => {
+    describe('when passing an invalid Java field name', () => {
       it('should return true', () => {
         expect(reservedKeywords.isReservedFieldName('private')).to.be.true;
         expect(reservedKeywords.isReservedFieldName('class')).to.be.true;
       });
     });
-    context('when passing an invalid Angular field name', () => {
+    describe('when passing an invalid Angular field name', () => {
       it('should return true', () => {
         expect(reservedKeywords.isReservedFieldName('injectable')).to.be.true;
         expect(reservedKeywords.isReservedFieldName('injectable', 'angular')).to.be.true;

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 import BinaryOptionValidator from '../validators/binary-option-validator.js';
@@ -29,7 +30,7 @@ describe('jdl - BinaryOptionValidator', () => {
   });
 
   describe('validate', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No binary option\.$/);
       });
@@ -39,15 +40,13 @@ describe('jdl - BinaryOptionValidator', () => {
         /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
       );
     });
-    context('when passing a binary option', () => {
-      context('with all its required attributes', () => {
+    describe('when passing a binary option', () => {
+      describe('with all its required attributes', () => {
         it('should not fail', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
         });
       });
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      context('without any of its required attributes', () => {});
-      context('with an invalid value', () => {
+      describe('with an invalid value', () => {
         it('should fail', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
             /^The 'dto' option is not valid for value 'toto'\.$/,

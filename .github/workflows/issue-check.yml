@@ -64,7 +64,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
@@ -116,13 +116,13 @@ jobs:
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
       - name: 'BACKEND: Store failure logs'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ inputs.issue || github.event.issue.number }}
           path: ${{ steps.setup.outputs.application-path }}/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ inputs.issue || github.event.issue.number }}

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { jestExpect } from 'esmocha';
+import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -25,23 +25,23 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { unaryOptions, binaryOptions } from '../../jhipster/index.mjs';
+import { unaryOptions, binaryOptions } from '../../jhipster/index.js';
 import { convert } from './jdl-to-json-option-converter.js';
 import logger from '../../utils/objects/logger.js';
 
 describe('jdl - JDLToJSONOptionConverter', () => {
   describe('convert', () => {
-    context('when not passing a JDL option holder', () => {
+    describe('when not passing a JDL option holder', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convert()).to.throw(/^A JDL object or application must be passed to convert JDL options to JSON\.$/);
       });
     });
-    context('when passing a JDL option holder', () => {
-      context('when there is no option', () => {
+    describe('when passing a JDL option holder', () => {
+      describe('when there is no option', () => {
         let returned;
 
         before(() => {
@@ -53,7 +53,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
           expect(returned.size).to.equal(0);
         });
       });
-      context('with options', () => {
+      describe('with options', () => {
         let convertedOptions;
 
         before(() => {
@@ -150,7 +150,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
 `);
         });
       });
-      context('when setting the DTO option without the service option', () => {
+      describe('when setting the DTO option without the service option', () => {
         let convertedOptions;
         let loggerSpy;
 
@@ -193,7 +193,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
 `);
         });
       });
-      context('when setting the filtering option without the service option', () => {
+      describe('when setting the filtering option without the service option', () => {
         let convertedOptions;
         let loggerSpy;
 
@@ -235,7 +235,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
 `);
         });
       });
-      context('when the searching option is set with exclusions', () => {
+      describe('when the searching option is set with exclusions', () => {
         let convertedOptions;
 
         before(() => {

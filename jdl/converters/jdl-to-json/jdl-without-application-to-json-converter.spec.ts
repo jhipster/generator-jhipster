@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, after, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -36,10 +36,10 @@ import {
   binaryOptions,
   relationshipTypes,
   relationshipOptions,
-} from '../../jhipster/index.mjs';
+} from '../../jhipster/index.js';
 
 import JDLObject from '../../models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
@@ -60,22 +60,22 @@ const { BUILT_IN_ENTITY } = relationshipOptions;
 
 describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
   describe('convert', () => {
-    context('when passing invalid parameters', () => {
-      context('such as no parameter', () => {
+    describe('when passing invalid parameters', () => {
+      describe('such as no parameter', () => {
         it('should throw an error', () => {
           expect(() => {
             convert();
           }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
-      context('such as an no database type', () => {
+      describe('such as an no database type', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), applicationName: 'toto' });
           }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
       });
-      context('such as no application name', () => {
+      describe('such as no application name', () => {
         it('should throw an error', () => {
           expect(() => {
             convert({ jdlObject: new JDLObject(), databaseType: 'sql' });
@@ -83,7 +83,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         });
       });
     });
-    context('when passing a JDL object without entities', () => {
+    describe('when passing a JDL object without entities', () => {
       let result;
 
       before(() => {
@@ -100,8 +100,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         expect(result.get('toto').length).to.equal(0);
       });
     });
-    context('when passing a JDL object with entities', () => {
-      context('with some of them being built-in entities', () => {
+    describe('when passing a JDL object with entities', () => {
+      describe('with some of them being built-in entities', () => {
         let builtInEntitiesAreConverted;
         let customEntitiesAreConverted;
 
@@ -138,7 +138,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
           expect(customEntitiesAreConverted).to.be.true;
         });
       });
-      context('with no field, no option and no relationship', () => {
+      describe('with no field, no option and no relationship', () => {
         let convertedEntity;
 
         before(() => {
@@ -179,7 +179,7 @@ JSONEntity {
 `);
         });
       });
-      context('with options', () => {
+      describe('with options', () => {
         let convertedEntity;
 
         before(() => {
@@ -288,7 +288,7 @@ JSONEntity {
 `);
         });
       });
-      context('when setting the DTO option without the service option', () => {
+      describe('when setting the DTO option without the service option', () => {
         let convertedEntity;
         let loggerSpy;
 
@@ -348,7 +348,7 @@ JSONEntity {
 `);
         });
       });
-      context('when setting the filtering option without the service option', () => {
+      describe('when setting the filtering option without the service option', () => {
         let convertedEntity;
         let loggerSpy;
 
@@ -407,7 +407,7 @@ JSONEntity {
 `);
         });
       });
-      context('when the searching option is set with exclusions', () => {
+      describe('when the searching option is set with exclusions', () => {
         let convertedEntity;
 
         before(() => {
@@ -457,8 +457,8 @@ JSONEntity {
 `);
         });
       });
-      context('with fields', () => {
-        context('without validation, comment or option', () => {
+      describe('with fields', () => {
+        describe('without validation, comment or option', () => {
           let convertedEntity;
 
           before(() => {
@@ -518,7 +518,7 @@ JSONEntity {
 `);
           });
         });
-        context('when having blobs', () => {
+        describe('when having blobs', () => {
           let convertedEntity;
 
           before(() => {
@@ -600,7 +600,7 @@ JSONEntity {
 `);
           });
         });
-        context('with field types being enums', () => {
+        describe('with field types being enums', () => {
           let convertedEntity;
 
           before(() => {
@@ -653,7 +653,7 @@ JSONEntity {
 `);
           });
         });
-        context('with comments', () => {
+        describe('with comments', () => {
           let convertedEntity;
 
           before(() => {
@@ -706,7 +706,7 @@ JSONEntity {
 `);
           });
         });
-        context('with validations', () => {
+        describe('with validations', () => {
           let convertedEntity;
 
           before(() => {
@@ -844,7 +844,7 @@ JSONEntity {
 `);
           });
         });
-        context('with options', () => {
+        describe('with options', () => {
           let convertedEntity;
 
           before(() => {
@@ -904,8 +904,8 @@ JSONEntity {
           });
         });
       });
-      context('with relationships', () => {
-        context('without options, required relationships or comments', () => {
+      describe('with relationships', () => {
+        describe('without options, required relationships or comments', () => {
           let relationshipsForA;
           let relationshipsForB;
 
@@ -1024,8 +1024,8 @@ JSONEntity {
             `);
           });
         });
-        context('with options', () => {
-          context('being custom options', () => {
+        describe('with options', () => {
+          describe('being custom options', () => {
             let convertedRelationship;
 
             before(() => {
@@ -1071,7 +1071,7 @@ JSONEntity {
               `);
             });
           });
-          context('being regular options', () => {
+          describe('being regular options', () => {
             let convertedRelationship;
 
             before(() => {
@@ -1116,7 +1116,7 @@ JSONEntity {
             });
           });
         });
-        context('with required relationships', () => {
+        describe('with required relationships', () => {
           let relationshipsForA;
           let relationshipsForB;
 
@@ -1173,7 +1173,7 @@ JSONEntity {
             `);
           });
         });
-        context('with comments', () => {
+        describe('with comments', () => {
           let relationshipsForA;
           let relationshipsForB;
 
@@ -1230,8 +1230,8 @@ JSONEntity {
             `);
           });
         });
-        context("when the injected field in the destination side isn't present", () => {
-          context('for a One-to-One relationship', () => {
+        describe("when the injected field in the destination side isn't present", () => {
+          describe('for a One-to-One relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1272,7 +1272,7 @@ JSONEntity {
               expect(relationshipFromDestinationToSource).to.be.undefined;
             });
           });
-          context('for a One-to-Many relationship', () => {
+          describe('for a One-to-Many relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1313,7 +1313,7 @@ JSONEntity {
               jestExpect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
-          context('for a Many-to-One relationship', () => {
+          describe('for a Many-to-One relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1354,7 +1354,7 @@ JSONEntity {
               expect(relationshipFromDestinationToSource).to.be.undefined;
             });
           });
-          context('for a Many-to-Many relationship', () => {
+          describe('for a Many-to-Many relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1396,8 +1396,8 @@ JSONEntity {
             });
           });
         });
-        context('when setting custom field for relationship mapping', () => {
-          context('for a One-to-One relationship', () => {
+        describe('when setting custom field for relationship mapping', () => {
+          describe('for a One-to-One relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1450,7 +1450,7 @@ JSONEntity {
               `);
             });
           });
-          context('for a One-to-Many relationship', () => {
+          describe('for a One-to-Many relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1503,7 +1503,7 @@ JSONEntity {
               `);
             });
           });
-          context('for a Many-to-One relationship', () => {
+          describe('for a Many-to-One relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 
@@ -1556,7 +1556,7 @@ JSONEntity {
               `);
             });
           });
-          context('for a Many-to-Many relationship', () => {
+          describe('for a Many-to-Many relationship', () => {
             let relationshipFromSourceToDestination;
             let relationshipFromDestinationToSource;
 

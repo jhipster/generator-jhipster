@@ -18,13 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { JDLEnum } from '../models/index.mjs';
+import { JDLEnum } from '../models/index.js';
 
 describe('jdl - JDLEnum', () => {
   describe('new', () => {
-    context('when not passing any argument', () => {
+    describe('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -32,14 +32,14 @@ describe('jdl - JDLEnum', () => {
         }).to.throw("The enum's name must be passed to create an enum.");
       });
     });
-    context('when not passing a name', () => {
+    describe('when not passing a name', () => {
       it('should fail', () => {
         expect(() => {
           new JDLEnum({ values: ['ABC'], comment: 'My enumeration.' });
         }).to.throw("The enum's name must be passed to create an enum.");
       });
     });
-    context('when passing arguments', () => {
+    describe('when passing arguments', () => {
       it('should use them', () => {
         new JDLEnum({ name: 'MyEnum', values: [{ key: 'ABC' }] });
       });
@@ -81,7 +81,7 @@ describe('jdl - JDLEnum', () => {
     });
   });
   describe('toString', () => {
-    context('with simple enum values', () => {
+    describe('with simple enum values', () => {
       let values: any[] = [];
       let jdlEnum;
 
@@ -105,7 +105,7 @@ enum ${jdlEnum.name} {
         );
       });
     });
-    context('with explicit enum values', () => {
+    describe('with explicit enum values', () => {
       let values: any[] = [];
       let jdlEnum;
 

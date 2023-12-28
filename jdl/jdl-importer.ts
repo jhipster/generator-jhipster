@@ -28,7 +28,7 @@ import exportDeployments from './exporters/jhipster-deployment-exporter.js';
 import exportEntities from './exporters/jhipster-entity-exporter.js';
 import createWithApplicationValidator from './validators/jdl-with-application-validator.js';
 import createWithoutApplicationValidator from './validators/jdl-without-application-validator.js';
-import { applicationOptions } from './jhipster/index.mjs';
+import { applicationOptions } from './jhipster/index.js';
 
 const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;

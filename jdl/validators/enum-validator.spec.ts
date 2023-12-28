@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
-import { JDLEnum } from '../models/index.mjs';
+import { JDLEnum } from '../models/index.js';
 import EnumValidator from '../validators/enum-validator.js';
 
 describe('jdl - EnumValidator', () => {
@@ -29,13 +30,13 @@ describe('jdl - EnumValidator', () => {
   });
 
   describe('validate', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No enum\.$/);
       });
     });
-    context('when passing an enum', () => {
-      context('with all its required attributes', () => {
+    describe('when passing an enum', () => {
+      describe('with all its required attributes', () => {
         let jdlEnum;
 
         before(() => {
@@ -48,12 +49,12 @@ describe('jdl - EnumValidator', () => {
           expect(() => validator.validate(jdlEnum)).not.to.throw();
         });
       });
-      context('when not passing any attribute', () => {
+      describe('when not passing any attribute', () => {
         it('should fail', () => {
           expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
         });
       });
-      context('passing checkReservedKeywords with a reserved class name as name', () => {
+      describe('passing checkReservedKeywords with a reserved class name as name', () => {
         it('should fail', () => {
           expect(() => {
             validator.validate(new JDLEnum({ name: 'Catch' }), { checkReservedKeywords: true });

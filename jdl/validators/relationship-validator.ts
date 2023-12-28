@@ -18,7 +18,7 @@
  */
 
 import Validator from './validator.js';
-import { relationshipTypes } from '../jhipster/index.mjs';
+import { relationshipTypes } from '../jhipster/index.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import { relationshipTypeExists } from '../jhipster/relationship-types.js';
 

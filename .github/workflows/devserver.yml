@@ -82,7 +82,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
@@ -113,13 +113,13 @@ jobs:
         id: e2e
         run: npm run e2e:devserver --if-present
       - name: 'BACKEND: Store failure logs'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.app-sample }}
           path: ${{ steps.setup.outputs.application-path }}/*/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.app-sample }}

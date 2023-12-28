@@ -18,9 +18,10 @@
  */
 /* eslint-disable no-unused-expressions */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 
-import { defaultApplicationOptions } from '../jhipster/index.mjs';
+import { defaultApplicationOptions } from '../jhipster/index.js';
 
 const {
   getConfigForMonolithApplication,
@@ -31,7 +32,7 @@ const {
 
 describe('jdl - DefaultApplicationOptions', () => {
   describe('getConfigForMonolithApplication', () => {
-    context('without passing custom options', () => {
+    describe('without passing custom options', () => {
       let options;
 
       before(() => {
@@ -66,7 +67,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.withAdminUi).to.be.true;
       });
     });
-    context('when passing a custom client theme and no variant', () => {
+    describe('when passing a custom client theme and no variant', () => {
       let clientThemeVariantOption: any;
 
       before(() => {
@@ -79,7 +80,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(clientThemeVariantOption).to.equal('primary');
       });
     });
-    context('when the authentication type is oauth2', () => {
+    describe('when the authentication type is oauth2', () => {
       let skipUserManagementOption: any;
 
       before(() => {
@@ -92,7 +93,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(skipUserManagementOption).to.be.true;
       });
     });
-    context('when passing custom options', () => {
+    describe('when passing custom options', () => {
       let options;
 
       before(() => {
@@ -107,7 +108,7 @@ describe('jdl - DefaultApplicationOptions', () => {
     });
   });
   describe('getConfigForGatewayApplication', () => {
-    context('without passing custom options', () => {
+    describe('without passing custom options', () => {
       let options;
 
       before(() => {
@@ -151,7 +152,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.reactive).to.be.true;
       });
     });
-    context('when the service discovery type option is no', () => {
+    describe('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
       before(() => {
@@ -164,7 +165,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(serviceDiscoveryTypeOption).to.be.equal('no');
       });
     });
-    context('when passing a custom client theme and no variant', () => {
+    describe('when passing a custom client theme and no variant', () => {
       let clientThemeVariantOption;
 
       before(() => {
@@ -177,7 +178,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(clientThemeVariantOption).to.equal('primary');
       });
     });
-    context('when the authentication type is oauth2', () => {
+    describe('when the authentication type is oauth2', () => {
       let skipUserManagementOption;
 
       before(() => {
@@ -190,7 +191,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(skipUserManagementOption).to.be.true;
       });
     });
-    context('when passing custom options', () => {
+    describe('when passing custom options', () => {
       let options;
 
       before(() => {
@@ -205,7 +206,7 @@ describe('jdl - DefaultApplicationOptions', () => {
     });
   });
   describe('getConfigForMicroserviceApplication', () => {
-    context('without passing custom options', () => {
+    describe('without passing custom options', () => {
       let options;
 
       before(() => {
@@ -246,7 +247,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.skipServer).to.be.undefined;
       });
     });
-    context('when the service discovery type option is no', () => {
+    describe('when the service discovery type option is no', () => {
       let serviceDiscoveryTypeOption;
 
       before(() => {
@@ -259,7 +260,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(serviceDiscoveryTypeOption).to.equal('no');
       });
     });
-    context('when passing custom options', () => {
+    describe('when passing custom options', () => {
       let options;
 
       before(() => {
@@ -297,7 +298,7 @@ describe('jdl - DefaultApplicationOptions', () => {
     });
   });
   describe('getDefaultConfigForNewApplication', () => {
-    context('when not passing custom options', () => {
+    describe('when not passing custom options', () => {
       let options;
 
       before(() => {
@@ -350,7 +351,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.websocket).to.be.equal('no');
       });
     });
-    context('when there is no package name option but only a package folder', () => {
+    describe('when there is no package name option but only a package folder', () => {
       let packageNameOption;
 
       before(() => {
@@ -363,7 +364,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(packageNameOption).to.equal('a.b.c.d');
       });
     });
-    context('when there is no package folder option but only a package name', () => {
+    describe('when there is no package folder option but only a package name', () => {
       let packageFolderOption;
 
       before(() => {
@@ -376,7 +377,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(packageFolderOption).to.equal('a/b/c/d');
       });
     });
-    context('when the client framework option is angular', () => {
+    describe('when the client framework option is angular', () => {
       let clientFrameworkOption;
 
       before(() => {
@@ -389,7 +390,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(clientFrameworkOption).to.equal('angular');
       });
     });
-    context('when the database type option is MongoDB', () => {
+    describe('when the database type option is MongoDB', () => {
       let enableHibernateCacheOption;
 
       before(() => {
@@ -403,7 +404,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(enableHibernateCacheOption).to.be.false;
       });
     });
-    context('when the database type option is couchbase', () => {
+    describe('when the database type option is couchbase', () => {
       let enableHibernateCacheOption;
 
       before(() => {
@@ -417,7 +418,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(enableHibernateCacheOption).to.be.false;
       });
     });
-    context('when the database type option is cassandra', () => {
+    describe('when the database type option is cassandra', () => {
       let enableHibernateCacheOption;
 
       before(() => {
@@ -431,7 +432,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(enableHibernateCacheOption).to.be.false;
       });
     });
-    context('when the reactive option is set', () => {
+    describe('when the reactive option is set', () => {
       let cacheProviderOption;
 
       before(() => {

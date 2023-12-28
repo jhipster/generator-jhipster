@@ -21,10 +21,10 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { jestExpect } from 'esmocha';
+import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,12 +35,12 @@ describe('jdl - JSONToJDLConverter', () => {
   });
 
   describe('convertToJDL', () => {
-    context('when there is a yo-rc file in the passed directory', () => {
+    describe('when there is a yo-rc file in the passed directory', () => {
       let dir;
       let jdlFilename;
       let jdlFileContent;
 
-      context('without entities', () => {
+      describe('without entities', () => {
         beforeEach(() => {
           dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'only_app');
           jdlFilename = 'app.jdl';
@@ -86,7 +86,7 @@ describe('jdl - JSONToJDLConverter', () => {
           `);
         });
       });
-      context('with entities', () => {
+      describe('with entities', () => {
         beforeEach(() => {
           dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_entities');
           jdlFilename = 'app.jdl';
@@ -195,13 +195,13 @@ describe('jdl - JSONToJDLConverter', () => {
         });
       });
     });
-    context('when there is no yo-rc file in the passed directory', () => {
-      context('with no JHipster app', () => {
+    describe('when there is no yo-rc file in the passed directory', () => {
+      describe('with no JHipster app', () => {
         it('does not fail', () => {
           expect(() => convertToJDL()).not.to.throw();
         });
       });
-      context('with several JHipster apps', () => {
+      describe('with several JHipster apps', () => {
         let rootDir;
         let jdlFilename;
         let jdlFileContent;
@@ -332,7 +332,7 @@ describe('jdl - JSONToJDLConverter', () => {
         });
       });
     });
-    context('when passing an output file', () => {
+    describe('when passing an output file', () => {
       let dir;
       let output;
 
@@ -348,7 +348,7 @@ describe('jdl - JSONToJDLConverter', () => {
     });
   });
   describe('convertSingleContentToJDL', () => {
-    context('with microservices attribute', () => {
+    describe('with microservices attribute', () => {
       let jdl;
       beforeEach(() => {
         jdl = convertSingleContentToJDL({
@@ -369,7 +369,7 @@ describe('jdl - JSONToJDLConverter', () => {
         jestExpect(jdl).toMatch(/microfrontends \[foo, bar\]/);
       });
     });
-    context('with nullish attributes', () => {
+    describe('with nullish attributes', () => {
       it('should not fail', () => {
         convertSingleContentToJDL({
           'generator-jhipster': {

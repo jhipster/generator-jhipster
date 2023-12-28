@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, inject, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -69,12 +69,8 @@ export default class RegisterComponent implements AfterViewInit {
     }),
   });
 
-  constructor(
-    <%_ if (enableTranslation) { _%>
-    private translateService: TranslateService,
-    <%_ } _%>
-    private registerService: RegisterService,
-  ) {}
+  <%_ if (enableTranslation) { _%>private translateService = inject(TranslateService);<%_ } _%>
+  private registerService = inject(RegisterService);
 
   ngAfterViewInit(): void {
     if (this.login) {

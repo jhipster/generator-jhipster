@@ -27,7 +27,7 @@ import buildToolTypes from './build-tool-types.js';
 import searchEngineTypes from './search-engine-types.js';
 import testFrameworkTypes from './test-framework-types.js';
 import websocketTypes from './websocket-types.js';
-import jhipsterDefinition from '../../generators/app/jdl/application-options.mjs';
+import jhipsterDefinition from '../../generators/app/jdl/application-options.js';
 import {
   JDLApplicationOptionType,
   JDLApplicationOptionTypeValue,

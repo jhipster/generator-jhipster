@@ -41,9 +41,6 @@ hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
 hazelcastHibernate53Version=<%- javaDependencies['hazelcast-hibernate53'] %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (messageBrokerPulsar) { _%>
-springPulsarVersion=<%- javaDependencies['spring-pulsar'] %>
-<%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=<%- javaDependencies['commons-beanutils'] %>
@@ -83,10 +80,6 @@ gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 awaitilityVersion=<%- javaDependencies.awaitility %>
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-gatlingVersion=<%- javaDependencies.gatling %>
-gatlingPluginVersion=<%- javaDependencies['gatling-gradle'] %>
 <%_ } _%>
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here

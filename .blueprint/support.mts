@@ -1,4 +1,4 @@
-import CoreGenerator from '../generators/base-core/index.mjs';
+import CoreGenerator from '../generators/base-core/index.js';
 import { defaultSamplesFolder } from './constants.js';
 
 export const samplesFolderConfig = 'samplesFolder';

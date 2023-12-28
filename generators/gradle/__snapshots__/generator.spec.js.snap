@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - gradle with empty configuration should generate only gradle files 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - gradle with valid configuration should generate only gradle files 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
+    "stateCleared": "modified",
+  },
+}
+`;

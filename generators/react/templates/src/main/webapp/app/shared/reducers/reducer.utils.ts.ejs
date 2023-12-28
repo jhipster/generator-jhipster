@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import {
-  AnyAction,
+  UnknownAction,
   AsyncThunk,
   ActionReducerMapBuilder,
   createSlice,
@@ -43,21 +43,21 @@ export type FulfilledAction = ReturnType<GenericAsyncThunk['fulfilled']>;
 /**
  * Check if the async action type is rejected
  */
-export function isRejectedAction(action: AnyAction) {
+export function isRejectedAction(action: UnknownAction) {
   return action.type.endsWith('/rejected');
 }
 
 /**
  * Check if the async action type is pending
  */
-export function isPendingAction(action: AnyAction) {
+export function isPendingAction(action: UnknownAction) {
   return action.type.endsWith('/pending');
 }
 
 /**
  * Check if the async action type is completed
  */
-export function isFulfilledAction(action: AnyAction) {
+export function isFulfilledAction(action: UnknownAction) {
   return action.type.endsWith('/fulfilled');
 }
 
@@ -137,7 +137,7 @@ export const createEntitySlice = <T, Reducers extends SliceCaseReducers<EntitySt
           state.loading = false;
           state.updating = false;
           state.updateSuccess = false;
-          state.errorMessage = action.error.message;
+          state.errorMessage = null;
         });
       }
     },

@@ -18,13 +18,14 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { binaryOptions } from '../jhipster/index.mjs';
+import { binaryOptions } from '../jhipster/index.js';
 
 describe('jdl - JDLBinaryOption', () => {
   describe('new', () => {
-    context('when passing no argument', () => {
+    describe('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
           // @ts-expect-error
@@ -32,14 +33,14 @@ describe('jdl - JDLBinaryOption', () => {
         }).to.throw("The option's name must be passed to create an option.");
       });
     });
-    context('when passing a name but no value', () => {
+    describe('when passing a name but no value', () => {
       it('should fail', () => {
         expect(() => {
           new JDLBinaryOption({ name: binaryOptions.Options.DTO });
         }).to.throw(/^A binary option must have a value\.$/);
       });
     });
-    context('when passing a name and a value', () => {
+    describe('when passing a name and a value', () => {
       let option;
 
       before(() => {
@@ -55,7 +56,7 @@ describe('jdl - JDLBinaryOption', () => {
         expect(option.value).to.equal(binaryOptions.Values.dto.MAPSTRUCT);
       });
     });
-    context('when passing a list of entity names and excluded names with some of them being repeated', () => {
+    describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
       let option;
 
       before(() => {
@@ -96,7 +97,7 @@ describe('jdl - JDLBinaryOption', () => {
     });
   });
   describe('addEntityName', () => {
-    context('when passing a nil name', () => {
+    describe('when passing a nil name', () => {
       let option;
 
       before(() => {
@@ -109,7 +110,7 @@ describe('jdl - JDLBinaryOption', () => {
         }).to.throw('An entity name has to be passed so as to be added to the option.');
       });
     });
-    context("when passing a name that hasn't been added yet", () => {
+    describe("when passing a name that hasn't been added yet", () => {
       let option;
 
       before(() => {
@@ -121,7 +122,7 @@ describe('jdl - JDLBinaryOption', () => {
         expect(option.entityNames.size).to.equal(1);
       });
     });
-    context('when passing a name that has already been added', () => {
+    describe('when passing a name that has already been added', () => {
       let option;
 
       before(() => {
@@ -134,7 +135,7 @@ describe('jdl - JDLBinaryOption', () => {
         expect(option.entityNames.size).to.equal(1);
       });
     });
-    context('when passing an excluded name', () => {
+    describe('when passing an excluded name', () => {
       let option;
 
       before(() => {
@@ -150,7 +151,7 @@ describe('jdl - JDLBinaryOption', () => {
     });
   });
   describe('excludeEntityName', () => {
-    context('when passing a nil name', () => {
+    describe('when passing a nil name', () => {
       let option;
 
       before(() => {
@@ -163,7 +164,7 @@ describe('jdl - JDLBinaryOption', () => {
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
       });
     });
-    context("when passing a name that hasn't been excluded yet", () => {
+    describe("when passing a name that hasn't been excluded yet", () => {
       let option;
 
       before(() => {
@@ -175,7 +176,7 @@ describe('jdl - JDLBinaryOption', () => {
         expect(option.excludedNames.size).to.equal(1);
       });
     });
-    context('when passing a name that has already been excluded', () => {
+    describe('when passing a name that has already been excluded', () => {
       let option;
 
       before(() => {
@@ -188,7 +189,7 @@ describe('jdl - JDLBinaryOption', () => {
         expect(option.excludedNames.size).to.equal(1);
       });
     });
-    context('when passing an added name', () => {
+    describe('when passing an added name', () => {
       let option;
 
       before(() => {
@@ -210,12 +211,12 @@ describe('jdl - JDLBinaryOption', () => {
       excludedNames: ['Z'],
     });
 
-    context('when passing an invalid option', () => {
+    describe('when passing an invalid option', () => {
       it('should return false', () => {
         expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
       });
     });
-    context('when passing a valid option', () => {
+    describe('when passing a valid option', () => {
       let returned;
 
       before(() => {

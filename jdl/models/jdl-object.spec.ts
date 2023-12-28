@@ -18,14 +18,14 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect, afterEach } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../jhipster/index.mjs';
+import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../jhipster/index.js';
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import JDLDeployment from '../models/jdl-deployment.js';
-import { JDLEntity, JDLEnum } from '../models/index.mjs';
+import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship from '../models/jdl-relationship.js';
@@ -36,10 +36,10 @@ const { MONOLITH } = applicationTypes;
 
 describe('jdl - JDLObject', () => {
   describe('addApplication', () => {
-    context('when adding an invalid application', () => {
+    describe('when adding an invalid application', () => {
       const object = new JDLObject();
 
-      context('such as a nil application', () => {
+      describe('such as a nil application', () => {
         it('should fail', () => {
           expect(() => {
             object.addApplication(null);
@@ -47,7 +47,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when adding a valid application', () => {
+    describe('when adding a valid application', () => {
       let addedApplication;
       let originalApplication;
 
@@ -71,13 +71,13 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no application', () => {
+    describe('when having no application', () => {
       it('should return 0', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(0);
       });
     });
 
-    context('when having one or more applications', () => {
+    describe('when having one or more applications', () => {
       before(() => {
         jdlObject.addApplication(
           createJDLApplication({
@@ -92,7 +92,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getApplication', () => {
-    context('when not passing an application name', () => {
+    describe('when not passing an application name', () => {
       let jdlObject;
 
       before(() => {
@@ -104,8 +104,8 @@ describe('jdl - JDLObject', () => {
         expect(jdlObject.getApplication()).to.be.undefined;
       });
     });
-    context("when passing an application's name", () => {
-      context('that does not exist', () => {
+    describe("when passing an application's name", () => {
+      describe('that does not exist', () => {
         let jdlObject;
 
         before(() => {
@@ -118,7 +118,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      context('that exists', () => {
+      describe('that exists', () => {
         let jdlObject;
 
         before(() => {
@@ -133,10 +133,10 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('addDeployment', () => {
-    context('when adding an invalid deployment', () => {
+    describe('when adding an invalid deployment', () => {
       const object = new JDLObject();
 
-      context('such as a nil deployment', () => {
+      describe('such as a nil deployment', () => {
         it('should fail', () => {
           expect(() => {
             object.addDeployment(null);
@@ -144,7 +144,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when adding a valid application', () => {
+    describe('when adding a valid application', () => {
       let object;
       let application;
 
@@ -170,13 +170,13 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no deployment', () => {
+    describe('when having no deployment', () => {
       it('should return 0', () => {
         expect(jdlObject.getDeploymentQuantity()).to.equal(0);
       });
     });
 
-    context('when having one or more deployment', () => {
+    describe('when having one or more deployment', () => {
       before(() => {
         jdlObject.addDeployment(
           new JDLDeployment({
@@ -201,12 +201,12 @@ describe('jdl - JDLObject', () => {
       jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }));
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlObject.forEachApplication();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -226,10 +226,10 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('addEntity', () => {
-    context('when adding an invalid entity', () => {
+    describe('when adding an invalid entity', () => {
       const object = new JDLObject();
 
-      context('such as a nil object', () => {
+      describe('such as a nil object', () => {
         it('should fail', () => {
           expect(() => {
             object.addEntity(null);
@@ -237,7 +237,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when adding a valid entity', () => {
+    describe('when adding a valid entity', () => {
       let object;
       let entity;
 
@@ -255,7 +255,7 @@ describe('jdl - JDLObject', () => {
         expect(object.entities[entity.name]).to.deep.eq(entity);
       });
     });
-    context('when adding an entity with the same name', () => {
+    describe('when adding an entity with the same name', () => {
       let object;
       let entity;
       let entity2;
@@ -289,7 +289,7 @@ describe('jdl - JDLObject', () => {
       jdlObject.addEntity(new JDLEntity({ name: 'A' }));
     });
 
-    context('when not passing a name', () => {
+    describe('when not passing a name', () => {
       it('should fail', () => {
         expect(() => {
           jdlObject.getEntity();
@@ -297,14 +297,14 @@ describe('jdl - JDLObject', () => {
       });
     });
 
-    context('when passing a name', () => {
+    describe('when passing a name', () => {
       it('should return the entity', () => {
         expect(jdlObject.getEntity('A')).not.to.be.undefined;
       });
     });
   });
   describe('getEntities', () => {
-    context('when there are no entities', () => {
+    describe('when there are no entities', () => {
       let object;
 
       before(() => {
@@ -315,7 +315,7 @@ describe('jdl - JDLObject', () => {
         expect(object.getEntities()).to.deep.equal([]);
       });
     });
-    context('when there are entities', () => {
+    describe('when there are entities', () => {
       let entity;
       let returnedEntities;
 
@@ -350,13 +350,13 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no entity', () => {
+    describe('when having no entity', () => {
       it('should return 0', () => {
         expect(jdlObject.getEntityQuantity()).to.equal(0);
       });
     });
 
-    context('when having one or more entities', () => {
+    describe('when having one or more entities', () => {
       before(() => {
         jdlObject.addEntity(
           new JDLEntity({
@@ -381,12 +381,12 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no entity', () => {
+    describe('when having no entity', () => {
       it('should return an empty list', () => {
         expect(jdlObject.getEntityNames()).to.be.empty;
       });
     });
-    context('when having entities', () => {
+    describe('when having entities', () => {
       before(() => {
         jdlObject.addEntity(new JDLEntity({ name: 'A' }));
         jdlObject.addEntity(new JDLEntity({ name: 'B' }));
@@ -407,12 +407,12 @@ describe('jdl - JDLObject', () => {
       jdlObject.addEntity(new JDLEntity({ name: 'B' }));
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlObject.forEachEntity();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -432,10 +432,10 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('addEnum', () => {
-    context('when adding an invalid enum', () => {
+    describe('when adding an invalid enum', () => {
       const object = new JDLObject();
 
-      context('such as a nil enum', () => {
+      describe('such as a nil enum', () => {
         it('should fail', () => {
           expect(() => {
             object.addEnum(null);
@@ -443,7 +443,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when adding a valid enum', () => {
+    describe('when adding a valid enum', () => {
       let object;
       let enumObject;
 
@@ -457,7 +457,7 @@ describe('jdl - JDLObject', () => {
         expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject);
       });
     });
-    context('when adding an enum with the same name', () => {
+    describe('when adding an enum with the same name', () => {
       let object;
       let enumObject;
       let enumObject2;
@@ -482,12 +482,12 @@ describe('jdl - JDLObject', () => {
       object = new JDLObject();
     });
 
-    context('when fetching an absent enum', () => {
+    describe('when fetching an absent enum', () => {
       it('should return null', () => {
         expect(object.getEnum('A')).to.be.undefined;
       });
     });
-    context('when fetching an existing enum', () => {
+    describe('when fetching an existing enum', () => {
       let jdlEnum;
 
       before(() => {
@@ -507,12 +507,12 @@ describe('jdl - JDLObject', () => {
       object = new JDLObject();
     });
 
-    context('when fetching an absent enum', () => {
+    describe('when fetching an absent enum', () => {
       it('should return false', () => {
         expect(object.hasEnum('A')).to.be.false;
       });
     });
-    context('when fetching an existing enum', () => {
+    describe('when fetching an existing enum', () => {
       let jdlEnum;
 
       before(() => {
@@ -532,13 +532,13 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no enum', () => {
+    describe('when having no enum', () => {
       it('should return 0', () => {
         expect(jdlObject.getEnumQuantity()).to.equal(0);
       });
     });
 
-    context('when having one or more enums', () => {
+    describe('when having one or more enums', () => {
       before(() => {
         jdlObject.addEnum(
           new JDLEnum({
@@ -561,12 +561,12 @@ describe('jdl - JDLObject', () => {
       jdlObject.addEnum(new JDLEnum({ name: 'B' }));
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlObject.forEachEnum();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -586,17 +586,17 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('addRelationship', () => {
-    context('when adding an invalid relationship', () => {
+    describe('when adding an invalid relationship', () => {
       const object = new JDLObject();
 
-      context('such as a nil relationship', () => {
+      describe('such as a nil relationship', () => {
         it('should fail', () => {
           expect(() => {
             object.addRelationship(null);
           }).to.throw(/^Can't add nil relationship\.$/);
         });
       });
-      context('such as an incomplete relationship', () => {
+      describe('such as an incomplete relationship', () => {
         it('should fail', () => {
           expect(() => {
             object.addRelationship(
@@ -610,7 +610,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when adding a valid relationship', () => {
+    describe('when adding a valid relationship', () => {
       let object;
       let relationship;
 
@@ -630,7 +630,7 @@ describe('jdl - JDLObject', () => {
         expect(object.relationships.getManyToMany(relationship.getId())).to.deep.eq(relationship);
       });
     });
-    context('when adding twice the same relationship', () => {
+    describe('when adding twice the same relationship', () => {
       let object;
 
       before(() => {
@@ -658,13 +658,13 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no relationship', () => {
+    describe('when having no relationship', () => {
       it('should return 0', () => {
         expect(jdlObject.getRelationshipQuantity()).to.equal(0);
       });
     });
 
-    context('when having one or more relationships', () => {
+    describe('when having one or more relationships', () => {
       before(() => {
         jdlObject.addRelationship(
           new JDLRelationship({
@@ -704,12 +704,12 @@ describe('jdl - JDLObject', () => {
       );
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlObject.forEachRelationship();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -729,17 +729,17 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('addOption', () => {
-    context('when adding an invalid option', () => {
+    describe('when adding an invalid option', () => {
       const object = new JDLObject();
 
-      context('such as a nil option', () => {
+      describe('such as a nil option', () => {
         it('should fail', () => {
           expect(() => {
             object.addOption(null);
           }).to.throw(/^Can't add nil option\.$/);
         });
       });
-      context('such as an empty object', () => {
+      describe('such as an empty object', () => {
         it('should fail', () => {
           expect(() => {
             object.addOption({});
@@ -747,7 +747,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when adding a valid option', () => {
+    describe('when adding a valid option', () => {
       it('should work', () => {
         new JDLObject().addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT }));
       });
@@ -764,17 +764,17 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when passing an invalid name', () => {
+    describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
         expect(jdlObject.getOptionsForName()).to.be.empty;
       });
     });
-    context('when checking for an absent option', () => {
+    describe('when checking for an absent option', () => {
       it('should return an empty array', () => {
         expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.be.empty;
       });
     });
-    context('when checking for a present option', () => {
+    describe('when checking for a present option', () => {
       let option1;
       let option2;
       let option3;
@@ -810,13 +810,13 @@ describe('jdl - JDLObject', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having no option', () => {
+    describe('when having no option', () => {
       it('should return 0', () => {
         expect(jdlObject.getOptionQuantity()).to.equal(0);
       });
     });
 
-    context('when having one or more options', () => {
+    describe('when having one or more options', () => {
       before(() => {
         jdlObject.addOption(
           new JDLUnaryOption({
@@ -847,12 +847,12 @@ describe('jdl - JDLObject', () => {
       );
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlObject.forEachOption();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -872,7 +872,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('hasOption', () => {
-    context('when passing a falsy value', () => {
+    describe('when passing a falsy value', () => {
       let jdlObject;
 
       before(() => {
@@ -883,7 +883,7 @@ describe('jdl - JDLObject', () => {
         expect(jdlObject.hasOption()).to.be.false;
       });
     });
-    context('when passing an option name', () => {
+    describe('when passing an option name', () => {
       let jdlObject;
 
       before(() => {
@@ -895,12 +895,12 @@ describe('jdl - JDLObject', () => {
         );
       });
 
-      context('for an absent option', () => {
+      describe('for an absent option', () => {
         it('should return false', () => {
           expect(jdlObject.hasOption('toto')).to.be.false;
         });
       });
-      context('for an existing option', () => {
+      describe('for an existing option', () => {
         it('should return false', () => {
           expect(jdlObject.hasOption(unaryOptions.READ_ONLY)).to.be.true;
         });
@@ -910,8 +910,8 @@ describe('jdl - JDLObject', () => {
   describe('isEntityInMicroservice', () => {
     let jdlObject;
 
-    context('when an entity is in a microservice', () => {
-      context('because no entity name has been specified', () => {
+    describe('when an entity is in a microservice', () => {
+      describe('because no entity name has been specified', () => {
         before(() => {
           jdlObject = new JDLObject();
           const microserviceOption = new JDLBinaryOption({
@@ -926,7 +926,7 @@ describe('jdl - JDLObject', () => {
         });
       });
 
-      context('because entity names have been specified', () => {
+      describe('because entity names have been specified', () => {
         before(() => {
           jdlObject = new JDLObject();
           const microserviceOption = new JDLBinaryOption({
@@ -942,7 +942,7 @@ describe('jdl - JDLObject', () => {
         });
       });
     });
-    context('when an entity is not in a microservice', () => {
+    describe('when an entity is not in a microservice', () => {
       before(() => {
         jdlObject = new JDLObject();
         const microserviceOption = new JDLBinaryOption({

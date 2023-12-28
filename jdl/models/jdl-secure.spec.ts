@@ -19,7 +19,7 @@
 
 import { expect } from 'chai';
 import { JDLSecurityType, PrivilegeActionType, RoleActionType } from './jdl-security-type.js';
-import { JDLSecure } from './index.mjs';
+import { JDLSecure } from './index.js';
 import { IJDLSecure, IOrganizationalSecurity, IParentPrivileges, IPrivilegeSecurity, IRelPrivileges, IRoleSecurity } from './jdl-secure.js';
 
 describe('JDLSecure', () => {

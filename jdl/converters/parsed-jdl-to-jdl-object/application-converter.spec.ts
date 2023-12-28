@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes } from '../../jhipster/index.mjs';
+import { applicationTypes } from '../../jhipster/index.js';
 import createJDLApplication from '../../models/jdl-application-factory.js';
 import { convertApplications } from './application-converter.js';
 
@@ -26,14 +27,14 @@ const { MONOLITH } = applicationTypes;
 
 describe('jdl - ApplicationConverter', () => {
   describe('convertApplications', () => {
-    context('when not passing applications', () => {
+    describe('when not passing applications', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertApplications()).to.throw(/^Applications have to be passed so as to be converted\.$/);
       });
     });
-    context('when passing applications', () => {
-      context('with no application type', () => {
+    describe('when passing applications', () => {
+      describe('with no application type', () => {
         let convertedApplication;
         let expectedApplication;
 
@@ -59,8 +60,8 @@ describe('jdl - ApplicationConverter', () => {
           expect(convertedApplication).to.deep.equal(expectedApplication);
         });
       });
-      context('when passing a configuration object', () => {
-        context('with a creation timestamp', () => {
+      describe('when passing a configuration object', () => {
+        describe('with a creation timestamp', () => {
           let convertedApplication;
           let expectedApplication;
 
@@ -90,8 +91,8 @@ describe('jdl - ApplicationConverter', () => {
             expect(convertedApplication).to.deep.equal(expectedApplication);
           });
         });
-        context('with blueprints', () => {
-          context("when there are blueprints without the 'generator-jhipster-' prefix", () => {
+        describe('with blueprints', () => {
+          describe("when there are blueprints without the 'generator-jhipster-' prefix", () => {
             let convertedApplication;
             let expectedApplication;
 
@@ -126,7 +127,7 @@ describe('jdl - ApplicationConverter', () => {
           });
         });
       });
-      context('when including all entities in an application', () => {
+      describe('when including all entities in an application', () => {
         let convertedApplication;
         let expectedApplication;
 
@@ -155,8 +156,8 @@ describe('jdl - ApplicationConverter', () => {
           expect(convertedApplication).to.deep.equal(expectedApplication);
         });
       });
-      context('when including some entities in an application', () => {
-        context("if entities don't exist", () => {
+      describe('when including some entities in an application', () => {
+        describe("if entities don't exist", () => {
           let applicationsToConvert;
 
           before(() => {
@@ -179,7 +180,7 @@ describe('jdl - ApplicationConverter', () => {
           });
         });
       });
-      context('when excluding entities in an application', () => {
+      describe('when excluding entities in an application', () => {
         let convertedApplication;
         let expectedApplication;
 
@@ -208,8 +209,8 @@ describe('jdl - ApplicationConverter', () => {
           expect(convertedApplication).to.deep.equal(expectedApplication);
         });
       });
-      context('when having entity options in an application', () => {
-        context('if the entity list does not contain some entities mentioned in options', () => {
+      describe('when having entity options in an application', () => {
+        describe('if the entity list does not contain some entities mentioned in options', () => {
           let applicationsToConvert;
 
           before(() => {
@@ -238,7 +239,7 @@ describe('jdl - ApplicationConverter', () => {
             );
           });
         });
-        context('if the entity list contains the entities mentioned in options', () => {
+        describe('if the entity list contains the entities mentioned in options', () => {
           let convertedApplications;
 
           before(() => {

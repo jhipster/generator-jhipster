@@ -99,7 +99,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/maven' \
   'generators/server' \
   'generators/spring-cache' \
-  'generators/spring-cloud-steam' \
+  'generators/spring-cloud-stream' \
   'generators/spring-data-cassandra' \
   'generators/spring-data-couchbase' \
   'generators/spring-data-elasticsearch' \

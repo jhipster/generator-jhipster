@@ -35,9 +35,6 @@ plugins {
     id "com.diffplug.spotless"
     id "io.spring.nohttp"
     id "com.github.andygoossens.gradle-modernizer-plugin"
-<%_ if (gatlingTests) { _%>
-    id "io.gatling.gradle"
-<%_ } _%>
     // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -147,52 +144,10 @@ test {
 <%_ } _%>
 }
 
-<%_ if (gatlingTests) { _%>
-sourceSets {
-    gatling {
-        java.srcDirs = ["src/test/java/gatling/simulations"]
-        resources.srcDirs = ["src/test/gatling/conf"]
-    }
-}
-
-gatling {
-    simulations = { include "**/*Test*.java" }
-}
-
-<%_ } _%>
 modernizer {
     failOnViolations = true
     includeTestClasses = true
 }
-
-
-<%_ if (cucumberTests) { _%>
-
-task consoleLauncherTest(type: JavaExec) {
-    dependsOn(testClasses)
-    String cucumberReportsDir = file("$buildDir/reports/tests")
-    outputs.dir(reportsDir)
-    classpath = sourceSets["test"].runtimeClasspath
-    main = "org.junit.platform.console.ConsoleLauncher"
-    args("--scan-classpath")
-    args("--include-engine", "cucumber")
-    args("--reports-dir", cucumberReportsDir)
-}
-
-task cucumberTest(type: Test) {
-    dependsOn(consoleLauncherTest)
-    description = "Execute cucumber BDD tests."
-    group = "verification"
-    include "**/*CucumberIT*"
-
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.required = false
-}
-
-check.dependsOn cucumberTest
-<%_ } _%>
 
 check.dependsOn integrationTest
 task testReport(type: TestReport) {
@@ -205,13 +160,6 @@ task integrationTestReport(type: TestReport) {
     testResults.from(integrationTest)
 }
 
-<%_ if (cucumberTests) { _%>
-task cucumberTestReport(type: TestReport) {
-    destinationDirectory = file("$buildDir/reports/tests")
-    testResults.from(cucumberTest)
-}
-
-<%_ } _%>
 gitProperties {
     failOnNoGitDirectory = false
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
@@ -233,6 +181,13 @@ nohttp {
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
+}
+
+// workaround for https://github.com/checkstyle/checkstyle/issues/14123
+configurations.checkstyle {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+      select("com.google.guava:guava:0")
+    }
 }
 
 repositories {
@@ -266,7 +221,7 @@ dependencies {
     // to use a SNAPSHOT release instead of a stable release
     implementation "tech.jhipster:jhipster-framework"
     implementation "jakarta.annotation:jakarta.annotation-api"
-<%_ // This is useful for major Spring Boot migration
+<%_ /* This is useful for major Spring Boot migration */
 if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
@@ -298,9 +253,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
-    // Openapi generator uses javax namespace for now https://github.com/OpenAPITools/openapi-generator/pull/13593
-    implementation "javax.annotation:javax.annotation-api:1.3.2"
-    implementation "javax.validation:validation-api:2.0.1.Final"
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
@@ -421,7 +373,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
   <%_ } _%>
     implementation "org.springframework.retry:spring-retry"
-    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
 <%_ } _%>
 <%_ if (serviceDiscoveryAny) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
@@ -441,16 +392,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "io.dropwizard.metrics:metrics-core"
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
-<%_ } _%>
-<%_ if (cucumberTests) { _%>
-    testImplementation "io.cucumber:cucumber-junit-platform-engine"
-    testImplementation "io.cucumber:cucumber-java"
-    testImplementation "io.cucumber:cucumber-spring"
-    testImplementation "org.junit.platform:junit-platform-console"
-    testImplementation "org.testng:testng"
-<%_ } _%>
-<%_ if (gatlingTests) { _%>
-    testImplementation "io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
     annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"

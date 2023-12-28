@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
 import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (!databaseTypeCassandra) { _%>
@@ -64,15 +64,13 @@ export default class UserManagementComponent implements OnInit {
   ascending!: boolean;
 <%_ } _%>
 
-  constructor(
-    private userService: UserManagementService,
-    private accountService: AccountService,
+  private userService = inject(UserManagementService);
+  private accountService = inject(AccountService);
 <%_ if (!databaseTypeCassandra) { _%>
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
 <%_ } _%>
-    private modalService: NgbModal
-  ) {}
+  private modalService = inject(NgbModal);
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => this.currentAccount = account);

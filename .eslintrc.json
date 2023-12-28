@@ -21,9 +21,6 @@
     },
     {
       "files": ["**/*.spec.{c,m,}{js,ts}", "**/__test-support/*.{c,m,}{js,ts}", "test/**/*.{c,m,}{js,ts}"],
-      "env": {
-        "mocha": true
-      },
       "rules": {
         "@typescript-eslint/ban-ts-comment": "off",
         "import/first": "off"
@@ -34,12 +31,7 @@
       "rules": {
         "@typescript-eslint/no-var-requires": "off",
         "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/no-this-alias": "off"
-      }
-    },
-    {
-      "files": ["**/*.mjs"],
-      "rules": {
+        "@typescript-eslint/no-this-alias": "off",
         "import/no-unresolved": "off"
       }
     },

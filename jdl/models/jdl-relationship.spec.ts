@@ -18,16 +18,17 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
-import { relationshipTypes, relationshipOptions } from '../jhipster/index.mjs';
+import { relationshipTypes, relationshipOptions } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
 describe('jdl - JDLRelationship', () => {
   describe('new', () => {
-    context('when not passing at least one injected field', () => {
+    describe('when not passing at least one injected field', () => {
       it('should fail', () => {
         expect(() => {
           new JDLRelationship({
@@ -38,7 +39,7 @@ describe('jdl - JDLRelationship', () => {
         }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
       });
     });
-    context('when passing an invalid type', () => {
+    describe('when passing an invalid type', () => {
       it('should fail', () => {
         expect(() => {
           new JDLRelationship({
@@ -50,7 +51,7 @@ describe('jdl - JDLRelationship', () => {
         }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
       });
     });
-    context('when passing valid args', () => {
+    describe('when passing valid args', () => {
       let relationship;
 
       before(() => {
@@ -69,8 +70,8 @@ describe('jdl - JDLRelationship', () => {
         expect(relationship.type).to.equal(relationshipTypes.ONE_TO_ONE);
       });
     });
-    context('when passing an unidirectional one-to-many relationship', () => {
-      context('and disabling the conversion to a bidirectional relationship', () => {
+    describe('when passing an unidirectional one-to-many relationship', () => {
+      describe('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
         before(() => {
@@ -87,8 +88,8 @@ describe('jdl - JDLRelationship', () => {
         });
       });
     });
-    context('when passing an unidirectional many-to-one relationship', () => {
-      context('and disabling the conversion to a bidirectional relationship', () => {
+    describe('when passing an unidirectional many-to-one relationship', () => {
+      describe('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
         before(() => {
@@ -105,8 +106,8 @@ describe('jdl - JDLRelationship', () => {
         });
       });
     });
-    context('when passing an unidirectional many-to-one relationship', () => {
-      context('and disabling the conversion to a bidirectional relationship', () => {
+    describe('when passing an unidirectional many-to-one relationship', () => {
+      describe('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
         before(() => {
@@ -123,8 +124,8 @@ describe('jdl - JDLRelationship', () => {
         });
       });
     });
-    context('when passing an unidirectional many-to-one relationship', () => {
-      context('and disabling the conversion to a bidirectional relationship', () => {
+    describe('when passing an unidirectional many-to-one relationship', () => {
+      describe('and disabling the conversion to a bidirectional relationship', () => {
         let relationship;
 
         before(() => {
@@ -177,12 +178,12 @@ describe('jdl - JDLRelationship', () => {
       });
     });
 
-    context('when the option does not exist', () => {
+    describe('when the option does not exist', () => {
       it('should return false', () => {
         expect(relationship.hasGlobalOption('toto')).to.be.false;
       });
     });
-    context('when the option exists', () => {
+    describe('when the option exists', () => {
       it('should return true', () => {
         expect(relationship.hasGlobalOption(BUILT_IN_ENTITY)).to.be.true;
       });
@@ -210,7 +211,7 @@ describe('jdl - JDLRelationship', () => {
     });
   });
   describe('toString', () => {
-    context('without any comment', () => {
+    describe('without any comment', () => {
       let relationship;
 
       before(() => {
@@ -230,7 +231,7 @@ describe('jdl - JDLRelationship', () => {
         );
       });
     });
-    context('with comments for both sides', () => {
+    describe('with comments for both sides', () => {
       let relationship;
 
       before(() => {
@@ -259,7 +260,7 @@ describe('jdl - JDLRelationship', () => {
         );
       });
     });
-    context('with a comment for the source side', () => {
+    describe('with a comment for the source side', () => {
       let relationship;
 
       before(() => {
@@ -283,7 +284,7 @@ describe('jdl - JDLRelationship', () => {
         );
       });
     });
-    context('with a comment for the destination side', () => {
+    describe('with a comment for the destination side', () => {
       let relationship;
 
       before(() => {
@@ -308,7 +309,7 @@ describe('jdl - JDLRelationship', () => {
         );
       });
     });
-    context('with only one injected field', () => {
+    describe('with only one injected field', () => {
       let relationship;
 
       before(() => {
@@ -328,7 +329,7 @@ describe('jdl - JDLRelationship', () => {
         );
       });
     });
-    context('with both injected fields', () => {
+    describe('with both injected fields', () => {
       let relationship;
 
       before(() => {
@@ -349,8 +350,8 @@ describe('jdl - JDLRelationship', () => {
         );
       });
     });
-    context('with options', () => {
-      context('being global', () => {
+    describe('with options', () => {
+      describe('being global', () => {
         let relationship;
 
         before(() => {
@@ -377,7 +378,7 @@ describe('jdl - JDLRelationship', () => {
           );
         });
       });
-      context('being global, on the source and on the destination', () => {
+      describe('being global, on the source and on the destination', () => {
         let relationship;
 
         before(() => {

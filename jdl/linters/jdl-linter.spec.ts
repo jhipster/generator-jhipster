@@ -23,12 +23,12 @@ import { writeFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
-import { jestExpect } from 'esmocha';
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { createJDLLinterFromFile, createJDLLinterFromContent, JDLLinter } from './jdl-linter.js';
 import Issues from './issues/issues.js';
 import EnumIssue from './issues/enum-issue.js';
 import relationshipIssue from './issues/relationship-issue.js';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,13 +38,13 @@ describe('jdl - JDLLinter', () => {
     await helpers.prepareTemporaryDir();
   });
   describe('createJDLLinterFromFile', () => {
-    context('when not passing a file', () => {
+    describe('when not passing a file', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createJDLLinterFromFile(undefined)).to.throw(/^A JDL file must be passed to create a new JDL linter\.$/);
       });
     });
-    context('when passing a file', () => {
+    describe('when passing a file', () => {
       let path: string;
 
       beforeEach(() => {
@@ -58,20 +58,20 @@ describe('jdl - JDLLinter', () => {
     });
   });
   describe('createJDLLinterFromContent', () => {
-    context('when not passing a content', () => {
+    describe('when not passing a content', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createJDLLinterFromContent(undefined)).to.throw(/^A JDL content must be passed to create a new JDL linter\.$/);
       });
     });
-    context('when passing a content', () => {
+    describe('when passing a content', () => {
       it('should not fail', () => {
         expect(() => createJDLLinterFromContent('entity A')).not.to.throw();
       });
     });
   });
   describe('check', () => {
-    context('when checking for useless entity braces', () => {
+    describe('when checking for useless entity braces', () => {
       let linter: JDLLinter;
       let issue: any;
       let reportedIssues: Issues;
@@ -88,7 +88,7 @@ describe('jdl - JDLLinter', () => {
         expect(issue.ruleName).to.equal('ENT_SHORTER_DECL');
       });
     });
-    context('when checking for useless table names', () => {
+    describe('when checking for useless table names', () => {
       let linter: { check: any };
       let issueForB: { ruleName: any };
       let issueForToto: { ruleName: any };
@@ -111,8 +111,8 @@ describe('jdl - JDLLinter', () => {
         expect(issueForSuperToto.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
       });
     });
-    context('when checking for duplicated', () => {
-      context('entities', () => {
+    describe('when checking for duplicated', () => {
+      describe('entities', () => {
         let linter: { check: any };
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForA: { ruleName: any };
@@ -132,7 +132,7 @@ describe('jdl - JDLLinter', () => {
           expect(issueForB.ruleName).to.equal('ENT_DUPLICATED');
         });
       });
-      context('fields', () => {
+      describe('fields', () => {
         let linter: { check: any };
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForAa: { ruleName: any };
@@ -152,7 +152,7 @@ describe('jdl - JDLLinter', () => {
           expect(issueForBb.ruleName).to.equal('FLD_DUPLICATED');
         });
       });
-      context('enums', () => {
+      describe('enums', () => {
         let linter: { check: any };
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForA: { ruleName: any };
@@ -170,7 +170,7 @@ describe('jdl - JDLLinter', () => {
         });
       });
     });
-    context('when checking for unused enums', () => {
+    describe('when checking for unused enums', () => {
       let linter: JDLLinter;
       let reportedIssues: Issues;
       let issueFor2: EnumIssue;
@@ -190,7 +190,7 @@ describe('jdl - JDLLinter', () => {
         expect(issueFor3.ruleName).to.equal('ENUM_UNUSED');
       });
     });
-    context('when checking for collapsible relationships', () => {
+    describe('when checking for collapsible relationships', () => {
       let linter: { check: any };
       let reportedIssues: Issues;
       let issueForAToB: relationshipIssue;

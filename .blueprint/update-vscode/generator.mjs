@@ -1,6 +1,6 @@
 import { join } from 'path';
-import BaseGenerator from '../../generators/base/index.mjs';
-import { getPackageRoot } from '../../lib/index.mjs';
+import BaseGenerator from '../../generators/base/index.js';
+import { getPackageRoot } from '../../lib/index.js';
 import command from './command.mjs';
 import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.js';
 

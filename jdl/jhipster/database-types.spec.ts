@@ -18,30 +18,31 @@
  */
 
 /* eslint-disable no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
-import { databaseTypes } from '../jhipster/index.mjs';
+import { databaseTypes } from '../jhipster/index.js';
 
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 
 describe('jdl - DatabaseTypes', () => {
   describe('isSql', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should return false', () => {
         expect(databaseTypes.isSql()).to.be.false;
       });
     });
-    context('when passing a SQL database type', () => {
+    describe('when passing a SQL database type', () => {
       [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL].forEach(databaseType => {
-        context(`such as ${databaseType}`, () => {
+        describe(`such as ${databaseType}`, () => {
           it('should return true', () => {
             expect(databaseTypes.isSql(databaseType)).to.be.true;
           });
         });
       });
     });
-    context('when not passing a SQL database type', () => {
+    describe('when not passing a SQL database type', () => {
       [MONGODB, CASSANDRA, COUCHBASE, NO].forEach(databaseType => {
-        context(`such as ${databaseType}`, () => {
+        describe(`such as ${databaseType}`, () => {
           it('should return false', () => {
             expect(databaseTypes.isSql(databaseType)).to.be.false;
           });

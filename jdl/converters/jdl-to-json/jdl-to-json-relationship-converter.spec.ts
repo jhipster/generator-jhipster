@@ -18,31 +18,31 @@
  */
 /* eslint-disable no-unused-expressions */
 
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLRelationship from '../../models/jdl-relationship.js';
 import { convert } from './jdl-to-json-relationship-converter.js';
-import { relationshipTypes, relationshipOptions } from '../../jhipster/index.mjs';
+import { relationshipTypes, relationshipOptions } from '../../jhipster/index.js';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
 describe('jdl - JDLToJSONRelationshipConverter', () => {
   describe('convert', () => {
-    context('when not passing any relationship', () => {
+    describe('when not passing any relationship', () => {
       it('should return an empty map', () => {
         expect(convert([]).size).to.equal(0);
         expect(convert([], ['A', 'B']).size).to.equal(0);
       });
     });
-    context('when not passing any entity name', () => {
+    describe('when not passing any entity name', () => {
       it('should return an empty map', () => {
         expect(convert(undefined, []).size).to.equal(0);
         expect(convert([], []).size).to.equal(0);
       });
     });
-    context('when passing relationships and entity names', () => {
-      context('without options, required relationships or comments', () => {
+    describe('when passing relationships and entity names', () => {
+      describe('without options, required relationships or comments', () => {
         let relationshipsForA;
         let relationshipsForB;
 
@@ -150,8 +150,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           `);
         });
       });
-      context('with options', () => {
-        context('being custom options', () => {
+      describe('with options', () => {
+        describe('being custom options', () => {
           let convertedRelationship;
 
           before(() => {
@@ -188,7 +188,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('being regular options', () => {
+        describe('being regular options', () => {
           let convertedRelationship;
 
           before(() => {
@@ -224,7 +224,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
       });
-      context('with required relationships', () => {
+      describe('with required relationships', () => {
         let relationshipsForA;
         let relationshipsForB;
 
@@ -270,7 +270,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           `);
         });
       });
-      context('with comments', () => {
+      describe('with comments', () => {
         let relationshipsForA;
         let relationshipsForB;
 
@@ -316,8 +316,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           `);
         });
       });
-      context("when the injected field in the destination side isn't present", () => {
-        context('for a One-to-One relationship', () => {
+      describe("when the injected field in the destination side isn't present", () => {
+        describe('for a One-to-One relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -347,7 +347,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             expect(relationshipFromDestinationToSource).to.be.undefined;
           });
         });
-        context('for a One-to-Many relationship', () => {
+        describe('for a One-to-Many relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -377,7 +377,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             jestExpect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
-        context('for a Many-to-One relationship', () => {
+        describe('for a Many-to-One relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -407,7 +407,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             expect(relationshipFromDestinationToSource).to.be.undefined;
           });
         });
-        context('for a Many-to-Many relationship', () => {
+        describe('for a Many-to-Many relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -438,8 +438,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
       });
-      context("when the injected field in the source side isn't present", () => {
-        context('for a One-to-One relationship', () => {
+      describe("when the injected field in the source side isn't present", () => {
+        describe('for a One-to-One relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -477,7 +477,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('for a One-to-Many relationship', () => {
+        describe('for a One-to-Many relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -515,7 +515,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('for a Many-to-One relationship', () => {
+        describe('for a Many-to-One relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -553,7 +553,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('for a Many-to-Many relationship', () => {
+        describe('for a Many-to-Many relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -592,8 +592,8 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
       });
-      context('when setting custom field for relationship mapping', () => {
-        context('for a One-to-One relationship', () => {
+      describe('when setting custom field for relationship mapping', () => {
+        describe('for a One-to-One relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -635,7 +635,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('for a One-to-Many relationship', () => {
+        describe('for a One-to-Many relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -677,7 +677,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('for a Many-to-One relationship', () => {
+        describe('for a Many-to-One relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 
@@ -719,7 +719,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
         });
-        context('for a Many-to-Many relationship', () => {
+        describe('for a Many-to-Many relationship', () => {
           let relationshipFromSourceToDestination;
           let relationshipFromDestinationToSource;
 

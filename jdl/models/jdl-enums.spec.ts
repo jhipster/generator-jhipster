@@ -18,10 +18,10 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLEnums from '../models/jdl-enums.js';
-import { JDLEnum } from '../models/index.mjs';
+import { JDLEnum } from '../models/index.js';
 
 describe('jdl - JDLEnums', () => {
   describe('add', () => {
@@ -31,21 +31,21 @@ describe('jdl - JDLEnums', () => {
       jdlEnums = new JDLEnums();
     });
 
-    context('when adding an invalid enum', () => {
+    describe('when adding an invalid enum', () => {
       it('should fail', () => {
         expect(() => {
           jdlEnums.add(new JDLEnum({ name: '' }));
         }).to.throw("The enum's name must be passed to create an enum.");
       });
     });
-    context('when adding an invalid element', () => {
+    describe('when adding an invalid element', () => {
       it('should fail', () => {
         expect(() => {
           jdlEnums.add();
         }).to.throw(/^Can't add a nil JDL enum to the JDL enums\.$/);
       });
     });
-    context('when adding a valid enum', () => {
+    describe('when adding a valid enum', () => {
       it('should not fail', () => {
         expect(() => {
           jdlEnums.add(new JDLEnum({ name: 'A' }));
@@ -60,12 +60,12 @@ describe('jdl - JDLEnums', () => {
       jdlEnums = new JDLEnums();
     });
 
-    context('when fetching an absent enum', () => {
+    describe('when fetching an absent enum', () => {
       it('should return null', () => {
         expect(jdlEnums.get('A')).to.be.undefined;
       });
     });
-    context('when fetching an existing enum', () => {
+    describe('when fetching an existing enum', () => {
       let jdlEnum;
 
       before(() => {
@@ -85,12 +85,12 @@ describe('jdl - JDLEnums', () => {
       jdlEnums = new JDLEnums();
     });
 
-    context('when fetching an absent enum', () => {
+    describe('when fetching an absent enum', () => {
       it('should return false', () => {
         expect(jdlEnums.has('A')).to.be.false;
       });
     });
-    context('when fetching an existing enum', () => {
+    describe('when fetching an existing enum', () => {
       let jdlEnum;
 
       before(() => {
@@ -110,12 +110,12 @@ describe('jdl - JDLEnums', () => {
       jdlEnums = new JDLEnums();
     });
 
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should not fail', () => {
         jdlEnums.forEach();
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       const result: any[] = [];
 
       before(() => {
@@ -143,12 +143,12 @@ describe('jdl - JDLEnums', () => {
       jdlEnums = new JDLEnums();
     });
 
-    context('when there is no element', () => {
+    describe('when there is no element', () => {
       it('should return 0', () => {
         expect(jdlEnums.size()).to.equal(0);
       });
     });
-    context('when there are enums', () => {
+    describe('when there are enums', () => {
       before(() => {
         jdlEnums.add(new JDLEnum({ name: 'A' }));
         jdlEnums.add(new JDLEnum({ name: 'B' }));
@@ -162,7 +162,7 @@ describe('jdl - JDLEnums', () => {
         expect(jdlEnums.size()).to.equal(3);
       });
     });
-    context('when adding twice the same enum', () => {
+    describe('when adding twice the same enum', () => {
       before(() => {
         jdlEnums.add(new JDLEnum({ name: 'A' }));
         jdlEnums.add(new JDLEnum({ name: 'A' }));
@@ -180,12 +180,12 @@ describe('jdl - JDLEnums', () => {
       jdlEnums = new JDLEnums();
     });
 
-    context('when there is no enum', () => {
+    describe('when there is no enum', () => {
       it('should return an empty string', () => {
         expect(jdlEnums.toString()).to.equal('');
       });
     });
-    context('when there is at least one enum', () => {
+    describe('when there is at least one enum', () => {
       before(() => {
         jdlEnums.add(new JDLEnum({ name: 'A', values: ['AA', 'AB'].map(value => ({ key: value })) }));
         jdlEnums.add(new JDLEnum({ name: 'B', values: ['BA', 'BB', 'BC'].map(value => ({ key: value })) }));

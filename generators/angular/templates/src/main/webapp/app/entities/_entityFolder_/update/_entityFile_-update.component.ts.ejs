@@ -22,7 +22,7 @@
     .map(relationships => relationships.filter(rel => rel.persistableRelationship))
     .filter(relationships => relationships.length > 0);
 _%>
-import { Component, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
+import { Component, inject, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -88,32 +88,32 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
   <%_ } _%>
 <%_ } _%>
 
-    editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
-
-    constructor(
 <%_ if (anyFieldIsBlobDerived) { _%>
-        protected dataUtils: DataUtils,
-        protected eventManager: EventManager,
+    protected dataUtils = inject(DataUtils);
+    protected eventManager = inject(EventManager);
 <%_ } _%>
-        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        protected <%= entityInstance %>FormService: <%= entityAngularName %>FormService,
+    protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected <%= entityInstance %>FormService = inject(<%= entityAngularName %>FormService);
 <%_
 Object.keys(differentRelationships).forEach(key => {
   if (differentRelationships[key].some(rel => rel.persistableRelationship)) {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
-        protected <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,
+    protected <%= uniqueRel.otherEntityName %>Service = inject(<%= uniqueRel.otherEntityAngularName %>Service);
 <%_
     }
   }
 });
 _%>
 <%_ if (anyFieldHasImageContentType) { _%>
-        protected elementRef: ElementRef,
+    protected elementRef = inject(ElementRef);
 <%_ } _%>
-        protected activatedRoute: ActivatedRoute,
-    ) {}
+    protected activatedRoute = inject(ActivatedRoute);
+
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
+
 <%_ for (const relationshipsByEntity of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.persistableRelationship && rel.otherEntity.primaryKey))) {
       const { otherEntity } = relationshipsByEntity[0];
 _%>

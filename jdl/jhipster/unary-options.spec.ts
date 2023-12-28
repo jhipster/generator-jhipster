@@ -18,30 +18,30 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { unaryOptions } from '../jhipster/index.mjs';
+import { unaryOptions } from '../jhipster/index.js';
 
 describe('jdl - UnaryOptions', () => {
   describe('exists', () => {
-    context('when checking for a valid unary option', () => {
+    describe('when checking for a valid unary option', () => {
       it('should return true', () => {
         expect(unaryOptions.exists(unaryOptions.SKIP_CLIENT)).to.be.true;
       });
     });
-    context('when checking for an invalid unary option', () => {
+    describe('when checking for an invalid unary option', () => {
       it('should return false', () => {
         expect(unaryOptions.exists('NOTHING')).to.be.false;
       });
     });
   });
   describe('forEach', () => {
-    context('when not passing a function', () => {
+    describe('when not passing a function', () => {
       it('should fail', () => {
         expect(() => unaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
       });
     });
-    context('when passing a function', () => {
+    describe('when passing a function', () => {
       let result;
 
       before(() => {

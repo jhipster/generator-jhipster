@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { jsonSecure as JSONSecure } from '../jhipster/index.mjs';
+import { jsonSecure as JSONSecure } from '../jhipster/index.js';
 import { JDLSecurityType, PrivilegeActionType, RoleActionType } from '../models/jdl-security-type.js';
-import { JDLSecure } from '../models/index.mjs';
+import { JDLSecure } from '../models/index.js';
 
 describe('JSONSecure', () => {
   it('should initialize with securityType None and no additional properties', () => {

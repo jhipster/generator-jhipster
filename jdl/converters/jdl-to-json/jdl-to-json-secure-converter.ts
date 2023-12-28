@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { IJSONSecure, JSONSecure } from '../../jhipster/json-secure.js';
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 import { JDLSecurityType } from '../../models/jdl-security-type.js';
 
 export default {

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>
@@ -35,15 +35,13 @@ export class AccountService {
   private authenticationState = new ReplaySubject<Account | null>(1);
   private accountCache$?: Observable<Account> | null;
 
-  constructor(
 <%_ if (enableTranslation) { _%>
-    private translateService: TranslateService,
+  private translateService = inject(TranslateService);
 <%_ } _%>
-    private http: HttpClient,
-    private stateStorageService: StateStorageService,
-    private router: Router,
-    private applicationConfigService: ApplicationConfigService
-  ) {}
+  private http = inject(HttpClient);
+  private stateStorageService = inject(StateStorageService);
+  private router = inject(Router);
+  private applicationConfigService = inject(ApplicationConfigService);
 
 <%_ if (generateUserManagement) { _%>
   save(account: Account): Observable<{}> {

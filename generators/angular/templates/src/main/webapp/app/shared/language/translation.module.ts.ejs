@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 <%_ if (applicationTypeMicroservice) { _%>import { TranslateHttpLoader } from '@ngx-translate/http-loader';<%_ } _%>
@@ -42,12 +42,12 @@ function lazyTranslatePartialLoader(http: HttpClient): TranslateLoader {
   ],
 })
 export class LazyTranslationModule {
-  constructor(
-    private translateService: TranslateService,
-    private translateLoader: TranslateLoader,
-    stateStorageService: StateStorageService
-  ) {
-    const currentLang = translateService.store.currentLang;
+  private translateService = inject(TranslateService);
+  private translateLoader = inject(TranslateLoader);
+  private stateStorageService = inject(StateStorageService);
+
+  constructor() {
+    const currentLang = this.translateService.store.currentLang;
     this.translateLoader.getTranslation(currentLang).subscribe(translation => {
       this.translateService.setTranslation(currentLang, translation);
     });
@@ -71,10 +71,10 @@ export class LazyTranslationModule {
   ],
 })
 export class TranslationModule {
-  constructor(
-    private translateService: TranslateService,
-    private stateStorageService: StateStorageService
-  ) {
+  private translateService = inject(TranslateService);
+  private stateStorageService = inject(StateStorageService);
+
+  constructor() {
     this.translateService.setDefaultLang('<%= nativeLanguage %>');
     // if user have changed language and navigates away from the application and back to the application then use previously choosed language
     const langKey = this.stateStorageService.getLocale() ?? '<%= nativeLanguage %>';

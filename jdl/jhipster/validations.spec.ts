@@ -18,8 +18,9 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
-import { validations } from '../jhipster/index.mjs';
+import { validations } from '../jhipster/index.js';
 
 const {
   Validations: { REQUIRED, MAXLENGTH, MAXBYTES },

@@ -125,7 +125,7 @@ _%>
         maxLength: validations.maxLength(t$('entity.validation.maxlength', { max: <%= field.fieldValidateRulesMaxlength %> }).toString(), <%= field.fieldValidateRulesMaxlength %>),
     <%_ } _%>
     <%_ if (field.fieldTypeInteger || field.fieldTypeLong) { _%>
-        numeric: validations.numeric(t$('entity.validation.number').toString()),
+        integer: validations.integer(t$('entity.validation.number').toString()),
     <%_ } _%>
     <%_ if (field.fieldValidationMin) { _%>
         min: validations.minValue(t$('entity.validation.min', { min: <%= field.fieldValidateRulesMin %> }).toString(), <%= field.fieldValidateRulesMin %>),

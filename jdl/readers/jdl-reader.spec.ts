@@ -18,13 +18,14 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+import { it, describe, after, beforeEach } from 'esmocha';
 import fs from 'fs';
 import path, { dirname } from 'path';
 
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import * as JDLReader from '../readers/jdl-reader.js';
-import { basicHelpers as helpers } from '../../test/support/index.mjs';
+import { basicHelpers as helpers } from '../../test/support/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,36 +35,36 @@ describe('jdl - JDLReader', () => {
     await helpers.prepareTemporaryDir();
   });
   describe('parseFromFiles', () => {
-    context('when passing invalid parameters', () => {
-      context('such as nil', () => {
+    describe('when passing invalid parameters', () => {
+      describe('such as nil', () => {
         it('should fail', () => {
           expect(() => {
             JDLReader.parseFromFiles(null);
           }).to.throw(/^The files must be passed to be parsed\.$/);
         });
       });
-      context('such as an empty array', () => {
+      describe('such as an empty array', () => {
         it('should fail', () => {
           expect(() => {
             JDLReader.parseFromFiles([]);
           }).to.throw(/^The files must be passed to be parsed\.$/);
         });
       });
-      context("such as files without the '.jh' or '.jdl' file extension", () => {
+      describe("such as files without the '.jh' or '.jdl' file extension", () => {
         it('should fail', () => {
           expect(() => {
             JDLReader.parseFromFiles(['../../__test-files__/invalid_file.txt']);
           }).to.throw(new RegExp("The passed file '../../__test-files__/invalid_file.txt' must end with '.jh' or '.jdl' to be valid."));
         });
       });
-      context('such as files that do not exist', () => {
+      describe('such as files that do not exist', () => {
         it('should fail', () => {
           expect(() => {
             JDLReader.parseFromFiles(['nofile.jh']);
           }).to.throw(new RegExp("The passed file 'nofile.jh' must exist and must not be a directory to be read."));
         });
       });
-      context('such as folders', () => {
+      describe('such as folders', () => {
         it('should fail', () => {
           expect(() => {
             JDLReader.parseFromFiles(['../../__test-files__/folder.jdl']);
@@ -71,8 +72,8 @@ describe('jdl - JDLReader', () => {
         });
       });
     });
-    context('when passing valid arguments', () => {
-      context('when passing an empty file', () => {
+    describe('when passing valid arguments', () => {
+      describe('when passing an empty file', () => {
         beforeEach(() => {
           fs.writeFileSync(path.join(__dirname, '..', '__test-files__', 'test_file.jdl'), '');
         });
@@ -87,7 +88,7 @@ describe('jdl - JDLReader', () => {
           }).to.throw(/^File content must be passed, it is currently empty\.$/);
         });
       });
-      context('when passing a JDL file with a syntax error', () => {
+      describe('when passing a JDL file with a syntax error', () => {
         beforeEach(() => {
           fs.writeFileSync('test_file.jdl', 'enity A');
         });
@@ -98,7 +99,7 @@ describe('jdl - JDLReader', () => {
           }).to.throw(/but found: 'enity'/);
         });
       });
-      context('when reading a single JDL file', () => {
+      describe('when reading a single JDL file', () => {
         let content;
 
         beforeEach(() => {
@@ -109,7 +110,7 @@ describe('jdl - JDLReader', () => {
           expect(content).not.to.be.null;
         });
       });
-      context('when reading more than one JDL file', () => {
+      describe('when reading more than one JDL file', () => {
         let content;
 
         beforeEach(() => {
@@ -123,7 +124,7 @@ describe('jdl - JDLReader', () => {
           expect(content).not.to.be.null;
         });
       });
-      context('when reading a complex JDL file', () => {
+      describe('when reading a complex JDL file', () => {
         let content;
 
         beforeEach(() => {
@@ -134,7 +135,7 @@ describe('jdl - JDLReader', () => {
           expect(content).not.to.be.null;
         });
       });
-      context('when having multiple internal JDL comments', () => {
+      describe('when having multiple internal JDL comments', () => {
         it('should ignore them and does not fail', () => {
           expect(() => {
             JDLReader.parseFromFiles([path.join(__dirname, '..', '__test-files__', 'multiple_jdl_comments.jdl')]);
@@ -144,14 +145,14 @@ describe('jdl - JDLReader', () => {
     });
   });
   describe('parseFromContent', () => {
-    context('when passing an invalid content', () => {
+    describe('when passing an invalid content', () => {
       it('should fail', () => {
         expect(() => {
           JDLReader.parseFromContent('');
         }).to.throw();
       });
     });
-    context('when passing a valid content', () => {
+    describe('when passing a valid content', () => {
       let content;
 
       beforeEach(() => {
@@ -163,7 +164,7 @@ describe('jdl - JDLReader', () => {
       });
     });
   });
-  context('when parsing a JDL application', () => {
+  describe('when parsing a JDL application', () => {
     let parsed;
 
     beforeEach(() => {

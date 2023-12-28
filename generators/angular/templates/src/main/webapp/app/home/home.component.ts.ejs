@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+import { Component, inject, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
 import {
 <%_ if (!authenticationTypeOauth2) { _%>
   Router,
@@ -49,14 +49,12 @@ export default class HomeComponent implements OnInit<% if (!authenticationTypeOa
   private readonly destroy$ = new Subject<void>();
 <%_ } _%>
 
-  constructor(
-    private accountService: AccountService,
+  private accountService = inject(AccountService);
 <%_ if (!authenticationTypeOauth2) { _%>
-    private router: Router
+  private router = inject(Router);
 <%_ } else { _%>
-    private loginService: LoginService
+  private loginService = inject(LoginService);
 <%_ } _%>
-  ) {}
 
   ngOnInit(): void {
 <%_ if (authenticationTypeOauth2) { _%>

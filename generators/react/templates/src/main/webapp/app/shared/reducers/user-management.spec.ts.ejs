@@ -17,9 +17,8 @@
  limitations under the License.
 -%>
 
-import configureStore from 'redux-mock-store';
+import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-import thunk from 'redux-thunk';
 import sinon from 'sinon';
 
 import userManagement, {
@@ -67,40 +66,34 @@ describe('User management reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
+    const getState = jest.fn();
+    const dispatch = jest.fn();
+    const extra = {};
     beforeEach(() => {
-      const mockStore = configureStore([thunk]);
-      store = mockStore({});
+      store = configureStore({
+        reducer: (state = [], action) => [...state, action],
+      });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
-      const expectedActions = [
-        {
-          type: getUsers.pending.type
-        },
-        {
-          type: getUsers.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getUsers({}));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = {};
+
+      const result = await getUsers(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(getUsers.fulfilled.match(result)).toBe(true);
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
-      const expectedActions = [
-        {
-          type: getUsers.pending.type
-        },
-        {
-          type: getUsers.fulfilled.type,
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getUsers({ page: 1, size: 20, sort: 'id,desc' }));
-      expect(store.getActions()[0]).toMatchObject(expectedActions[0]);
-      expect(store.getActions()[1]).toMatchObject(expectedActions[1]);
+      const arg = { page: 1, size: 20, sort: 'id,desc' };
+
+      const result = await getUsers(arg)(dispatch, getState, extra);
+
+      const pendingAction = dispatch.mock.calls[0][0];
+      expect(pendingAction.meta.requestStatus).toBe('pending');
+      expect(getUsers.fulfilled.match(result)).toBe(true);
     });
   });
 });

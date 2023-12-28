@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import JDLRelationship from '../models/jdl-relationship.js';
 import RelationshipValidator from '../validators/relationship-validator.js';
-import { relationshipOptions, relationshipTypes } from '../jhipster/index.mjs';
+import { relationshipOptions, relationshipTypes } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
@@ -33,13 +34,13 @@ describe('jdl - RelationshipValidator', () => {
   });
 
   describe('validate', () => {
-    context('when not passing anything', () => {
+    describe('when not passing anything', () => {
       it('should fail', () => {
         expect(() => validator.validate()).to.throw(/^No relationship\.$/);
       });
     });
-    context('when passing a relationship', () => {
-      context('with all its required attributes', () => {
+    describe('when passing a relationship', () => {
+      describe('with all its required attributes', () => {
         let relationship;
 
         before(() => {
@@ -56,7 +57,7 @@ describe('jdl - RelationshipValidator', () => {
           expect(() => validator.validate(relationship)).not.to.throw();
         });
       });
-      context('with an invalid type', () => {
+      describe('with an invalid type', () => {
         let relationship;
 
         before(() => {
@@ -72,7 +73,7 @@ describe('jdl - RelationshipValidator', () => {
           expect(() => validator.validate(relationship)).to.throw(/^The relationship type 'toto' doesn't exist\.$/);
         });
       });
-      context('without any injected field', () => {
+      describe('without any injected field', () => {
         let relationship;
 
         before(() => {
@@ -87,8 +88,8 @@ describe('jdl - RelationshipValidator', () => {
           expect(() => validator.validate(relationship)).to.throw(/^At least one injected field is required\.$/);
         });
       });
-      context(`when using the ${BUILT_IN_ENTITY} option`, () => {
-        context(`in a ${ONE_TO_ONE} relationship`, () => {
+      describe(`when using the ${BUILT_IN_ENTITY} option`, () => {
+        describe(`in a ${ONE_TO_ONE} relationship`, () => {
           let relationship;
 
           before(() => {
@@ -107,7 +108,7 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
         [ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE].forEach(type => {
-          context(`in a ${type} relationship`, () => {
+          describe(`in a ${type} relationship`, () => {
             let relationship;
 
             before(() => {
@@ -130,8 +131,8 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
       });
-      context('when having a reflexive relationship', () => {
-        context('with both sides being required', () => {
+      describe('when having a reflexive relationship', () => {
+        describe('with both sides being required', () => {
           let relationship;
 
           before(() => {
@@ -151,8 +152,8 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
       });
-      context(`when having a ${ONE_TO_ONE} relationship`, () => {
-        context('without an injected field in the source entity', () => {
+      describe(`when having a ${ONE_TO_ONE} relationship`, () => {
+        describe('without an injected field in the source entity', () => {
           let relationship;
 
           before(() => {
@@ -171,8 +172,8 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
       });
-      context(`when having a ${MANY_TO_ONE} relationship`, () => {
-        context('when having a bidirectional relationship', () => {
+      describe(`when having a ${MANY_TO_ONE} relationship`, () => {
+        describe('when having a bidirectional relationship', () => {
           let relationship;
 
           before(() => {
@@ -190,9 +191,9 @@ describe('jdl - RelationshipValidator', () => {
           });
         });
       });
-      context('with the user entity', () => {
-        context(`when having a ${ONE_TO_ONE} relationship`, () => {
-          context('having an injected field in the source entity', () => {
+      describe('with the user entity', () => {
+        describe(`when having a ${ONE_TO_ONE} relationship`, () => {
+          describe('having an injected field in the source entity', () => {
             let relationship;
 
             before(() => {
@@ -209,8 +210,8 @@ describe('jdl - RelationshipValidator', () => {
             });
           });
         });
-        context(`when having a ${MANY_TO_ONE} relationship`, () => {
-          context('without the User having the injected field', () => {
+        describe(`when having a ${MANY_TO_ONE} relationship`, () => {
+          describe('without the User having the injected field', () => {
             let relationship;
 
             before(() => {
@@ -226,8 +227,8 @@ describe('jdl - RelationshipValidator', () => {
               expect(() => validator.validate(relationship)).not.to.throw();
             });
           });
-          context('with the User having the injected field', () => {
-            context('as the source', () => {
+          describe('with the User having the injected field', () => {
+            describe('as the source', () => {
               let relationship;
 
               before(() => {
@@ -243,7 +244,7 @@ describe('jdl - RelationshipValidator', () => {
                 expect(() => validator.validate(relationship)).not.to.throw();
               });
             });
-            context('as the destination', () => {
+            describe('as the destination', () => {
               let relationship;
 
               before(() => {
@@ -261,8 +262,8 @@ describe('jdl - RelationshipValidator', () => {
             });
           });
         });
-        context(`when having a ${MANY_TO_MANY} relationship`, () => {
-          context('with the user being the destination', () => {
+        describe(`when having a ${MANY_TO_MANY} relationship`, () => {
+          describe('with the user being the destination', () => {
             let relationship;
 
             before(() => {
@@ -278,7 +279,7 @@ describe('jdl - RelationshipValidator', () => {
               expect(() => validator.validate(relationship)).not.to.throw();
             });
           });
-          context('with the user being the source', () => {
+          describe('with the user being the source', () => {
             let relationship;
 
             before(() => {

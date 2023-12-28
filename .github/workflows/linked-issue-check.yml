@@ -1,0 +1,136 @@
+#
+# Copyright the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: Linked Issue Check
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  linked-issue-check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      pull-requests: read
+    outputs:
+      linked-issues: ${{ steps.get-linked-issues.outputs.issues }}
+      linked-issues-count: ${{ steps.get-linked-issues.outputs.linked_issues_count }}
+    steps:
+      - name: Get Linked Issues
+        id: get-linked-issues
+        uses: nearform-actions/github-action-check-linked-issues@v1
+        with:
+          custom-body-comment: 'This PR is not linked to any issues. Please consider adding the corresponding issues if they exist, in the pull request description.'
+        continue-on-error: true
+  closing-issues:
+    name: ${{ matrix.linked-issue }}
+    strategy:
+      fail-fast: false
+      matrix:
+        linked-issue: ${{ fromJSON(needs.linked-issue-check.outputs.linked-issues) }}
+    runs-on: ubuntu-latest
+    needs: linked-issue-check
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    if: >-
+      fromJSON(needs.linked-issue-check.outputs.linked-issues-count) > 0 &&
+      !contains(github.event.pull_request.labels.*.name, 'pr: skip-closing-issues-check')
+    steps:
+      #----------------------------------------------------------------------
+      # Install all tools and check configuration
+      #----------------------------------------------------------------------
+      - name: 'SETUP: Checkout generator-jhipster'
+        uses: actions/checkout@v4
+        with:
+          path: generator-jhipster
+          fetch-depth: 1
+      - name: 'SETUP: environment'
+        id: setup
+        uses: ./generator-jhipster/.github/actions/setup
+      - uses: ./generator-jhipster/.github/actions/setup-default-node-java
+      - uses: jhipster/actions/create-app-path@v0
+      - uses: jhipster/actions/setup-keycloak-hostname@v0
+      - uses: jhipster/actions/setup-git@v0
+      - uses: jhipster/actions/restore-cache@v0
+        with:
+          npm: true
+          maven: true
+          gradle: true
+      #----------------------------------------------------------------------
+      # Install JHipster and generate project+entities
+      #----------------------------------------------------------------------
+      - name: 'GENERATION: install JHipster'
+        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - name: 'GENERATION: project'
+        id: project
+        run: jhipster from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints
+      - name: 'GENERATION: jhipster info'
+        run: $JHI_SCRIPTS/14-jhipster-info.sh
+      #----------------------------------------------------------------------
+      # Launch tests
+      #----------------------------------------------------------------------
+      - name: 'PREPARE: npm install'
+        run: npm install
+        timeout-minutes: 7
+      - name: 'TESTS: backend'
+        id: backend
+        run: npm run ci:backend:test --if-present
+        timeout-minutes: 15
+      - name: 'TESTS: frontend'
+        id: frontend
+        run: npm run ci:frontend:test --if-present
+        timeout-minutes: 15
+      - name: 'TESTS: packaging'
+        run: npm run ci:e2e:package --if-present
+        timeout-minutes: 12
+      - name: 'TESTS: Start docker compose containers for e2e tests'
+        run: npm run ci:e2e:prepare --if-present
+        timeout-minutes: 5
+      - name: 'E2E: Run'
+        id: e2e
+        run: npm run ci:e2e:run --if-present
+        timeout-minutes: 15
+      - name: 'BACKEND: Store failure logs'
+        uses: actions/upload-artifact@v4
+        if: always() && steps.backend.outcome == 'failure'
+        with:
+          name: log-${{ matrix.number }}
+          path: app/**/test-results/**/*.xml
+      - name: 'E2E: Store failure screenshots'
+        uses: actions/upload-artifact@v4
+        if: always() && steps.e2e.outcome == 'failure'
+        with:
+          name: screenshots-${{ matrix.number }}
+          path: app/**/cypress/screenshots
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2
+  check-closing-issues:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: [closing-issues]
+    if: always()
+    steps:
+      - run: |
+          echo '${{ toJSON(needs) }}'
+          if [ 'skipped' == '${{ needs.closing-issues.result }}' ] || [ 'success' == '${{ needs.closing-issues.result }}' ] || [ 'closed' == '${{ github.event.action }}' ]; then
+            exit 0
+          fi
+          exit 12

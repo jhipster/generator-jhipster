@@ -17,13 +17,14 @@
  * limitations under the License.
  */
 
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipTypes, validations } from '../jhipster/index.mjs';
+import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipTypes, validations } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { JDLEntity } from '../models/index.mjs';
+import { JDLEntity } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLValidation from '../models/jdl-validation.js';
@@ -36,7 +37,7 @@ const {
 
 describe('jdl - JDLWithApplicationValidator', () => {
   describe('createValidator', () => {
-    context('when not passing a JDL object', () => {
+    describe('when not passing a JDL object', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => createValidator()).to.throw(/^A JDL object must be passed to check for business errors.$/);
@@ -44,7 +45,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
     });
   });
   describe('checkForErrors', () => {
-    context('when having an entity with a reserved name', () => {
+    describe('when having an entity with a reserved name', () => {
       let validator;
 
       before(() => {
@@ -68,8 +69,8 @@ describe('jdl - JDLWithApplicationValidator', () => {
         }).to.throw(/^The name 'Continue' is a reserved keyword and can not be used as an entity class name.$/);
       });
     });
-    context('when passing gateway as application type', () => {
-      context('with incompatible database type and field type', () => {
+    describe('when passing gateway as application type', () => {
+      describe('with incompatible database type and field type', () => {
         let validator;
 
         before(() => {
@@ -99,7 +100,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         });
       });
     });
-    context('when passing an unsupported validation for a field', () => {
+    describe('when passing an unsupported validation for a field', () => {
       let validator;
 
       before(() => {
@@ -134,7 +135,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         }).to.throw("The validation 'min' isn't supported for the type 'String'.");
       });
     });
-    context('when the source entity of a relationship is missing', () => {
+    describe('when the source entity of a relationship is missing', () => {
       let validator;
 
       before(() => {
@@ -167,8 +168,8 @@ describe('jdl - JDLWithApplicationValidator', () => {
         );
       });
     });
-    context('when the destination entity of a relationship is missing', () => {
-      context('if it has builtInEntity annotation', () => {
+    describe('when the destination entity of a relationship is missing', () => {
+      describe('if it has builtInEntity annotation', () => {
         let validator;
 
         before(() => {
@@ -206,7 +207,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
           }).not.to.throw();
         });
       });
-      context('if it is not the User entity', () => {
+      describe('if it is not the User entity', () => {
         let checker;
 
         before(() => {
@@ -240,7 +241,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         });
       });
     });
-    context('with relationships between multiple applications', () => {
+    describe('with relationships between multiple applications', () => {
       let validator;
 
       before(() => {
@@ -313,7 +314,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         }).to.throw("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
       });
     });
-    context('when having DTOs without services', () => {
+    describe('when having DTOs without services', () => {
       let validator;
 
       before(() => {
@@ -346,7 +347,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         }).not.to.throw();
       });
     });
-    context('when having DTOs with services', () => {
+    describe('when having DTOs with services', () => {
       let validator;
 
       before(() => {
@@ -396,7 +397,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         }).not.to.throw();
       });
     });
-    context('when having a relationship with the User entity as source', () => {
+    describe('when having a relationship with the User entity as source', () => {
       let validator;
 
       before(() => {
@@ -430,7 +431,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         expect(() => validator.checkForErrors()).not.to.throw();
       });
     });
-    context('when having a relationship with the User entity as destination', () => {
+    describe('when having a relationship with the User entity as destination', () => {
       let validator;
 
       before(() => {
@@ -464,7 +465,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         expect(() => validator.checkForErrors()).not.to.throw();
       });
     });
-    context('when blueprints is used', () => {
+    describe('when blueprints is used', () => {
       let parameter;
 
       before(() => {

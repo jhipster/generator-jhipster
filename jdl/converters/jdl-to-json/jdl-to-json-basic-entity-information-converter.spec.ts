@@ -18,30 +18,30 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { jestExpect } from 'esmocha';
+import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
-import { JDLEntity } from '../../models/index.mjs';
+import { JDLEntity } from '../../models/index.js';
 import { convert } from './jdl-to-json-basic-entity-converter.js';
 
 describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {
-    context('when not passing JDL entities', () => {
+    describe('when not passing JDL entities', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convert()).to.throw(/^JDL entities must be passed to get the basic entity information\.$/);
       });
     });
-    context('when passing an empty array', () => {
+    describe('when passing an empty array', () => {
       it('should return an empty map', () => {
         expect(convert([])).to.deep.equal(new Map());
       });
     });
-    context('when passing JDL entities', () => {
-      context('with some of them being built-in entities', () => {
+    describe('when passing JDL entities', () => {
+      describe('with some of them being built-in entities', () => {
         let builtInEntitiesAreConverted;
         let customEntitiesAreConverted;
 
@@ -69,7 +69,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           expect(customEntitiesAreConverted).to.be.true;
         });
       });
-      context('with no field, no option and no relationship', () => {
+      describe('with no field, no option and no relationship', () => {
         let convertedEntity;
 
         before(() => {

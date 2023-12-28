@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
-import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.mjs';
+import { before, it, describe, expect } from 'esmocha';
+import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.js';
 import { convertOptions } from './option-converter.js';
 
 const { MapperTypes, PaginationTypes } = entityOptions;
@@ -29,15 +29,15 @@ const { PAGINATION } = PaginationTypes;
 
 describe('jdl - OptionConverter', () => {
   describe('convertOptions', () => {
-    context('when not passing options', () => {
+    describe('when not passing options', () => {
       it('should fail', () => {
         // @ts-expect-error
         expect(() => convertOptions()).toThrow(/^Options have to be passed so as to be converted\.$/);
       });
     });
-    context('when passing options', () => {
+    describe('when passing options', () => {
       unaryOptions.forEach(unaryOptionName => {
-        context(`such as ${unaryOptionName}`, () => {
+        describe(`such as ${unaryOptionName}`, () => {
           let convertedOptions;
 
           before(() => {
@@ -64,7 +64,7 @@ describe('jdl - OptionConverter', () => {
         [binaryOptions.Options.MICROSERVICE, 'toto'],
       ]);
       BinaryOptions.forEach((optionValue, optionName) => {
-        context(`such as ${optionName}`, () => {
+        describe(`such as ${optionName}`, () => {
           let convertedOptions;
 
           before(() => {
@@ -84,8 +84,8 @@ describe('jdl - OptionConverter', () => {
         });
       });
     });
-    context('when passing use options', () => {
-      context('that exist', () => {
+    describe('when passing use options', () => {
+      describe('that exist', () => {
         let convertedOptions;
 
         before(() => {
@@ -138,7 +138,7 @@ describe('jdl - OptionConverter', () => {
 `);
         });
       });
-      context('that do not exist', () => {
+      describe('that do not exist', () => {
         let convertedOptions;
 
         before(() => {
