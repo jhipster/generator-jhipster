@@ -200,7 +200,7 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
     }
   }
 
-  if (this.isJhipsterVersionLessThan('8.1.0')) {
+  if (this.isJhipsterVersionLessThan('8.1.1')) {
     if (application.buildToolGradle) {
       this.removeFile('gradle/sonar.gradle');
     }
