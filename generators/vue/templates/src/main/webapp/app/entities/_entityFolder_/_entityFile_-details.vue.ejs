@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
-                <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="t$('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
+                <h2 class="jh-entity-heading" data-cy="<%= entityInstance %>DetailsHeading"><span v-text="t$('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.<%= primaryKey.name %>}}</h2>
                 <dl class="row jh-entity-details">
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
@@ -49,7 +49,7 @@
                     <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
-                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
+                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.<%= primaryKey.name %>">{{i > 0 ? ', ' : ''}}
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
       <%_ } else { _%>
@@ -57,12 +57,12 @@
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
-                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
-                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.<%= primaryKey.name %>">{{i > 0 ? ', ' : ''}}
+                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.<%= primaryKey.name %>}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
       <%_ } else { _%>
                         <div v-if="<%= entityInstance + '.' + relationshipFieldName %>">
-                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.<%= primaryKey.name %>}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>
@@ -77,7 +77,7 @@
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"> Back</span>
                 </button>
 <%_ if (!readOnly) { _%>
-                <router-link v-if="<%= entityInstance %>.id" :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" custom v-slot="{ navigate }">
+                <router-link v-if="<%= entityInstance %>.<%= primaryKey.name %>" :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.<%= primaryKey.name %>}}" custom v-slot="{ navigate }">
                     <button @click="navigate" class="btn btn-primary">
                         <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"> Edit</span>
                     </button>

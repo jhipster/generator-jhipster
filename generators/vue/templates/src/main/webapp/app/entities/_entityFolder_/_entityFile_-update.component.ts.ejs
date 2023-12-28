@@ -64,9 +64,9 @@ export default defineComponent({
 
     const previousState = () => router.go(-1);
 
-    const retrieve<%= entityAngularName %> = async <%= entityInstance %>Id => {
+    const retrieve<%= entityAngularName %> = async <%= entityInstance %><%= primaryKey.nameCapitalized %> => {
       try {
-        const res = await <%= entityInstance %>Service().find(<%= entityInstance %>Id);
+        const res = await <%= entityInstance %>Service().find(<%= entityInstance %><%= primaryKey.nameCapitalized %>);
 <%_
         for (field of fields.filter(field => !field.id)) {
             const fieldName = field.fieldName;
@@ -190,15 +190,15 @@ _%>
           const fieldName = field.fieldName;
           const fieldType = field.fieldType;
     } _%>
-    if (this.<%= entityInstance %>.id) {
+    if (this.<%= entityInstance %>.<%= primaryKey.name %>) {
         this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
           this.isSaving = false;
           this.previousState();
           this.alertService.showInfo(
 <%_ if (enableTranslation) { _%>
-            this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.id })
+            this.t$('<%= i18nAlertHeaderPrefix %>.updated', { 'param' : param.<%= primaryKey.name %> })
 <%_ } else {_%>
-            'A <%= entityAngularName %> is updated with identifier ' + param.id
+            'A <%= entityAngularName %> is updated with identifier ' + param.<%= primaryKey.name %>
 <%_ } _%>
           );
         }).catch(error => {
@@ -211,9 +211,9 @@ _%>
           this.previousState();
           this.alertService.showSuccess(
 <%_ if (enableTranslation) { _%>
-            this.t$('<%= i18nAlertHeaderPrefix %>.created', { param: param.id }).toString()
+            this.t$('<%= i18nAlertHeaderPrefix %>.created', { param: param.<%= primaryKey.name %> }).toString()
 <%_ } else {_%>
-            'A <%= entityAngularName %> is created with identifier ' + param.id
+            'A <%= entityAngularName %> is created with identifier ' + param.<%= primaryKey.name %>
 <%_ } _%>
           );
         }).catch(error => {
@@ -242,7 +242,7 @@ _%>
   <%_ if (relationshipsContainManyToOne) { _%>
     getSelected(selectedVals, option) : any {
       if (selectedVals) {
-        return selectedVals.find(value => option.id === value.id) ?? option;
+        return selectedVals.find(value => option.<%= primaryKey.name %> === value.<%= primaryKey.name %>) ?? option;
       }
       return option;
     },

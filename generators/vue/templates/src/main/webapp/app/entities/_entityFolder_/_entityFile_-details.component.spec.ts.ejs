@@ -39,7 +39,7 @@ vitest.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock }),
 }));
 
-const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
+const <%= entityInstance %>Sample = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -83,7 +83,7 @@ describe('Component Tests', () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
         route = {
           params: {
-            <%= entityInstance %>Id: '' + <%- tsKeyId %>,
+            <%= entityInstance %><%= primaryKey.nameCapitalized %>: '' + <%- tsKeyId %>,
           },
         };
         const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });

@@ -55,7 +55,7 @@ vitest.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock }),
 }));
 
-const <%= entityInstance %>Sample = { id: <%- tsKeyId %> };
+const <%= entityInstance %>Sample = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
   let mountOptions: MountingOptions<<%= entityAngularName %>UpdateComponentType>['global'];
@@ -178,7 +178,7 @@ describe('Component Tests', () => {
         // WHEN
         route = {
           params: {
-            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+            <%= entityInstance %><%= primaryKey.nameCapitalized %>: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
           },
         };
         const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
