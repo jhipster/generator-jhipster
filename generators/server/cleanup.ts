@@ -199,4 +199,10 @@ export default function cleanupOldServerFilesTask(this: BaseGenerator, taskParam
       this.removeFile(`${application.javaPackageSrcDir}security/oauth2/OAuthIdpTokenResponseDTO.java`);
     }
   }
+
+  if (this.isJhipsterVersionLessThan('8.1.0')) {
+    if (application.buildToolGradle) {
+      this.removeFile('gradle/sonar.gradle');
+    }
+  }
 }
