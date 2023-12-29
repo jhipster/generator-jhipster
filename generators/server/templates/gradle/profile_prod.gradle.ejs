@@ -36,6 +36,12 @@ configurations {
       // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
       force "org.hibernate.orm:hibernate-jcache:${hibernateVersion}"
 <%_ } _%>
+<%_ if (prodDatabaseDriver?.r2dbc?.version) { _%>
+      force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
+<%_ } _%>
+<%_ if (prodDatabaseDriver?.jdbc?.version) { _%>
+      force "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>:<%- prodDatabaseDriver.jdbc.version %>"
+<%_ } _%>
     }
   }
 }
@@ -43,9 +49,9 @@ configurations {
 dependencies {
   <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgresql) { _%>
     <%_ if (reactive) { _%>
-    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %><%- prodDatabaseDriver.r2dbc.version ? `:${prodDatabaseDriver.r2dbc.version}` : '' %>"
+    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
     <%_ } _%>
-    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %><%- prodDatabaseDriver.jdbc.version ? `:${prodDatabaseDriver.jdbc.version}` : '' %>"
+    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMysql) { _%>
     testImplementation "org.testcontainers:mysql"
