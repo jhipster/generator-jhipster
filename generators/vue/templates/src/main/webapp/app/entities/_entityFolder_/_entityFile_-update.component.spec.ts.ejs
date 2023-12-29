@@ -178,7 +178,7 @@ describe('Component Tests', () => {
         // WHEN
         route = {
           params: {
-            <%= entityInstance %><%= primaryKey.nameCapitalized %>: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
           },
         };
         const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });

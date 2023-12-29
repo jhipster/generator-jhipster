@@ -49,7 +49,7 @@
                     <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
-                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.<%= primaryKey.name %>">{{i > 0 ? ', ' : ''}}
+                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
       <%_ } else { _%>
@@ -57,12 +57,12 @@
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
-                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.<%= primaryKey.name %>">{{i > 0 ? ', ' : ''}}
-                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.<%= primaryKey.name %>}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>">{{i > 0 ? ', ' : ''}}
+                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
       <%_ } else { _%>
                         <div v-if="<%= entityInstance + '.' + relationshipFieldName %>">
-                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.<%= primaryKey.name %>}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= otherEntityName %>Id: <%= entityInstance + "." + relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
       <%_ } _%>
     <%_ } _%>

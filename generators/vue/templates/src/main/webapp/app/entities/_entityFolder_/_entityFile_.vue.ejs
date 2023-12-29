@@ -173,7 +173,7 @@
                 <span id="<%= i18nKeyPrefix %>.delete.question" data-cy="<%= entityInstance %>DeleteDialogHeading" v-text="t$('entity.delete.title')">Confirm delete operation</span>
             </template>
             <div class="modal-body">
-                <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" v-text="t$('<%= i18nKeyPrefix %>.delete.question', {'<%= primaryKey.name %>': removeId})">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
+                <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" v-text="t$('<%= i18nKeyPrefix %>.delete.question', {'id': removeId})">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
             </div>
             <template #modal-footer>
                 <div>

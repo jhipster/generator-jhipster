@@ -83,7 +83,7 @@ describe('Component Tests', () => {
         <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
         route = {
           params: {
-            <%= entityInstance %><%= primaryKey.nameCapitalized %>: '' + <%- tsKeyId %>,
+            <%= entityInstance %>Id: '' + <%- tsKeyId %>,
           },
         };
         const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });

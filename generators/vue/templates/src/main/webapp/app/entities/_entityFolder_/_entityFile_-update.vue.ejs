@@ -139,14 +139,14 @@ _%>
     <%_ } else { _%>
                             <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
     <%_ } _%>
-                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="form-group">
                         <label v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
-                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>
