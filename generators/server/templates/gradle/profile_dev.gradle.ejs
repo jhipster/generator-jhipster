@@ -37,10 +37,10 @@ configurations {
       force "org.hibernate.orm:hibernate-jcache:${hibernateVersion}"
 <%_ } _%>
 <%_ if (prodDatabaseDriver?.r2dbc?.version) { _%>
-    force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
+      force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
 <%_ } _%>
 <%_ if (prodDatabaseDriver?.jdbc?.version) { _%>
-    force "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>:<%- prodDatabaseDriver.jdbc.version %>"
+      force "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>:<%- prodDatabaseDriver.jdbc.version %>"
 <%_ } _%>
     }
   }
