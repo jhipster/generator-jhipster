@@ -31,7 +31,7 @@ const testcontainerFileForDB = {
   postgresql: 'PostgreSqlTestContainer.java',
 };
 
-type JavaArtifact = { groupId: string; artifactId: string };
+type JavaArtifact = { groupId: string; artifactId: string; version?: string };
 export type DatabaseArtifact = { jdbc: JavaArtifact; r2dbc: JavaArtifact };
 
 const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
@@ -51,7 +51,8 @@ const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
   },
   postgresql: {
     jdbc: { groupId: 'org.postgresql', artifactId: 'postgresql' },
-    r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql' },
+    // TODO ignore v1.0.3.RELEASE due to https://github.com/pgjdbc/r2dbc-postgresql/issues/622, revisit for spring-boot 3.2.2
+    r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql', version: 'v1.0.2.RELEASE' },
   },
 };
 
