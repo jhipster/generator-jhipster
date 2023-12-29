@@ -572,7 +572,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.anyPropertyHasValidation =
     entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
 
-  const relationshipsByOtherEntity = relationships
+  const relationshipsByOtherEntity: Record<string, any> = relationships
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship])
     .reduce((relationshipsByOtherEntity: any, [type, relationship]) => {
       if (!relationshipsByOtherEntity[type]) {
@@ -585,6 +585,9 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
 
   entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
   entity.differentRelationships = relationshipsByOtherEntity;
+  entity.persistableOtherEntities = Object.values(relationshipsByOtherEntity).filter(relationships =>
+    relationships.some(({ persistableRelationship, otherEntity }) => persistableRelationship && otherEntity !== entity),
+  );
 
   entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
 
@@ -594,6 +597,9 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   ];
 
   entity.otherEntities = _.uniq(entity.relationships.map(rel => rel.otherEntity));
+
+  entity.persistableRelationships = relationships.filter(({ persistableRelationship }) => persistableRelationship);
+  entity.otherEntitiesWithPersistableRelationship = _.uniq(entity.persistableRelationships.map(rel => rel.otherEntity));
 
   entity.updatableEntity =
     entity.fields.some(field => !field.id && !field.transient) ||

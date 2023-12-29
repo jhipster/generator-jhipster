@@ -17,10 +17,16 @@
  limitations under the License.
 -%>
 import { Component } from '@angular/core';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
 
 @Component({
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-footer',
   templateUrl: './footer.component.html',
+<%_ if (enableTranslation) { _%>
+  imports: [TranslateDirective],
+<%_ } _%>
 })
 export default class FooterComponent {}

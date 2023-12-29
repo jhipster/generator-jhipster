@@ -41,9 +41,6 @@ hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
 hazelcastHibernate53Version=<%- javaDependencies['hazelcast-hibernate53'] %>
   <%_ } _%>
 <%_ } _%>
-<%_ if (messageBrokerPulsar) { _%>
-springPulsarVersion=<%- javaDependencies['spring-pulsar'] %>
-<%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=<%- javaDependencies['commons-beanutils'] %>
@@ -69,14 +66,9 @@ gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 <%_ if (!skipClient) { _%>
 gradleNodePluginVersion=<%- javaDependencies['node-gradle'] %>
 <%_ } _%>
-sonarqubePluginVersion=<%- javaDependencies['gradle-sonarqube'] %>
-spotlessPluginVersion=<%- javaDependencies['spotless-gradle-plugin'] %>
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ } _%>
-noHttpCheckstyleVersion=<%- javaDependencies['nohttp-checkstyle'] %>
-checkstyleVersion=<%- javaDependencies.checkstyle %>
-modernizerPluginVersion=<%- javaDependencies['gradle-modernizer-plugin'] %>
 <%_ if (enableGradleEnterprise) { _%>
 gradleEnterprisePluginVersion=<%- javaDependencies['gradle-enterprise'] %>
 gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user-data-gradle-plugin'] %>

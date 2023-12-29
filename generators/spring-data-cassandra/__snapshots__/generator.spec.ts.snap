@@ -20,6 +20,9 @@ exports[`generator - cassandra gateway-jwt-gradle-enableTranslation(true)-com.pa
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -33,9 +36,6 @@ exports[`generator - cassandra gateway-jwt-gradle-enableTranslation(true)-com.pa
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -822,6 +822,9 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -835,9 +838,6 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -1175,6 +1175,9 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1188,9 +1191,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -1986,6 +1986,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1999,9 +2002,6 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -2713,6 +2713,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -2726,9 +2729,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -3533,6 +3533,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -3546,9 +3549,6 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
