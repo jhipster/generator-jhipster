@@ -69,7 +69,7 @@ export const generateSample = async (
       const files = globSync('*', { cwd: jdlEntitiesSamplesFolder });
       copyJdlEntitySamples(destProjectFolder, ...files);
     } else {
-      copyJdlEntitySamples(destProjectFolder, jdlEntity.split(','));
+      copyJdlEntitySamples(destProjectFolder, ...jdlEntity.split(','));
     }
   }
 
