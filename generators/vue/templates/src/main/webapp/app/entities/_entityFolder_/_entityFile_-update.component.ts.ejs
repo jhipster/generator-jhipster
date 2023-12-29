@@ -240,9 +240,9 @@ _%>
 
   <%_ } _%>
   <%_ if (relationshipsContainManyToOne) { _%>
-    getSelected(selectedVals, option) : any {
+    getSelected(selectedVals, option, pkField = 'id') : any {
       if (selectedVals) {
-        return selectedVals.find(value => option.<%= primaryKey.name %> === value.<%= primaryKey.name %>) ?? option;
+        return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
       }
       return option;
     },
