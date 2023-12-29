@@ -8,7 +8,7 @@
     {
       "name": "vue-default-additional",
       "app-sample": "vue-default",
-      "entity": none",
+      "entity": "none",
       "jdl-entity": "custom-id",
       "node": "20",
       "java": "21"
