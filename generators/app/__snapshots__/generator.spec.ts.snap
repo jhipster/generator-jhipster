@@ -693,7 +693,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "r2dbc": {
       "artifactId": "r2dbc-postgresql",
       "groupId": "org.postgresql",
-      "version": "v1.0.2.RELEASE",
+      "version": "1.0.2.RELEASE",
     },
   },
   "prodDatabaseExtraOptions": "",
@@ -1264,7 +1264,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "r2dbc": {
       "artifactId": "r2dbc-postgresql",
       "groupId": "org.postgresql",
-      "version": "v1.0.2.RELEASE",
+      "version": "1.0.2.RELEASE",
     },
   },
   "prodDatabaseExtraOptions": "",
@@ -1780,7 +1780,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "r2dbc": {
       "artifactId": "r2dbc-postgresql",
       "groupId": "org.postgresql",
-      "version": "v1.0.2.RELEASE",
+      "version": "1.0.2.RELEASE",
     },
   },
   "prodDatabaseExtraOptions": "",
