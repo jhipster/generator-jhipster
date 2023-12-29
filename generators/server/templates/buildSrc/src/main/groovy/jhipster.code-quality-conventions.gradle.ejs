@@ -1,0 +1,63 @@
+plugins {
+    id "jacoco"
+    id "org.sonarqube"
+    id "com.diffplug.spotless"
+    id "com.github.andygoossens.gradle-modernizer-plugin"
+    id "io.spring.nohttp"
+}
+
+jacoco {
+    toolVersion = "${libs.versions.jacoco.get()}"
+}
+
+jacocoTestReport {
+    executionData tasks.withType(Test)
+    classDirectories.from = files(sourceSets.main.output.classesDirs)
+    sourceDirectories.from = files(sourceSets.main.java.srcDirs)
+
+    reports {
+        xml.required = true
+    }
+}
+
+file("sonar-project.properties").withReader {
+    Properties sonarProperties = new Properties()
+    sonarProperties.load(it)
+
+    sonarProperties.each { key, value ->
+        sonarqube {
+            properties {
+                property key, value
+            }
+        }
+    }
+}
+
+spotless {
+    java {
+        target 'src/*/java/**/*.java'
+        // removeUnusedImports()
+    }
+}
+
+modernizer {
+    failOnViolations = true
+    includeTestClasses = true
+}
+
+checkstyle {
+    toolVersion "${libs.versions.checkstyle.get()}"
+    configFile file("checkstyle.xml")
+    checkstyleTest.enabled = false
+}
+
+nohttp {
+    source.include "build.gradle", "README.md"
+}
+
+// workaround for https://github.com/checkstyle/checkstyle/issues/14123
+configurations.checkstyle {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+      select("com.google.guava:guava:0")
+    }
+}
