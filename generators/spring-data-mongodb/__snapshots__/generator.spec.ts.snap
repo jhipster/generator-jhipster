@@ -20,6 +20,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -33,9 +36,6 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -804,6 +804,9 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -817,9 +820,6 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -1145,6 +1145,9 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1158,9 +1161,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -1935,6 +1935,9 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1948,9 +1951,6 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -2638,6 +2638,9 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -2651,9 +2654,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
@@ -3437,6 +3437,9 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -3450,9 +3453,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "gradle/profile_prod.gradle": {
-    "stateCleared": "modified",
-  },
-  "gradle/sonar.gradle": {
     "stateCleared": "modified",
   },
   "gradle/war.gradle": {
