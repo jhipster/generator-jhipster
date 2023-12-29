@@ -35,8 +35,6 @@ jib {
         environment = [
 <%_ if (cacheProviderInfinispan) { _%>
             JAVA_OPTS: "-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true",
-<%_ } else { _%>
-            JAVA_OPTS: "-Djava.net.preferIPv4Stack=true",
 <%_ } _%>
             SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
             JHIPSTER_SLEEP: "0"
