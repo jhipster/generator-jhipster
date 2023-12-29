@@ -181,7 +181,7 @@
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-plugin-mocha": "10.2.0",
     "eslint-plugin-prettier": "5.1.2",
-    "esmocha": "1.1.1",
+    "esmocha": "1.2.0",
     "fs-extra": "11.2.0",
     "jest-extended": "4.0.2",
     "jsdoc": "4.0.2",
