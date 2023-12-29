@@ -23,7 +23,7 @@ import type GatlingGenerator from './generator.js';
  * need to be removed.
  */
 export default function cleanupTask(this: GatlingGenerator, { application }) {
-  if (this.isJhipsterVersionLessThan('8.1.0')) {
+  if (this.isJhipsterVersionLessThan('8.1.1')) {
     if (application.buildToolGradle) {
       this.removeFile('gradle/gatling.gradle');
     }
