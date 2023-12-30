@@ -37,7 +37,7 @@ const imperativeConfigFiles = {
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/WebConfigurerTest.java', 'config/WebConfigurerTestController.java'],
+      templates: ['config/CRLFLogConverterTest.java', 'config/WebConfigurerTest.java', 'config/WebConfigurerTestController.java'],
     },
   ],
 };
