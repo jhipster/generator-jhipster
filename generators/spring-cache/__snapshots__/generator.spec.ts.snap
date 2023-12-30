@@ -5,7 +5,7 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/cache.gradle": {
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
@@ -16,9 +16,21 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
 
 exports[`generator - spring-cache caffeine-gradle should match source calls 1`] = `
 {
-  "applyFromGradle": [
+  "addGradleBuildSrcDependencyCatalogVersion": [
     {
-      "script": "gradle/cache.gradle",
+      "name": "typesafe",
+      "version": "'TYPESAFE-VERSION'",
+    },
+  ],
+  "addGradleDependencyCatalogVersion": [
+    {
+      "name": "typesafe",
+      "version": "'TYPESAFE-VERSION'",
+    },
+  ],
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.spring-cache-conventions",
     },
   ],
 }
@@ -89,7 +101,7 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/cache.gradle": {
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
@@ -100,9 +112,9 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
 
 exports[`generator - spring-cache ehcache-gradle should match source calls 1`] = `
 {
-  "applyFromGradle": [
+  "addGradlePlugin": [
     {
-      "script": "gradle/cache.gradle",
+      "id": "jhipster.spring-cache-conventions",
     },
   ],
 }
@@ -159,7 +171,7 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/cache.gradle": {
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
@@ -170,9 +182,29 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
 
 exports[`generator - spring-cache hazelcast-gradle should match source calls 1`] = `
 {
-  "applyFromGradle": [
+  "addGradleBuildSrcDependencyCatalogVersion": [
     {
-      "script": "gradle/cache.gradle",
+      "name": "hazelcast-spring",
+      "version": "'HAZELCAST-SPRING-VERSION'",
+    },
+    {
+      "name": "hazelcast-hibernate53",
+      "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
+    },
+  ],
+  "addGradleDependencyCatalogVersion": [
+    {
+      "name": "hazelcast-spring",
+      "version": "'HAZELCAST-SPRING-VERSION'",
+    },
+    {
+      "name": "hazelcast-hibernate53",
+      "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
+    },
+  ],
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.spring-cache-conventions",
     },
   ],
 }
@@ -241,7 +273,7 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/cache.gradle": {
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
@@ -255,9 +287,9 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
 
 exports[`generator - spring-cache infinispan-gradle should match source calls 1`] = `
 {
-  "applyFromGradle": [
+  "addGradlePlugin": [
     {
-      "script": "gradle/cache.gradle",
+      "id": "jhipster.spring-cache-conventions",
     },
   ],
 }
@@ -324,7 +356,7 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/cache.gradle": {
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
@@ -335,9 +367,9 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
 
 exports[`generator - spring-cache memcached-gradle should match source calls 1`] = `
 {
-  "applyFromGradle": [
+  "addGradlePlugin": [
     {
-      "script": "gradle/cache.gradle",
+      "id": "jhipster.spring-cache-conventions",
     },
   ],
 }
@@ -392,7 +424,7 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "gradle/cache.gradle": {
+  "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
@@ -412,15 +444,15 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
 
 exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
 {
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.spring-cache-conventions",
+    },
+  ],
   "addTestSpringFactory": [
     {
       "key": "org.springframework.test.context.ContextCustomizerFactory",
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
-    },
-  ],
-  "applyFromGradle": [
-    {
-      "script": "gradle/cache.gradle",
     },
   ],
 }

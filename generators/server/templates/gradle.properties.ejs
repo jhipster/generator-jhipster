@@ -32,16 +32,6 @@ archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
 <%_ if (enableSwaggerCodegen) { _%>
 jacksonDatabindNullableVersion=<%- javaDependencies['jackson-databind-nullable'] %>
 <%_ } _%>
-<%_ if (cacheProviderCaffeine) { _%>
-typesafeConfigVersion=<%- javaDependencies.typesafe %>
-<%_ } _%>
-<%_ if (cacheProviderHazelcast) { _%>
-hazelcastSpringVersion=<%- javaDependencies['hazelcast-spring'] %>
-  <%_ if (enableHibernateCache) { _%>
-hazelcastHibernate53Version=<%- javaDependencies['hazelcast-hibernate53'] %>
-  <%_ } _%>
-<%_ } _%>
-
 <%_ if (databaseTypeSql && reactive) { _%>
 commonsBeanutilsVersion=<%- javaDependencies['commons-beanutils'] %>
 <%_ } _%>

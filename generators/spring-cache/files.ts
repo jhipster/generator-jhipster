@@ -18,14 +18,14 @@
  */
 import Generator from './generator.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.js';
 import { WriteFileSection } from '../base/api.js';
 
 const files: WriteFileSection<Generator, any> = {
   cacheFiles: [
     {
       condition: data => data.buildToolGradle,
-      templates: ['gradle/cache.gradle'],
+      templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.spring-cache-conventions.gradle`],
     },
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
