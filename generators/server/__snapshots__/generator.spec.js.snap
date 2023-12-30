@@ -176,6 +176,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -421,6 +424,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -634,6 +640,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
@@ -1080,6 +1089,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": {

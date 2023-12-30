@@ -736,6 +736,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -1873,6 +1876,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -2643,6 +2649,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {
@@ -3466,6 +3475,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/CouchbaseTestContainer.java": {

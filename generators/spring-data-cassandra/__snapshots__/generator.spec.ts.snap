@@ -715,6 +715,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -1834,6 +1837,9 @@ exports[`generator - cassandra monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -2598,6 +2604,9 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
@@ -3400,6 +3409,9 @@ exports[`generator - cassandra monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/AsyncSyncConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/CassandraTestContainer.java": {
