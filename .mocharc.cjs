@@ -16,5 +16,5 @@ module.exports = {
   // Resolve absolute path for test with fork and different cwd.
   // `loader` options is passed to forks, but `require` is not.
   // Use node-option instead (it overrides loader option)
-  parallel: false,
+  parallel: true,
 };
