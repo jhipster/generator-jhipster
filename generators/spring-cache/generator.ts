@@ -99,7 +99,32 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
       },
       applyGradleScript({ source, application }) {
         if (application.buildToolGradle) {
-          source.applyFromGradle?.({ script: 'gradle/cache.gradle' });
+          const applicationAny = application as any;
+          if (applicationAny.cacheProviderCaffeine) {
+            source.addGradleDependencyCatalogVersion?.({ name: 'typesafe', version: application.javaDependencies?.typesafe });
+            source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'typesafe', version: application.javaDependencies?.typesafe });
+          }
+          if (applicationAny.cacheProviderHazelcast) {
+            source.addGradleDependencyCatalogVersion?.({
+              name: 'hazelcast-spring',
+              version: application.javaDependencies?.['hazelcast-spring'],
+            });
+            source.addGradleBuildSrcDependencyCatalogVersion?.({
+              name: 'hazelcast-spring',
+              version: application.javaDependencies?.['hazelcast-spring'],
+            });
+            if (applicationAny.enableHibernateCache) {
+              source.addGradleDependencyCatalogVersion?.({
+                name: 'hazelcast-hibernate53',
+                version: application.javaDependencies?.['hazelcast-hibernate53'],
+              });
+              source.addGradleBuildSrcDependencyCatalogVersion?.({
+                name: 'hazelcast-hibernate53',
+                version: application.javaDependencies?.['hazelcast-hibernate53'],
+              });
+            }
+          }
+          source.addGradlePlugin?.({ id: 'jhipster.spring-cache-conventions' });
         }
       },
       addDependencies({ application, source }) {

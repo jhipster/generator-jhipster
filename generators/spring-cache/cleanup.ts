@@ -34,4 +34,9 @@ export default function cleanupTask(this: Generator, { application }: any) {
       this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
     }
   }
+  if (application.buildToolGradle) {
+    if (this.isJhipsterVersionLessThan('8.1.1')) {
+      this.removeFile('gradle/cache.gradle');
+    }
+  }
 }
