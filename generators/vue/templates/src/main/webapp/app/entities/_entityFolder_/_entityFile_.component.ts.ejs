@@ -134,7 +134,7 @@ export default defineComponent({
     const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
     const removeEntity = ref<any>(null);
     const prepareRemove = (instance: I<%= entityAngularName %>) => {
-      removeId.value = instance.id;
+      removeId.value = instance.<%= primaryKey.name %>;
       removeEntity.value.show();
     };
     const closeDialog = () => {

@@ -6,6 +6,14 @@
       "entity": "sqlfull"
     },
     {
+      "name": "vue-default-additional",
+      "app-sample": "vue-default",
+      "entity": "none",
+      "jdl-entity": "custom-id",
+      "node": "20",
+      "java": "21"
+    },
+    {
       "name": "vue-noi18n-mysql-ws-oauth2",
       "app-sample": "vue-noi18n-ws-oauth2",
       "entity": "sqlfull",

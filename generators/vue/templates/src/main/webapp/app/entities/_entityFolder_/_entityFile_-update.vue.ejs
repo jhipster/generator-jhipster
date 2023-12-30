@@ -4,10 +4,10 @@
             <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
                 <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading" v-text="t$('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
                 <div>
-                    <div class="form-group" v-if="<%= entityInstance %>.id">
-                        <label for="id" v-text="t$('global.field.id')">ID</label>
-                        <input type="text" class="form-control" id="id" name="id"
-                               v-model="<%= entityInstance %>.id" readonly />
+                    <div class="form-group" v-if="<%= entityInstance %>.<%= primaryKey.name %>">
+                        <label for="id" v-text="t$('global.field.id')"><%= primaryKey.nameCapitalized %></label>
+                        <input type="text" class="form-control" id="id" name="<%= primaryKey.name %>"
+                               v-model="<%= entityInstance %>.<%= primaryKey.name %>" readonly />
                     </div>
 <%_ for (field of fields.filter(field => !field.id)) {
   const fieldName = field.fieldName;
@@ -139,14 +139,14 @@ _%>
     <%_ } else { _%>
                             <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
     <%_ } _%>
-                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="form-group">
                         <label v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
-                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option, '<%= relationship.otherEntity.primaryKey.name %>')" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>
