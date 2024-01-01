@@ -813,7 +813,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           scope: 'implementation',
         });
         source.addGradlePlugin?.({ id: 'jhipster.code-quality-conventions' });
-        source.addGradlePlugin?.({ id: 'jhipster.docker-conventions ' });
+        source.addGradlePlugin?.({ id: 'jhipster.docker-conventions' });
       },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
