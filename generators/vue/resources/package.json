@@ -22,7 +22,7 @@
     "@pinia/testing": "0.1.3",
     "@rushstack/eslint-patch": "1.6.1",
     "@tsconfig/node18": "18.2.2",
-    "@types/node": "18.19.3",
+    "@types/node": "18.19.4",
     "@types/sinon": "17.0.2",
     "@vitejs/plugin-vue": "5.0.0",
     "@vue/eslint-config-prettier": "8.0.0",
