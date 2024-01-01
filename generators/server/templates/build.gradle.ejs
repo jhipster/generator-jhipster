@@ -22,7 +22,6 @@ plugins {
     id "idea"
     id "eclipse"
     id "org.springframework.boot"
-    id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
 <%_ if (enableSwaggerCodegen) { _%>
     id "org.openapi.generator"
@@ -52,7 +51,6 @@ ext {
     }
 }
 
-apply from: "gradle/docker.gradle"
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: "gradle/swagger.gradle"
 <%_ } _%>

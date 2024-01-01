@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+plugins {
+    id "com.google.cloud.tools.jib"
+}
+
 jib {
     from {
         image = "<%- dockerContainers.javaJre %>"
@@ -47,4 +51,3 @@ jib {
       permissions = ["/entrypoint.sh": "755"]
     }
 }
-

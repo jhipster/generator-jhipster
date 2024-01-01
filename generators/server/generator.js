@@ -772,6 +772,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           name: 'nohttp-plugin',
           version: application.javaDependencies?.['nohttp-checkstyle'],
         });
+        source.addGradleDependencyCatalogVersion?.({ name: 'jib-plugin', version: application.javaDependencies?.['jib-maven-plugin'] });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'jib-plugin',
+          version: application.javaDependencies?.['jib-maven-plugin'],
+        });
         source.addGradleBuildSrcDependency?.({
           groupId: 'org.sonarsource.scanner.gradle',
           artifactId: 'sonarqube-gradle-plugin',
@@ -800,7 +805,15 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           version: '${libs.versions.nohttp.plugin.get()}',
           scope: 'implementation',
         });
+        source.addGradleBuildSrcDependency?.({
+          groupId: 'com.google.cloud.tools',
+          artifactId: 'jib-gradle-plugin',
+          // eslint-disable-next-line no-template-curly-in-string
+          version: '${libs.versions.jib.plugin.get()}',
+          scope: 'implementation',
+        });
         source.addGradlePlugin?.({ id: 'jhipster.code-quality-conventions' });
+        source.addGradlePlugin?.({ id: 'jhipster.docker-conventions ' });
       },
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();

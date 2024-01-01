@@ -311,12 +311,12 @@ export const baseServerFiles = {
         'build.gradle',
         'settings.gradle',
         'gradle.properties',
-        'gradle/docker.gradle',
         'gradle/profile_dev.gradle',
         'gradle/profile_prod.gradle',
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
         `${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.code-quality-conventions.gradle`,
+        `${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.docker-conventions.gradle`,
       ],
     },
     {

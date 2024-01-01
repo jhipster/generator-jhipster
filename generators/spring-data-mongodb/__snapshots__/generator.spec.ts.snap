@@ -23,13 +23,13 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.pack
   "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
-    "stateCleared": "modified",
-  },
-  "gradle/docker.gradle": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -810,13 +810,13 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
-    "stateCleared": "modified",
-  },
-  "gradle/docker.gradle": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -1151,13 +1151,13 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
-    "stateCleared": "modified",
-  },
-  "gradle/docker.gradle": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -1944,13 +1944,13 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
-    "stateCleared": "modified",
-  },
-  "gradle/docker.gradle": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -2650,13 +2650,13 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
-    "stateCleared": "modified",
-  },
-  "gradle/docker.gradle": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -3452,13 +3452,13 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
-    "stateCleared": "modified",
-  },
-  "gradle/docker.gradle": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
