@@ -43,8 +43,8 @@ jobs:
           fetch-depth: 0
       # Update the copyright headers
       - name: Find and Replace
-      #    CURRENT_YEAR=$(date +'%Y')
-      #    NEW_YEAR=$(($CURRENT_YEAR + 1))
+        #  CURRENT_YEAR=$(date +'%Y')
+        #  NEW_YEAR=$(($CURRENT_YEAR + 1))
         run: |
           NEW_YEAR=$(date +'%Y')
           CURRENT_YEAR=$(($NEW_YEAR - 1))
