@@ -19,15 +19,8 @@
 package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
-import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
-<%_ }  _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
-import org.springframework.data.neo4j.repository.query.Query;
 <%_ } _%>
 <%_ if (!paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Pageable;
@@ -55,7 +48,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeMongodb) { %>ReactiveMongo<% } if (databaseTypeNeo4j) { %>ReactiveNeo4j<% } if (databaseTypeCassandra) { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeMongodb) { %>ReactiveMongo<% } if (databaseTypeCassandra) { %>ReactiveCassandra<% } %>Repository<<%= persistClass %>, <%= primaryKey.type %>> {
 
 <%_ if (!paginationNo) { _%>
     Flux<<%= persistClass %>> findAllBy(Pageable pageable);
@@ -70,16 +63,6 @@ public interface <%= entityClass %>Repository extends <% if (databaseTypeMongodb
     Flux<<%= persistClass %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
-    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
-  <%_ } _%>
-  <%_ if (databaseTypeNeo4j) { _%>
-    @Query("MATCH (n:<%= persistClass %>)<-[]-(m) RETURN n,m")
-    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
-
-    @Query("MATCH (n:<%= persistClass %>)<-[]-(m) RETURN n,m")
-    Flux<<%= persistClass %>> findAllWithEagerRelationships();
-
-    @Query("MATCH (e:<%= persistClass %> {id: $id}) RETURN e")
     Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
   <%_ } _%>
 <%_ } _%>

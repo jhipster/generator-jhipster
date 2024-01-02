@@ -22,9 +22,8 @@ import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
 export const entityFiles = {
   server: [
     {
-      condition: generator => generator.databaseTypeNeo4j,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['domain/_persistClass_.java.jhi.spring_data_neo4j'],
+      templates: ['repository/_entityClass_Repository.java', 'domain/_persistClass_.java.jhi.spring_data_neo4j'],
     },
   ],
 };

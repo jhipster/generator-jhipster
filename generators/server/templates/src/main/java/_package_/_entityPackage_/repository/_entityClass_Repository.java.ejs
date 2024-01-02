@@ -28,9 +28,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import org.springframework.data.neo4j.repository.Neo4jRepository;
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
@@ -55,7 +52,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>> {
 <%_ if (implementsEagerLoadApis) { _%>
   <%_ if (databaseTypeMongodb) { _%>
 
