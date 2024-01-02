@@ -88,6 +88,7 @@ export const repositoryFiles = {
         !generator.embedded &&
         !generator.databaseTypeCouchbase &&
         !generator.databaseTypeSql &&
+        !generator.databaseTypeMongodb &&
         !generator.databaseTypeNeo4j,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['repository/_entityClass_Repository.java'],
@@ -98,6 +99,7 @@ export const repositoryFiles = {
         !generator.embedded &&
         !generator.databaseTypeCouchbase &&
         !generator.databaseTypeSql &&
+        !generator.databaseTypeMongodb &&
         !generator.databaseTypeNeo4j,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['repository/_entityClass_Repository_reactive.java'],
