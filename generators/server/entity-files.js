@@ -83,12 +83,12 @@ const filteringReactiveFiles = {
 export const repositoryFiles = {
   repositoryFiles: [
     {
-      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
+      condition: generator => !generator.reactive && !generator.embedded && !generator.databaseTypeCouchbase && !generator.databaseTypeSql,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['repository/_entityClass_Repository.java'],
     },
     {
-      condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
+      condition: generator => generator.reactive && !generator.embedded && !generator.databaseTypeCouchbase && !generator.databaseTypeSql,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['repository/_entityClass_Repository_reactive.java'],
     },
