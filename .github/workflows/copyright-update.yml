@@ -18,6 +18,7 @@
 
 name: Copyright Update
 on:
+  pull_request:
   schedule:
     - cron: '0 0 31 12 *' # Repeats December 31st every year
 
@@ -42,6 +43,8 @@ jobs:
           fetch-depth: 0
       # Update the copyright headers
       - name: Find and Replace
+#          CURRENT_YEAR=$(date +'%Y')
+#          NEW_YEAR=$(($CURRENT_YEAR + 1))
         run: |
           CURRENT_YEAR=$(date +'%Y')
           NEW_YEAR=$(($CURRENT_YEAR + 1))
