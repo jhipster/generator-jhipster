@@ -19,20 +19,16 @@
 package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering) {  _%>
 import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
 <%_ }  _%>
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.stereotype.Repository;
-<%_ if (!paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
-<%_ } _%>
-<%_ if (implementsEagerLoadApis) { _%>
 import reactor.core.publisher.Mono;
-<%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 
 import java.util.UUID;
@@ -107,7 +103,7 @@ interface <%= entityClass %>RepositoryInternal {
     Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
     // this is not supported at the moment because of https://github.com/jhipster/generator-jhipster/issues/18269
     // Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering) {  _%>
     Flux<<%= persistClass %>> findByCriteria(<%= entityClass %>Criteria criteria, Pageable pageable);
 
     Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria);
