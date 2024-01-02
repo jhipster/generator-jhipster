@@ -46,8 +46,8 @@ jobs:
 #          CURRENT_YEAR=$(date +'%Y')
 #          NEW_YEAR=$(($CURRENT_YEAR + 1))
         run: |
-          CURRENT_YEAR=$(date +'%Y')
-          NEW_YEAR=$(($CURRENT_YEAR + 1))
+          NEW_YEAR=$(date +'%Y')
+          CURRENT_YEAR=$(($NEW_YEAR - 1))
           grep -rlZE "Copyright ([0-9]+)-$CURRENT_YEAR" . | xargs -0 sed -i -E "s/Copyright ([0-9]+)-$CURRENT_YEAR/Copyright \1-$NEW_YEAR/g"
       # Create PR
       - name: Create Pull Request
