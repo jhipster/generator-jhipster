@@ -25,12 +25,12 @@ export const entityFiles = {
       templates: ['domain/_persistClass_.java.jhi.spring_data_mongodb'],
     },
     {
-      condition: generator => !generator.reactive,
+      condition: ctx => !ctx.reactive && !ctx.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['repository/_entityClass_Repository.java'],
     },
     {
-      condition: generator => generator.reactive,
+      condition: ctx => ctx.reactive && !ctx.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['repository/_entityClass_Repository_reactive.java'],
     },
