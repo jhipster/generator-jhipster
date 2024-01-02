@@ -97,4 +97,5 @@ public interface <%= entityClass %>Repository extends <% if (containsBagRelation
       } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithToOneRelationships(@Param("id") <%= primaryKey.type %> id);
   <%_ } _%>
+<%_ } _%>
 }
