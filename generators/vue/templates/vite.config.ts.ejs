@@ -37,15 +37,7 @@ const getFileFromRepo = (file: string) =>
 // eslint-disable-next-line prefer-const
 let config = defineConfig({
   plugins: [
-    vue({
-      template: {
-        compilerOptions: {
-          compatConfig: {
-            MODE: 2,
-          },
-        },
-      },
-    }),
+    vue(),
     copy({
       targets: [
         {
@@ -144,7 +136,8 @@ config = mergeConfig(config, {
         axios: {},
         // 'bootstrap-vue': {},
         vue: {
-          packagePath: '@vue/compat/dist/vue.esm-bundler.js',
+          generate: false,
+          // packagePath: '@vue/compat/dist/vue.esm-bundler.js',
         },
         'vue-i18n': {},
         'vue-router': {},
