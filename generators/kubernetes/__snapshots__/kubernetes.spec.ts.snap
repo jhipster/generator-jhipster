@@ -3031,6 +3031,9 @@ data:
       "requiredCredentials": [
         "password"
       ],
+      "defaultGroups": [
+        "/Users"
+      ],
       "otpPolicyType": "totp",
       "otpPolicyAlgorithm": "HmacSHA1",
       "otpPolicyInitialCounter": 0,
@@ -3545,7 +3548,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*", 
+            "https://localhost:8080/*",
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "http://localhost:9000/*",
@@ -3554,7 +3557,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080", 
+            "https://localhost:8080",
             "http://localhost:8100",
             "http://127.0.0.1:8761",
             "http://localhost:9000"
@@ -4830,14 +4833,6 @@ data:
               "autheticatorFlow": false
             },
             {
-              "authenticator": "registration-profile-action",
-              "authenticatorFlow": false,
-              "requirement": "REQUIRED",
-              "priority": 40,
-              "userSetupAllowed": false,
-              "autheticatorFlow": false
-            },
-            {
               "authenticator": "registration-password-action",
               "authenticatorFlow": false,
               "requirement": "REQUIRED",
@@ -4852,6 +4847,14 @@ data:
               "priority": 60,
               "userSetupAllowed": false,
               "autheticatorFlow": false
+            },
+            {
+              "authenticator": "registration-terms-and-conditions",
+              "authenticatorFlow": false,
+              "requirement": "DISABLED",
+              "priority": 70,
+              "autheticatorFlow": false,
+              "userSetupAllowed": false
             }
           ]
         },
@@ -4943,9 +4946,9 @@ data:
           "config": {}
         },
         {
-          "alias": "terms_and_conditions",
+          "alias": "TERMS_AND_CONDITIONS",
           "name": "Terms and Conditions",
-          "providerId": "terms_and_conditions",
+          "providerId": "TERMS_AND_CONDITIONS",
           "enabled": false,
           "defaultAction": false,
           "priority": 20,
@@ -6478,6 +6481,9 @@ data:
       "requiredCredentials": [
         "password"
       ],
+      "defaultGroups": [
+        "/Users"
+      ],
       "otpPolicyType": "totp",
       "otpPolicyAlgorithm": "HmacSHA1",
       "otpPolicyInitialCounter": 0,
@@ -6992,7 +6998,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*", 
+            "https://localhost:8080/*",
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "http://localhost:9000/*",
@@ -7001,7 +7007,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080", 
+            "https://localhost:8080",
             "http://localhost:8100",
             "http://127.0.0.1:8761",
             "http://localhost:9000"
@@ -8277,14 +8283,6 @@ data:
               "autheticatorFlow": false
             },
             {
-              "authenticator": "registration-profile-action",
-              "authenticatorFlow": false,
-              "requirement": "REQUIRED",
-              "priority": 40,
-              "userSetupAllowed": false,
-              "autheticatorFlow": false
-            },
-            {
               "authenticator": "registration-password-action",
               "authenticatorFlow": false,
               "requirement": "REQUIRED",
@@ -8299,6 +8297,14 @@ data:
               "priority": 60,
               "userSetupAllowed": false,
               "autheticatorFlow": false
+            },
+            {
+              "authenticator": "registration-terms-and-conditions",
+              "authenticatorFlow": false,
+              "requirement": "DISABLED",
+              "priority": 70,
+              "autheticatorFlow": false,
+              "userSetupAllowed": false
             }
           ]
         },
@@ -8390,9 +8396,9 @@ data:
           "config": {}
         },
         {
-          "alias": "terms_and_conditions",
+          "alias": "TERMS_AND_CONDITIONS",
           "name": "Terms and Conditions",
-          "providerId": "terms_and_conditions",
+          "providerId": "TERMS_AND_CONDITIONS",
           "enabled": false,
           "defaultAction": false,
           "priority": 20,
