@@ -80,21 +80,6 @@ const filteringReactiveFiles = {
   ],
 };
 
-export const repositoryFiles = {
-  repositoryFiles: [
-    {
-      condition: generator => !generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['repository/_entityClass_Repository.java'],
-    },
-    {
-      condition: generator => generator.reactive && !generator.embedded && generator.databaseType !== COUCHBASE,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['repository/_entityClass_Repository_reactive.java'],
-    },
-  ],
-};
-
 export const serviceFiles = {
   serviceFiles: [
     {
@@ -184,7 +169,6 @@ export const serverFiles = {
   ...restFiles,
   ...filteringFiles,
   ...filteringReactiveFiles,
-  ...repositoryFiles,
   ...serviceFiles,
   ...dtoFiles,
 };

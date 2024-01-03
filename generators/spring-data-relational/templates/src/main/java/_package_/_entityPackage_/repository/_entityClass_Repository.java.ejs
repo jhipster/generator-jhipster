@@ -23,31 +23,13 @@ import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-import org.springframework.data.jpa.repository.*;
-  <%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.repository.query.Param;
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.mongodb.repository.MongoRepository;
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import org.springframework.data.neo4j.repository.Neo4jRepository;
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-import org.springframework.data.cassandra.repository.CassandraRepository;
-<%_ } _%>
-import org.springframework.stereotype.Repository;
-<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
-  <%_ if (implementsEagerLoadApis || relationships.some(r => r.relationshipManyToOne && r.otherEntityUser)) { _%>
-import java.util.List;
-  <%_ } _%>
-  <%_ if (implementsEagerLoadApis) { _%>
 import java.util.Optional;
-  <%_ } _%>
+<%_ } _%>
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
+<%_ if (implementsEagerLoadApis || relationships.some(r => r.relationshipManyToOne && r.otherEntityUser)) { _%>
+import java.util.List;
 <%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 
@@ -56,7 +38,7 @@ import java.util.UUID;
 
 /**
  * <%= springDataDescription %> repository for the <%= persistClass %> entity.
-<%_ if (containsBagRelationships && databaseTypeSql) { _%>
+<%_ if (containsBagRelationships) { _%>
  *
  * When extending this class, extend <%= entityClass %>RepositoryWithBagRelationships too.
  * For more information refer to https://github.com/jhipster/generator-jhipster/issues/17990.
@@ -66,36 +48,35 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%= entityClass %>Repository extends <% if (containsBagRelationships && databaseTypeSql) { %><%= entityClass %>RepositoryWithBagRelationships, <% } %><% if (databaseTypeSql) { %>JpaRepository<% } %><% if (databaseTypeMongodb) { %>MongoRepository<% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<% } %><% if (databaseTypeCassandra) { %>CassandraRepository<% } %><<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (containsBagRelationships) { %><%= entityClass %>RepositoryWithBagRelationships, <% } %>JpaRepository<<%= persistClass %>, <%= primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%= persistClass %>><% } %> {
 <%_ for (const relationship of relationships) { _%>
-  <%_ if (relationship.relationshipManyToOne && relationship.otherEntityUser && databaseTypeSql) { _%>
+  <%_ if (relationship.relationshipManyToOne && relationship.otherEntityUser) { _%>
 
     @Query("select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %> where <%= entityInstanceDbSafe %>.<%= relationship.relationshipFieldName %>.login = ?#{authentication.name}")
     List<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>IsCurrentUser();
   <%_ } _%>
 <%_ } _%>
 <%_ if (implementsEagerLoadApis) { _%>
-  <%_ if (databaseTypeSql) { _%>
 
-    <%_ const containsToOneEagerRelationship = relationships.some(relationship => relationship.relationshipEagerLoad && !relationship.bagRelationship); _%>
+  <%_ const containsToOneEagerRelationship = relationships.some(relationship => relationship.relationshipEagerLoad && !relationship.bagRelationship); _%>
     default Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> <%= primaryKey.name %>) {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findOneWithToOneRelationships<% } else { %>findById<% } %>(<%= primaryKey.name %>)
-    <%  if (containsBagRelationships) { %>)<% } %>;
+        <%  if (containsBagRelationships) { %>)<% } %>;
     }
 
     default List<<%= persistClass %>> findAllWithEagerRelationships() {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findAllWithToOneRelationships<% } else { %>findAll<% } %>()
-    <%  if (containsBagRelationships) { %>)<% } %>;
+        <%  if (containsBagRelationships) { %>)<% } %>;
     }
 
     default Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable) {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findAllWithToOneRelationships<% } else { %>findAll<% } %>(pageable)
-    <%  if (containsBagRelationships) { %>)<% } %>;
+        <%  if (containsBagRelationships) { %>)<% } %>;
     }
-    <%_ if (containsToOneEagerRelationship) { _%>
+  <%_ if (containsToOneEagerRelationship) { _%>
 
     @Query(value = "select <%= entityInstanceDbSafe %> from <%= persistClass %> <%= entityInstanceDbSafe %><%
       for (const relationship of relationships) {
@@ -115,17 +96,6 @@ public interface <%= entityClass %>Repository extends <% if (containsBagRelation
         if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%= entityInstanceDbSafe %>.<%= relationship.reference.name %><% }
       } %> where <%= entityInstanceDbSafe %>.id =:id")
     Optional<<%= persistClass %>> findOneWithToOneRelationships(@Param("id") <%= primaryKey.type %> id);
-    <%_ } _%>
-  <%_ } else if (databaseTypeMongodb) { _%>
-
-    @Query("{}")
-    Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
-
-    @Query("{}")
-    List<<%= persistClass %>> findAllWithEagerRelationships();
-
-    @Query("{'id': ?0}")
-    Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
   <%_ } _%>
 <%_ } _%>
 }

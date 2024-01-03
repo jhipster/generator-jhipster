@@ -510,6 +510,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           entityConfig.jpaMetamodelFiltering = false;
         }
       },
+      configurePagination({ application, entityName, entityConfig }) {
+        const entityDatabaseType = entityConfig.databaseType ?? application.databaseType;
+        // disable pagination if there is no database, unless it’s a microservice entity published by a gateway
+        if (entityDatabaseType === NO_DATABASE && (application.applicationType !== GATEWAY || !entityConfig.microserviceName)) {
+          const errorMessage = `Pagination is not supported for entity ${entityName} when the app doesn't use a database.`;
+          if (!this.skipChecks) {
+            throw new Error(errorMessage);
+          }
+
+          this.log.warn(errorMessage);
+          entityConfig.pagination = NO_PAGINATION;
+        }
+      },
       configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
@@ -524,14 +537,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
         if (validation !== true) {
           throw new Error(validation);
-        }
-
-        // disable pagination if there is no database, unless it’s a microservice entity published by a gateway
-        if (
-          ![SQL, MONGODB, COUCHBASE, NEO4J].includes(entityConfig.databaseType ?? application.databaseType) &&
-          (application.applicationType !== GATEWAY || !entityConfig.microserviceName)
-        ) {
-          entityConfig.pagination = NO_PAGINATION;
         }
 
         if (entityConfig.incrementalChangelog === undefined) {

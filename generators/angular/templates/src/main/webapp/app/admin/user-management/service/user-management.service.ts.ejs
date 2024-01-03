@@ -18,13 +18,13 @@
 -%>
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable<% if (!authenticationTypeOauth2 && !databaseTypeSql && !databaseTypeMongodb && !databaseTypeCouchbase) { %>, of<% } %> } from 'rxjs';
+import { Observable<% if (generateUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %> } from 'rxjs';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
 import { IUser } from '../user-management.model';
-<%_ if (!authenticationTypeOauth2 && !databaseTypeSql && !databaseTypeMongodb && !databaseTypeCouchbase) { _%>
+<%_ if (generateUserManagement && !generateBuiltInAuthorityEntity) { _%>
 import { Authority } from 'app/config/authority.constants';
 <%_ } _%>
 
@@ -35,7 +35,7 @@ export class UserManagementService {
 
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (generateUserManagement) { _%>
   create(user: IUser): Observable<IUser> {
     return this.http.post<IUser>(this.resourceUrl, user);
   }
@@ -54,13 +54,13 @@ export class UserManagementService {
     return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (generateUserManagement) { _%>
   delete(login: string): Observable<{}> {
     return this.http.delete(`${this.resourceUrl}/${login}`);
   }
 
   authorities(): Observable<string[]> {
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
     return this.http.get<string[]>(this.applicationConfigService.getEndpointFor('api/authorities'));
   <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);

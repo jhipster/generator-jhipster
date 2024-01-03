@@ -1,0 +1,62 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= entityAbsolutePackage %>.repository;
+
+import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+<%_ if (!paginationNo || implementsEagerLoadApis) { _%>
+import org.springframework.data.domain.Pageable;
+<%_ } _%>
+<%_ if (implementsEagerLoadApis) { _%>
+import org.springframework.data.mongodb.repository.Query;
+<%_ } _%>
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
+<%_ if (!paginationNo || implementsEagerLoadApis) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+<%_ if (implementsEagerLoadApis) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+<%_ if (primaryKey.typeUUID) { _%>
+
+import java.util.UUID;
+<%_ } _%>
+
+/**
+ * <%= springDataDescription %> repository for the <%= persistClass %> entity.
+ */
+@SuppressWarnings("unused")
+@Repository
+public interface <%= entityClass %>Repository extends ReactiveMongoRepository<<%= persistClass %>, <%= primaryKey.type %>> {
+
+<%_ if (!paginationNo) { _%>
+    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
+<%_ } _%>
+<%_ if (implementsEagerLoadApis) { _%>
+
+    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
+
+    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    Flux<<%= persistClass %>> findAllWithEagerRelationships();
+
+    @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+<%_ } _%>
+}

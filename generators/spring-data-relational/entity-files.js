@@ -26,6 +26,11 @@ const sqlFiles = {
       templates: ['domain/_persistClass_.java.jhi.jakarta_persistence'],
     },
     {
+      condition: generator => !generator.reactive && !generator.embedded,
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['repository/_entityClass_Repository.java'],
+    },
+    {
       condition: generator => !generator.reactive && generator.requiresPersistableImplementation,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_persistClass_.java.jhi.jakarta_lifecycle_events'],
@@ -62,6 +67,7 @@ const sqlFiles = {
       condition: generator => generator.reactive && !generator.embedded,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
+        'repository/_entityClass_Repository_reactive.java',
         'repository/_entityClass_RepositoryInternalImpl_reactive.java',
         'repository/_entityClass_SqlHelper_reactive.java',
         'repository/rowmapper/_entityClass_RowMapper_reactive.java',
