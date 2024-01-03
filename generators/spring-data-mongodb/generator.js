@@ -92,6 +92,12 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
           }
         }
       },
+      blockhound({ application, source }) {
+        const { reactive } = application;
+        if (reactive) {
+          source.addAllowBlockingCallsInside({ classPath: 'com.mongodb.internal.Locks', method: 'checkedWithLock' });
+        }
+      },
     });
   }
 

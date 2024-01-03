@@ -403,6 +403,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           (application.backendType ?? 'Java') === 'Java' &&
           (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
+      blockhound({ application, source }) {
+        source.addAllowBlockingCallsInside = ({ classPath, method }) => {
+          if (!application.reactive) throw new Error('Blockhound is only supported by reactive applications');
+
+          this.editFile(
+            `${application.javaPackageTestDir}config/JHipsterBlockHoundIntegration.java`,
+            createNeedleCallback({
+              needle: 'blockhound-integration',
+              contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
+            }),
+          );
+        };
+      },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
           const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
