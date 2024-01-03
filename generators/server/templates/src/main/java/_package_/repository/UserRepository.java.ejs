@@ -150,7 +150,7 @@ import java.util.UUID;
 import java.time.Instant;
 <%_ } _%>
 /**
- * Spring Data <% if (databaseTypeSql && !reactive) { %>JPA<% } else if (databaseTypeSql && reactive) { %>R2DBC<% } else if (databaseTypeMongodb) { %>MongoDB<% } else if (databaseTypeCouchbase) { %>Couchbase<% } else if (databaseTypeCassandra) { %>Cassandra<% } else if (databaseTypeNeo4j) { %>Neo4j<% } %> repository for the {@link <%= user.persistClass %>} entity.
+ * <%= springDataDescription %> repository for the {@link <%= user.persistClass %>} entity.
  */
 <%_
     let optionalOrMono = reactive ? 'Mono' : 'Optional';
