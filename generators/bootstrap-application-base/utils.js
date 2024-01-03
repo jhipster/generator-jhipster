@@ -49,6 +49,7 @@ export function createUserEntity(customUserData = {}, application) {
     dto: true,
     adminUserDto: `AdminUser${application.dtoSuffix ?? ''}`,
     builtInUser: true,
+    hasImageField: !application.databaseTypeNo && !application.databaseTypeCassandra,
     ...customUserData,
   };
 

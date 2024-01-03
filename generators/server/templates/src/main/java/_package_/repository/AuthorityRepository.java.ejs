@@ -43,26 +43,9 @@ import reactor.core.publisher.Flux;
 import java.util.List;
   <%_ } _%>
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
 /**
- * Spring Data <% if (reactive) { %>R2DBC<% } else { %>JPA<% } %> repository for the {@link Authority} entity.
+ * <%= user.springDataDescription %> repository for the {@link Authority} entity.
  */
- <%_ } _%>
- <%_ if (databaseTypeMongodb) { _%>
-/**
- * Spring Data MongoDB repository for the {@link Authority} entity.
- */
-<%_ } _%>
- <%_ if (databaseTypeNeo4j) { _%>
-/**
- * Spring Data Neo4j repository for the {@link Authority} entity.
- */
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-/**
- * Spring Data Couchbase repository for the {@link Authority} entity.
- */
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Repository
 <%_ } _%>

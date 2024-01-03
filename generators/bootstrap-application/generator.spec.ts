@@ -575,6 +575,7 @@ describe(`generator - ${generator}`, () => {
   "fluentMethods": true,
   "frontendAppName": "jhipsterApp",
   "generateFakeData": Any<Function>,
+  "hasImageField": true,
   "i18nAlertHeaderPrefix": "jhipsterApp.user",
   "i18nKeyPrefix": "jhipsterApp.user",
   "implementsEagerLoadApis": false,

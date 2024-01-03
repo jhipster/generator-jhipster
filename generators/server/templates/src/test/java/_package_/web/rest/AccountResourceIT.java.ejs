@@ -199,7 +199,7 @@ class AccountResourceIT {
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail("john.doe@jhipster.com");
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         user.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         user.setLangKey("en");
@@ -217,7 +217,7 @@ class AccountResourceIT {
             .jsonPath("$.firstName").isEqualTo("john")
             .jsonPath("$.lastName").isEqualTo("doe")
             .jsonPath("$.email").isEqualTo("john.doe@jhipster.com")
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+  <%_ if (user.hasImageField) { _%>
             .jsonPath("$.imageUrl").isEqualTo("http://placehold.it/50x50")
   <%_ } _%>
             .jsonPath("$.langKey").isEqualTo("en")
@@ -231,7 +231,7 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.firstName").value("john"))
             .andExpect(jsonPath("$.lastName").value("doe"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+  <%_ if (user.hasImageField) { _%>
             .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
   <%_ } _%>
             .andExpect(jsonPath("$.langKey").value("en"))
@@ -270,7 +270,7 @@ class AccountResourceIT {
         validUser.setFirstName("Alice");
         validUser.setLastName("Test");
         validUser.setEmail("test-register-valid@example.com");
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         validUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -307,7 +307,7 @@ class AccountResourceIT {
         invalidUser.setLastName("One");
         invalidUser.setEmail("funky@example.com");
         invalidUser.setActivated(true);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -347,7 +347,7 @@ class AccountResourceIT {
         invalidUser.setLastName("Green");
         invalidUser.setEmail("invalid");// <-- invalid
         invalidUser.setActivated(true);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -384,7 +384,7 @@ class AccountResourceIT {
         invalidUser.setLastName("Green");
         invalidUser.setEmail("bob@example.com");
         invalidUser.setActivated(true);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -421,7 +421,7 @@ class AccountResourceIT {
         invalidUser.setLastName("Green");
         invalidUser.setEmail("bob@example.com");
         invalidUser.setActivated(true);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -458,7 +458,7 @@ class AccountResourceIT {
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Something");
         firstUser.setEmail("alice@example.com");
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         firstUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -471,11 +471,11 @@ class AccountResourceIT {
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
         secondUser.setEmail("alice2@example.com");
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         secondUser.setImageUrl(firstUser.getImageUrl());
 <%_ } _%>
         secondUser.setLangKey(firstUser.getLangKey());
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (generateSpringAuditor) { _%>
         secondUser.setCreatedBy(firstUser.getCreatedBy());
         secondUser.setCreatedDate(firstUser.getCreatedDate());
         secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
@@ -552,7 +552,7 @@ class AccountResourceIT {
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Test");
         firstUser.setEmail("test-register-duplicate-email@example.com");
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         firstUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -584,7 +584,7 @@ class AccountResourceIT {
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
         secondUser.setEmail(firstUser.getEmail());
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         secondUser.setImageUrl(firstUser.getImageUrl());
 <%_ } _%>
         secondUser.setLangKey(firstUser.getLangKey());
@@ -620,7 +620,7 @@ class AccountResourceIT {
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
         userWithUpperCaseEmail.setLastName(firstUser.getLastName());
         userWithUpperCaseEmail.setEmail("TEST-register-duplicate-email@example.com");
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
 <%_ } _%>
         userWithUpperCaseEmail.setLangKey(firstUser.getLangKey());
@@ -678,7 +678,7 @@ class AccountResourceIT {
         validUser.setLastName("Guy");
         validUser.setEmail("badguy@example.com");
         validUser.setActivated(true);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         validUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -779,7 +779,7 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -806,7 +806,7 @@ class AccountResourceIT {
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
         assertThat(updatedUser.getLangKey()).isEqualTo(userDTO.getLangKey());
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         assertThat(updatedUser.getImageUrl()).isEqualTo(userDTO.getImageUrl());
 <%_ } _%>
         assertThat(updatedUser.isActivated()).isTrue();
@@ -839,7 +839,7 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("invalid email");
         userDTO.setActivated(false);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -905,7 +905,7 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email2@example.com");
         userDTO.setActivated(false);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -955,7 +955,7 @@ class AccountResourceIT {
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+<%_ if (user.hasImageField) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
