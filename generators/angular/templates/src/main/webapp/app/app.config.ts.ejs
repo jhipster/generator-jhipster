@@ -64,9 +64,6 @@ export const appConfig: ApplicationConfig = {
 <%_ } _%>
     importProvidersFrom(HttpClientModule),
     Title,
-<%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
-    CookieService,
-<%_ } _%>
     { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
