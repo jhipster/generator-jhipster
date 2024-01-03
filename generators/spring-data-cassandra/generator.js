@@ -22,6 +22,9 @@ import { GENERATOR_SPRING_DATA_CASSANDRA, GENERATOR_BOOTSTRAP_APPLICATION } from
 import writeCassandraFilesTask from './files.js';
 import cleanupCassandraFilesTask from './cleanup.js';
 import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.js';
+import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
+
+const { NO: NO_PAGINATION } = PaginationTypes;
 
 export default class CassandraGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -36,9 +39,15 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      checkEntities({ entityConfig }) {
-        if (entityConfig.pagination && entityConfig.pagination !== 'no') {
-          throw new Error("Pagination isn't allowed when the app uses Cassandra.");
+      checkEntities({ entityName, entityConfig }) {
+        if (entityConfig.pagination && entityConfig.pagination !== NO_PAGINATION) {
+          const errorMessage = `Pagination is not supported for entity ${entityName} when the app uses Cassandra.`;
+          if (!this.skipChecks) {
+            throw new Error(errorMessage);
+          }
+
+          this.log.warn(errorMessage);
+          entityConfig.pagination = NO_PAGINATION;
         }
       },
     });

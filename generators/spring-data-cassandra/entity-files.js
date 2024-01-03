@@ -35,7 +35,7 @@ export const entityFiles = {
   server: [
     {
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['domain/_persistClass_.java.jhi.spring_data_cassandra'],
+      templates: ['repository/_entityClass_Repository.java', 'domain/_persistClass_.java.jhi.spring_data_cassandra'],
     },
   ],
 };
