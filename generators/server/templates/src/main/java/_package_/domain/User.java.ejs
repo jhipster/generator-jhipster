@@ -380,7 +380,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @Relationship("HAS_AUTHORITY")
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "<%= user.entityTableName %>_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
