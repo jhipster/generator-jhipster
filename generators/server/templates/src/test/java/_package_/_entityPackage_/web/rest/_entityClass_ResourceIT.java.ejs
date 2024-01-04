@@ -19,7 +19,7 @@
 package <%= entityAbsolutePackage %>.web.rest;
 
 <%_
-var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => !relationship.otherEntity.hasCyclicRequiredRelationship);
+var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
 let mapsIdEntityInstance;
@@ -531,7 +531,7 @@ filterTestableRelationships.forEach((relationship) => { _%>
   <%_ } _%>
   <%_
   const alreadyGeneratedEntities = [];
-  for (relationship of relationships) {
+  for (relationship of persistableRelationships) {
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
     const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
