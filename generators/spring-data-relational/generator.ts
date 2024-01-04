@@ -89,6 +89,22 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        entity.relationships.forEach(relationship => {
+          if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
+            relationship.persistableRelationship = true;
+          }
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ application, relationship }) {
