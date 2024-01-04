@@ -52,8 +52,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
       loadConfig() {
         this.parseJHipsterOptions(command.options);
 
-        // Generate workspaces file only when option passed or regenerating
-        this.generateWorkspaces = this.workspaces !== false || !!this.packageJson?.get('workspaces');
+        // Generate workspaces file if workspace option is passed, or if workspace option is ommitted and monorepository is enabled, or if regenerating.
+        this.generateWorkspaces = (this.workspaces ?? this.jhipsterConfig.monorepository) || Boolean(this.packageJson?.get('workspaces'));
 
         // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
         this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
@@ -111,6 +111,20 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
 
   get [BaseWorkspacesGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      checkWorkspaces() {
+        if (this.generateWorkspaces && !this.jhipsterConfig.monorepository) {
+          throw new Error('Workspaces option is only supported with monorepositories.');
+        }
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get loadingWorkspaces() {
