@@ -65,8 +65,10 @@
 <%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
 <%_ } _%>
-<%_ if (microfrontend && applicationTypeGateway) { _%>
+<%_ if (microfrontend) { _%>
+  <%_ if (applicationTypeGateway) { _%>
     "@angular-architects/module-federation-runtime": "<%= nodeDependencies['@angular-architects/module-federation-runtime'] %>",
+  <%_ } _%>
     "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
