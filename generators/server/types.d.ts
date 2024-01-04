@@ -14,6 +14,7 @@ export type SpringBootSourceType = GradleSourceType &
     addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
     addLogbackTestLog?({ name, level }: { name: string; level: string }): void;
     addIntegrationTestAnnotation?({ package, annotation }: { package?: string; annotation: string }): void;
+    addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<
