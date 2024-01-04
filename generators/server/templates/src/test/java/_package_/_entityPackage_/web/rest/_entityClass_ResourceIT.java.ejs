@@ -19,7 +19,7 @@
 package <%= entityAbsolutePackage %>.web.rest;
 
 <%_
-var filterTestableRelationships = reactive ? reactiveEagerRelations : relationships;
+var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => !relationship.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
 let mapsIdEntityInstance;
@@ -538,7 +538,7 @@ filterTestableRelationships.forEach((relationship) => { _%>
     const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
     const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
     const mapsIdUse = relationship.id;
-    if ((relationshipValidate !== null && relationshipValidate) || mapsIdUse) { _%>
+    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
