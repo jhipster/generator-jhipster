@@ -268,7 +268,7 @@ public class SecurityConfiguration {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (applicationTypeMonolith) { _%>
-            .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
+            .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
   <%_ } else if (applicationTypeMicroservice) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } _%>
