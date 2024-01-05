@@ -34,6 +34,9 @@ const getFileFromRepo = (file: string) =>
     ? fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url))
     : fileURLToPath(new URL(`./node_modules/${file}`, import.meta.url));
 
+const { getAbsoluteFSPath } = await import('swagger-ui-dist');
+const swaggerUiPath = getAbsoluteFSPath();
+
 // eslint-disable-next-line prefer-const
 let config = defineConfig({
   plugins: [
@@ -42,8 +45,8 @@ let config = defineConfig({
       targets: [
         {
           src: [
-            `${require('swagger-ui-dist').getAbsoluteFSPath()}/*.{js,css,html,png}`,
-            `!${require('swagger-ui-dist').getAbsoluteFSPath()}/**/index.html`,
+            `${swaggerUiPath}/*.{js,css,html,png}`,
+            `!${swaggerUiPath}/**/index.html`,
             getFileFromRepo('axios/dist/axios.min.js'),
             fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url)),
           ],
