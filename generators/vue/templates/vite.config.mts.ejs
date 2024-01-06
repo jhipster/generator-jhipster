@@ -17,10 +17,14 @@
  limitations under the License.
 -%>
 import { fileURLToPath, URL } from 'node:url';
-import { dirname, join } from 'node:path';
 import { existsSync } from 'node:fs';
 
-import { mergeConfig, defineConfig } from 'vite';
+import {
+<%_ if (microfrontend) { _%>
+  mergeConfig,
+<%_ } _%>
+  defineConfig,
+} from 'vite';
 import vue from '@vitejs/plugin-vue';
 import copy from 'rollup-plugin-copy';
 <%_ if (microfrontend) { _%>
