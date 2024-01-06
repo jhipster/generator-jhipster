@@ -446,10 +446,10 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/vite.config.ts": {
+  "clientRoot/vite.config.mts": {
     "stateCleared": "modified",
   },
-  "clientRoot/vitest.config.ts": {
+  "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
 }
@@ -970,10 +970,10 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/vite.config.ts": {
+  "clientRoot/vite.config.mts": {
     "stateCleared": "modified",
   },
-  "clientRoot/vitest.config.ts": {
+  "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
 }
@@ -1431,10 +1431,10 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/vite.config.ts": {
+  "clientRoot/vite.config.mts": {
     "stateCleared": "modified",
   },
-  "clientRoot/vitest.config.ts": {
+  "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
   "clientRoot/webpack/config.js": {
@@ -1910,10 +1910,10 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.ts": {
+  "vite.config.mts": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "vitest.config.mts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
@@ -2542,10 +2542,10 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.ts": {
+  "vite.config.mts": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "vitest.config.mts": {
     "stateCleared": "modified",
   },
 }
@@ -2976,10 +2976,10 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.ts": {
+  "vite.config.mts": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "vitest.config.mts": {
     "stateCleared": "modified",
   },
 }
@@ -3419,10 +3419,10 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.ts": {
+  "vite.config.mts": {
     "stateCleared": "modified",
   },
-  "vitest.config.ts": {
+  "vitest.config.mts": {
     "stateCleared": "modified",
   },
 }
