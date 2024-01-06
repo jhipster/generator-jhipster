@@ -23,13 +23,14 @@ import { Minimatch } from 'minimatch';
 
 import BaseGenerator from '../../base-core/index.js';
 import { getPackageRoot } from '../../../lib/index.js';
+import { JS_PRETTIER_EXTENSIONS } from '../../generator-constants.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const createESLintTransform = function (
   this: BaseGenerator | void,
   transformOptions: { ignoreErrors?: boolean; extensions?: string } = {},
 ) {
-  const { extensions = 'js,ts', ignoreErrors } = transformOptions;
+  const { extensions = JS_PRETTIER_EXTENSIONS, ignoreErrors } = transformOptions;
   const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
   const eslint = new ESLint.ESLint({
     fix: true,
