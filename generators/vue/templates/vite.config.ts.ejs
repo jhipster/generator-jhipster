@@ -37,15 +37,7 @@ const getFileFromRepo = (file: string) =>
 // eslint-disable-next-line prefer-const
 let config = defineConfig({
   plugins: [
-    vue({
-      template: {
-        compilerOptions: {
-          compatConfig: {
-            MODE: 2,
-          },
-        },
-      },
-    }),
+    vue(),
     copy({
       targets: [
         {

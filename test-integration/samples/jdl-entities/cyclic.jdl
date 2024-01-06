@@ -1,0 +1,13 @@
+@ChangelogDate(20200905000100)
+entity CyclicA {
+  name String
+}
+
+@ChangelogDate(20200905000200)
+entity CyclicB {
+  name String
+}
+
+relationship ManyToMany {
+  CyclicA{b required} to CyclicB{a required}
+}

@@ -109,11 +109,6 @@ module.exports = async (env, options) => {
             loader: 'vue-loader',
             options: {
               ...vueLoaderConfig(!development),
-              compilerOptions: {
-                compatConfig: {
-                  MODE: 2
-                },
-              },
             },
           },
           {
@@ -144,6 +139,7 @@ module.exports = async (env, options) => {
 <%_ } _%>
           APP_VERSION: JSON.stringify(config.version),
           SERVER_API_URL: JSON.stringify(config.serverApiUrl),
+          __VUE_PROD_DEVTOOLS__: false,
         }),
         new HtmlWebpackPlugin({
           base: '/',

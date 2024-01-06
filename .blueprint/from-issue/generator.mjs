@@ -13,6 +13,7 @@ const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';
 const RESULT_OUTPUT = 'result';
 const VALID_OUTPUT = 'valid';
+const CONTAINS_SAMPLE = 'contains-sample';
 
 const BLANK = 'blank';
 const VALID = 'valid';
@@ -70,9 +71,11 @@ export default class extends BaseGenerator {
 
         const regexp = /<summary>(?<title>(?:(?!<\/summary>).)+)<\/summary>\s+<pre>(?<body>(?:(?!<\/pre>).)+)/gs;
         let match;
+        let containsSample = false;
         let valid = false;
         while ((match = regexp.exec(issue.data.body)) !== null) {
           if (match.groups.title.includes('.yo-rc.json file')) {
+            containsSample = true;
             try {
               if (match.groups.body) {
                 const yoRcContent = JSON.parse(match.groups.body);
@@ -86,10 +89,12 @@ export default class extends BaseGenerator {
               setOutput(YO_RC_OUTPUT, ERROR);
             }
           } else if (match.groups.title.includes('JDL entity definitions')) {
+            containsSample = true;
             this.jdlEntities = match.groups.body?.trim();
             setOutput(ENTITIES_JDL_OUTPUT, this.jdlEntities ? VALID : BLANK);
           }
         }
+        setOutput(CONTAINS_SAMPLE, containsSample);
         setOutput(VALID_OUTPUT, valid);
 
         this.projectFolder = this.projectFolder ?? join(this._globalConfig.get('samplesFolder'), `issues/${this.issue}`);

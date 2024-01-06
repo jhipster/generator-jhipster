@@ -403,6 +403,19 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           (application.backendType ?? 'Java') === 'Java' &&
           (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
+      blockhound({ application, source }) {
+        source.addAllowBlockingCallsInside = ({ classPath, method }) => {
+          if (!application.reactive) throw new Error('Blockhound is only supported by reactive applications');
+
+          this.editFile(
+            `${application.javaPackageTestDir}config/JHipsterBlockHoundIntegration.java`,
+            createNeedleCallback({
+              needle: 'blockhound-integration',
+              contentToAdd: `builder.allowBlockingCallsInside("${classPath}", "${method}");`,
+            }),
+          );
+        };
+      },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
           const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
@@ -621,6 +634,26 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      checkForCircularRelationships({ entity }) {
+        const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
+          if (relatedEntities.has(entity)) return true;
+          relatedEntities.add(entity);
+          return entity.relationships
+            ?.filter(rel => rel.relationshipRequired || rel.id)
+            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set([...relatedEntities])));
+        };
+        entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
+        entity.skipJunitTests = entity.hasCyclicRequiredRelationship ? 'Cyclic required relationships detected' : undefined;
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.asPostPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.postPreparingEachEntity));
   }
 
   /** @inheritdoc */

@@ -172,6 +172,7 @@ export const loadDerivedServerConfig = ({ application }: { application: any }) =
 
     authenticationUsesCsrf: ({ authenticationType }) => [OAUTH2, SESSION].includes(authenticationType),
     imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
+    generateSpringAuditor: ctx => ctx.databaseTypeSql || ctx.databaseTypeMongodb || ctx.databaseTypeNeo4j || ctx.databaseTypeCouchbase,
   });
 
   if (application.databaseTypeSql) {

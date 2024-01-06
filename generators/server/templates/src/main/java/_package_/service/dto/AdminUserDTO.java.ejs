@@ -27,7 +27,7 @@ import <%= user.entityAbsoluteClass %>;
 
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
-<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
+<%_ if (generateSpringAuditor) { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
@@ -70,7 +70,7 @@ public class <%= user.adminUserDto %> implements Serializable {
 
     @Size(min = 2, max = 10)
     private String langKey;
-<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
+<%_ if (generateSpringAuditor) { _%>
 
     private String createdBy;
 
@@ -99,7 +99,7 @@ public class <%= user.adminUserDto %> implements Serializable {
         this.imageUrl = user.getImageUrl();
   <%_ } _%>
         this.langKey = user.getLangKey();
-  <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
+  <%_ if (generateSpringAuditor) { _%>
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
@@ -180,7 +180,7 @@ public class <%= user.adminUserDto %> implements Serializable {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
+<%_ if (generateSpringAuditor) { _%>
 
     public String getCreatedBy() {
         return createdBy;

@@ -356,7 +356,7 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
-      <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+      <%_ if (user.hasImageField) { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
       <%_ } _%>
         newUser.setLangKey(userDTO.getLangKey());
@@ -609,7 +609,7 @@ public class UserService {
      * @param lastName  last name of user.
      * @param email     email id of user.
      * @param langKey   language key.
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+  <%_ if (user.hasImageField) { _%>
      * @param imageUrl  image URL of user.
   <%_ } _%>
   <%_ if (reactive) { _%>
@@ -619,7 +619,7 @@ public class UserService {
   <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
   <%_ } _%>
-    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { %>, String imageUrl<% } %>) {
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (user.hasImageField) { %>, String imageUrl<% } %>) {
         <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
@@ -629,7 +629,7 @@ public class UserService {
                     user.setEmail(email.toLowerCase());
                 }
                 user.setLangKey(langKey);
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j) { _%>
+  <%_ if (user.hasImageField) { _%>
                 user.setImageUrl(imageUrl);
   <%_ } _%>
   <%_ if (reactive) { _%>

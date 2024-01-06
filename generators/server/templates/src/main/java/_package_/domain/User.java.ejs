@@ -134,7 +134,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
+public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
 
     private static final long serialVersionUID = 1L;
 
@@ -297,7 +297,7 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
     @Column("lang_key")
 <%_ } _%>
     private String langKey;
-<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
+<%_ if (user.hasImageField) { _%>
 
     @Size(max = 256)
   <%_ if (databaseTypeSql && !reactive) { _%>
@@ -467,7 +467,7 @@ public class <%= user.persistClass %><% if (databaseTypeSql || databaseTypeMongo
     public void setEmail(String email) {
         this.email = email;
     }
-<%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeSql) { _%>
+<%_ if (user.hasImageField) { _%>
 
     public String getImageUrl() {
         return imageUrl;

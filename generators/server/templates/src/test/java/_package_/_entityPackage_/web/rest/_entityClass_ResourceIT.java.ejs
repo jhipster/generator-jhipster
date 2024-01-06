@@ -19,7 +19,7 @@
 package <%= entityAbsolutePackage %>.web.rest;
 
 <%_
-var filterTestableRelationships = reactive ? reactiveEagerRelations : relationships;
+var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
 let mapsIdEntityInstance;
@@ -115,6 +115,9 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
+<%_ if (skipJunitTests) { _%>
+import org.junit.jupiter.api.Disabled;
+<%_ } _%>
 import org.junit.jupiter.api.Test;
 <%_ if (implementsEagerLoadApis || databaseTypeNeo4j) { _%>
 import org.mockito.Mock;
@@ -246,6 +249,9 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 @IntegrationTest
+<%_ if (skipJunitTests) { _%>
+@Disabled("<%- skipJunitTests %>")
+<%_ } _%>
 <%_ if (implementsEagerLoadApis) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
@@ -525,14 +531,14 @@ filterTestableRelationships.forEach((relationship) => { _%>
   <%_ } _%>
   <%_
   const alreadyGeneratedEntities = [];
-  for (relationship of relationships) {
+  for (relationship of persistableRelationships) {
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
     const otherEntityNameCapitalized = relationship.otherEntityNameCapitalized;
     const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
     const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
     const mapsIdUse = relationship.id;
-    if ((relationshipValidate !== null && relationshipValidate) || mapsIdUse) { _%>
+    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>

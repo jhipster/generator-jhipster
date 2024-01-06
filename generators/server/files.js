@@ -470,8 +470,7 @@ export const baseServerFiles = {
   ],
   serverJavaDomain: [
     {
-      condition: generator =>
-        generator.databaseTypeSql || generator.databaseTypeMongodb || generator.databaseTypeNeo4j || generator.databaseTypeCouchbase,
+      condition: ctx => ctx.generateSpringAuditor,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['domain/AbstractAuditingEntity.java'],
