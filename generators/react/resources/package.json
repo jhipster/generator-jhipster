@@ -72,7 +72,7 @@
     "sinon": "17.0.1",
     "source-map-loader": "4.0.2",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
-    "style-loader": "3.3.3",
+    "style-loader": "3.3.4",
     "terser-webpack-plugin": "5.3.10",
     "thread-loader": "4.0.2",
     "ts-jest": "29.1.1",
