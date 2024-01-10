@@ -19,11 +19,19 @@
 import { parse } from '@iarna/toml';
 
 type LibsToml = {
-  plugins: Record<string, { id: string; version: string }>;
+  versions?: Record<string, string>,
+  libraries?: Record<string, string | { module: string; version: string } | { group: string; name: string; version: string }>,
+  plugins?: Record<string, string | { id: string; version: string }>;
 };
 
 // eslint-disable-next-line import/prefer-default-export
 export function getGradleLibsVersionsProperties(libsVersionsContent: string): Record<string, string> {
   const parsed = parse(libsVersionsContent) as LibsToml;
-  return Object.fromEntries(Object.entries(parsed.plugins).map(([dependencyName, dependency]) => [dependencyName, dependency.version]));
+  return {
+    ...parsed.versions,
+    ...Object.fromEntries([
+      ...Object.entries(parsed.libraries ?? {}).map(([dependencyName, dependency]) => [dependencyName, typeof dependency === 'string' ? dependency.split(':')[2] : dependency.version]),
+      ...Object.entries(parsed.plugins ?? {}).map(([dependencyName, dependency]) => [dependencyName, typeof dependency === 'string' ? dependency.split(':')[1] : dependency.version]),
+    ]),
+  };
 }
