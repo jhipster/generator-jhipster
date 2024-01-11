@@ -23,7 +23,7 @@
     "@rushstack/eslint-patch": "1.6.1",
     "@tsconfig/node18": "18.2.2",
     "@types/node": "18.19.6",
-    "@types/sinon": "17.0.2",
+    "@types/sinon": "17.0.3",
     "@vitejs/plugin-vue": "5.0.2",
     "@vue/eslint-config-prettier": "9.0.0",
     "@vue/eslint-config-typescript": "10.0.0",
