@@ -43,7 +43,7 @@
     "happy-dom": "12.10.3",
     "html-webpack-plugin": "5.6.0",
     "merge-jsons-webpack-plugin": "2.0.1",
-    "mini-css-extract-plugin": "2.7.6",
+    "mini-css-extract-plugin": "2.7.7",
     "numeral": "2.0.6",
     "postcss-import": "16.0.0",
     "postcss-loader": "7.3.4",
