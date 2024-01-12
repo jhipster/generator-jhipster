@@ -18,63 +18,98 @@
 #
 
 'theme: cli':
-  - cli/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - cli/*
 
 'theme: CI Builds':
-  - .github/**/*
-  - azure-pipelines.yml
+  - changed-files:
+    - any-glob-to-any-file:
+      - .github/**/*
+      - azure-pipelines.yml
 
 'theme: dependencies':
-  - package.json
-  - '**/package.json'
-  - package-lock.json
+  - changed-files:
+    - any-glob-to-any-file:
+      - package.json
+      - '**/package.json'
+      - package-lock.json
 
 'theme: front':
-  - generators/common/**
-  - generators/client/**
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/common/**
+      - generators/client/**
 
 'theme: angular':
-  - generators/angular/**
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/angular/**
 
 'theme: react':
-  - generators/react/**
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/react/**
 
 'theme: vue':
-  - generators/vue/**
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/vue/**
 
 'theme: jhipster-internals':
-  - generators/*.*
-  - generators/app/**
-  - generators/base/**
-  - generators/base-application/**
-  - generators/bootstrap/**
-  - generators/bootstrap-*/**
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/*.*
+      - generators/app/**
+      - generators/base/**
+      - generators/base-application/**
+      - generators/bootstrap/**
+      - generators/bootstrap-*/**
 
 'theme: i18n':
-  - generators/languages/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/languages/**/*
 
 'theme: java':
-  - generators/common/**
-  - generators/server/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/common/**
+      - generators/server/**/*
 
 'theme: upgrade':
-  - generators/upgrade/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/upgrade/**/*
 
 'theme: docker :whale:':
-  - Dockerfile
-  - generators/docker*.js
-  - generators/docker-compose/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - Dockerfile
+      - generators/docker/**/*
+      - generators/docker-compose/**/*
 
 'theme: maven':
-  - generators/maven/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/maven/**/*
+      - **/pom.xml*
 
 'theme: gradle':
-  - generators/gradle/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/gradle/**/*
+      - **/*.gradle
+      - **/gradle/**/*
 
 'theme: Heroku':
-  - generators/heroku/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/heroku/**/*
 
 'theme: kubernetes':
-  - generators/kubernetes/**/*
-  - generators/kubernetes-helm/**/*
-  - generators/kubernetes-knative/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - generators/kubernetes/**/*
+      - generators/kubernetes-helm/**/*
+      - generators/kubernetes-knative/**/*
