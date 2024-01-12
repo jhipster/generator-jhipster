@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-couchbase should match generated files snapshot 1`] = `
+exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-couchbase should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -59,247 +59,247 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/GeneratedByJHipster.java": {
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/JhipsterApp.java": {
+  "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/package-info.java": {
+  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ApplicationProperties.java": {
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/AsyncConfiguration.java": {
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CRLFLogConverter.java": {
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/JacksonConfiguration.java": {
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
+  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ReactorConfiguration.java": {
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityJwtConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/WebConfigurer.java": {
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/package-info.java": {
+  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AbstractAuditingEntity.java": {
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": {
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Authority.java": {
+  "src/main/java/com/mycompany/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/User.java": {
+  "src/main/java/com/mycompany/domain/User.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/package-info.java": {
+  "src/main/java/com/mycompany/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/management/SecurityMetersService.java": {
+  "src/main/java/com/mycompany/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/management/package-info.java": {
+  "src/main/java/com/mycompany/management/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/package-info.java": {
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AuthorityRepository.java": {
+  "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/CouchbaseSearchRepository.java": {
+  "src/main/java/com/mycompany/repository/CouchbaseSearchRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/JHipsterCouchbaseRepository.java": {
+  "src/main/java/com/mycompany/repository/JHipsterCouchbaseRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/UserRepository.java": {
+  "src/main/java/com/mycompany/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/package-info.java": {
+  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/DomainUserDetailsService.java": {
+  "src/main/java/com/mycompany/security/DomainUserDetailsService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/SecurityUtils.java": {
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/UserNotActivatedException.java": {
+  "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/jwt/JWTRelayGatewayFilterFactory.java": {
+  "src/main/java/com/mycompany/security/jwt/JWTRelayGatewayFilterFactory.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/jwt/package-info.java": {
+  "src/main/java/com/mycompany/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/package-info.java": {
+  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": {
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/EmailAlreadyUsedException.java": {
+  "src/main/java/com/mycompany/service/EmailAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/InvalidPasswordException.java": {
+  "src/main/java/com/mycompany/service/InvalidPasswordException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/MailService.java": {
+  "src/main/java/com/mycompany/service/MailService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/UserService.java": {
+  "src/main/java/com/mycompany/service/UserService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/UsernameAlreadyUsedException.java": {
+  "src/main/java/com/mycompany/service/UsernameAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AdminUserRest.java": {
+  "src/main/java/com/mycompany/service/dto/AdminUserRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/PasswordChangeDTO.java": {
+  "src/main/java/com/mycompany/service/dto/PasswordChangeDTO.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/UserRest.java": {
+  "src/main/java/com/mycompany/service/dto/UserRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/package-info.java": {
+  "src/main/java/com/mycompany/service/dto/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/package-info.java": {
+  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/UserMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/UserMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/package-info.java": {
+  "src/main/java/com/mycompany/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/package-info.java": {
+  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+  "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/package-info.java": {
+  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AccountResource.java": {
+  "src/main/java/com/mycompany/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AuthenticateController.java": {
+  "src/main/java/com/mycompany/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/PublicUserResource.java": {
+  "src/main/java/com/mycompany/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/UserResource.java": {
+  "src/main/java/com/mycompany/web/rest/UserResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/EmailAlreadyUsedException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/EmailAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/InvalidPasswordException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/InvalidPasswordException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/LoginAlreadyUsedException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/LoginAlreadyUsedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/KeyAndPasswordVM.java": {
+  "src/main/java/com/mycompany/web/rest/vm/KeyAndPasswordVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/LoginVM.java": {
+  "src/main/java/com/mycompany/web/rest/vm/LoginVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/ManagedUserVM.java": {
+  "src/main/java/com/mycompany/web/rest/vm/ManagedUserVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -368,115 +368,115 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.pa
   "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/IntegrationTest.java": {
+  "src/test/java/com/mycompany/IntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/TechnicalStructureTest.java": {
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/CouchbaseTestContainer.java": {
+  "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedCouchbase.java": {
+  "src/test/java/com/mycompany/config/EmbeddedCouchbase.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": {
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/management/SecurityMetersServiceTests.java": {
+  "src/test/java/com/mycompany/management/SecurityMetersServiceTests.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/repository/CouchbaseSearchRepositoryTest.java": {
+  "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/DomainUserDetailsServiceIT.java": {
+  "src/test/java/com/mycompany/security/DomainUserDetailsServiceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": {
+  "src/test/java/com/mycompany/security/jwt/AuthenticationIntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": {
+  "src/test/java/com/mycompany/security/jwt/JwtAuthenticationTestUtils.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": {
+  "src/test/java/com/mycompany/security/jwt/TokenAuthenticationIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+  "src/test/java/com/mycompany/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/MailServiceIT.java": {
+  "src/test/java/com/mycompany/service/MailServiceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/UserServiceIT.java": {
+  "src/test/java/com/mycompany/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/UserMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AuthenticateControllerIT.java": {
+  "src/test/java/com/mycompany/web/rest/AuthenticateControllerIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/PublicUserResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/PublicUserResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/UserResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/UserResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -829,7 +829,7 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
 }
 `;
 
-exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-couchbase should match generated files snapshot 1`] = `
+exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-couchbase should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -882,160 +882,160 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/GeneratedByJHipster.java": {
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/JhipsterApp.java": {
+  "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/package-info.java": {
+  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ApplicationProperties.java": {
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/AsyncConfiguration.java": {
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CRLFLogConverter.java": {
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": {
+  "src/main/java/com/mycompany/config/EurekaWorkaroundConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/JacksonConfiguration.java": {
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
+  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ReactorConfiguration.java": {
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityJwtConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/WebConfigurer.java": {
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/package-info.java": {
+  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AbstractAuditingEntity.java": {
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": {
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/package-info.java": {
+  "src/main/java/com/mycompany/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/management/SecurityMetersService.java": {
+  "src/main/java/com/mycompany/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/management/package-info.java": {
+  "src/main/java/com/mycompany/management/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/package-info.java": {
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/CouchbaseSearchRepository.java": {
+  "src/main/java/com/mycompany/repository/CouchbaseSearchRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/JHipsterCouchbaseRepository.java": {
+  "src/main/java/com/mycompany/repository/JHipsterCouchbaseRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/package-info.java": {
+  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/SecurityUtils.java": {
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/package-info.java": {
+  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": {
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/package-info.java": {
+  "src/main/java/com/mycompany/service/dto/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/package-info.java": {
+  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/package-info.java": {
+  "src/main/java/com/mycompany/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/package-info.java": {
+  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1080,88 +1080,88 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/IntegrationTest.java": {
+  "src/test/java/com/mycompany/IntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/TechnicalStructureTest.java": {
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/CouchbaseTestContainer.java": {
+  "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedCouchbase.java": {
+  "src/test/java/com/mycompany/config/EmbeddedCouchbase.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": {
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/management/SecurityMetersServiceTests.java": {
+  "src/test/java/com/mycompany/management/SecurityMetersServiceTests.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/repository/CouchbaseSearchRepositoryTest.java": {
+  "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": {
+  "src/test/java/com/mycompany/security/jwt/AuthenticationIntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": {
+  "src/test/java/com/mycompany/security/jwt/JwtAuthenticationTestUtils.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TestAuthenticationResource.java": {
+  "src/test/java/com/mycompany/security/jwt/TestAuthenticationResource.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": {
+  "src/test/java/com/mycompany/security/jwt/TokenAuthenticationIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+  "src/test/java/com/mycompany/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -1185,7 +1185,7 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
 }
 `;
 
-exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-couchbase should match generated files snapshot 1`] = `
+exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul-couchbase should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -1238,157 +1238,157 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/GeneratedByJHipster.java": {
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/JhipsterApp.java": {
+  "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/package-info.java": {
+  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ApplicationProperties.java": {
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/AsyncConfiguration.java": {
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CRLFLogConverter.java": {
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/JacksonConfiguration.java": {
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
+  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ReactorConfiguration.java": {
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/WebConfigurer.java": {
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/package-info.java": {
+  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AbstractAuditingEntity.java": {
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": {
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/package-info.java": {
+  "src/main/java/com/mycompany/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/package-info.java": {
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/CouchbaseSearchRepository.java": {
+  "src/main/java/com/mycompany/repository/CouchbaseSearchRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/JHipsterCouchbaseRepository.java": {
+  "src/main/java/com/mycompany/repository/JHipsterCouchbaseRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/package-info.java": {
+  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/SecurityUtils.java": {
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/AudienceValidator.java": {
+  "src/main/java/com/mycompany/security/oauth2/AudienceValidator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
+  "src/main/java/com/mycompany/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/package-info.java": {
+  "src/main/java/com/mycompany/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/package-info.java": {
+  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": {
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/package-info.java": {
+  "src/main/java/com/mycompany/service/dto/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/package-info.java": {
+  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/package-info.java": {
+  "src/main/java/com/mycompany/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/package-info.java": {
+  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -1433,76 +1433,76 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/IntegrationTest.java": {
+  "src/test/java/com/mycompany/IntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/TechnicalStructureTest.java": {
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/CouchbaseTestContainer.java": {
+  "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedCouchbase.java": {
+  "src/test/java/com/mycompany/config/EmbeddedCouchbase.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestSecurityConfiguration.java": {
+  "src/test/java/com/mycompany/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": {
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/repository/CouchbaseSearchRepositoryTest.java": {
+  "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/oauth2/AudienceValidatorTest.java": {
+  "src/test/java/com/mycompany/security/oauth2/AudienceValidatorTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -2014,7 +2014,7 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
 }
 `;
 
-exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-couchbase should match generated files snapshot 1`] = `
+exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-couchbase should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -2073,175 +2073,175 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/GeneratedByJHipster.java": {
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/JhipsterApp.java": {
+  "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/package-info.java": {
+  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ApplicationProperties.java": {
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/AsyncConfiguration.java": {
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CRLFLogConverter.java": {
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/JacksonConfiguration.java": {
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
+  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ReactorConfiguration.java": {
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityJwtConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/WebConfigurer.java": {
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/package-info.java": {
+  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AbstractAuditingEntity.java": {
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": {
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/package-info.java": {
+  "src/main/java/com/mycompany/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/management/SecurityMetersService.java": {
+  "src/main/java/com/mycompany/management/SecurityMetersService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/management/package-info.java": {
+  "src/main/java/com/mycompany/management/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/package-info.java": {
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/CouchbaseSearchRepository.java": {
+  "src/main/java/com/mycompany/repository/CouchbaseSearchRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/JHipsterCouchbaseRepository.java": {
+  "src/main/java/com/mycompany/repository/JHipsterCouchbaseRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/package-info.java": {
+  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/SecurityUtils.java": {
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/package-info.java": {
+  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": {
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/package-info.java": {
+  "src/main/java/com/mycompany/service/dto/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/package-info.java": {
+  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/package-info.java": {
+  "src/main/java/com/mycompany/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/package-info.java": {
+  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+  "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/package-info.java": {
+  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AccountResource.java": {
+  "src/main/java/com/mycompany/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AuthenticateController.java": {
+  "src/main/java/com/mycompany/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/LoginVM.java": {
+  "src/main/java/com/mycompany/web/rest/vm/LoginVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/vm/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -2283,97 +2283,97 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/IntegrationTest.java": {
+  "src/test/java/com/mycompany/IntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/TechnicalStructureTest.java": {
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/CouchbaseTestContainer.java": {
+  "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedCouchbase.java": {
+  "src/test/java/com/mycompany/config/EmbeddedCouchbase.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": {
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/management/SecurityMetersServiceTests.java": {
+  "src/test/java/com/mycompany/management/SecurityMetersServiceTests.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/repository/CouchbaseSearchRepositoryTest.java": {
+  "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/AuthenticationIntegrationTest.java": {
+  "src/test/java/com/mycompany/security/jwt/AuthenticationIntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/JwtAuthenticationTestUtils.java": {
+  "src/test/java/com/mycompany/security/jwt/JwtAuthenticationTestUtils.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenAuthenticationIT.java": {
+  "src/test/java/com/mycompany/security/jwt/TokenAuthenticationIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+  "src/test/java/com/mycompany/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AuthenticateControllerIT.java": {
+  "src/test/java/com/mycompany/web/rest/AuthenticateControllerIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -2750,7 +2750,7 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
 }
 `;
 
-exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-couchbase should match generated files snapshot 1`] = `
+exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-couchbase should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -2809,181 +2809,181 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/GeneratedByJHipster.java": {
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/JhipsterApp.java": {
+  "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/package-info.java": {
+  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ApplicationProperties.java": {
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/AsyncConfiguration.java": {
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CRLFLogConverter.java": {
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/EurekaWorkaroundConfiguration.java": {
+  "src/main/java/com/mycompany/config/EurekaWorkaroundConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/JacksonConfiguration.java": {
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
+  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/OAuth2Configuration.java": {
+  "src/main/java/com/mycompany/config/OAuth2Configuration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ReactorConfiguration.java": {
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/WebConfigurer.java": {
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/package-info.java": {
+  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AbstractAuditingEntity.java": {
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": {
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/package-info.java": {
+  "src/main/java/com/mycompany/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/package-info.java": {
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/CouchbaseSearchRepository.java": {
+  "src/main/java/com/mycompany/repository/CouchbaseSearchRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/JHipsterCouchbaseRepository.java": {
+  "src/main/java/com/mycompany/repository/JHipsterCouchbaseRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/package-info.java": {
+  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/SecurityUtils.java": {
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/AudienceValidator.java": {
+  "src/main/java/com/mycompany/security/oauth2/AudienceValidator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/JwtGrantedAuthorityConverter.java": {
+  "src/main/java/com/mycompany/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/oauth2/package-info.java": {
+  "src/main/java/com/mycompany/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/package-info.java": {
+  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": {
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/package-info.java": {
+  "src/main/java/com/mycompany/service/dto/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/package-info.java": {
+  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/package-info.java": {
+  "src/main/java/com/mycompany/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/package-info.java": {
+  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
+  "src/main/java/com/mycompany/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+  "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/package-info.java": {
+  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AccountResource.java": {
+  "src/main/java/com/mycompany/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AuthInfoResource.java": {
+  "src/main/java/com/mycompany/web/rest/AuthInfoResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/LogoutResource.java": {
+  "src/main/java/com/mycompany/web/rest/LogoutResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -3031,91 +3031,91 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/IntegrationTest.java": {
+  "src/test/java/com/mycompany/IntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/TechnicalStructureTest.java": {
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/CouchbaseTestContainer.java": {
+  "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedCouchbase.java": {
+  "src/test/java/com/mycompany/config/EmbeddedCouchbase.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestSecurityConfiguration.java": {
+  "src/test/java/com/mycompany/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": {
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/repository/CouchbaseSearchRepositoryTest.java": {
+  "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/oauth2/AudienceValidatorTest.java": {
+  "src/test/java/com/mycompany/security/oauth2/AudienceValidatorTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/test/util/OAuth2TestUtil.java": {
+  "src/test/java/com/mycompany/test/util/OAuth2TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/LogoutResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/LogoutResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -3594,7 +3594,7 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
 }
 `;
 
-exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase should match generated files snapshot 1`] = `
+exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase should match generated files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
@@ -3653,157 +3653,157 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/GeneratedByJHipster.java": {
+  "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/JhipsterApp.java": {
+  "src/main/java/com/mycompany/JhipsterApp.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/LoggingAspect.java": {
+  "src/main/java/com/mycompany/aop/logging/LoggingAspect.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/aop/logging/package-info.java": {
+  "src/main/java/com/mycompany/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ApplicationProperties.java": {
+  "src/main/java/com/mycompany/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/AsyncConfiguration.java": {
+  "src/main/java/com/mycompany/config/AsyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/CRLFLogConverter.java": {
+  "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/Constants.java": {
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DatabaseConfiguration.java": {
+  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/DateTimeFormatConfiguration.java": {
+  "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/JacksonConfiguration.java": {
+  "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LocaleConfiguration.java": {
+  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingAspectConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/LoggingConfiguration.java": {
+  "src/main/java/com/mycompany/config/LoggingConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/ReactorConfiguration.java": {
+  "src/main/java/com/mycompany/config/ReactorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/SecurityConfiguration.java": {
+  "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/WebConfigurer.java": {
+  "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/config/package-info.java": {
+  "src/main/java/com/mycompany/config/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AbstractAuditingEntity.java": {
+  "src/main/java/com/mycompany/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/AnotherSimple.java": {
+  "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/Simple.java": {
+  "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/domain/package-info.java": {
+  "src/main/java/com/mycompany/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/package-info.java": {
+  "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/AnotherSimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/CouchbaseSearchRepository.java": {
+  "src/main/java/com/mycompany/repository/CouchbaseSearchRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/JHipsterCouchbaseRepository.java": {
+  "src/main/java/com/mycompany/repository/JHipsterCouchbaseRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/SimpleRepository.java": {
+  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/repository/package-info.java": {
+  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/AuthoritiesConstants.java": {
+  "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/SecurityUtils.java": {
+  "src/main/java/com/mycompany/security/SecurityUtils.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/security/package-info.java": {
+  "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/AnotherSimpleService.java": {
+  "src/main/java/com/mycompany/service/AnotherSimpleService.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/AnotherSimpleRest.java": {
+  "src/main/java/com/mycompany/service/dto/AnotherSimpleRest.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/dto/package-info.java": {
+  "src/main/java/com/mycompany/service/dto/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/AnotherSimpleServiceImpl.java": {
+  "src/main/java/com/mycompany/service/impl/AnotherSimpleServiceImpl.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/impl/package-info.java": {
+  "src/main/java/com/mycompany/service/impl/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/AnotherSimpleMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/AnotherSimpleMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/EntityMapper.java": {
+  "src/main/java/com/mycompany/service/mapper/EntityMapper.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/mapper/package-info.java": {
+  "src/main/java/com/mycompany/service/mapper/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/service/package-info.java": {
+  "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/SpaWebFilter.java": {
+  "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/filter/package-info.java": {
+  "src/main/java/com/mycompany/web/filter/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AccountResource.java": {
+  "src/main/java/com/mycompany/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/AnotherSimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/SimpleResource.java": {
+  "src/main/java/com/mycompany/web/rest/SimpleResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/BadRequestAlertException.java": {
+  "src/main/java/com/mycompany/web/rest/errors/BadRequestAlertException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ErrorConstants.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ErrorConstants.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/ExceptionTranslator.java": {
+  "src/main/java/com/mycompany/web/rest/errors/ExceptionTranslator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/FieldErrorVM.java": {
+  "src/main/java/com/mycompany/web/rest/errors/FieldErrorVM.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/errors/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/errors/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/package/web/rest/package-info.java": {
+  "src/main/java/com/mycompany/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/banner.txt": {
@@ -3851,79 +3851,79 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/main/resources/templates/error.html": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/IntegrationTest.java": {
+  "src/test/java/com/mycompany/IntegrationTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/TechnicalStructureTest.java": {
+  "src/test/java/com/mycompany/TechnicalStructureTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/AsyncSyncConfiguration.java": {
+  "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/CouchbaseTestContainer.java": {
+  "src/test/java/com/mycompany/config/CouchbaseTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedCouchbase.java": {
+  "src/test/java/com/mycompany/config/EmbeddedCouchbase.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/SpringBootTestClassOrderer.java": {
+  "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/TestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTest.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/AnotherSimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTest.java": {
+  "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/domain/SimpleTestSamples.java": {
+  "src/test/java/com/mycompany/domain/SimpleTestSamples.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/repository/CouchbaseSearchRepositoryTest.java": {
+  "src/test/java/com/mycompany/repository/CouchbaseSearchRepositoryTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/security/SecurityUtilsUnitTest.java": {
+  "src/test/java/com/mycompany/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/dto/AnotherSimpleRestTest.java": {
+  "src/test/java/com/mycompany/service/dto/AnotherSimpleRestTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/service/mapper/AnotherSimpleMapperTest.java": {
+  "src/test/java/com/mycompany/service/mapper/AnotherSimpleMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterIT.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/filter/SpaWebFilterTestController.java": {
+  "src/test/java/com/mycompany/web/filter/SpaWebFilterTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AccountResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/AnotherSimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/SimpleResourceIT.java": {
+  "src/test/java/com/mycompany/web/rest/SimpleResourceIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/TestUtil.java": {
+  "src/test/java/com/mycompany/web/rest/TestUtil.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/WithUnauthenticatedMockUser.java": {
+  "src/test/java/com/mycompany/web/rest/WithUnauthenticatedMockUser.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorIT.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/web/rest/errors/ExceptionTranslatorTestController.java": {
+  "src/test/java/com/mycompany/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
@@ -3949,7 +3949,7 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
 
 exports[`generator - couchbase samples matrix should match snapshot 1`] = `
 {
-  "gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-couchbase": {
+  "gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no)-couchbase": {
     "applicationType": "gateway",
     "authenticationType": "jwt",
     "baseName": "jhipster",
@@ -3964,7 +3964,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
       "en",
     ],
     "nativeLanguage": "en",
-    "packageName": "com.package",
+    "packageName": "com.mycompany",
     "searchEngine": "couchbase",
     "serverSideOptions": [],
     "serviceDiscoveryType": "no",
@@ -4027,7 +4027,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
     ],
     "websocket": false,
   },
-  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-couchbase": {
+  "microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka-couchbase": {
     "applicationType": "microservice",
     "authenticationType": "jwt",
     "baseName": "jhipster",
@@ -4042,7 +4042,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
       "en",
     ],
     "nativeLanguage": "en",
-    "packageName": "com.package",
+    "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "couchbase",
     "serverSideOptions": [
@@ -4081,7 +4081,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
     ],
     "websocket": true,
   },
-  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul-couchbase": {
+  "microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul-couchbase": {
     "applicationType": "microservice",
     "authenticationType": "oauth2",
     "baseName": "jhipster",
@@ -4096,7 +4096,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
       "en",
     ],
     "nativeLanguage": "en",
-    "packageName": "com.package",
+    "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "couchbase",
     "serverSideOptions": [],
@@ -4133,7 +4133,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
     "testFrameworks": [],
     "websocket": true,
   },
-  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-couchbase": {
+  "monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no)-couchbase": {
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "jhipster",
@@ -4148,7 +4148,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
       "en",
     ],
     "nativeLanguage": "en",
-    "packageName": "com.package",
+    "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "couchbase",
     "serverSideOptions": [],
@@ -4183,7 +4183,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
     "testFrameworks": [],
     "websocket": false,
   },
-  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-couchbase": {
+  "monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka-couchbase": {
     "applicationType": "monolith",
     "authenticationType": "oauth2",
     "baseName": "jhipster",
@@ -4198,7 +4198,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
       "en",
     ],
     "nativeLanguage": "en",
-    "packageName": "com.package",
+    "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "couchbase",
     "serverSideOptions": [
@@ -4237,7 +4237,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
     ],
     "websocket": false,
   },
-  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase": {
+  "monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul-couchbase": {
     "applicationType": "monolith",
     "authenticationType": "session",
     "baseName": "jhipster",
@@ -4252,7 +4252,7 @@ exports[`generator - couchbase samples matrix should match snapshot 1`] = `
       "en",
     ],
     "nativeLanguage": "en",
-    "packageName": "com.package",
+    "packageName": "com.mycompany",
     "reactive": true,
     "searchEngine": "couchbase",
     "serverSideOptions": [
