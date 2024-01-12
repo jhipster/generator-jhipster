@@ -22,7 +22,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
-import { packageInfoTransform, generatedAnnotationTransform, checkJava } from './support/index.js';
+import { packageInfoTransform, generatedAnnotationTransform, checkJava, isReservedJavaKeyword } from './support/index.js';
 import { JavaApplication } from './types.js';
 import { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.js';
 import { GenericSourceTypeDefinition } from '../base/tasks.js';
@@ -68,6 +68,22 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      checkConfig() {
+        const { packageName } = this.jhipsterConfigWithDefaults;
+        const reservedKeywork = packageName.split('.').find(isReservedJavaKeyword);
+        if (reservedKeywork) {
+          throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
   }
 
   get default() {

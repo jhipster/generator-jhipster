@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const javaReservedKeywords = [
   'ABSTRACT',
   'CONTINUE',
   'FOR',
@@ -69,3 +69,7 @@ export default [
   'SUPER',
   'WHILE',
 ];
+
+export const isReservedJavaKeyword = (keyword: string) => {
+  return javaReservedKeywords.includes(keyword.toUpperCase());
+};

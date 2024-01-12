@@ -21,7 +21,7 @@ import JHipsterReservedKeywords from './reserved-keywords/jhipster.js';
 import PagingReservedKeywords from './reserved-keywords/paging.js';
 import AngularReservedKeywords from './reserved-keywords/angular.js';
 import MySQLReservedKeywords from './reserved-keywords/mysql.js';
-import JavaReservedKeywords from './reserved-keywords/java.js';
+import { javaReservedKeywords } from '../../generators/java/support/index.js';
 import TypescriptReservedKeywords from './reserved-keywords/typescript.js';
 import PostgresqlReservedKeywords from './reserved-keywords/postgresql.js';
 import CassandraReservedKeywords from './reserved-keywords/cassandra.js';
@@ -38,7 +38,7 @@ const ReservedWords = {
   ANGULAR: AngularReservedKeywords,
   // TODO: Remove react from the object if there are no reserve keywords for react.
   REACT: [],
-  JAVA: JavaReservedKeywords,
+  JAVA: javaReservedKeywords,
   TYPESCRIPT: TypescriptReservedKeywords,
   MYSQL: MySQLReservedKeywords,
   MARIADB: MySQLReservedKeywords,
@@ -52,8 +52,10 @@ const ReservedWords = {
   NEO4J: Neo4JReservedKeywords,
 };
 
-export function isReserved(keyword?: any, type?: any) {
-  return !!keyword && !!type && !!ReservedWords[type.toUpperCase()] && ReservedWords[type.toUpperCase()].includes(keyword.toUpperCase());
+export const keywordsForType = (type: string) => ReservedWords[type.toUpperCase()];
+
+export function isReserved(keyword?: any, type?: string) {
+  return !!keyword && !!type && !!keywordsForType(type)?.includes(keyword.toUpperCase());
 }
 
 export function isReservedClassName(keyword) {
