@@ -23,7 +23,7 @@ export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
   serverMatrix = extendMatrix(serverMatrix, {
     buildTool: ['maven', 'gradle'],
     enableTranslation: [false, true],
-    packageName: ['tech.jhipster', 'com.package'],
+    packageName: ['tech.jhipster', 'com.mycompany'],
     jhiPrefix: ['jhi', 'fix'],
     entitySuffix: ['Entity', ''],
     dtoSuffix: ['DTO', 'Rest'],

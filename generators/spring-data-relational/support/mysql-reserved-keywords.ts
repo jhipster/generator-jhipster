@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const mysqlReservedKeywords = [
   'ACCESSIBLE',
   'ADD',
   'ALL',
@@ -275,3 +275,7 @@ export default [
   'SLOW',
   'WINDOW',
 ];
+
+export const isReservedMysqlKeyword = (keyword: string) => {
+  return mysqlReservedKeywords.includes(keyword.toUpperCase());
+};

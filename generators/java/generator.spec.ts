@@ -75,6 +75,12 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  it('packageName with reserved keyword', async () => {
+    await expect(helpers.runJHipster(GENERATOR_JAVA).withJHipsterConfig({ packageName: 'com.public.myapp' })).rejects.toThrow(
+      'The package name "com.public.myapp" contains a reserved Java keyword "public".',
+    );
+  });
+
   describe('with jakarta and enums disabled', () => {
     before(async () => {
       await helpers

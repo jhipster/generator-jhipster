@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const cassandraReservedKeywords = [
   'ADD',
   'ALL',
   'ALTER',
@@ -112,3 +112,7 @@ export default [
   'MACADDR',
   'BITSTRING',
 ];
+
+export const isReservedCassandraKeyword = (keyword: string) => {
+  return cassandraReservedKeywords.includes(keyword.toUpperCase());
+};

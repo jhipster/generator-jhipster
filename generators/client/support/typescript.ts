@@ -17,4 +17,55 @@
  * limitations under the License.
  */
 
-export default ['CLASS', 'NODENAME', 'NODETYPE', 'COMPONENT', 'SUBSCRIPTION', 'RESPONSE', 'OBSERVABLE', 'INJECTABLE', 'HTTP', 'ROUTER'];
+export const typescriptReservedKeywords = [
+  'BREAK',
+  'CASE',
+  'CATCH',
+  'CLASS',
+  'CONST',
+  'CONSTRUCTOR',
+  'CONTINUE',
+  'DEBUGGER',
+  'DEFAULT',
+  'DELETE',
+  'DO',
+  'ELSE',
+  'ENUM',
+  'EXPORT',
+  'EXTENDS',
+  'FALSE',
+  'FINALLY',
+  'FOR',
+  'FUNCTION',
+  'IF',
+  'IMPORT',
+  'IN',
+  'INSTANCEOF',
+  'NEW',
+  'NULL',
+  'RETURN',
+  'SUPER',
+  'SWITCH',
+  'THIS',
+  'THROW',
+  'TRUE',
+  'TRY',
+  'TYPEOF',
+  'VAR',
+  'VOID',
+  'WHILE',
+  'WITH',
+  'IMPLEMENTS',
+  'INTERFACE',
+  'LET',
+  'PACKAGE',
+  'PRIVATE',
+  'PROTECTED',
+  'PUBLIC',
+  'STATIC',
+  'YIELD',
+];
+
+export const isReservedTypescriptKeyword = (keyword: string) => {
+  return typescriptReservedKeywords.includes(keyword.toUpperCase());
+};

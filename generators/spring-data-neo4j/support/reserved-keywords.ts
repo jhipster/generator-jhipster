@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const neo4jReservedKeywords = [
   'CALL',
   'CREATE',
   'DELETE',
@@ -90,3 +90,7 @@ export default [
   'REQUIRE',
   'SCALAR',
 ];
+
+export const isReservedNeo4jKeyword = (keyword: string) => {
+  return neo4jReservedKeywords.includes(keyword.toUpperCase());
+};
