@@ -34,11 +34,17 @@ import command from './command.<%- js ? '' : 'm' %>js';
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
 export async function createGenerator(env) {
-  const jhipsterGenerator = 'jhipster:<%= generator %>';
-  const jhipsterPath = env.getPackagePath(jhipsterGenerator);
-  const constants = (await import(`${jhipsterPath}/generators/generator-constants.js`)).default;
-  const ParentClass = await env.requireGenerator(jhipsterGenerator);
-  return class <%= generatorClass %>Generator extends ParentClass {
+  let <%= generatorClass %>Generator;
+  try {
+    // Try to use locally installed generator-jhipster
+    <%= generatorClass %>Generator = (await import('generator-jhipster/generators/<%= jhipsterGenerator %>')).default;
+  } catch {
+    // Fallback to the currently running jhipster.
+    const jhipsterGenerator = 'jhipster:<%= generator %>';
+    <%= generatorClass %>Generator = await env.requireGenerator(jhipsterGenerator);
+  }
+
+  return class extends <%= generatorClass %>Generator {
 <%_ } else { _%>
 export default class extends <%= generatorClass %>Generator {
 <%_ } _%>
