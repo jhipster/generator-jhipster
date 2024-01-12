@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const oracleReservedKeywords = [
   'ACCESS',
   'ACCOUNT',
   'ACTIVATE',
@@ -500,3 +500,7 @@ export default [
   'YEAR',
   'ZONE',
 ];
+
+export const isReservedOracleKeyword = (keyword: string) => {
+  return oracleReservedKeywords.includes(keyword.toUpperCase());
+};

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const typescriptReservedKeywords = [
   'BREAK',
   'CASE',
   'CATCH',
@@ -65,3 +65,7 @@ export default [
   'STATIC',
   'YIELD',
 ];
+
+export const isReservedTypescriptKeyword = (keyword: string) => {
+  return typescriptReservedKeywords.includes(keyword.toUpperCase());
+};

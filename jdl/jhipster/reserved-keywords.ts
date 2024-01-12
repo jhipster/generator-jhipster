@@ -19,37 +19,37 @@
 
 import JHipsterReservedKeywords from './reserved-keywords/jhipster.js';
 import PagingReservedKeywords from './reserved-keywords/paging.js';
-import AngularReservedKeywords from './reserved-keywords/angular.js';
-import MySQLReservedKeywords from './reserved-keywords/mysql.js';
-import { javaReservedKeywords } from '../../generators/java/support/index.js';
-import TypescriptReservedKeywords from './reserved-keywords/typescript.js';
-import PostgresqlReservedKeywords from './reserved-keywords/postgresql.js';
-import CassandraReservedKeywords from './reserved-keywords/cassandra.js';
-import CouchbaseReservedKeywords from './reserved-keywords/couchbase.js';
-import OracleReservedKeywords from './reserved-keywords/oracle.js';
-import MsSQLReservedKeywords from './reserved-keywords/mssql.js';
-import Neo4JReservedKeywords from './reserved-keywords/neo4j.js';
+import { angularReservedKeywords } from '../../generators/angular/support/reserved-keywords.js';
+import { mysqlReservedKeywords } from '../../generators/spring-data-relational/support/mysql-reserved-keywords.js';
+import { javaReservedKeywords } from '../../generators/java/support/reserved-keywords.js';
+import { typescriptReservedKeywords } from '../../generators/client/support/typescript.js';
+import { postgresqlReservedKeywords } from '../../generators/spring-data-relational/support/postgresql-reserved-keywords.js';
+import { cassandraReservedKeywords } from '../../generators/spring-data-cassandra/support/reserved-keywords.js';
+import { couchbaseReservedKeywords } from '../../generators/spring-data-couchbase/support/reserved-keywords.js';
+import { oracleReservedKeywords } from '../../generators/spring-data-relational/support/oracle-reserved-keywords.js';
+import { mssqlReservedKeywords } from '../../generators/spring-data-relational/support/mssql-reserved-keywords.js';
+import { neo4jReservedKeywords } from '../../generators/spring-data-neo4j/support/reserved-keywords.js';
 import applicationOptions from './application-options.js';
 
 const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK] as Record<string, string>;
 
 const ReservedWords = {
   JHIPSTER: JHipsterReservedKeywords,
-  ANGULAR: AngularReservedKeywords,
+  ANGULAR: angularReservedKeywords,
   // TODO: Remove react from the object if there are no reserve keywords for react.
   REACT: [],
   JAVA: javaReservedKeywords,
-  TYPESCRIPT: TypescriptReservedKeywords,
-  MYSQL: MySQLReservedKeywords,
-  MARIADB: MySQLReservedKeywords,
-  POSTGRESQL: PostgresqlReservedKeywords,
+  TYPESCRIPT: typescriptReservedKeywords,
+  MYSQL: mysqlReservedKeywords,
+  MARIADB: mysqlReservedKeywords,
+  POSTGRESQL: postgresqlReservedKeywords,
   PAGING: PagingReservedKeywords,
-  CASSANDRA: CassandraReservedKeywords,
-  COUCHBASE: CouchbaseReservedKeywords,
-  ORACLE: OracleReservedKeywords,
+  CASSANDRA: cassandraReservedKeywords,
+  COUCHBASE: couchbaseReservedKeywords,
+  ORACLE: oracleReservedKeywords,
   MONGODB: ['DOCUMENT'],
-  MSSQL: MsSQLReservedKeywords,
-  NEO4J: Neo4JReservedKeywords,
+  MSSQL: mssqlReservedKeywords,
+  NEO4J: neo4jReservedKeywords,
 };
 
 export const keywordsForType = (type: string) => ReservedWords[type.toUpperCase()];

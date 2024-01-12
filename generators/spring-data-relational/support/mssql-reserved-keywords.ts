@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-export default [
+export const mssqlReservedKeywords = [
   'ADD',
   'ALL',
   'ALTER',
@@ -204,3 +204,7 @@ export default [
   'WITHIN GROUP',
   'WRITETEXT',
 ];
+
+export const isReservedMssqlKeyword = (keyword: string) => {
+  return mssqlReservedKeywords.includes(keyword.toUpperCase());
+};

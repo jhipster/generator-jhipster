@@ -17,4 +17,19 @@
  * limitations under the License.
  */
 
-export default ['CLASS', 'NODENAME', 'NODETYPE', 'COMPONENT', 'SUBSCRIPTION', 'RESPONSE', 'OBSERVABLE', 'INJECTABLE', 'HTTP', 'ROUTER'];
+export const angularReservedKeywords = [
+  'CLASS',
+  'NODENAME',
+  'NODETYPE',
+  'COMPONENT',
+  'SUBSCRIPTION',
+  'RESPONSE',
+  'OBSERVABLE',
+  'INJECTABLE',
+  'HTTP',
+  'ROUTER',
+];
+
+export const isReservedAngularKeyword = (keyword: string) => {
+  return angularReservedKeywords.includes(keyword.toUpperCase());
+};
