@@ -19,8 +19,14 @@
 export * from './config.js';
 export * from './doc.js';
 export * from './database.js';
-export * from './dependabot-maven.js';
-export * from './dependabot-gradle.js';
+/**
+ * @deprecated Use from maven generator support
+ */
+export * from '../../maven/support/dependabot-maven.js';
+/**
+ * @deprecated Use from gradle generator support
+ */
+export * from '../../gradle/support/dependabot-gradle.js';
 export * from '../../java/support/files.js';
 export * from './java-formatting.js';
 export * from './key-store.js';

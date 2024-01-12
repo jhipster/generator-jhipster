@@ -19,8 +19,8 @@
 import { parse } from '@iarna/toml';
 
 type LibsToml = {
-  versions?: Record<string, string>,
-  libraries?: Record<string, string | { module: string; version: string } | { group: string; name: string; version: string }>,
+  versions?: Record<string, string>;
+  libraries?: Record<string, string | { module: string; version: string } | { group: string; name: string; version: string }>;
   plugins?: Record<string, string | { id: string; version: string }>;
 };
 
@@ -30,8 +30,14 @@ export function getGradleLibsVersionsProperties(libsVersionsContent: string): Re
   return {
     ...parsed.versions,
     ...Object.fromEntries([
-      ...Object.entries(parsed.libraries ?? {}).map(([dependencyName, dependency]) => [dependencyName, typeof dependency === 'string' ? dependency.split(':')[2] : dependency.version]),
-      ...Object.entries(parsed.plugins ?? {}).map(([dependencyName, dependency]) => [dependencyName, typeof dependency === 'string' ? dependency.split(':')[1] : dependency.version]),
+      ...Object.entries(parsed.libraries ?? {}).map(([dependencyName, dependency]) => [
+        dependencyName,
+        typeof dependency === 'string' ? dependency.split(':')[2] : dependency.version,
+      ]),
+      ...Object.entries(parsed.plugins ?? {}).map(([dependencyName, dependency]) => [
+        dependencyName,
+        typeof dependency === 'string' ? dependency.split(':')[1] : dependency.version,
+      ]),
     ]),
   };
 }
