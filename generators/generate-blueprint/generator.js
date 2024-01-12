@@ -39,6 +39,7 @@ import {
   WRITTEN,
   LOCAL_BLUEPRINT_OPTION,
   ALL_PRIORITIES,
+  DYNAMIC,
 } from './constants.js';
 
 import * as GENERATOR_LIST from '../generator-list.js';
@@ -128,6 +129,7 @@ export default class extends BaseGenerator {
         if (!this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
           this.config.defaults({
             [SKIP_COMMIT_HOOK]: true,
+            [DYNAMIC]: true,
           });
         }
       },
