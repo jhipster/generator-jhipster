@@ -93,14 +93,14 @@
   - changed-files:
     - any-glob-to-any-file:
       - generators/maven/**/*
-      - **/pom.xml*
+      - '**/pom.xml*'
 
 'theme: gradle':
   - changed-files:
     - any-glob-to-any-file:
       - generators/gradle/**/*
-      - **/*.gradle
-      - **/gradle/**/*
+      - '**/*.gradle'
+      - '**/gradle/**/*'
 
 'theme: Heroku':
   - changed-files:
