@@ -16,14 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { parse } from '@iarna/toml';
 
-type LibsToml = {
-  plugins: Record<string, { id: string; version: string }>;
-};
-
-// eslint-disable-next-line import/prefer-default-export
-export function getGradleLibsVersionsProperties(libsVersionsContent: string): Record<string, string> {
-  const parsed = parse(libsVersionsContent) as LibsToml;
-  return Object.fromEntries(Object.entries(parsed.plugins).map(([dependencyName, dependency]) => [dependencyName, dependency.version]));
-}
+export * from './dependabot-gradle.js';

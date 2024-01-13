@@ -17,5 +17,6 @@
  * limitations under the License.
  */
 
+export * from './dependabot-maven.js';
 export { default as PomStorage } from './pom-store.js';
 export * from './pom-store.js';
