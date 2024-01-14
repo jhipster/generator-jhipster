@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector<% } %> } from '@angular/core';
+import { Component, inject, signal, OnInit<% if (microfrontend && enableTranslation && applicationTypeGateway) { %>, createNgModule, Injector<% } %> } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -56,7 +56,7 @@ import NavbarItem from './navbar-item.model';
 })
 export default class NavbarComponent implements OnInit {
   inProduction?: boolean;
-  isNavbarCollapsed = true;
+  isNavbarCollapsed = signal(true);
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>
@@ -111,7 +111,7 @@ export default class NavbarComponent implements OnInit {
 <%_ } _%>
 
   collapseNavbar(): void {
-    this.isNavbarCollapsed = true;
+    this.isNavbarCollapsed.set(true);
   }
 
   login(): void {
@@ -129,7 +129,7 @@ export default class NavbarComponent implements OnInit {
   }
 
   toggleNavbar(): void {
-    this.isNavbarCollapsed = !this.isNavbarCollapsed;
+    this.isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed);
   }
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
