@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -47,7 +47,7 @@ export default class UserManagementUpdateComponent implements OnInit {
   languages = LANGUAGES;
 <%_ } _%>
   authorities: string[] = [];
-  isSaving = false;
+  isSaving = signal(false);
 
   editForm = new FormGroup({
     id: new FormControl(userTemplate.id),
@@ -92,7 +92,7 @@ export default class UserManagementUpdateComponent implements OnInit {
   }
 
   save(): void {
-    this.isSaving = true;
+    this.isSaving.set(true);
     const user = this.editForm.getRawValue();
     if (user.id !== null) {
       this.userService.update(user).subscribe({
@@ -108,11 +108,11 @@ export default class UserManagementUpdateComponent implements OnInit {
   }
 
   private onSaveSuccess(): void {
-    this.isSaving = false;
+    this.isSaving.set(false);
     this.previousState();
   }
 
   private onSaveError(): void {
-    this.isSaving = false;
+    this.isSaving.set(false);
   }
 }

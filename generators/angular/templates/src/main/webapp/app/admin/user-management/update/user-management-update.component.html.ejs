@@ -162,7 +162,7 @@
         <fa-icon icon="ban"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.cancel">__jhiTransformTranslate__('entity.action.cancel')</span>
       </button>
 
-      <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+      <button type="submit" [disabled]="editForm.invalid || isSaving()" class="btn btn-primary">
         <fa-icon icon="save"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.save">__jhiTransformTranslate__('entity.action.save')</span>
       </button>
     </form>
