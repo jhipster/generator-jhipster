@@ -151,7 +151,7 @@ export class <%= entityAngularName %>Service {
     add<%= entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>>(<%= entityInstance %>Collection: Type[], ...<%= entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
         const <%= entityInstancePlural %>: Type[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
         if (<%= entityInstancePlural %>.length > 0) {
-            const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item)!);
+            const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item));
             const <%= entityInstancePlural %>ToAdd = <%= entityInstancePlural %>.filter(<%= entityInstance %>Item => {
                 const <%= entityInstance %>Identifier = this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item);
                 if (<%= entityInstance %>CollectionIdentifiers.includes(<%= entityInstance %>Identifier)) {
