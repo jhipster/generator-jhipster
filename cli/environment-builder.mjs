@@ -35,6 +35,10 @@ const __dirname = dirname(__filename);
 const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(__dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
+const defaultLookupOptions = {
+  lookups: ['generators', 'generators/*/generators'],
+  customizeNamespace: ns => ns?.replaceAll(':generators:', ':'),
+};
 
 function loadYoRc(filePath = '.yo-rc.json') {
   if (!existsSync(filePath)) {
@@ -155,7 +159,12 @@ export default class EnvironmentBuilder {
       packagePath = path.join(__dirname, '../..');
       lookup = `${sourceRoot}/generators`;
     }
-    (await this.env.lookup({ packagePaths: [packagePath], lookups: [lookup] })).forEach(generator => {
+    const generators = await this.env.lookup({
+      ...defaultLookupOptions,
+      packagePaths: [packagePath],
+      lookups: [lookup, `${lookup}/*/generators`],
+    });
+    generators.forEach(generator => {
       // Verify jhipster generators namespace.
       assert(
         generator.namespace.startsWith(`${CLI_NAME}:`),
@@ -193,7 +202,7 @@ export default class EnvironmentBuilder {
   async _lookups(lookups = []) {
     lookups = [].concat(lookups);
     for (const lookup of lookups) {
-      await this.env.lookup(lookup);
+      await this.env.lookup({ ...defaultLookupOptions, ...lookup });
     }
     return this;
   }
@@ -226,7 +235,12 @@ export default class EnvironmentBuilder {
 
     if (missingBlueprints && missingBlueprints.length > 0) {
       // Lookup for blueprints.
-      await this.env.lookup({ ...options, filterPaths: true, packagePatterns: missingBlueprints });
+      await this.env.lookup({
+        ...defaultLookupOptions,
+        ...options,
+        filterPaths: true,
+        packagePatterns: missingBlueprints,
+      });
     }
     return this;
   }
