@@ -168,9 +168,12 @@ export default class EnvironmentBuilder {
   async _lookupLocalBlueprint() {
     if (this.localBlueprintExists) {
       // Register jhipster generators.
-      const generators = await this.env.lookup({ packagePaths: [this.localBlueprintPath], lookups: ['.'] });
+      const generators = await this.env.lookup({
+        packagePaths: [this.localBlueprintPath],
+        lookups: ['.'],
+        customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-local'),
+      });
       if (generators.length > 0) {
-        this.env.alias(/^@jhipster\/jhipster-local(:(.*))?$/, '.blueprint$1');
         this.env.sharedOptions.composeWithLocalBlueprint = true;
       }
     }
@@ -179,10 +182,11 @@ export default class EnvironmentBuilder {
 
   async _lookupDevBlueprint() {
     // Register jhipster generators.
-    const generators = await this.env.lookup({ packagePaths: [this.devBlueprintPath], lookups: ['.'] });
-    if (generators.length > 0) {
-      this.env.alias(/^@jhipster\/jhipster-dev(:(.*))?$/, '.blueprint$1');
-    }
+    await this.env.lookup({
+      packagePaths: [this.devBlueprintPath],
+      lookups: ['.'],
+      customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-dev'),
+    });
     return this;
   }
 
