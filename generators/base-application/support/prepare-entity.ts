@@ -142,6 +142,7 @@ export const entityDefaultConfig = {
 
 export default function prepareEntity(entityWithConfig, generator, application) {
   const entityName = upperFirst(entityWithConfig.name);
+  const entitySuffix = entityWithConfig.entitySuffix ?? application.entitySuffix;
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
@@ -180,8 +181,8 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   }
 
   mutateData(entityWithConfig, {
-    persistClass: `${entityWithConfig.entityClass}${application.entitySuffix ?? ''}`,
-    persistInstance: `${entityWithConfig.entityInstance}${application.entitySuffix ?? ''}`,
+    persistClass: `${entityWithConfig.entityClass}${entitySuffix ?? ''}`,
+    persistInstance: `${entityWithConfig.entityInstance}${entitySuffix ?? ''}`,
   });
 
   mutateData(entityWithConfig, {
