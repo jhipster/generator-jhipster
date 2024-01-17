@@ -63,7 +63,7 @@ describe('RegisterComponent', () => {
 
     comp.register();
 
-    expect(comp.doNotMatch).toBe(true);
+    expect(comp.doNotMatch()).toBe(true);
   });
 
   it('should update success to true after creating an account', inject(
