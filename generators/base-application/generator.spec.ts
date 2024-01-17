@@ -233,7 +233,7 @@ describe(`generator - ${generator}`, () => {
       const entitiesArg = {
         ...controlArg,
         ...applicationArg,
-        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
+        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
       };
 
       expect(initializing).toBeCalledWith(controlArg);
@@ -248,35 +248,39 @@ describe(`generator - ${generator}`, () => {
       expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
-      expect(preparingEachEntity).toBeCalledTimes(5);
+      expect(preparingEachEntity).toBeCalledTimes(6);
       expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'Authority' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Three' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
-      expect(preparingEachEntityField).toBeCalledTimes(9);
+      expect(preparingEachEntityField).toBeCalledTimes(21);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(4, { ...fieldArg, description: 'User#lastName' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(5, { ...fieldArg, description: 'Authority#name' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(6, { ...fieldArg, description: 'One#id' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(7, { ...fieldArg, description: 'Two#id' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(8, { ...fieldArg, description: 'Two#name' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(9, { ...fieldArg, description: 'Three#id' });
+      // Ommit UserManagement fields
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 4, { ...fieldArg, description: 'Authority#name' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 3, { ...fieldArg, description: 'One#id' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 2, { ...fieldArg, description: 'Two#id' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 1, { ...fieldArg, description: 'Two#name' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
-      expect(preparingEachEntityRelationship).toBeCalledTimes(3);
-      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(1, { ...relationshipArg, description: 'One#two' });
-      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'Two#one' });
-      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#three' });
+      expect(preparingEachEntityRelationship).toBeCalledTimes(4);
+      // Ommit UserManagement relationships
+      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
+      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
+      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
 
-      expect(postPreparingEachEntity).toBeCalledTimes(5);
+      expect(postPreparingEachEntity).toBeCalledTimes(6);
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'Authority' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'One' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Two' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Three' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
       expect(defaultTask).toBeCalledWith(entitiesArg);
       expect(writingEntities).toBeCalledWith(entitiesArg);
@@ -471,7 +475,7 @@ describe(`generator - ${generator}`, () => {
 
       const entitiesArg = {
         ...applicationArg,
-        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
+        entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
       };
 
       const writingEntitiesArg = {
@@ -495,35 +499,39 @@ describe(`generator - ${generator}`, () => {
       expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
-      expect(preparingEachEntity).toBeCalledTimes(5);
+      expect(preparingEachEntity).toBeCalledTimes(6);
       expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'Authority' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'One' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Two' });
-      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Three' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
+      expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
-      expect(preparingEachEntityField).toBeCalledTimes(9);
+      expect(preparingEachEntityField).toBeCalledTimes(21);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(4, { ...fieldArg, description: 'User#lastName' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(5, { ...fieldArg, description: 'Authority#name' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(6, { ...fieldArg, description: 'One#id' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(7, { ...fieldArg, description: 'Two#id' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(8, { ...fieldArg, description: 'Two#name' });
-      expect(preparingEachEntityField).toHaveBeenNthCalledWith(9, { ...fieldArg, description: 'Three#id' });
+      // Ommit UserManagement fields
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 4, { ...fieldArg, description: 'Authority#name' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 3, { ...fieldArg, description: 'One#id' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 2, { ...fieldArg, description: 'Two#id' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 1, { ...fieldArg, description: 'Two#name' });
+      expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
-      expect(preparingEachEntityRelationship).toBeCalledTimes(3);
-      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(1, { ...relationshipArg, description: 'One#two' });
-      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'Two#one' });
-      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#three' });
+      expect(preparingEachEntityRelationship).toBeCalledTimes(4);
+      // Ommit UserManagement relationships
+      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
+      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
+      expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
 
-      expect(postPreparingEachEntity).toBeCalledTimes(5);
+      expect(postPreparingEachEntity).toBeCalledTimes(6);
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'Authority' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'One' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'Two' });
-      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Three' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(4, { ...entityArg, entityName: 'One' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
+      expect(postPreparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
       expect(defaultTask).toBeCalledWith(entitiesArg);
 

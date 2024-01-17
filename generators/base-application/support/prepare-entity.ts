@@ -77,6 +77,7 @@ const BASE_TEMPLATE_DATA = {
   entityAuthority: undefined,
   entityReadAuthority: undefined,
   adminEntity: undefined,
+  builtInUserManagement: undefined,
 
   requiresPersistableImplementation: false,
   updatableEntity: undefined,
@@ -209,8 +210,11 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   });
 
   mutateData(entityWithConfig, {
-    entityFileName: data =>
-      data.entityFileName ?? kebabCase(entityWithConfig.entityNameCapitalized + upperFirst(entityWithConfig.entityAngularJSSuffix)),
+    __override__: false,
+    entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
+    entityAngularName: data => data.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix),
+    entityAngularNamePlural: data => pluralize(data.entityAngularName),
+    entityApiUrl: data => data.entityNamePluralizedAndSpinalCased,
   });
   entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
     ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
@@ -220,11 +224,8 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   entityWithConfig.entityPluralFileName = entityWithConfig.entityNamePluralizedAndSpinalCased + entityWithConfig.entityAngularJSSuffix;
   entityWithConfig.entityServiceFileName = entityWithConfig.entityFileName;
 
-  entityWithConfig.entityAngularName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
-  entityWithConfig.entityAngularNamePlural = pluralize(entityWithConfig.entityAngularName);
   entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
 
-  entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
   entityWithConfig.entityStateName = kebabCase(entityWithConfig.entityAngularName);
   entityWithConfig.entityUrl = entityWithConfig.entityStateName;
 
@@ -248,9 +249,10 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
   entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
   entityWithConfig.entityPage =
-    microfrontend && microserviceName && entityWithConfig.applicationType === MICROSERVICE
+    entityWithConfig.entityPage ??
+    (microfrontend && microserviceName && entityWithConfig.applicationType === MICROSERVICE
       ? `${microserviceName.toLowerCase()}/${entityFileName}`
-      : `${entityFileName}`;
+      : `${entityFileName}`);
 
   const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => relationship.otherEntity.builtInUser);
   entityWithConfig.saveUserSnapshot =

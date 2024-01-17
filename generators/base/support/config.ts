@@ -74,11 +74,22 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
  *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
  * );
  */
-export const mutateData = (context: Record<string | number, any>, ...mutations: Record<string | number, any>[]) => {
+export const mutateData = (
+  context: Record<string | number, any>,
+  ...mutations: Array<
+    Record<string | number, any> & {
+      /** Set to false if you don't want functions to override the value */
+      __override__?: boolean;
+    }
+  >
+) => {
   for (const mutation of mutations) {
-    for (const [key, value] of Object.entries(mutation)) {
+    const override = mutation.__override__;
+    for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
       if (typeof value === 'function') {
-        context[key] = value(context);
+        if (override !== false || context[key] === undefined) {
+          context[key] = value(context);
+        }
       } else if (context[key] === undefined) {
         context[key] = value;
       }
