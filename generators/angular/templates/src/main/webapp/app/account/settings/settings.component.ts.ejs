@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -38,7 +38,7 @@ const initialAccount: Account = {} as Account;
   templateUrl: './settings.component.html',
 })
 export default class SettingsComponent implements OnInit {
-  success = false;
+  success = signal(false);
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>
@@ -78,11 +78,11 @@ export default class SettingsComponent implements OnInit {
   }
 
   save(): void {
-    this.success = false;
+    this.success.set(false);
 
     const account = this.settingsForm.getRawValue();
     this.accountService.save(account).subscribe(() => {
-      this.success = true;
+      this.success.set(true);
 
       this.accountService.authenticate(account);
 
