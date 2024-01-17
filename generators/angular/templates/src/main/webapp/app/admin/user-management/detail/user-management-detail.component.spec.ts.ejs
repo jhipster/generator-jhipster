@@ -30,9 +30,6 @@ import { User } from '../user-management.model';
 import UserManagementDetailComponent from './user-management-detail.component';
 
 describe('User Management Detail Component', () => {
-  let comp: UserManagementDetailComponent;
-  let fixture: ComponentFixture<UserManagementDetailComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [UserManagementDetailComponent, RouterTestingModule.withRoutes([], { bindToComponentInputs: true })],
