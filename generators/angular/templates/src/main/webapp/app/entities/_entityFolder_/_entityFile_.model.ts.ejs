@@ -47,7 +47,7 @@ _%>
   <%= propertyName %>?: <% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>Pick<<% } %>I<%= otherEntity.entityAngularName %><% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>, '<%= otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%= otherEntityField %>'<% } %>><% } %><% if (collection) { %>[]<% } %> | null;
 <%_ } _%>
 }
-<%_ if (primaryKey) { _%>
+<%_ if (!readOnly && primaryKey) { _%>
 
 export type New<%= entityAngularName %> = Omit<I<%= entityAngularName %>, '<%= primaryKey.name %>'> & { <%= primaryKey.name %>: null };
 <%_ } _%>
