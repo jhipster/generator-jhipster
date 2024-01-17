@@ -32,7 +32,7 @@ const entityServiceFiles: WriteFileBlock = {
   templates: ['entities/_entityFolder_/service/_entityFile_.service.ts', 'entities/_entityFolder_/service/_entityFile_.service.spec.ts'],
 };
 
-export const userFiles: WriteFileSection = {
+export const builtInFiles: WriteFileSection = {
   model: [entityModelFiles],
   service: [entityServiceFiles],
 };
@@ -80,9 +80,9 @@ export async function writeEntitiesFiles(this: CoreGenerator, { application, ent
         sections: angularFiles,
         context: { ...application, ...entity },
       });
-    } else if ((entity as any).builtInUser) {
+    } else if (entity.builtInUser) {
       await this.writeFiles({
-        sections: userFiles,
+        sections: builtInFiles,
         context: {
           ...application,
           ...entity,
