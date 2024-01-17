@@ -140,7 +140,7 @@ describe('LoginComponent', () => {
       comp.login();
 
       // THEN
-      expect(comp.authenticationError).toEqual(false);
+      expect(comp.authenticationError()).toEqual(false);
       expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
     });
@@ -153,7 +153,7 @@ describe('LoginComponent', () => {
       comp.login();
 
       // THEN
-      expect(comp.authenticationError).toEqual(false);
+      expect(comp.authenticationError()).toEqual(false);
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
 
@@ -165,7 +165,7 @@ describe('LoginComponent', () => {
       comp.login();
 
       // THEN
-      expect(comp.authenticationError).toEqual(true);
+      expect(comp.authenticationError()).toEqual(true);
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
   });
