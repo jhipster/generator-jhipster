@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { camelCase, kebabCase, startCase, upperFirst, sortedUniq, intersection, lowerFirst, uniq } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.js';
@@ -44,8 +44,6 @@ import { fieldIsEnum } from './field-utils.js';
 
 import { Entity } from '../types/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
-
-const { sortedUniq, intersection } = _;
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
@@ -113,7 +111,7 @@ function _derivedProperties(entityWithConfig) {
   const pagination = entityWithConfig.pagination;
   const dto = entityWithConfig.dto;
   const service = entityWithConfig.service;
-  _.defaults(entityWithConfig, {
+  mutateData(entityWithConfig, {
     paginationPagination: pagination === PAGINATION,
     paginationInfiniteScroll: pagination === INFINITE_SCROLL,
     paginationNo: pagination === NO_PAGINATION,
@@ -143,8 +141,8 @@ export const entityDefaultConfig = {
 };
 
 export default function prepareEntity(entityWithConfig, generator, application) {
-  const entityName = _.upperFirst(entityWithConfig.name);
-  _.defaults(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
+  const entityName = upperFirst(entityWithConfig.name);
+  mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
     entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
@@ -165,48 +163,49 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     entityWithConfig.skipServer = true;
   }
 
-  _.defaults(entityWithConfig, {
+  mutateData(entityWithConfig, {
     entityNameCapitalized: entityName,
-    entityClass: _.upperFirst(entityName),
-    entityInstance: _.lowerFirst(entityName),
+    entityClass: upperFirst(entityName),
+    entityInstance: lowerFirst(entityName),
     entityTableName: hibernateSnakeCase(entityName),
     entityNamePlural: pluralize(entityName),
   });
 
   const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
   if (dto) {
-    _.defaults(entityWithConfig, {
+    mutateData(entityWithConfig, {
       dtoClass: `${entityWithConfig.entityClass}${application.dtoSuffix ?? ''}`,
       dtoInstance: `${entityWithConfig.entityInstance}${application.dtoSuffix ?? ''}`,
     });
   }
 
-  _.defaults(entityWithConfig, {
+  mutateData(entityWithConfig, {
     persistClass: `${entityWithConfig.entityClass}${application.entitySuffix ?? ''}`,
     persistInstance: `${entityWithConfig.entityInstance}${application.entitySuffix ?? ''}`,
   });
 
-  _.defaults(entityWithConfig, {
+  mutateData(entityWithConfig, {
     restClass: dto ? entityWithConfig.dtoClass : entityWithConfig.persistClass,
     restInstance: dto ? entityWithConfig.dtoInstance : entityWithConfig.persistInstance,
   });
 
-  _.defaults(entityWithConfig, {
-    entityNamePluralizedAndSpinalCased: _.kebabCase(entityWithConfig.entityNamePlural),
-    entityClassPlural: _.upperFirst(entityWithConfig.entityNamePlural),
-    entityInstancePlural: _.lowerFirst(entityWithConfig.entityNamePlural),
+  mutateData(entityWithConfig, {
+    entityNamePluralizedAndSpinalCased: kebabCase(entityWithConfig.entityNamePlural),
+    entityClassPlural: upperFirst(entityWithConfig.entityNamePlural),
+    entityInstancePlural: lowerFirst(entityWithConfig.entityNamePlural),
   });
 
-  _.defaults(entityWithConfig, {
+  mutateData(entityWithConfig, {
     // Implement i18n variant ex: 'male', 'female' when applied
     entityI18nVariant: 'default',
-    entityClassHumanized: _.startCase(entityWithConfig.entityNameCapitalized),
-    entityClassPluralHumanized: _.startCase(entityWithConfig.entityClassPlural),
+    entityClassHumanized: startCase(entityWithConfig.entityNameCapitalized),
+    entityClassPluralHumanized: startCase(entityWithConfig.entityClassPlural),
   });
 
-  entityWithConfig.entityFileName = _.kebabCase(
-    entityWithConfig.entityNameCapitalized + _.upperFirst(entityWithConfig.entityAngularJSSuffix),
-  );
+  mutateData(entityWithConfig, {
+    entityFileName: data =>
+      data.entityFileName ?? kebabCase(entityWithConfig.entityNameCapitalized + upperFirst(entityWithConfig.entityAngularJSSuffix)),
+  });
   entityWithConfig.entityFolderName = entityWithConfig.clientRootFolder
     ? `${entityWithConfig.clientRootFolder}/${entityWithConfig.entityFileName}`
     : entityWithConfig.entityFileName;
@@ -220,23 +219,25 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   entityWithConfig.entityReactName = entityWithConfig.entityClass + upperFirstCamelCase(entityWithConfig.entityAngularJSSuffix);
 
   entityWithConfig.entityApiUrl = entityWithConfig.entityNamePluralizedAndSpinalCased;
-  entityWithConfig.entityStateName = _.kebabCase(entityWithConfig.entityAngularName);
+  entityWithConfig.entityStateName = kebabCase(entityWithConfig.entityAngularName);
   entityWithConfig.entityUrl = entityWithConfig.entityStateName;
 
   entityWithConfig.entityTranslationKey = entityWithConfig.clientRootFolder
-    ? _.camelCase(`${entityWithConfig.clientRootFolder}-${entityWithConfig.entityInstance}`)
+    ? camelCase(`${entityWithConfig.clientRootFolder}-${entityWithConfig.entityInstance}`)
     : entityWithConfig.entityInstance;
-  entityWithConfig.entityTranslationKeyMenu = _.camelCase(
+  entityWithConfig.entityTranslationKeyMenu = camelCase(
     entityWithConfig.clientRootFolder
       ? `${entityWithConfig.clientRootFolder}-${entityWithConfig.entityStateName}`
       : entityWithConfig.entityStateName,
   );
 
-  entityWithConfig.i18nKeyPrefix = `${entityWithConfig.frontendAppName}.${entityWithConfig.entityTranslationKey}`;
-  entityWithConfig.i18nAlertHeaderPrefix = entityWithConfig.i18nKeyPrefix;
-  if (entityWithConfig.microserviceAppName) {
-    entityWithConfig.i18nAlertHeaderPrefix = `${entityWithConfig.microserviceAppName}.${entityWithConfig.entityTranslationKey}`;
-  }
+  mutateData(entityWithConfig, {
+    i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${data.frontendAppName}.${data.entityTranslationKey}`,
+    i18nAlertHeaderPrefix: data =>
+      data.i18nAlertHeaderPrefix ?? data.microserviceAppName
+        ? `${data.microserviceAppName}.${data.entityTranslationKey}`
+        : data.i18nKeyPrefix,
+  });
 
   const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
   entityWithConfig.entityApi = microserviceName ? `services/${microserviceName.toLowerCase()}/` : '';
@@ -273,7 +274,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
 }
 
 export function derivedPrimaryKeyProperties(primaryKey) {
-  _.defaults(primaryKey, {
+  mutateData(primaryKey, {
     hasUUID: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === UUID),
     hasLong: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === LONG),
     hasInteger: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === INTEGER),
@@ -429,7 +430,7 @@ export function prepareEntityPrimaryKeyForTemplates(
       derived: false,
       name: primaryKeyName,
       hibernateSnakeCaseName: hibernateSnakeCase(primaryKeyName),
-      nameCapitalized: _.upperFirst(primaryKeyName),
+      nameCapitalized: upperFirst(primaryKeyName),
       type: primaryKeyType,
       tsType: getTypescriptKeyType(primaryKeyType),
       composite,
@@ -495,7 +496,7 @@ function fieldToId(field) {
  * @returns {Object} the entity parameter for chaining.
  */
 export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity, config) {
-  _.defaults(entity, {
+  mutateData(entity, {
     applicationType: config.applicationType,
     baseName: config.baseName,
     frontendAppName: config.frontendAppName,
@@ -528,7 +529,7 @@ export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity,
     }
   }
   if (config.applicationType === MICROSERVICE) {
-    _.defaults(entity, {
+    mutateData(entity, {
       microserviceName: config.baseName,
     });
   }
@@ -596,10 +597,10 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     ...entity.relationships.map(relationship => relationship.reference),
   ];
 
-  entity.otherEntities = _.uniq(entity.relationships.map(rel => rel.otherEntity));
+  entity.otherEntities = uniq(entity.relationships.map(rel => rel.otherEntity));
 
   entity.persistableRelationships = relationships.filter(({ persistableRelationship }) => persistableRelationship);
-  entity.otherEntitiesWithPersistableRelationship = _.uniq(entity.persistableRelationships.map(rel => rel.otherEntity));
+  entity.otherEntitiesWithPersistableRelationship = uniq(entity.persistableRelationships.map(rel => rel.otherEntity));
 
   entity.updatableEntity =
     entity.fields.some(field => !field.id && !field.transient) ||

@@ -3502,13 +3502,16 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/user/service/user.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/user/service/user.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/user/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/user/user.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/user/user.service.ts": {
+  "src/main/webapp/app/entities/user/user.test-samples.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/home/home.component.html": {
