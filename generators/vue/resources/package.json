@@ -29,7 +29,7 @@
     "@vue/eslint-config-typescript": "10.0.0",
     "@vue/test-utils": "2.4.3",
     "@vue/tsconfig": "0.5.1",
-    "autoprefixer": "10.4.16",
+    "autoprefixer": "10.4.17",
     "axios-mock-adapter": "1.22.0",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "12.0.1",
