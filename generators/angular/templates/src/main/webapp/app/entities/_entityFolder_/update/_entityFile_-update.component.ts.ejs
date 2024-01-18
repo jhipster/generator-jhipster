@@ -44,17 +44,10 @@ Object.keys(differentRelationships).forEach(key => {
   if (differentRelationships[key].some(rel => rel.persistableRelationship)) {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-      if (uniqueRel.otherEntity.builtInUser) {
-_%>
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
-<%_
-      } else {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
 import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/service/<%= uniqueRel.otherEntityFileName %>.service';
 <%_
-      }
     }
   }
 });

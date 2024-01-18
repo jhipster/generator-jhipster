@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { kebabCase, lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import {
@@ -90,7 +90,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     const otherRelationship = relationship.otherRelationship;
     if (otherRelationship) {
       relationship.otherSideReferenceExists = true;
-      _.defaults(relationship, {
+      mutateData(relationship, {
         otherRelationship,
         otherEntityRelationshipName: otherRelationship.relationshipName,
         otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
@@ -126,46 +126,46 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
     relationship.relatedField.relatedByOtherEntity = true;
   } else {
-    relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
+    relationship.otherEntityFieldCapitalized = upperFirst(relationship.otherEntityField);
   }
 
   if (relationship.otherEntityRelationshipName !== undefined) {
-    _.defaults(relationship, {
+    mutateData(relationship, {
       otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
-      otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
+      otherEntityRelationshipNameCapitalized: upperFirst(relationship.otherEntityRelationshipName),
     });
-    _.defaults(relationship, {
+    mutateData(relationship, {
       otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
     });
   }
 
   const relationshipName = relationship.relationshipName;
-  _.defaults(relationship, {
+  mutateData(relationship, {
     relationshipNamePlural: pluralize(relationshipName),
-    relationshipFieldName: _.lowerFirst(relationshipName),
-    relationshipNameCapitalized: _.upperFirst(relationshipName),
-    relationshipNameHumanized: _.startCase(relationshipName),
+    relationshipFieldName: lowerFirst(relationshipName),
+    relationshipNameCapitalized: upperFirst(relationshipName),
+    relationshipNameHumanized: startCase(relationshipName),
     columnName: hibernateSnakeCase(relationshipName),
     columnNamePrefix: relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${hibernateSnakeCase(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
-    otherEntityNameCapitalized: _.upperFirst(otherEntityName),
+    otherEntityNameCapitalized: upperFirst(otherEntityName),
     otherEntityTableName:
       otherEntityData.entityTableName ||
       hibernateSnakeCase(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
   });
 
-  _.defaults(relationship, {
+  mutateData(relationship, {
     relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
     relationshipNameCapitalizedPlural:
       relationship.relationshipName.length > 1
         ? pluralize(relationship.relationshipNameCapitalized)
-        : _.upperFirst(pluralize(relationship.relationshipName)),
+        : upperFirst(pluralize(relationship.relationshipName)),
     otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
 
   mutateData(relationship, {
     propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
-    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? _.upperFirst(propertyName),
+    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? upperFirst(propertyName),
   });
 
   if (entityWithConfig.dto === MAPSTRUCT) {
@@ -188,45 +188,43 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       relationship.otherEntityAngularName = 'User';
     } else {
       const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-      relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + upperFirstCamelCase(otherEntityAngularSuffix);
+      relationship.otherEntityAngularName = upperFirst(relationship.otherEntityName) + upperFirstCamelCase(otherEntityAngularSuffix);
     }
   }
 
-  _.defaults(relationship, {
-    otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
+  mutateData(relationship, {
+    otherEntityStateName: kebabCase(relationship.otherEntityAngularName),
     jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
     unique: relationship.id || (relationship.ownerSide && relationship.relationshipType === 'one-to-one'),
   });
 
-  if (!otherEntityData.builtInUser) {
-    _.defaults(relationship, {
-      otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
-      otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
-    });
+  mutateData(relationship, {
+    otherEntityFileName: kebabCase(relationship.otherEntity.entityAngularName),
+    otherEntityFolderName: kebabCase(relationship.otherEntity.entityAngularName),
+  });
 
-    const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
-    if (entityWithConfig.skipUiGrouping || !otherEntityClientRootFolder) {
-      relationship.otherEntityClientRootFolder = '';
-    } else {
-      relationship.otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
-    }
-    if (otherEntityClientRootFolder) {
-      if (entityWithConfig.clientRootFolder === otherEntityClientRootFolder) {
-        relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-      } else {
-        relationship.otherEntityModulePath = `${
-          entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-        }${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
-      }
-      relationship.otherEntityModelName = `${otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
-      relationship.otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
+  const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
+  if (entityWithConfig.skipUiGrouping || !otherEntityClientRootFolder) {
+    relationship.otherEntityClientRootFolder = '';
+  } else {
+    relationship.otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
+  }
+  if (otherEntityClientRootFolder) {
+    if (entityWithConfig.clientRootFolder === otherEntityClientRootFolder) {
+      relationship.otherEntityModulePath = relationship.otherEntityFolderName;
     } else {
       relationship.otherEntityModulePath = `${
         entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-      }${relationship.otherEntityFolderName}`;
-      relationship.otherEntityModelName = relationship.otherEntityFileName;
-      relationship.otherEntityPath = relationship.otherEntityFolderName;
+      }${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
     }
+    relationship.otherEntityModelName = `${otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
+    relationship.otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
+  } else {
+    relationship.otherEntityModulePath = `${
+      entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
+    }${relationship.otherEntityFolderName}`;
+    relationship.otherEntityModelName = relationship.otherEntityFileName;
+    relationship.otherEntityPath = relationship.otherEntityFolderName;
   }
 
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {

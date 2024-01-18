@@ -288,4 +288,8 @@ export default function cleanupOldFilesTask(this: CoreGenerator, { application }
     this.removeFile(`${application.clientSrcDir}app/app-routing.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/entities/entity-routing.module.ts`);
   }
+  if (this.isJhipsterVersionLessThan('8.1.1')) {
+    this.removeFile(`${application.clientSrcDir}app/entities/user/user.service.ts`);
+    this.removeFile(`${application.clientSrcDir}app/entities/user/user.service.spec.ts`);
+  }
 }

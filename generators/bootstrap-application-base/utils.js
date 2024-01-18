@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 import * as _ from 'lodash-es';
-import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
+import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
 import { hibernateSnakeCase } from '../server/support/string.js';
+import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -75,6 +76,10 @@ export function createUserEntity(customUserData = {}, application) {
     {
       fieldName: 'login',
       fieldType: TYPE_STRING,
+      fieldValidateRules: [Validations.REQUIRED, Validations.MAX, Validations.PATTERN],
+      fieldValidateRulesMax: 50,
+      fieldValidateRulesPattern: LOGIN_REGEX_JS,
+      fieldValidateRulesPatternJava: LOGIN_REGEX,
       builtIn: true,
     },
     {
