@@ -85,7 +85,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.Department).to.deep.equal(
             new JDLEntity({
               name: 'Department',
-              tableName: 'Department',
+              tableName: undefined,
               fields: {
                 guid: new JDLField({
                   name: 'guid',
@@ -120,7 +120,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.JobHistory).to.deep.eq(
             new JDLEntity({
               name: 'JobHistory',
-              tableName: 'JobHistory',
+              tableName: undefined,
               fields: {
                 startDate: new JDLField({
                   name: 'startDate',
@@ -144,7 +144,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.Job).to.deep.eq(
             new JDLEntity({
               name: 'Job',
-              tableName: 'Job',
+              tableName: undefined,
               fields: {
                 jobTitle: new JDLField({
                   name: 'jobTitle',
@@ -255,7 +255,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.entities.A).to.deep.eq(
             new JDLEntity({
               name: 'A',
-              tableName: 'A',
+              tableName: undefined,
               fields: {
                 email: new JDLField({ name: 'email', type: fieldTypes.CommonDBTypes.STRING }),
                 id: new JDLField({

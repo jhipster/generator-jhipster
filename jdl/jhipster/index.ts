@@ -11,6 +11,7 @@ export { default as databaseTypes } from './database-types.js';
 export { default as deploymentOptions } from './deployment-options.js';
 export { default as entityOptions } from './entity-options.js';
 export { default as entityTableNameCreator } from './entity-table-name-creator.js';
+export * from './entity-table-name-creator.js';
 export { default as fieldTypes } from './field-types.js';
 export { default as jsonEntity } from './json-entity.js';
 export { default as kubernetesPlatformTypes } from './kubernetes-platform-types.js';

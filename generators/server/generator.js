@@ -539,17 +539,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
-        entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
-
         const databaseType =
           entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
-        const fixedEntityTableName = this._fixEntityTableName(entityConfig.entityTableName, databaseType, application.jhiTablePrefix);
-        if (fixedEntityTableName !== entityConfig.entityTableName) {
+        const entityTableName = entityConfig.entityTableName ?? hibernateSnakeCase(entityName);
+        const fixedEntityTableName = this._fixEntityTableName(entityTableName, databaseType, application.jhiTablePrefix);
+        if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
-        }
-        const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
-        if (validation !== true) {
-          throw new Error(validation);
         }
 
         if (entityConfig.incrementalChangelog === undefined) {
@@ -638,6 +633,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      checkForTableName({ application, entity }) {
+        const databaseType = entity.prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
+        const validation = this._validateTableName(entity.entityTableName, databaseType, entity);
+        if (validation !== true) {
+          throw new Error(validation);
+        }
+      },
       checkForCircularRelationships({ entity }) {
         const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
           if (relatedEntities.has(entity)) return true;
