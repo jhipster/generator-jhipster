@@ -29,6 +29,8 @@ describe('generator - server - support - database', () => {
       it('returns a column name', () => {
         expect(hibernateSnakeCase('colName')).toBe('col_name');
         expect(hibernateSnakeCase('colNName')).toBe('colnname');
+        expect(hibernateSnakeCase('A')).toBe('a');
+        expect(hibernateSnakeCase('EntityA')).toBe('entitya');
       });
     });
   });

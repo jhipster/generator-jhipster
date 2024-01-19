@@ -19,7 +19,7 @@
 
 import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
-import getTableNameFromEntityName from '../jhipster/entity-table-name-creator.js';
+import { shouldWriteEntityTableName } from '../jhipster/index.js';
 import JDLField from './jdl-field.js';
 
 export default class JDLEntity {
@@ -35,7 +35,7 @@ export default class JDLEntity {
       throw new Error('The entity name is mandatory to create an entity.');
     }
     this.name = merged.name;
-    this.tableName = merged.tableName || merged.name;
+    this.tableName = merged.tableName;
     this.fields = merged.fields;
     this.comment = merged.comment;
     this.annotations = merged.annotations ?? {};
@@ -82,7 +82,7 @@ export default class JDLEntity {
       }
     });
     stringifiedEntity += `entity ${this.name}`;
-    if (this.tableName && getTableNameFromEntityName(this.name) !== getTableNameFromEntityName(this.tableName)) {
+    if (this.tableName && shouldWriteEntityTableName(this.name, this.tableName)) {
       stringifiedEntity += ` (${this.tableName})`;
     }
     if (Object.keys(this.fields).length !== 0) {

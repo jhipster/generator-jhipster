@@ -19,7 +19,7 @@
 
 import JSONEntity from '../../jhipster/json-entity.js';
 import formatComment from '../../utils/format-utils.js';
-import getTableNameFromEntityName from '../../jhipster/entity-table-name-creator.js';
+import { getTableNameFromEntityNameFallback } from '../../jhipster/entity-table-name-creator.js';
 import { JDLEntity } from '../../models/index.js';
 
 export default {
@@ -47,7 +47,7 @@ function createJSONEntities(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
       entityName,
       new JSONEntity({
         entityName,
-        entityTableName: getTableNameFromEntityName(jdlEntity.tableName),
+        entityTableName: jdlEntity.tableName ?? getTableNameFromEntityNameFallback(entityName),
         documentation: formatComment(jdlEntity.comment),
         annotations: jdlEntity.annotations,
       }),

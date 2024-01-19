@@ -336,7 +336,7 @@ describe('jdl - JDLObject', () => {
     "comment": undefined,
     "fields": {},
     "name": "toto",
-    "tableName": "toto",
+    "tableName": undefined,
   },
 ]
 `);

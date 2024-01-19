@@ -36,7 +36,7 @@ describe('jdl - JDL DSL API', () => {
         expect(ast.entities).to.have.lengthOf(1);
         expect(ast.entities[0]).to.deep.eql({
           name: 'A',
-          tableName: 'A',
+          tableName: undefined,
           annotations: [{ optionName: 'service', optionValue: 'serviceClass', type: 'BINARY' }],
           body: [
             {
