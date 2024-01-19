@@ -51,7 +51,7 @@ _%>
     return existing<%= entityClass %>;
     })
   <%_ } %>
-  <% if (!updatableEntity) { %>// <%} %>.<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+  .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
     <%_ if(reactive) { %>

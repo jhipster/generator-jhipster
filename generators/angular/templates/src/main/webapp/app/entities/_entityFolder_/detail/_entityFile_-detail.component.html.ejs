@@ -116,7 +116,7 @@ _%>
           data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">__jhiTransformTranslate__('entity.action.back')</span>
       </button>
-<%_ if (!readOnly) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
       <button type="button"
           [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
