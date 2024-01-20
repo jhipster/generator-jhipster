@@ -2,14 +2,16 @@ import {
   entityTableSelector,
   entityDetailsButtonSelector,
   entityDetailsBackButtonSelector,
-  <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
   entityCreateButtonSelector,
   entityCreateSaveButtonSelector,
   entityCreateCancelButtonSelector,
+  <%_ if (updatableEntity) { _%>
   entityEditButtonSelector,
+  <%_ } _%>
   entityDeleteButtonSelector,
   entityConfirmDeleteButtonSelector,
-  <%_ } _%>
+<%_ } _%>
 } from '../../support/entity';
 <%_
 
@@ -247,7 +249,7 @@ describe('<%= entityClass %> e2e test', () => {
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       });
 
-<%_ if (!readOnly) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
       it('edit button click should load edit <%= entityClass %> page and go back', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%= entityClass %>');
@@ -269,6 +271,8 @@ describe('<%= entityClass %> e2e test', () => {
         cy.url().should('match', <%= entityInstance %>PageUrlPattern);
       });
 
+<%_ } _%>
+<%_ if (!readOnly) { _%>
       it<%= skipCreateTest %>('last delete button click should delete instance of <%= entityClass %>', () => {
   <%_ if (clientFrameworkReact) { _%>
         cy.intercept('GET', '/<%= baseApi + entityApiUrl %>/*').as('dialogDeleteRequest');

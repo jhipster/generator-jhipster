@@ -82,6 +82,8 @@ describe('<%= entityAngularName %> Service', () => {
             req.flush(returnedFromService);
             expect(expectedResult).toMatchObject(expected);
         });
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
         it('should update a <%= entityAngularName %>', () => {
             const <%= entityInstance %> = { ...sampleWithRequiredData };

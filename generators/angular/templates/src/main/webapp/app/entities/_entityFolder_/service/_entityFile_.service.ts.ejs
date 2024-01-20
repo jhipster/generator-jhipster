@@ -50,7 +50,7 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
 import { I<%= entityAngularName %><% if (!readOnly) { %>, New<%= entityAngularName %><% } %> } from '../<%= entityFileName %>.model';
-<%_ if (!readOnly) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
 export type PartialUpdate<%= entityAngularName %> = Partial<I<%= entityAngularName %>> & Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>;
 <%_ } _%>
@@ -69,6 +69,8 @@ export type <%= entityRestName %> = RestOf<I<%= entityAngularName %>>;
   <%_ if (!readOnly) { _%>
 
 export type New<%= entityRestName %> = RestOf<New<%= entityAngularName %>>;
+  <%_ } _%>
+  <%_ if (!readOnly && updatableEntity) { _%>
 
 export type PartialUpdate<%= entityRestName %> = RestOf<PartialUpdate<%= entityAngularName %>>;
   <%_ } _%>
@@ -97,6 +99,8 @@ export class <%= entityAngularName %>Service {
                 { observe: 'response' })
         <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ if (anyFieldIsDateDerived) { _%>
@@ -170,7 +174,7 @@ export class <%= entityAngularName %>Service {
     }
 
 <%_ if (anyFieldIsDateDerived) { _%>
-    protected convertDateFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): RestOf<T> {
+    protected convertDateFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): RestOf<T> {
         return {
             ...<%= entityInstance %>,
     <%_ for (const field of fields) { _%>

@@ -76,6 +76,7 @@ const BASE_TEMPLATE_DATA = {
   microserviceName: undefined,
 
   requiresPersistableImplementation: false,
+  updatableEntity: undefined,
   anyFieldIsDateDerived: false,
   anyFieldIsTimeDerived: false,
   anyFieldIsInstant: false,
@@ -605,7 +606,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
 
   entity.updatableEntity =
     entity.fields.some(field => !field.id && !field.transient) ||
-    entity.relationships.some(relationship => !relationship.id && relationship.ownerSide);
+    entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
 
   entity.allReferences
     .filter(reference => reference.relationship && reference.relationship.relatedField)

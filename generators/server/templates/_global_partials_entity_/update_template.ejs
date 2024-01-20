@@ -44,11 +44,7 @@ if (isUsingMapsId) {
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
     <%_ } _%>
-    <%_ if (updatableEntity) { _%>
         <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
-    <%_ } else { _%>
-        // no save call needed as we have no fields that can be updated
-    <%_ } _%>
         <%= returnPrefix %> <%= entityToDto %>(<%= persistInstance %>);
   <%_ } else {
       resultEntity = 'result'; _%>
@@ -59,12 +55,7 @@ if (isUsingMapsId) {
     <%_ if (isPersisted) { _%>
         <%= persistInstance %>.setIsPersisted();
     <%_ } _%>
-    <%_ if (updatableEntity) { _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
-    <%_ } else { _%>
-        // no save call needed as we have no fields that can be updated
-        <%= returnPrefix %> <%= persistInstance %>;
-    <%_ } _%>
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>SearchRepository.index(<%= resultEntity %>);

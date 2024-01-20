@@ -1386,7 +1386,7 @@ _%>
             .andExpect(status().isNotFound());
 <%_ } _%>
     }
-<%_ if (!readOnly) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
     @Test<%= transactionalAnnotation %>
     void putExisting<%= entityClass %>() throws Exception {
@@ -1752,6 +1752,8 @@ _%>
   <%_ } _%>
 
     }
+<%_ } _%>
+<%_ if (!readOnly) { _%>
 
     @Test<%= transactionalAnnotation %>
     void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{

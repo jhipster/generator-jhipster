@@ -53,6 +53,8 @@ const <%= entityInstance %>Route: Routes = [
     },
     canActivate: [UserRouteAccessService]
   },
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
   {
     path: ':<%= primaryKey.name %>/edit',
     component: <%= entityAngularName %>UpdateComponent,
