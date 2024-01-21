@@ -23,7 +23,7 @@
       <h2 <%= jhiPrefix %>Translate="settings.title" [translateValues]="{ username: settingsForm.value.login }">__jhiTransformTranslate__('settings.title', { "username": "{{ settingsForm.value.login }}" })</h2>
     }
 
-    @if (success) {
+    @if (success()) {
       <div class="alert alert-success" <%= jhiPrefix %>Translate="settings.messages.success">__jhiTransformTranslate__('settings.messages.success')</div>
     }
 
