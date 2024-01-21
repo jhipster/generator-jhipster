@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { finalize<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>, map<%_ } _%> } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
@@ -40,7 +40,7 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 export default class LogsComponent implements OnInit {
   loggers?: Log[];
   filteredAndOrderedLoggers?: Log[];
-  isLoading = false;
+  isLoading = signal(false);
   filter = '';
   orderProp: keyof Log = 'name';
   ascending = true;
@@ -86,13 +86,13 @@ export default class LogsComponent implements OnInit {
   }
 
   private findAndExtractLoggers(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.logsService
       .findAll(<%= applicationTypeGateway && serviceDiscoveryAny ? 'this.selectedService' : '' %>)
       .pipe(
         finalize(() => {
           this.filterAndSort();
-          this.isLoading = false;
+          this.isLoading.set(false);
         })
       )
       .subscribe({
