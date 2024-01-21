@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterModule<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
 import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (!databaseTypeCassandra) { _%>
@@ -53,11 +53,11 @@ import UserManagementDeleteDialogComponent from '../delete/user-management-delet
   ],
 })
 export default class UserManagementComponent implements OnInit {
-  currentAccount: Account | null = null;
-  users: User[] | null = null;
-  isLoading = false;
+  currentAccount = signal<Account | null>(null);
+  users = signal<User[] | null>(null);
+  isLoading = signal(false);
 <%_ if (!databaseTypeCassandra) { _%>
-  totalItems = 0;
+  totalItems = signal(0);
   itemsPerPage = ITEMS_PER_PAGE;
   page!: number;
   predicate!: string;
@@ -73,7 +73,7 @@ export default class UserManagementComponent implements OnInit {
   private modalService = inject(NgbModal);
 
   ngOnInit(): void {
-    this.accountService.identity().subscribe(account => this.currentAccount = account);
+    this.accountService.identity().subscribe(account => this.currentAccount.set(account));
 <%_ if (databaseTypeCassandra) { _%>
     this.loadAll();
 <%_ } else { _%>
@@ -101,7 +101,7 @@ export default class UserManagementComponent implements OnInit {
   }
 
   loadAll(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.userService
       .query(<% if (!databaseTypeCassandra) { %>{
         page: this.page - 1,
@@ -110,10 +110,10 @@ export default class UserManagementComponent implements OnInit {
       }<% } %>)
       .subscribe({
         next: (res: HttpResponse<User[]>) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           this.onSuccess(res.body<% if (!databaseTypeCassandra) { %>, res.headers<% } %>);
         },
-        error: () => this.isLoading = false
+        error: () => this.isLoading.set(false)
       });
   }
 
@@ -152,8 +152,8 @@ export default class UserManagementComponent implements OnInit {
 
   private onSuccess(users: User[] | null<% if (!databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
 <%_ if (!databaseTypeCassandra) { _%>
-    this.totalItems = Number(headers.get('X-Total-Count'));
+    this.totalItems.set(Number(headers.get('X-Total-Count')));    
 <%_ } _%>
-    this.users = users;
+    this.users.set(users);
   }
 }

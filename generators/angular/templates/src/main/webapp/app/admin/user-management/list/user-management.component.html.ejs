@@ -21,8 +21,8 @@
     <span id="user-management-page-heading" <%= jhiPrefix %>Translate="userManagement.home.title" data-cy="userManagementPageHeading">__jhiTransformTranslate__('userManagement.home.title')</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [spin]="isLoading()"></fa-icon>
         <span <%= jhiPrefix %>Translate="userManagement.home.refreshListLabel">__jhiTransformTranslate__('userManagement.home.refreshListLabel')</span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
@@ -35,7 +35,7 @@
 
   <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
-@if (users) {
+@if (users()) {
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
@@ -70,9 +70,9 @@
           <th scope="col"></th>
         </tr>
       </thead>
-    @if (users) {
+    @if (users()) {
       <tbody>
-      @for (user of users; track trackIdentity) {
+      @for (user of users(); track trackIdentity) {
         <tr>
           <td>
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
@@ -88,7 +88,7 @@
           } @else {
             <button class="btn btn-success btn-sm"
               (click)="setActive(user, false)"
-              [disabled]="!currentAccount || currentAccount.login === user.login"
+              [disabled]="!currentAccount() || currentAccount()?.login === user.login"
               <%= jhiPrefix %>Translate="userManagement.activated"
             >__jhiTransformTranslate__('userManagement.activated')</button>
           }
@@ -124,7 +124,7 @@
                 type="button"
                 (click)="deleteUser(user)"
                 class="btn btn-danger btn-sm"
-                [disabled]="!currentAccount || currentAccount.login === user.login"
+                [disabled]="!currentAccount() || currentAccount()?.login === user.login"
               >
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">__jhiTransformTranslate__('entity.action.delete')</span>
@@ -140,15 +140,15 @@
 }
 <%_ if (!databaseTypeCassandra) { _%>
 
-@if (users) {
+@if (users()) {
   <div>
     <div class="d-flex justify-content-center">
-      <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
+      <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems(), itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
     </div>
 
     <div class="d-flex justify-content-center">
       <ngb-pagination
-        [collectionSize]="totalItems"
+        [collectionSize]="totalItems()"
         [(page)]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
