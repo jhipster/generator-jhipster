@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -36,7 +36,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
   imports: [CommonModule, NgbModule],
 })
 export class AlertErrorComponent implements OnDestroy {
-  alerts: Alert[] = [];
+  alerts = signal<Alert[]>([]);
   errorListener: Subscription;
   httpErrorListener: Subscription;
 
@@ -132,10 +132,10 @@ export class AlertErrorComponent implements OnDestroy {
   }
 
   close(alert: Alert): void {
-    alert.close?.(this.alerts);
+    alert.close?.(this.alerts());
   }
 
   private addErrorAlert(message?: string<% if (enableTranslation) { %>, translationKey?: string, translationParams?: { [key: string]: unknown }<% } %>): void {
-    this.alertService.addAlert({ type: 'danger', message<% if (enableTranslation) { %>, translationKey, translationParams<% } %> }, this.alerts);
+    this.alertService.addAlert({ type: 'danger', message<% if (enableTranslation) { %>, translationKey, translationParams<% } %> }, this.alerts());
   }
 }
