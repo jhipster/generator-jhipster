@@ -48,7 +48,7 @@ jobs:
         with:
           node-version: 20.11.0
       - name: 'SETUP: load npm cache'
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: |
             ~/.npm
