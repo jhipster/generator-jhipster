@@ -199,7 +199,8 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
-        return <%= entityInstance %>Service.save(<%= instanceName %>)
+        return <%= entityInstance %>Service
+            .save(<%= instanceName %>)
     <%_ } _%>
             .map(result -> {
                 try {
@@ -212,7 +213,7 @@ public class <%= entityClass %>Resource {
             });
   <%_ } else { _%>
     <%_ if (!serviceNo) { _%>
-        <%- restClass %> <%- restInstance %> = <%= entityInstance %>Service.save(<%= instanceName %>);
+        <%- restInstance %> = <%= entityInstance %>Service.save(<%= instanceName %>);
     <%_ } _%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
@@ -276,7 +277,8 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
-            return <%= entityInstance %>Service.update(<%= restInstance %>)
+            return <%= entityInstance %>Service
+                .update(<%= restInstance %>)
     <%_ } _%>
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(result -> ResponseEntity.ok()
