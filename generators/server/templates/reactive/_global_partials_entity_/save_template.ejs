@@ -22,15 +22,11 @@ const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDtoReference = mapper + '::' + 'toDto';
 _%>
-<%_ if (viaService) { _%>
-        return <%= entityInstance %>Service.save(<%= instanceName %>)
-<%_ } else { _%>
         return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %><%if (dtoMapstruct) { %>)<% } -%>)
-    <%_ if (searchEngineElasticsearch) { %>
+<%_ if (searchEngineElasticsearch) { %>
             .flatMap(<%= entityInstance %>SearchRepository::save)
-    <%_ } -%>
-    <%_ if (dtoMapstruct) { %>
+<%_ } -%>
+<%_ if (dtoMapstruct) { %>
             .map(<%= entityToDtoReference  %>)
-    <%_ } -%>
-    <%_ if (returnDirectly) { _%>;<%_ } _%>
-<%_ } _%>
+<%_ } -%>
+<%_ if (returnDirectly) { _%>;<%_ } _%>
