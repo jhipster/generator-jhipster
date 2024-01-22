@@ -16,49 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const instanceType = restClass;
-const instanceName = restInstance;
-const mapper = entityInstance  + 'Mapper';
-const dtoToEntity = mapper + '.' + 'toEntity';
-const entityToDto = mapper + '.' + 'toDto';
-const entityToDtoReference = mapper + '::' + 'toDto';
-const returnPrefix = (returnDirectly && !searchEngineElasticsearch) ? 'return' : instanceType + ' result =';
-let resultEntity;
-let mapsIdEntityInstance;
-let mapsIdRepoInstance;
-let otherEntityName;
-
-if (isUsingMapsId) {
-    mapsIdEntityInstance = mapsIdAssoc.otherEntityNameCapitalized.charAt(0).toLowerCase() + mapsIdAssoc.otherEntityNameCapitalized.slice(1);
-    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-    otherEntityName = mapsIdAssoc.otherEntityName;
-} _%>
 <%_ if (dtoMapstruct) { _%>
-  <%_ resultEntity = persistInstance; _%>
-        <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
-  <%_ if (requiresPersistableImplementation) { _%>
-        <%= persistInstance %>.setIsPersisted();
-    <%_ } _%>
-    <%_ if (isUsingMapsId) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= persistInstance %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
-    <%_ } _%>
-        <%= persistInstance %> = <%= entityInstance %>Repository.save(<%= persistInstance %>);
-        <%= returnPrefix %> <%= entityToDto %>(<%= persistInstance %>);
-  <%_ } else {
-      resultEntity = 'result'; _%>
-    <%_ if (isUsingMapsId) { _%>
-        <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
-    <%_ } _%>
-    <%_ if (requiresPersistableImplementation) { _%>
-        <%= persistInstance %>.setIsPersisted();
-    <%_ } _%>
-        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
-  <%_ } _%>
-  <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.index(<%= resultEntity %>);
-    <%_ if (returnDirectly) { _%>
-        return result;
-    <%_ } _%>
-  <%_ } _%>
+        <%- persistClass %> <%- persistInstance %> = <%- entityInstance %>Mapper.toEntity(<%- restInstance %>);
+<%_ } _%>
+<%_ if (requiresPersistableImplementation) { _%>
+        <%- persistInstance %>.setIsPersisted();
+<%_ } _%>
+<%_ if (isUsingMapsId) { _%>
+        <%- mapsIdAssoc.otherEntity.primaryKey.type %> <%- mapsIdAssoc.otherEntityName %>Id = <%- persistInstance %>.get<%- mapsIdAssoc.relationshipNameCapitalized %>().get<%- mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>();
+        <%- mapsIdAssoc.otherEntity.entityInstance %>Repository.findById(<%- mapsIdAssoc.otherEntityName %>Id).ifPresent(<%- persistInstance %>::<%_ if (!fluentMethods) { _%>set<%- mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%- mapsIdAssoc.relationshipName %><%_ } _%>);
+<%_ } _%>
+        <%- returnDirectly && !searchEngineElasticsearch && !dtoMapstruct ? 'return' : `${persistInstance} =` %> <%- entityInstance %>Repository.save(<%- persistInstance %>);
+<%_ if (searchEngineElasticsearch) { _%>
+        <%- entityInstance %>SearchRepository.index(<%- persistInstance %>);
+<%_ } _%>
+<%_ if (dtoMapstruct) { _%>
+        <%- returnDirectly ? 'return' : `${dtoInstance} =` %> <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
+<%_ } else if (returnDirectly) { _%>
+        return <%- entityInstance %>;
+<%_ } _%>
