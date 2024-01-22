@@ -258,8 +258,13 @@ public class <%= entityClass %>Resource {
       <%_ } _%>
     <% } %>
   <%_ } _%>
-<%- include('/_global_partials_entity_/update_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc, isController: true, isPersisted: requiresPersistableImplementation}); -%>
+  <%_ if (serviceNo) { _%>
+<%- include('/_global_partials_entity_/update_template', {returnDirectly: false, isUsingMapsId: false}); -%>
+  <%_ } _%>
   <%_ if (reactive) { _%>
+    <%_ if (!serviceNo) { _%>
+        return <%= entityInstance %>Service.update(<%= instanceName %>)
+    <%_ } _%>
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(result -> ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
@@ -267,6 +272,9 @@ public class <%= entityClass %>Resource {
             );
         });
   <%_ } else { _%>
+    <%_ if (!serviceNo) { _%>
+        <%- restClass %> result = <%= entityInstance %>Service.update(<%= instanceName %>);    
+    <%_ } _%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
             .body(result);

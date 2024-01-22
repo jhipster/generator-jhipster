@@ -128,7 +128,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
   <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> update(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to update <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('/_global_partials_entity_/update_template', {viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, isPersisted: requiresPersistableImplementation}); -%>
+<%- include('/_global_partials_entity_/update_template', {returnDirectly: true, mapsIdAssoc: mapsIdAssoc}); -%>
     }
 
   <%_ if (!serviceImpl) { _%>

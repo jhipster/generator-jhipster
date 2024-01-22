@@ -33,11 +33,10 @@ if (isUsingMapsId) {
     mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
     otherEntityName = mapsIdAssoc.otherEntityName;
 } _%>
-<%_ if (!viaService) { _%>
-  <%_ if (dtoMapstruct) { _%>
-    <%_ resultEntity = persistInstance; _%>
+<%_ if (dtoMapstruct) { _%>
+  <%_ resultEntity = persistInstance; _%>
         <%= persistClass %> <%= persistInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
-    <%_ if (isPersisted) { _%>
+  <%_ if (requiresPersistableImplementation) { _%>
         <%= persistInstance %>.setIsPersisted();
     <%_ } _%>
     <%_ if (isUsingMapsId) { _%>
@@ -52,7 +51,7 @@ if (isUsingMapsId) {
         <%= mapsIdAssoc.otherEntity.primaryKey.type %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().get<%= primaryKey.nameCapitalized %>();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName %>::<%_ if (!fluentMethods) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= otherEntityName %><%_ } _%>);
     <%_ } _%>
-    <%_ if (isPersisted) { _%>
+    <%_ if (requiresPersistableImplementation) { _%>
         <%= persistInstance %>.setIsPersisted();
     <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= persistInstance %>);
@@ -63,6 +62,3 @@ if (isUsingMapsId) {
         return result;
     <%_ } _%>
   <%_ } _%>
-<%_ } else { _%>
-        <%= returnPrefix %> <%= entityInstance %>Service.update(<%= instanceName %>);
-<%_ } _%>
