@@ -169,6 +169,11 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
         }
+  <%_ if (isUsingMapsId) { _%>
+        if (Objects.isNull(<%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>())) {
+            throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
+        }
+  <%_ } _%>
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%>
@@ -189,8 +194,13 @@ public class <%= entityClass %>Resource {
         <%= instanceName %>.set<%= field.fieldNameCapitalized %>(UUID.randomUUID());
     <%_ } _%>
   <%_ } _%>
-<%- include('/_global_partials_entity_/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+  <%_ if (serviceNo) { _%>
+<%- include('/_global_partials_entity_/save_template', {returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc}); -%>
+  <%_ } _%>
   <%_ if (reactive) { _%>
+    <%_ if (!serviceNo) { _%>
+        return <%= entityInstance %>Service.save(<%= instanceName %>)
+    <%_ } _%>
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.get<%= primaryKey.nameCapitalized %>()))
@@ -201,6 +211,9 @@ public class <%= entityClass %>Resource {
                 }
             });
   <%_ } else { _%>
+    <%_ if (!serviceNo) { _%>
+        <%- restClass %> result = <%= entityInstance %>Service.save(<%= instanceName %>);    
+    <%_ } _%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.get<%= primaryKey.nameCapitalized %>()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
             .body(result);
