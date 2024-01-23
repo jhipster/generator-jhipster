@@ -42,7 +42,7 @@
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "5.1.0",
     "rimraf": "5.0.5",
-    "ts-jest": "29.1.1",
+    "ts-jest": "29.1.2",
     "typescript": "5.2.2",
     "webpack": "5.89.0",
     "webpack-bundle-analyzer": "4.10.1",
