@@ -149,7 +149,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         for (const { entityName } of entitiesToLoad) {
           const entity = this.sharedData.getEntity(entityName);
           loadRequiredConfigIntoEntity.call(this, entity, application);
-          loadRequiredConfigDerivedProperties(entity);
         }
       },
       requiredOtherSideRelationships() {
@@ -166,6 +165,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         prepareEntityServerForTemplates(entity);
+        loadRequiredConfigDerivedProperties(entity);
       },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.

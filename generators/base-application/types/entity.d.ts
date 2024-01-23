@@ -38,6 +38,7 @@ export type BaseEntity = {
 type Entity = Required<BaseEntity> & {
   builtIn?: boolean;
   builtInUser?: boolean;
+  builtInAuthority?: boolean;
   microserviceName?: string;
 
   entityNameCapitalized: string;

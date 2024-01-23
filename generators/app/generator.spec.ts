@@ -54,6 +54,7 @@ describe(`generator - ${generator}`, () => {
       it('should match snapshot', () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
+          authority: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
         });
       });
@@ -73,6 +74,7 @@ describe(`generator - ${generator}`, () => {
       it('should match snapshot', () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
+          authority: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
         });

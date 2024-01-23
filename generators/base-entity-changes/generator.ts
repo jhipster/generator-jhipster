@@ -69,7 +69,7 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
    */
   protected generateIncrementalChanges(): BaseChangelog[] {
     const recreateInitialChangelog = this.recreateInitialChangelog;
-    const { generateBuiltInUserEntity, incrementalChangelog } = this.sharedData.getApplication();
+    const { generateBuiltInUserEntity, generateBuiltInAuthorityEntity, incrementalChangelog } = this.sharedData.getApplication();
     const entityNames = this.getExistingEntityNames();
 
     const entitiesByName = Object.fromEntries(entityNames.map(entityName => [entityName, this.sharedData.getEntity(entityName)]));
@@ -87,6 +87,10 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
     if (generateBuiltInUserEntity) {
       const user = this.sharedData.getEntity('User');
       previousEntitiesByName.User = user;
+    }
+    if (generateBuiltInAuthorityEntity) {
+      const authority = this.sharedData.getEntity('Authority');
+      previousEntitiesByName.Authority = authority;
     }
 
     const entities: any[] = Object.values(previousEntitiesByName);

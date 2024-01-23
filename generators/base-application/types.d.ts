@@ -56,10 +56,15 @@ type ApplicationType = DeterministicOptionWithDerivedProperties<
 type UserManagement =
   | {
       skipUserManagement: true;
+      generateBuiltInUserEntity?: false;
+      generateBuiltInAuthorityEntity: false;
     }
   | {
       skipUserManagement: false;
+      generateBuiltInUserEntity?: boolean;
       user: any;
+      generateBuiltInAuthorityEntity: boolean;
+      authority: any;
     };
 
 type JwtApplication = UserManagement & {
@@ -68,7 +73,9 @@ type JwtApplication = UserManagement & {
 
 type Oauth2Application = {
   jwtSecretKey: string;
+  generateBuiltInUserEntity?: boolean;
   user: any;
+  generateBuiltInAuthorityEntity: false;
 };
 
 type SessionApplication = UserManagement & {
@@ -112,8 +119,6 @@ export type CommonClientServerApplication = BaseApplication &
 
     skipUserManagement?: boolean;
     generateUserManagement?: boolean;
-    generateBuiltInUserEntity?: boolean;
-    generateBuiltInAuthorityEntity?: boolean;
   };
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
