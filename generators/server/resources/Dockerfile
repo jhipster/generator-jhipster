@@ -31,7 +31,7 @@ FROM cassandra:4.1.3
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.15.0
+FROM neo4j:5.16.0
 
 FROM hazelcast/management-center:5.3.3
 LABEL ALIAS=hazelcast
