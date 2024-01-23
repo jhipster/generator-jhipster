@@ -113,7 +113,7 @@ JSONEntity {
   "microserviceName": "nope",
   "name": "Titi",
   "pagination": "pagination",
-  "readOnly": true,
+  "readOnly": undefined,
   "relationships": [
     42,
     43,
