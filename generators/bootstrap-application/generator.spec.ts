@@ -173,6 +173,7 @@ describe(`generator - ${generator}`, () => {
           expectedEntity(entity),
           `
 {
+  "adminEntity": undefined,
   "adminUserDto": "AdminUserDTO",
   "allReferences": Any<Array>,
   "annotations": {
@@ -222,6 +223,7 @@ describe(`generator - ${generator}`, () => {
   "entityApi": "",
   "entityApiDescription": undefined,
   "entityApiUrl": "users",
+  "entityAuthority": undefined,
   "entityClass": "User",
   "entityClassHumanized": "User",
   "entityClassPlural": "Users",
@@ -246,6 +248,7 @@ describe(`generator - ${generator}`, () => {
   "entityPersistenceLayer": false,
   "entityPluralFileName": "usersundefined",
   "entityReactName": "User",
+  "entityReadAuthority": undefined,
   "entityRestLayer": false,
   "entitySearchLayer": false,
   "entityServiceFileName": "user",
@@ -699,6 +702,7 @@ describe(`generator - ${generator}`, () => {
           expectedEntity(entity),
           `
 {
+  "adminEntity": undefined,
   "allReferences": Any<Array>,
   "annotations": {
     "changelogDate": "20220129025419",
@@ -743,6 +747,7 @@ describe(`generator - ${generator}`, () => {
   "entityApi": "",
   "entityApiDescription": undefined,
   "entityApiUrl": "entity-as",
+  "entityAuthority": undefined,
   "entityClass": "EntityA",
   "entityClassHumanized": "Entity A",
   "entityClassPlural": "EntityAS",
@@ -765,6 +770,7 @@ describe(`generator - ${generator}`, () => {
   "entityParentPathAddition": "",
   "entityPluralFileName": "entity-asundefined",
   "entityReactName": "EntityA",
+  "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
   "entityStateName": "entity-a",
   "entitySuffix": "",
@@ -1031,6 +1037,7 @@ describe(`generator - ${generator}`, () => {
           expectedEntity(entity),
           `
 {
+  "adminEntity": undefined,
   "allReferences": Any<Array>,
   "annotations": {
     "changelogDate": "20220129025419",
@@ -1075,6 +1082,7 @@ describe(`generator - ${generator}`, () => {
   "entityApi": "",
   "entityApiDescription": undefined,
   "entityApiUrl": "entity-as",
+  "entityAuthority": undefined,
   "entityClass": "EntityA",
   "entityClassHumanized": "Entity A",
   "entityClassPlural": "EntityAS",
@@ -1097,6 +1105,7 @@ describe(`generator - ${generator}`, () => {
   "entityParentPathAddition": "",
   "entityPluralFileName": "entity-asundefined",
   "entityReactName": "EntityA",
+  "entityReadAuthority": undefined,
   "entityServiceFileName": "entity-a",
   "entityStateName": "entity-a",
   "entitySuffix": "",

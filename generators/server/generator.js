@@ -634,9 +634,16 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
+        const hasAnyAuthority = authorities =>
+          authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
         mutateData(entity, {
           entityPersistenceLayer: true,
           entityRestLayer: true,
+          entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
+          entitySpringReadPreAuthorize: hasAnyAuthority([
+            ...(entity.entityAuthority?.split(',') ?? []),
+            ...(entity.entityReadAuthority?.split(',') ?? []),
+          ]),
         });
       },
     });

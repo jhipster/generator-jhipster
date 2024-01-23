@@ -1025,32 +1025,6 @@ class UserResourceIT {
         assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
         assertThat(userDTO.toString()).isNotNull();
     }
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-
-    @Test
-    void testAuthorityEquals() {
-        Authority authorityA = new Authority();
-        assertThat(authorityA)
-          .isNotEqualTo(null)
-          .isNotEqualTo(new Object());
-        assertThat(authorityA.hashCode()).isZero();
-        assertThat(authorityA.toString()).isNotNull();
-
-        Authority authorityB = new Authority();
-        assertThat(authorityA).isEqualTo(authorityB);
-
-        authorityB.setName(AuthoritiesConstants.ADMIN);
-        assertThat(authorityA).isNotEqualTo(authorityB);
-
-        authorityA.setName(AuthoritiesConstants.USER);
-        assertThat(authorityA).isNotEqualTo(authorityB);
-
-        authorityB.setName(AuthoritiesConstants.USER);
-        assertThat(authorityA)
-          .isEqualTo(authorityB)
-          .hasSameHashCodeAs(authorityB);
-    }
-<%_ } _%>
 
     private void assertPersistedUsers(Consumer<List<<%= user.persistClass %>>> userAssertion) {
 <%_ if (databaseTypeCouchbase) { _%>

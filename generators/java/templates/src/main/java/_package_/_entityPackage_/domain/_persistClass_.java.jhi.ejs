@@ -80,6 +80,9 @@ Object.keys(uniqueEnums).forEach(function(element) { _%>
 
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
+<%_ if (!updatableEntity) { _%>
+import java.util.Objects;
+<%_ } _%>
 
 <%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityPackage !== entityPackage)) { _%>
 import <%= otherEntity.entityAbsoluteClass %>;
@@ -347,8 +350,12 @@ _%>
 
     @Override
     public int hashCode() {
+<%_ if (updatableEntity) { _%>
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
+<%_ } else { _%>
+        return Objects.hashCode(get<%= primaryKey.nameCapitalized %>());
+<%_ } _%>
     }
 
     // prettier-ignore

@@ -56,6 +56,12 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/domain/AnotherSimple.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/domain/AuthorityCallback.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/domain/Simple.java": {
     "stateCleared": "modified",
   },
@@ -146,6 +152,9 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
@@ -170,6 +179,12 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -189,6 +204,9 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/PublicUserResourceIT.java": {
@@ -781,6 +799,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
@@ -859,6 +880,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
@@ -886,6 +910,12 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -911,6 +941,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {
@@ -1506,6 +1539,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/domain/AnotherSimpleEntity.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/MicroserviceEntity.java": {
     "stateCleared": "modified",
   },
@@ -1584,6 +1620,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
     "stateCleared": "modified",
   },
@@ -1611,6 +1650,12 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -1636,6 +1681,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {

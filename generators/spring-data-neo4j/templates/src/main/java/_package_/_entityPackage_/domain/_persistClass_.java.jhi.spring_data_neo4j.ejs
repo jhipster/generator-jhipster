@@ -32,14 +32,16 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
-@Node
+@Node("<%- entityTableName %>")
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id && !embedded) { _%>
     @Id
+    <%_ if (field.autoGenerate) { _%>
     @GeneratedValue(UUIDStringGenerator.class)
+    <%_ } _%>
   <%_ } else { _%>
     @Property("<%=field.fieldNameUnderscored %>")
   <%_ } _%>
