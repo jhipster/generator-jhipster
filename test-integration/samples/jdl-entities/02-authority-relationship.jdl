@@ -1,0 +1,11 @@
+@ChangelogDate(20230200000000)
+entity AuthorityRelationship {
+  name String
+}
+
+@EntityReadAuthority(ROLE_USER)
+entity Authority {}
+
+relationship ManyToOne {
+  AuthorityRelationship{authority} to Authority
+}
