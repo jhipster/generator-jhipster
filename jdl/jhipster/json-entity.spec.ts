@@ -82,7 +82,6 @@ JSONEntity {
           documentation: '',
           jpaMetamodelFiltering: true,
           pagination: 'pagination',
-          readOnly: true,
           embedded: true,
           relationships: [42, 43],
           service: 'serviceClass',
