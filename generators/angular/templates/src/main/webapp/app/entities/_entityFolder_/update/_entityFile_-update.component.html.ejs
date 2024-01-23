@@ -101,7 +101,7 @@ _%>
                            data-cy="<%= fieldName %>" formControlName="<%= fieldName %>" <% if (readonly) { %> [readonly]="true"<% } %>/>
     <%_ } else { _%>
                     <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>"
-                           formControlName="<%= fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%= primaryKey.name %>')!.value != null"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
+                           formControlName="<%= fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%= primaryKey.name %>')!.disabled"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                     <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                            formControlName="<%= fieldName %>ContentType" />

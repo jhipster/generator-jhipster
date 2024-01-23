@@ -36,8 +36,14 @@ export type BaseEntity = {
   skipServer?: boolean;
 };
 
+type AngularEntity = {
+  entityAngularAuthorities?: string;
+  entityAngularReadAuthorities?: string;
+};
+
 type Entity = Required<BaseEntity> &
-  SpringEntity & {
+  SpringEntity &
+  AngularEntity & {
     builtIn?: boolean;
     builtInUser?: boolean;
     builtInAuthority?: boolean;

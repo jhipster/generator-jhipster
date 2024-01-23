@@ -33,6 +33,9 @@ const <%= entityInstance %>Route: Routes = [
     component: <%= entityAngularName %>Component,
     data: {
       defaultSort: '<%- primaryKey.name %>,' + ASC,
+<%_ if (entityAngularReadAuthorities) { _%>
+      authorities: [<%- entityAngularReadAuthorities %>],
+<%_ } _%>
     },
     canActivate: [UserRouteAccessService]
   },
@@ -42,6 +45,11 @@ const <%= entityInstance %>Route: Routes = [
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
+<%_ if (entityAngularReadAuthorities) { _%>
+    data: {
+      authorities: [<%- entityAngularReadAuthorities %>],
+    },
+<%_ } _%>
     canActivate: [UserRouteAccessService]
   },
 <%_ if (!readOnly) { _%>
@@ -51,6 +59,11 @@ const <%= entityInstance %>Route: Routes = [
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
+<%_ if (entityAngularAuthorities) { _%>
+    data: {
+      authorities: [<%- entityAngularAuthorities %>],
+    },
+<%_ } _%>
     canActivate: [UserRouteAccessService]
   },
 <%_ } _%>
@@ -61,6 +74,11 @@ const <%= entityInstance %>Route: Routes = [
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
     },
+<%_ if (entityAngularAuthorities) { _%>
+    data: {
+      authorities: [<%- entityAngularAuthorities %>],
+    },
+<%_ } _%>
     canActivate: [UserRouteAccessService]
   },
 <%_ } _%>
