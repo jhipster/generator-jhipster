@@ -16,13 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const instanceType = restClass;
-const instanceName = restInstance;
+<%_
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDtoReference = mapper + '::' + 'toDto';
 _%>
-        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= instanceName %><%if (dtoMapstruct) { %>)<% } -%>)
+        return <%= entityInstance %>Repository.save(<%if (dtoMapstruct) { %><%= dtoToEntity %>(<% } %><%= restInstance %><%if (dtoMapstruct) { %>)<% } -%><% if (!saveNewEntityOperation && requiresPersistableImplementation) { %>.setIsPersisted()<% } %>)
 <%_ if (searchEngineElasticsearch) { %>
             .flatMap(<%= entityInstance %>SearchRepository::save)
 <%_ } -%>

@@ -195,11 +195,12 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include('/_global_partials_entity_/save_template', {returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc}); -%>
+<%- include('/_global_partials_entity_/save_template', {saveNewEntityOperation: true, returnDirectly: false}); -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
-        return <%= entityInstance %>Service.save(<%= instanceName %>)
+        return <%= entityInstance %>Service
+            .save(<%= instanceName %>)
     <%_ } _%>
             .map(result -> {
                 try {
@@ -212,11 +213,11 @@ public class <%= entityClass %>Resource {
             });
   <%_ } else { _%>
     <%_ if (!serviceNo) { _%>
-        <%- restClass %> result = <%= entityInstance %>Service.save(<%= instanceName %>);    
+        <%- restInstance %> = <%= entityInstance %>Service.save(<%= instanceName %>);
     <%_ } _%>
-        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.get<%= primaryKey.nameCapitalized %>()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+            .body(<%- restInstance %>);
   <%_ } _%>
     }
 <%_ } _%>
@@ -235,7 +236,7 @@ public class <%= entityClass %>Resource {
     @PutMapping("/{<%= primaryKey.name %>}")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(
         @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
-        <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>
+        <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= restClass %> <%= restInstance %>
     ) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
@@ -271,18 +272,27 @@ public class <%= entityClass %>Resource {
       <%_ } _%>
     <% } %>
   <%_ } _%>
-<%- include('/_global_partials_entity_/update_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc, isController: true, isPersisted: requiresPersistableImplementation}); -%>
+  <%_ if (serviceNo) { _%>
+<%- include('/_global_partials_entity_/save_template', {saveNewEntityOperation: false, returnDirectly: false}); -%>
+  <%_ } _%>
   <%_ if (reactive) { _%>
-            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-            .map(result -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
-                .body(result)
-            );
+    <%_ if (!serviceNo) { _%>
+            return <%= entityInstance %>Service
+                .update(<%= restInstance %>)
+    <%_ } _%>
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+                .map(result -> ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                    .body(result)
+                );
         });
   <%_ } else { _%>
+    <%_ if (!serviceNo) { _%>
+        <%- restInstance %> = <%= entityInstance %>Service.update(<%= restInstance %>);
+    <%_ } _%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
-            .body(result);
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+            .body(<%- restInstance %>);
   <%_ } _%>
     }
 
