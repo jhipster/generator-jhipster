@@ -114,7 +114,7 @@
     "@yeoman/namespace": "1.0.0",
     "@yeoman/transform": "1.2.0",
     "@yeoman/types": "1.1.2",
-    "axios": "1.6.5",
+    "axios": "1.6.6",
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "11.1.0",
