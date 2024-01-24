@@ -32,14 +32,14 @@ const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
 export const restFiles = {
   restFiles: [
     {
-      condition: generator => !generator.embedded,
+      condition: generator => !generator.embedded && generator.entityRestLayer,
       ...javaMainPackageTemplatesBlock('_entityPackage_/'),
       templates: ['web/rest/_entityClass_Resource.java'],
     },
   ],
   restTestFiles: [
     {
-      condition: generator => !generator.embedded,
+      condition: generator => !generator.embedded && generator.entityRestLayer,
       path: SERVER_TEST_SRC_DIR,
       templates: [
         {
@@ -182,16 +182,18 @@ export function writeFiles() {
     },
 
     async writeServerFiles({ application, entities }) {
+      const rootTemplatesPath = application.reactive ? ['reactive', '', '../../java/templates/'] : ['', '../../java/templates/'];
       for (const entity of entities.filter(entity => !entity.skipServer)) {
         if (entity.builtInUser) {
           await this.writeFiles({
             sections: userFiles,
+            rootTemplatesPath,
             context: { ...application, ...entity },
           });
-        } else if (!entity.builtIn) {
+        } else {
           await this.writeFiles({
             sections: serverFiles,
-            rootTemplatesPath: application.reactive ? ['reactive', '', '../../java/templates/'] : ['', '../../java/templates/'],
+            rootTemplatesPath,
             context: { ...application, ...entity },
           });
         }

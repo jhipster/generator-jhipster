@@ -6,6 +6,15 @@ import { SpringCacheSourceType } from '../spring-cache/types.js';
 import { MessageBrokerApplicationType } from './options/message-broker.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
 
+export type SpringEntity = {
+  /* Generate entity's Entity */
+  entityDomainLayer?: boolean;
+  /* Generate entity's Repository */
+  entityPersistenceLayer?: boolean;
+  /* Generate entity's Rest Api */
+  entityRestLayer?: boolean;
+};
+
 export type SpringBootSourceType = GradleSourceType &
   MavenSourceType &
   SpringCacheSourceType &
