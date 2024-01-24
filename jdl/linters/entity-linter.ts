@@ -18,7 +18,7 @@
  */
 
 import EntityIssue from './issues/entity-issue.js';
-import getTableNameFromEntityName from '../jhipster/entity-table-name-creator.js';
+import { shouldWriteEntityTableName } from '../jhipster/index.js';
 import { rulesNames } from './rules.js';
 
 let issues: EntityIssue[];
@@ -93,7 +93,7 @@ function checkForUselessTableName(entityDeclaration: EntityDeclaration) {
   const entityTableNameDeclaration = entityDeclaration.children.entityTableNameDeclaration;
   if (entityTableNameDeclaration) {
     const tableName = entityTableNameDeclaration[0].children.NAME[0].image;
-    if (getTableNameFromEntityName(entityName) === tableName) {
+    if (!shouldWriteEntityTableName(entityName, tableName)) {
       issues.push(
         new EntityIssue({
           ruleName: rulesNames.ENT_OPTIONAL_TABLE_NAME,

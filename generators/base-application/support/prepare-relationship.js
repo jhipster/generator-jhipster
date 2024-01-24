@@ -16,22 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kebabCase, lowerFirst, startCase, upperFirst } from 'lodash-es';
+import { lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import {
-  databaseTypes,
-  entityOptions,
-  reservedKeywords,
-  validations,
-  checkAndReturnRelationshipOnValue,
-} from '../../../jdl/jhipster/index.js';
-import { upperFirstCamelCase } from '../../base/support/string.js';
+import { databaseTypes, entityOptions, validations, checkAndReturnRelationshipOnValue } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { stringifyApplicationData } from './debug.js';
 import { mutateData } from '../../base/support/config.js';
 
-const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const {
@@ -48,7 +40,6 @@ function _defineOnUpdateAndOnDelete(relationship, generator) {
 export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
   const entityName = entityWithConfig.name;
   const otherEntityName = relationship.otherEntityName;
-  const jhiTablePrefix = entityWithConfig.jhiTablePrefix || hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
   if (!relationship.otherEntity) {
     throw new Error(
@@ -149,9 +140,6 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     columnNamePrefix: relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${hibernateSnakeCase(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
     otherEntityNameCapitalized: upperFirst(otherEntityName),
-    otherEntityTableName:
-      otherEntityData.entityTableName ||
-      hibernateSnakeCase(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
   });
 
   mutateData(relationship, {
@@ -176,31 +164,14 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     }
   }
 
-  if (entityWithConfig.prodDatabaseType) {
-    if (isReservedTableName(relationship.otherEntityTableName, entityWithConfig.prodDatabaseType) && jhiTablePrefix) {
-      const otherEntityTableName = relationship.otherEntityTableName;
-      relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-    }
-  }
-
-  if (relationship.otherEntityAngularName === undefined) {
-    if (otherEntityData.builtInUser) {
-      relationship.otherEntityAngularName = 'User';
-    } else {
-      const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-      relationship.otherEntityAngularName = upperFirst(relationship.otherEntityName) + upperFirstCamelCase(otherEntityAngularSuffix);
-    }
-  }
-
   mutateData(relationship, {
-    otherEntityStateName: kebabCase(relationship.otherEntityAngularName),
+    otherEntityTableName: otherEntityData.entityTableName,
+    otherEntityAngularName: otherEntityData.entityAngularName,
+    otherEntityStateName: otherEntityData.entityStateName,
+    otherEntityFileName: otherEntityData.entityFileName,
+    otherEntityFolderName: otherEntityData.entityFileName,
     jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
     unique: relationship.id || (relationship.ownerSide && relationship.relationshipType === 'one-to-one'),
-  });
-
-  mutateData(relationship, {
-    otherEntityFileName: kebabCase(relationship.otherEntity.entityAngularName),
-    otherEntityFolderName: kebabCase(relationship.otherEntity.entityAngularName),
   });
 
   const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';

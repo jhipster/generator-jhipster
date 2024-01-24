@@ -19,7 +19,7 @@
 
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';
-import { entityTableNameCreator } from '../jhipster/index.js';
+import { entityTableNameCreator, getTableNameFromEntityNameFallback } from '../jhipster/index.js';
 
 const getTableNameFromEntityName = entityTableNameCreator;
 
@@ -51,6 +51,24 @@ describe('jdl - EntityTableNameCreator', () => {
         it('should keep them the same', () => {
           expect(getTableNameFromEntityName('t_toto_tata')).to.equal('t_toto_tata');
         });
+      });
+    });
+  });
+  describe('getTableNameFromEntityNameFallback', () => {
+    describe('when not passing an entity name', () => {
+      it('should fail', () => {
+        // @ts-expect-error
+        expect(() => getTableNameFromEntityNameFallback(undefined)).to.throw(/^An entity name must be passed to get a table name.$/);
+      });
+    });
+    describe("like 'AaBbc", () => {
+      it('should add return undefined if matches hibernateSnakeCase', () => {
+        expect(getTableNameFromEntityNameFallback('TotoTata')).to.equal(undefined);
+      });
+    });
+    describe('like ABabc', () => {
+      it('should add return the table name if conflicts with hibernateSnakeCase', () => {
+        expect(getTableNameFromEntityNameFallback('TTotoTata')).to.equal('t_toto_tata');
       });
     });
   });

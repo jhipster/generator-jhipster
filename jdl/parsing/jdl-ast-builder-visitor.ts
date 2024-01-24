@@ -144,7 +144,7 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
 
     const name = context.NAME[0].image;
 
-    let tableName = name;
+    let tableName;
     if (context.entityTableNameDeclaration) {
       tableName = this.visit(context.entityTableNameDeclaration);
     }

@@ -76,7 +76,7 @@ describe('MetricsComponent', () => {
       expect(service.getMetrics).toHaveBeenCalled();
       expect(comp.metrics).toEqual(metrics);
       expect(comp.threads).toEqual(threadDump.threads);
-      expect(comp.updatingMetrics).toBeFalsy();
+      expect(comp.updatingMetrics()).toBeFalsy();
       expect(changeDetector.constructor.prototype.markForCheck).toHaveBeenCalled();
     });
   });

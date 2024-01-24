@@ -55,7 +55,7 @@ describe('jdl - EntityConverter', () => {
     "comment": "/** No comment */",
     "fields": {},
     "name": "A",
-    "tableName": "A",
+    "tableName": undefined,
   },
   JDLEntity {
     "annotations": {},

@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { snakeCase } from 'lodash-es';
+import { hibernateSnakeCase } from '../../generators/server/support/string.js';
 
 /**
+ * @deprecated TODO v9 drop this function and don't calculate entityTableName.
  * Returns an entity table name based on the passed entity name.
  * @param entityName - the entity's name
  * @returns the corresponding table name.
@@ -28,5 +30,25 @@ export default function getTableNameFromEntityName(entityName: string): string {
   if (!entityName) {
     throw new Error('An entity name must be passed to get a table name.');
   }
-  return _.snakeCase(entityName);
+  return snakeCase(entityName);
 }
+
+/**
+ * @deprecated TODO v9 drop this function and don't calculate entityTableName.
+ * Returns an entity table name based on the passed entity name if it conflicts with the default one.
+ */
+export const getTableNameFromEntityNameFallback = (entityName: string): string | undefined => {
+  const snakeCasedEntityName = getTableNameFromEntityName(entityName);
+  if (snakeCasedEntityName !== hibernateSnakeCase(entityName)) {
+    return snakeCasedEntityName;
+  }
+
+  return undefined;
+};
+
+/**
+ * @deprecated TODO v9 drop this function and always write entityTableName if exists.
+ */
+export const shouldWriteEntityTableName = (entityName: string, entityTableName: string): boolean => {
+  return entityTableName !== snakeCase(entityName) || entityTableName !== hibernateSnakeCase(entityName);
+};

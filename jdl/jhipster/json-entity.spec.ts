@@ -82,7 +82,6 @@ JSONEntity {
           documentation: '',
           jpaMetamodelFiltering: true,
           pagination: 'pagination',
-          readOnly: true,
           embedded: true,
           relationships: [42, 43],
           service: 'serviceClass',
@@ -114,7 +113,7 @@ JSONEntity {
   "microserviceName": "nope",
   "name": "Titi",
   "pagination": "pagination",
-  "readOnly": true,
+  "readOnly": undefined,
   "relationships": [
     42,
     43,

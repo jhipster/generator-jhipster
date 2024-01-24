@@ -162,6 +162,7 @@ describe(`generator - ${generator}`, () => {
         expect(Object.keys(runResult.generator.sharedData.getEntitiesMap())).toMatchInlineSnapshot(`
 [
   "User",
+  "Authority",
   "EntityA",
 ]
 `);

@@ -71,7 +71,7 @@ describe('User Management Update Component', () => {
 
         // THEN
         expect(service.authorities).toHaveBeenCalled();
-        expect(comp.authorities).toEqual(['USER']);
+        expect(comp.authorities()).toEqual(['USER']);
       })
     ));
   });

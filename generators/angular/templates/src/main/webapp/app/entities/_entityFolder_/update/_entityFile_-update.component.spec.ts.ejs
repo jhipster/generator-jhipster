@@ -176,6 +176,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
     });
 
     describe('save', () => {
+<%_ if (updatableEntity) { _%>
         it('Should call update service on save for existing entity', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
@@ -199,6 +200,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             expect(comp.isSaving).toEqual(false);
         });
 
+<%_ } _%>
         it('Should call create service on save for new entity', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
@@ -221,6 +223,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             expect(comp.isSaving).toEqual(false);
             expect(comp.previousState).toHaveBeenCalled();
         });
+<%_ if (updatableEntity) { _%>
 
         it('Should set isSaving to false on error', () => {
             // GIVEN
@@ -241,6 +244,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             expect(comp.isSaving).toEqual(false);
             expect(comp.previousState).not.toHaveBeenCalled();
         });
+<%_ } _%>
     });
 
 <%_ const trackedRelationships = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.persistableRelationship && rel.otherEntity.primaryKey));

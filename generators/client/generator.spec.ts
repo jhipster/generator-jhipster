@@ -20,7 +20,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import assert from 'assert';
 import lodash from 'lodash';
-import { before, it, describe, after, expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from './index.js';
 import { defaultHelpers as helpers, checkEnforcements, result } from '../../test/support/index.js';
@@ -53,12 +53,11 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should compose with jhipster:common', () => {
         assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
@@ -74,12 +73,11 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should compose with jhipster:common', () => {
         assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
@@ -95,12 +93,11 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should compose with jhipster:common', () => {
         assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
@@ -119,12 +116,11 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers
           .run(generatorFile)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
           .withMockedGenerators(mockedComposedGenerators);
       });
-
-      after(() => runResult.cleanup());
 
       it('should compose with jhipster:common', () => {
         assert(runResult.mockedGenerators['jhipster:common'].calledOnce);
@@ -151,6 +147,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .run(generatorFile)
+        .withControl({ getWebappTranslation: () => 'translations' })
         .withJHipsterConfig(options)
         .withSkipWritingPriorities()
         .withMockedGenerators(mockedComposedGenerators);

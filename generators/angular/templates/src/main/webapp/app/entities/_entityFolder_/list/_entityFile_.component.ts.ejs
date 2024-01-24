@@ -34,7 +34,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
-import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, switchMap, tap } from 'rxjs';
+import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, switchMap, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
@@ -121,6 +121,7 @@ export class <%= componentName %> implements OnInit {
     private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
 
 <%_ } _%>
+    subscription: Subscription | null = null;
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     isLoading = false;
 
@@ -227,7 +228,10 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
     load(): void {
-      this.loadFromBackendWithRouteInformations().subscribe({
+      if (this.subscription !== null) {
+        this.subscription.unsubscribe();
+      }
+      this.subscription = this.loadFromBackendWithRouteInformations().subscribe({
         next: (res: EntityArrayResponseType) => {
           this.onResponseSuccess(res);
         }

@@ -46,7 +46,7 @@ export default class UserManagementUpdateComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>
-  authorities: string[] = [];
+  authorities = signal<string[]>([]);
   isSaving = signal(false);
 
   editForm = new FormGroup({
@@ -84,7 +84,7 @@ export default class UserManagementUpdateComponent implements OnInit {
         this.editForm.reset(newUser);
       }
     });
-    this.userService.authorities().subscribe(authorities => (this.authorities = authorities));
+    this.userService.authorities().subscribe(authorities => (this.authorities.set(authorities)));
   }
 
   previousState(): void {
