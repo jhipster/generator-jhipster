@@ -20,7 +20,17 @@
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { pulsarFiles } from './files.js';
 
-export default class KafkaGenerator extends BaseApplicationGenerator {
+export default class PulsarGenerator extends BaseApplicationGenerator {
+  async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints();
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrapAplicationServer();
+    }
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
