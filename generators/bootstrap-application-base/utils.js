@@ -131,7 +131,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     dto: 'no',
     skipDbChangelog: true,
     entityDomainLayer: application.backendTypeSpringBoot,
-    entityPersistenceLayer: false,
+    entityPersistenceLayer: application.backendTypeSpringBoot,
     entityRestLayer: application.backendTypeSpringBoot,
     ...customAuthorityData,
   };

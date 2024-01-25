@@ -539,12 +539,6 @@ export const baseServerFiles = {
   ],
   serverJavaUserManagement: [
     {
-      condition: generator => generator.generateBuiltInAuthorityEntity,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['repository/AuthorityRepository.java'],
-    },
-    {
       condition: generator =>
         generator.databaseTypeMongodb ||
         generator.searchEngineElasticsearch ||

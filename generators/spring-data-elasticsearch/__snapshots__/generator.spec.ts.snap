@@ -167,9 +167,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
@@ -3628,9 +3625,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/PersistentTokenRepository.java": {

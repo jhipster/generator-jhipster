@@ -137,6 +137,12 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AuthorityRepositoryInternalImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/AuthoritySqlHelper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
@@ -147,6 +153,9 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/rowmapper/AuthorityRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
@@ -604,6 +613,12 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AuthorityRepositoryInternalImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/AuthoritySqlHelper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
@@ -614,6 +629,9 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/rowmapper/AuthorityRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
@@ -1065,6 +1083,12 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AuthorityRepositoryInternalImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/AuthoritySqlHelper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
@@ -1075,6 +1099,9 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/rowmapper/AuthorityRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
@@ -1502,6 +1529,12 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AuthorityRepositoryInternalImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/AuthoritySqlHelper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
@@ -1512,6 +1545,9 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/rowmapper/AuthorityRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
@@ -1897,6 +1933,12 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AuthorityRepositoryInternalImpl.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/AuthoritySqlHelper.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/EntityManager.java": {
     "stateCleared": "modified",
   },
@@ -1907,6 +1949,9 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/repository/rowmapper/AuthorityRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
