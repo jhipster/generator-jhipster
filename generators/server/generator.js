@@ -98,7 +98,7 @@ import {
   APPLICATION_TYPE_MICROSERVICE,
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { createBase64Secret, createSecret, createNeedleCallback } from '../base/support/index.js';
+import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
 import command from './command.js';
 import { addJavaAnnotation } from '../java/support/index.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
@@ -629,6 +629,21 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        mutateData(entity, {
+          entityPersistenceLayer: true,
+          entityRestLayer: true,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get postPreparingEachEntity() {

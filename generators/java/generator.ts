@@ -31,6 +31,7 @@ import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
 import { matchMainJavaFiles } from './support/package-info-transform.js';
 import { entityServerFiles, enumFiles } from './entity-files.js';
 import { getEnumInfo } from '../base-application/support/index.js';
+import { mutateData } from '../base/support/index.js';
 
 export type ApplicationDefinition = GenericApplicationDefinition<JavaApplication>;
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition>;
@@ -84,6 +85,20 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        mutateData(entity, {
+          entityDomainLayer: true,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get default() {
@@ -149,7 +164,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
         if (!this.generateEntities) return;
 
         const { useJakartaValidation, useJacksonIdentityInfo } = this;
-        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+        for (const entity of entities.filter(entity => !entity.skipServer)) {
           await this.writeFiles({
             sections: entityServerFiles,
             context: { ...application, ...entity, useJakartaValidation, useJacksonIdentityInfo },
