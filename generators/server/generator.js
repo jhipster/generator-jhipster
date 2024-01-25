@@ -54,6 +54,7 @@ import {
   GENERATOR_SPRING_DATA_MONGODB,
   GENERATOR_SPRING_DATA_NEO4J,
   GENERATOR_SERVER,
+  GENERATOR_SPRING_BOOT,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SPRING_DATA_RELATIONAL,
@@ -258,6 +259,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
+      async composeBackendType() {
+        if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
+          await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
+        }
+      },
       async composing() {
         const {
           buildTool,
@@ -634,16 +640,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
-        const hasAnyAuthority = authorities =>
-          authorities.length > 0 ? `hasAnyAuthority(${authorities.map(auth => `'${auth}'`).join(',')})` : undefined;
         mutateData(entity, {
           entityPersistenceLayer: true,
           entityRestLayer: true,
-          entitySpringPreAuthorize: hasAnyAuthority(entity.entityAuthority?.split(',') ?? []),
-          entitySpringReadPreAuthorize: hasAnyAuthority([
-            ...(entity.entityAuthority?.split(',') ?? []),
-            ...(entity.entityReadAuthority?.split(',') ?? []),
-          ]),
         });
       },
     });
