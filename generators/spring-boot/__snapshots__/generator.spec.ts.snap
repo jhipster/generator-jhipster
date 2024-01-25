@@ -1,11 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - server - support - needles generated project should match state snapshot 1`] = `
+exports[`generator - spring-boot with default config should match files snapshot 1`] = `
 {
   ".devcontainer/Dockerfile": {
     "stateCleared": "modified",
   },
   ".devcontainer/devcontainer.json": {
+    "stateCleared": "modified",
+  },
+  ".editorconfig": {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": {
+    "stateCleared": "modified",
+  },
+  ".gitignore": {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.cjs": {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": {
@@ -17,7 +32,16 @@ exports[`generator - server - support - needles generated project should match s
   ".mvn/wrapper/maven-wrapper.properties": {
     "stateCleared": "modified",
   },
+  ".prettierignore": {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -29,16 +53,13 @@ exports[`generator - server - support - needles generated project should match s
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
   "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": {
     "stateCleared": "modified",
   },
   "src/main/docker/app.yml": {
@@ -66,9 +87,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/docker/prometheus/prometheus.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/services.yml": {
     "stateCleared": "modified",
   },
   "src/main/docker/sonar.yml": {
@@ -129,9 +147,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/StaticResourcesWebConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": {
@@ -224,12 +239,6 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/filter/SpaWebFilter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/filter/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/AccountResource.java": {
     "stateCleared": "modified",
   },
@@ -320,6 +329,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
+  "src/main/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -360,9 +372,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SqlTestContainersSpringContextCustomizerFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTest.java": {
@@ -416,9 +425,6 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/service/mapper/UserMapperTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/web/filter/SpaWebFilterIT.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/web/rest/AccountResourceIT.java": {
     "stateCleared": "modified",
   },
@@ -446,9 +452,6 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
     "stateCleared": "modified",
   },
-  "src/test/resources/META-INF/spring.factories": {
-    "stateCleared": "modified",
-  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -456,6 +459,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": {

@@ -156,15 +156,6 @@ public class PublicUserResource {
     }
   <%_ } _%>
 
-    /**
-     * Gets a list of all roles.
-     * @return a string list of all roles.
-     */
-    @GetMapping("/authorities")
-    public <% if (reactive) { %>Mono<List<String>><% } else { %>List<String><% } %> getAuthorities() {
-        return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
-    }
-
 <%_ } else { /* Cassandra */ _%>
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.dtoClass %>> getAllPublicUsers() {
         return userService.getAllPublicUsers();

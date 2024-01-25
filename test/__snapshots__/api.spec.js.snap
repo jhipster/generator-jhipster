@@ -44,6 +44,7 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "GENERATOR_PROJECT_NAME": "project-name",
   "GENERATOR_REACT": "react",
   "GENERATOR_SERVER": "server",
+  "GENERATOR_SPRING_BOOT": "spring-boot",
   "GENERATOR_SPRING_CACHE": "spring-cache",
   "GENERATOR_SPRING_CLOUD_STREAM": "spring-cloud-stream",
   "GENERATOR_SPRING_DATA_CASSANDRA": "spring-data-cassandra",

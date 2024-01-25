@@ -203,35 +203,6 @@ class PublicUserResourceIT {
 <% } _%>
     }
 
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)
-  && (!(authenticationTypeOauth2 && applicationTypeMicroservice))) { _%>
-    @Test
-  <%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-  <%_ } _%>
-    void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
-  <%_ if (reactive) { _%>
-        webTestClient.get().uri("/api/authorities")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
-            .expectBody()
-            .jsonPath("$").isArray()
-            .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]").hasJsonPath()
-            .jsonPath("$[?(@=='" + AuthoritiesConstants.USER + "')]").hasJsonPath();
-  <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/authorities")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
-  <%_ } _%>
-    }
-<%_ } _%>
-
 <%_ if (databaseTypeSql && !authenticationTypeOauth2) { _%>
     @Test
   <%_ if (!reactive) { _%>

@@ -13,6 +13,8 @@ export type SpringEntity = {
   entityPersistenceLayer?: boolean;
   /* Generate entity's Rest Api */
   entityRestLayer?: boolean;
+  entitySpringPreAuthorize?: string;
+  entitySpringReadPreAuthorize?: string;
 };
 
 export type SpringBootSourceType = GradleSourceType &

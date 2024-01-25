@@ -42,6 +42,9 @@ type Entity = Required<BaseEntity> &
     builtInUser?: boolean;
     builtInAuthority?: boolean;
     microserviceName?: string;
+    adminEntity?: boolean;
+    entityAuthority?: string;
+    entityReadAuthority?: string;
 
     entityNameCapitalized: string;
     entityClass: string;

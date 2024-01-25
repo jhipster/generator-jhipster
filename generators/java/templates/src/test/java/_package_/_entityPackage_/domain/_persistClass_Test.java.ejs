@@ -48,8 +48,20 @@ class <%= persistClass %>Test {
 
         <%= persistInstance %>2 = get<%= persistClass %>Sample2();
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
-<%_} _%>
+<%_ } _%>
     }
+<%_if (!updatableEntity) { _%>
+
+    @Test
+    void hashCodeVerifier() throws Exception {
+        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+        assertThat(<%= persistInstance %>.hashCode()).isZero();
+
+        <%= persistClass %> <%= persistInstance %>1 = get<%= persistClass %>Sample1();
+        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        assertThat(<%= persistInstance %>).hasSameHashCodeAs(<%= persistInstance %>1);
+    }
+<%_ } _%>
 <%_ for (const relationship of relationships.filter(relationship => !relationship.otherEntity.builtIn)) { _%>
 
     @Test

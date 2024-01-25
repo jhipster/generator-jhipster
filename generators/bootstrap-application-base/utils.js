@@ -120,7 +120,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     name: authorityEntityName,
     entitySuffix: '',
     builtIn: true,
-    fluentMethods: false,
+    adminEntity: true,
     entityTableName: `${application.jhiTablePrefix}_authority`,
     relationships: [],
     fields: entityDefinition ? entityDefinition.fields || [] : [],
@@ -130,9 +130,9 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     service: 'no',
     dto: 'no',
     skipDbChangelog: true,
-    entityDomainLayer: false,
+    entityDomainLayer: application.backendTypeSpringBoot,
     entityPersistenceLayer: false,
-    entityRestLayer: false,
+    entityRestLayer: application.backendTypeSpringBoot,
     ...customAuthorityData,
   };
 

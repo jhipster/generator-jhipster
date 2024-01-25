@@ -254,6 +254,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.myco
   "src/main/java/com/mycompany/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
@@ -368,6 +371,12 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.myco
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -423,6 +432,9 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.myco
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/PublicUserResourceIT.java": {
@@ -1684,6 +1696,9 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/main/java/tech/jhipster/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
@@ -1813,6 +1828,12 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -1865,6 +1886,9 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {
@@ -3222,6 +3246,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
@@ -3342,6 +3369,12 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -3376,6 +3409,9 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/PublicUserResourceIT.java": {

@@ -67,6 +67,26 @@ entity Company {}
 
 `female` variant is supported by `pt-br` locale.
 
+##### Authority
+
+Secure the entity with the authority.
+
+```
+@EntityAuthority(ROLE_ADMIN)
+@EntityReadAuthority(ROLE_USER)
+entity Department {}
+```
+
+##### Admin Entity
+
+Declare the entity as an admin entity like User and Authority.
+The entity is added to the admin menu and secured with ROLE_ADMIN authority.
+
+```
+@AdminEntity
+entity Department {}
+```
+
 ### Fields
 
 #### Notable customizations
@@ -87,7 +107,7 @@ entity Company {
 ##### Label
 
 ```jdl
-relationship ManyToOnly {
+relationship ManyToOne {
   @RelationshipNameHumanized('Company user') Company{user} to User
 }
 ```

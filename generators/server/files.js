@@ -542,7 +542,7 @@ export const baseServerFiles = {
       condition: generator => generator.generateBuiltInAuthorityEntity,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
-      templates: ['domain/Authority.java', 'repository/AuthorityRepository.java'],
+      templates: ['repository/AuthorityRepository.java'],
     },
     {
       condition: generator =>

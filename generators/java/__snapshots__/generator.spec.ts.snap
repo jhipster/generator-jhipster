@@ -14,6 +14,9 @@ exports[`generator - java with default config should match files snapshot 1`] = 
   "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/Bar.java": {
     "stateCleared": "modified",
   },
@@ -30,6 +33,12 @@ exports[`generator - java with default config should match files snapshot 1`] = 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
