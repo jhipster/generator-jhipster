@@ -25,13 +25,7 @@ import { checkNode, loadStoredAppOptions } from './support/index.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { askForInsightOptIn } from './prompts.js';
 import statistics from '../statistics.js';
-import {
-  GENERATOR_APP,
-  GENERATOR_COMMON,
-  GENERATOR_CLIENT,
-  GENERATOR_SERVER,
-  GENERATOR_BOOTSTRAP_APPLICATION_BASE,
-} from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_CLIENT, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 import { packageJson } from '../../lib/index.js';
 
@@ -48,11 +42,11 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     loadStoredAppOptions.call(this);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_APP);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
+      await this.dependsOnBootstrapAplicationBase();
     }
   }
 

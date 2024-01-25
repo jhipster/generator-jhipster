@@ -22,6 +22,16 @@ import cleanupKafkaFilesTask from './cleanup.js';
 import { kafkaFiles } from './files.js';
 
 export default class KafkaGenerator extends BaseApplicationGenerator {
+  async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints();
+    }
+
+    if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrapAplicationServer();
+    }
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupKafkaFilesTask,
