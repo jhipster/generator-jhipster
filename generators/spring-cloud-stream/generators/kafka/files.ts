@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { WriteFileSection } from '../base/api.js';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
-import KafkaGenerator from './generator.js';
+import { WriteFileSection } from '../../../base/api.js';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../server/support/index.js';
 
 export const kafkaFiles: WriteFileSection<any, any> = {
   config: [
@@ -68,41 +67,3 @@ export const kafkaFiles: WriteFileSection<any, any> = {
     },
   ],
 };
-
-export const pulsarFiles: WriteFileSection<any, any> = {
-  config: [
-    {
-      condition: data => data.buildToolGradle,
-      path: GRADLE_BUILD_SRC_MAIN_DIR,
-      templates: ['jhipster.pulsar-conventions.gradle'],
-    },
-  ],
-  test: [
-    {
-      path: `${SERVER_TEST_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: [
-        'broker/PulsarIT.java',
-        'config/BrokerConfiguration.java',
-        'config/EmbeddedPulsar.java',
-        'config/PulsarTestContainer.java',
-        'config/PulsarTestContainersSpringContextCustomizerFactory.java',
-      ],
-    },
-  ],
-};
-
-export default async function writeFilesTask(this: KafkaGenerator, { application }) {
-  if (application.messageBrokerKafka) {
-    await this.writeFiles({
-      sections: kafkaFiles,
-      context: application,
-    });
-  }
-  if (application.messageBrokerPulsar) {
-    await this.writeFiles({
-      sections: pulsarFiles,
-      context: application,
-    });
-  }
-}
