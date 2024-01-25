@@ -125,7 +125,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     relationships: [],
     fields: entityDefinition ? entityDefinition.fields || [] : [],
     builtInAuthority: true,
-    skipClient: true,
+    skipClient: !application.backendTypeSpringBoot || application.clientFrameworkReact || application.clientFrameworkVue,
     searchEngine: 'no',
     service: 'no',
     dto: 'no',

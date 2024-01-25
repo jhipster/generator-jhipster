@@ -46,7 +46,7 @@ import {
   generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.js';
 import type { CommonClientServerApplication } from '../base-application/types.js';
-import { createNeedleCallback } from '../base/support/index.js';
+import { createNeedleCallback, mutateData } from '../base/support/index.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
@@ -139,6 +139,25 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        const asAuthorities = authorities => (authorities.length > 0 ? authorities.map(auth => `'${auth}'`).join(', ') : undefined);
+        mutateData(entity, {
+          entityAngularAuthorities: asAuthorities(entity.entityAuthority?.split(',') ?? []),
+          entityAngularReadAuthorities: asAuthorities([
+            ...(entity.entityAuthority?.split(',') ?? []),
+            ...(entity.entityReadAuthority?.split(',') ?? []),
+          ]),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get default() {

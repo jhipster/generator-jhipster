@@ -51,7 +51,7 @@ export const entityFiles = {
 };
 
 export async function writeEntityFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
     await this.writeFiles({
       sections: entityFiles,
       context: { ...application, ...entity },
@@ -60,7 +60,7 @@ export async function writeEntityFiles({ application, entities }) {
 }
 
 export async function postWriteEntityFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
     if (!entity.embedded) {
       const { enableTranslation } = application;
       const {
@@ -94,7 +94,7 @@ export async function postWriteEntityFiles({ application, entities }) {
 }
 
 export function cleanupEntitiesFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
     const { entityFolderName, entityFileName } = entity;
     if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);

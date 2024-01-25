@@ -302,7 +302,7 @@ export async function writeFiles({ application }) {
 }
 
 export async function writeEntitiesFiles({ application, entities }) {
-  entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
+  entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,
     context: {
