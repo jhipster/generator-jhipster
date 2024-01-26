@@ -260,7 +260,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } else { _%>
 @AutoConfigureMockMvc
 <%_ } _%>
-@WithMockUser
+@WithMockUser<% if (entityAuthority) { %>(authorities = {"<%- entityAuthority %>"})<% } %>
 class <%= entityClass %>ResourceIT {
 <%_
 for (field of fieldsToTest) {
@@ -512,15 +512,23 @@ filterTestableRelationships.forEach((relationship) => { _%>
      */
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
-        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()<%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()
+    <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
             .<%= primaryKey.name %>(UUID.randomUUID())
-  <%_ } _%><% for (field of fieldsToTest) { %>
+    <%_ } _%>
+    <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
+            .<%= primaryKey.name %>(UUID.randomUUID().toString())
+    <%_ } _%>
+    <% for (field of fieldsToTest) { %>
             .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
             .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
   <%_ } else { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
         <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
+    <%_ } _%>
+    <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
+        <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
         <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
@@ -703,7 +711,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void create<%= entityClass %>WithExistingId() throws Exception {
         // Create the <%= entityClass %> with an existing ID
-  <%_ if (primaryKey.typeUUID && databaseTypeSql) { _%>
+  <%_ if ((primaryKey.typeUUID && databaseTypeSql) || !primaryKey.autoGenerate) { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else { _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
@@ -1386,7 +1394,7 @@ _%>
             .andExpect(status().isNotFound());
 <%_ } _%>
     }
-<%_ if (!readOnly) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
     @Test<%= transactionalAnnotation %>
     void putExisting<%= entityClass %>() throws Exception {
@@ -1752,6 +1760,8 @@ _%>
   <%_ } _%>
 
     }
+<%_ } _%>
+<%_ if (!readOnly) { _%>
 
     @Test<%= transactionalAnnotation %>
     void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{

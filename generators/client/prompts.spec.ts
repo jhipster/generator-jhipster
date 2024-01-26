@@ -28,6 +28,7 @@ describe('generator - client - prompts', () => {
       before(async () => {
         runResult = await helpers
           .runJHipster(GENERATOR_APP)
+          .withControl({ getWebappTranslation: () => 'translations' })
           .withAnswers({
             baseName: 'sampleMysql',
             packageName: 'com.mycompany.myapp',

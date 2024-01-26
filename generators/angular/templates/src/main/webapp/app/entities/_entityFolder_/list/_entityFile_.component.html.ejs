@@ -194,13 +194,15 @@ _%>
                                 <fa-icon icon="eye"></fa-icon>
                                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">__jhiTransformTranslate__('entity.action.view')</span>
                             </a>
-<%_ if (!readOnly) { _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
                                class="btn btn-primary btn-sm" data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
                                 <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">__jhiTransformTranslate__('entity.action.edit')</span>
                             </a>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
                                     class="btn btn-danger btn-sm"

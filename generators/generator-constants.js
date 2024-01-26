@@ -26,7 +26,7 @@ export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = '20.10.0';
+export const NODE_VERSION = '20.11.0';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
 
 /**
@@ -118,4 +118,5 @@ export const SERVER_MAIN_SRC_DIR = `${MAIN_DIR}java/`;
 export const SERVER_MAIN_RES_DIR = `${MAIN_DIR}resources/`;
 export const SERVER_TEST_SRC_DIR = `${TEST_DIR}java/`;
 export const SERVER_TEST_RES_DIR = `${TEST_DIR}resources/`;
-export const PRETTIER_EXTENSIONS = 'md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,vue,java';
+export const JS_PRETTIER_EXTENSIONS = 'cjs,mjs,js,cts,mts,ts';
+export const PRETTIER_EXTENSIONS = `md,json,yml,html,${JS_PRETTIER_EXTENSIONS},tsx,css,scss,vue,java`;

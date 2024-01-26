@@ -633,7 +633,7 @@ JSONEntity {
   "documentation": "The best entity",
   "dto": undefined,
   "embedded": undefined,
-  "entityTableName": "a",
+  "entityTableName": undefined,
   "fields": [
     {
       "fieldName": "enumField",

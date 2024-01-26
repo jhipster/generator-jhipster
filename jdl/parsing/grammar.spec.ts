@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { parseFromContent } from '../readers/jdl-reader.js';
 import { relationshipTypes, validations, unaryOptions, binaryOptions } from '../jhipster/index.js';
@@ -388,7 +388,7 @@ entity C
   "body": [],
   "documentation": null,
   "name": "A",
-  "tableName": "A",
+  "tableName": undefined,
 }
 `);
       });
@@ -487,7 +487,7 @@ entity A`);
   "body": [],
   "documentation": null,
   "name": "A",
-  "tableName": "A",
+  "tableName": undefined,
 }
 `);
       });
@@ -508,7 +508,7 @@ entity A`);
   "body": [],
   "documentation": "A comment",
   "name": "A",
-  "tableName": "A",
+  "tableName": undefined,
 }
 `);
         });
@@ -535,7 +535,7 @@ entity A`);
  * comment.
 ",
   "name": "A",
-  "tableName": "A",
+  "tableName": undefined,
 }
 `);
         });
@@ -567,7 +567,7 @@ entity A`);
   "body": [],
   "documentation": "A comment",
   "name": "A",
-  "tableName": "A",
+  "tableName": undefined,
 }
 `);
         });
@@ -622,7 +622,7 @@ entity A`);
   ],
   "documentation": null,
   "name": "A",
-  "tableName": "A",
+  "tableName": undefined,
 }
 `);
           });

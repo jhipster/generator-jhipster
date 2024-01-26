@@ -48,12 +48,13 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities();
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities().withMockedSource();
       });
 
       it('should match snapshot', () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
+          authority: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
         });
       });
@@ -73,6 +74,7 @@ describe(`generator - ${generator}`, () => {
       it('should match snapshot', () => {
         expect(runResult.generator.sharedData.getApplication()).toMatchSnapshot({
           user: expect.any(Object),
+          authority: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
         });

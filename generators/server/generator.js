@@ -54,6 +54,7 @@ import {
   GENERATOR_SPRING_DATA_MONGODB,
   GENERATOR_SPRING_DATA_NEO4J,
   GENERATOR_SERVER,
+  GENERATOR_SPRING_BOOT,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_WEBSOCKET,
   GENERATOR_SPRING_DATA_RELATIONAL,
@@ -98,7 +99,7 @@ import {
   APPLICATION_TYPE_MICROSERVICE,
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { createBase64Secret, createSecret, createNeedleCallback } from '../base/support/index.js';
+import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
 import command from './command.js';
 import { addJavaAnnotation } from '../java/support/index.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
@@ -258,6 +259,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
+      async composeBackendType() {
+        if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
+          await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
+        }
+      },
       async composing() {
         const {
           buildTool,
@@ -539,17 +545,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
-        entityConfig.entityTableName = entityConfig.entityTableName || hibernateSnakeCase(entityName);
-
         const databaseType =
           entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
-        const fixedEntityTableName = this._fixEntityTableName(entityConfig.entityTableName, databaseType, application.jhiTablePrefix);
-        if (fixedEntityTableName !== entityConfig.entityTableName) {
+        const entityTableName = entityConfig.entityTableName ?? hibernateSnakeCase(entityName);
+        const fixedEntityTableName = this._fixEntityTableName(entityTableName, databaseType, application.jhiTablePrefix);
+        if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
-        }
-        const validation = this._validateTableName(entityConfig.entityTableName, databaseType, entityConfig);
-        if (validation !== true) {
-          throw new Error(validation);
         }
 
         if (entityConfig.incrementalChangelog === undefined) {
@@ -636,8 +637,30 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asConfiguringEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
   }
 
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        mutateData(entity, {
+          entityPersistenceLayer: true,
+          entityRestLayer: true,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      checkForTableName({ application, entity }) {
+        const databaseType = entity.prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
+        const validation = this._validateTableName(entity.entityTableName, databaseType, entity);
+        if (validation !== true) {
+          throw new Error(validation);
+        }
+      },
       checkForCircularRelationships({ entity }) {
         const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
           if (relatedEntities.has(entity)) return true;

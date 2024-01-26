@@ -17,15 +17,17 @@
  * limitations under the License.
  */
 import * as _ from 'lodash-es';
-import { authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
+import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
-import { hibernateSnakeCase } from '../server/support/string.js';
+import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { STRING: TYPE_STRING } = CommonDBTypes;
+
+const authorityEntityName = 'Authority';
 
 // eslint-disable-next-line import/prefer-default-export
 export function createUserEntity(customUserData = {}, application) {
@@ -43,12 +45,18 @@ export function createUserEntity(customUserData = {}, application) {
   const user = {
     name: 'User',
     builtIn: true,
-    entityTableName: `${hibernateSnakeCase(application.jhiPrefix)}_user`,
+    entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
     dto: true,
     adminUserDto: `AdminUser${application.dtoSuffix ?? ''}`,
     builtInUser: true,
+    skipClient: application.clientFrameworkReact || application.clientFrameworkVue,
+    skipDbChangelog: true,
+    entityDomainLayer: false,
+    entityPersistenceLayer: false,
+    entityRestLayer: false,
+    entitySearchLayer: false,
     hasImageField: !application.databaseTypeNo && !application.databaseTypeCassandra,
     ...customUserData,
   };
@@ -75,6 +83,10 @@ export function createUserEntity(customUserData = {}, application) {
     {
       fieldName: 'login',
       fieldType: TYPE_STRING,
+      fieldValidateRules: [Validations.REQUIRED, Validations.MAX, Validations.PATTERN],
+      fieldValidateRulesMax: 50,
+      fieldValidateRulesPattern: LOGIN_REGEX_JS,
+      fieldValidateRulesPatternJava: LOGIN_REGEX,
       builtIn: true,
     },
     {
@@ -90,6 +102,57 @@ export function createUserEntity(customUserData = {}, application) {
   ]);
 
   return user;
+}
+
+export function createAuthorityEntity(customAuthorityData = {}, application) {
+  const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll();
+  if (entityDefinition) {
+    if (entityDefinition.relationships && entityDefinition.relationships.length > 0) {
+      this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
+    }
+    if (entityDefinition.fields && entityDefinition.fields.some(field => field.fieldName !== 'name')) {
+      this.log.warn(`Fields on the ${authorityEntityName} entity side (other than name) will be disregarded`);
+    }
+  }
+
+  // Create entity definition for built-in entity to make easier to deal with relationships.
+  const authorityEntity = {
+    name: authorityEntityName,
+    entitySuffix: '',
+    builtIn: true,
+    adminEntity: true,
+    entityTableName: `${application.jhiTablePrefix}_authority`,
+    relationships: [],
+    fields: entityDefinition ? entityDefinition.fields || [] : [],
+    builtInAuthority: true,
+    skipClient: !application.backendTypeSpringBoot || application.clientFrameworkReact || application.clientFrameworkVue,
+    searchEngine: 'no',
+    service: 'no',
+    dto: 'no',
+    entityR2dbcRepository: true,
+    skipDbChangelog: true,
+    entityDomainLayer: application.backendTypeSpringBoot,
+    entityPersistenceLayer: application.backendTypeSpringBoot,
+    entityRestLayer: application.backendTypeSpringBoot,
+    ...customAuthorityData,
+  };
+
+  loadRequiredConfigIntoEntity(authorityEntity, application);
+  // Fallback to defaults for test cases.
+  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults);
+
+  addOrExtendFields(authorityEntity.fields, [
+    {
+      fieldName: 'name',
+      fieldType: TYPE_STRING,
+      id: true,
+      fieldValidateRules: [Validations.MAXLENGTH, Validations.REQUIRED],
+      fieldValidateRulesMaxlength: 50,
+      builtIn: true,
+    },
+  ]);
+
+  return authorityEntity;
 }
 
 function addOrExtendFields(fields, fieldsToAdd) {

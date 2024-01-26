@@ -16,22 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import {
-  databaseTypes,
-  entityOptions,
-  reservedKeywords,
-  validations,
-  checkAndReturnRelationshipOnValue,
-} from '../../../jdl/jhipster/index.js';
-import { upperFirstCamelCase } from '../../base/support/string.js';
+import { databaseTypes, entityOptions, validations, checkAndReturnRelationshipOnValue } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { stringifyApplicationData } from './debug.js';
 import { mutateData } from '../../base/support/config.js';
 
-const { isReservedTableName } = reservedKeywords;
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
 const {
@@ -48,7 +40,6 @@ function _defineOnUpdateAndOnDelete(relationship, generator) {
 export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
   const entityName = entityWithConfig.name;
   const otherEntityName = relationship.otherEntityName;
-  const jhiTablePrefix = entityWithConfig.jhiTablePrefix || hibernateSnakeCase(entityWithConfig.jhiPrefix);
 
   if (!relationship.otherEntity) {
     throw new Error(
@@ -90,7 +81,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     const otherRelationship = relationship.otherRelationship;
     if (otherRelationship) {
       relationship.otherSideReferenceExists = true;
-      _.defaults(relationship, {
+      mutateData(relationship, {
         otherRelationship,
         otherEntityRelationshipName: otherRelationship.relationshipName,
         otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
@@ -126,46 +117,43 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
     relationship.relatedField.relatedByOtherEntity = true;
   } else {
-    relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
+    relationship.otherEntityFieldCapitalized = upperFirst(relationship.otherEntityField);
   }
 
   if (relationship.otherEntityRelationshipName !== undefined) {
-    _.defaults(relationship, {
+    mutateData(relationship, {
       otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
-      otherEntityRelationshipNameCapitalized: _.upperFirst(relationship.otherEntityRelationshipName),
+      otherEntityRelationshipNameCapitalized: upperFirst(relationship.otherEntityRelationshipName),
     });
-    _.defaults(relationship, {
+    mutateData(relationship, {
       otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
     });
   }
 
   const relationshipName = relationship.relationshipName;
-  _.defaults(relationship, {
+  mutateData(relationship, {
     relationshipNamePlural: pluralize(relationshipName),
-    relationshipFieldName: _.lowerFirst(relationshipName),
-    relationshipNameCapitalized: _.upperFirst(relationshipName),
-    relationshipNameHumanized: _.startCase(relationshipName),
+    relationshipFieldName: lowerFirst(relationshipName),
+    relationshipNameCapitalized: upperFirst(relationshipName),
+    relationshipNameHumanized: startCase(relationshipName),
     columnName: hibernateSnakeCase(relationshipName),
     columnNamePrefix: relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${hibernateSnakeCase(relationshipName)}_`,
     otherEntityNamePlural: pluralize(otherEntityName),
-    otherEntityNameCapitalized: _.upperFirst(otherEntityName),
-    otherEntityTableName:
-      otherEntityData.entityTableName ||
-      hibernateSnakeCase(otherEntityData.builtInUser ? `${jhiTablePrefix}_${otherEntityName}` : otherEntityName),
+    otherEntityNameCapitalized: upperFirst(otherEntityName),
   });
 
-  _.defaults(relationship, {
+  mutateData(relationship, {
     relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
     relationshipNameCapitalizedPlural:
       relationship.relationshipName.length > 1
         ? pluralize(relationship.relationshipNameCapitalized)
-        : _.upperFirst(pluralize(relationship.relationshipName)),
+        : upperFirst(pluralize(relationship.relationshipName)),
     otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
 
   mutateData(relationship, {
     propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
-    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? _.upperFirst(propertyName),
+    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? upperFirst(propertyName),
   });
 
   if (entityWithConfig.dto === MAPSTRUCT) {
@@ -176,57 +164,38 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     }
   }
 
-  if (entityWithConfig.prodDatabaseType) {
-    if (isReservedTableName(relationship.otherEntityTableName, entityWithConfig.prodDatabaseType) && jhiTablePrefix) {
-      const otherEntityTableName = relationship.otherEntityTableName;
-      relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-    }
-  }
-
-  if (relationship.otherEntityAngularName === undefined) {
-    if (otherEntityData.builtInUser) {
-      relationship.otherEntityAngularName = 'User';
-    } else {
-      const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
-      relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + upperFirstCamelCase(otherEntityAngularSuffix);
-    }
-  }
-
-  _.defaults(relationship, {
-    otherEntityStateName: _.kebabCase(relationship.otherEntityAngularName),
+  mutateData(relationship, {
+    otherEntityTableName: otherEntityData.entityTableName,
+    otherEntityAngularName: otherEntityData.entityAngularName,
+    otherEntityStateName: otherEntityData.entityStateName,
+    otherEntityFileName: otherEntityData.entityFileName,
+    otherEntityFolderName: otherEntityData.entityFileName,
     jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
     unique: relationship.id || (relationship.ownerSide && relationship.relationshipType === 'one-to-one'),
   });
 
-  if (!otherEntityData.builtInUser) {
-    _.defaults(relationship, {
-      otherEntityFileName: _.kebabCase(relationship.otherEntityAngularName),
-      otherEntityFolderName: _.kebabCase(relationship.otherEntityAngularName),
-    });
-
-    const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
-    if (entityWithConfig.skipUiGrouping || !otherEntityClientRootFolder) {
-      relationship.otherEntityClientRootFolder = '';
-    } else {
-      relationship.otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
-    }
-    if (otherEntityClientRootFolder) {
-      if (entityWithConfig.clientRootFolder === otherEntityClientRootFolder) {
-        relationship.otherEntityModulePath = relationship.otherEntityFolderName;
-      } else {
-        relationship.otherEntityModulePath = `${
-          entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-        }${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
-      }
-      relationship.otherEntityModelName = `${otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
-      relationship.otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
+  const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
+  if (entityWithConfig.skipUiGrouping || !otherEntityClientRootFolder) {
+    relationship.otherEntityClientRootFolder = '';
+  } else {
+    relationship.otherEntityClientRootFolder = `${otherEntityClientRootFolder}/`;
+  }
+  if (otherEntityClientRootFolder) {
+    if (entityWithConfig.clientRootFolder === otherEntityClientRootFolder) {
+      relationship.otherEntityModulePath = relationship.otherEntityFolderName;
     } else {
       relationship.otherEntityModulePath = `${
         entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
-      }${relationship.otherEntityFolderName}`;
-      relationship.otherEntityModelName = relationship.otherEntityFileName;
-      relationship.otherEntityPath = relationship.otherEntityFolderName;
+      }${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
     }
+    relationship.otherEntityModelName = `${otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
+    relationship.otherEntityPath = `${otherEntityClientRootFolder}/${relationship.otherEntityFolderName}`;
+  } else {
+    relationship.otherEntityModulePath = `${
+      entityWithConfig.entityParentPathAddition ? `${entityWithConfig.entityParentPathAddition}/` : ''
+    }${relationship.otherEntityFolderName}`;
+    relationship.otherEntityModelName = relationship.otherEntityFileName;
+    relationship.otherEntityPath = relationship.otherEntityFolderName;
   }
 
   if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {

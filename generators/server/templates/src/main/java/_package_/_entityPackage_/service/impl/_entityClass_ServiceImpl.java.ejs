@@ -111,40 +111,42 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('/_global_partials_entity_/save_template', {viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, isPersisted: false}); -%>
+<%- include('/_global_partials_entity_/save_template', {saveNewEntityOperation: true, returnDirectly: true}); -%>
     }
+<%_ if (updatableEntity) { _%>
 
-<%_ if (!serviceImpl) { _%>
+  <%_ if (!serviceImpl) { _%>
     /**
      * Update a <%= entityInstance %>.
      *
      * @param <%= instanceName %> the entity to save.
      * @return the persisted entity.
     */
-<%_ } _%>
-<%_ if (serviceImpl) { _%>
+  <%_ } _%>
+  <%_ if (serviceImpl) { _%>
     @Override
-<%_ } _%>
+  <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> update(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to update <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('/_global_partials_entity_/update_template', {updatableEntity, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false, isPersisted: requiresPersistableImplementation}); -%>
+<%- include('/_global_partials_entity_/save_template', {saveNewEntityOperation: false, returnDirectly: true}); -%>
     }
 
-<%_ if (!serviceImpl) { _%>
+  <%_ if (!serviceImpl) { _%>
     /**
      * Partially update a <%= entityInstance %>.
      *
      * @param <%= instanceName %> the entity to update partially.
      * @return the persisted entity.
      */
-<%_ } _%>
-<%_ if (serviceImpl) { _%>
+  <%_ } _%>
+  <%_ if (serviceImpl) { _%>
     @Override
-<%_ } _%>
+  <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to partially update <%= entityClass %> : {}", <%= instanceName %>);
 <%- include('../../_partials_entity_/patch_template', {isService: true, viaService: false}); -%>
     }
+<%_ } _%>
 
 <%_ if (!serviceImpl) { _%>
     /**

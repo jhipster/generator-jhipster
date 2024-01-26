@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
 import SharedModule from 'app/shared/shared.module';
@@ -53,7 +53,7 @@ import { MetricsSystemComponent } from './blocks/metrics-system/metrics-system.c
 export default class MetricsComponent implements OnInit {
   metrics?: Metrics;
   threads?: Thread[];
-  updatingMetrics = true;
+  updatingMetrics = signal(true);
 
   private metricsService = inject(MetricsService);
   private changeDetector = inject(ChangeDetectorRef);
@@ -63,11 +63,11 @@ export default class MetricsComponent implements OnInit {
   }
 
   refresh(): void {
-    this.updatingMetrics = true;
+    this.updatingMetrics.set(true);
     combineLatest([this.metricsService.getMetrics(), this.metricsService.threadDump()]).subscribe(([metrics, threadDump]) => {
       this.metrics = metrics;
       this.threads = threadDump.threads;
-      this.updatingMetrics = false;
+      this.updatingMetrics.set(false);
       this.changeDetector.markForCheck();
     });
   }

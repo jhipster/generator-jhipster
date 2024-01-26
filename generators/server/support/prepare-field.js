@@ -21,7 +21,6 @@ import * as _ from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.js';
 import { getUXConstraintName } from './database.js';
-import { hibernateSnakeCase } from './string.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.js';
 
@@ -102,7 +101,7 @@ export default function prepareField(entityWithConfig, field, generator) {
 
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
-    const jhiFieldNamePrefix = hibernateSnakeCase(entityWithConfig.jhiPrefix);
+    const jhiFieldNamePrefix = entityWithConfig.jhiTablePrefix;
 
     if (isReservedTableName(fieldNameUnderscored, entityWithConfig.prodDatabaseType ?? entityWithConfig.databaseType)) {
       if (!jhiFieldNamePrefix) {

@@ -28,6 +28,9 @@
 export function hibernateSnakeCase(value: string): string {
   let res = '';
   if (value) {
+    if (value.length === 1) {
+      return value.toLowerCase();
+    }
     value = value.replace('.', '_');
     res = value[0];
     for (let i = 1, len = value.length - 1; i < len; i++) {

@@ -1,0 +1,55 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { fileURLToPath } from 'node:url'
+import { mergeConfig, defineConfig } from 'vitest/config';
+import viteConfig from './vite.config.mjs'
+
+export default mergeConfig(
+  viteConfig,
+  defineConfig({
+    resolve: {
+      alias: {
+        vue: 'vue',
+      },
+    },
+    test: {
+      globals: true,
+      environment: 'happy-dom', // happy-dom provides a better performance but doesn't have a default url.
+      setupFiles: [fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/test-setup.ts', import.meta.url))],
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+      alias: {
+  <%_ for (const remote of microfrontends) { _%>
+        '@<%- remote.lowercaseBaseName %>': fileURLToPath(new URL('./<%- clientTestDir %>spec/app/microfrontends/', import.meta.url)),
+  <%_ } _%>
+      },
+<%_ } _%>
+      reporters: ['default', 'vitest-sonar-reporter'],
+      outputFile: {
+        'vitest-sonar-reporter': fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-vitest.xml', import.meta.url)),
+      },
+      coverage: {
+        provider: 'v8',
+        statements: 85,
+        branches: 75,
+        lines: 85,
+        reportsDirectory: fileURLToPath(new URL('./target/vite-coverage', import.meta.url)),
+      },
+    },
+  }),
+);

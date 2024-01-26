@@ -35,6 +35,9 @@ exports[`generator - cypress jwt-cypressAudit(false)-angular-withAdminUi(false)-
   "clientRoot/src/test/javascript/cypress/e2e/administration/administration.cy.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/test/javascript/cypress/e2e/entity/authority.cy.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": {
     "stateCleared": "modified",
   },
@@ -364,6 +367,9 @@ exports[`generator - cypress session-cypressAudit(false)-angular-withAdminUi(fal
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/e2e/administration/administration.cy.ts": {
+    "stateCleared": "modified",
+  },
+  "src/test/javascript/cypress/e2e/entity/authority.cy.ts": {
     "stateCleared": "modified",
   },
   "src/test/javascript/cypress/e2e/entity/entity-a.cy.ts": {

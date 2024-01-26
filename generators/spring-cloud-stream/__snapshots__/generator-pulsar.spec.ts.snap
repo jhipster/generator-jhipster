@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-websocket(false)-skipUserManagement(false)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -8,19 +8,19 @@ exports[`generator - spring-cloud-stream gateway-jwt-gradle-enableTranslation(tr
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/broker/PulsarIT.java": {
+  "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/BrokerConfiguration.java": {
+  "src/test/java/com/mycompany/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedPulsar.java": {
+  "src/test/java/com/mycompany/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainer.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -72,7 +72,7 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(false)-maven-
 }
 `;
 
-exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-enableSwaggerCodegen:true-skipUserManagement(true)-eureka should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -80,19 +80,19 @@ exports[`generator - spring-cloud-stream microservice-jwt-reactive(true)-gradle-
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/broker/PulsarIT.java": {
+  "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/BrokerConfiguration.java": {
+  "src/test/java/com/mycompany/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedPulsar.java": {
+  "src/test/java/com/mycompany/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainer.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -121,7 +121,7 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(false)-mav
 }
 `;
 
-exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-consul should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-consul should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -129,19 +129,19 @@ exports[`generator - spring-cloud-stream microservice-oauth2-reactive(true)-grad
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/broker/PulsarIT.java": {
+  "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/BrokerConfiguration.java": {
+  "src/test/java/com/mycompany/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedPulsar.java": {
+  "src/test/java/com/mycompany/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainer.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -170,7 +170,7 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(false)-maven-enab
 }
 `;
 
-exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-skipUserManagement(true)-serviceDiscoveryType(no) should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -178,19 +178,19 @@ exports[`generator - spring-cloud-stream monolith-jwt-reactive(true)-gradle-enab
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/broker/PulsarIT.java": {
+  "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/BrokerConfiguration.java": {
+  "src/test/java/com/mycompany/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedPulsar.java": {
+  "src/test/java/com/mycompany/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainer.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -219,7 +219,7 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(false)-maven-e
 }
 `;
 
-exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen:true-eureka should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -227,19 +227,19 @@ exports[`generator - spring-cloud-stream monolith-oauth2-reactive(true)-gradle-e
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/broker/PulsarIT.java": {
+  "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/BrokerConfiguration.java": {
+  "src/test/java/com/mycompany/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedPulsar.java": {
+  "src/test/java/com/mycompany/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainer.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -268,7 +268,7 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(false)-maven-
 }
 `;
 
-exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-enableTranslation(true)-com.package-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul should match generated files snapshot 1`] = `
+exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-enableTranslation(true)-com.mycompany-fix--Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen:true-skipUserManagement(true)-consul should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -276,19 +276,19 @@ exports[`generator - spring-cloud-stream monolith-session-reactive(true)-gradle-
   "buildSrc/src/main/groovy/jhipster.pulsar-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/broker/PulsarIT.java": {
+  "src/test/java/com/mycompany/broker/PulsarIT.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/BrokerConfiguration.java": {
+  "src/test/java/com/mycompany/config/BrokerConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/EmbeddedPulsar.java": {
+  "src/test/java/com/mycompany/config/EmbeddedPulsar.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainer.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/package/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/com/mycompany/config/PulsarTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }

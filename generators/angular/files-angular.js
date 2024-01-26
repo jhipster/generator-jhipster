@@ -305,11 +305,6 @@ export const files = {
       templates: ['core/interceptor/auth.interceptor.ts'],
     },
     {
-      condition: generator => generator.generateBuiltInUserEntity,
-      ...clientApplicationTemplatesBlock(),
-      templates: ['entities/user/user.service.ts', 'entities/user/user.service.spec.ts', 'entities/user/user.model.ts'],
-    },
-    {
       condition: generator => generator.enableTranslation,
       ...clientApplicationTemplatesBlock(),
       templates: ['config/language.constants.ts', 'config/translation.config.ts'],

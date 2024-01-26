@@ -13,17 +13,17 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:16.1
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:23.0.3
+FROM quay.io/keycloak/keycloak:23.0.4
 LABEL ALIAS=keycloak
 
 FROM mysql:8.2.0
 
 FROM mariadb:11.2.2
 
-FROM mongo:7.0.4
+FROM mongo:7.0.5
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:7.2.3
+FROM couchbase/server:7.2.4
 LABEL ALIAS=couchbase
 
 FROM cassandra:4.1.3
@@ -31,14 +31,14 @@ FROM cassandra:4.1.3
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.15.0
+FROM neo4j:5.16.0
 
 FROM hazelcast/management-center:5.3.3
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.22-alpine
+FROM memcached:1.6.23-alpine
 
-FROM redis:7.2.3
+FROM redis:7.2.4
 
 FROM confluentinc/cp-kafka:7.5.3
 LABEL ALIAS=kafka
@@ -52,10 +52,10 @@ LABEL ALIAS=pulsar
 FROM sonarqube:10.3.0-community
 LABEL ALIAS=sonar
 
-FROM docker.io/bitnami/consul:1.17.1
+FROM docker.io/bitnami/consul:1.17.2
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v2.48.1
+FROM prom/prometheus:v2.49.1
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.26.0
@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:10.2.3
+FROM grafana/grafana:10.3.1
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

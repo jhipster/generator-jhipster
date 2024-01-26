@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { upperFirst } from 'lodash-es';
-import type { Storage } from 'yeoman-generator';
+import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
@@ -31,6 +31,12 @@ import { ClientSourceType } from '../client/types.js';
 import { I18nApplication } from '../languages/types.js';
 import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../base/support/config.js';
+import {
+  GENERATOR_BOOTSTRAP_APPLICATION,
+  GENERATOR_BOOTSTRAP_APPLICATION_BASE,
+  GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
+  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
+} from '../generator-list.js';
 
 const {
   LOADING,
@@ -132,6 +138,22 @@ export default class BaseApplicationGenerator<
       }
       delete this.options.applicationWithEntities;
     }
+  }
+
+  dependsOnBootstrapAplication(options?: ComposeOptions | undefined) {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options);
+  }
+
+  dependsOnBootstrapAplicationBase(options?: ComposeOptions | undefined) {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options);
+  }
+
+  dependsOnBootstrapAplicationServer(options?: ComposeOptions | undefined) {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
+  }
+
+  dependsOnBootstrapAplicationClient(options?: ComposeOptions | undefined) {
+    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options);
   }
 
   /**

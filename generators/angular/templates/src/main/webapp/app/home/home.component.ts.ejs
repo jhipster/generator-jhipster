@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+import { Component, inject, signal, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
 import {
 <%_ if (!authenticationTypeOauth2) { _%>
   Router,
@@ -43,7 +43,7 @@ import { Account } from 'app/core/auth/account.model';
   imports: [SharedModule, RouterModule],
 })
 export default class HomeComponent implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
-  account: Account | null = null;
+  account = signal<Account | null>(null);
 <%_ if (!authenticationTypeOauth2) { _%>
 
   private readonly destroy$ = new Subject<void>();
@@ -58,12 +58,12 @@ export default class HomeComponent implements OnInit<% if (!authenticationTypeOa
 
   ngOnInit(): void {
 <%_ if (authenticationTypeOauth2) { _%>
-    this.accountService.identity().subscribe(account => (this.account = account));
+    this.accountService.identity().subscribe(account => (this.account.set(account)));
 <%_ } else { _%>
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(account => (this.account = account));
+      .subscribe(account => (this.account.set(account)));
 <%_ } _%>
   }
 

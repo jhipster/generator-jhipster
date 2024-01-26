@@ -33,7 +33,7 @@ import {
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.js';
-import { createUserEntity } from './utils.js';
+import { createAuthorityEntity, createUserEntity } from './utils.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
@@ -227,10 +227,24 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'User');
-          const customUserData = customUser ? customUser.entityStorage.getAll() : {};
-          const user = createUserEntity.call(this, customUserData, application);
+          const customUserData: any = customUser?.entityStorage.getAll() ?? {};
+          const user = createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application);
           this.sharedData.setEntity('User', user);
-          (application as any).user = user;
+          application.user = user;
+        }
+      },
+      loadAuthority({ application, entitiesToLoad }) {
+        if (application.generateBuiltInAuthorityEntity) {
+          const authority = 'Authority';
+          if (this.sharedData.hasEntity(authority)) {
+            throw new Error(`Fail to bootstrap '${authority}', already exists.`);
+          }
+
+          const customEntity = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === authority);
+          const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
+          const authorityEntity = createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application);
+          this.sharedData.setEntity(authority, authorityEntity);
+          application.authority = authorityEntity;
         }
       },
       loadingEntities({ application, entitiesToLoad }) {

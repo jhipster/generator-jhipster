@@ -86,6 +86,7 @@ describe('<%= entityAngularName %> Form Service', () => {
         expect(<%= entityInstance %>).toMatchObject(sampleWithRequiredData);
       });
     });
+<%_ if (primaryKey.autoGenerate) { _%>
 
     describe('resetForm', () => {
       it('passing I<%= entityAngularName %> should not enable <%= primaryKey.name %> FormControl', () => {
@@ -106,5 +107,6 @@ describe('<%= entityAngularName %> Form Service', () => {
         expect(formGroup.controls.<%= primaryKey.name %>.disabled).toBe(true);
       });
     });
+<%_ } _%>
   });
 });

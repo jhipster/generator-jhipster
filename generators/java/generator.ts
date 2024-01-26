@@ -22,7 +22,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
-import { packageInfoTransform, generatedAnnotationTransform, checkJava } from './support/index.js';
+import { packageInfoTransform, generatedAnnotationTransform, checkJava, isReservedJavaKeyword } from './support/index.js';
 import { JavaApplication } from './types.js';
 import { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.js';
 import { GenericSourceTypeDefinition } from '../base/tasks.js';
@@ -31,6 +31,7 @@ import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
 import { matchMainJavaFiles } from './support/package-info-transform.js';
 import { entityServerFiles, enumFiles } from './entity-files.js';
 import { getEnumInfo } from '../base-application/support/index.js';
+import { mutateData } from '../base/support/index.js';
 
 export type ApplicationDefinition = GenericApplicationDefinition<JavaApplication>;
 export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition>;
@@ -68,6 +69,36 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      checkConfig() {
+        const { packageName } = this.jhipsterConfigWithDefaults;
+        const reservedKeywork = packageName.split('.').find(isReservedJavaKeyword);
+        if (reservedKeywork) {
+          throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        mutateData(entity, {
+          entityDomainLayer: true,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get default() {
@@ -133,7 +164,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
         if (!this.generateEntities) return;
 
         const { useJakartaValidation, useJacksonIdentityInfo } = this;
-        for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtIn)) {
+        for (const entity of entities.filter(entity => !entity.skipServer)) {
           await this.writeFiles({
             sections: entityServerFiles,
             context: { ...application, ...entity, useJakartaValidation, useJacksonIdentityInfo },

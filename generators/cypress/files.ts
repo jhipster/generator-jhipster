@@ -103,7 +103,6 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CommonClientServer
 export const cypressEntityFiles: WriteFileSection<CypressGenerator, CypressApplication & Entity> = {
   testsCypress: [
     {
-      condition: ctx => !ctx.builtIn && !ctx.embedded,
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: ctx => `${ctx.cypressDir}e2e/entity/${ctx.entityFileName}.cy.ts`,
       templates: ['e2e/entity/_entity_.cy.ts'],

@@ -30,8 +30,8 @@ export const vueFiles = {
         'tsconfig.vitest.json',
         '.postcssrc.js',
         '.eslintrc.cjs',
-        'vite.config.ts',
-        'vitest.config.ts',
+        'vite.config.mts',
+        'vitest.config.mts',
       ],
     }),
   ],
@@ -302,7 +302,7 @@ export async function writeFiles({ application }) {
 }
 
 export async function writeEntitiesFiles({ application, entities }) {
-  entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
+  entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,
     context: {

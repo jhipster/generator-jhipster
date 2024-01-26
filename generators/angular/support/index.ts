@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './path-utils.js';
 export * from './needles.js';
+export * from './path-utils.js';
+export * from './reserved-keywords.js';
 export * from './translate-angular.js';
 export { default as translateAngularFilesTransform } from './translate-angular.js';
 export { default as updateLanguagesTask } from './update-languages.js';

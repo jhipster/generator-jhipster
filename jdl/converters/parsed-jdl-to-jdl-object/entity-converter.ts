@@ -36,7 +36,7 @@ export function convertEntities(parsedEntities, jdlFieldGetterFunction): JDLEnti
   return parsedEntities.map(parsedEntity => {
     const jdlEntity = new JDLEntity({
       name: parsedEntity.name,
-      tableName: parsedEntity.tableName || parsedEntity.name,
+      tableName: parsedEntity.tableName,
       comment: formatComment(parsedEntity.documentation),
       annotations: Object.fromEntries(
         parsedEntity.annotations?.map(annotation => [

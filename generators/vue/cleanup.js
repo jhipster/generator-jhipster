@@ -102,4 +102,8 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile('webpack/webpack.dev.js');
     this.removeFile('webpack/webpack.prod.js');
   }
+  if (this.isJhipsterVersionLessThan('8.1.1')) {
+    this.removeFile('vite.config.ts');
+    this.removeFile('vitest.config.ts');
+  }
 }

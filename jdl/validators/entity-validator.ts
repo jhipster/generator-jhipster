@@ -24,7 +24,7 @@ const { isReservedClassName } = reservedKeywords;
 
 export default class EntityValidator extends Validator {
   constructor() {
-    super('entity', ['name', 'tableName']);
+    super('entity', ['name']);
   }
 
   validate(jdlEntity, options: ValidatorOptions = {}) {

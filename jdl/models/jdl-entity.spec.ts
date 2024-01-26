@@ -48,8 +48,8 @@ describe('jdl - JDLEntity', () => {
         entity = new JDLEntity({ name: 'Abc' });
       });
 
-      it('should use the names as value', () => {
-        expect(entity.tableName).to.equal('Abc');
+      it('should not use any value', () => {
+        expect(entity.tableName).to.equal(undefined);
       });
     });
     describe('when passing arguments', () => {

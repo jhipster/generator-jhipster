@@ -21,7 +21,7 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
 import { basicHelpers as helpers } from '../../test/support/index.js';

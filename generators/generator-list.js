@@ -59,6 +59,7 @@ export const GENERATOR_MAVEN = 'maven';
 export const GENERATOR_PROJECT_NAME = 'project-name';
 export const GENERATOR_REACT = 'react';
 export const GENERATOR_SERVER = 'server';
+export const GENERATOR_SPRING_BOOT = 'spring-boot';
 export const GENERATOR_SPRING_CACHE = 'spring-cache';
 export const GENERATOR_SPRING_CLOUD_STREAM = 'spring-cloud-stream';
 export const GENERATOR_SPRING_DATA_CASSANDRA = 'spring-data-cassandra';

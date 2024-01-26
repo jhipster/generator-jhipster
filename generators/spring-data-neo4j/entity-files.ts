@@ -19,19 +19,31 @@
 import Generator from './generator.js';
 import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
 
+const domainFiles = [
+  {
+    condition: ctx => ctx.entityDomainLayer,
+    ...javaMainPackageTemplatesBlock('_entityPackage_'),
+    templates: ['domain/_persistClass_.java.jhi.spring_data_neo4j'],
+  },
+];
+
+const repositoryFiles = [
+  {
+    condition: ctx => ctx.entityPersistenceLayer,
+    ...javaMainPackageTemplatesBlock('_entityPackage_'),
+    templates: ['repository/_entityClass_Repository.java'],
+  },
+];
+
 export const entityFiles = {
-  server: [
-    {
-      ...javaMainPackageTemplatesBlock('_entityPackage_'),
-      templates: ['repository/_entityClass_Repository.java', 'domain/_persistClass_.java.jhi.spring_data_neo4j'],
-    },
-  ],
+  domainFiles,
+  repositoryFiles,
 };
 
 export function cleanupEntitiesTask() {}
 
 export default async function writeEntitiesTask(this: Generator, { application, entities }) {
-  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+  for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entityFiles,
       context: { ...application, ...entity },

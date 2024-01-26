@@ -35,14 +35,14 @@ import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } fro
 import {
   loadRequiredConfigDerivedProperties,
   prepareEntity as prepareEntityServerForTemplates,
-  getPomVersionProperties,
-  getGradleLibsVersionsProperties,
   addEntitiesOtherRelationships,
   hibernateSnakeCase,
   loadServerConfig,
   loadDerivedServerConfig,
   prepareRelationship,
 } from '../server/support/index.js';
+import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
+import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.js';
 import { GRADLE_VERSION } from '../gradle/constants.js';
@@ -149,7 +149,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         for (const { entityName } of entitiesToLoad) {
           const entity = this.sharedData.getEntity(entityName);
           loadRequiredConfigIntoEntity.call(this, entity, application);
-          loadRequiredConfigDerivedProperties(entity);
         }
       },
       requiredOtherSideRelationships() {
@@ -166,6 +165,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         prepareEntityServerForTemplates(entity);
+        loadRequiredConfigDerivedProperties(entity);
       },
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.

@@ -22,21 +22,23 @@ import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from './
 export const entityServerFiles: WriteFileSection = {
   model: [
     javaMainPackageTemplatesBlock({
+      condition: ctx => ctx.entityDomainLayer,
       templates: ['_entityPackage_/domain/_persistClass_.java.jhi'],
     }),
   ],
   modelTestFiles: [
     javaTestPackageTemplatesBlock({
+      condition: ctx => ctx.entityDomainLayer,
       templates: ['_entityPackage_/domain/_persistClass_Test.java', '_entityPackage_/domain/_persistClass_TestSamples.java'],
     }),
   ],
   server: [
     javaMainPackageTemplatesBlock({
-      condition: ctx => ctx.useJakartaValidation,
+      condition: ctx => ctx.useJakartaValidation && ctx.entityDomainLayer,
       templates: ['_entityPackage_/domain/_persistClass_.java.jhi.jakarta_validation'],
     }),
     javaMainPackageTemplatesBlock({
-      condition: ctx => ctx.useJacksonIdentityInfo,
+      condition: ctx => ctx.useJacksonIdentityInfo && ctx.entityDomainLayer,
       templates: ['_entityPackage_/domain/_persistClass_.java.jhi.jackson_identity_info'],
     }),
   ],

@@ -49,13 +49,15 @@ import { createRequestOption } from 'app/core/request/request-util';
 <%_ if (searchEngineAny) { _%>
 import { <%= searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
-import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%= entityAngularName %><% if (!readOnly) { %>, New<%= entityAngularName %><% } %> } from '../<%= entityFileName %>.model';
+<%_ if (!readOnly && updatableEntity) { _%>
 
 export type PartialUpdate<%= entityAngularName %> = Partial<I<%= entityAngularName %>> & Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>;
+<%_ } _%>
 
 <%_ const entityRestName = anyFieldIsDateDerived ? `Rest${entityAngularName}` : `I${entityAngularName}`; _%>
 <%_ if (anyFieldIsDateDerived) { _%>
-type RestOf<T extends I<%= entityAngularName %> | New<%= entityAngularName %>> =
+type RestOf<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %>> =
   Omit<T, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> &
   {
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
@@ -64,12 +66,16 @@ type RestOf<T extends I<%= entityAngularName %> | New<%= entityAngularName %>> =
   };
 
 export type <%= entityRestName %> = RestOf<I<%= entityAngularName %>>;
+  <%_ if (!readOnly) { _%>
 
 export type New<%= entityRestName %> = RestOf<New<%= entityAngularName %>>;
+  <%_ } _%>
+  <%_ if (!readOnly && updatableEntity) { _%>
 
 export type PartialUpdate<%= entityRestName %> = RestOf<PartialUpdate<%= entityAngularName %>>;
-
+  <%_ } _%>
 <%_ } _%>
+
 export type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
@@ -93,6 +99,8 @@ export class <%= entityAngularName %>Service {
                 { observe: 'response' })
         <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ if (anyFieldIsDateDerived) { _%>
@@ -151,7 +159,7 @@ export class <%= entityAngularName %>Service {
     add<%= entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>>(<%= entityInstance %>Collection: Type[], ...<%= entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
         const <%= entityInstancePlural %>: Type[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
         if (<%= entityInstancePlural %>.length > 0) {
-            const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item)!);
+            const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item));
             const <%= entityInstancePlural %>ToAdd = <%= entityInstancePlural %>.filter(<%= entityInstance %>Item => {
                 const <%= entityInstance %>Identifier = this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item);
                 if (<%= entityInstance %>CollectionIdentifiers.includes(<%= entityInstance %>Identifier)) {
@@ -166,7 +174,7 @@ export class <%= entityAngularName %>Service {
     }
 
 <%_ if (anyFieldIsDateDerived) { _%>
-    protected convertDateFromClient<T extends I<%= entityAngularName %> | New<%= entityAngularName %> | PartialUpdate<%= entityAngularName %>>(<%= entityInstance %>: T): RestOf<T> {
+    protected convertDateFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): RestOf<T> {
         return {
             ...<%= entityInstance %>,
     <%_ for (const field of fields) { _%>

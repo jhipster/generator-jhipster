@@ -236,7 +236,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (!application.webappEnumerationsDir || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
           return;
         }
-        for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+        for (const entity of entities.filter(entity => !entity.skipClient)) {
           await addEnumerationFiles.call(this, { application, entity });
         }
       },
