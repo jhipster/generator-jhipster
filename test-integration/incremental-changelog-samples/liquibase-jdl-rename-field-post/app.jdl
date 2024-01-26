@@ -170,7 +170,7 @@ relationship ManyToMany {
   Job{chore(title)} to Task{linkedJob(title)}
 }
 
-dto BankAccount, Employee, Department, Location, Country, Region, SilverBadge, GoldenBadge, Identifier with mapstruct
+dto * with mapstruct
 
 angularSuffix BankAccount with mySuffix
 filter BankAccount, Employee
