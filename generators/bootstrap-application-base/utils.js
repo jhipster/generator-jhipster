@@ -129,6 +129,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     searchEngine: 'no',
     service: 'no',
     dto: 'no',
+    entityR2dbcRepository: true,
     skipDbChangelog: true,
     entityDomainLayer: application.backendTypeSpringBoot,
     entityPersistenceLayer: application.backendTypeSpringBoot,

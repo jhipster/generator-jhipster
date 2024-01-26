@@ -69,7 +69,7 @@ const sqlFiles = {
       ],
     },
     {
-      condition: generator => generator.reactive && !generator.embedded && generator.entityPersistenceLayer,
+      condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer && !ctx.entityR2dbcRepository,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: [
         'repository/_entityClass_Repository_reactive.java',
@@ -77,6 +77,11 @@ const sqlFiles = {
         'repository/_entityClass_SqlHelper_reactive.java',
         'repository/rowmapper/_entityClass_RowMapper_reactive.java',
       ],
+    },
+    {
+      condition: ctx => ctx.reactive && !ctx.embedded && ctx.entityPersistenceLayer && ctx.entityR2dbcRepository,
+      ...javaMainPackageTemplatesBlock('_entityPackage_'),
+      templates: ['repository/_entityClass_Repository_r2dbc.java'],
     },
   ],
 };
