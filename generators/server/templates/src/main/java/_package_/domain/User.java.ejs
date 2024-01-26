@@ -392,7 +392,6 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
         <%_ }
   } _%>
-    @BatchSize(size = 20)
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     @Transient
