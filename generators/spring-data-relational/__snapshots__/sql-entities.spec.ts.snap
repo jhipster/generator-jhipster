@@ -86,6 +86,9 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/repository/AnotherSimpleSqlHelper.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -815,6 +818,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
@@ -1555,6 +1561,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/AnotherSimpleRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/repository/MicroserviceRepository.java": {
