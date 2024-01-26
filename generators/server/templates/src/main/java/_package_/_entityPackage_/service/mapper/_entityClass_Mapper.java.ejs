@@ -22,7 +22,7 @@ package <%= entityAbsolutePackage %>.service.mapper;
   const getOriginalField = field => field.originalField || field;
   const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
   const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
-  const dtoRelationships = restProperties.filter(property => property.relationshipName && !relationship.otherEntity.embedded);
+  const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
   let otherEntitiesFields = otherEntities
     .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
     .map(otherEntity =>
