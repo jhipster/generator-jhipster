@@ -321,6 +321,25 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.preparingEachEntityRelationship;
   }
 
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      checkForCircularRelationships({ entity }) {
+        const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
+          if (relatedEntities.has(entity)) return true;
+          relatedEntities.add(entity);
+          return entity.relationships
+            ?.filter(rel => rel.relationshipRequired || rel.id)
+            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set([...relatedEntities])));
+        };
+        entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.asPostPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.postPreparingEachEntity));
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       task({ application }) {

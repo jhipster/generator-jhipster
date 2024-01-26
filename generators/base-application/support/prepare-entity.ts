@@ -680,6 +680,12 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
         .map(relationship => relationship.reference)
         .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
     ];
+    entity.restProperties = [
+      ...entity.fields,
+      ...entity.relationships.filter(
+        relationship => relationship.persistableRelationship || relationship.relationshipEagerLoad || relationship.otherEntity.embedded,
+      ),
+    ];
     entity.otherReferences = entity.otherRelationships.map(relationship => relationship.reference);
   }
 

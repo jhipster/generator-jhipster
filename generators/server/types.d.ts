@@ -15,6 +15,7 @@ export type SpringEntity = {
   entityRestLayer?: boolean;
   entitySpringPreAuthorize?: string;
   entitySpringReadPreAuthorize?: string;
+  skipJunitTests?: string;
 };
 
 export type SpringBootSourceType = GradleSourceType &

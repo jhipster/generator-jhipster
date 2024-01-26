@@ -51,7 +51,7 @@ public class <%= user.dtoClass %> implements Serializable {
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        this.<%= field.fieldName %> = user.get<%= this.javaBeanCase(field.fieldName) %>();
+        this.<%= field.fieldName %> = user.get<%= field.propertyJavaBeanName %>();
   <%_ } _%>
     }
 
@@ -73,10 +73,10 @@ public class <%= user.dtoClass %> implements Serializable {
     }
 
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    public String get<%= this.javaBeanCase(field.fieldName) %>() {
+    public String get<%= field.propertyJavaBeanName %>() {
         return <%= field.fieldName %>;
     }
-    public void set<%= this.javaBeanCase(field.fieldName) %>(String <%= field.fieldName %>) {
+    public void set<%= field.propertyJavaBeanName %>(String <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
 <%_ } _%>
