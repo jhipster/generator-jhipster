@@ -89,12 +89,6 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AuthorityRepositoryInternalImpl.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AuthoritySqlHelper.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/SimpleRepository.java": {
     "stateCleared": "modified",
   },
@@ -111,9 +105,6 @@ exports[`generator - sql - entities gateway-jwt-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/AnotherSimpleRowMapper.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/rowmapper/AuthorityRowMapper.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/rowmapper/SimpleRowMapper.java": {
