@@ -51,6 +51,7 @@ type Entity = Required<BaseEntity> &
     adminEntity?: boolean;
     entityAuthority?: string;
     entityReadAuthority?: string;
+    hasCyclicRequiredRelationship?: boolean;
 
     entityNameCapitalized: string;
     entityClass: string;
@@ -124,6 +125,8 @@ type Entity = Required<BaseEntity> &
      * Any field has image or any contentType
      */
     anyFieldHasFileBasedContentType: boolean;
+
+    dtoMapstruct: boolean;
   };
 
 export default Entity;

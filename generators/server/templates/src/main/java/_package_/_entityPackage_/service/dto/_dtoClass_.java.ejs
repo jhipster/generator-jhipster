@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.service.dto;
+package <%- entityAbsolutePackage %>.service.dto;
 
 import java.util.Objects;
 <%_ if (entityApiDescription || importApiModelProperty) { _%>
@@ -44,7 +44,7 @@ import java.math.BigDecimal;
 <%_ if (anyFieldIsBlobDerived && databaseTypeCassandra) { _%>
 import java.nio.ByteBuffer;
 <%_ } _%>
-<%_ if (dtoReferences.some(reference => reference.collection)) { _%>
+<%_ if (restProperties.some(property => property.collection)) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
@@ -55,104 +55,81 @@ import java.util.UUID;
 import jakarta.persistence.Lob;
 <%_ } _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
-import <%= entityAbsolutePackage %>.domain.enumeration.<%= element %>;
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- element %>;
 <%_ }); _%>
 
 <%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityPackage !== entityPackage)) { _%>
-import <%= `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoClass}` %>;
+import <%- `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoClass}` %>;
 <%_ } _%>
 
 /**
- * A DTO for the {@link <%= entityAbsolutePackage %>.domain.<%= persistClass %>} entity.
+ * A DTO for the {@link <%- entityAbsolutePackage %>.domain.<%- persistClass %>} entity.
  */
 <%_ if (entityApiDescription) { _%>
 @Schema(description = "<%- entityApiDescription %>")
 <%_ } _%>
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class <%= dtoClass %> implements Serializable {
+public class <%- dtoClass %> implements Serializable {
 
-<%_ for (reference of dtoReferences) {
-  if (typeof reference.doc !== 'undefined') {
+<%_ for (property of restProperties) {
+  if (typeof property.propertyJavadoc) {
 _%>
-<%- reference.propertyJavadoc %>
+<%- property.propertyJavadoc %>
   <%_ }
-  const field = reference.field;
+  const field = property.fieldName ? property : undefined;
+  const relationship = property.relationshipName ? property : undefined;
   const required = field && field.fieldValidate && field.fieldValidationRequired;
   if (field) {
-    if (field.fieldValidate ) { _%>
+    if (property.fieldValidate ) { _%>
     <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
     <%_ }
   } _%>
-  <%_ if (reference.doc) { _%>
-    @Schema(description = "<%- reference.propertyApiDescription %>"<% if (required) { %>, required = true<% } %>)
+  <%_ if (property.propertyApiDescription) { _%>
+    @Schema(description = "<%- property.propertyApiDescription %>"<% if (required) { %>, required = true<% } %>)
   <%_ } _%>
-  <%_ if (field && field.fieldTypeBytes && databaseTypeSql) { _%>
+  <%_ if (property.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob
   <%_ } _%>
-  <%_ if (field && field.blobContentTypeText) { _%>
-    private String <%= reference.name %>;
-  <%_ } else if (reference.collection && reference.relationship) { _%>
-    private Set<<%= reference.relationship.otherEntity.dtoClass %>> <%= reference.name %> = new HashSet<>();
-  <%_ } else if (reference.relationship) { _%>
-    private <%= reference.relationship.otherEntity.dtoClass %> <%= reference.name %>;
-  <%_ } else { _%>
-    private <%= reference.type %> <%= reference.name %>;
-  <%_ } _%>
+    private <%- property.propertyDtoJavaType %> <%- property.propertyName %><% if (property.collection && relationship) { %> = new HashSet<>()<% } %>;
 
-  <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
-    private String <%= reference.name %>ContentType;
+  <%_ if (property.fieldWithContentType) { _%>
+    private String <%- property.propertyName %>ContentType;
   <%_ }
 }
 _%>
 
-<%_ for (reference of dtoReferences) { _%>
-  <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
-    public <%= this.buildJavaGetter(reference, 'String') %> {
-  <%_ } else if (reference.collection && reference.relationship) { _%>
-    public <%- this.buildJavaGetter(reference, `Set<${ reference.relationship.otherEntity.dtoClass }>` ) %> {
-  <%_ } else if (reference.relationship) { _%>
-    public <%= this.buildJavaGetter(reference, reference.relationship.otherEntity.dtoClass) %> {
-  <%_ } else { _%>
-    public <%= this.buildJavaGetter(reference) %> {
-  <%_ } _%>
-        return <%= reference.name %>;
+<%_ for (property of restProperties) { _%>
+    public <%- property.propertyDtoJavaType %> get<%- property.propertyJavaBeanName %>() {
+        return <%- property.propertyName %>;
     }
 
-  <%_ if (reference.field && reference.field.blobContentTypeText) { _%>
-    public void <%= this.buildJavaSetter(reference, `String ${reference.name}`) %> {
-  <%_ } else if (reference.collection && reference.relationship) { _%>
-    public void <%- this.buildJavaSetter(reference, `Set<${ reference.relationship.otherEntity.dtoClass }> ${reference.name}`) %> {
-  <%_ } else if (reference.relationship) { _%>
-    public void <%= this.buildJavaSetter(reference, `${ reference.relationship.otherEntity.dtoClass } ${reference.name}`) %> {
-  <%_ } else { _%>
-    public void <%= this.buildJavaSetter(reference) %> {
-  <%_ } _%>
-        this.<%= reference.name %> = <%= reference.name %>;
+    public void set<%- property.propertyJavaBeanName %>(<%- property.propertyDtoJavaType %> <%- property.propertyName %>) %> {
+        this.<%- property.propertyName %> = <%- property.propertyName %>;
     }
-  <%_ if (reference.field && reference.field.fieldWithContentType) { _%>
+  <%_ if (property.fieldWithContentType) { _%>
 
-    public String get<%= this.javaBeanCase(reference.name) %>ContentType() {
-        return <%= reference.name %>ContentType;
+    public String get<%- property.propertyJavaBeanName %>ContentType() {
+        return <%- property.propertyName %>ContentType;
     }
 
-    public void set<%= this.javaBeanCase(reference.name) %>ContentType(String <%= reference.name %>ContentType) {
-        this.<%= reference.name %>ContentType = <%= reference.name %>ContentType;
+    public void set<%- property.propertyJavaBeanName %>ContentType(String <%- property.propertyName %>ContentType) {
+        this.<%- property.propertyName %>ContentType = <%- property.propertyName %>ContentType;
     }
   <%_ } _%>
 <%_ } _%>
 
-<%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.fieldName)] : [] _%>
+<%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.propertyName)] : [] _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof <%= dtoClass %>)) {
+        if (!(o instanceof <%- dtoClass %>)) {
             return false;
         }
 
 <%_ if (!embedded) { _%>
-        <%= dtoClass %> <%= dtoInstance %> = (<%= dtoClass %>) o;
+        <%- dtoClass %> <%- dtoInstance %> = (<%- dtoClass %>) o;
         if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>){
             return false;
         }
@@ -174,10 +151,10 @@ _%>
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= dtoClass %>{" +
-<%_ for ([idx, reference] of dtoReferences.entries()) {
-  const isQuoted = reference.field && !reference.field.fieldTypeNumeric _%>
-            "<%= idx === 0 ? '' : ', ' %><%= reference.name %>=<% if (isQuoted) { %>'<% } %>" + <%= this.buildJavaGet(reference) %> <% if (isQuoted) { %>+ "'" <% } %>+
+        return "<%- dtoClass %>{" +
+<%_ for ([idx, property] of restProperties.entries()) {
+  const isQuoted = property.fieldName && !property.fieldTypeNumeric _%>
+            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + get<%- property.propertyJavaBeanName %>() <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>
             "}";
     }

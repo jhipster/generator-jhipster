@@ -32,17 +32,19 @@ fields.filter(field => !field.transient).forEach((field) => {
   }
 });
 effectiveRelationships.forEach((relationship) => {
-const relationshipType = relationship.otherEntity.primaryKey.type;
-const referenceFilterType = '' + relationshipType + 'Filter';
-// user has a String PK when using OAuth, so change relationships accordingly
-let oauthAwareReferenceFilterType = referenceFilterType;
-if (relationship.otherEntityUser && authenticationTypeOauth2) {
-  oauthAwareReferenceFilterType = 'StringFilter';
-}
-filterVariables.push({ filterType : oauthAwareReferenceFilterType,
-  name: relationship.relationshipFieldName + 'Id',
-  type: relationshipType,
-  fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
+  const relationshipType = relationship.otherEntity.primaryKey.type;
+  const referenceFilterType = '' + relationshipType + 'Filter';
+  // user has a String PK when using OAuth, so change relationships accordingly
+  let oauthAwareReferenceFilterType = referenceFilterType;
+  if (relationship.otherEntityUser && authenticationTypeOauth2) {
+    oauthAwareReferenceFilterType = 'StringFilter';
+  }
+  filterVariables.push({
+    filterType : oauthAwareReferenceFilterType,
+    name: relationship.relationshipFieldName + 'Id',
+    type: relationshipType,
+    fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id',
+  });
 });
 _%>
 /**

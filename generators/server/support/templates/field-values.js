@@ -23,9 +23,8 @@ const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;
 const { SQL } = databaseTypes;
 
 /**
- * @private
+ * Returns the java value generator for the given primaryKey type
  */
-// eslint-disable-next-line import/prefer-default-export
 export const getJavaValueGeneratorForType = (type) => {
   if (type === STRING) {
     return 'UUID.randomUUID().toString()';
@@ -48,7 +47,7 @@ export const getJavaValueGeneratorForType = (type) => {
  *
  * @param {string} primaryKey - the primary key type
  * @param {string} databaseType - the database type
- * @param {string} defaultValue - default value
+ * @param {number} defaultValue - default value
  * @returns {string} java primary key value
  */
 export const getPrimaryKeyValue = (primaryKey, databaseType, defaultValue = 1) => {

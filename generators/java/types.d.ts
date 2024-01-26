@@ -1,6 +1,8 @@
 import { BaseApplication } from '../base-application/types.js';
 
 export type JavaApplication = BaseApplication & {
+  javaVersion: string;
+
   packageName: string;
   packageFolder: string;
 

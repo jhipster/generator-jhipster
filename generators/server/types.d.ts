@@ -15,6 +15,7 @@ export type SpringEntity = {
   entityRestLayer?: boolean;
   entitySpringPreAuthorize?: string;
   entitySpringReadPreAuthorize?: string;
+  skipJunitTests?: string;
 };
 
 export type SpringBootSourceType = GradleSourceType &
@@ -22,6 +23,7 @@ export type SpringBootSourceType = GradleSourceType &
   SpringCacheSourceType &
   LiquibaseSourceType & {
     addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
+    addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
     addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
     addLogbackTestLog?({ name, level }: { name: string; level: string }): void;
     addIntegrationTestAnnotation?({ package, annotation }: { package?: string; annotation: string }): void;
@@ -86,8 +88,10 @@ export type SpringBootApplication = JavaApplication &
   SearchEngine &
   DatabaseTypeApplication &
   MessageBrokerApplicationType & {
-    javaVersion: string;
+    jhipsterDependenciesVersion: string;
     dockerContainers: Record<string, string>;
+
+    addSpringMilestoneRepository: boolean;
 
     enableSwaggerCodegen: boolean;
     embeddableLaunchScript: boolean;
