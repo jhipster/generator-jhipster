@@ -57,6 +57,14 @@
       "types": "./dist/types/generators/*/support/index.d.ts",
       "default": "./dist/generators/*/support/index.js"
     },
+    "./generators/*/generators/*": {
+      "types": "./dist/types/generators/*/generators/*/types-export.d.ts",
+      "default": "./dist/generators/*/generators/*/index.js"
+    },
+    "./generators/*/generators/*/support": {
+      "types": "./dist/types/generators/*/generators/*/support/index.d.ts",
+      "default": "./dist/generators/*/generators/*/support/index.js"
+    },
     "./jdl": {
       "types": "./dist/types/jdl/index.d.ts",
       "default": "./dist/jdl/index.js"
@@ -103,7 +111,7 @@
     "watch": "concurrently \"tsc --watch\" \"node ./watch.mjs\""
   },
   "dependencies": {
-    "@faker-js/faker": "8.3.1",
+    "@faker-js/faker": "8.4.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
     "@types/lodash": "4.14.202",
@@ -114,7 +122,7 @@
     "@yeoman/namespace": "1.0.0",
     "@yeoman/transform": "1.2.0",
     "@yeoman/types": "1.1.2",
-    "axios": "1.6.5",
+    "axios": "1.6.7",
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "11.1.0",
@@ -155,7 +163,7 @@
     "run-async": "3.0.0",
     "semver": "7.5.4",
     "simple-git": "3.22.0",
-    "type-fest": "4.10.0",
+    "type-fest": "4.10.1",
     "uuid": "9.0.1",
     "winston": "3.11.0",
     "yaml": "2.3.4",
@@ -169,7 +177,7 @@
     "@types/glob": "npm:noist@1.0.0",
     "@types/minimatch": "npm:noist@1.0.0",
     "@types/mocha": "10.0.6",
-    "@types/node": "18.19.8",
+    "@types/node": "18.19.9",
     "@types/sinon-chai": "3.2.12",
     "chai": "4.4.1",
     "chokidar": "3.5.3",

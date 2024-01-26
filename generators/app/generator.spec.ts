@@ -48,7 +48,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities();
+        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities().withMockedSource();
       });
 
       it('should match snapshot', () => {

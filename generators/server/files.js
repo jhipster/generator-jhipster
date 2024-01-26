@@ -163,7 +163,6 @@ const userManagementFiles = {
         'service/EmailAlreadyUsedException.java',
         'service/InvalidPasswordException.java',
         'service/UsernameAlreadyUsedException.java',
-        'web/rest/UserResource.java',
         'web/rest/vm/KeyAndPasswordVM.java',
         'web/rest/errors/EmailAlreadyUsedException.java',
         'web/rest/errors/InvalidPasswordException.java',
@@ -538,12 +537,6 @@ export const baseServerFiles = {
     },
   ],
   serverJavaUserManagement: [
-    {
-      condition: generator => generator.generateBuiltInAuthorityEntity,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['domain/Authority.java', 'repository/AuthorityRepository.java'],
-    },
     {
       condition: generator =>
         generator.databaseTypeMongodb ||

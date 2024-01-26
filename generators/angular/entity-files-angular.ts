@@ -75,12 +75,7 @@ export const angularFiles = {
 
 export async function writeEntitiesFiles(this: CoreGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
   for (const entity of entities.filter(entity => !entity.skipClient)) {
-    if (!entity.builtIn) {
-      await this.writeFiles({
-        sections: angularFiles,
-        context: { ...application, ...entity },
-      });
-    } else if (entity.builtInUser) {
+    if (entity.builtInUser) {
       await this.writeFiles({
         sections: builtInFiles,
         context: {
@@ -90,13 +85,18 @@ export async function writeEntitiesFiles(this: CoreGenerator, { application, ent
           readOnly: true,
         },
       });
+    } else {
+      await this.writeFiles({
+        sections: angularFiles,
+        context: { ...application, ...entity },
+      });
     }
   }
 }
 
 export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
   const { source, application } = taskParam;
-  const entities = taskParam.entities.filter(entity => !entity.skipClient && !entity.builtIn && !entity.embedded);
+  const entities = taskParam.entities.filter(entity => !entity.skipClient && !entity.builtInUser && !entity.embedded);
   source.addEntitiesToClient({ application, entities });
 }
 

@@ -58,6 +58,12 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        source.addTestSpringFactory({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
+        });
+      },
       addDependencies({ application, source }) {
         const { reactive } = application;
         if (application.buildToolMaven) {

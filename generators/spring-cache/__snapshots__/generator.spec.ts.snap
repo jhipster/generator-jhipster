@@ -16,6 +16,12 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
 
 exports[`generator - spring-cache caffeine-gradle should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addGradleBuildSrcDependencyCatalogVersion": [
     {
       "name": "typesafe",
@@ -49,6 +55,12 @@ exports[`generator - spring-cache caffeine-maven should match files snapshot 1`]
 
 exports[`generator - spring-cache caffeine-maven should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addMavenDefinition": [
     {
       "dependencies": [
@@ -112,6 +124,12 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
 
 exports[`generator - spring-cache ehcache-gradle should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addGradlePlugin": [
     {
       "id": "jhipster.spring-cache-conventions",
@@ -133,6 +151,12 @@ exports[`generator - spring-cache ehcache-maven should match files snapshot 1`] 
 
 exports[`generator - spring-cache ehcache-maven should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addMavenDefinition": [
     {
       "dependencies": [
@@ -182,6 +206,12 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
 
 exports[`generator - spring-cache hazelcast-gradle should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addGradleBuildSrcDependencyCatalogVersion": [
     {
       "name": "hazelcast-spring",
@@ -223,6 +253,12 @@ exports[`generator - spring-cache hazelcast-maven should match files snapshot 1`
 
 exports[`generator - spring-cache hazelcast-maven should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addMavenDefinition": [
     {
       "dependencies": [
@@ -287,6 +323,12 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
 
 exports[`generator - spring-cache infinispan-gradle should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addGradlePlugin": [
     {
       "id": "jhipster.spring-cache-conventions",
@@ -311,6 +353,12 @@ exports[`generator - spring-cache infinispan-maven should match files snapshot 1
 
 exports[`generator - spring-cache infinispan-maven should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addMavenDefinition": [
     {
       "dependencies": [
@@ -367,6 +415,12 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
 
 exports[`generator - spring-cache memcached-gradle should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addGradlePlugin": [
     {
       "id": "jhipster.spring-cache-conventions",
@@ -388,6 +442,12 @@ exports[`generator - spring-cache memcached-maven should match files snapshot 1`
 
 exports[`generator - spring-cache memcached-maven should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addMavenDefinition": [
     {
       "dependencies": [
@@ -444,6 +504,12 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
 
 exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addGradlePlugin": [
     {
       "id": "jhipster.spring-cache-conventions",
@@ -480,6 +546,12 @@ exports[`generator - spring-cache redis-maven should match files snapshot 1`] = 
 
 exports[`generator - spring-cache redis-maven should match source calls 1`] = `
 {
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Authority",
+      "relationships": [],
+    },
+  ],
   "addMavenDefinition": [
     {
       "dependencies": [

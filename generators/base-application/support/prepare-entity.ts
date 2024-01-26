@@ -74,6 +74,9 @@ const BASE_TEMPLATE_DATA = {
   existingEnum: false,
   searchEngine: NO_SEARCH_ENGINE,
   microserviceName: undefined,
+  entityAuthority: undefined,
+  entityReadAuthority: undefined,
+  adminEntity: undefined,
 
   requiresPersistableImplementation: false,
   updatableEntity: undefined,
@@ -171,6 +174,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     entityInstance: lowerFirst(entityName),
     entityTableName: hibernateSnakeCase(entityName),
     entityNamePlural: pluralize(entityName),
+    entityAuthority: entityWithConfig.adminEntity ? 'ROLE_ADMIN' : undefined,
   });
 
   const dto = entityWithConfig.dto && entityWithConfig.dto !== NO_DTO;
@@ -675,6 +679,12 @@ export function preparePostEntitiesCommonDerivedProperties(entities) {
       ...entity.relationships
         .map(relationship => relationship.reference)
         .filter(reference => reference.owned || reference.relationship.otherEntity.embedded),
+    ];
+    entity.restProperties = [
+      ...entity.fields,
+      ...entity.relationships.filter(
+        relationship => relationship.persistableRelationship || relationship.relationshipEagerLoad || relationship.otherEntity.embedded,
+      ),
     ];
     entity.otherReferences = entity.otherRelationships.map(relationship => relationship.reference);
   }

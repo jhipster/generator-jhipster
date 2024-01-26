@@ -160,7 +160,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
       },
 
       async writeCypressEntityFiles({ application, entities }) {
-        for (const entity of entities) {
+        for (const entity of entities.filter(entity => !entity.skipClient && !entity.embedded && !entity.builtInUser)) {
           const context = { ...application, ...entity } as any;
           await this.writeFiles({
             sections: cypressEntityFiles,

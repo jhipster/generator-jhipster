@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export * from './build-specification-mapper.js';
 export * from './config.js';
 export * from './doc.js';
 export * from './database.js';

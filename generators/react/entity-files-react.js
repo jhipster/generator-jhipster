@@ -51,7 +51,7 @@ export const reactFiles = {
 };
 
 export async function writeEntitiesFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
     await this.writeFiles({
       sections: reactFiles,
       context: { ...application, ...entity },
@@ -60,7 +60,7 @@ export async function writeEntitiesFiles({ application, entities }) {
 }
 
 export async function postWriteEntitiesFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
     if (!entity.embedded) {
       const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
@@ -75,7 +75,7 @@ export async function postWriteEntitiesFiles({ application, entities }) {
 }
 
 export function cleanupEntitiesFiles({ application, entities }) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtInUser)) {
     const { entityFolderName, entityFileName } = entity;
 
     if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {

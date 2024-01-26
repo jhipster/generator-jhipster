@@ -22,6 +22,7 @@ import { GENERATOR_SPRING_DATA_ELASTICSEARCH, GENERATOR_BOOTSTRAP_APPLICATION } 
 import writeElasticsearchFilesTask from './files.js';
 import cleanupElasticsearchFilesTask from './cleanup.js';
 import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.js';
+import { mutateData } from '../base/support/index.js';
 
 export default class ElasticsearchGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -32,6 +33,20 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
     }
+  }
+
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        mutateData(entity, {
+          entitySearchLayer: true,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get writing() {
@@ -58,6 +73,12 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addTestSpringFactory({ source, application }) {
+        source.addTestSpringFactory({
+          key: 'org.springframework.test.context.ContextCustomizerFactory',
+          value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
+        });
+      },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
           source.addMavenProperty?.({

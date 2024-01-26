@@ -52,7 +52,7 @@ export function writeEntityFiles() {
   return {
     async writeEnumFiles({ entities, application }) {
       if (!application.enableTranslation || application.skipClient) return;
-      entities = entities.filter(entity => !entity.skipClient && !entity.builtIn);
+      entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
       const { clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
         entities
@@ -81,7 +81,7 @@ export function writeEntityFiles() {
 
     async writeClientFiles({ application, entities }) {
       if (application.skipClient) return;
-      const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtIn);
+      const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
 
       // Copy each
       const { clientSrcDir, frontendAppName } = application;

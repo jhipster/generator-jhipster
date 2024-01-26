@@ -445,7 +445,14 @@ export default class JHipsterBaseBlueprintGenerator<
    * @protected
    * Composes with blueprint generators, if any.
    */
-  protected async composeWithBlueprints(subGen: string, options?: ComposeOptions) {
+  protected async composeWithBlueprints(subGen?: string, options?: ComposeOptions) {
+    if (subGen === undefined) {
+      const { namespace } = this.options;
+      if (!namespace || !namespace.startsWith('jhipster:')) {
+        throw new Error(`Generator is not blueprintable ${namespace}`);
+      }
+      subGen = namespace.substring('jhipster:'.length);
+    }
     this.delegateToBlueprint = false;
 
     if (this.options.disableBlueprints) {

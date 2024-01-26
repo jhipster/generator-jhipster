@@ -236,6 +236,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
@@ -371,6 +374,12 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
     "stateCleared": "modified",
   },
@@ -414,6 +423,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {

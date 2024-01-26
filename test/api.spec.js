@@ -23,4 +23,8 @@ describe('public api', () => {
     // eslint-disable-next-line import/no-unresolved
     expect(await import('generator-jhipster/generators')).toMatchSnapshot();
   });
+
+  it('should import neasted sub-generators', async () => {
+    expect(await import('generator-jhipster/generators/spring-cloud-stream/generators/kafka')).toBeDefined();
+  });
 });

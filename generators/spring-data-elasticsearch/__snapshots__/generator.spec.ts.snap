@@ -167,9 +167,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/mycompany/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/repository/UserRepository.java": {
     "stateCleared": "modified",
   },
@@ -276,6 +273,9 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/PublicUserResource.java": {
@@ -410,6 +410,12 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
     "stateCleared": "modified",
   },
@@ -465,6 +471,9 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/rest/PublicUserResourceIT.java": {
@@ -3618,9 +3627,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/repository/PersistentTokenRepository.java": {
     "stateCleared": "modified",
   },
@@ -3736,6 +3742,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/AnotherSimpleResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/web/rest/AuthorityResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/web/rest/MicroserviceResource.java": {
@@ -3879,6 +3888,12 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/MicroserviceEntityTest.java": {
     "stateCleared": "modified",
   },
@@ -3919,6 +3934,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/AnotherSimpleResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/web/rest/AuthorityResourceIT.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/MicroserviceResourceIT.java": {

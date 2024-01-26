@@ -50,8 +50,8 @@ describe('<%= entityClass %> e2e test', () => {
 
   const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? '<%- adminEntity ? 'admin' : 'user' %>';
+  const password = Cypress.env('E2E_PASSWORD') ?? '<%- adminEntity ? 'admin' : 'user' %>';
   <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields.map(field => field.reference))) %>;
 
   let <%= entityInstance %>;

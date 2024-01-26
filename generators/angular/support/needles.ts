@@ -100,6 +100,7 @@ export function addItemToMenu({
             <span${enableTranslation ? ` ${jhiPrefix}Translate="${translationKey}"` : ''}>${name}</span>
           </a>
         </li>`;
+
   return createNeedleCallback({
     needle,
     contentToAdd,
@@ -130,22 +131,14 @@ export function addToEntitiesMenu({ application, entities }: { application: Base
   const { enableTranslation, jhiPrefix } = application;
   return joinCallbacks(
     ...entities.map(entity => {
-      const { entityPage, entityTranslationKeyMenu, entityClassHumanized } = entity;
-      const routerLink = `routerLink="/${entityPage}"`;
-
-      // prettier-ignore
-      const contentToAdd =`
-        <li>
-          <a class="dropdown-item" ${routerLink} routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${entityClassHumanized}</span>
-          </a>
-        </li>`;
-
-      return createNeedleCallback({
-        needle: 'jhipster-needle-add-entity-to-menu',
-        contentToAdd,
-        contentToCheck: routerLink,
+      return addItemToMenu({
+        needle: entity.adminEntity ? 'jhipster-needle-add-element-to-admin-menu' : 'jhipster-needle-add-entity-to-menu',
+        enableTranslation,
+        icon: 'asterisk',
+        route: entity.entityPage,
+        translationKey: `global.menu.entities.${entity.entityTranslationKeyMenu}`,
+        name: entity.entityClassHumanized,
+        jhiPrefix,
       });
     }),
   );

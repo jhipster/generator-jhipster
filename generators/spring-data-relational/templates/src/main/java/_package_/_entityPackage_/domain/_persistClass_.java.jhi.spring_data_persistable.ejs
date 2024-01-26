@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
-@JsonIgnoreProperties(value = { "new" })
+@JsonIgnoreProperties(value = { "new"<% if (primaryKey.name !== 'id') { %>, "id"<% } %> })
 <&_ } -&>
 
 <&_ if (fragment.additionalInterfacesSection) { -&>

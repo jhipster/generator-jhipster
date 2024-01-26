@@ -16,85 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
-import * as _ from 'lodash-es';
-import chalk from 'chalk';
-import { cleanupOldFiles } from './entity-cleanup.js';
-import { moveToJavaPackageSrcDir, javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from './support/index.js';
-import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock, moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.js';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
-const { MapperTypes, ServiceTypes } = entityOptions;
+const { MapperTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
-const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
-
-export const restFiles = {
-  restFiles: [
-    {
-      condition: generator => !generator.embedded,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['web/rest/_entityClass_Resource.java'],
-    },
-  ],
-  restTestFiles: [
-    {
-      condition: generator => !generator.embedded,
-      path: SERVER_TEST_SRC_DIR,
-      templates: [
-        {
-          file: '_package_/_entityPackage_/web/rest/_entityClass_ResourceIT.java',
-          options: {
-            context: {
-              _,
-              chalkRed: chalk.red,
-              fs,
-              SERVER_TEST_SRC_DIR,
-            },
-          },
-          renameTo: generator => `${generator.entityAbsoluteFolder}/web/rest/${generator.entityClass}ResourceIT.java`,
-        },
-      ],
-    },
-  ],
-};
-
-export const filteringFiles = {
-  filteringFiles: [
-    {
-      condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/criteria/_entityClass_Criteria.java', 'service/_entityClass_QueryService.java'],
-    },
-  ],
-};
-
-const filteringReactiveFiles = {
-  filteringReactiveFiles: [
-    {
-      condition: generator => generator.jpaMetamodelFiltering && generator.reactive,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('service/', 'domain/'),
-      templates: ['service/criteria/_entityClass_Criteria.java'],
-    },
-  ],
-};
-
-export const serviceFiles = {
-  serviceFiles: [
-    {
-      condition: generator => generator.service === SERVICE_IMPL && !generator.embedded,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/_entityClass_Service.java', 'service/impl/_entityClass_ServiceImpl.java'],
-    },
-    javaMainPackageTemplatesBlock({
-      condition: generator => generator.service === SERVICE_CLASS && !generator.embedded,
-      relativePath: '_entityPackage_/',
-      renameTo: (_data, file) => file.replace('service/impl', 'service').replace('Impl.java', '.java'),
-      templates: ['service/impl/_entityClass_ServiceImpl.java'],
-    }),
-  ],
-};
 
 export const dtoFiles = {
   baseDtoFiles: [
@@ -126,12 +53,14 @@ export const dtoFiles = {
 };
 
 const userFiles = {
-  userFiles: [
+  domain: [
     {
       ...javaMainPackageTemplatesBlock(),
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
       templates: ['domain/User.java'],
     },
+  ],
+  dto: [
     {
       ...javaMainPackageTemplatesBlock(),
       renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
@@ -145,53 +74,35 @@ const userFiles = {
     {
       condition: data => data.generateBuiltInUserEntity,
       ...javaMainPackageTemplatesBlock(),
-      templates: [
-        'service/UserService.java',
-        'service/mapper/UserMapper.java',
-        'repository/UserRepository.java',
-        'web/rest/PublicUserResource.java',
-      ],
+      templates: ['service/mapper/UserMapper.java'],
     },
     {
       condition: data => data.generateBuiltInUserEntity,
       ...javaTestPackageTemplatesBlock(),
-      templates: [
-        'service/UserServiceIT.java',
-        'service/mapper/UserMapperTest.java',
-        'web/rest/UserResourceIT.java',
-        'web/rest/PublicUserResourceIT.java',
-      ],
+      templates: ['service/mapper/UserMapperTest.java'],
     },
   ],
 };
 
 export const serverFiles = {
-  ...restFiles,
-  ...filteringFiles,
-  ...filteringReactiveFiles,
-  ...serviceFiles,
   ...dtoFiles,
 };
 
-export function writeFiles() {
+export function writeEntityFiles() {
   return {
-    cleanupOldServerFiles({ application, entities }) {
-      for (const entity of entities.filter(entity => !entity.skipServer)) {
-        cleanupOldFiles.call(this, { application, entity });
-      }
-    },
-
     async writeServerFiles({ application, entities }) {
+      const rootTemplatesPath = application.reactive ? ['reactive', '', '../../java/templates/'] : ['', '../../java/templates/'];
       for (const entity of entities.filter(entity => !entity.skipServer)) {
         if (entity.builtInUser) {
           await this.writeFiles({
             sections: userFiles,
+            rootTemplatesPath,
             context: { ...application, ...entity },
           });
-        } else if (!entity.builtIn) {
+        } else {
           await this.writeFiles({
             sections: serverFiles,
-            rootTemplatesPath: application.reactive ? ['reactive', '', '../../java/templates/'] : ['', '../../java/templates/'],
+            rootTemplatesPath,
             context: { ...application, ...entity },
           });
         }
