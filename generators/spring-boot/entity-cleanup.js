@@ -20,7 +20,7 @@
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  *
- * @param {import('../base')} this - reference to generator
+ * @param {import('../base/index.js')} this - reference to generator
  * @param {Object} application
  * @param {Object} entity
  */

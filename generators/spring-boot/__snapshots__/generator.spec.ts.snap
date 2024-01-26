@@ -5,12 +5,72 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/UserRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/UserService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthorityResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/UserResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthorityResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/PublicUserResourceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/UserResourceIT.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
 exports[`generator - spring-boot with oauth2 should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }

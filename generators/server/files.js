@@ -163,7 +163,6 @@ const userManagementFiles = {
         'service/EmailAlreadyUsedException.java',
         'service/InvalidPasswordException.java',
         'service/UsernameAlreadyUsedException.java',
-        'web/rest/UserResource.java',
         'web/rest/vm/KeyAndPasswordVM.java',
         'web/rest/errors/EmailAlreadyUsedException.java',
         'web/rest/errors/InvalidPasswordException.java',

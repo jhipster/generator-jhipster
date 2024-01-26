@@ -20,7 +20,7 @@ import os from 'node:os';
 import chalk from 'chalk';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
+  GENERATOR_JAVA,
   GENERATOR_SPRING_BOOT,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_CLOUD_STREAM,
@@ -35,7 +35,12 @@ import {
 import { springBootFiles } from './files.js';
 import cleanupTask from './cleanup.js';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
-import { addSpringFactory } from '../server/support/index.js';
+import {
+  addSpringFactory,
+  getJavaValueGeneratorForType,
+  getPrimaryKeyValue,
+  getSpecificationBuildForType,
+} from '../server/support/index.js';
 import { addJavaAnnotation } from '../java/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import {
@@ -47,6 +52,7 @@ import {
   searchEngineTypes,
   websocketTypes,
 } from '../../jdl/index.js';
+import { writeFiles as writeEntityFiles } from './entity-files.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -62,7 +68,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_JAVA);
     }
   }
 
@@ -213,6 +219,37 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareEntity({ field }) {
+        field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareEntity({ entity }) {
+        const { primaryKey } = entity;
+        if (primaryKey) {
+          primaryKey.javaBuildSpecification = getSpecificationBuildForType(primaryKey.type);
+          primaryKey.javaValueGenerator = getJavaValueGeneratorForType(primaryKey.type);
+          for (const field of primaryKey.fields) {
+            field.fieldJavaValueGenerator = getJavaValueGeneratorForType(field.fieldType);
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
@@ -227,6 +264,16 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      ...writeEntityFiles(),
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting() {
@@ -282,5 +329,18 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.END]() {
     return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
+  }
+
+  /**
+   * @private
+   * Returns the primary key value based on the primary key type, DB and default value
+   *
+   * @param {string} primaryKey - the primary key type
+   * @param {string} databaseType - the database type
+   * @param {string} defaultValue - default value
+   * @returns {string} java primary key value
+   */
+  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
+    return getPrimaryKeyValue(primaryKey, databaseType, defaultValue);
   }
 }
