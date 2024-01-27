@@ -137,7 +137,7 @@ function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
     data = faker.number.float({
       max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : 32767,
       min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : 0,
-      precision: 0.01,
+      multipleOf: 0.01,
     });
   } else if ([INTEGER, LONG, DURATION].includes(field.fieldType)) {
     data = faker.number.int({
