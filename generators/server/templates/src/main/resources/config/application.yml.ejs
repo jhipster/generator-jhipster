@@ -181,6 +181,8 @@ spring:
     consul:
       discovery:
         healthCheckPath: /management/health
+        heartbeat:
+          enabled: true
         instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
         service-name: <%= baseName.toLowerCase() %>
       config:
