@@ -113,6 +113,7 @@ spring:
     consul:
       discovery:
         prefer-ip-address: true
+        # ip-address: host.docker.internal # Uncomment this if service check fails when running apps without Docker
       host: localhost
       port: 8500
 <%_ } _%>
