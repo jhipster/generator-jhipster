@@ -23,7 +23,6 @@ import { SpringBootApplication, SpringBootSourceType } from './types.js';
 
 export { default } from './generator.js';
 export { default as command } from './command.js';
-export { serverFiles as files } from './files.js';
 
 // TODO move to ./generator.mts
 export type ApplicationDefinition = GenericApplicationDefinition<SpringBootApplication>;

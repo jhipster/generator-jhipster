@@ -22,7 +22,11 @@ import chalk from 'chalk';
 import { cleanupOldFiles } from './entity-cleanup.js';
 import { moveToJavaPackageSrcDir, javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../java/support/index.js';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { entityOptions } from '../../jdl/jhipster/index.js';
+import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.js';
+
+const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
+const { MapperTypes } = entityOptions;
+const { MAPSTRUCT } = MapperTypes;
 
 const { ServiceTypes } = entityOptions;
 const { SERVICE_CLASS, SERVICE_IMPL } = ServiceTypes;
@@ -94,7 +98,69 @@ export const serviceFiles = {
   ],
 };
 
+export const dtoFiles = {
+  baseDtoFiles: [
+    {
+      condition: generator => generator.dto === MAPSTRUCT,
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/mapper/EntityMapper.java'],
+    },
+  ],
+  dtoFiles: [
+    {
+      condition: generator => generator.dto === MAPSTRUCT,
+      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/dto/_dtoClass_.java', 'service/mapper/_entityClass_Mapper.java'],
+    },
+  ],
+  dtoTestFiles: [
+    {
+      condition: generator => generator.dto === MAPSTRUCT,
+      ...javaTestPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/dto/_dtoClass_Test.java'],
+    },
+    {
+      condition: generator => generator.dto === MAPSTRUCT && [SQL, MONGODB, COUCHBASE, NEO4J].includes(generator.databaseType),
+      ...javaTestPackageTemplatesBlock('_entityPackage_/'),
+      templates: ['service/mapper/_entityClass_MapperTest.java'],
+    },
+  ],
+};
+
+const userDtoFiles = {
+  domain: [
+    {
+      ...javaMainPackageTemplatesBlock(),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
+      templates: ['domain/User.java'],
+    },
+  ],
+  dto: [
+    {
+      ...javaMainPackageTemplatesBlock(),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
+      templates: ['service/dto/UserDTO.java'],
+    },
+    {
+      ...javaMainPackageTemplatesBlock(),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user.adminUserDto}.java`),
+      templates: ['service/dto/AdminUserDTO.java'],
+    },
+    {
+      condition: data => data.generateBuiltInUserEntity,
+      ...javaMainPackageTemplatesBlock(),
+      templates: ['service/mapper/UserMapper.java'],
+    },
+    {
+      condition: data => data.generateBuiltInUserEntity,
+      ...javaTestPackageTemplatesBlock(),
+      templates: ['service/mapper/UserMapperTest.java'],
+    },
+  ],
+};
+
 const userFiles = {
+  ...userDtoFiles,
   userFiles: [
     {
       condition: data => data.generateUserManagement,
@@ -119,6 +185,7 @@ export const serverFiles = {
   ...filteringFiles,
   ...filteringReactiveFiles,
   ...serviceFiles,
+  ...dtoFiles,
 };
 
 export function writeFiles() {
@@ -130,7 +197,9 @@ export function writeFiles() {
     },
 
     async writeServerFiles({ application, entities }) {
-      const rootTemplatesPath = application.reactive ? ['reactive', '', '../../java/templates/'] : ['', '../../java/templates/'];
+      const rootTemplatesPath = application.reactive
+        ? ['reactive', '', '../../server/templates/', '../../java/templates/']
+        : ['', '../../server/templates/', '../../java/templates/'];
       for (const entity of entities.filter(entity => !entity.skipServer)) {
         if (entity.builtInUser) {
           await this.writeFiles({

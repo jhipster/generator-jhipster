@@ -26,7 +26,7 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.js';
 import Generator from './index.js';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.js';
-import { GENERATOR_SERVER } from '../generator-list.js';
+import { GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 
 const { snakeCase } = lodash;
 
@@ -42,7 +42,7 @@ describe(`generator - ${generator}`, () => {
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({}, GENERATOR_SERVER);
+  checkEnforcements({}, GENERATOR_SERVER, GENERATOR_SPRING_BOOT);
 
   describe('composing', () => {
     describe('buildTool option', () => {

@@ -20,8 +20,7 @@ import os from 'node:os';
 import chalk from 'chalk';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
-  GENERATOR_JAVA,
-  GENERATOR_SPRING_BOOT,
+  GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_CLOUD_STREAM,
   GENERATOR_SPRING_DATA_CASSANDRA,
@@ -32,7 +31,7 @@ import {
   GENERATOR_SPRING_DATA_RELATIONAL,
   GENERATOR_SPRING_WEBSOCKET,
 } from '../generator-list.js';
-import { springBootFiles } from './files.js';
+import { serverFiles } from './files.js';
 import cleanupTask from './cleanup.js';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
@@ -41,7 +40,7 @@ import {
   getPrimaryKeyValue,
   getSpecificationBuildForType,
 } from '../server/support/index.js';
-import { addJavaAnnotation } from '../java/support/index.js';
+import { addJavaAnnotation, generateKeyStore } from '../java/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import {
   APPLICATION_TYPE_MICROSERVICE,
@@ -62,14 +61,28 @@ const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
 export default class SpringBootGenerator extends BaseApplicationGenerator {
+  fakeKeytool;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_BOOT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_JAVA);
+      await this.dependsOnJHipster(GENERATOR_SERVER);
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get configuring() {
@@ -121,7 +134,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
@@ -157,7 +170,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get preparing() {
@@ -253,11 +266,23 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
-      async writeTask({ application }) {
-        await this.writeFiles({
-          sections: springBootFiles,
+      resetFakeDataSeed() {
+        this.resetEntitiesFakeData('server');
+      },
+      async writeFiles({ application }) {
+        return this.writeFiles({
+          sections: serverFiles,
+          rootTemplatesPath: ['', '../../server/templates/', '../../java/templates/'],
           context: application,
         });
+      },
+      async generateKeyStore({ application }) {
+        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
+        if (this.fakeKeytool) {
+          this.writeDestination(keyStoreFile, 'fake key-tool');
+        } else {
+          this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName! }));
+        }
       },
     });
   }

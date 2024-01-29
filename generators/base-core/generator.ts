@@ -23,6 +23,7 @@ import { fileURLToPath } from 'url';
 import { statSync, rmSync, existsSync, readFileSync } from 'fs';
 import assert from 'assert';
 import { requireNamespace } from '@yeoman/namespace';
+import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import * as _ from 'lodash-es';
@@ -141,6 +142,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   // Override the type of `env` to be a full Environment
   declare env: Environment;
   declare log: Logger;
+  declare _meta?: GeneratorMeta;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, {
@@ -287,6 +289,24 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;
+  }
+
+  async parseCurrentJHipsterCommand() {
+    const module: any = await this._meta?.importModule?.();
+    if (!module?.command) {
+      throw new Error(`Command not found for generator ${this.options.namespace}`);
+    }
+
+    this.parseJHipsterCommand(module?.command);
+  }
+
+  async promptCurrentJHipsterCommand() {
+    const module: any = await this._meta?.importModule?.();
+    if (!module?.command?.configs) {
+      throw new Error(`Configs not found for generator ${this.options.namespace}`);
+    }
+
+    return this.prompt(this.prepareQuestions(module?.command?.configs));
   }
 
   parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
