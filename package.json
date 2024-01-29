@@ -167,7 +167,7 @@
     "uuid": "9.0.1",
     "winston": "3.11.0",
     "yaml": "2.3.4",
-    "yeoman-environment": "4.2.1",
+    "yeoman-environment": "4.3.0",
     "yeoman-generator": "7.1.1"
   },
   "devDependencies": {
