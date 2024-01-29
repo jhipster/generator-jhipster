@@ -70,7 +70,7 @@ dependencies {
     testImplementation "org.testcontainers:mssqlserver"
   <%_ } _%>
   <%_ if (prodDatabaseTypeMysql) { _%>
-    testImplementation "org.testcontainers:mysql"
+    testImplementation "org.testcontainers:mysql:1.19.4"
   <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>
     testImplementation "org.testcontainers:oracle-xe"

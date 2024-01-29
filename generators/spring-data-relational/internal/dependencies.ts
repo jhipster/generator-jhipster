@@ -170,7 +170,7 @@ export const getDatabaseTypeMavenDefinition: (
       jdbc: {
         dependencies: [
           { inProfile, ...databaseArtifactForDB.mysql.jdbc },
-          { groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
+          { groupId: 'org.testcontainers', artifactId: 'mysql', version: '1.19.4', scope: 'test' },
         ],
       },
       r2dbc: {
