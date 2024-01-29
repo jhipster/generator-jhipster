@@ -30,7 +30,6 @@ import {
   buildJavaSetter as javaSetter,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
-  generateKeyStore,
   hibernateSnakeCase,
 } from './support/index.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
@@ -50,7 +49,6 @@ import {
   GENERATOR_FEIGN_CLIENT,
 } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
-import { writeFiles } from './files.js';
 import { packageJson } from '../../lib/index.js';
 import {
   SERVER_MAIN_SRC_DIR,
@@ -85,7 +83,6 @@ import { createBase64Secret, createSecret, createNeedleCallback, mutateData } fr
 import command from './command.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
-import { writeEntityFiles } from './entity-files.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -128,7 +125,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
-  fakeKeytool;
   command = command;
 
   async beforeQueue() {
@@ -595,38 +591,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.DEFAULT]() {
     return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
-  }
-
-  /** @inheritdoc */
-  get writing() {
-    return this.asWritingTaskGroup({
-      resetFakeDataSeed() {
-        this.resetEntitiesFakeData('server');
-      },
-      ...writeFiles.call(this),
-      async generateKeyStore({ application }) {
-        const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
-        if (this.fakeKeytool) {
-          this.writeDestination(keyStoreFile, 'fake key-tool');
-        } else {
-          this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName }));
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.asWritingTaskGroup(this.delegateTasksToBlueprint(() => this.writing));
-  }
-
-  get writingEntities() {
-    return this.asWritingEntitiesTaskGroup({
-      ...writeEntityFiles(),
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting() {
