@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-@if (loggers) {
+@defer (when loggers && !isLoading()) {
 <div class="table-responsive">
   <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">__jhiTransformTranslate__('logs.title')</h2>
 
@@ -33,13 +33,7 @@
   </div>
 <%_ } _%>
 
-@if (isLoading()) {
-  <div class="float-end me-3">
-    <div class="spinner-border"></div>
-  </div>
-}
-
-  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })</p>
+  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers?.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers?.length }}" })</p>
 
   <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
   <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
@@ -112,4 +106,8 @@
     </tbody>
   </table>
 </div>
+} @loading {
+  <div class="d-flex justify-content-center me-3">
+    <div class="spinner-border"></div>
+  </div>
 }
