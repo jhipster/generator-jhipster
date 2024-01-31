@@ -17,6 +17,8 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+import { ASC, DESC } from 'app/config/navigation.constants';
+import { SortState } from './sort-state';
 
 @Injectable({ providedIn: 'root' })
 export class SortService {
@@ -27,5 +29,19 @@ export class SortService {
 
   public startSort(property: string, order: number): (a: any, b: any) => number {
     return (a: any, b: any) => this.collator.compare(a[property], b[property]) * order;
+  }
+
+  public parseSortParam(sortParam: string | undefined): SortState {
+    if (sortParam?.includes(',')) {
+      const split = sortParam.split(',');
+      if (split[0]) {
+        return { predicate: split[0], ascending: split[1] !== DESC };
+      }
+    }
+    return { predicate: sortParam ? sortParam : undefined };
+  };
+
+  public buildSortParam(sortState: SortState): string[] {
+    return sortState.predicate && sortState.ascending !== undefined ? [`${sortState.predicate},${sortState.ascending ? ASC : DESC}`] : [];
   }
 }
