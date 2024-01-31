@@ -34,13 +34,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
-import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, switchMap, Subscription, tap } from 'rxjs';
+import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
 import SharedModule from 'app/shared/shared.module';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { sortStateSignal, SortSignalDirective, SortBySignalDirective, type SortState, SortService } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 <%_ if (paginationPagination) { _%>
 import { ItemCountComponent } from 'app/shared/pagination';
@@ -61,8 +61,6 @@ import {
 } from 'app/config/pagination.constants';
 <%_ } _%>
 import {
-  ASC,
-  DESC,
   SORT,
 <%_ if (!readOnly) { _%>
   ITEM_DELETED_EVENT,
@@ -82,9 +80,6 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
 import { FilterComponent, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
 <%_ } _%>
-<%_ if (paginationNo) { _%>
-import { SortService } from 'app/shared/sort/sort.service';
-<%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 <%_ } _%>
@@ -99,8 +94,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
       FormsModule,
 <%_ } _%>
       SharedModule,
-      SortDirective,
-      SortByDirective,
+      SortSignalDirective,
+      SortBySignalDirective,
       DurationPipe,
       FormatMediumDatetimePipe,
       FormatMediumDatePipe,
@@ -125,8 +120,7 @@ export class <%= componentName %> implements OnInit {
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     isLoading = false;
 
-    predicate = '<%- primaryKey.name %>';
-    ascending: boolean | undefined;
+    sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
     currentSearch = '';
 <%_ } _%>
@@ -143,9 +137,8 @@ export class <%= componentName %> implements OnInit {
     public router = inject(Router);
     protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
     protected activatedRoute = inject(ActivatedRoute);
-<%_ if (paginationNo) { _%>
     protected sortService = inject(SortService);
-<%_ } else if (paginationInfiniteScroll) { _%>
+<%_ if (paginationInfiniteScroll) { _%>
     protected parseLinks = inject(ParseLinks);
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -175,7 +168,8 @@ export class <%= componentName %> implements OnInit {
 <%_ if (searchEngineAny) { _%>
     search(query: string): void {
   <%_ if (notSortableFieldsAfterSearch) { _%>
-      if (query && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+      const { predicate } = this.sortState();
+      if (query && predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
         this.loadDefaultSortState();
       }
   <%_ } _%>
@@ -183,22 +177,14 @@ export class <%= componentName %> implements OnInit {
       this.page = 1;
   <%_ } _%>
       this.currentSearch = query;
-      this.navigateToWithComponentValues();
+      this.navigateToWithComponentValues(this.sortState());
     }
 
     loadDefaultSortState(): void {
   <%_ if (notSortableFieldsAfterSearchFieldNames.includes(primaryKey.name)) { _%>
-      this.predicate = '';
-      this.ascending = undefined;
+      this.sortState.set({});
   <%_ } else { _%>
-      const sort = this.activatedRoute.snapshot.data[ DEFAULT_SORT_DATA ]?.split(',');
-      if (sort && sort.length > 1) {
-        this.predicate = sort[0];
-        this.ascending = sort[1] === ASC;
-      } else {
-        this.predicate = '';
-        this.ascending = undefined;
-      }
+      this.sortState.set(this.sortService.parseSortParam(this.activatedRoute.snapshot.data[DEFAULT_SORT_DATA]));
   <%_ } _%>
     }
 
@@ -210,7 +196,7 @@ export class <%= componentName %> implements OnInit {
       ).subscribe();
 
 <% if (jpaMetamodelFiltering && paginationPagination) { %>
-      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
+      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
 <% } %>
     }
 
@@ -245,13 +231,13 @@ export class <%= componentName %> implements OnInit {
       });
     }
 
-    navigateToWithComponentValues(): void {
-      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
+    navigateToWithComponentValues(event: SortState): void {
+      this.handleNavigation(<% if (!paginationNo) { %>this.page, <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
     }
 
 <%_ if (!paginationNo) { _%>
     navigateToPage(page = this.page): void {
-      this.handleNavigation(page, this.predicate, this.ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(page, this.sortState()<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
     }
 
 <%_ } _%>
@@ -260,14 +246,7 @@ export class <%= componentName %> implements OnInit {
       const page = params.get(PAGE_HEADER);
       this.page = +(page ?? 1);
 <%_ } _%>
-      const sort = (params.get(SORT) ?? data[ DEFAULT_SORT_DATA ])?.split(',');
-      if (sort && sort.length > 1) {
-        this.predicate = sort[0];
-        this.ascending = sort[1] === ASC;
-      } else {
-        this.predicate = '';
-        this.ascending = undefined;
-      }
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       this.filters.initializeFromParams(params);
 <%_ } _%>
@@ -275,8 +254,9 @@ export class <%= componentName %> implements OnInit {
       if (params.has('search') && params.get('search') !== '') {
         this.currentSearch = params.get('search') as string;
   <%_ if (notSortableFieldsAfterSearch) { _%>
-          if (<%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
-            this.predicate = '';
+          const { predicate } = this.sortState();
+          if (predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+            this.sortState.set({});
           }
   <%_ } _%>
       }
@@ -297,7 +277,8 @@ export class <%= componentName %> implements OnInit {
 
 <%_ if (paginationNo) { _%>
     protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
-      return this.predicate && this.ascending !== undefined ? data.sort(this.sortService.startSort(this.predicate, this.ascending ? 1 : -1)) : data;
+      const { predicate, ascending } = this.sortState();
+      return predicate && ascending !== undefined ? data.sort(this.sortService.startSort(predicate, ascending ? 1 : -1)) : data;
     }
 
 <%_ } _%>
@@ -341,7 +322,20 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
     protected queryBackend(): Observable<EntityArrayResponseType> {
-      const { <% if (!paginationNo) { %>page, <% } %>predicate, ascending<% if (jpaMetamodelFiltering && paginationPagination) { %>, filters<% } %><% if (searchEngineAny) { %>, currentSearch<% } %> } = this;
+<%_ if (!paginationNo || (jpaMetamodelFiltering && paginationPagination) || searchEngineAny) { _%>
+      const {
+  <%_ if (!paginationNo) { _%>
+        page,
+  <%_ } _%>
+  <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+        filters,
+  <%_ } _%>
+  <%_ if (searchEngineAny) { _%>
+        currentSearch,
+  <%_ } _%>
+      } = this;
+<%_ } _%>
+
       this.isLoading = true;
 <%_ if (!paginationNo) { _%>
       const pageToLoad: number = page;
@@ -357,7 +351,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (searchEngineAny) { _%>
         query: currentSearch,
 <%_ } _%>
-        sort: this.getSortQueryParam(predicate, ascending),
+        sort: this.sortService.buildSortParam(this.sortState()),
       };
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
       filters.filterOptions.forEach(filterOption => {
@@ -381,7 +375,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     }
 
-    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>predicate?: string, ascending?: boolean<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
+    protected handleNavigation(<% if (!paginationNo) { %>page = this.page, <% } %>sortState: SortState<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
       const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
 <%_ if (searchEngineAny) { _%>
         search: currentSearch,
@@ -390,7 +384,7 @@ export class <%= componentName %> implements OnInit {
         page,
         size: this.itemsPerPage,
 <%_ } _%>
-        sort: this.getSortQueryParam(predicate, ascending),
+        sort: this.sortService.buildSortParam(sortState),
       };
 
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
@@ -403,9 +397,5 @@ export class <%= componentName %> implements OnInit {
         relativeTo: this.activatedRoute,
         queryParams: queryParamsObj,
       });
-    }
-
-    protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
-      return !predicate || ascending === undefined ? [] : [`${predicate},${ascending ? ASC : DESC}`];
     }
 }

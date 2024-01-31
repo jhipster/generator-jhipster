@@ -74,7 +74,7 @@
     <div class="table-responsive table-entities" id="entities">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
-                <tr <%= jhiPrefix %>Sort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+                <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
                         <div class="d-flex">
