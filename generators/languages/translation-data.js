@@ -94,6 +94,10 @@ export default class TranslationData {
     if (!data) {
       return translatedValue;
     }
+    /* workaround custom translation for UserManagement */
+    if (translatedValue.includes('{{ login }}') && !data.login) {
+      data.login = data.id;
+    }
     const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
     return compiledTemplate(data);
   }

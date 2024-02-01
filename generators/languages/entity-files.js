@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { getEnumInfo } from '../base-application/support/index.js';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -31,6 +32,17 @@ export const entityClientI18nFiles = {
           destinationFile: context => `${context.clientSrcDir}i18n/${context.lang}/${context.entityTranslationKey}.json`,
         },
       ],
+    },
+  ],
+};
+
+export const userTranslationfiles = {
+  userTranslationfiles: [
+    {
+      from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
+      to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
+      transform: false,
+      templates: ['user-management.json'],
     },
   ],
 };
@@ -82,13 +94,20 @@ export function writeEntityFiles() {
     async writeClientFiles({ application, entities }) {
       if (application.skipClient) return;
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
+      if (application.userManagement && application.userManagement.skipClient) {
+        entitiesToWriteTranslationFor.push(application.userManagement);
+      }
 
       // Copy each
       const { clientSrcDir, frontendAppName } = application;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       for (const entity of entitiesToWriteTranslationFor) {
         for (const lang of languagesToApply) {
-          await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          if (entity.builtInUserManagement) {
+            await this.writeFiles({ sections: userTranslationfiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          } else {
+            await this.writeFiles({ sections: entityClientI18nFiles, context: { ...entity, clientSrcDir, frontendAppName, lang } });
+          }
         }
       }
     },
