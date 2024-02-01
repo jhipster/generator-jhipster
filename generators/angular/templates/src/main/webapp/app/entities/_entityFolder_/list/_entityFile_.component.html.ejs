@@ -102,7 +102,7 @@
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page - 1 >= links['last']" [infiniteScrollDistance]="0"<% } %>>
+            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"<% } %>>
             @for (<%= entityInstance %> of <%= entityInstancePlural %>; track track<%= primaryKey.nameCapitalized %>) {
                 <tr data-cy="entityTable">
 <%_
