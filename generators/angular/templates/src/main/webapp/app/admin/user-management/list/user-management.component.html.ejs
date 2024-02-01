@@ -70,7 +70,6 @@
           <th scope="col"></th>
         </tr>
       </thead>
-    @if (users()) {
       <tbody>
       @for (user of users(); track trackIdentity) {
         <tr>
@@ -134,7 +133,6 @@
         </tr>
       }
       </tbody>
-    }
     </table>
   </div>
 <%_ if (!databaseTypeCassandra) { _%>
