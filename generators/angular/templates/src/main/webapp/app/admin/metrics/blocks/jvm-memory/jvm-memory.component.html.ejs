@@ -29,10 +29,6 @@
     </span>
 
     <div>Committed : {{ entry.value.committed / 1048576 | number: '1.0-0' }}M</div>
-  } @else {
-    <span><span>{{ entry.key }}</span> {{ entry.value.used / 1048576 | number: '1.0-0' }}M</span>
-  }
-  @if (entry.value.max !== -1) {
     <ngb-progressbar
       type="success"
       [value]="(100 * entry.value.used) / entry.value.max"
@@ -41,6 +37,8 @@
     >
       <span>{{ (entry.value.used * 100) / entry.value.max | number: '1.0-0' }}%</span>
     </ngb-progressbar>
+  } @else {
+    <span><span>{{ entry.key }}</span> {{ entry.value.used / 1048576 | number: '1.0-0' }}M</span>
   }
   </div>
   }
