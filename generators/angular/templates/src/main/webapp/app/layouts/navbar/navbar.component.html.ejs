@@ -116,7 +116,7 @@
             </a>
           </li>
 <%_ } _%>
-<%_ if (generateUserManagement) { _%>
+<%_ if (generateUserManagement && userManagement.skipClient) { _%>
           <li>
             <a class="dropdown-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="users" [fixedWidth]="true"></fa-icon>

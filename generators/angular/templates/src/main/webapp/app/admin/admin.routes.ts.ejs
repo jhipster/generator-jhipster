@@ -20,7 +20,7 @@ import { Routes } from '@angular/router';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
 const routes: Routes = [
-<%_ if (generateUserManagement) { _%>
+<%_ if (generateUserManagement && userManagement.skipClient) { _%>
   {
     path: 'user-management',
     loadChildren: () => import('./user-management/user-management.route'),
