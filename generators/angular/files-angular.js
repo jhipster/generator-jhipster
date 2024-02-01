@@ -236,23 +236,6 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'admin/user-management/user-management.route.ts',
-        'admin/user-management/user-management.model.ts',
-        'admin/user-management/list/user-management.component.ts',
-        'admin/user-management/list/user-management.component.html',
-        'admin/user-management/detail/user-management-detail.component.ts',
-        'admin/user-management/detail/user-management-detail.component.html',
-        'admin/user-management/update/user-management-update.component.ts',
-        'admin/user-management/update/user-management-update.component.html',
-        'admin/user-management/delete/user-management-delete-dialog.component.ts',
-        'admin/user-management/delete/user-management-delete-dialog.component.html',
-        'admin/user-management/service/user-management.service.ts',
-      ],
-    },
-    {
       condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
       ...clientApplicationTemplatesBlock(),
       templates: [
@@ -443,17 +426,6 @@ export const files = {
       condition: generator => !generator.authenticationTypeOauth2,
       ...clientApplicationTemplatesBlock(),
       templates: ['login/login.component.spec.ts'],
-    },
-    {
-      condition: generator => generator.generateUserManagement,
-      ...clientApplicationTemplatesBlock(),
-      templates: [
-        'admin/user-management/list/user-management.component.spec.ts',
-        'admin/user-management/detail/user-management-detail.component.spec.ts',
-        'admin/user-management/update/user-management-update.component.spec.ts',
-        'admin/user-management/delete/user-management-delete-dialog.component.spec.ts',
-        'admin/user-management/service/user-management.service.spec.ts',
-      ],
     },
     {
       condition: generator => generator.authenticationTypeSession && generator.generateUserManagement,
