@@ -26,6 +26,16 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
 
 /**
  * @private
+ * Filter the relevant relationships fields on the model
+ * @param {Array|Object} relationships - array of relationships
+ * @returns {Array|Object} filtered relationships
+ */
+export const filterRelevantRelationships = relationships => {
+  return relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad);
+};
+
+/**
+ * @private
  * Generate Entity Client Imports
  *
  * @param {Array|Object} relationships - array of relationships
@@ -35,7 +45,10 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
  */
 export const generateEntityClientImports = (relationships, dto, clientFramework) => {
   const typeImports = new Map();
-  relationships.forEach(relationship => {
+
+  const relevantRelationships = filterRelevantRelationships(relationships);
+
+  relevantRelationships.forEach(relationship => {
     const otherEntityAngularName = relationship.otherEntityAngularName;
     const importType = `I${otherEntityAngularName}`;
     let importPath;

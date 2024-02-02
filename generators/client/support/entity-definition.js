@@ -20,6 +20,7 @@
 import getTypescriptKeyType from './types-utils.js';
 
 import { fieldTypes, validations, clientFrameworkTypes } from '../../../jdl/jhipster/index.js';
+import { filterRelevantRelationships } from './template-utils.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -99,7 +100,9 @@ const generateEntityClientFields = (
     variablesWithTypes.push(`${fieldName}?: ${tsType}`);
   });
 
-  relationships.forEach(relationship => {
+  const relevantRelationships = filterRelevantRelationships(relationships);
+
+  relevantRelationships.forEach(relationship => {
     let fieldType;
     let fieldName;
     const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes(REQUIRED);

@@ -11,13 +11,37 @@ const NO_DTO = MapperTypes.NO;
 
 describe('generator - client - support - template-utils', () => {
   describe('generateEntityClientImports', () => {
+    describe('with relationships to entities', () => {
+      const relationships = [
+        {
+          otherEntityAngularName: 'EntityA',
+          persistableRelationship: true,
+        },
+        {
+          otherEntityAngularName: 'EntityB',
+          relationshipEagerLoad: true,
+        },
+        {
+          otherEntityAngularName: 'EntityC',
+        },
+      ];
+
+      it('return only imports for relevant relationships for fields', () => {
+        const imports = generateEntityClientImports(relationships, NO_DTO);
+        expect(imports).to.have.all.keys('IEntityA', 'IEntityB');
+        expect(imports.size).to.eql(2);
+      });
+    });
+
     describe('with relationships from or to the User', () => {
       const relationships = [
         {
           otherEntityAngularName: 'User',
+          persistableRelationship: true,
         },
         {
           otherEntityAngularName: 'AnEntity',
+          persistableRelationship: true,
         },
       ];
       describe('when called with 2 distinct relationships without dto option', () => {
@@ -31,9 +55,11 @@ describe('generator - client - support - template-utils', () => {
         const relationships = [
           {
             otherEntityAngularName: 'User',
+            persistableRelationship: true,
           },
           {
             otherEntityAngularName: 'User',
+            persistableRelationship: true,
           },
         ];
         it('return a Map with 1 import', () => {
