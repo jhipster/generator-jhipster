@@ -51,8 +51,7 @@ const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
   },
   postgresql: {
     jdbc: { groupId: 'org.postgresql', artifactId: 'postgresql' },
-    // TODO ignore v1.0.3.RELEASE due to https://github.com/pgjdbc/r2dbc-postgresql/issues/622, revisit for spring-boot 3.2.2
-    r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql', version: '1.0.2.RELEASE' },
+    r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql' },
   },
 };
 
