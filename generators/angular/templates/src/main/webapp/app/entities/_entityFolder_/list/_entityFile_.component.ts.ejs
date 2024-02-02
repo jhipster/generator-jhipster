@@ -154,7 +154,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
     protected modalService = inject(NgbModal);
 <%_ } _%>
-    ngZone = inject(NgZone);
+    protected ngZone = inject(NgZone);
 
 <%_ if (paginationInfiniteScroll) { _%>
     reset(): void {
