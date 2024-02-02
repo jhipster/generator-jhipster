@@ -93,7 +93,7 @@ Object.keys(differentRelationships).forEach(key => {
     const uniqueRel = differentRelationships[key][0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
-    protected <%= uniqueRel.otherEntityName %>Service = inject(<%= uniqueRel.otherEntityAngularName %>Service);
+    protected <%= uniqueRel.otherEntity.entityInstance %>Service = inject(<%= uniqueRel.otherEntityAngularName %>Service);
 <%_
     }
   }

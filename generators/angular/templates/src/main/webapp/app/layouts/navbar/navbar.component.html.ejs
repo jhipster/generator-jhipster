@@ -107,6 +107,7 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
+          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
           <li>
             <a class="dropdown-item" routerLink="/admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
@@ -167,7 +168,6 @@
           </li>
         }
 <%_ } _%>
-          <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
 <%_ if (devDatabaseTypeH2Any || databaseTypeCouchbase) { _%>
         @if (!inProduction) {
           <li>
