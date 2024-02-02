@@ -20,6 +20,7 @@
 const entityArrayOptionalChainSymbol = '?.';
 const order = 'desc';
 const testEntityPrimaryKey = this.generateTestEntityPrimaryKey(primaryKey, 0);
+const testEntityPrimaryKey2 = this.generateTestEntityPrimaryKey(primaryKey, 1);
 _%>
 
 import {
@@ -103,16 +104,29 @@ describe('<%= entityAngularName %> Management Component', () => {
         service = TestBed.inject(<%= entityAngularName %>Service);
         routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
 
-        const headers = new HttpHeaders();
-        jest.spyOn(service, 'query').mockReturnValue(
+        jest
+          .spyOn(service, 'query')
+          .mockReturnValueOnce(
             of(
-                new HttpResponse({
-                    body: [<%- testEntityPrimaryKey %>],
-                    headers,
-                })
-            )
-        );
-    });
+              new HttpResponse({
+                body: [<%- testEntityPrimaryKey %>],
+                headers: new HttpHeaders({
+                  link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+                }),
+              }),
+            ),
+          )
+          .mockReturnValueOnce(
+            of(
+              new HttpResponse({
+                body: [<%- testEntityPrimaryKey2 %>],
+                headers: new HttpHeaders({
+                  link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"',
+                }),
+              }),
+            ),
+          );
+        });
 
     it('Should call load all on init', () => {
         // WHEN
@@ -145,7 +159,7 @@ describe('<%= entityAngularName %> Management Component', () => {
               })
           }));
     });
-<%_ if (!paginationNo) { _%>
+<%_ if (paginationPagination) { _%>
 
     it('should load a page', () => {
         // WHEN
@@ -154,6 +168,7 @@ describe('<%= entityAngularName %> Management Component', () => {
         // THEN
         expect(routerNavigateSpy).toHaveBeenCalled();
     });
+<%_ } _%>
 
     it('should calculate the sort attribute for an id', () => {
         // WHEN
@@ -162,30 +177,29 @@ describe('<%= entityAngularName %> Management Component', () => {
         // THEN
         expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%= order %>'] }));
     });
+<%_ if (paginationInfiniteScroll) { _%>
 
-  <%_ if (paginationInfiniteScroll) { _%>
+  it('should infinite scroll', () => {
+    // GIVEN
+    comp.loadNextPage();
+    comp.loadNextPage();
+    comp.loadNextPage();
 
-    it('should re-initialize the page', () => {
-        // WHEN
-        comp.loadPage(1);
-        comp.reset();
+    // THEN
+    expect(service.query).toHaveBeenCalledTimes(3);
+    expect(service.query).toHaveBeenNthCalledWith(2, expect.objectContaining({ page: '1' }));
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ page: '2' }));
+  });
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
 
-        // THEN
-        expect(comp.page).toEqual(1);
-        expect(service.query).toHaveBeenCalledTimes(2);
-        expect(comp.<%= entityInstancePlural %><%= entityArrayOptionalChainSymbol %>[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
-    });
-  <%_ } _%>
-  <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+  it('should calculate the filter attribute', () => {
+    // WHEN
+    comp.ngOnInit();
 
-    it('should calculate the filter attribute', () => {
-        // WHEN
-        comp.ngOnInit();
-
-        // THEN
-        expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
-    });
-  <%_ } _%>
+    // THEN
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
+  });
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
