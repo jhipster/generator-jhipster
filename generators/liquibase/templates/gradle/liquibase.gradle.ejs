@@ -39,7 +39,7 @@ dependencies {
   // See: https://github.com/jhipster/generator-jhipster/pull/24241
   implementation ("org.liquibase.ext:liquibase-neo4j:${liquibaseVersion}") {
     exclude group: "org.neo4j.driver", module: "neo4j-java-driver"
-    exclude group: "org.slf4j", module: "slf4j-jdk14"
+    exclude group: "org.slf4j", module: "*"
   }
   implementation "org.springframework:spring-jdbc"
 <%_ } _%>
