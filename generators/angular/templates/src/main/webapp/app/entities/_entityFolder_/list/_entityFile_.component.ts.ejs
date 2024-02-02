@@ -29,7 +29,7 @@
 
   const componentName = entityAngularName + 'Component';
 _%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
@@ -154,6 +154,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
     protected modalService = inject(NgbModal);
 <%_ } _%>
+    ngZone = inject(NgZone);
 
 <%_ if (paginationInfiniteScroll) { _%>
     reset(): void {
@@ -399,9 +400,11 @@ export class <%= componentName %> implements OnInit {
       });
 <%_ } _%>
 
-      this.router.navigate([ './' ], {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParamsObj,
+      this.ngZone.run(() => {
+        this.router.navigate(['./'], {
+          relativeTo: this.activatedRoute,
+          queryParams: queryParamsObj,
+        });
       });
     }
 
