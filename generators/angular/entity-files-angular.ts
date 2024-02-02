@@ -19,18 +19,17 @@
 import type { GeneratorDefinition } from '../base-application/generator.js';
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
 import CoreGenerator from '../base-core/index.js';
-import { WriteFileBlock, WriteFileSection } from '../base/api.js';
+import { WriteFileSection } from '../base/api.js';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 
-const entityModelFiles: WriteFileBlock = {
-  ...clientApplicationTemplatesBlock(),
+const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
-};
+});
 
-const entityServiceFiles: WriteFileBlock = {
-  ...clientApplicationTemplatesBlock(),
+const entityServiceFiles = clientApplicationTemplatesBlock({
   condition: generator => !generator.embedded,
   templates: ['entities/_entityFolder_/service/_entityFile_.service.ts', 'entities/_entityFolder_/service/_entityFile_.service.spec.ts'],
-};
+});
 
 export const builtInFiles: WriteFileSection = {
   model: [entityModelFiles],
@@ -41,9 +40,8 @@ export const angularFiles = {
   model: [entityModelFiles],
   service: [entityServiceFiles],
   client: [
-    {
+    clientApplicationTemplatesBlock({
       condition: generator => !generator.embedded,
-      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder_/_entityFile_.routes.ts',
         'entities/_entityFolder_/detail/_entityFile_-detail.component.html',
@@ -55,10 +53,9 @@ export const angularFiles = {
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.spec.ts',
       ],
-    },
-    {
+    }),
+    clientApplicationTemplatesBlock({
       condition: generator => !generator.readOnly && !generator.embedded,
-      ...clientApplicationTemplatesBlock(),
       templates: [
         'entities/_entityFolder_/update/_entityFile_-form.service.ts',
         'entities/_entityFolder_/update/_entityFile_-form.service.spec.ts',
@@ -69,11 +66,39 @@ export const angularFiles = {
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.component.ts',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.component.spec.ts',
       ],
-    },
+    }),
   ],
 };
 
-export async function writeEntitiesFiles(this: CoreGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
+export const userManagementFiles: WriteFileSection = {
+  userManagement: [
+    clientApplicationTemplatesBlock({
+      templates: [
+        'admin/user-management/user-management.route.ts',
+        'admin/user-management/user-management.model.ts',
+        'admin/user-management/list/user-management.component.html',
+        'admin/user-management/list/user-management.component.spec.ts',
+        'admin/user-management/list/user-management.component.ts',
+        'admin/user-management/detail/user-management-detail.component.html',
+        'admin/user-management/detail/user-management-detail.component.spec.ts',
+        'admin/user-management/detail/user-management-detail.component.ts',
+        'admin/user-management/update/user-management-update.component.html',
+        'admin/user-management/update/user-management-update.component.spec.ts',
+        'admin/user-management/update/user-management-update.component.ts',
+        'admin/user-management/delete/user-management-delete-dialog.component.html',
+        'admin/user-management/delete/user-management-delete-dialog.component.spec.ts',
+        'admin/user-management/delete/user-management-delete-dialog.component.ts',
+        'admin/user-management/service/user-management.service.spec.ts',
+        'admin/user-management/service/user-management.service.ts',
+      ],
+    }),
+  ],
+};
+
+export const writeEntitiesFiles = asWritingEntitiesTask(async function (
+  this: CoreGenerator,
+  { application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
+) {
   for (const entity of entities.filter(entity => !entity.skipClient)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -85,6 +110,19 @@ export async function writeEntitiesFiles(this: CoreGenerator, { application, ent
           readOnly: true,
         },
       });
+
+      if (application.generateUserManagement) {
+        await this.writeFiles({
+          sections: userManagementFiles,
+          context: {
+            ...application,
+            ...entity,
+            i18nKeyPrefix: 'userManagement',
+            entityFileName: 'user-management',
+            entityFolderPrefix: 'admin',
+          },
+        });
+      }
     } else {
       await this.writeFiles({
         sections: angularFiles,
@@ -92,7 +130,7 @@ export async function writeEntitiesFiles(this: CoreGenerator, { application, ent
       });
     }
   }
-}
+});
 
 export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
   const { source, application } = taskParam;

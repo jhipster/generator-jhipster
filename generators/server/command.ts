@@ -114,13 +114,6 @@ const command: JHipsterCommandDefinition = {
       env: 'JHIPSTER_DEPENDENCIES_VERSION',
       scope: 'generator',
     },
-    fakeKeytool: {
-      description: 'Add a fake certificate store file for test purposes',
-      type: Boolean,
-      env: 'FAKE_KEYTOOL',
-      scope: 'generator',
-      hide: true,
-    },
   },
   configs: {
     applicationType: {

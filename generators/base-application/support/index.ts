@@ -29,4 +29,5 @@ export { default as prepareField } from './prepare-field.js';
 export * from './prepare-field.js';
 export { default as prepareRelationship } from './prepare-relationship.js';
 export * from './relationship.js';
+export * from './task-type-inference.js';
 export * from './update-application-entities-transform.js';

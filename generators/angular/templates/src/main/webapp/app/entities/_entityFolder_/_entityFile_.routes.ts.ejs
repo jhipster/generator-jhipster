@@ -32,7 +32,9 @@ const <%= entityInstance %>Route: Routes = [
     path: '',
     component: <%= entityAngularName %>Component,
     data: {
+<%_ if (primaryKey.typeLong && primaryKey.autoGenerate) { _%>
       defaultSort: '<%- primaryKey.name %>,' + ASC,
+<%_ } _%>
 <%_ if (entityAngularReadAuthorities) { _%>
       authorities: [<%- entityAngularReadAuthorities %>],
 <%_ } _%>

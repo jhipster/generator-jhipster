@@ -70,7 +70,6 @@
           <th scope="col"></th>
         </tr>
       </thead>
-    @if (users()) {
       <tbody>
       @for (user of users(); track trackIdentity) {
         <tr>
@@ -134,13 +133,10 @@
         </tr>
       }
       </tbody>
-    }
     </table>
   </div>
-}
 <%_ if (!databaseTypeCassandra) { _%>
 
-@if (users()) {
   <div>
     <div class="d-flex justify-content-center">
       <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems(), itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
@@ -158,6 +154,6 @@
       ></ngb-pagination>
     </div>
   </div>
-}
 <%_ } _%>
+}
 </div>

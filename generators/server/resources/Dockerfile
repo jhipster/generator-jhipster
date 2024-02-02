@@ -13,7 +13,7 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:16.1
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:23.0.4
+FROM quay.io/keycloak/keycloak:23.0.5
 LABEL ALIAS=keycloak
 
 FROM mysql:8.2.0
@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM confluentinc/cp-zookeeper:7.5.3
 LABEL ALIAS=zookeeper
 
-FROM apachepulsar/pulsar:3.1.1
+FROM apachepulsar/pulsar:3.1.2
 LABEL ALIAS=pulsar
 
 FROM sonarqube:10.3.0-community

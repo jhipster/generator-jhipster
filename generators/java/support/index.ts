@@ -20,6 +20,7 @@ export { default as addJavaAnnotation } from './add-java-annotation.js';
 export * from './checks/index.js';
 export * from './files.js';
 export { default as generatedAnnotationTransform } from './generated-annotation-transform.js';
+export * from './key-store.js';
 export { default as packageInfoTransform } from './package-info-transform.js';
 export * from './reserved-keywords.js';
 export * from './util.js';

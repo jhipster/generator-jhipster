@@ -119,6 +119,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
   const authorityEntity = {
     name: authorityEntityName,
     entitySuffix: '',
+    clientRootFolder: 'admin',
     builtIn: true,
     adminEntity: true,
     entityTableName: `${application.jhiTablePrefix}_authority`,

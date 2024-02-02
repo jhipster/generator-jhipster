@@ -399,7 +399,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
                   </exclusion>
                   <exclusion>
                       <groupId>org.slf4j</groupId>
-                      <artifactId>slf4j-jdk14</artifactId>
+                      <artifactId>*</artifactId>
                   </exclusion>
               </exclusions>`,
             },

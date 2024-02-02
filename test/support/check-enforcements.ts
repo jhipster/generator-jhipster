@@ -42,80 +42,70 @@ const readDir = dirPath => {
   return files;
 };
 
-export default function checkEnforcements({ client }: { client?: boolean }, ...generators: string[]) {
+export default function checkEnforcements({ client }: { client?: boolean }, generator, ...generatorUsage: string[]) {
   describe('enforce some developments patterns', () => {
-    for (const generator of generators) {
-      const allFiles = readDir(getGeneratorFolder(generator));
-      allFiles
-        .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
-        .forEach(file => {
-          describe(`file ${path.basename(file)}`, () => {
-            let content;
-            before(() => {
-              content = fse.readFileSync(file, 'utf-8');
-            });
+    const allFiles = readDir(getGeneratorFolder(generator));
+    allFiles
+      .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
+      .forEach(file => {
+        describe(`file ${path.basename(file)}`, () => {
+          let content;
+          before(() => {
+            content = fse.readFileSync(file, 'utf-8');
+          });
 
-            [
-              ['src/main/webapp', '<%= clientSrcDir %>'],
-              ['src/test/javascript', '<%= clientTestDir %>'],
-              ...(client
-                ? [
-                    ['jhiTranslate', '<%= jhiPrefix %>Translate'],
-                    [' Java ', ' <%= backendType %> '],
-                  ]
-                : []),
-            ].forEach(([notSpected, replacement]) => {
-              const regex = new RegExp(notSpected, 'g');
-              const regexSeparator = new RegExp(`${notSpected}/`, 'g');
-              before(() => {
-                if (!fixEnforcements || !replacement) return;
-                if (file.endsWith('.ejs')) {
-                  if (regexSeparator.test(content)) {
-                    fse.writeFileSync(file, content.replace(regexSeparator, replacement));
-                    content = fse.readFileSync(file, 'utf-8');
-                  }
-                  if (regex.test(content)) {
-                    fse.writeFileSync(file, content.replace(regex, replacement));
-                    content = fse.readFileSync(file, 'utf-8');
-                  }
+          [
+            ['src/main/webapp', '<%= clientSrcDir %>'],
+            ['src/test/javascript', '<%= clientTestDir %>'],
+            ...(client
+              ? [
+                  ['jhiTranslate', '<%= jhiPrefix %>Translate'],
+                  [' Java ', ' <%= backendType %> '],
+                ]
+              : []),
+          ].forEach(([notSpected, replacement]) => {
+            const regex = new RegExp(notSpected, 'g');
+            const regexSeparator = new RegExp(`${notSpected}/`, 'g');
+            before(() => {
+              if (!fixEnforcements || !replacement) return;
+              if (file.endsWith('.ejs')) {
+                if (regexSeparator.test(content)) {
+                  fse.writeFileSync(file, content.replace(regexSeparator, replacement));
+                  content = fse.readFileSync(file, 'utf-8');
                 }
-              });
-              it(`should not contain ${notSpected}`, () => {
-                assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
-              });
+                if (regex.test(content)) {
+                  fse.writeFileSync(file, content.replace(regex, replacement));
+                  content = fse.readFileSync(file, 'utf-8');
+                }
+              }
+            });
+            it(`should not contain ${notSpected}`, () => {
+              assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
             });
           });
-        });
-      const templateFiles = allFiles
-        .filter(file => file.endsWith('.ejs'))
-        .filter(file => {
-          return (
-            !/DatabaseConfiguration_.*.java.ejs/.test(file) &&
-            !/docker\/.*.yml.ejs/.test(file) &&
-            !/OAuth2.*RefreshTokensWebFilter.java.ejs/.test(file)
-          );
-        });
-      const jsFiles = allFiles
-        .filter(file => file.endsWith('.js') || file.endsWith('.ts') || file.endsWith('.ejs'))
-        .sort((a, b) => {
-          if (a.includes('files')) return -1;
-          if (b.includes('files')) return 1;
-          if (a.includes('generator.')) return -1;
-          if (b.includes('generator.')) return 1;
-          if (a.endsWith('.ejs')) return 1;
-          if (b.endsWith('.ejs')) return -1;
-          return 0;
-        });
-      templateFiles.forEach(templateFile => {
-        const reference = basename(templateFile, '.ejs').replace('_reactive.java', '_').replace('_imperative.java', '_');
-        it(`${templateFile} must have referenced with ${reference}`, () => {
-          const found = jsFiles.find(jsFile => {
-            const content = readFileSync(jsFile).toString();
-            return content.includes(`/${reference}`) || content.includes(`'${reference}`);
-          });
-          if (!found) throw new Error(`File ${templateFile} is not referenced`);
         });
       });
-    }
+    const templateFiles = allFiles.filter(file => file.endsWith('.ejs'));
+    const jsFiles: string[] = [...allFiles, ...generatorUsage.map(gen => readDir(getGeneratorFolder(gen))).flat()]
+      .filter(file => file.endsWith('.js') || file.endsWith('.ts') || file.endsWith('.ejs'))
+      .sort((a, b) => {
+        if (a.includes('files')) return -1;
+        if (b.includes('files')) return 1;
+        if (a.includes('generator.')) return -1;
+        if (b.includes('generator.')) return 1;
+        if (a.endsWith('.ejs')) return 1;
+        if (b.endsWith('.ejs')) return -1;
+        return 0;
+      });
+    templateFiles.forEach(templateFile => {
+      const reference = basename(templateFile, '.ejs').replace('_reactive.java', '_').replace('_imperative.java', '_');
+      it(`${templateFile} must have referenced with ${reference}`, () => {
+        const found = jsFiles.find(jsFile => {
+          const content = readFileSync(jsFile).toString();
+          return content.includes(`/${reference}`) || content.includes(`'${reference}`);
+        });
+        if (!found) throw new Error(`File ${templateFile} is not referenced`);
+      });
+    });
   });
 }

@@ -40,6 +40,6 @@ jobs:
           days-before-issue-stale: 180
           days-before-pr-stale: 360
           days-before-close: 7
-          exempt-issue-labels: 'area: bug :bug:,status: work in progress,v8,$$ bug-bounty $$'
+          exempt-issue-labels: 'area: bug :bug:,status: work in progress,$$ bug-bounty $$'
           exempt-pr-labels: 'pr: bug-fix,status: work in progress'
-          operations-per-run: 20
+          operations-per-run: 60

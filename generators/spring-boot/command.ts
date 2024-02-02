@@ -16,5 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
+import { JHipsterCommandDefinition } from '../base/api.js';
+import { GENERATOR_SERVER } from '../generator-list.js';
+
+const command: JHipsterCommandDefinition = {
+  options: {
+    fakeKeytool: {
+      description: 'Add a fake certificate store file for test purposes',
+      type: Boolean,
+      env: 'FAKE_KEYTOOL',
+      scope: 'generator',
+      hide: true,
+    },
+  },
+  import: [GENERATOR_SERVER],
+};
+
+export default command;

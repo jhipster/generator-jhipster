@@ -30,7 +30,10 @@ export * from '../../maven/support/dependabot-maven.js';
 export * from '../../gradle/support/dependabot-gradle.js';
 export * from '../../java/support/files.js';
 export * from './java-formatting.js';
-export * from './key-store.js';
+/**
+ * @deprecated Use from java generator support
+ */
+export * from '../../java/support/key-store.js';
 export * from './needles.js';
 export { default as prepareEntity } from './prepare-entity.js';
 export * from './prepare-entity.js';
