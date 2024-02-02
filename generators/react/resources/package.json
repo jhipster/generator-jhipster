@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@module-federation/utilities": "3.0.5",
-    "@testing-library/react": "14.2.0",
+    "@testing-library/react": "14.2.1",
     "@types/jest": "29.5.11",
     "@types/lodash": "4.14.202",
     "@types/node": "18.19.14",
