@@ -91,9 +91,9 @@ export class SortBySignalDirective {
     effect(() => {
       if (this.iconComponent) {
         let icon: IconDefinition = this.sortIcon;
-        const { predicate, ascending } = this.sort.sortState();
-        if (predicate === this.<%= jhiPrefix %>SortBy && ascending !== undefined) {
-          icon = ascending ? this.sortAscIcon : this.sortDescIcon;
+        const { predicate, order } = this.sort.sortState();
+        if (predicate === this.<%= jhiPrefix %>SortBy && order !== undefined) {
+          icon = order === 'asc' ? this.sortAscIcon : this.sortDescIcon;
         }
         this.iconComponent.icon = icon.iconName;
         this.iconComponent.render();

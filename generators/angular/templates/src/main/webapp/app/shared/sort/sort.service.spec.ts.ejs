@@ -36,11 +36,11 @@ describe('sort state', () => {
     });
     it('should accept predicate and ASC string', () => {
       const sortState = service.parseSortParam('predicate,asc');
-      expect(sortState).toEqual({ predicate: 'predicate', ascending: true });
+      expect(sortState).toEqual({ predicate: 'predicate', order: 'asc' });
     });
     it('should accept predicate and DESC string', () => {
       const sortState = service.parseSortParam('predicate,desc');
-      expect(sortState).toEqual({ predicate: 'predicate', ascending: false });
+      expect(sortState).toEqual({ predicate: 'predicate', order: 'desc' });
     });
   });
   describe('buildSortParam', () => {
@@ -52,12 +52,12 @@ describe('sort state', () => {
       const sortParam = service.buildSortParam({ predicate: 'column' });
       expect(sortParam).toEqual([]);
     });
-    it('should accept object with predicate and true ascending value', () => {
-      const sortParam = service.buildSortParam({ predicate: 'column', ascending: true });
+    it('should accept object with predicate and asc value', () => {
+      const sortParam = service.buildSortParam({ predicate: 'column', order: 'asc' });
       expect(sortParam).toEqual(['column,asc']);
     });
-    it('should accept object with predicate and false ascending value', () => {
-      const sortParam = service.buildSortParam({ predicate: 'column', ascending: false });
+    it('should accept object with predicate and desc value', () => {
+      const sortParam = service.buildSortParam({ predicate: 'column', order: 'desc' });
       expect(sortParam).toEqual(['column,desc']);
     });
   });

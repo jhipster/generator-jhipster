@@ -119,7 +119,7 @@ describe('<%= entityAngularName %> Management Component', () => {
 
     it('should calculate the sort attribute for a non-id attribute', () => {
         // WHEN
-        comp.navigateToWithComponentValues({ predicate: 'non-existing-column', ascending: true });
+        comp.navigateToWithComponentValues({ predicate: 'non-existing-column', order: 'asc' });
 
         // THEN
         expect(routerNavigateSpy).toHaveBeenLastCalledWith(expect.anything(),

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Directive, EventEmitter, Input, Output } from '@angular/core';
-import { SortState, SortStateSignal } from './sort-state';
+import { SortOrder, SortState, SortStateSignal } from './sort-state';
 
 export interface SortChangeDirective<T> {
   sortChange: EventEmitter<SortState>;
@@ -74,8 +74,8 @@ export class SortSignalDirective implements SortChangeDirective<string> {
   @Output() sortChange = new EventEmitter<SortState>();
 
   sort(field: string): void {
-    const { predicate, ascending } = this.sortState();
-    const toggle = (): boolean => !ascending;
-    this.sortChange.emit({ predicate: field, ascending: field !== predicate ? true : toggle() });
+    const { predicate, order } = this.sortState();
+    const toggle = (): SortOrder => order === 'asc' ? 'desc' : 'asc';
+    this.sortChange.emit({ predicate: field, order: field !== predicate ? 'asc' : toggle() });
   }
 }

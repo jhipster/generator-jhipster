@@ -277,8 +277,8 @@ export class <%= componentName %> implements OnInit {
 
 <%_ if (paginationNo) { _%>
     protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
-      const { predicate, ascending } = this.sortState();
-      return predicate && ascending !== undefined ? data.sort(this.sortService.startSort(predicate, ascending ? 1 : -1)) : data;
+      const { predicate, order } = this.sortState();
+      return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
     }
 
 <%_ } _%>

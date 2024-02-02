@@ -27,21 +27,22 @@ export class SortService {
     sensitivity: 'base',
   });
 
-  public startSort(property: string, order: number): (a: any, b: any) => number {
-    return (a: any, b: any) => this.collator.compare(a[property], b[property]) * order;
+  public startSort({ predicate, order }: Required<SortState>): (a: any, b: any) => number {
+    const multiply = order === 'desc' ? -1 : 1;
+    return (a: any, b: any) => this.collator.compare(a[predicate], b[predicate]) * multiply;
   }
 
   public parseSortParam(sortParam: string | undefined): SortState {
     if (sortParam?.includes(',')) {
       const split = sortParam.split(',');
       if (split[0]) {
-        return { predicate: split[0], ascending: split[1] !== DESC };
+        return { predicate: split[0], order: split[1] as any };
       }
     }
     return { predicate: sortParam ? sortParam : undefined };
   };
 
   public buildSortParam(sortState: SortState): string[] {
-    return sortState.predicate && sortState.ascending !== undefined ? [`${sortState.predicate},${sortState.ascending ? ASC : DESC}`] : [];
+    return sortState.predicate && sortState.order !== undefined ? [`${sortState.predicate},${sortState.order}`] : [];
   }
 }
