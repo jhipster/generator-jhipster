@@ -111,7 +111,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
         },
       });
 
-      if (application.generateUserManagement) {
+      if (application.generateUserManagement && application.userManagement.skipClient) {
         await this.writeFiles({
           sections: userManagementFiles,
           context: {

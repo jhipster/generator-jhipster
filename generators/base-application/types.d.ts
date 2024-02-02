@@ -56,13 +56,16 @@ type ApplicationType = DeterministicOptionWithDerivedProperties<
 type UserManagement =
   | {
       skipUserManagement: true;
+      generateUserManagement: false;
       generateBuiltInUserEntity?: false;
       generateBuiltInAuthorityEntity: false;
     }
   | {
       skipUserManagement: false;
       generateBuiltInUserEntity?: boolean;
+      generateUserManagement: true;
       user: any;
+      userManagement: any;
       generateBuiltInAuthorityEntity: boolean;
       authority: any;
     };
@@ -76,6 +79,7 @@ type Oauth2Application = {
   generateBuiltInUserEntity?: boolean;
   user: any;
   generateBuiltInAuthorityEntity: false;
+  generateUserManagement: false;
 };
 
 type SessionApplication = UserManagement & {

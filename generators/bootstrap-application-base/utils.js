@@ -19,13 +19,54 @@
 import * as _ from 'lodash-es';
 import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
+import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
+import { getDatabaseTypeData } from '../server/support/database.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
-const { STRING: TYPE_STRING } = CommonDBTypes;
+const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN, INSTANT } = CommonDBTypes;
+
+export const auditableEntityFields = () => [
+  {
+    fieldName: 'createdBy',
+    fieldType: TYPE_STRING,
+    readonly: true,
+    skipServer: true,
+    builtIn: true,
+    fieldValidateRules: [Validations.MAXLENGTH],
+    fieldValidateRulesMaxlength: 50,
+    autoGenerate: true,
+  },
+  {
+    fieldName: 'createdDate',
+    fieldType: INSTANT,
+    readonly: true,
+    skipServer: true,
+    builtIn: true,
+    autoGenerate: true,
+  },
+  {
+    fieldName: 'lastModifiedBy',
+    fieldType: TYPE_STRING,
+    readonly: true,
+    skipServer: true,
+    builtIn: true,
+    fieldValidateRules: [Validations.MAXLENGTH],
+    fieldValidateRulesMaxlength: 50,
+    autoGenerate: true,
+  },
+  {
+    fieldName: 'lastModifiedDate',
+    fieldType: INSTANT,
+    readonly: true,
+    skipServer: true,
+    builtIn: true,
+    autoGenerate: true,
+  },
+];
 
 const authorityEntityName = 'Authority';
 
@@ -41,10 +82,12 @@ export function createUserEntity(customUserData = {}, application) {
     }
   }
 
+  const cassandraOrNoDatabase = application.databaseTypeNo || application.databaseTypeCassandra;
   // Create entity definition for built-in entity to make easier to deal with relationships.
   const user = {
     name: 'User',
     builtIn: true,
+    changelogDate: '00000000000100',
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
@@ -57,7 +100,10 @@ export function createUserEntity(customUserData = {}, application) {
     entityPersistenceLayer: false,
     entityRestLayer: false,
     entitySearchLayer: false,
-    hasImageField: !application.databaseTypeNo && !application.databaseTypeCassandra,
+    hasImageField: !cassandraOrNoDatabase,
+    pagination: cassandraOrNoDatabase ? PaginationTypes.NO : PaginationTypes.PAGINATION,
+    auditableEntity: !cassandraOrNoDatabase,
+    i18nKeyPrefix: 'userManagement',
     ...customUserData,
   };
 
@@ -77,14 +123,15 @@ export function createUserEntity(customUserData = {}, application) {
       fieldValidateRulesMaxlength,
       fieldTranslationKey: 'global.field.id',
       fieldNameHumanized: 'ID',
+      readonly: true,
       id: true,
       builtIn: true,
     },
     {
       fieldName: 'login',
       fieldType: TYPE_STRING,
-      fieldValidateRules: [Validations.REQUIRED, Validations.MAX, Validations.PATTERN],
-      fieldValidateRulesMax: 50,
+      fieldValidateRules: [Validations.REQUIRED, Validations.UNIQUE, Validations.MAXLENGTH, Validations.PATTERN],
+      fieldValidateRulesMaxlength: 50,
       fieldValidateRulesPattern: LOGIN_REGEX_JS,
       fieldValidateRulesPatternJava: LOGIN_REGEX,
       builtIn: true,
@@ -92,16 +139,101 @@ export function createUserEntity(customUserData = {}, application) {
     {
       fieldName: 'firstName',
       fieldType: TYPE_STRING,
+      fieldValidateRules: [Validations.MAXLENGTH],
+      fieldValidateRulesMaxlength: 50,
       builtIn: true,
     },
     {
       fieldName: 'lastName',
       fieldType: TYPE_STRING,
+      fieldValidateRules: [Validations.MAXLENGTH],
+      fieldValidateRulesMaxlength: 50,
       builtIn: true,
     },
+    {
+      fieldName: 'email',
+      fieldType: TYPE_STRING,
+      fieldValidateRules: [Validations.REQUIRED, Validations.UNIQUE, Validations.MAXLENGTH, Validations.MINLENGTH],
+      fieldValidateRulesMinlength: 5,
+      fieldValidateRulesMaxlength: 191,
+      builtIn: true,
+    },
+    ...(user.hasImageField
+      ? [
+          {
+            fieldName: 'imageUrl',
+            fieldType: TYPE_STRING,
+            fieldValidateRules: [Validations.MAXLENGTH],
+            fieldValidateRulesMaxlength: 256,
+            builtIn: true,
+          },
+        ]
+      : []),
+    {
+      fieldName: 'activated',
+      fieldType: TYPE_BOOLEAN,
+      builtIn: true,
+      autoGenerate: true,
+    },
+    ...(application.enableTranslation
+      ? [
+          {
+            fieldName: 'langKey',
+            fieldType: TYPE_STRING,
+            fieldValidateRules: [Validations.MAXLENGTH],
+            fieldValidateRulesMaxlength: 10,
+            builtIn: true,
+          },
+        ]
+      : []),
   ]);
 
   return user;
+}
+
+export function createUserManagementEntity(customUserManagementData = {}, application) {
+  const user = createUserEntity.call(this, {}, application);
+  for (const field of user.fields) {
+    // Login is used as the id field in rest api.
+    if (field.fieldName === 'login') {
+      field.id = true;
+    } else if (field.fieldName === 'id') {
+      field.id = false;
+      field.fieldValidateRules = [Validations.REQUIRED];
+      // Set id type fallback since it's not id anymore and will not be calculated.
+      field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType).defaultPrimaryKeyType;
+    }
+  }
+
+  const userManagement = {
+    ...user,
+    name: 'UserManagement',
+    skipClient: true,
+    skipServer: true,
+    changelogDate: '00000000000150',
+    clientRootFolder: 'admin',
+    entityAngularName: 'UserManagement',
+    entityApiUrl: 'admin/users',
+    entityFileName: 'user-management',
+    entityPage: 'user-management',
+    ...customUserManagementData,
+    adminEntity: true,
+    builtInUser: false,
+    builtInUserManagement: true,
+  };
+
+  if (application.generateBuiltInAuthorityEntity) {
+    addOrExtendRelationships(userManagement.relationships, [
+      {
+        otherEntityName: 'Authority',
+        relationshipName: 'authority',
+        relationshipType: 'many-to-many',
+        relationshipIgnoreBackReference: true,
+      },
+    ]);
+  }
+
+  return userManagement;
 }
 
 export function createAuthorityEntity(customAuthorityData = {}, application) {
@@ -121,6 +253,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     entitySuffix: '',
     clientRootFolder: 'admin',
     builtIn: true,
+    changelogDate: '00000000000200',
     adminEntity: true,
     entityTableName: `${application.jhiTablePrefix}_authority`,
     relationships: [],
@@ -170,6 +303,20 @@ function addOrExtendFields(fields, fieldsToAdd) {
       }
     } else {
       _.defaults(field, fieldToAdd);
+    }
+  }
+}
+
+function addOrExtendRelationships(relationships, relationshipsToAdd) {
+  relationshipsToAdd = [].concat(relationshipsToAdd);
+  for (const relationshipToAdd of relationshipsToAdd) {
+    const { relationshipName: newrelationshipName } = relationshipToAdd;
+    let relationship = relationships.find(relationship => relationship.relationshipName === newrelationshipName);
+    if (!relationship) {
+      relationship = { ...relationshipToAdd };
+      relationships.push(relationship);
+    } else {
+      _.defaults(relationship, relationshipToAdd);
     }
   }
 }

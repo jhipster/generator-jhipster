@@ -33,7 +33,7 @@ import {
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.js';
-import { createAuthorityEntity, createUserEntity } from './utils.js';
+import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
@@ -231,6 +231,24 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           const user = createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application);
           this.sharedData.setEntity('User', user);
           application.user = user;
+        }
+      },
+      loadUserManagement({ application, entitiesToLoad }) {
+        if (application.generateBuiltInUserEntity && application.generateUserManagement) {
+          if (this.sharedData.hasEntity('UserManagement')) {
+            throw new Error("Fail to bootstrap 'User', already exists.");
+          }
+
+          const customUserManagement = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'UserManagement');
+          const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
+
+          const userManagement = createUserManagementEntity.call(
+            this,
+            { ...customUserManagementData, ...customUserManagementData.annotations },
+            application,
+          );
+          this.sharedData.setEntity('UserManagement', userManagement);
+          application.userManagement = userManagement;
         }
       },
       loadAuthority({ application, entitiesToLoad }) {

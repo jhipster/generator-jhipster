@@ -25,16 +25,7 @@ export const clientI18nFiles = {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
       to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
       transform: false,
-      templates: [
-        'error.json',
-        'login.json',
-        'home.json',
-        'password.json',
-        'register.json',
-        'sessions.json',
-        'settings.json',
-        'user-management.json',
-      ],
+      templates: ['error.json', 'login.json', 'home.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
     },
     {
       condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,

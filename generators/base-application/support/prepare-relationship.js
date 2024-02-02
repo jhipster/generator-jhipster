@@ -90,6 +90,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
       });
     } else if (
       !ignoreMissingRequiredRelationship &&
+      !relationship.relationshipIgnoreBackReference &&
       entityWithConfig.databaseType !== NEO4J &&
       entityWithConfig.databaseType !== DATABASE_NO &&
       (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
