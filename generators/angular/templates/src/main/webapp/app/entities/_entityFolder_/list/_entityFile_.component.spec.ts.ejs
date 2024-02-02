@@ -32,17 +32,13 @@ import { of } from 'rxjs';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
-<%_ if (!paginationNo) { _%>
 import SpyInstance = jest.SpyInstance;
-<%_ } _%>
 
 describe('<%= entityAngularName %> Management Component', () => {
     let comp: <%= entityAngularName %>Component;
     let fixture: ComponentFixture<<%= entityAngularName %>Component>;
     let service: <%= entityAngularName %>Service;
-<%_ if (!paginationNo) { _%>
     let routerNavigateSpy: SpyInstance<Promise<boolean>>;
-<%_ } _%>
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -89,9 +85,7 @@ describe('<%= entityAngularName %> Management Component', () => {
         fixture = TestBed.createComponent(<%= entityAngularName %>Component);
         comp = fixture.componentInstance;
         service = TestBed.inject(<%= entityAngularName %>Service);
-<%_ if (!paginationNo) { _%>
         routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
-<%_ } _%>
 
         const headers = new HttpHeaders();
         jest.spyOn(service, 'query').mockReturnValue(
@@ -122,6 +116,19 @@ describe('<%= entityAngularName %> Management Component', () => {
             expect(<%= primaryKey.name %>).toBe(entity.<%= primaryKey.name %>);
         });
     });
+
+    it('should calculate the sort attribute for a non-id attribute', () => {
+        // WHEN
+        comp.navigateToWithComponentValues({ predicate: 'non-existing-column', order: 'asc' });
+
+        // THEN
+        expect(routerNavigateSpy).toHaveBeenLastCalledWith(expect.anything(),
+          expect.objectContaining({
+            queryParams: expect.objectContaining({
+                sort: ['non-existing-column,asc']
+              })
+          }));
+    });
 <%_ if (!paginationNo) { _%>
 
     it('should load a page', () => {
@@ -140,23 +147,6 @@ describe('<%= entityAngularName %> Management Component', () => {
         expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%= order %>'] }));
     });
 
-    it('should calculate the sort attribute for a non-id attribute', () => {
-
-        // GIVEN
-        comp.predicate = 'non-existing-column';
-        comp.ascending = true;
-
-        // WHEN
-        comp.navigateToWithComponentValues();
-
-        // THEN
-        expect(routerNavigateSpy).toHaveBeenLastCalledWith(expect.anything(),
-          expect.objectContaining({
-            queryParams: expect.objectContaining({
-                sort: ['non-existing-column,asc']
-              })
-          }));
-    });
   <%_ if (paginationInfiniteScroll) { _%>
 
     it('should re-initialize the page', () => {
