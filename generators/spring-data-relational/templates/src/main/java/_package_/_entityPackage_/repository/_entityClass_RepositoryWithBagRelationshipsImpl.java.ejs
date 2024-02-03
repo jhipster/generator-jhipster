@@ -50,13 +50,11 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
 <%_ } _%>
         ;
     }
-<%_ if (!paginationNo) { _%>
 
     @Override
     public Page<<%= persistClass %>> fetchBagRelationships(Page<<%= persistClass %>> <%= entityInstancePlural %>) {
         return new PageImpl<>(fetchBagRelationships(<%= entityInstancePlural %>.getContent()), <%= entityInstancePlural %>.getPageable(), <%= entityInstancePlural %>.getTotalElements());
     }
-<%_ } _%>
 
     @Override
     public List<<%= persistClass %>> fetchBagRelationships(List<<%= persistClass %>> <%= entityInstancePlural %>) {
