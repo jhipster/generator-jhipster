@@ -74,7 +74,7 @@ describe('LogsComponent', () => {
 
       // THEN
       expect(service.findAll).toHaveBeenCalled();
-      expect(comp.loggers?.[0]).toEqual(expect.objectContaining(log));
+      expect(comp.loggers()?.[0]).toEqual(expect.objectContaining(log));
     });
   });
 
@@ -99,7 +99,7 @@ describe('LogsComponent', () => {
       // THEN
       expect(service.changeLevel).toHaveBeenCalled();
       expect(service.findAll).toHaveBeenCalled();
-      expect(comp.loggers?.[0]).toEqual(expect.objectContaining(log));
+      expect(comp.loggers()?.[0]).toEqual(expect.objectContaining(log));
     });
   });
 });
