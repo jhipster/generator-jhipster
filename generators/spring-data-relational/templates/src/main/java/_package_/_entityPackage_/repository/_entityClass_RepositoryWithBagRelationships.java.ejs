@@ -32,6 +32,8 @@ public interface <%= entityClass %>RepositoryWithBagRelationships {
     Optional<<%= persistClass %>> fetchBagRelationships(Optional<<%= persistClass %>> <%= entityInstance %>);
 
     List<<%= persistClass %>> fetchBagRelationships(List<<%= persistClass %>> <%= entityInstancePlural %>);
+<%_ if (!paginationNo) { _%>
 
     Page<<%= persistClass %>> fetchBagRelationships(Page<<%= persistClass %>> <%= entityInstancePlural %>);
+<%_ } _%>
 }

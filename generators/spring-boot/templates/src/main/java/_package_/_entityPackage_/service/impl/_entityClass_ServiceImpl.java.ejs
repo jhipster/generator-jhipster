@@ -147,36 +147,38 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
 <%- include('../../_partials_entity_/patch_template', {isService: true, viaService: false}); -%>
     }
 <%_ } _%>
+<%_ if (!jpaMetamodelFiltering) { _%>
 
-<%_ if (!serviceImpl) { _%>
+  <%_ if (!serviceImpl) { _%>
     /**
      * Get all the <%= entityInstancePlural %>.
      *
-  <%_ if (!paginationNo) { _%>
+    <%_ if (!paginationNo) { _%>
      * @param pageable the pagination information.
-  <%_ } _%>
+    <%_ } _%>
      * @return the list of entities.
      */
-<%_ } _%>
-<%_ if (serviceImpl) { _%>
+  <%_ } _%>
+  <%_ if (serviceImpl) { _%>
     @Override
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
-<%_ } _%>
+  <%_ } _%>
     public <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
-<%_ if (paginationNo) { _%>
+  <%_ if (paginationNo) { _%>
         return <%= entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><% if (!reactive) { %>.stream()<% } %>
             .map(<%= entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
-<%_ } else { _%>
+  <%_ } else { _%>
         return <%= entityInstance %>Repository.findAll<% if (reactive) { %>By<% } %>(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%= entityToDtoReference %>);<% } %>
-<%_ } _%>
+  <%_ } _%>
     }
-
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) {  _%>
+
     <%_ if (!serviceImpl) { _%>
     /**
     * Find <%= entityInstancePlural %> by Criteria.
@@ -211,7 +213,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
         log.debug("Request to get the count of all <%= entityClassPlural %> by Criteria");
         return <%= entityInstance %>Repository.countByCriteria(criteria);
     }
-    <%_ }  _%>
+<%_ }  _%>
 
 
 <%_ if (implementsEagerLoadApis) { _%>
