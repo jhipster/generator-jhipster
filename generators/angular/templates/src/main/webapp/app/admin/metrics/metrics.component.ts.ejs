@@ -51,8 +51,8 @@ import { MetricsSystemComponent } from './blocks/metrics-system/metrics-system.c
   ],
 })
 export default class MetricsComponent implements OnInit {
-  metrics?: Metrics;
-  threads?: Thread[];
+  metrics = signal<Metrics | undefined>(undefined);
+  threads = signal<Thread[] | undefined>(undefined);
   updatingMetrics = signal(true);
 
   private metricsService = inject(MetricsService);
@@ -65,18 +65,18 @@ export default class MetricsComponent implements OnInit {
   refresh(): void {
     this.updatingMetrics.set(true);
     combineLatest([this.metricsService.getMetrics(), this.metricsService.threadDump()]).subscribe(([metrics, threadDump]) => {
-      this.metrics = metrics;
-      this.threads = threadDump.threads;
+      this.metrics.set(metrics);
+      this.threads.set(threadDump.threads);
       this.updatingMetrics.set(false);
       this.changeDetector.markForCheck();
     });
   }
 
   metricsKeyExists(key: keyof Metrics): boolean {
-    return Boolean(this.metrics?.[key]);
+    return Boolean(this.metrics()?.[key]);
   }
 
   metricsKeyExistsAndObjectNotEmpty(key: keyof Metrics): boolean {
-    return Boolean(this.metrics?.[key] && JSON.stringify(this.metrics[key]) !== '{}');
+    return Boolean(this.metrics()?.[key] && JSON.stringify(this.metrics()?.[key]) !== '{}');
   }
 }
