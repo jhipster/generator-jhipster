@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-@if (allBeans) {
+@if (allBeans()) {
 <div>
   <h2 id="configuration-page-heading" <%= jhiPrefix %>Translate="configuration.title" data-cy="configurationPageHeading">__jhiTransformTranslate__('configuration.title')</h2>
 
@@ -35,7 +35,7 @@
       </tr>
     </thead>
     <tbody>
-    @for (bean of beans; track $index) {
+    @for (bean of beans(); track $index) {
       <tr>
         <td>
           <span>{{ bean.prefix }}</span>
@@ -55,7 +55,7 @@
     </tbody>
   </table>
 
-  @for (propertySource of propertySources; track i; let i = $index) {
+  @for (propertySource of propertySources(); track i; let i = $index) {
   <div>
     <h4 [id]="'property-source-' + i">
       <span>{{ propertySource.name }}</span>

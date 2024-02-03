@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -31,28 +31,28 @@ import { Bean, PropertySource } from './configuration.model';
   imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class ConfigurationComponent implements OnInit {
-  allBeans!: Bean[];
-  beans: Bean[] = [];
+  allBeans = signal<Bean[] | undefined>(undefined);
+  beans = signal<Bean[]>([]);
   beansFilter = '';
   beansAscending = true;
-  propertySources: PropertySource[] = [];
+  propertySources = signal<PropertySource[]>([]);
 
   private configurationService = inject(ConfigurationService);
 
   ngOnInit(): void {
     this.configurationService.getBeans().subscribe(beans => {
-      this.allBeans = beans;
+      this.allBeans.set(beans);
       this.filterAndSortBeans();
     });
 
-    this.configurationService.getPropertySources().subscribe(propertySources => (this.propertySources = propertySources));
+    this.configurationService.getPropertySources().subscribe(propertySources => (this.propertySources.set(propertySources)));
   }
 
   filterAndSortBeans(): void {
     const beansAscendingValue = this.beansAscending ? -1 : 1;
     const beansAscendingValueReverse = this.beansAscending ? 1 : -1;
-    this.beans = this.allBeans
+    this.beans.set(this.allBeans()!
       .filter(bean => !this.beansFilter || bean.prefix.toLowerCase().includes(this.beansFilter.toLowerCase()))
-      .sort((a, b) => (a.prefix < b.prefix ? beansAscendingValue : beansAscendingValueReverse));
+      .sort((a, b) => (a.prefix < b.prefix ? beansAscendingValue : beansAscendingValueReverse)));
   }
 }
