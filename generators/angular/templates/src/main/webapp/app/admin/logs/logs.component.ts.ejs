@@ -38,8 +38,8 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
   imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class LogsComponent implements OnInit {
-  loggers?: Log[];
-  filteredAndOrderedLoggers?: Log[];
+  loggers = signal<Log[] | undefined>(undefined);
+  filteredAndOrderedLoggers = signal<Log[] | undefined>(undefined);
   isLoading = signal(false);
   filter = '';
   orderProp: keyof Log = 'name';
@@ -71,7 +71,7 @@ export default class LogsComponent implements OnInit {
 <%_ } _%>
 
   filterAndSort(): void {
-    this.filteredAndOrderedLoggers = this.loggers!.filter(
+    this.filteredAndOrderedLoggers.set(this.loggers()!.filter(
       logger => !this.filter || logger.name.toLowerCase().includes(this.filter.toLowerCase())
     ).sort((a, b) => {
       if (a[this.orderProp] < b[this.orderProp]) {
@@ -82,7 +82,7 @@ export default class LogsComponent implements OnInit {
         return a.name < b.name ? -1 : 1;
       }
       return 0;
-    });
+    }));
   }
 
   private findAndExtractLoggers(): void {
@@ -97,8 +97,8 @@ export default class LogsComponent implements OnInit {
       )
       .subscribe({
         next: (response: LoggersResponse) =>
-          (this.loggers = Object.entries(response.loggers).map(([key, logger]) => new Log(key, logger.effectiveLevel))),
-        error: () => (this.loggers = []),
+          (this.loggers.set(Object.entries(response.loggers).map(([key, logger]) => new Log(key, logger.effectiveLevel)))),
+        error: () => (this.loggers.set([])),
       });
   }
 

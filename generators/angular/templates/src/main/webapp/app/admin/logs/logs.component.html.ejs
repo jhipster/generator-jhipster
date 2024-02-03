@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-@defer (when loggers && !isLoading()) {
+@defer (when loggers() && !isLoading()) {
 <div class="table-responsive">
   <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">__jhiTransformTranslate__('logs.title')</h2>
 
@@ -33,7 +33,7 @@
   </div>
 <%_ } _%>
 
-  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers?.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers?.length }}" })</p>
+  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers()?.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers()?.length }}" })</p>
 
   <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
   <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
@@ -47,7 +47,7 @@
     </thead>
 
     <tbody>
-    @for (logger of filteredAndOrderedLoggers; track $index) {
+    @for (logger of filteredAndOrderedLoggers(); track $index) {
       <tr>
         <td>
           <small>{{ logger.name | slice: 0:140 }}</small>
