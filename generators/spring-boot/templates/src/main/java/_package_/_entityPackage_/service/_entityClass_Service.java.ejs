@@ -83,6 +83,7 @@ public interface <%= entityClass %>Service {
      * @return the persisted entity.
      */
     <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>);
+<%_ if (!jpaMetamodelFiltering) {  _%>
 
     /**
      * Get all the <%= entityInstancePlural %>.
@@ -92,7 +93,8 @@ public interface <%= entityClass %>Service {
      */
     <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
 
-    <%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && reactive) {  _%>
       /**
       * Find <%= entityInstancePlural %> by criteria.
       *<% if (!paginationNo) { %>
@@ -107,7 +109,7 @@ public interface <%= entityClass %>Service {
       * @return the count of <%= entityInstancePlural %>
       */
       public Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria);
-    <%_ } _%>
+<%_ } _%>
 
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
@@ -117,7 +119,8 @@ public interface <%= entityClass %>Service {
      * @return the {@link <%= listOrFlux %>} of entities.
      */
     <%= listOrFlux %><<%= instanceType %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
-<%_ } } _%>
+  <%_ } _%>
+<%_ } _%>
 
 <%_ if (implementsEagerLoadApis) { _%>
     /**

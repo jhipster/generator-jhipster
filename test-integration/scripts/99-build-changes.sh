@@ -98,6 +98,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/liquibase' \
   'generators/maven' \
   'generators/server' \
+  'generators/spring-boot' \
   'generators/spring-cache' \
   'generators/spring-cloud-stream' \
   'generators/spring-data-cassandra' \

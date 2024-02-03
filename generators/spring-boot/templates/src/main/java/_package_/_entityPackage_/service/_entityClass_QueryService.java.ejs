@@ -60,7 +60,7 @@ import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
  * Service for executing complex queries for {@link <%= persistClass %>} entities in the database.
  * The main input is a {@link <%= entityClass %>Criteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link <%= instanceType %>} or a {@link Page} of {@link <%= instanceType %>} which fulfills the criteria.
+ * It returns a {@link <% if (paginationNo) { %>List<% } else { %>Page<% } %>} of {@link <%= instanceType %>} which fulfills the criteria.
  */
 @Service
 <%_ if (databaseTypeSql) { _%>
@@ -70,6 +70,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
 <%- include('../_partials_entity_/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null, isController: false}); -%>
+<%_ if (paginationNo) { _%>
 
     /**
      * Return a {@link List} of {@link <%= instanceType %>} which matches the criteria from the database.
@@ -80,12 +81,13 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
     public List<<%= instanceType %>> findByCriteria(<%= criteria %> criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<<%= persistClass %>> specification = createSpecification(criteria);
-<%_ if (dtoMapstruct) { _%>
-        return <%= entityListToDto %>(<%= repository %>.findAll(specification));
-<%_ } else { _%>
-        return <%= repository %>.findAll(specification);
-<%_ } _%>
+  <%_ if (dtoMapstruct) { _%>
+        return <%= entityListToDto %>(<% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>);
+  <%_ } else { _%>
+        return <% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>;
+  <%_ } _%>
     }
+<%_ } else { _%>
 
     /**
      * Return a {@link Page} of {@link <%= instanceType %>} which matches the criteria from the database.
@@ -97,13 +99,14 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
     public Page<<%= instanceType %>> findByCriteria(<%= criteria %> criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<<%= persistClass %>> specification = createSpecification(criteria);
-<%_ if (dtoMapstruct) { _%>
-        return <%= repository %>.findAll(specification, page)
+  <%_ if (dtoMapstruct) { _%>
+        return <% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>
             .map(<%= entityToDtoReference %>);
-<%_ } else { _%>
-        return <%= repository %>.findAll(specification, page);
-<%_ } _%>
+  <%_ } else { _%>
+        return <% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>;
+  <%_ } _%>
     }
+<%_ } _%>
 
     /**
      * Return the number of matching entities in the database.
