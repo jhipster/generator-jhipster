@@ -16,9 +16,6 @@ plugins:
   - prettier-plugin-java
 
 overrides:
-  - files: "tsconfig.json"
-    options:
-      parser: "json"
   # java rules:
   - files: "*.java"
     options:
