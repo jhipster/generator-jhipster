@@ -73,9 +73,6 @@ plugins:
 
 # java rules:
 overrides:
-  - files: "tsconfig.json"
-    options:
-      parser: "json"
   - files: "*.java"
     options:
       tabWidth: 4

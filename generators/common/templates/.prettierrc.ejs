@@ -15,14 +15,9 @@ plugins:
   - prettier-plugin-packagejson
 <%_ if (backendTypeJavaAny) { _%>
   - prettier-plugin-java
-<%_ } _%>
 
 # java rules:
 overrides:
-  - files: "tsconfig.json"
-    options:
-      parser: "json"
-<%_ if (backendTypeJavaAny) { _%>
   - files: "*.java"
     options:
       tabWidth: 4
