@@ -9,7 +9,7 @@
     "axios": "1.6.7",
     "bootstrap": "4.6.2",
     "bootstrap-vue": "2.23.1",
-    "bootswatch": "5.3.2",
+    "bootswatch": "4.6.2",
     "deepmerge": "4.3.1",
     "js-cookie": "3.0.5",
     "pinia": "2.1.7",
