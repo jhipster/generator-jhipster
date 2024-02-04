@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
+import { Component, inject, signal, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { Subscription } from 'rxjs';
@@ -31,7 +31,7 @@ import SharedModule from 'app/shared/shared.module';
   imports: [SharedModule],
 })
 export default class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
-  errorMessage?: string;
+  errorMessage = signal<string | undefined>(undefined);
 <%_ if (enableTranslation) { _%>
   errorKey?: string;
   langChangeSubscription?: Subscription;
@@ -50,7 +50,7 @@ export default class ErrorComponent implements OnInit<% if (enableTranslation) {
         this.getErrorMessageTranslation();
         this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.getErrorMessageTranslation());
 <%_ } else { _%>
-        this.errorMessage = routeData.errorMessage;
+        this.errorMessage.set(routeData.errorMessage);
 <%_ } _%>
       }
     });
@@ -64,10 +64,10 @@ export default class ErrorComponent implements OnInit<% if (enableTranslation) {
   }
 
   private getErrorMessageTranslation(): void {
-    this.errorMessage = '';
+    this.errorMessage.set('');
     if (this.errorKey) {
       this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => {
-        this.errorMessage = translatedErrorMessage;
+        this.errorMessage.set(translatedErrorMessage);
       });
     }
   }
