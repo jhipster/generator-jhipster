@@ -40,10 +40,8 @@
         <maven-checkstyle-plugin.version>3.3.1</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
-        <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
-        <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
@@ -212,11 +210,6 @@
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-eclipse-plugin</artifactId>
-                  <version>${maven-eclipse-plugin.version}</version>
-                </plugin>
-                <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-enforcer-plugin</artifactId>
                   <version>${maven-enforcer-plugin.version}</version>
                 </plugin>
@@ -224,11 +217,6 @@
                   <groupId>org.apache.maven.plugins</groupId>
                   <artifactId>maven-failsafe-plugin</artifactId>
                   <version>${maven-failsafe-plugin.version}</version>
-                </plugin>
-                <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-idea-plugin</artifactId>
-                  <version>${maven-idea-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>org.apache.maven.plugins</groupId>
