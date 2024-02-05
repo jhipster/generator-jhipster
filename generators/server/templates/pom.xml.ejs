@@ -781,6 +781,12 @@
                         <!-- Fix tests at java 13+ https://github.com/reactor/BlockHound/issues/33 -->
                         <argLine>@{argLine} -XX:+AllowRedefinitionToAddDeleteMethods</argLine>
 <%_ } _%>
+                        <systemProperties>
+                            <property>
+                                <name>java.util.logging.config.file</name>
+                                <value>src/test/resources/logback.xml</value>
+                            </property>
+                        </systemProperties>
                     </configuration>
                 </plugin>
                 <plugin>
