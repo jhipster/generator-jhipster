@@ -595,7 +595,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     // fakeDataCount must be limited to the size of required unique relationships.
     Object.defineProperty(entity, 'fakeDataCount', {
       get: () => {
-        const uniqueRelationships = entity.relationships.filter(rel => rel.unique && (rel.relationshipRequired || rel.id));
+        const uniqueRelationships = entity.relationships.filter(rel => rel.unique && (rel.columnRequired || rel.id));
         return _.min([entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
       },
       configurable: true,

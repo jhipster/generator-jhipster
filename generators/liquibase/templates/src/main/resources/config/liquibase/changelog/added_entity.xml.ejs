@@ -40,14 +40,14 @@
     <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
     <%_ } else if (field.unique) { _%>
-                <constraints nullable="<%= field.nullable %>" unique="true" uniqueConstraintName="<%= field.uniqueConstraintName %>" />
+                <constraints nullable="<%= !field.columnRequired %>" unique="true" uniqueConstraintName="<%= field.uniqueConstraintName %>" />
     <%_ } else { _%>
-                <constraints nullable="<%= field.nullable %>" />
+                <constraints nullable="<%= !field.columnRequired %>" />
     <%_ } _%>
             </column>
     <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%= field.columnName %>_content_type" type="varchar(255)">
-                <constraints nullable="<%= field.nullable %>" />
+                <constraints nullable="<%= !field.columnRequired %>" />
             </column>
     <%_ } _%>
 <%_ } _%>
@@ -58,7 +58,7 @@
         const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
          _%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
-                <constraints nullable="<%= relationship.nullable %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />
+                <constraints nullable="<%= !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />
             </column>
         <%_ });
     }
@@ -113,24 +113,17 @@ _%>
                   separator=";"
                   tableName="<%= entity.entityTableName %>"
                   usePreparedStatements="true">
-    <%_ for (field of fields) { _%>
+  <%_ for (field of fields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
-        <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
             <column name="<%= field.columnName %>_content_type" type="string"/>
-        <%_ } _%>
     <%_ } _%>
-    <%_ for (relationship of relationships) {
-            if (relationship.relationshipValidate === true && relationship.relationshipRequired
-                && (relationship.relationshipType === "many-to-one"
-                    || (relationship.relationshipType === "one-to-one" && relationship.ownerSide === true
-                        && (relationship.id == null || relationship.id === false))
-            )) {
-                _%>
-                <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
+  <%_ } _%>
+  <%_ for (relationship of relationships.filter(relationship => !relationship.id && relationship.columnRequired && relationship.persistableRelationship && !relationship.collection)) { _%>
+      <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
-                <%_ } _%>
-            <%_ } _%>
-    <%_  } _%>
+    <%_ } _%>
+  <%_  } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

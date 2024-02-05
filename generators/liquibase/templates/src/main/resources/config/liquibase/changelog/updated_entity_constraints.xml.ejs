@@ -38,7 +38,7 @@ if (hasFieldConstraint) { _%>
             columnNames="<%= field.columnName %>"
             constraintName="<%= field.uniqueConstraintName %>"/>
     <%_ }
-        if (!field.nullable) {
+        if (field.columnRequired) {
     _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= field.columnName %>"
@@ -69,7 +69,7 @@ if (hasFieldConstraint) { _%>
             columnNames="<%= relationshipData.columnName %>_id"
             constraintName="<%= uniqueConstraintName %>"/>
         <%_ }
-        if (!relationshipData.nullable) {
+        if (relationshipData.columnRequired) {
         _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= relationshipData.columnName %>_id"
