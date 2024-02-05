@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
 import { getFKConstraintName } from '../../server/support/index.js';
+import { mutateData } from '../../base/support/index.js';
 
 function relationshipBaseDataEquals(relationshipA, relationshipB) {
   return (
@@ -66,12 +66,17 @@ export function prepareRelationshipForLiquibase(entity, relationship) {
   if (relationship.shouldWriteJoinTable) {
     const joinTableName = relationship.joinTable.name;
     const prodDatabaseType = entity.prodDatabaseType;
-    _.defaults(relationship.joinTable, {
+    mutateData(relationship.joinTable, {
       constraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }).value,
       otherConstraintName: getFKConstraintName(joinTableName, relationship.columnName, { prodDatabaseType }).value,
     });
   }
 
-  relationship.columnDataType = relationship.otherEntity.columnType;
+  mutateData(relationship, {
+    __override__: false,
+    columnDataType: data => data.otherEntity.columnType,
+    columnRequired: data => data.nullable === false || data.relationshipRequired,
+  });
+
   return relationship;
 }

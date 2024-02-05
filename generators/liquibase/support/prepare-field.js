@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
-
 import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
+import { mutateData } from '../../base/support/index.js';
 
 const { MYSQL, MARIADB } = databaseTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
@@ -140,14 +139,14 @@ function parseLiquibaseLoadColumnType(entity, field) {
 }
 
 export default function prepareField(entity, field) {
-  _.defaults(field, {
-    columnType: parseLiquibaseColumnType(entity, field),
-    shouldDropDefaultValue: field.fieldType === ZONED_DATE_TIME || field.fieldType === INSTANT,
-    shouldCreateContentType: field.fieldType === BYTES && field.fieldTypeBlobContent !== TEXT,
-    nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes('required')),
-  });
-  _.defaults(field, {
-    loadColumnType: parseLiquibaseLoadColumnType(entity, field),
+  mutateData(field, {
+    __override__: false,
+    columnType: data => parseLiquibaseColumnType(entity, data),
+    shouldDropDefaultValue: data => data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT,
+    shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
+    columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules.includes('required')),
+    nullable: data => !data.columnRequired,
+    loadColumnType: data => parseLiquibaseLoadColumnType(entity, data),
   });
   return field;
 }

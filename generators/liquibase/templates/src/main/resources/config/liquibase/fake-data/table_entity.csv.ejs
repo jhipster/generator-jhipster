@@ -28,16 +28,9 @@ for (field of fieldsToGenerate) {
     header.push(field.columnName + '_content_type');
   }
 }
-for (relationship of relationships) {
-  const { relationshipType, joinColumnNames } = relationship;
-  if (
-    (relationshipType === "many-to-one"
-      || (relationshipType === "one-to-one" && relationship.ownerSide === true
-         && (relationship.id == null || relationship.id === false))
-    ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
-  ) {
-    header.push(joinColumnNames[0]);
-  }
+for (relationship of relationships.filter(relationship => relationship.columnRequired)) {
+  const { joinColumnNames } = relationship;
+  header.push(joinColumnNames[0]);
 }
 table.push(header);
 
@@ -50,7 +43,7 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
     let data = rowData[field.fieldName];
     // manage required
     if (data === undefined) {
-      if (field.id || (field.fieldValidateRules && field.fieldValidateRules.includes('required'))) {
+      if (field.id || field.columnRequired) {
         // Remove row;
         line = [];
         break;
@@ -64,22 +57,15 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
     }
   }
 
-  for (relationship of relationships) {
+  for (relationship of relationships.filter(relationship => relationship.columnRequired)) {
     const relationshipType = relationship.relationshipType;
-    if (
-      (relationshipType === "many-to-one"
-        || (relationshipType === "one-to-one" && relationship.ownerSide === true
-           && (relationship.id == null || relationship.id === false))
-      ) && (relationship.relationshipValidate === true && relationship.relationshipRequired)
-    ) {
-      const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
-      let relationshipRow = lineNb;
-      if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
-        relationshipRow = entity.faker.number.int({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
-      }
-      if (relationshipRow < relationship.otherEntity.fakeDataCount) {
-        line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
-      }
+    const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
+    let relationshipRow = lineNb;
+    if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
+      relationshipRow = entity.faker.number.int({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
+    }
+    if (relationshipRow < relationship.otherEntity.fakeDataCount) {
+      line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
     }
   }
   if (line.length === header.length) {
