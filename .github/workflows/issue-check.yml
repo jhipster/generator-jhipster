@@ -36,7 +36,7 @@ jobs:
       issues: write
     if: "${{ github.event.action != 'labeled' || github.event.label.name == 'area: check' }}"
     steps:
-      - uses: mshick/add-pr-comment@v2.8.1
+      - uses: mshick/add-pr-comment@v2.8.2
         with:
           issue: ${{ inputs.issue || github.event.issue.number }}
           message: |
@@ -161,7 +161,7 @@ jobs:
                   github.rest.issues.addLabels({...issue, labels: ['area: invalid', 'area: stale']})
               }
             })
-      - uses: mshick/add-pr-comment@v2.8.1
+      - uses: mshick/add-pr-comment@v2.8.2
         with:
           issue: ${{ inputs.issue || github.event.issue.number }}
           message: |
