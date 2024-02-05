@@ -210,16 +210,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       askForFiltering: prompts.askForFiltering,
       askForReadOnly: prompts.askForReadOnly,
       askForPagination: prompts.askForPagination,
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get default() {
-    return this.asDefaultTaskGroup({
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
@@ -233,8 +223,8 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   // Public API method used by the getter and also by Blueprints
