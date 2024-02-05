@@ -13,7 +13,7 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:16.1
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:23.0.5
+FROM quay.io/keycloak/keycloak:23.0.6
 LABEL ALIAS=keycloak
 
 FROM mysql:8.2.0
