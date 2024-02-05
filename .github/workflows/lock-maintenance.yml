@@ -51,7 +51,7 @@ jobs:
           ./test-integration/scripts/04-git-config.sh
           git commit -a -m "Bump transitional dependencies" || true
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'Bump transitional dependencies'
