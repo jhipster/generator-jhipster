@@ -24,6 +24,7 @@ if (!reactive && databaseTypeSql) {
 }
 _%>
 import <%= packageName %>.IntegrationTest;
+
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
@@ -44,6 +45,8 @@ import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.repository.EntityManager;
 <%_ } _%>
 import <%= packageName %>.service.mapper.UserMapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -159,6 +162,9 @@ class UserResourceIT {
 <%_ if (!authenticationTypeOauth2) { _%>
     private static final String UPDATED_LANGKEY = "fr";
 <%_ } _%>
+
+    @Autowired
+    private ObjectMapper om;
 
     @Autowired
     private UserRepository userRepository;
@@ -299,13 +305,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isCreated();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isCreated());
   <%_ } _%>
@@ -361,13 +367,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -410,13 +416,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -459,13 +465,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -654,13 +660,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -719,13 +725,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -808,13 +814,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -883,13 +889,13 @@ class UserResourceIT {
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(user))
+            .bodyValue(om.writeValueAsBytes(user))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>

@@ -27,6 +27,8 @@ import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
@@ -72,6 +74,9 @@ import static org.hamcrest.Matchers.not;
 <%_ } _%>
 @IntegrationTest
 class AuthenticateControllerIT {
+
+    @Autowired
+    private ObjectMapper om;
 
 <%_ if (generateUserManagement) { _%>
     @Autowired
@@ -119,7 +124,7 @@ class AuthenticateControllerIT {
 <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(om.writeValueAsBytes(login))
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueMatches("Authorization", "Bearer .+")
@@ -128,7 +133,7 @@ class AuthenticateControllerIT {
 <%_ } else { _%>
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .content(om.writeValueAsBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
@@ -169,7 +174,7 @@ class AuthenticateControllerIT {
 <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(om.writeValueAsBytes(login))
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueMatches("Authorization", "Bearer .+")
@@ -178,7 +183,7 @@ class AuthenticateControllerIT {
 <%_ } else { _%>
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .content(om.writeValueAsBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
@@ -195,7 +200,7 @@ class AuthenticateControllerIT {
 <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(om.writeValueAsBytes(login))
             .exchange()
             .expectStatus().isUnauthorized()
             .expectHeader().doesNotExist("Authorization")
@@ -204,7 +209,7 @@ class AuthenticateControllerIT {
 <%_ } else { _%>
         mockMvc.perform(post("/api/authenticate")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(login)))
+            .content(om.writeValueAsBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));
