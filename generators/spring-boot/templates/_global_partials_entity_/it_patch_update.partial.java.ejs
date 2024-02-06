@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+long databaseSizeBeforeUpdate = getRepositoryCount();
 
 // Update the <%= entityInstance %> using partial update
 <%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
@@ -58,7 +58,7 @@ rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%=
 SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 <%_ } _%>
 List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+assertSameRepositoryCount(databaseSizeBeforeUpdate);
 <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
 <%_ for (field of fields) { _%>
   <%_ if (field.fieldTypeZonedDateTime) { _%>
