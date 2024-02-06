@@ -41,6 +41,8 @@ import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ if (reactive && authenticationUsesCsrf || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import org.junit.jupiter.api.BeforeEach;
@@ -109,6 +111,9 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 @IntegrationTest
 class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
+
+    @Autowired
+    private ObjectMapper om;
 
     @Autowired
     private UserRepository userRepository;
@@ -280,14 +285,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(validUser))
+            .bodyValue(om.writeValueAsBytes(validUser))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(validUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -317,7 +322,7 @@ class AccountResourceIT {
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
         <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
@@ -326,7 +331,7 @@ class AccountResourceIT {
 <%_ } else { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } _%>
@@ -356,14 +361,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -393,14 +398,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -430,14 +435,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(om.writeValueAsBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -487,14 +492,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(firstUser))
+            .bodyValue(om.writeValueAsBytes(firstUser))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(firstUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -503,14 +508,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
         <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
@@ -527,14 +532,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
 <%_ } _%>
@@ -562,14 +567,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(firstUser))
+            .bodyValue(om.writeValueAsBytes(firstUser))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(firstUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -594,14 +599,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -630,14 +635,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
+            .bodyValue(om.writeValueAsBytes(userWithUpperCaseEmail))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userWithUpperCaseEmail))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -653,14 +658,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(om.writeValueAsBytes(secondUser))
             .exchange()
             .expectStatus().is4xxClientError();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
 <%_ } _%>
@@ -687,14 +692,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(validUser))
+            .bodyValue(om.writeValueAsBytes(validUser))
             .exchange()
             .expectStatus().isCreated();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(validUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
 <%_ } _%>
@@ -788,14 +793,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
 <%_ } _%>
@@ -848,14 +853,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
         <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
@@ -914,14 +919,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -964,14 +969,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
 <%_ } _%>
@@ -1002,13 +1007,13 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
+            .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
+            .content(om.writeValueAsBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
             <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
@@ -1041,13 +1046,13 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
+            .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
+            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
             <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
@@ -1081,13 +1086,13 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
@@ -1121,13 +1126,13 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
@@ -1159,13 +1164,13 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
+            .bodyValue(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "")))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
+            .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "")))
             <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
@@ -1376,14 +1381,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/reset-password/finish")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .bodyValue(om.writeValueAsBytes(keyAndPassword))
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
 <%_ } _%>
@@ -1418,14 +1423,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/reset-password/finish")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .bodyValue(om.writeValueAsBytes(keyAndPassword))
             .exchange()
             .expectStatus().isBadRequest();
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -1446,14 +1451,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/reset-password/finish")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .bodyValue(om.writeValueAsBytes(keyAndPassword))
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 <%_ } else { _%>
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
+                .content(om.writeValueAsBytes(keyAndPassword))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isInternalServerError());
 <%_ } _%>

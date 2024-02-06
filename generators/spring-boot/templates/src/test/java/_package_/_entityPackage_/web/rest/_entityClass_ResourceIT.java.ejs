@@ -106,6 +106,7 @@ import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ if (jpaMetamodelFiltering & !reactive) { _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
+import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.apache.commons.collections4.IterableUtils;
@@ -452,6 +453,9 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 <%_ } _%>
 
     @Autowired
+    private ObjectMapper om;
+
+    @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
     @Autowired
@@ -666,13 +670,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isCreated();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isCreated());
   <%_ } _%>
 
@@ -729,13 +733,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -797,13 +801,13 @@ _%>
     <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>))
+            .bodyValue(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>))
             .exchange()
             .expectStatus().isOk();
     <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>)))
+            .content(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>)))
             .andExpect(status().isOk());
     <%_ } _%>
 
@@ -849,13 +853,13 @@ _%>
         <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
         <%_ } _%>
 
@@ -1437,13 +1441,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
+            .bodyValue(om.writeValueAsBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
+            .content(om.writeValueAsBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
             .andExpect(status().isOk());
   <%_ } _%>
 
@@ -1505,13 +1509,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -1545,13 +1549,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -1584,13 +1588,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
@@ -1660,13 +1664,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -1699,13 +1703,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -1738,13 +1742,13 @@ _%>
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
         rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
-            .content(TestUtil.convertObjectToJsonBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
