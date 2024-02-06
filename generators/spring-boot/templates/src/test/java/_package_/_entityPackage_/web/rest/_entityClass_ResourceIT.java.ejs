@@ -18,6 +18,8 @@
 -%>
 package <%= entityAbsolutePackage %>.web.rest;
 
+import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>Asserts.*;
+
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
@@ -701,29 +703,20 @@ _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+  <%_ if (dtoMapstruct) { _%>
+        var returned<%- persistClass %> = <%= entityInstance %>Mapper.toEntity(returned<%- dtoClass %>);
+  <%_ } _%>
+        assert<%- persistClass %>UpdatableFieldsEquals(returned<%- persistClass %>, getPersisted<%- persistClass %>(returned<%- persistClass %>));
   <%_ if (searchEngineElasticsearch) { _%>
+
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
         });
   <%_ } _%>
-        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>Repository.findById(returned<%- restClass %>.get<%- primaryKey.nameCapitalized %>())<%= reactive ? callBlock : '.orElseThrow()' %>;
-  <%_ for (const field of fieldsToTest) {
-    if (field.fieldTypeZonedDateTime) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-    <%_ } else if (field.fieldTypeBigDecimal) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ }
-  } _%>
-  <%_ if (isUsingMapsId) { _%>
+  <%_ if (primaryKey.derived) { _%>
 
-        // Validate the id for MapsId, the ids must be same
-        assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(<%_ if (dtoMapstruct) { _%><%= dtoInstance %><%_ } else { _%>test<%= entityClass %><%_ } _%>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+        assert<%- persistClass %>MapsIdRelationshipPersistedValue(<%= persistInstance %>, returned<%- persistClass %>);
   <%_ } _%>
     }
 
@@ -752,9 +745,15 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+        rest<%= entityClass %>MockMvc
+            .perform(
+                post(ENTITY_API_URL)
+    <%_ if (authenticationUsesCsrf) { _%>
+                .with(csrf())
+    <%_ } _%>
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(<%= restInstance %>))
+            )
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
@@ -762,7 +761,6 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertSameRepositoryCount(databaseSizeBeforeCreate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
@@ -923,18 +921,12 @@ _%>
         assertThat(<%= entityInstance %>List).isNotNull();
         assertThat(<%= entityInstance %>List).hasSize(1);
         <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(0);
-  <%_ for (const field of fieldsToTest) {
-    if (field.fieldTypeZonedDateTime) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } else if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-    <%_ } else if (field.fieldTypeBigDecimal) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ }
-  } _%>
+
+  <%_ if (relationships.length > 0) { _%>
+        assert<%- persistClass %>AllUpdatablePropertiesEquals(<%= persistInstance %>, test<%= entityClass %>);
+  <%_ } else { _%>
+        assert<%- persistClass %>UpdatableFieldsEquals(<%= persistInstance %>, test<%= entityClass %>);
+  <%_ } _%>
     }
 <%_ } _%>
 
@@ -1471,39 +1463,17 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
-  <%_ for (const field of fieldsToTest) { _%>
-    <%_ if (field.fieldTypeZonedDateTime) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-    <%_ } else if (field.fieldTypeBigDecimal) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-    <%_ } _%>
-  <%_ } _%>
+        assertPersisted<%- persistClass %>ToMatchAllProperties(updated<%= persistClass %>);
+
   <%_ if (searchEngineElasticsearch) { _%>
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
             List<<%= persistClass %>> <%= entityInstance %>SearchList = IterableUtils.toList(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
-        <%= persistClass %> test<%= entityClass %>Search = <%= entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
-    <%_ for (const field of fieldsToTest) { _%>
-      <%_ if (field.fieldTypeZonedDateTime) { _%>
-            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-      <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
-      <%_ } else if (field.fieldTypeBigDecimal) { _%>
-            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-      <%_ } else { _%>
-            assertThat(test<%= entityClass %>Search.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
-      <%_ } _%>
-    <%_ } _%>
+            <%= persistClass %> test<%= entityClass %>Search = <%= entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
+
+            assert<%- persistClass %>AllPropertiesEquals(test<%= entityClass %>Search, updated<%= persistClass %>);
       });
   <%_ } _%>
     }
@@ -1644,6 +1614,22 @@ _%>
 
   <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock}); -%>
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        <%= persistClass %> test<%= entityClass %> = getPersisted<%- persistClass %>(<%= persistInstance %>);
+
+<%_ for (field of fieldsToIncludeInPartialPatchTest) { _%>
+  <%_ if (field.fieldTypeZonedDateTime) { _%>
+        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
+  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
+        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= field.testWithConstant %>_CONTENT_TYPE);
+  <%_ } else if (field.fieldTypeBigDecimal) { _%>
+        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= field.testWithConstant %>);
+  <%_ } else { _%>
+        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
+  <%_ } _%>
+<%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1658,6 +1644,12 @@ _%>
 
   <% const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); %>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock}); -%>
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assert<%- persistClass %>UpdatableFieldsEquals(
+            partialUpdated<%= persistClass %>,
+            getPersisted<%- persistClass %>(partialUpdated<%= persistClass %>)
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1693,8 +1685,8 @@ _%>
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-    int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
-    assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
@@ -1889,5 +1881,29 @@ _%>
 
     protected void assertSameRepositoryCount(long countBefore) {
       assertThat(countBefore).isEqualTo(getRepositoryCount());
+    }
+
+    protected <%- persistClass %> getPersisted<%- persistClass %>(<%- persistClass %> <%- entityInstance %>) {
+        return <%= entityInstance %>Repository.findById(<%- entityInstance %>.get<%- primaryKey.nameCapitalized %>()).<%- reactive ? 'block()' : 'orElseThrow()' %>;
+    }
+
+    protected void assertPersisted<%- persistClass %>ToMatchAllProperties(<%- persistClass %> expected<%- persistClass %>) {
+<%_ if (reactive && databaseTypeSql) { _%>
+        // Test fails because reactive api returns an empty object instead of null
+        // assert<%- persistClass %>AllPropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
+        assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
+<%_ } else { _%>
+        assert<%- persistClass %>AllPropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
+<%_ } _%>
+    }
+
+    protected void assertPersisted<%- persistClass %>ToMatchUpdatableProperties(<%- persistClass %> expected<%- persistClass %>) {
+      <%_ if (reactive && databaseTypeSql) { _%>
+        // Test fails because reactive api returns an empty object instead of null
+        // assert<%- persistClass %>AllUpdatablePropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
+        assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
+<%_ } else { _%>
+        assert<%- persistClass %>AllUpdatablePropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
+<%_ } _%>
     }
 }
