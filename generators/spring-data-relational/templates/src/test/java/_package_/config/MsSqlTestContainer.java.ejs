@@ -42,7 +42,9 @@ public class MsSqlTestContainer implements SqlTestContainer {
     public void afterPropertiesSet() {
         if (null == mSSQLServerContainer) {
             mSSQLServerContainer = new MSSQLServerContainer<>("<%- dockerContainers.mssql %>")
-                .acceptLicense()
+                // You are required to accept EULA license for SQL server containers
+                // Refer to https://java.testcontainers.org/modules/databases/mssqlserver/
+                //.acceptLicense()
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(log))
                 .withReuse(true);
