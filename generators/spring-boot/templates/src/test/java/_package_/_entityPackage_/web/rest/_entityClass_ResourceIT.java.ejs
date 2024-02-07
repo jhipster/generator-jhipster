@@ -652,7 +652,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void create<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeCreate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -668,31 +668,46 @@ _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
   <%_ } _%>
   <%_ if (reactive) { _%>
-        webTestClient.post().uri(ENTITY_API_URL)
+        var returned<%- restClass %> = webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
-            .expectStatus().isCreated();
+            .expectStatus()
+            .isCreated()
+            .expectBody(<%- restClass %>.class)
+            .returnResult()
+            .getResponseBody();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
-            .andExpect(status().isCreated());
+        var returned<%- restClass %> = om.readValue(
+            rest<%= entityClass %>MockMvc
+                .perform(
+                  post(ENTITY_API_URL)
+    <%_ if (authenticationUsesCsrf) { _%>
+                  .with(csrf())
+    <%_ } _%>
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(om.writeValueAsBytes(<%= restInstance %>))
+                )
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(),
+            <%- restClass %>.class
+        );
   <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
+        assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
   <%_ if (searchEngineElasticsearch) { _%>
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
         });
   <%_ } _%>
-        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
+        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>Repository.findById(returned<%- restClass %>.get<%- primaryKey.nameCapitalized %>())<%= reactive ? callBlock : '.orElseThrow()' %>;
   <%_ for (const field of fieldsToTest) {
     if (field.fieldTypeZonedDateTime) { _%>
         assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>);
@@ -724,7 +739,7 @@ _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
   <%_ } _%>
 
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeCreate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -748,7 +763,7 @@ _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -761,7 +776,7 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
     <%_ const alreadyGeneratedEntities = []; _%>
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeCreate = getRepositoryCount();
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
     <%_ } _%>
@@ -816,7 +831,7 @@ _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
     <%_ } _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
         <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
 
         // Validate the id for MapsId, the ids must be same
@@ -839,7 +854,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void check<%= field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
-        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeTest = getRepositoryCount();
         <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         <%_ } _%>
@@ -862,13 +877,14 @@ _%>
             .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
         <%_ } _%>
-
         <%_ if (databaseTypeCouchbase) { _%>
+
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
         <%_ if (searchEngineElasticsearch) { _%>
+
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
         <%_ } _%>
@@ -1410,7 +1426,7 @@ _%>
   <%_ } _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
@@ -1456,7 +1472,7 @@ _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
         <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
   <%_ for (const field of fieldsToTest) { _%>
     <%_ if (field.fieldTypeZonedDateTime) { _%>
@@ -1494,7 +1510,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void putNonExisting<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -1523,8 +1539,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1534,7 +1549,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void putWithIdMismatch<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -1563,8 +1578,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1573,7 +1587,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -1602,8 +1616,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1649,7 +1662,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void patchNonExisting<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -1678,8 +1691,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
     int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
     assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1688,7 +1700,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void patchWithIdMismatch<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -1717,8 +1729,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1727,7 +1738,7 @@ _%>
 
     @Test<%= transactionalAnnotation %>
     void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
       int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
@@ -1756,8 +1767,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -1781,7 +1791,7 @@ _%>
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } _%>
 
-        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
+        long databaseSizeBeforeDelete = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
@@ -1803,8 +1813,7 @@ _%>
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
+        assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
@@ -1865,4 +1874,20 @@ _%>
   if (!field.fieldTypeString) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
     }
 <%_ } _%>
+
+    protected long getRepositoryCount() {
+        return <%= entityInstance %>Repository.count()<%= callBlock %>;
+    }
+
+    protected void assertIncrementedRepositoryCount(long countBefore) {
+        assertThat(countBefore + 1).isEqualTo(getRepositoryCount());
+    }
+
+    protected void assertDecrementedRepositoryCount(long countBefore) {
+        assertThat(countBefore - 1).isEqualTo(getRepositoryCount());
+    }
+
+    protected void assertSameRepositoryCount(long countBefore) {
+      assertThat(countBefore).isEqualTo(getRepositoryCount());
+    }
 }
