@@ -90,9 +90,13 @@ const oauth2Files = {
       templates: [
         {
           file: generator =>
-            `_package_/web/filter/${generator.reactive ? 'OAuth2ReactiveRefreshTokensWebFilter.java' : 'OAuth2RefreshTokensWebFilter.java'}`,
+            `_package_/web/filter/${
+              generator.reactive ? 'OAuth2ReactiveRefreshTokensWebFilter.java' : 'OAuth2RefreshTokensWebFilter.java'
+            }`,
           renameTo: generator =>
-            `${generator.packageFolder}web/filter/${generator.reactive ? 'OAuth2ReactiveRefreshTokensWebFilter.java' : 'OAuth2RefreshTokensWebFilter.java'}`,
+            `${generator.packageFolder}web/filter/${
+              generator.reactive ? 'OAuth2ReactiveRefreshTokensWebFilter.java' : 'OAuth2RefreshTokensWebFilter.java'
+            }`,
         },
       ],
     },
