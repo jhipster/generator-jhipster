@@ -24,11 +24,6 @@
 # To activate this configuration launch integration tests with the 'testcontainers' profile
 #
 # More information on database containers: https://www.testcontainers.org/modules/databases/
-<%_ if (devDatabaseTypeMssql) { _%>
-#
-# You are required to accept EULA license for SQL server containers.
-# Follow the instructions at https://www.testcontainers.org/modules/databases/mssqlserver/
-<%_ } _%>
 <%_ if (devDatabaseTypeOracle) { _%>
 #
 # You have to specify an Oracle image name in a classpath file named testcontainers.properties.
