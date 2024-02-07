@@ -443,7 +443,39 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   getEntitiesDataToLoad() {
-    return this.getExistingEntityNames().map(entityName => ({ entityName, entityStorage: this.getEntityConfig(entityName, true) }));
+    const application = this.sharedData.getApplication();
+    const builtInEntities: string[] = [];
+    if (application.generateBuiltInUserEntity) {
+      // Reorder User entity to be the first one to be loaded
+      builtInEntities.push('User');
+    }
+    if (application.generateBuiltInUserEntity && application.generateUserManagement) {
+      // Reorder User entity to be the first one to be loaded
+      builtInEntities.push('UserManagement');
+    }
+    if (application.generateBuiltInAuthorityEntity) {
+      // Reorder User entity to be the first one to be loaded
+      builtInEntities.push('Authority');
+    }
+    const entitiesToLoad = [...new Set([...builtInEntities, ...this.getExistingEntityNames()])];
+    return entitiesToLoad.map(entityName => {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const generator = this;
+      if (!this.sharedData.hasEntity(entityName)) {
+        this.sharedData.setEntity(entityName, { name: entityName });
+      }
+      const entityBootstrap = this.sharedData.getEntity(entityName);
+      return {
+        entityName,
+        get entityStorage() {
+          return generator.getEntityConfig(entityName, true);
+        },
+        get entityConfig() {
+          return generator.getEntityConfig(entityName, true)!.createProxy();
+        },
+        entityBootstrap,
+      };
+    });
   }
 
   /**

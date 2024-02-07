@@ -25,6 +25,8 @@ type LoadingEntitiesTaskParam = {
     entityStorage: Storage;
     /** Proxy object for the entitystorage */
     entityConfig: Record<string, any>;
+    /** Initial entity object */
+    entityBootstrap: Record<string, any>;
   }[];
 };
 

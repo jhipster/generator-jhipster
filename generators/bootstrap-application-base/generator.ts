@@ -222,61 +222,61 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asLoadingEntitiesTaskGroup({
       loadUser({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity) {
-          if (this.sharedData.hasEntity('User')) {
-            throw new Error("Fail to bootstrap 'User', already exists.");
+          const User = 'User';
+
+          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === User);
+          const bootstrap = customUser?.entityBootstrap;
+          if (!bootstrap) {
+            throw new Error('User entity should already be passed.');
           }
 
-          const customUser = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'User');
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          const user = createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application);
-          this.sharedData.setEntity('User', user);
-          application.user = user;
+          Object.assign(bootstrap!, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
+          application.user = bootstrap;
         }
       },
       loadUserManagement({ application, entitiesToLoad }) {
         if (application.generateBuiltInUserEntity && application.generateUserManagement) {
-          if (this.sharedData.hasEntity('UserManagement')) {
-            throw new Error("Fail to bootstrap 'User', already exists.");
+          const UserManagement = 'UserManagement';
+          const customUserManagement = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === UserManagement);
+          const bootstrap = customUserManagement?.entityBootstrap;
+          if (!bootstrap) {
+            throw new Error('UserManagement entity should already be passed.');
           }
 
-          const customUserManagement = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === 'UserManagement');
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
-
-          const userManagement = createUserManagementEntity.call(
-            this,
-            { ...customUserManagementData, ...customUserManagementData.annotations },
-            application,
+          Object.assign(
+            bootstrap!,
+            createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
           );
-          this.sharedData.setEntity('UserManagement', userManagement);
-          application.userManagement = userManagement;
+          application.userManagement = bootstrap;
         }
       },
       loadAuthority({ application, entitiesToLoad }) {
         if (application.generateBuiltInAuthorityEntity) {
           const authority = 'Authority';
-          if (this.sharedData.hasEntity(authority)) {
-            throw new Error(`Fail to bootstrap '${authority}', already exists.`);
-          }
 
           const customEntity = entitiesToLoad.find(entityToLoad => entityToLoad.entityName === authority);
+          const bootstrap = customEntity?.entityBootstrap;
+          if (!bootstrap) {
+            throw new Error('Authority entity should already be passed.');
+          }
+
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
-          const authorityEntity = createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application);
-          this.sharedData.setEntity(authority, authorityEntity);
-          application.authority = authorityEntity;
+          Object.assign(
+            bootstrap!,
+            createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application),
+          );
+          application.authority = bootstrap;
         }
       },
       loadingEntities({ application, entitiesToLoad }) {
-        for (const { entityName, entityStorage } of entitiesToLoad) {
-          if (this.sharedData.hasEntity(entityName)) {
-            const existingEntity = this.sharedData.getEntity(entityName);
-            if (!existingEntity.builtIn) {
-              throw new Error(`Fail to bootstrap '${entityName}', already exists.`);
-            }
-          } else {
+        for (const { entityName, entityBootstrap, entityStorage } of entitiesToLoad) {
+          if (!entityBootstrap.builtIn) {
             let entity = entityStorage.getAll() as any;
             entity.name = entity.name ?? entityName;
             entity = { ...entity, ...entity.annotations };
-            this.sharedData.setEntity(entityName, entity);
+            Object.assign(entityBootstrap, entity);
           }
         }
 
