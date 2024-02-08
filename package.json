@@ -111,7 +111,7 @@
     "watch": "concurrently \"tsc --watch\" \"node ./watch.mjs\""
   },
   "dependencies": {
-    "@faker-js/faker": "8.4.0",
+    "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
     "@types/lodash": "4.14.202",
