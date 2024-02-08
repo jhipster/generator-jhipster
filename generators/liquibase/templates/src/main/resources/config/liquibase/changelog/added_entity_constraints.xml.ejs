@@ -16,11 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<?xml version="1.0" encoding="utf-8"?>
-<databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<%- include('/liquibase-changelog-header') -%>
     <!--
         Added the constraints for entity <%= entity.entityClass %>.
     -->
