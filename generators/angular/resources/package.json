@@ -17,8 +17,8 @@
     "zone.js": "0.14.3"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "17.0.2",
-    "@angular-architects/module-federation-runtime": "17.0.2",
+    "@angular-architects/module-federation": "17.0.4",
+    "@angular-architects/module-federation-runtime": "17.0.4",
     "@angular-builders/custom-webpack": "17.0.0",
     "@angular-builders/jest": "17.0.0",
     "@angular-eslint/eslint-plugin": "17.2.1",
