@@ -18,7 +18,7 @@
 -%>
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable<% if (generateUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %> } from 'rxjs';
+import { map, Observable<% if (generateUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %> } from 'rxjs';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
@@ -61,7 +61,9 @@ export class UserManagementService {
 
   authorities(): Observable<string[]> {
   <%_ if (generateBuiltInAuthorityEntity) { _%>
-    return this.http.get<string[]>(this.applicationConfigService.getEndpointFor('api/authorities'));
+    return this.http
+      .get<Array<{ name: string }>>(this.applicationConfigService.getEndpointFor('api/authorities'))
+      .pipe(map(authorities => authorities.map(a => a.name)));
   <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);
   <%_ } _%>

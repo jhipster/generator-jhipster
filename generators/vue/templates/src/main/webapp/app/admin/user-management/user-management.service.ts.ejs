@@ -29,7 +29,10 @@ export default class UserManagementService {
 
   public retrieveAuthorities(): Promise<any> {
 <%_ if (!databaseTypeCassandra) { _%>
-    return axios.get('api/authorities');
+    return axios.get('api/authorities').then(response => {
+      response.data = response.data.map(authority => authority.name);
+      return response;
+    });
 <%_ } else { _%>
     return Promise.resolve([Authority.USER, Authority.ADMIN]);
 <%_ } _%>
