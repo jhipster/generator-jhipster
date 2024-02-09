@@ -21,6 +21,7 @@ import { clientApplicationTemplatesBlock } from '../client/support/files.js';
 import CoreGenerator from '../base-core/index.js';
 import { WriteFileSection } from '../base/api.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/index.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -99,7 +100,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
   this: CoreGenerator,
   { application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
 ) {
-  for (const entity of entities.filter(entity => !entity.skipClient)) {
+  for (const entity of filterEntitiesAndPropertiesForClient(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
         sections: builtInFiles,
@@ -134,12 +135,12 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
 
 export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
   const { source, application } = taskParam;
-  const entities = taskParam.entities.filter(entity => !entity.skipClient && !entity.builtInUser && !entity.embedded);
+  const entities = filterEntitiesForClient(taskParam.entities).filter(entity => !entity.builtInUser && !entity.embedded);
   source.addEntitiesToClient({ application, entities });
 }
 
 export function cleanupEntitiesFiles(this: CoreGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
-  for (const entity of entities.filter(entity => !entity.skipClient && !entity.builtIn)) {
+  for (const entity of filterEntitiesForClient(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (this.isJhipsterVersionLessThan('5.0.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityName}/${entityName}.model.ts`);
