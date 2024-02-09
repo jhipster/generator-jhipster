@@ -32,6 +32,7 @@ import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/ind
 import { createNeedleCallback } from '../base/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import command from './command.js';
+import { filterEntitiesAndPropertiesForClient } from './support/index.js';
 
 const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
@@ -236,7 +237,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         if (!application.webappEnumerationsDir || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
           return;
         }
-        for (const entity of entities.filter(entity => !entity.skipClient)) {
+        for (const entity of filterEntitiesAndPropertiesForClient(entities)) {
           await addEnumerationFiles.call(this, { application, entity });
         }
       },

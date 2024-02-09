@@ -25,3 +25,4 @@ export { default as prepareField } from './prepare-field.js';
 export * from './template-utils.js';
 export * from './update-languages.js';
 export * from './files.js';
+export * from './filter-entities.js';
