@@ -118,10 +118,10 @@ public class <%= persistClass %>Asserts {
      * @param actual the actual entity
      */
     public static void assert<%- persistClass %>UpdatableRelationshipsEquals(<%- persistClass %> expected, <%- persistClass %> actual) {
-<%_ if (relationships.some(relationship => !relationship.autoGenerate && !relationship.otherEntity.builtInUser)) { _%>
+<%_ if (relationships.some(relationship => relationship.persistableRelationship && !relationship.id && !relationship.autoGenerate && !relationship.otherEntity.builtInUser)) { _%>
         assertThat(expected)
             .as("Verify <%- persistClass %> relationships")
-  <%_ for (const relationship of relationships.filter(relationship => !relationship.autoGenerate && !relationship.otherEntity.builtInUser)) { _%>
+  <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship && !relationship.id && !relationship.autoGenerate && !relationship.otherEntity.builtInUser)) { _%>
             .satisfies(e -> assertThat(e.get<%- relationship.propertyJavaBeanName %>()).as("check <%- relationship.propertyName %>").isEqualTo(actual.get<%- relationship.propertyJavaBeanName %>()))
   <%_ } _%>
         ;
