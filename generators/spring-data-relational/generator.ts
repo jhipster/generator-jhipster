@@ -151,6 +151,12 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
           value: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
         });
       },
+      addLog({ source }) {
+        source.addLogbackTestLog?.({
+          name: 'org.hibernate.orm.incubating',
+          level: 'ERROR',
+        });
+      },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
           const { reactive, javaDependencies, packageFolder } = application;
