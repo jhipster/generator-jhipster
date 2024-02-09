@@ -39,6 +39,10 @@ import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
  * Utility repository to load bag relationships based on https://vladmihalcea.com/hibernate-multiplebagfetchexception/
  */
 public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%= entityClass %>RepositoryWithBagRelationships {
+
+    private static final String <%= primaryKey.name.toUpperCase() %>_PARAMETER = "<%= primaryKey.name %>";
+    private static final String <%= entityInstancePlural.toUpperCase() %>_PARAMETER = "<%= entityInstancePlural %>";
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -73,7 +77,7 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
                 "select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %>.<%= primaryKey.name %> = :<%= primaryKey.name %>",
                 <%= persistClass %>.class
             )
-            .setParameter("<%= primaryKey.name %>", result.get<%= primaryKey.nameCapitalized %>())
+            .setParameter(<%= primaryKey.name.toUpperCase() %>_PARAMETER, result.get<%= primaryKey.nameCapitalized %>())
             .getSingleResult();
     }
 
@@ -86,7 +90,7 @@ public class <%= entityClass %>RepositoryWithBagRelationshipsImpl implements <%=
                 "select <%= entityInstance %> from <%= persistClass %> <%= entityInstance %> left join fetch <%= entityInstance %>.<%= relationship.relationshipFieldNamePlural %> where <%= entityInstance %> in :<%= entityInstancePlural %>",
                 <%= persistClass %>.class
             )
-            .setParameter("<%= entityInstancePlural %>", <%= entityInstancePlural %>)
+            .setParameter(<%= entityInstancePlural.toUpperCase() %>_PARAMETER, <%= entityInstancePlural %>)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.get<%= primaryKey.nameCapitalized %>()), order.get(o2.get<%= primaryKey.nameCapitalized %>())));
         return result;
