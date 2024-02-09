@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "17.1.2",
+    "@angular/common": "17.1.3",
     "@fortawesome/angular-fontawesome": "0.14.1",
     "@fortawesome/fontawesome-svg-core": "6.5.1",
     "@fortawesome/free-solid-svg-icons": "6.5.1",
@@ -17,12 +17,12 @@
     "zone.js": "0.14.3"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "17.0.4",
-    "@angular-architects/module-federation-runtime": "17.0.4",
+    "@angular-architects/module-federation": "17.0.6",
+    "@angular-architects/module-federation-runtime": "17.0.6",
     "@angular-builders/custom-webpack": "17.0.0",
     "@angular-builders/jest": "17.0.0",
     "@angular-eslint/eslint-plugin": "17.2.1",
-    "@angular/cli": "17.1.2",
+    "@angular/cli": "17.1.3",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.14",
     "@typescript-eslint/eslint-plugin": "6.21.0",
