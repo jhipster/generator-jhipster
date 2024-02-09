@@ -19,7 +19,7 @@
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <jaxb-runtime.version>4.0.4</jaxb-runtime.version>
         <junit-platform-launcher.version>1.10.2</junit-platform-launcher.version>
-        <liquibase.version>4.25.1</liquibase.version>
+        <liquibase.version>4.26.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.1.0</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
