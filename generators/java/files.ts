@@ -20,7 +20,7 @@ import Generator from './generator.js';
 import { WriteFileSection } from '../base/api.js';
 import { JavaApplication } from './types.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir } from './support/index.js';
+import { javaTestPackageTemplatesBlock, moveToJavaPackageSrcDir } from './support/index.js';
 
 const files: WriteFileSection<Generator, JavaApplication> = {
   baseFiles: [
@@ -29,6 +29,9 @@ const files: WriteFileSection<Generator, JavaApplication> = {
       renameTo: moveToJavaPackageSrcDir,
       templates: ['GeneratedByJHipster.java'],
     },
+    javaTestPackageTemplatesBlock({
+      templates: ['domain/AssertUtils.java'],
+    }),
   ],
 };
 
