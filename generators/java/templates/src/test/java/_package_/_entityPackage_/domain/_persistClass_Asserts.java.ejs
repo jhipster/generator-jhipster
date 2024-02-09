@@ -51,7 +51,7 @@ public class <%= persistClass %>Asserts {
         assert<%- persistClass %>UpdatableFieldsEquals(expected, actual);
         assert<%- persistClass %>UpdatableRelationshipsEquals(expected, actual);
     }
-<%_ if (primaryKey.derived) { _%>
+<%_ if (!embedded && primaryKey.derived) { _%>
 
     /**
      * Asserts that the derived primary key is set correctly.
