@@ -395,16 +395,28 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.my
   "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AuthorityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
@@ -769,10 +781,19 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
@@ -1116,10 +1137,19 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
@@ -1472,10 +1502,19 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
@@ -1915,16 +1954,28 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
@@ -2331,10 +2382,19 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
@@ -2702,10 +2762,19 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
@@ -3082,10 +3151,19 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/config/TestSecurityConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {
@@ -3528,16 +3606,28 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AnotherSimpleEntityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AnotherSimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/domain/AuthorityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/AuthorityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/domain/SimpleEntityAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTest.java": {
@@ -3911,10 +4001,19 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/TestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/domain/AnotherSimpleAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/domain/AnotherSimpleTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AnotherSimpleTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/domain/SimpleAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/SimpleTest.java": {

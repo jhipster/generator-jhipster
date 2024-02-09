@@ -191,6 +191,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
     "stateCleared": "modified",
   },
@@ -442,6 +445,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
     "stateCleared": "modified",
   },
@@ -655,6 +661,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
@@ -1121,16 +1130,28 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {

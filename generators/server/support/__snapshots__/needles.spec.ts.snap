@@ -374,6 +374,12 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
     "stateCleared": "modified",
   },

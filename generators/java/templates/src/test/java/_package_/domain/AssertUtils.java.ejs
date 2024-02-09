@@ -1,0 +1,15 @@
+package <%= packageName %>.domain;
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
+import java.util.Comparator;
+import java.util.Objects;
+
+public class AssertUtils {
+
+    public static Comparator<ZonedDateTime> zonedDataTimeSameInstant = (ZonedDateTime e, ZonedDateTime a) -> Objects.compare(e, a, (e1, a2) -> e1.withZoneSameInstant(ZoneOffset.UTC).compareTo(a2.withZoneSameInstant(ZoneOffset.UTC)));
+
+    public static Comparator<BigDecimal> bigDecimalCompareTo = (BigDecimal e, BigDecimal a) -> Objects.compare(e, a, (e1, a2) -> e1.compareTo(a2));
+
+}

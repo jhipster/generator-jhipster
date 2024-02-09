@@ -287,6 +287,12 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
     "stateCleared": "modified",
   },
@@ -584,6 +590,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/WebConfigurerTestController.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java": {
