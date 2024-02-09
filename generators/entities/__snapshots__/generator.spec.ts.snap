@@ -311,16 +311,25 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/SkipAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/SkipTest.java": {
@@ -631,10 +640,16 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
