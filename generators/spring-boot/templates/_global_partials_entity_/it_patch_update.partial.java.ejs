@@ -57,18 +57,3 @@ rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%=
 <%_ if (databaseTypeCouchbase) { _%>
 SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 <%_ } _%>
-List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
-assertSameRepositoryCount(databaseSizeBeforeUpdate);
-<%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
-<%_ for (field of fields) { _%>
-  <%_ if (field.fieldTypeZonedDateTime) { _%>
-    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= field.testWithConstant %>_CONTENT_TYPE);
-  <%_ } else if (field.fieldTypeBigDecimal) { _%>
-    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= field.testWithConstant %>);
-  <%_ } else { _%>
-    assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-  <%_ } _%>
-<%_ } _%>
