@@ -24,9 +24,6 @@ import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.js';
 
-const TYPE_BYTES = fieldTypes.RelationalOnlyDBTypes.BYTES;
-const TYPE_BYTE_BUFFER = fieldTypes.RelationalOnlyDBTypes.BYTE_BUFFER;
-
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
 const { MYSQL, SQL } = databaseTypes;
@@ -168,5 +165,4 @@ export default function prepareField(entityWithConfig, field, generator) {
     }
     field.javaValueGenerator = getJavaValueGeneratorForType(field.javaFieldType);
   }
-  field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType);
 }
