@@ -53,68 +53,7 @@ export class AlertErrorComponent implements OnDestroy {
     });
 
     this.httpErrorListener = this.eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
-      const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
-      switch (httpErrorResponse.status) {
-        // connection refused, server not reachable
-        case 0:
-          this.addErrorAlert('Server not reachable'<% if (enableTranslation) { %>, 'error.server.not.reachable'<% } %>);
-          break;
-
-        case 400: {
-          const arr = httpErrorResponse.headers.keys();
-          let errorHeader: string | null = null;
-<%_ if (enableTranslation) { _%>
-          let entityKey: string | null = null;
-<%_ } _%>
-          for (const entry of arr) {
-            if (entry.toLowerCase().endsWith('app-error')) {
-              errorHeader = httpErrorResponse.headers.get(entry);
-<%_ if (enableTranslation) { _%>
-            } else if (entry.toLowerCase().endsWith('app-params')) {
-              entityKey = httpErrorResponse.headers.get(entry);
-<%_ } _%>
-            }
-          }
-          if (errorHeader) {
-<%_ if (enableTranslation) { _%>
-            const alertData = entityKey ? { entityName: this.translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
-<%_ } _%>
-            this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
-          } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
-            const fieldErrors = httpErrorResponse.error.fieldErrors;
-            for (const fieldError of fieldErrors) {
-              if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
-                fieldError.message = 'Size';
-              }
-              // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-              const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
-              const fieldName: string =
-<%_ if (enableTranslation) { _%>
-                this.translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
-<%_ } else { _%>
-                convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
-<%_ } _%>
-              this.addErrorAlert(`Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
-            }
-          } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
-          } else {
-            this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
-          }
-          break;
-        }
-
-        case 404:
-          this.addErrorAlert('Not found'<% if (enableTranslation) { %>, 'error.url.not.found'<% } %>);
-          break;
-
-        default:
-          if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-            this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
-          } else {
-            this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
-          }
-      }
+      this.handleHttpError(response);
     });
   }
 
@@ -137,5 +76,82 @@ export class AlertErrorComponent implements OnDestroy {
 
   private addErrorAlert(message?: string<% if (enableTranslation) { %>, translationKey?: string, translationParams?: { [key: string]: unknown }<% } %>): void {
     this.alertService.addAlert({ type: 'danger', message<% if (enableTranslation) { %>, translationKey, translationParams<% } %> }, this.alerts());
+  }
+
+  private handleHttpError(response: EventWithContent<unknown> | string): void {
+    const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
+    switch (httpErrorResponse.status) {
+      // connection refused, server not reachable
+      case 0:
+        this.addErrorAlert('Server not reachable'<% if (enableTranslation) { %>, 'error.server.not.reachable'<% } %>);
+        break;
+
+      case 400: {
+        this.handleBadRequest(httpErrorResponse);
+        break;
+      }
+
+      case 404:
+        this.addErrorAlert('Not found'<% if (enableTranslation) { %>, 'error.url.not.found'<% } %>);
+        break;
+
+      default:
+        this.handleDefaultError(httpErrorResponse);
+    }
+  }
+
+  private handleBadRequest(httpErrorResponse: HttpErrorResponse): void {
+    const arr = httpErrorResponse.headers.keys();
+    let errorHeader: string | null = null;
+<%_ if (enableTranslation) { _%>
+    let entityKey: string | null = null;
+<%_ } _%>
+    for (const entry of arr) {
+      if (entry.toLowerCase().endsWith('app-error')) {
+        errorHeader = httpErrorResponse.headers.get(entry);
+<%_ if (enableTranslation) { _%>
+      } else if (entry.toLowerCase().endsWith('app-params')) {
+        entityKey = httpErrorResponse.headers.get(entry);
+<%_ } _%>
+      }
+    }
+    if (errorHeader) {
+<%_ if (enableTranslation) { _%>
+      const alertData = entityKey ? { entityName: this.translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
+<%_ } _%>
+      this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
+    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
+      this.handleFieldsError(httpErrorResponse);
+    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+      this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
+    } else {
+      this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
+    }
+  }
+
+  private handleDefaultError(httpErrorResponse: HttpErrorResponse): void {
+    if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+      this.addErrorAlert(httpErrorResponse.error.detail ?? httpErrorResponse.error.message<% if (enableTranslation) { %>, httpErrorResponse.error.message, httpErrorResponse.error.params<% } %>);
+    } else {
+      this.addErrorAlert(httpErrorResponse.error<% if (enableTranslation) { %>, httpErrorResponse.error<% } %>);
+    }
+  }
+
+  private handleFieldsError(httpErrorResponse: HttpErrorResponse): void {
+    const fieldErrors = httpErrorResponse.error.fieldErrors;
+    for (const fieldError of fieldErrors) {
+      if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
+        fieldError.message = 'Size';
+      }
+      // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+      const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
+      const fieldName: string =
+<%_ if (enableTranslation) { _%>
+        this.translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
+<%_ } else { _%>
+        convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+<%_ } _%>
+      this.addErrorAlert(`Error on field "${fieldName}"`<% if (enableTranslation) { %>, `error.${fieldError.message as string}`, { fieldName }<% } %>);
+    }
   }
 }
