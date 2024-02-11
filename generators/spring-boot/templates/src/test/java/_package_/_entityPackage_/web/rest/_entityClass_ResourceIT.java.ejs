@@ -19,7 +19,7 @@
 package <%= entityAbsolutePackage %>.web.rest;
 
 import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>Asserts.*;
-
+import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
@@ -1624,20 +1624,10 @@ _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock}); -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        <%= persistClass %> test<%= entityClass %> = getPersisted<%- persistClass %>(<%= persistInstance %>);
-
-<%_ for (field of fieldsToIncludeInPartialPatchTest) { _%>
-  <%_ if (field.fieldTypeZonedDateTime) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-  <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= field.testWithConstant %>_CONTENT_TYPE);
-  <%_ } else if (field.fieldTypeBigDecimal) { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= field.testWithConstant %>);
-  <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%= field.fieldInJavaBeanMethod %>()).isEqualTo(<%= field.testWithConstant %>);
-  <%_ } _%>
-<%_ } _%>
+        assert<%- persistClass %>UpdatableFieldsEquals(
+            createUpdateProxyForBean(partialUpdated<%= persistClass %>, <%= persistInstance %>),
+            getPersisted<%- persistClass %>(<%= persistInstance %>)
+        );
     }
 
     @Test<%= transactionalAnnotation %>
