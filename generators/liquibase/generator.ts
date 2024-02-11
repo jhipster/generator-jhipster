@@ -186,6 +186,14 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               prepareField(entity, field, this);
               prepareFieldForLiquibase(entity, field);
             }
+          }
+        }
+
+        for (const databaseChangelog of entityChanges) {
+          if (!databaseChangelog.newEntity) {
+            // Previous entities are not prepared using default jhipster priorities.
+            // Prepare them.
+            const { previousEntity: entity } = databaseChangelog;
             for (const relationship of entity.relationships ?? []) {
               prepareRelationship(entity, relationship, this, true);
               prepareRelationshipForLiquibase(entity, relationship);

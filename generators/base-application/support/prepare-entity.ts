@@ -620,12 +620,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
       reference.relatedReference = reference.relationship.relatedField.reference;
     });
 
-  entity.relationships.forEach(relationship => {
-    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
-    relationship.relationshipReferenceField = relationship.relationshipCollection
-      ? relationship.relationshipFieldNamePlural
-      : relationship.relationshipFieldName;
-  });
   entity.entityContainsCollectionField = entity.relationships.some(relationship => relationship.relationshipCollection);
 
   if (entity.primaryKey) {
@@ -641,23 +635,6 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
   entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
 
-  entity.relationships.forEach(relationship => {
-    if (!relationship.otherEntity.primaryKey) {
-      relationship.bagRelationship = false;
-      relationship.relationshipEagerLoad = false;
-      return;
-    }
-
-    mutateData(relationship, {
-      bagRelationship: relationship.ownerSide && relationship.collection,
-      relationshipEagerLoad: ({ relationshipEagerLoad, bagRelationship, ownerSide, otherEntity, otherEntityField }) =>
-        relationshipEagerLoad ??
-        (bagRelationship ||
-          entity.eagerLoad ||
-          // Fetch relationships if otherEntityField differs otherwise the id is enough
-          (ownerSide && otherEntity.primaryKey.name !== otherEntityField)),
-    });
-  });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
   entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerRelationships apis
