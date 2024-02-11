@@ -43,8 +43,6 @@
         };
       };
 
-      window.onload = async function () {
-        const serverBaseUri = document.baseURI.replace('swagger-ui/', '');
 <%_ if (authenticationUsesCsrf) { _%>
         function getCSRF() {
           var name = 'XSRF-TOKEN=';
@@ -56,10 +54,6 @@
           }
           return '';
         }
-        const axiosConfig = {
-          timeout: 5000,
-          baseURL: serverBaseUri,
-        };
 <%_ } else { _%>
         const getBearerToken = () => {
           var authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
@@ -71,14 +65,19 @@
           }
           return null;
         };
-        const axiosConfig = {
-          timeout: 5000,
-          baseURL: serverBaseUri,
-          headers: { Authorization: getBearerToken() },
-        };
 <%_ } _%>
 
-        const baseUrl = 'v3/api-docs';
+      function createAxiosConfig(serverBaseUri) {
+        return {
+          timeout: 5000,
+          baseURL: serverBaseUri,
+<%_ if (!authenticationUsesCsrf) { _%>
+          headers: { Authorization: getBearerToken() },
+<%_ } _%>
+        };
+      }
+
+      async function fetchUrls(serverBaseUri, axiosConfig, baseUrl) {
         let urls;
 <%_ if (!applicationTypeMonolith && serviceDiscoveryAny) { _%>
 
@@ -131,19 +130,26 @@
         }
         console.log(`Swagger urls`, urls);
 
-        if (urls) {
-          urls.sort(function (a, b) {
-            var x = a.name.toLowerCase(),
-              y = b.name.toLowerCase();
-            if (x.includes('(default)')) return -1;
-            if (y.includes('(default)')) return 1;
-            if (x.includes('(management)')) return -1;
-            if (y.includes('(management)')) return 1;
-            if (x < y) return -1;
-            return x > y ? 1 : 0;
-          });
-        }
+        return urls;
+      }
 
+      function sortUrls(urls) {
+        if (!urls) return urls;
+
+        urls.sort((a, b) => compareUrls(a.name.toLowerCase(), b.name.toLowerCase()));
+
+        return urls;
+      }
+
+      function compareUrls(nameA, nameB) {
+        if (nameA.includes('(default)')) return -1;
+        if (nameB.includes('(default)')) return 1;
+        if (nameA.includes('(management)')) return -1;
+        if (nameB.includes('(management)')) return 1;
+        return nameA.localeCompare(nameB);
+      }
+
+      function initializeSwaggerUI(urls, baseUrl) {
         // Build a system
         var ui = SwaggerUIBundle({
           urls: urls,
@@ -174,6 +180,16 @@
         });
 
         window.ui = ui;
+      }
+
+      window.onload = async function () {
+        const baseUrl = 'v3/api-docs';
+        const serverBaseUri = document.baseURI.replace('swagger-ui/', '');
+        const axiosConfig = createAxiosConfig(serverBaseUri);
+        const urls = await fetchUrls(serverBaseUri, axiosConfig, baseUrl);
+        const sortedUrls = sortUrls(urls);
+
+        initializeSwaggerUI(sortedUrls, baseUrl);
       };
     </script>
   </body>
