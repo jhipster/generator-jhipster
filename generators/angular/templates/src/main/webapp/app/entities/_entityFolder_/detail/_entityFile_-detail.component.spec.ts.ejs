@@ -20,7 +20,7 @@
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 const testEntity = this.generateTestEntityPrimaryKey(primaryKey, 0);
 _%>
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness, RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
@@ -32,6 +32,8 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 
 describe('<%= entityAngularName %> Management Detail Component', () => {
+  let comp: <%= entityAngularName %>DetailComponent;
+  let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
 <%_ if (anyFieldIsBlobDerived) { _%>
   let dataUtils: DataUtils;
 <%_ } _%>
@@ -60,6 +62,11 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
 <%_ } _%>
   });
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
+    comp = fixture.componentInstance;
+  });
+
   describe('OnInit', () => {
     it('Should load <%= entityInstance %> on init', async () => {
       const harness = await RouterTestingHarness.create();
@@ -70,14 +77,20 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
     });
   });
 
+  describe('PreviousState', () => {
+    it('Should navigate to previous state', () => {
+      jest.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(window.history.back).toHaveBeenCalled();
+    });
+  });
+
 <%_ if (anyFieldIsBlobDerived) { _%>
   describe('byteSize', () => {
     it('Should call byteSize from DataUtils', () => {
       // GIVEN
       jest.spyOn(dataUtils, 'byteSize');
       const fakeBase64 = 'fake base64';
-      const fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
-      const comp = fixture.componentInstance;
 
       // WHEN
       comp.byteSize(fakeBase64);
@@ -98,8 +111,6 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
       jest.spyOn(dataUtils, 'openFile');
       const fakeContentType = 'fake content type';
       const fakeBase64 = 'fake base64';
-      const fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
-      const comp = fixture.componentInstance;
 
       // WHEN
       comp.openFile(fakeBase64, fakeContentType);
