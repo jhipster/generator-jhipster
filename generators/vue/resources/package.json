@@ -65,7 +65,7 @@
     "webpack": "5.90.1",
     "webpack-bundle-analyzer": "4.10.1",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "4.15.1",
+    "webpack-dev-server": "5.0.0",
     "webpack-merge": "5.10.0",
     "workbox-webpack-plugin": "7.0.0"
   }
