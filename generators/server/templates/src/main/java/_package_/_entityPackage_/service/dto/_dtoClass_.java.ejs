@@ -71,19 +71,22 @@ import <%- `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%- dtoClass %> implements Serializable {
 
-<%_ for (property of restProperties) {
-  if (typeof property.propertyJavadoc) {
-_%>
+<%_ for (property of restProperties) { _%>
+  <%_ if (typeof property.propertyJavadoc) { _%>
 <%- property.propertyJavadoc %>
   <%_ }
   const field = property.fieldName ? property : undefined;
   const relationship = property.relationshipName ? property : undefined;
   const required = field && field.fieldValidate && field.fieldValidationRequired;
-  if (field) {
-    if (property.fieldValidate ) { _%>
+  _%>
+  <%_ if (field) { _%>
+    <%_ if (property.fieldValidate ) { _%>
     <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
-    <%_ }
-  } _%>
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (relationship && relationship.relationshipRequired) { _%>
+    @NotNull
+  <%_ } _%>
   <%_ if (property.propertyApiDescription) { _%>
     @Schema(description = "<%- property.propertyApiDescription %>"<% if (required) { %>, required = true<% } %>)
   <%_ } _%>
