@@ -880,6 +880,9 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
@@ -3074,6 +3077,9 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
   "src/test/java/tech/jhipster/security/oauth2/CustomClaimConverterIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
@@ -4054,6 +4060,9 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {

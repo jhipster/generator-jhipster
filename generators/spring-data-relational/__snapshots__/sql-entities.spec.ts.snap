@@ -385,6 +385,9 @@ exports[`generator - sql - entities microservice-jwt-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
@@ -1006,6 +1009,9 @@ exports[`generator - sql - entities monolith-jwt-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
     "stateCleared": "modified",
   },
@@ -1386,6 +1392,9 @@ exports[`generator - sql - entities monolith-oauth2-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/domain/SimpleEntityTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {
@@ -1801,6 +1810,9 @@ exports[`generator - sql - entities monolith-session-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/UserServiceIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/tech/jhipster/service/criteria/SimpleCriteriaTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/service/dto/AnotherSimpleDTOTest.java": {

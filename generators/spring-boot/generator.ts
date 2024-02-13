@@ -18,6 +18,7 @@
  */
 import os from 'node:os';
 import chalk from 'chalk';
+import { sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
   GENERATOR_SERVER,
@@ -47,6 +48,7 @@ import {
   applicationTypes,
   cacheTypes,
   databaseTypes,
+  fieldTypes,
   messageBrokerTypes,
   searchEngineTypes,
   websocketTypes,
@@ -59,6 +61,8 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
+
+const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
 export default class SpringBootGenerator extends BaseApplicationGenerator {
   fakeKeytool;
@@ -236,12 +240,59 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareEntity({ field }) {
         field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType);
+
+        field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType) && !field.transient;
+        if (field.filterableField) {
+          const { fieldType, fieldName, fieldInJavaBeanMethod } = field;
+          mutateData(field, {
+            propertyJavaFilterName: fieldName,
+            propertyJavaFilteredType: fieldType,
+            propertyJavaFilterJavaBeanName: fieldInJavaBeanMethod,
+          });
+
+          if (field.fieldIsEnum) {
+            const filterType = `${fieldType}Filter`;
+            field.propertyJavaFilterType = filterType;
+            field.propertyJavaCustomFilter = { type: filterType, superType: `Filter<${fieldType}>`, fieldType };
+          } else if (
+            field.fieldTypeDuration ||
+            field.fieldTypeTemporal ||
+            field.fieldTypeCharSequence ||
+            field.fieldTypeNumeric ||
+            field.fieldTypeBoolean
+          ) {
+            field.propertyJavaFilterType = `${fieldType}Filter`;
+          } else {
+            field.propertyJavaFilterType = `Filter<${fieldType}>`;
+          }
+        }
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareEntity({ relationship }) {
+        if (relationship.otherEntity.embedded) return;
+
+        const { relationshipName, relationshipNameCapitalized } = relationship;
+        const otherEntityPkField = relationship.otherEntity.primaryKey.fields[0];
+        mutateData(relationship, {
+          propertyJavaFilterName: `${relationshipName}Id`,
+          propertyJavaFilterJavaBeanName: `${relationshipNameCapitalized}Id`,
+          propertyJavaFilterType: otherEntityPkField.propertyJavaFilterType,
+          propertyJavaFilteredType: otherEntityPkField.propertyJavaFilteredType,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 
   get postPreparingEachEntity() {
@@ -255,6 +306,16 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
             field.fieldJavaValueGenerator = getJavaValueGeneratorForType(field.fieldType);
           }
         }
+      },
+      prepareFilters({ application, entity }) {
+        (entity as any).entityJavaFilterableProperties = [
+          ...entity.fields.filter(field => field.filterableField),
+          ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
+        ];
+        (entity as any).entityJavaCustomFilters = sortedUniqBy(
+          entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean),
+          'type',
+        );
       },
     });
   }

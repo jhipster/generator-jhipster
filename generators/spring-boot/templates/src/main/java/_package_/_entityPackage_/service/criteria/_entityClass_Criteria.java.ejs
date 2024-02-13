@@ -1,128 +1,106 @@
-package <%= entityAbsolutePackage %>.<%_ if(jpaMetamodelFiltering && reactive) { _%>domain<%_ } else { _%>service<%_ } _%>.criteria;
+package <%- entityAbsolutePackage %>.<%_ if(jpaMetamodelFiltering && reactive) { _%>domain<%_ } else { _%>service<%_ } _%>.criteria;
 
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.Objects;
+import java.util.function.BiFunction;
+
 import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 <%_ for (const field of fields) { if (field.fieldIsEnum === true) { _%>
-import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ } } _%>
 import tech.jhipster.service.filter.*;
 
-<%_
-var effectiveRelationships = reactive ? reactiveEagerRelations : relationships;
-var filterVariables = [];
-var extraFilters = {};
-fields.filter(field => !field.transient).forEach((field) => {
-  const fieldType = field.fieldType;
-  if (field.filterableField) {
-    var filterType;
-    if (field.fieldIsEnum) {
-      filterType = fieldType + 'Filter';
-      extraFilters[fieldType] = {type: filterType, superType: 'Filter<' + fieldType + '>', fieldType: fieldType};
-    } else if (field.fieldTypeDuration || field.fieldTypeTemporal || field.fieldTypeCharSequence || field.fieldTypeNumeric || field.fieldTypeBoolean) {
-      filterType = fieldType + 'Filter';
-    } else {
-      filterType = 'Filter<' + fieldType + '>';
-    }
-    filterVariables.push( { filterType : filterType,
-      name: field.fieldName,
-      type: fieldType,
-      fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
-  }
-});
-effectiveRelationships.forEach((relationship) => {
-  const relationshipType = relationship.otherEntity.primaryKey.type;
-  const referenceFilterType = '' + relationshipType + 'Filter';
-  // user has a String PK when using OAuth, so change relationships accordingly
-  let oauthAwareReferenceFilterType = referenceFilterType;
-  if (relationship.otherEntityUser && authenticationTypeOauth2) {
-    oauthAwareReferenceFilterType = 'StringFilter';
-  }
-  filterVariables.push({
-    filterType : oauthAwareReferenceFilterType,
-    name: relationship.relationshipFieldName + 'Id',
-    type: relationshipType,
-    fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id',
-  });
-});
-_%>
 /**
- * Criteria class for the {@link <%= entityAbsoluteClass %>} entity. This class is used
- * in {@link <%= entityAbsolutePackage %>.web.rest.<%= entityClass %>Resource} to receive all the possible filtering options from
+ * Criteria class for the {@link <%- entityAbsoluteClass %>} entity. This class is used
+ * in {@link <%- entityAbsolutePackage %>.web.rest.<%- entityClass %>Resource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /<%= entityApiUrl %>?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /<%- entityApiUrl %>?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
 @ParameterObject
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class <%= entityClass %>Criteria implements Serializable, Criteria {
-<%_ Object.keys(extraFilters).forEach((key) => {
-  extraFilter = extraFilters[key]; _%>
+public class <%- entityClass %>Criteria implements Serializable, Criteria {
+<%_ for (const { type, superType, fieldType } of entityJavaCustomFilters) { _%>
+
     /**
-     * Class for filtering <%= key %>
+     * Class for filtering <%- fieldType %>
      */
-    public static class <%= extraFilter.type %> extends <%- extraFilter.superType %> {
+    public static class <%- type %> extends <%- superType %> {
 
-        public <%= extraFilter.type %>() {
-        }
+        public <%- type %>() {}
 
-        public <%= extraFilter.type %>(<%= extraFilter.type %> filter) {
+        public <%- type %>(<%- type %> filter) {
             super(filter);
         }
 
         @Override
-        public <%= extraFilter.type %> copy() {
-            return new <%= extraFilter.type %>(this);
+        public <%- type %> copy() {
+            return new <%- type %>(this);
         }
 
     }
-<%_ }); _%>
+<%_ } _%>
 
     private static final long serialVersionUID = 1L;
-<%_ filterVariables.forEach((filterVariable) => { _%>
+<%_ for (const filterableProperty of entityJavaFilterableProperties) { _%>
 
-    private <%- filterVariable.filterType %> <%= filterVariable.name %>;
-<%_ }); _%>
+    private <%- filterableProperty.propertyJavaFilterType %> <%- filterableProperty.propertyJavaFilterName %>;
+<%_ } _%>
 
     private Boolean distinct;
 
-    public <%= entityClass %>Criteria() {
+    public <%- entityClass %>Criteria() {
     }
 
-    public <%= entityClass %>Criteria(<%= entityClass %>Criteria other) {
-<%_ filterVariables.forEach((filterVariable) => { _%>
-        this.<%= filterVariable.name %> = other.<%= filterVariable.name %> == null ? null : other.<%= filterVariable.name %>.copy();
-<%_ }); _%>
+    public <%- entityClass %>Criteria(<%- entityClass %>Criteria other) {
+<%_ for (const { propertyJavaFilterName, propertyJavaFilterJavaBeanName, propertyJavaFilterType } of entityJavaFilterableProperties) { _%>
+        this.<%- propertyJavaFilterName %> = other.optional<%- propertyJavaFilterJavaBeanName %>().map(<%- propertyJavaFilterType %>::copy).orElse(null);
+<%_ } _%>
         this.distinct = other.distinct;
     }
 
     @Override
-    public <%= entityClass %>Criteria copy() {
-        return new <%= entityClass %>Criteria(this);
+    public <%- entityClass %>Criteria copy() {
+        return new <%- entityClass %>Criteria(this);
+    }
+<%_ for (const { propertyJavaFilterName, propertyJavaFilterType, propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
+
+    public <%- propertyJavaFilterType %> get<%- propertyJavaFilterJavaBeanName %>() {
+        return <%- propertyJavaFilterName %>;
     }
 
-<%_ filterVariables.forEach((filterVariable) => { _%>
-    public <%- filterVariable.filterType %> get<%= filterVariable.fieldInJavaBeanMethod %>() {
-        return <%= filterVariable.name %>;
+    public Optional<<%- propertyJavaFilterType %>> optional<%- propertyJavaFilterJavaBeanName %>() {
+        return Optional.ofNullable(<%- propertyJavaFilterName %>);
     }
 
-    public <%- filterVariable.filterType %> <%= filterVariable.name %>() {
-        if (<%= filterVariable.name %> == null) {
-            <%= filterVariable.name %> = new <%- filterVariable.filterType %>();
+    public <%- propertyJavaFilterType %> <%- propertyJavaFilterName %>() {
+        if (<%- propertyJavaFilterName %> == null) {
+            set<%- propertyJavaFilterJavaBeanName %>(new <%- propertyJavaFilterType %>());
         }
-        return <%= filterVariable.name %>;
+        return <%- propertyJavaFilterName %>;
     }
 
-    public void set<%= filterVariable.fieldInJavaBeanMethod %>(<%- filterVariable.filterType %> <%= filterVariable.name %>) {
-        this.<%= filterVariable.name %> = <%= filterVariable.name %>;
+    public void set<%- propertyJavaFilterJavaBeanName %>(<%- propertyJavaFilterType %> <%- propertyJavaFilterName %>) {
+        this.<%- propertyJavaFilterName %> = <%- propertyJavaFilterName %>;
     }
-
-<%_ }); _%>
+<%_ } _%>
 
     public Boolean getDistinct() {
+        return distinct;
+    }
+
+    public Optional<Boolean> optionalDistinct() {
+        return Optional.ofNullable(distinct);
+    }
+
+    public Boolean distinct() {
+        if (distinct == null) {
+            setDistinct(true);
+        }
         return distinct;
     }
 
@@ -138,32 +116,33 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final <%= entityClass %>Criteria that = (<%= entityClass %>Criteria) o;
+        final <%- entityClass %>Criteria that = (<%- entityClass %>Criteria) o;
         return
-<%_ filterVariables.forEach((filterVariable, index) => { _%>
-            Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>) &&
-<%_ }); _%>
+<%_ for (const { propertyJavaFilterName } of entityJavaFilterableProperties) { _%>
+            Objects.equals(<%- propertyJavaFilterName %>, that.<%- propertyJavaFilterName %>) &&
+<%_ } _%>
             Objects.equals(distinct, that.distinct);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-<%_ filterVariables.forEach((filterVariable, index) => { _%>
-        <%= filterVariable.name %>,
-<%_ }); _%>
-        distinct);
+<%_ for (const { propertyJavaFilterName } of entityJavaFilterableProperties) { _%>
+          <%- propertyJavaFilterName %>,
+<%_ } _%>
+          distinct
+        );
     }
 
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= entityClass %>Criteria{" +
-<%_ filterVariables.forEach((field) => { _%>
-            (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
-<%_ }); _%>
-            (distinct != null ? "distinct=" + distinct + ", " : "") +
-            "}";
+        return "<%- entityClass %>Criteria{" +
+<%_ for (const { propertyJavaFilterName, propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
+            optional<%- propertyJavaFilterJavaBeanName %>().map(f -> "<%- propertyJavaFilterName %>=" + f + ", ").orElse("") +
+<%_ } _%>
+            optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
+        "}";
     }
 
 }

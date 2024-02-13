@@ -63,11 +63,16 @@ export const restFiles = {
 
 export const filteringFiles = {
   filteringFiles: [
-    {
+    javaMainPackageTemplatesBlock({
       condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
-      ...javaMainPackageTemplatesBlock('_entityPackage_/'),
-      templates: ['service/criteria/_entityClass_Criteria.java', 'service/_entityClass_QueryService.java'],
-    },
+      relativePath: '_entityPackage_/service/',
+      templates: ['criteria/_entityClass_Criteria.java', '_entityClass_QueryService.java'],
+    }),
+    javaTestPackageTemplatesBlock({
+      condition: generator => generator.jpaMetamodelFiltering && !generator.reactive,
+      relativePath: '_entityPackage_/service/',
+      templates: ['criteria/_entityClass_CriteriaTest.java'],
+    }),
   ],
 };
 
