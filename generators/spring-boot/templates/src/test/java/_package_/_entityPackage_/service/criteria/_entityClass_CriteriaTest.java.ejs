@@ -14,7 +14,7 @@ class <%- entityClass %>CriteriaTest {
         var <%- persistInstance %>Criteria = new <%- entityClass %>Criteria();
         assertThat(<%- persistInstance %>Criteria).satisfies(
             criteria -> assertThat(criteria).is(criteriaFiltersAre(filter -> filter == null)),
-            criteria -> assertThat(criteria).isNotEqualTo(null)
+            criteria -> assertThat(criteria).isNull()
         );
     }
 
