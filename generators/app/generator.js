@@ -95,7 +95,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   }
 
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       setup() {
         if (!this.options.reproducibleTests) {
           this.jhipsterConfig.jhipsterVersion = packageJson.version;
@@ -118,7 +118,16 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           });
         }
       },
-    };
+      loadGlobalConfig() {
+        if (!this.options.reproducible) {
+          const globalConfig = this._globalConfig.getAll();
+          if (Object.keys(globalConfig).length > 0) {
+            this.log.warn('Using global configuration values:', globalConfig);
+            this.config.defaults(globalConfig);
+          }
+        }
+      },
+    });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
