@@ -1070,15 +1070,12 @@ _%>
 
         <%= primaryKey.type %> id = <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>();
 
-        default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.equals=" + id);
-        default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.notEquals=" + id);
+        default<%= entityClass %>Filtering("<%= primaryKey.name %>.equals=" + id, "<%= primaryKey.name %>.notEquals=" + id);
 
   <%_ if (primaryKey.typeLong || primaryKey.typeInteger) { _%>
-        default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.greaterThanOrEqual=" + id);
-        default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.greaterThan=" + id);
+        default<%= entityClass %>Filtering("<%= primaryKey.name %>.greaterThanOrEqual=" + id, "<%= primaryKey.name %>.greaterThan=" + id);
 
-        default<%= entityClass %>ShouldBeFound("<%= primaryKey.name %>.lessThanOrEqual=" + id);
-        default<%= entityClass %>ShouldNotBeFound("<%= primaryKey.name %>.lessThan=" + id);
+        default<%= entityClass %>Filtering("<%= primaryKey.name %>.lessThanOrEqual=" + id, "<%= primaryKey.name %>.lessThan=" + id);
   <%_ } _%>
     }
 
@@ -1090,11 +1087,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.equals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%= searchBy.fieldName %>.equals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1102,11 +1099,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> or <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.in=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.in=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.in=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%= searchBy.fieldName %>.in=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1115,10 +1112,10 @@ _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is not null
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.specified=true");
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is null
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.specified=false");
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.specified=true",
+            "<%= searchBy.fieldName %>.specified=false"
+        );
     }
       <%_ } _%>
       <%_ if (searchBy.fieldTypeString) { _%>
@@ -1127,11 +1124,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.contains=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.contains=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.contains=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%= searchBy.fieldName %>.contains=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1139,11 +1136,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.doesNotContain=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%= searchBy.fieldName %>.doesNotContain=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        );
     }
 
     <%_ }
@@ -1169,11 +1166,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to <%= defaultValue %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= defaultValue %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to <%= biggerValue %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= biggerValue %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= defaultValue %>,
+            "<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= biggerValue %>
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1181,11 +1178,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to <%= defaultValue %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= defaultValue %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to <%= smallerValue %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= smallerValue %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= defaultValue %>,
+            "<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= smallerValue %>
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1193,11 +1190,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than <%= defaultValue %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= defaultValue %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than <%= biggerValue %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= biggerValue %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than
+        default<%= entityClass %>Filtering(
+            "<%= searchBy.fieldName %>.lessThan=" + <%= biggerValue %>,
+            "<%= searchBy.fieldName %>.lessThan=" + <%= defaultValue %>
+        );
     }
 
     @Test<%= transactionalAnnotation %>
@@ -1205,11 +1202,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than <%= defaultValue %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterThan=" + <%= defaultValue %>);
-
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than <%= smallerValue %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterThan=" + <%= smallerValue %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than
+        default<%= entityClass %>Filtering(
+          "<%= searchBy.fieldName %>.greaterThan=" + <%= smallerValue %>,
+          "<%= searchBy.fieldName %>.greaterThan=" + <%= defaultValue %>
+        );
     }
 
     <%_ } _%>
@@ -1271,6 +1268,11 @@ _%>
     }
 
   <%_ }); _%>
+    private void default<%= entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <% if (!reactive) { %>throws Exception <% } %>{
+        default<%= entityClass %>ShouldBeFound(shouldBeFound);
+        default<%= entityClass %>ShouldNotBeFound(shouldNotBeFound);
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
