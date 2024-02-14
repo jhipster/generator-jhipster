@@ -146,9 +146,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory?.({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
+        source.addIntegrationTestConfigurationClass?.({
+          classPath: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
         });
       },
       addLog({ source }) {

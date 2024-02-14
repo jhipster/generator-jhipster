@@ -1106,9 +1106,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -1233,9 +1230,6 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {

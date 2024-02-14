@@ -40,4 +40,7 @@ export default function cleanupOldServerFilesTask(this: Generator, { application
   if (application.prodDatabaseTypeMysql && this.isJhipsterVersionLessThan('7.9.0')) {
     this.removeFile(`${application.srcTestResources}testcontainers/mysql/my.cnf`);
   }
+  if (this.isJhipsterVersionLessThan('8.1.1')) {
+    this.removeFile(`${application.javaPackageTestDir}config/EmbeddedSQL.java`);
+  }
 }

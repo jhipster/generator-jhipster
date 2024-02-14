@@ -59,7 +59,7 @@ export const sqlFiles = {
   testContainers: [
     {
       ...javaTestPackageTemplatesBlock(),
-      templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java', 'config/SqlTestContainersSpringContextCustomizerFactory.java'],
+      templates: ['config/SqlTestContainer.java', 'config/SqlTestContainersSpringContextCustomizerFactory.java'],
     },
     {
       ...javaTestResourceTemplatesBlock(),

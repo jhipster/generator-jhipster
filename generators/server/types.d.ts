@@ -23,6 +23,7 @@ export type SpringBootSourceType = GradleSourceType &
   SpringCacheSourceType &
   LiquibaseSourceType & {
     addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
+    addIntegrationTestConfigurationClass?({ classPath }: { classPath: string }): void;
     addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
     addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
     addLogbackTestLog?({ name, level }: { name: string; level: string }): void;

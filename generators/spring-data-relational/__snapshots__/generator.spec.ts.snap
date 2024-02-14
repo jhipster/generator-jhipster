@@ -338,9 +338,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -435,9 +432,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -811,9 +805,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -905,9 +896,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -1263,9 +1251,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -1357,9 +1342,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -1679,9 +1661,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -1764,9 +1743,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -2080,9 +2056,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -2165,9 +2138,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -2382,9 +2352,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -2437,9 +2404,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -2660,9 +2624,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -2715,9 +2676,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -2914,9 +2872,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -2978,9 +2933,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -3204,9 +3156,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -3259,9 +3208,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -3455,9 +3401,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -3516,9 +3459,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -3736,9 +3676,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -3788,9 +3725,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -3975,9 +3909,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -4039,9 +3970,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -4265,9 +4193,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -4320,9 +4245,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -4516,9 +4438,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -4568,9 +4487,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -4797,9 +4713,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -4840,9 +4753,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -5033,9 +4943,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -5085,9 +4992,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -5308,9 +5212,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -5351,9 +5252,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -5577,9 +5475,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -5620,9 +5515,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -5846,9 +5738,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -5886,9 +5775,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -6106,9 +5992,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -6149,9 +6032,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -6453,9 +6333,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -6556,9 +6433,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -6821,9 +6695,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -6885,9 +6756,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -7201,9 +7069,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -7304,9 +7169,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -7569,9 +7431,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -7633,9 +7492,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -7946,9 +7802,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -8049,9 +7902,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -8308,9 +8158,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -8372,9 +8219,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -8676,9 +8520,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -8776,9 +8617,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -9041,9 +8879,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -9102,9 +8937,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -9418,9 +9250,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -9521,9 +9350,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -9786,9 +9612,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -9850,9 +9673,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -10076,9 +9896,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -10146,9 +9963,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -10396,9 +10210,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -10454,9 +10265,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -10671,9 +10479,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -10741,9 +10546,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -10997,9 +10799,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -11055,9 +10854,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -11284,9 +11080,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -11354,9 +11147,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -11610,9 +11400,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -11668,9 +11455,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -11894,9 +11678,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -11961,9 +11742,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -12211,9 +11989,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -12266,9 +12041,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -12483,9 +12255,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -12553,9 +12322,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -12809,9 +12575,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -12867,9 +12630,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -13168,9 +12928,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -13253,9 +13010,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -13500,9 +13254,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -13546,9 +13297,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -13847,9 +13595,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -13932,9 +13677,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -14179,9 +13921,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -14225,9 +13964,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -14526,9 +14262,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -14611,9 +14344,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -14858,9 +14588,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -14904,9 +14631,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -15205,9 +14929,6 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
     "stateCleared": "modified",
   },
@@ -15287,9 +15008,6 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -15534,9 +15252,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -15577,9 +15292,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -15878,9 +15590,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
     "stateCleared": "modified",
   },
@@ -15963,9 +15672,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -16210,9 +15916,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
@@ -16256,9 +15959,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {

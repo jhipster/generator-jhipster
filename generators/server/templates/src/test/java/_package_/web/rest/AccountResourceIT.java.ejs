@@ -44,6 +44,7 @@ import <%= packageName %>.web.rest.vm.ManagedUserVM;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.test.annotation.DirtiesContext;
 <%_ if (reactive && authenticationUsesCsrf || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
@@ -109,6 +110,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 @AutoConfigureMockMvc
 <%_ } _%>
 @IntegrationTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class AccountResourceIT {
     static final String TEST_USER_LOGIN = "test";
 

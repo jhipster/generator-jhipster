@@ -192,6 +192,11 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         };
       },
       addSpringIntegrationTest({ application, source }) {
+        source.addIntegrationTestConfigurationClass = ({ classPath }) => {
+          this.editFile(this.destinationPath(`${application.javaPackageTestDir}IntegrationTest.java`), content =>
+            content.replace(/(classes = {)/, `$1 ${classPath.split('.').pop()}.class,`).replace(/(\r?\nimport )/, `$1 ${classPath};$1`),
+          );
+        };
         source.addIntegrationTestAnnotation = ({ package: packageName, annotation }) =>
           this.editFile(this.destinationPath(`${application.javaPackageTestDir}IntegrationTest.java`), content =>
             addJavaAnnotation(content, { package: packageName, annotation }),
