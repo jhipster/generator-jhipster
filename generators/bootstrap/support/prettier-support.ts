@@ -18,11 +18,9 @@
  */
 import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import prettier from 'prettier';
-import prettierPluginJava from 'prettier-plugin-java';
-import prettierPluginProperties from 'prettier-plugin-properties';
-import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 import { Minimatch } from 'minimatch';
+import Piscina from 'piscina';
+import type prettier from 'prettier';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import type CoreGenerator from '../../base-core/index.js';
 
@@ -41,62 +39,45 @@ export const createPrettierTransform = async function (
     prettierOptions?: prettier.Options;
   } = {},
 ) {
-  // prettier cache is global, generators may execute more than one commit.
-  // In case prettier config is committed to disk at later commits, the cache may be outdated.
-  await prettier.clearConfigCache();
+  const pool = new Piscina({
+    maxThreads: 1,
+    filename: new URL('./prettier-worker.js', import.meta.url).href,
+  });
 
   const { ignoreErrors = false, extensions = '*', prettierPackageJson, prettierJava, prettierProperties, prettierOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
 
-  return passthrough(async (file: VinylMemFsEditorFile) => {
-    if (!minimatch.match(file.path) || !isFileStateModified(file)) {
-      return;
-    }
-    if (!file.contents) {
-      throw new Error(`File content doesn't exist for ${file.relative}`);
-    }
-    /* resolve from the projects config */
-    let fileContent;
-    try {
-      const resolvedDestinationFileOptions = await prettier.resolveConfig(file.relative);
-      const fileOptions: prettier.Options = {
-        // Config from disk
-        ...resolvedDestinationFileOptions,
-        plugins: [],
-        // for better errors
-        filepath: file.relative,
-        ...prettierOptions,
-      };
-      if (prettierPackageJson && file.path.endsWith('package.json')) {
-        fileOptions.plugins!.push(prettierPluginPackagejson);
-      }
-      if (prettierJava && file.path.endsWith('.java')) {
-        fileOptions.plugins!.push(prettierPluginJava);
-      }
-      if (prettierProperties) {
-        fileOptions.plugins!.push(prettierPluginProperties);
-      }
-      fileContent = file.contents.toString('utf8');
-      const data = await prettier.format(fileContent, fileOptions);
-      file.contents = Buffer.from(data);
-    } catch (error) {
-      let errorMessage;
-      if (fileContent) {
-        errorMessage = `Error parsing file ${file.relative}: ${error}
-
-At: ${fileContent
-          .split('\n')
-          .map((value, idx) => `${idx + 1}: ${value}`)
-          .join('\n')}`;
-      } else {
-        errorMessage = `Unknown prettier error: ${error}`;
-      }
-      if (ignoreErrors) {
-        this?.log?.warn?.(errorMessage);
+  return passthrough(
+    async (file: VinylMemFsEditorFile) => {
+      if (!minimatch.match(file.path) || !isFileStateModified(file)) {
         return;
       }
-      throw new Error(errorMessage);
-    }
-  });
+      if (!file.contents) {
+        throw new Error(`File content doesn't exist for ${file.relative}`);
+      }
+      const { result, errorMessage } = await pool.run({
+        relativeFilePath: file.relative,
+        filePath: file.path,
+        fileContents: file.contents.toString('utf8'),
+        prettierOptions,
+        prettierPackageJson,
+        prettierJava,
+        prettierProperties,
+        ignoreErrors,
+      });
+      if (result) {
+        file.contents = Buffer.from(result);
+      }
+      if (errorMessage) {
+        if (!ignoreErrors) {
+          throw new Error(errorMessage);
+        }
+        this?.log?.warn?.(errorMessage);
+      }
+    },
+    () => {
+      pool.destroy();
+    },
+  );
 };
