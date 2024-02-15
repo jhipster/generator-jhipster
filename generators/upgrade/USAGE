@@ -5,7 +5,7 @@ Example:
 
     jhipster upgrade
 
-    Assuming you have Git installed, and you run this command in the Git branch you are using for development, JHipster Upgrader will :
+    Assuming you have Git installed, and you run this command in the Git branch you are using for development, it will:
     - checkout a "jhipster_upgrade" branch
     - generate a application upgrade reference
     - apply the reference point to your application

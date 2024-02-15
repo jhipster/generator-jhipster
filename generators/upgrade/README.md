@@ -1,8 +1,8 @@
 # upgrade sub-generador
 
-Upgrades the application the a newer generator-jhipster version.
+Upgrades the application to a newer generator-jhipster version.
 
-The upgrade process generates 4 commits.
+The upgrade process generates 4 commits:
 
 - the reference application
 - a merge commit with unrelated histories
