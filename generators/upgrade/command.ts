@@ -20,16 +20,6 @@ import { JHipsterCommandDefinition } from '../base/api.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    targetJhipsterVersion: {
-      name: 'targetVersion',
-      description: 'Upgrade to a specific version instead of the latest',
-      type: String,
-      scope: 'generator',
-    },
-    targetBlueprintVersions: {
-      description: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
-      type: String,
-    },
     silent: {
       description: 'Hides output of the generation process',
       type: Boolean,
