@@ -16,459 +16,309 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import process from 'node:process';
-import fs, { rmSync, readdirSync } from 'node:fs';
-import path from 'node:path';
+import { setTimeout } from 'timers/promises';
+import { readdir, rm } from 'fs/promises';
 import chalk from 'chalk';
-import semver from 'semver';
 import gitignore from 'parse-gitignore';
-import latestVersion from 'latest-version';
+import semver from 'semver';
+import { ResetMode } from 'simple-git';
 
 import BaseGenerator from '../base/index.js';
-import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import statistics from '../statistics.js';
-import { parseBluePrints } from '../base/internal/index.js';
 import { packageJson } from '../../lib/index.js';
+import statistics from '../statistics.js';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import command from './command.js';
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
-const UPGRADE_BRANCH = 'jhipster_upgrade';
-const GLOBAL_VERSION = 'global';
-const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
-const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
+const GENERATOR_APP = 'app';
+const DEFAULT_CLI_OPTIONS = '--force --skip-install --skip-git --ignore-errors --no-insight --skip-checks';
+const DEFAULT_NON_INTERATIVE_OPTIONS = {
+  skipInstall: true,
+  skipGit: true,
+  skipChecks: true,
+  force: true,
+  ignoreErrors: true,
+  skipPriorities: ['prompting'],
+};
+const DEFAULT_MERGE_OPTIONS = ['--strategy', 'ours'];
 
 export default class UpgradeGenerator extends BaseGenerator {
-  fromV7;
-  fromV7_9_3App;
+  requiredPackage = GENERATOR_JHIPSTER;
+  createEnvBuilder = EnvironmentBuilder.createDefaultBuilder;
+  actualApplicationBranch;
+  silent;
+  spawnStdio = 'inherit';
+  generationCommand = 'jhipster';
 
-  get [BaseGenerator.INITIALIZING]() {
+  async beforeQueue() {
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints();
+    }
+  }
+
+  get initializing() {
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.log.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
-        this.log.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
+        this.log.log(chalk.green(`This will upgrade your current application codebase to JHipster version ${packageJson.version}`));
+        this.log.log(
+          chalk.green(
+            'For advanced options, please use the jhipster-migrate blueprint (https://github.com/jhipster/generator-jhipster-migrate/)',
+          ),
+        );
+        this.log.log('');
       },
 
-      loadOptions() {
+      parseCommand() {
+        this.parseJHipsterOptions(command.options);
+        if (this.silent) {
+          this.spawnStdio = 'ignore';
+        }
+      },
+
+      assertJHipsterProject() {
         if (!this.config.existed) {
           throw new Error(
             "Could not find a valid JHipster application configuration, check if the '.yo-rc.json' file exists and if the 'generator-jhipster' key exists inside it.",
           );
         }
 
-        this.parseJHipsterOptions(command.options);
-
-        this.force = this.options.force;
-        this.targetBlueprintVersions = parseBluePrints(this.options.targetBlueprintVersions);
-        this.skipInstall = this.options.skipInstall;
-
-        this.fromV7 = this.jhipsterConfig.jhipsterVersion && semver.satisfies(this.jhipsterConfig.jhipsterVersion, '^7.0.0');
-        const currentNodeVersion = process.versions.node;
-        if (this.jhipsterConfig.jhipsterVersion === '7.9.3') {
-          if (!semver.satisfies(currentNodeVersion, '^16.0.0')) {
-            throw new Error('Upgrading a v7.9.3 generated application requires node 16 to upgrade');
-          }
-          this.fromV7_9_3App = true;
-        } else if (!semver.satisfies(currentNodeVersion, packageJson.engines.node)) {
-          this.log.fatal(
-            `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${packageJson.engines.node}\nPlease update your version of Node.`,
-          );
-        }
-      },
-      parseBlueprints() {
-        this.blueprints = parseBluePrints(this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')) || [];
-      },
-
-      loadConfig() {
-        this.currentJhipsterVersion = this.config.get('jhipsterVersion');
-        this.clientPackageManager = this.config.get('clientPackageManager');
-      },
-    });
-  }
-
-  _rmRf(file) {
-    const absolutePath = path.resolve(file);
-    this.log.verboseInfo(`Removing ${absolutePath}`);
-    rmSync(absolutePath, { recursive: true, force: true });
-  }
-
-  _gitCheckout(branch, options = {}) {
-    const args = ['checkout', '-q', branch];
-    if (options.force) {
-      args.push('-f');
-    }
-    const gitCheckout = this.spawnSync('git', args, { stdio: 'pipe', reject: false });
-    if (gitCheckout.exitCode !== 0) throw new Error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
-    this.log.ok(`Checked out branch "${branch}"`);
-  }
-
-  _cleanUp() {
-    const ignoredFiles = gitignore(fs.readFileSync('.gitignore')).patterns || [];
-    const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
-    const files = readdirSync(this.destinationPath());
-    files.forEach(file => {
-      if (!filesToKeep.includes(file)) {
-        this._rmRf(file);
-      }
-    });
-    this.log.ok('Cleaned up project directory');
-  }
-
-  _generate(jhipsterVersion, blueprintInfo, { target }) {
-    this.log.verboseInfo(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
-    let generatorCommand = 'yo jhipster';
-    if (this.options.regenerateExecutable) {
-      generatorCommand = this.options.regenerateExecutable;
-    } else if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
-      this._rmRf('node_modules');
-      generatorCommand = 'jhipster';
-    } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
-      const result = this.spawnCommandSync('npm bin', { stdio: 'pipe', reject: false });
-      if (result.exitCode === 0) {
-        generatorCommand = `"${result.stdout.replace('\n', '')}/jhipster"`;
-      } else {
-        generatorCommand = 'npm exec --no jhipster --';
-      }
-    }
-    const skipChecksOption = this.skipChecks || (!target && this.fromV7_9_3App) ? '--skip-checks' : '';
-    const regenerateCmd = `${generatorCommand} ${
-      this.fromV7 ? '--with-entities ' : ''
-    }--force --skip-install --skip-git --ignore-errors --no-insight ${skipChecksOption}`;
-    this.log.verboseInfo(regenerateCmd);
-    const result = this.spawnCommandSync(regenerateCmd);
-    if (result.exitCode !== 0) {
-      throw new Error(`Something went wrong while generating project! ${result.exitCode}`);
-    }
-
-    this.log.ok(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
-  }
-
-  _gitCommitAll(commitMsg) {
-    const gitAdd = this.spawnSync('git', ['add', '-A'], { stdio: 'pipe', reject: false });
-    if (gitAdd.exitCode !== 0) throw new Error(`Unable to add resources in git:\n${gitAdd.stderr}`);
-
-    const gitCommit = this.spawnSync('git', ['commit', '-q', '-m', commitMsg, '-a', '--allow-empty', '--no-verify'], {
-      stdio: 'pipe',
-    });
-    if (gitCommit.exitCode !== 0) throw new Error(`Unable to commit in git:\n${gitCommit.stderr}`);
-    this.log.ok(`Committed with message "${commitMsg}"`);
-  }
-
-  _regenerate(jhipsterVersion, blueprintInfo, { target }) {
-    this._generate(jhipsterVersion, blueprintInfo, { target });
-    const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
-    this.log.verboseInfo(`Removing ${keystore}`);
-    this._rmRf(keystore);
-    this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
-  }
-
-  _installNpmPackageLocally(npmPackage, version) {
-    this.log.verboseInfo(`Installing ${npmPackage} ${version} locally`);
-    const commandPrefix = 'npm install';
-    const devDependencyParam = '--save-dev';
-    const noPackageLockParam = '--no-package-lock';
-    const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts --force`;
-    this.log.verboseInfo(generatorCommand);
-
-    const npmInstall = this.spawnCommandSync(generatorCommand, { stdio: 'pipe', reject: false });
-    if (npmInstall.exitCode === 0) this.log.ok(`Installed ${npmPackage}@${version}`);
-    else throw new Error(`Something went wrong while installing ${npmPackage}! ${npmInstall.stdout} ${npmInstall.stderr}`);
-  }
-
-  get [BaseGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup({
-      assertJHipsterProject() {
         if (!this.config.get('baseName')) {
           throw new Error('Current directory does not contain a JHipster project.');
         }
       },
 
+      async checkoutDependency() {
+        const jhipsterVersion = this.getPackageJsonVersion();
+        if (!jhipsterVersion) {
+          throw new Error('No generator-jhipster dependency found in your package.json');
+        }
+        if (this.isV7(jhipsterVersion) && jhipsterVersion !== '7.9.4') {
+          throw new Error('Upgrade the project to JHipster 7.9.4 before upgrading to the latest version.');
+        }
+      },
+
       async assertGitPresent() {
-        if (!(await this.createGit().version()).installed) {
-          this.log.warn(`git is not found on your computer.\n, Install git: ${chalk.yellow('https://git-scm.com/')}`);
+        if (!(await this.checkGitVersion(GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES))) {
+          this.log.warn('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
           throw new Error('Exiting the process.');
         }
       },
 
-      checkLatestBlueprintVersions() {
-        if (!this.blueprints || this.blueprints.length === 0) {
-          this.log.warn('No blueprints detected, skipping check of last blueprint version');
-          return undefined;
-        }
-
-        this.log.ok('Checking for new blueprint versions');
-        return Promise.all(
-          this.blueprints
-            .filter(blueprint => {
-              if (this.targetBlueprintVersions && this.targetBlueprintVersions.length > 0) {
-                const targetBlueprint = this.targetBlueprintVersions.find(elem => {
-                  return elem.name === blueprint.name;
-                });
-                if (targetBlueprint && targetBlueprint.version && targetBlueprint.version !== 'latest') {
-                  this.log.warn(`Blueprint ${targetBlueprint.name} will be upgraded to target version: ${targetBlueprint.version}`);
-                  blueprint.latestBlueprintVersion = targetBlueprint.version;
-                  return false;
-                }
-              }
-              return true;
-            })
-            .map(async blueprint => {
-              blueprint.latestBlueprintVersion = await latestVersion(blueprint.name);
-              if (semver.lt(blueprint.version, blueprint.latestBlueprintVersion)) {
-                this.newBlueprintVersionFound = true;
-                this.log.ok(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
-              } else if (this.force) {
-                this.newBlueprintVersionFound = true;
-                this.log.log(chalk.yellow('Forced re-generation'));
-              } else {
-                if (this.newBlueprintVersionFound === undefined) {
-                  this.newBlueprintVersionFound = false;
-                }
-                this.log.warn(
-                  `${chalk.green('No update available.')} Application has already been generated with latest version for blueprint: ${
-                    blueprint.name
-                  }`,
-                );
-              }
-              this.log.ok(`Done checking for new version for blueprint ${blueprint.name}`);
-            }),
-        ).then(() => {
-          this.log.ok('Done checking for new version of blueprints');
-        });
-      },
-
-      async checkLatestJhipsterVersion() {
-        if (this.targetJhipsterVersion) {
-          if (this.targetJhipsterVersion === GLOBAL_VERSION) {
-            this.originalTargetJhipsterVersion = this.targetJhipsterVersion;
-            this.targetJhipsterVersion = packageJson.version;
-          }
-          this.log.warn(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
-          return;
-        }
-        this.log.verboseInfo(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
-        this.targetJhipsterVersion = await latestVersion(GENERATOR_JHIPSTER);
-        if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
-          this.log.ok(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
-        } else if (this.force) {
-          this.log.log(chalk.yellow('Forced re-generation'));
-        } else if (!this.newBlueprintVersionFound) {
-          throw new Error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
+      async assertGitRepository() {
+        const git = this.createGit();
+        if (!(await git.checkIsRepo())) {
+          this.log.warn('Current directory is not a git repository. Initializing git.');
+          await git.init().add('.').commit('initial commit', ['--allow-empty', '--no-verify']);
         }
       },
 
-      assertGitRepository() {
-        const gitInit = () => {
-          const gitInit = this.spawnSync('git', ['init'], { stdio: 'pipe', reject: false });
-          if (gitInit.exitCode !== 0) throw new Error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
-          this.log.ok('Initialized a new Git repository');
-          this._gitCommitAll('Initial');
-        };
-        const gitRevParse = this.spawnSync('git', ['rev-parse', '-q', '--is-inside-work-tree'], { stdio: 'pipe', reject: false });
-        if (gitRevParse.exitCode !== 0) gitInit();
-        else this.log.ok('Git repository detected');
-      },
-
-      assertNoLocalChanges() {
-        const gitStatus = this.spawnSync('git', ['status', '--porcelain'], { stdio: 'pipe', reject: false });
-        if (gitStatus.exitCode !== 0) throw new Error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
-        if (gitStatus.stdout) {
-          this.log.warn(gitStatus.stdout);
-          throw new Error(' local changes found.\n\tPlease commit/stash them before upgrading');
+      async assertNoLocalChanges() {
+        const result = await this.createGit().status();
+        if (!result.isClean()) {
+          throw new Error(
+            ` local changes found.\n\tPlease commit/stash them before upgrading\n\t${result.files
+              .map(file => `${file.index} ${file.path}`)
+              .join('\n\t')}`,
+          );
         }
       },
 
-      detectCurrentBranch() {
-        const gitRevParse = this.spawnSync('git', ['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { stdio: 'pipe', reject: false });
-        if (gitRevParse.exitCode !== 0)
-          throw new Error(`Unable to detect current Git branch:\n${gitRevParse.stdout} ${gitRevParse.stderr}`);
-        this.sourceBranch = gitRevParse.stdout.replace('\n', '');
-      },
-
-      async prepareUpgradeBranch() {
-        const getGitVersion = () => {
-          const gitVersion = this.spawnSync('git', ['--version'], { stdio: 'pipe', reject: false });
-          return String(gitVersion.stdout.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));
-        };
-
-        const recordCodeHasBeenGenerated = () => {
-          const gitVersion = getGitVersion();
-          let args;
-          if (semver.lt(gitVersion, GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES)) {
-            args = ['merge', '--strategy=ours', '-q', '--no-edit', UPGRADE_BRANCH];
-          } else {
-            args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
-          }
-          const gitMerge = this.spawnSync('git', args, { stdio: 'pipe', reject: false });
-          if (gitMerge.exitCode !== 0) {
-            throw new Error(
-              `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`,
-            );
-          }
-          this.log.ok(`Current code has been generated with version ${this.currentJhipsterVersion}`);
-        };
-
-        const installJhipsterLocally = version => {
-          this._installNpmPackageLocally(GENERATOR_JHIPSTER, version);
-        };
-
-        const installBlueprintsLocally = () => {
-          if (!this.blueprints || this.blueprints.length < 1) {
-            this.log.verboseInfo('Skipping local blueprint installation since no blueprint has been detected');
-            return Promise.resolve(false);
-          }
-
-          this.log.ok('Installing blueprints locally...');
-          return Promise.all(
-            this.blueprints.map(blueprint => {
-              return new Promise(resolve => {
-                this._installNpmPackageLocally(blueprint.name, blueprint.version);
-                this.log.ok(`Done installing blueprint: ${blueprint.name}@${blueprint.version}`);
-                resolve();
-              });
-            }),
-          ).then(() => {
-            this.log.ok('Done installing blueprints locally');
-            return true;
-          });
-        };
-
-        const createUpgradeBranch = () => {
-          const gitCheckout = this.spawnSync('git', ['checkout', '--orphan', UPGRADE_BRANCH], { stdio: 'pipe', reject: false });
-          if (gitCheckout.exitCode !== 0)
-            throw new Error(`Unable to create ${UPGRADE_BRANCH} branch:\n${gitCheckout.stdout} ${gitCheckout.stderr}`);
-          this.log.ok(`Created branch ${UPGRADE_BRANCH}`);
-        };
-
-        const gitRevParse = this.spawnSync('git', ['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { stdio: 'pipe', reject: false });
-        if (gitRevParse.exitCode !== 0) {
-          // Create and checkout upgrade branch
-          createUpgradeBranch();
-          // Remove/rename old files
-          this._cleanUp();
-          // Install jhipster
-          if (!this.options.regenerateExecutable) {
-            installJhipsterLocally(this.currentJhipsterVersion);
-          }
-          // Install blueprints
-          await installBlueprintsLocally();
-          const blueprintInfo =
-            this.blueprints && this.blueprints.length > 0 ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} ` : '';
-          // Regenerate the project
-          this._regenerate(this.currentJhipsterVersion, blueprintInfo, { target: false });
-          // Checkout original branch
-          this._gitCheckout(this.sourceBranch);
-          // Register reference for merging
-          recordCodeHasBeenGenerated();
+      async detectCurrentBranch() {
+        this.actualApplicationBranch = await this.createGit().revparse(['--abbrev-ref', 'HEAD']);
+        if (this.actualApplicationBranch === UPGRADE_BRANCH) {
+          throw new Error('You are on the upgrade branch, please switch to another branch before upgrading.');
         }
       },
     });
   }
 
-  get [BaseGenerator.DEFAULT]() {
-    return {
+  get [BaseGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
       insight() {
         statistics.sendSubGenEvent('generator', 'upgrade');
       },
 
-      checkoutUpgradeBranch() {
-        this._gitCheckout(UPGRADE_BRANCH);
-      },
+      async prepareUpgradeBranch() {
+        const git = this.createGit();
 
-      updateJhipster() {
-        if (this.originalTargetJhipsterVersion === GLOBAL_VERSION || this.options.regenerateExecutable) {
-          return;
-        }
-        this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.targetJhipsterVersion);
-      },
-
-      updateBlueprints() {
-        if (!this.blueprints || this.blueprints.length < 1) {
-          this.log.verboseInfo('Skipping blueprint update since no blueprint has been detected');
-          return undefined;
+        // Checkout upgrade branch
+        try {
+          await git.revparse(['--verify', UPGRADE_BRANCH]);
+          await git.checkout(UPGRADE_BRANCH);
+        } catch {
+          // Branch does not exist
+          await git.checkout(['--orphan', UPGRADE_BRANCH]);
         }
 
-        this.log.ok('Upgrading blueprints...');
-        return Promise.all(
-          this.blueprints.map(blueprint => {
-            return new Promise(resolve => {
-              this._installNpmPackageLocally(blueprint.name, blueprint.latestBlueprintVersion);
-              this.log.ok(`Done upgrading blueprint ${blueprint.name} to version ${blueprint.latestBlueprintVersion}`);
-              resolve();
-            });
-          }),
-        ).then(() => {
-          this.log.ok('Done upgrading blueprints');
-        });
+        // Make sure the package.json is up to date
+        await this.spawnCommand('npm install', { stdio: this.spawnStdio });
+
+        // Cleanup sources
+        await this.cleanUp();
+
+        // Regenerate sources
+        await this.spawn('npx', [this.generationCommand, ...DEFAULT_CLI_OPTIONS.split(' ')], { stdio: this.spawnStdio });
+
+        await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`);
+
+        // Commit changes
+        await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${this.getPackageJsonVersion()}`, ['--no-verify']);
+
+        this.log.info('reference application created');
+
+        // Add 1s between commits for more consistent git log
+        await setTimeout(1000);
       },
 
-      generateWithTargetVersion() {
-        this._cleanUp();
+      async prepareSourceBranch() {
+        const git = this.createGit();
+        await git
+          .checkout(this.actualApplicationBranch, ['-f'])
+          .merge([
+            UPGRADE_BRANCH,
+            ...DEFAULT_MERGE_OPTIONS,
+            '-m',
+            `reference merge of ${UPGRADE_BRANCH} branch into ${this.actualApplicationBranch}`,
+            '--allow-unrelated-histories',
+          ]);
 
-        const blueprintInfo =
-          this.blueprints && this.blueprints.length > 0
-            ? ` and ${this.blueprints.map(bp => bp.name + bp.latestBlueprintVersion).join(', ')} `
-            : '';
-        const targetJhipsterVersion = this.originalTargetJhipsterVersion
-          ? `${this.originalTargetJhipsterVersion} ${this.targetJhipsterVersion}`
-          : this.targetJhipsterVersion;
-        this._regenerate(targetJhipsterVersion, blueprintInfo, { target: true });
+        this.log.info('reference application merged into source branch');
+
+        // Add 1s between commits for more consistent git log
+        await setTimeout(1000);
       },
 
-      checkoutSourceBranch() {
-        this._gitCheckout(this.sourceBranch, { force: true });
+      async updateUpgradeBranch() {
+        const git = this.createGit();
+        // Switch back to upgrade branch
+        await git.checkout(UPGRADE_BRANCH);
+
+        // Cleanup sources
+        await this.cleanUp();
+
+        // Regenerate sources
+        await this.runNonInteractive();
+
+        await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`);
+
+        // Commit changes
+        await git.add('.').commit(`generated ${UPGRADE_BRANCH} using JHipster ${packageJson.version}`, ['--no-verify']);
+
+        this.log.info('upgrade commit created');
+
+        // Add 1s between commits for more consistent git log
+        await setTimeout(1000);
       },
 
-      mergeChangesBack() {
-        this.log.verboseInfo(`Merging changes back to ${this.sourceBranch}...`);
-        this.spawnSync('git', ['merge', '-q', UPGRADE_BRANCH], { stdio: 'pipe', reject: false });
-        this.log.ok('Merge done!');
-      },
+      async upgradeSourceBranch() {
+        const git = this.createGit();
+        await git
+          .checkout(this.actualApplicationBranch, ['-f'])
+          .merge([UPGRADE_BRANCH, '-m', `upgrade merge of ${UPGRADE_BRANCH} branch into ${this.actualApplicationBranch}`])
+          .reset(ResetMode.HARD);
 
-      checkConflictsInPackageJson() {
-        const gitDiff = this.spawnSync('git', ['diff', '--name-only', '--diff-filter=U', 'package.json'], { stdio: 'pipe', reject: false });
-        if (gitDiff.exitCode !== 0) throw new Error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
-        if (gitDiff.stdout) {
-          const installCommand = 'npm install';
-          this.log.warn(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
-          this.skipInstall = true;
-        }
+        this.log.info('upgrade application merged into source branch');
+
+        // Remove packages to allow a clean install
+        await this.rmRf('node_modules');
+        await this.rmRf('package-lock.json');
+
+        this.log.info('node_modules and package-lock.json removed to allow a clean install');
       },
-    };
+    });
   }
 
-  get [BaseGenerator.INSTALL]() {
-    return this.asInstallTaskGroup({
-      install() {
-        if (!this.skipInstall) {
-          this.log.verboseInfo('Installing dependencies, please wait...');
-          this.log.verboseInfo('Removing the node_modules directory');
-          this._rmRf('node_modules');
-          const installCommand = 'npm install';
-          this.log.verboseInfo(installCommand);
+  get [BaseGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
+  }
 
-          const pkgInstall = this.spawnSync(installCommand, { stdio: 'pipe', reject: false });
-          if (pkgInstall.exitCode !== 0) {
-            throw new Error(`${installCommand} failed.`);
-          }
-        } else {
-          const logMsg = `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
-          this.log.ok(logMsg);
+  get end() {
+    return this.asEndTaskGroup({
+      async end() {
+        const diff = await this.createGit().diff(['--name-only', '--diff-filter', 'U']);
+        this.log.ok(chalk.bold('upgraded successfully.'));
+        if (diff) {
+          this.log.warn(`please fix conflicts listed below and commit!\n${diff}`);
         }
       },
     });
   }
 
   get [BaseGenerator.END]() {
-    return {
-      end() {
-        const gitDiff = this.spawnSync('git', ['diff', '--name-only', '--diff-filter=U'], { stdio: 'pipe', reject: false });
-        if (gitDiff.exitCode !== 0) throw new Error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
-        this.log.ok(chalk.bold('Upgraded successfully.'));
-        if (gitDiff.stdout) {
-          this.log.warn(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
-        }
-      },
-    };
+    return this.delegateTasksToBlueprint(() => this.end);
+  }
+
+  async rmRf(file) {
+    const absolutePath = this.destinationPath(file);
+    if (this.verbose) {
+      this.log.verboseInfo(`Removing ${absolutePath}`);
+    }
+
+    try {
+      await rm(absolutePath, { recursive: true });
+    } catch {
+      // ignore
+    }
+  }
+
+  /**
+   * Remove every generated file not related to the generation.
+   */
+  async cleanUp() {
+    const gitignoreContent = this.readDestination('.gitignore');
+    const ignoredFiles = gitignoreContent ? gitignore(gitignoreContent).patterns ?? [] : [];
+    const filesToKeep = ['.yo-rc.json', '.jhipster', 'package.json', 'package-lock.json', 'node_modules', '.git', ...ignoredFiles];
+    for (const file of await readdir(this.destinationPath())) {
+      if (!filesToKeep.includes(file)) {
+        await this.rmRf(file);
+      }
+    }
+    this.log.info('cleaned up project directory');
+  }
+
+  getPackageJsonVersion() {
+    return this.readDestinationJSON('package.json').devDependencies?.['generator-jhipster'];
+  }
+
+  isV7(version) {
+    return version.includes('.') && parseInt(version.split('.', 2), 10) < 8;
+  }
+
+  async runNonInteractive() {
+    const adapter = this.env.adapter.newAdapter?.();
+    const envOptions = { sharedFs: this.env.sharedFs, adapter };
+    const generatorOptions = { ...this.options, ...DEFAULT_NON_INTERATIVE_OPTIONS };
+
+    // We should not reuse sharedData at non interactive runs
+    delete generatorOptions.sharedData;
+
+    const envBuilder = await this.createEnvBuilder(envOptions);
+    const env = envBuilder.getEnvironment();
+    await env.run([`jhipster:${GENERATOR_APP}`], generatorOptions);
+  }
+
+  /**
+   * Check git version.
+   */
+  async checkGitVersion(minVersion) {
+    try {
+      const rawVersion = await this.createGit().raw('--version');
+      const gitVersion = String(rawVersion.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));
+      if (minVersion) {
+        return semver.gte(gitVersion, minVersion);
+      }
+
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
