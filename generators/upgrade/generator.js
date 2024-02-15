@@ -50,6 +50,7 @@ export default class UpgradeGenerator extends BaseGenerator {
   createEnvBuilder = EnvironmentBuilder.createDefaultBuilder;
   actualApplicationBranch;
   silent;
+  applyConfig;
   spawnStdio = 'inherit';
   generationCommand = 'jhipster';
 
@@ -158,20 +159,25 @@ export default class UpgradeGenerator extends BaseGenerator {
           await git.checkout(['--orphan', UPGRADE_BRANCH]);
         }
 
-        // Make sure the package.json is up to date
-        await this.spawnCommand('npm install', { stdio: this.spawnStdio });
-
         // Cleanup sources
         await this.cleanUp();
 
-        const customCliOptions = [];
-        if (this.getPackageJsonVersion() === '7.9.4') {
-          customCliOptions.push('--with-entities');
+        if (this.applyConfig) {
+          // Regenerate sources
+          await this.runNonInteractive(false);
+        } else {
+          // Make sure the node_modules is up to date
+          await this.spawnCommand('npm install', { stdio: this.spawnStdio });
+
+          const customCliOptions = [];
+          if (this.getPackageJsonVersion() === '7.9.4') {
+            customCliOptions.push('--with-entities');
+          }
+          // Regenerate sources
+          await this.spawn('npx', ['--no', this.generationCommand, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
+            stdio: this.spawnStdio,
+          });
         }
-        // Regenerate sources
-        await this.spawn('npx', ['--no', this.generationCommand, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
-          stdio: this.spawnStdio,
-        });
 
         await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`);
 
@@ -233,11 +239,13 @@ export default class UpgradeGenerator extends BaseGenerator {
 
         this.log.info('upgrade application merged into source branch');
 
-        // Remove packages to allow a clean install
-        await this.rmRf('node_modules');
-        await this.rmRf('package-lock.json');
+        if (!this.applyConfig) {
+          // Remove packages to allow a clean install
+          await this.rmRf('node_modules');
+          await this.rmRf('package-lock.json');
 
-        this.log.info('node_modules and package-lock.json removed to allow a clean install');
+          this.log.info('node_modules and package-lock.json removed to allow a clean install');
+        }
       },
     });
   }
@@ -298,10 +306,12 @@ export default class UpgradeGenerator extends BaseGenerator {
     return version.includes('.') && parseInt(version.split('.', 2), 10) < 8;
   }
 
-  async runNonInteractive() {
+  async runNonInteractive(inherit = true) {
     const adapter = this.env.adapter.newAdapter?.();
-    const envOptions = { sharedFs: this.env.sharedFs, adapter };
-    const generatorOptions = { ...this.options, ...DEFAULT_NON_INTERATIVE_OPTIONS };
+    const sharedFs = inherit ? this.env.sharedFs : undefined;
+    const inheritedOptions = inherit ? this.options : {};
+    const envOptions = { sharedFs, adapter };
+    const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERATIVE_OPTIONS };
 
     // We should not reuse sharedData at non interactive runs
     delete generatorOptions.sharedData;
