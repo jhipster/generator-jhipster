@@ -35,7 +35,7 @@ const minimumNodeVersion = packageJson.engines.node;
 
 if (!process.argv.includes('--skip-checks') && !semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
   logger.fatal(
-    `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`,
+    `You are running Node version ${currentNodeVersion}.\nJHipster requires Node version ${minimumNodeVersion}.\nPlease update your version of Node.`,
   );
 }
 
