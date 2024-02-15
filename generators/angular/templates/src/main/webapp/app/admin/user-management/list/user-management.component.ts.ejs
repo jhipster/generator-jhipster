@@ -25,10 +25,10 @@ import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
 <%_ if (!databaseTypeCassandra) { _%>
+import { SortSignalDirective, SortBySignalDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
-import { ASC, DESC, SORT } from 'app/config/navigation.constants';
+import { SORT } from 'app/config/navigation.constants';
 import { ItemCountComponent } from 'app/shared/pagination';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
@@ -44,10 +44,10 @@ import UserManagementDeleteDialogComponent from '../delete/user-management-delet
   imports: [
     RouterModule,
     SharedModule,
-    SortDirective,
-    SortByDirective,
     UserManagementDeleteDialogComponent,
 <%_ if (!databaseTypeCassandra) { _%>
+    SortSignalDirective,
+    SortBySignalDirective,
     ItemCountComponent,
 <%_ } _%>
   ],
@@ -60,14 +60,14 @@ export default class UserManagementComponent implements OnInit {
   totalItems = signal(0);
   itemsPerPage = ITEMS_PER_PAGE;
   page!: number;
-  predicate!: string;
-  ascending!: boolean;
+  sortState = sortStateSignal({});
 <%_ } _%>
 
   private userService = inject(UserManagementService);
 <%_ if (!databaseTypeCassandra) { _%>
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
+  private sortService = inject(SortService);
 <%_ } _%>
   private modalService = inject(NgbModal);
 
@@ -104,24 +104,24 @@ export default class UserManagementComponent implements OnInit {
       .query(<% if (!databaseTypeCassandra) { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
-        sort: this.sort(),
+        sort: this.sortService.buildSortParam(this.sortState(), 'id'),
       }<% } %>)
       .subscribe({
         next: (res: HttpResponse<User[]>) => {
           this.isLoading.set(false);
           this.onSuccess(res.body<% if (!databaseTypeCassandra) { %>, res.headers<% } %>);
         },
-        error: () => this.isLoading.set(false)
+        error: () => this.isLoading.set(false),
       });
   }
 
 <%_ if (!databaseTypeCassandra) { _%>
-  transition(): void {
+  transition(sortState?: SortState): void {
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute.parent,
       queryParams: {
         page: this.page,
-        sort: `${this.predicate},${this.ascending ? ASC : DESC}`,
+        sort: this.sortService.buildSortParam(sortState ?? this.sortState()),
       },
     });
   }
@@ -130,21 +130,9 @@ export default class UserManagementComponent implements OnInit {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
       const page = params.get('page');
       this.page = +(page ?? 1);
-      const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
-      this.predicate = sort[0];
-      this.ascending = sort[1] === ASC;
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data['defaultSort']));
       this.loadAll();
     });
-  }
-<%_ } _%>
-
-<%_ if (!databaseTypeCassandra) { _%>
-  private sort(): string[] {
-    const result = [`${this.predicate},${this.ascending ? ASC : DESC}`];
-    if (this.predicate !== 'id') {
-      result.push('id');
-    }
-    return result;
   }
 <%_ } _%>
 
