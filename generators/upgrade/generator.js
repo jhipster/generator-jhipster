@@ -164,8 +164,14 @@ export default class UpgradeGenerator extends BaseGenerator {
         // Cleanup sources
         await this.cleanUp();
 
+        const customCliOptions = [];
+        if (this.getPackageJsonVersion() === '7.9.4') {
+          customCliOptions.push('--with-entities');
+        }
         // Regenerate sources
-        await this.spawn('npx', [this.generationCommand, ...DEFAULT_CLI_OPTIONS.split(' ')], { stdio: this.spawnStdio });
+        await this.spawn('npx', ['--no', this.generationCommand, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
+          stdio: this.spawnStdio,
+        });
 
         await this.rmRf(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`);
 
