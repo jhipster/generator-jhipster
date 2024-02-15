@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { ASC, DESC } from 'app/config/navigation.constants';
 import { SortState } from './sort-state';
 
 @Injectable({ providedIn: 'root' })
@@ -27,9 +26,15 @@ export class SortService {
     sensitivity: 'base',
   });
 
-  public startSort({ predicate, order }: Required<SortState>): (a: any, b: any) => number {
+  public startSort({ predicate, order }: Required<SortState>, fallback?: Required<SortState>): (a: any, b: any) => number {
     const multiply = order === 'desc' ? -1 : 1;
-    return (a: any, b: any) => this.collator.compare(a[predicate], b[predicate]) * multiply;
+    return (a: any, b: any) => {
+      const compare = this.collator.compare(a[predicate], b[predicate]);
+      if (compare === 0 && fallback) {
+        return this.startSort(fallback)(a, b);
+      }
+      return compare * multiply;
+    };
   }
 
   public parseSortParam(sortParam: string | undefined): SortState {
@@ -40,9 +45,13 @@ export class SortService {
       }
     }
     return { predicate: sortParam?.length ? sortParam : undefined };
-  };
+  }
 
-  public buildSortParam(sortState: SortState): string[] {
-    return sortState.predicate && sortState.order !== undefined ? [`${sortState.predicate},${sortState.order}`] : [];
+  public buildSortParam({ predicate, order }: SortState, fallback?: string): string[] {
+    const sortParam = predicate && order ? [`${predicate},${order}`] : [];
+    if (fallback && predicate !== fallback) {
+      sortParam.push(`${fallback},asc`);
+    }
+    return sortParam;
   }
 }
