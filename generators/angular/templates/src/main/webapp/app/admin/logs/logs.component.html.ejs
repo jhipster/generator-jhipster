@@ -17,95 +17,95 @@
  limitations under the License.
 -%>
 @defer (when loggers() && !isLoading()) {
-<div class="table-responsive">
-  <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">__jhiTransformTranslate__('logs.title')</h2>
+  <div class="table-responsive">
+    <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">Logs</h2>
 
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
-  <div class="float-end">
-    <select class="form-select" id="routesSelect" (change)="changeService($event)">
-      <option [ngValue]="null"></option>
-    @for (service of services; track $index) {
-      <option [value]="service">
-        {{ service }}
-      </option>
-    }
-    </select>
+    <div class="float-end">
+      <select class="form-select" id="routesSelect" (change)="changeService($event)">
+        <option [ngValue]="null"></option>
+        @for (service of services; track $index) {
+          <option [value]="service">
+            {{ service }}
+          </option>
+        }
+      </select>
+    </div>
+    <%_ } _%>
+
+    <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers()?.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers()?.length }}" })</p>
+
+    <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
+    <input type="text" [ngModel]="filter()" (ngModelChange)="filter.set($event)" class="form-control" />
+
+    <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
+      <thead>
+        <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="sortState.set($event)">
+          <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name">__jhiTransformTranslate__('logs.table.name')</span> <fa-icon icon="sort"></fa-icon></th>
+          <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level">__jhiTransformTranslate__('logs.table.level')</span> <fa-icon icon="sort"></fa-icon></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (logger of filteredAndOrderedLoggers(); track $index) {
+          <tr>
+            <td>
+              <small>{{ logger.name | slice: 0 : 140 }}</small>
+            </td>
+            <td>
+              <button
+                (click)="changeLevel(logger.name, 'TRACE')"
+                [ngClass]="logger.level === 'TRACE' ? 'btn-primary' : 'btn-light'"
+                class="btn btn-sm"
+              >
+                TRACE
+              </button>
+
+              <button
+                (click)="changeLevel(logger.name, 'DEBUG')"
+                [ngClass]="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
+                class="btn btn-sm"
+              >
+                DEBUG
+              </button>
+
+              <button
+                (click)="changeLevel(logger.name, 'INFO')"
+                [ngClass]="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
+                class="btn btn-sm"
+              >
+                INFO
+              </button>
+
+              <button
+                (click)="changeLevel(logger.name, 'WARN')"
+                [ngClass]="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
+                class="btn btn-sm"
+              >
+                WARN
+              </button>
+
+              <button
+                (click)="changeLevel(logger.name, 'ERROR')"
+                [ngClass]="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
+                class="btn btn-sm"
+              >
+                ERROR
+              </button>
+
+              <button
+                (click)="changeLevel(logger.name, 'OFF')"
+                [ngClass]="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
+                class="btn btn-sm"
+              >
+                OFF
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
-<%_ } _%>
-
-  <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers()?.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers()?.length }}" })</p>
-
-  <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
-  <input type="text" [(ngModel)]="filter" (ngModelChange)="filterAndSort()" class="form-control" />
-
-  <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
-    <thead>
-      <tr <%= jhiPrefix %>Sort [(predicate)]="orderProp" [(ascending)]="ascending" (sortChange)="filterAndSort()">
-        <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name">__jhiTransformTranslate__('logs.table.name')</span> <fa-icon icon="sort"></fa-icon></th>
-        <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level">__jhiTransformTranslate__('logs.table.level')</span> <fa-icon icon="sort"></fa-icon></th>
-      </tr>
-    </thead>
-
-    <tbody>
-    @for (logger of filteredAndOrderedLoggers(); track $index) {
-      <tr>
-        <td>
-          <small>{{ logger.name | slice: 0:140 }}</small>
-        </td>
-        <td>
-          <button
-            (click)="changeLevel(logger.name, 'TRACE')"
-            [ngClass]="logger.level === 'TRACE' ? 'btn-primary' : 'btn-light'"
-            class="btn btn-sm"
-          >
-            TRACE
-          </button>
-
-          <button
-            (click)="changeLevel(logger.name, 'DEBUG')"
-            [ngClass]="logger.level === 'DEBUG' ? 'btn-success' : 'btn-light'"
-            class="btn btn-sm"
-          >
-            DEBUG
-          </button>
-
-          <button
-            (click)="changeLevel(logger.name, 'INFO')"
-            [ngClass]="logger.level === 'INFO' ? 'btn-info' : 'btn-light'"
-            class="btn btn-sm"
-          >
-            INFO
-          </button>
-
-          <button
-            (click)="changeLevel(logger.name, 'WARN')"
-            [ngClass]="logger.level === 'WARN' ? 'btn-warning' : 'btn-light'"
-            class="btn btn-sm"
-          >
-            WARN
-          </button>
-
-          <button
-            (click)="changeLevel(logger.name, 'ERROR')"
-            [ngClass]="logger.level === 'ERROR' ? 'btn-danger' : 'btn-light'"
-            class="btn btn-sm"
-          >
-            ERROR
-          </button>
-
-          <button
-            (click)="changeLevel(logger.name, 'OFF')"
-            [ngClass]="logger.level === 'OFF' ? 'btn-secondary' : 'btn-light'"
-            class="btn btn-sm"
-          >
-            OFF
-          </button>
-        </td>
-      </tr>
-    }
-    </tbody>
-  </table>
-</div>
 } @loading {
   <div class="d-flex justify-content-center me-3">
     <div class="spinner-border"></div>
