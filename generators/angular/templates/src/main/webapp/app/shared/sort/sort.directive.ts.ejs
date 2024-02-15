@@ -29,7 +29,7 @@ export interface SortChangeDirective<T> {
   standalone: true,
   selector: '[<%= jhiPrefix %>Sort]',
 })
-export class SortSignalDirective implements SortChangeDirective<string> {
+export class SortDirective implements SortChangeDirective<string> {
   @Input() sortState!: SortStateSignal;
 
   @Output() sortChange = new EventEmitter<SortState>();

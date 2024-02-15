@@ -40,7 +40,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
 import SharedModule from 'app/shared/shared.module';
-import { sortStateSignal, SortSignalDirective, SortBySignalDirective, type SortState, SortService } from 'app/shared/sort';
+import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 <%_ if (paginationPagination) { _%>
 import { ItemCountComponent } from 'app/shared/pagination';
@@ -94,8 +94,8 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
       FormsModule,
 <%_ } _%>
       SharedModule,
-      SortSignalDirective,
-      SortBySignalDirective,
+      SortDirective,
+      SortByDirective,
       DurationPipe,
       FormatMediumDatetimePipe,
       FormatMediumDatePipe,

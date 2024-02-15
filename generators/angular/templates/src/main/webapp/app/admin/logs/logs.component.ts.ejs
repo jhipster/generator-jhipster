@@ -21,7 +21,7 @@ import { finalize<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>, m
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
-import { SortSignalDirective, SortBySignalDirective, sortStateSignal, SortService } from 'app/shared/sort';
+import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
@@ -35,7 +35,7 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
   providers: [GatewayRoutesService],
 <%_ } _%>
-  imports: [SharedModule, FormsModule, SortSignalDirective, SortBySignalDirective],
+  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
 })
 export default class LogsComponent implements OnInit {
   loggers = signal<Log[] | undefined>(undefined);

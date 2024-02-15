@@ -26,7 +26,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 <%_ if (!databaseTypeCassandra) { _%>
-import { SortSignalDirective, SortBySignalDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
+import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { SORT } from 'app/config/navigation.constants';
 import { ItemCountComponent } from 'app/shared/pagination';
@@ -46,8 +46,8 @@ import UserManagementDeleteDialogComponent from '../delete/user-management-delet
     SharedModule,
     UserManagementDeleteDialogComponent,
 <%_ if (!databaseTypeCassandra) { _%>
-    SortSignalDirective,
-    SortBySignalDirective,
+    SortDirective,
+    SortByDirective,
     ItemCountComponent,
 <%_ } _%>
   ],

@@ -20,12 +20,12 @@ import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { SortSignalDirective } from './sort.directive';
+import { SortDirective } from './sort.directive';
 import { SortState, sortStateSignal } from './sort-state';
 
 @Component({
   standalone: true,
-  imports: [SortSignalDirective],
+  imports: [SortDirective],
   template: `
     <table>
       <thead>
@@ -34,30 +34,30 @@ import { SortState, sortStateSignal } from './sort-state';
     </table>
   `,
 })
-class TestSortSignalDirectiveComponent {
+class TestSortDirectiveComponent {
   sortState = sortStateSignal({ predicate: 'ID' });
   transition = jest.fn().mockImplementation((sortState: SortState) => {
     this.sortState.set(sortState);
   });
 }
 
-describe('Directive: SortSignalDirective', () => {
-  let component: TestSortSignalDirectiveComponent;
-  let fixture: ComponentFixture<TestSortSignalDirectiveComponent>;
+describe('Directive: SortDirective', () => {
+  let component: TestSortDirectiveComponent;
+  let fixture: ComponentFixture<TestSortDirectiveComponent>;
   let tableRow: DebugElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestSortSignalDirectiveComponent],
+      imports: [TestSortDirectiveComponent],
     });
-    fixture = TestBed.createComponent(TestSortSignalDirectiveComponent);
+    fixture = TestBed.createComponent(TestSortDirectiveComponent);
     component = fixture.componentInstance;
-    tableRow = fixture.debugElement.query(By.directive(SortSignalDirective));
+    tableRow = fixture.debugElement.query(By.directive(SortDirective));
   });
 
   it('should invoke sortChange function', () => {
     // GIVEN
-    const sortDirective = tableRow.injector.get(SortSignalDirective);
+    const sortDirective = tableRow.injector.get(SortDirective);
 
     // WHEN
     fixture.detectChanges();
@@ -70,7 +70,7 @@ describe('Directive: SortSignalDirective', () => {
 
   it('should change sort order to descending, neutral when same field is sorted again', () => {
     // GIVEN
-    const sortDirective = tableRow.injector.get(SortSignalDirective);
+    const sortDirective = tableRow.injector.get(SortDirective);
 
     // WHEN
     fixture.detectChanges();
@@ -89,7 +89,7 @@ describe('Directive: SortSignalDirective', () => {
 
   it('should change sort order to ascending when different field is sorted', () => {
     // GIVEN
-    const sortDirective = tableRow.injector.get(SortSignalDirective);
+    const sortDirective = tableRow.injector.get(SortDirective);
 
     // WHEN
     fixture.detectChanges();

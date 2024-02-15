@@ -20,13 +20,13 @@ import { ContentChild, Directive, Host, HostListener, Input, effect } from '@ang
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faSort, faSortDown, faSortUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
-import { SortSignalDirective } from './sort.directive';
+import { SortDirective } from './sort.directive';
 
 @Directive({
   standalone: true,
   selector: '[<%= jhiPrefix %>SortBy]',
 })
-export class SortBySignalDirective {
+export class SortByDirective {
   @Input() <%= jhiPrefix %>SortBy!: string;
 
   @ContentChild(FaIconComponent, { static: false })
@@ -36,7 +36,7 @@ export class SortBySignalDirective {
   protected sortAscIcon = faSortUp;
   protected sortDescIcon = faSortDown;
 
-  constructor(@Host() private sort: SortSignalDirective) {
+  constructor(@Host() private sort: SortDirective) {
     effect(() => {
       if (this.iconComponent) {
         let icon: IconDefinition = this.sortIcon;
