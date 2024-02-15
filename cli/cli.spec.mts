@@ -267,16 +267,16 @@ describe('cli', () => {
             description: 'Foo',
           },
           {
-            option: '--qux-cd',
-            description: 'Qux cd',
+            option: '--no-foo',
+            description: 'No foo',
           },
           {
-            option: '--bar',
-            description: 'Bar',
+            option: '--foo-bar',
+            description: 'Foo bar',
           },
           {
-            option: '--xyz-ab',
-            description: 'Xyz ab',
+            option: '--no-foo-bar',
+            description: 'No foo bar',
           },
         ],
       };
@@ -293,7 +293,7 @@ describe('cli', () => {
         commands.mocked.desc = 'Mocked command';
         commands.mocked.argument = ['<name>'];
         commands.mocked.cliOnly = true;
-        argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--bar'];
+        argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
       });
 
       commonTests();
@@ -302,7 +302,7 @@ describe('cli', () => {
         const cb = (args, options) => {
           expect(args).toEqual(['Foo']);
           expect(options.foo).toBe(true);
-          expect(options.bar).toBe(true);
+          expect(options.fooBar).toBe(true);
         };
         await mockCli(argv, { commands, './mocked': cb });
       });
@@ -313,7 +313,7 @@ describe('cli', () => {
         commands.mocked.desc = 'Mocked command';
         commands.mocked.argument = ['<name>'];
         commands.mocked.cliOnly = true;
-        argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--qux-cd', '--xyz-ab'];
+        argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--no-foo', '--no-foo-bar'];
       });
 
       commonTests();
@@ -321,8 +321,8 @@ describe('cli', () => {
       it('should forward argument and options', async () => {
         const cb = (args, options) => {
           expect(args).toEqual(['Foo']);
-          expect(options.foo).toBeUndefined();
-          expect(options.bar).toBeUndefined();
+          expect(options.foo).toBe(false);
+          expect(options.fooBar).toBe(false);
         };
         await mockCli(argv, { commands, './mocked': cb });
       });
@@ -333,7 +333,7 @@ describe('cli', () => {
         commands.mocked.desc = 'Mocked command';
         commands.mocked.argument = ['<name...>'];
         commands.mocked.cliOnly = true;
-        argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--bar'];
+        argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
       });
 
       commonTests();
@@ -342,7 +342,7 @@ describe('cli', () => {
         const cb = (args, options) => {
           expect(args).toEqual([['Foo', 'Bar']]);
           expect(options.foo).toBe(true);
-          expect(options.bar).toBe(true);
+          expect(options.fooBar).toBe(true);
         };
         await mockCli(argv, { commands, './mocked': cb });
       });
@@ -352,7 +352,7 @@ describe('cli', () => {
       beforeEach(() => {
         commands.mocked.desc = 'Mocked command';
         commands.mocked.cliOnly = true;
-        argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--bar'];
+        argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--foo-bar'];
       });
 
       commonTests();
@@ -361,7 +361,7 @@ describe('cli', () => {
         const cb = (args, options) => {
           expect(args).toEqual([]);
           expect(options.foo).toBe(true);
-          expect(options.bar).toBe(true);
+          expect(options.fooBar).toBe(true);
         };
         return mockCli(argv, { commands, './mocked': cb });
       });
