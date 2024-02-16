@@ -1,4 +1,4 @@
-# spring-data-elasticsearch sub-generador
+# spring-data-elasticsearch sub-generator
 
 Elasticsearch for Spring generator.
 

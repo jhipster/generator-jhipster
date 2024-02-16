@@ -1,4 +1,4 @@
-# SQL/spring-data-relational sub-generador
+# SQL/spring-data-relational sub-generator
 
 Adds support to liquibase to SQL databases and Neo4j.
 

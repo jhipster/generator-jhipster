@@ -1,4 +1,4 @@
-# app sub-generador
+# app sub-generator
 
 `jhipster` command entrypoint, it composes with `common`, `languages`, `server`, and `client`.
 
@@ -6,7 +6,7 @@
 
 JHipster implementation allows you to override almost every aspect of the generation process.
 
-[SQL/spring-data-relational customizations](https://github.com/jhipster/generator-jhipster/blob/skip_ci-architecture/generators/spring-data-relational/README.md#sqlspring-data-relational-sub-generador)
+[SQL/spring-data-relational customizations](https://github.com/jhipster/generator-jhipster/blob/skip_ci-architecture/generators/spring-data-relational/README.md#sqlspring-data-relational-sub-generator)
 
 ### Application
 

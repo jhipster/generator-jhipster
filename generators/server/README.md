@@ -1,4 +1,4 @@
-# server sub-generador
+# server sub-generator
 
 Server generator.
 
