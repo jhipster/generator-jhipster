@@ -48,6 +48,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 <%_ } _%>
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -76,6 +78,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 <%_ } _%>
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (reactive && searchEngineElasticsearch) { _%>
@@ -340,24 +343,20 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @Test
+    static Stream<ManagedUserVM> invalidUsers() {
+        return Stream.of(
+            createInvalidUser("bob", "password", "Bob", "Green", "invalid", true),// <-- invalid
+            createInvalidUser("bob", "123", "Bob", "Green", "bob@example.com", true),// password with only 3 digits
+            createInvalidUser("bob", null, "Bob", "Green", "bob@example.com", true)// invalid null password
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidUsers")
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testRegisterInvalidEmail() throws Exception {
-        ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("bob");
-        invalidUser.setPassword("password");
-        invalidUser.setFirstName("Bob");
-        invalidUser.setLastName("Green");
-        invalidUser.setEmail("invalid");// <-- invalid
-        invalidUser.setActivated(true);
-<%_ if (user.hasImageField) { _%>
-        invalidUser.setImageUrl("http://placehold.it/50x50");
-<%_ } _%>
-        invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
+    void testRegisterInvalidUsers(ManagedUserVM invalidUser) throws Exception {
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
             .contentType(MediaType.APPLICATION_JSON)
@@ -377,78 +376,20 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @Test
-<%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-<%_ } _%>
-    void testRegisterInvalidPassword() throws Exception {
+    private static ManagedUserVM createInvalidUser(String login, String password, String firstName, String lastName, String email, boolean activated) {
         ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("bob");
-        invalidUser.setPassword("123");// password with only 3 digits
-        invalidUser.setFirstName("Bob");
-        invalidUser.setLastName("Green");
-        invalidUser.setEmail("bob@example.com");
-        invalidUser.setActivated(true);
+        invalidUser.setLogin(login);
+        invalidUser.setPassword(password);
+        invalidUser.setFirstName(firstName);
+        invalidUser.setLastName(lastName);
+        invalidUser.setEmail(email);
+        invalidUser.setActivated(activated);
 <%_ if (user.hasImageField) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-<%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(invalidUser))
-            .exchange()
-            .expectStatus().isBadRequest();
-<%_ } else { _%>
-        restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
-                .with(csrf())<% } %>)
-            .andExpect(status().isBadRequest());
-<%_ } _%>
-
-        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(user).isEmpty();
-    }
-
-    @Test
-<%_ if (databaseTypeSql && !reactive) { _%>
-    @Transactional
-<%_ } _%>
-    void testRegisterNullPassword() throws Exception {
-        ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("bob");
-        invalidUser.setPassword(null);// invalid null password
-        invalidUser.setFirstName("Bob");
-        invalidUser.setLastName("Green");
-        invalidUser.setEmail("bob@example.com");
-        invalidUser.setActivated(true);
-<%_ if (user.hasImageField) { _%>
-        invalidUser.setImageUrl("http://placehold.it/50x50");
-<%_ } _%>
-        invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-<%_ if (reactive) { _%>
-        accountWebTestClient.post().uri("/api/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(invalidUser))
-            .exchange()
-            .expectStatus().isBadRequest();
-<%_ } else { _%>
-        restAccountMockMvc.perform(
-            post("/api/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
-                .with(csrf())<% } %>)
-            .andExpect(status().isBadRequest());
-<%_ } _%>
-
-        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin("bob")<% if (reactive) { %>.blockOptional()<% } %>;
-        assertThat(user).isEmpty();
+        return invalidUser;
     }
 
     @Test
