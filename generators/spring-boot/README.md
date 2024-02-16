@@ -1,4 +1,4 @@
-# spring-boot sub-generador
+# spring-boot sub-generator
 
 Spring Boot generator.
 

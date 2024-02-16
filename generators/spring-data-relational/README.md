@@ -1,4 +1,4 @@
-# SQL/spring-data-relational sub-generador
+# SQL/spring-data-relational sub-generator
 
 Adds support to spring-data-relational and provides sql related utilities.
 
