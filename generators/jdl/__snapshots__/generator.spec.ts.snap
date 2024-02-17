@@ -231,6 +231,42 @@ Options:
 "
 `;
 
+exports[`generator - jdl with a gateway generating json should generate expected config 1`] = `
+{
+  ".jhipster/Bar.json": {
+    "contents": "{
+  "annotations": {},
+  "applications": [
+    "gatewayApp"
+  ],
+  "fields": [],
+  "microserviceName": "ms",
+  "name": "Bar",
+  "relationships": []
+}
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "applicationIndex": 0,
+    "applicationType": "gateway",
+    "applications": {
+      "ms": {}
+    },
+    "baseName": "gatewayApp",
+    "entities": [
+      "Bar"
+    ]
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - jdl with a microservices stack generating json should generate expected config 1`] = `
 {
   "gatewayApp/.jhipster/Bar.json": {

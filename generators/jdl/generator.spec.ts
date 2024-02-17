@@ -472,4 +472,20 @@ entity Bar
       });
     });
   });
+  describe('with a gateway', () => {
+    const jdl = `
+application { config { baseName gatewayApp applicationType gateway } entities * }
+microservice Bar with ms
+entity Bar
+`;
+    describe('generating json', () => {
+      before(async () => {
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({ inline: jdl, jsonOnly: true });
+      });
+
+      it('should generate expected config', () => {
+        expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+  });
 });
