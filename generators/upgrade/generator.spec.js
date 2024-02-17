@@ -18,16 +18,14 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { it, describe, expect, before, fn } from 'esmocha';
+import { snakeCase } from 'lodash-es';
 import git from 'simple-git';
 
 import Generator from './index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { basicHelpers as helpers } from '../../test/support/index.js';
+import { basicHelpers as helpers, result } from '../../test/support/index.js';
 import { UPGRADE_BRANCH } from './support/index.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -74,7 +72,7 @@ describe(`generator - ${generator}`, () => {
         }),
     ).rejects.toThrow('local changes found.');
   });
-  it('should at upgrade branch', async () => {
+  it('should throw at upgrade branch', async () => {
     await expect(
       helpers
         .runJHipster(generator)
@@ -87,5 +85,106 @@ describe(`generator - ${generator}`, () => {
           await git(ctx.cwd).init().add('.').commit('project', ['--no-verify']).checkoutLocalBranch(UPGRADE_BRANCH);
         }),
     ).rejects.toThrow('You are on the upgrade branch, please switch to another branch before upgrading.');
+  });
+  describe('with createEnvBuilder option', async () => {
+    let createEnvBuilder;
+
+    before(async () => {
+      createEnvBuilder = fn().mockReturnValue({ getEnvironment: () => ({ run: () => {} }) });
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig()
+        .withSpawnMock()
+        .withFiles({
+          'package.json': { devDependencies: { 'generator-jhipster': '7.9.4' } },
+        })
+        .commitFiles()
+        .withOptions({
+          programName: 'customProgramName',
+          createEnvBuilder,
+        });
+    });
+    it('should call createEnvBuilder', async () => {
+      expect(createEnvBuilder).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('with createEnvBuilder and applyConfig options', async () => {
+    let createEnvBuilder;
+
+    before(async () => {
+      createEnvBuilder = fn().mockReturnValue({ getEnvironment: () => ({ run: () => {} }) });
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig()
+        .withSpawnMock()
+        .withFiles({
+          'package.json': { devDependencies: { 'generator-jhipster': '7.9.4' } },
+        })
+        .commitFiles()
+        .withOptions({
+          programName: 'customProgramName',
+          applyConfig: true,
+          createEnvBuilder,
+        });
+    });
+    it('should call createEnvBuilder twice', async () => {
+      expect(createEnvBuilder).toHaveBeenCalledTimes(2);
+    });
+  });
+  describe('with programName option', async () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig()
+        .withSpawnMock({
+          registerSinonDefaults: false,
+          stub: fn(),
+        })
+        .withFiles({
+          'package.json': { devDependencies: { 'generator-jhipster': '7.9.4' } },
+        })
+        .commitFiles()
+        .withOptions({
+          programName: 'customProgramName',
+          createEnvBuilder: () => ({ getEnvironment: () => ({ run: () => {} }) }),
+        });
+    });
+    it('should execute programName', async () => {
+      expect(result.spawnStub).toHaveBeenLastCalledWith(
+        'spawn',
+        'npx',
+        expect.arrayContaining(['--no', 'customProgramName']),
+        expect.any(Object),
+      );
+    });
+  });
+
+  describe('with programName and executable options', async () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig()
+        .withSpawnMock({
+          registerSinonDefaults: false,
+          stub: fn(),
+        })
+        .withFiles({
+          'package.json': { devDependencies: { 'generator-jhipster': '7.9.4' } },
+        })
+        .commitFiles()
+        .withOptions({
+          programName: 'customProgramName',
+          executable: 'customExecutable',
+          createEnvBuilder: () => ({ getEnvironment: () => ({ run: () => {} }) }),
+        });
+    });
+    it('should execute executable', async () => {
+      expect(result.spawnStub).toHaveBeenLastCalledWith(
+        'spawn',
+        'npx',
+        expect.arrayContaining(['--no', 'customExecutable']),
+        expect.any(Object),
+      );
+    });
   });
 });

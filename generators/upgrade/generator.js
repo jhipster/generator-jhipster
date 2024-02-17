@@ -189,8 +189,8 @@ export default class UpgradeGenerator extends BaseGenerator {
             customCliOptions.push('--with-entities');
           }
           // Regenerate sources
-          this.log.info(`Regenerating sources using ${this.programName} executable`);
-          await this.spawn('npx', ['--no', this.programName, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
+          this.log.info(`Regenerating sources using ${this.executable} executable`);
+          await this.spawn('npx', ['--no', this.executable, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
             stdio: this.spawnStdio,
           });
         }
@@ -303,7 +303,7 @@ export default class UpgradeGenerator extends BaseGenerator {
    * Remove every generated file not related to the generation.
    */
   async cleanUp() {
-    const gitignoreContent = this.readDestination('.gitignore');
+    const gitignoreContent = this.readDestination('.gitignore', { defaults: '' });
     const ignoredFiles = gitignoreContent ? gitignore(gitignoreContent).patterns ?? [] : [];
     const filesToKeep = ['.yo-rc.json', '.jhipster', 'package.json', 'package-lock.json', 'node_modules', '.git', ...ignoredFiles];
     for (const file of await readdir(this.destinationPath())) {
