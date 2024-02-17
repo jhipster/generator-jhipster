@@ -69,7 +69,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 
 ## Analysis of the sample JHipster project
 
-[![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
+[![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url] [![sonar-sample-code-smells-badge][sonar-sample-code-smells-badge]][sonar-sample-code-smells-url]
 
 [ng-maven-sql.yaml-badge]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-maven-sql.yaml/badge.svg
 [ng-maven-sql.yaml-link]: https://github.com/hipster-labs/jhipster-daily-builds/actions/workflows/ng-maven-sql.yaml
@@ -113,6 +113,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=coverage
 [sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=bugs
+[sonar-sample-code-smells-badge]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=code_smells
+[sonar-sample-code-smells-url]: https://sonarcloud.io/project/issues?resolved=false&types=CODE_SMELL&id=jhipster-sample-application
 [sonar-vulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=vulnerabilities
 [jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster-artwork/main/logos/v2/normal/V2%20JHipster%20RGB.png
 [jhipster-url]: https://www.jhipster.tech/
