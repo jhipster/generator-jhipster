@@ -33,6 +33,11 @@ const command: JHipsterCommandDefinition = {
       default: false,
       scope: 'generator',
     },
+    executable: {
+      description: 'Executable command',
+      type: String,
+      scope: 'generator',
+    },
   },
   import: [GENERATOR_APP],
 };

@@ -298,6 +298,10 @@ export const buildCommands = async ({
             errors => done(errors.find(error => error)),
           );
         }
+        if (cmdName === 'upgrade') {
+          options.programName = program.name();
+          options.createEnvBuilder = createEnvBuilder;
+        }
         const namespace = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
         const generatorCommand = getCommand(namespace, args, opts);
         return env.run(generatorCommand, options).then(done, done);

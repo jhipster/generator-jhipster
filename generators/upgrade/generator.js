@@ -47,12 +47,12 @@ const DEFAULT_MERGE_OPTIONS = ['--strategy', 'ours'];
 
 export default class UpgradeGenerator extends BaseGenerator {
   requiredPackage = GENERATOR_JHIPSTER;
-  createEnvBuilder = EnvironmentBuilder.createDefaultBuilder;
+  createEnvBuilder;
   actualApplicationBranch;
   silent;
   applyConfig;
   spawnStdio = 'inherit';
-  generationCommand = 'jhipster';
+  executable;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -78,6 +78,8 @@ export default class UpgradeGenerator extends BaseGenerator {
         if (this.silent) {
           this.spawnStdio = 'ignore';
         }
+        this.executable = this.executable ?? this.options.programName ?? 'jhipster';
+        this.createEnvBuilder = this.options.createEnvBuilder ?? EnvironmentBuilder.createDefaultBuilder;
       },
 
       assertJHipsterProject() {
@@ -93,12 +95,25 @@ export default class UpgradeGenerator extends BaseGenerator {
       },
 
       async checkoutDependency() {
+        if (this.applyConfig) return;
+
         const jhipsterVersion = this.getPackageJsonVersion();
         if (!jhipsterVersion) {
           throw new Error('No generator-jhipster dependency found in your package.json');
         }
-        if (this.isV7(jhipsterVersion) && jhipsterVersion !== '7.9.4') {
-          throw new Error('Upgrade the project to JHipster 7.9.4 before upgrading to the latest version.');
+        if (this.isV7(jhipsterVersion)) {
+          if (jhipsterVersion !== '7.9.4') {
+            throw new Error('Upgrade the project to JHipster 7.9.4 before upgrading to the latest version.');
+          }
+          if ((this.jhipsterConfig.blueprints ?? []).length > 0) {
+            const errorMessage =
+              'Upgrade does not support upgrading a v7 project with blueprints. Please use the jhipster-migrate blueprint.';
+            if (!this.skipChecks) {
+              throw new Error(errorMessage);
+            } else {
+              this.log.warn(errorMessage);
+            }
+          }
         }
       },
 
@@ -174,7 +189,8 @@ export default class UpgradeGenerator extends BaseGenerator {
             customCliOptions.push('--with-entities');
           }
           // Regenerate sources
-          await this.spawn('npx', ['--no', this.generationCommand, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
+          this.log.info(`Regenerating sources using ${this.programName} executable`);
+          await this.spawn('npx', ['--no', this.programName, ...customCliOptions, ...DEFAULT_CLI_OPTIONS.split(' ')], {
             stdio: this.spawnStdio,
           });
         }
