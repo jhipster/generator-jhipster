@@ -114,27 +114,5 @@
         }
       }
     </script>
-    <%_ if (!clientFrameworkAngular) { _%>
-    <!-- uncomment this for adding service worker
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(function () {
-              console.log('Service Worker Registered');
-            });
-        });
-      }
-    </script>
-    -->
-    <%_ } _%>
-    <!-- Google Analytics: uncomment and change both instances of UA-XXXXX-X to be your site's ID.
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-X"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-XXXXX-X');
-    </script>-->
   </body>
 </html>
