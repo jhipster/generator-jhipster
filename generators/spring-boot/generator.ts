@@ -40,6 +40,7 @@ import {
   getJavaValueGeneratorForType,
   getPrimaryKeyValue,
   getSpecificationBuildForType,
+  insertContentIntoApplicationProperties,
 } from '../server/support/index.js';
 import { addJavaAnnotation, generateKeyStore } from '../java/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
@@ -208,6 +209,13 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           );
         source.addLogbackMainLog = opts => source.addLogbackLogEntry!({ file: 'src/main/resources/logback-spring.xml', ...opts });
         source.addLogbackTestLog = opts => source.addLogbackLogEntry!({ file: 'src/test/resources/logback.xml', ...opts });
+      },
+      addApplicationPropertiesNeedles({ application, source }) {
+        source.addApplicationPropertiesContent = needles =>
+          this.editFile(
+            `${application.javaPackageSrcDir}config/ApplicationProperties.java`,
+            insertContentIntoApplicationProperties(needles),
+          );
       },
     });
   }
