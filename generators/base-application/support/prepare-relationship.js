@@ -23,6 +23,7 @@ import { databaseTypes, entityOptions, validations, checkAndReturnRelationshipOn
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { stringifyApplicationData } from './debug.js';
 import { mutateData } from '../../base/support/config.js';
+import { prepareProperty } from './prepare-property.js';
 
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -153,9 +154,11 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   });
 
   mutateData(relationship, {
+    __override__: false,
     propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
-    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? upperFirst(propertyName),
   });
+
+  prepareProperty(relationship);
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
