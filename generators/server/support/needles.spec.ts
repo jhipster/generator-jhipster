@@ -18,14 +18,16 @@
  */
 import { before, it, describe, expect } from 'esmocha';
 import { defaultHelpers as helpers } from '../../../test/support/index.js';
-import { GENERATOR_SERVER } from '../../generator-list.js';
+import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
 import { insertContentIntoApplicationProperties } from './needles.js';
 
 describe('generator - server - support - needles', () => {
   describe('generated project', () => {
     let runResult;
     before(async () => {
-      runResult = await helpers.runJHipster(GENERATOR_SERVER).withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+      runResult = await helpers
+        .runJHipster(GENERATOR_SPRING_BOOT)
+        .withMockedGenerators(['jhipster:common', 'jhipster:languages', 'jhipster:liquibase']);
     });
 
     it('should match state snapshot', () => {
@@ -92,13 +94,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+
     private Foo foo;
     // jhipster-needle-application-properties-property
+
 
     private Foo getFoo() {
         return foo;
     };
     // jhipster-needle-application-properties-property-getter
+
 
     public static Foo{} {
         private String bar;

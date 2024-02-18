@@ -5,6 +5,7 @@ import { LiquibaseSourceType } from '../liquibase/types.js';
 import { SpringCacheSourceType } from '../spring-cache/types.js';
 import { MessageBrokerApplicationType } from './options/message-broker.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
+import { ApplicationPropertiesNeedles } from './support/needles.ts';
 
 export type SpringEntity = {
   /* Generate entity's Entity */
@@ -28,6 +29,7 @@ export type SpringBootSourceType = GradleSourceType &
     addLogbackTestLog?({ name, level }: { name: string; level: string }): void;
     addIntegrationTestAnnotation?({ package, annotation }: { package?: string; annotation: string }): void;
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
+    addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<

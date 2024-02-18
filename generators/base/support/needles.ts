@@ -232,11 +232,11 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
   needles?: Record<string, string>,
 ): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
   const actualNeedles = needles === undefined ? (options as Record<string, string>) : needles;
-  const actualOptions: NeedleFileInsertion | undefined = needles === undefined ? undefined : (options as NeedleFileInsertion);
+  const actualOptions: Partial<NeedleFileInsertion> | undefined = needles === undefined ? {} : (options as NeedleFileInsertion);
 
   assert(actualNeedles, 'needles is required');
-  const { filePath, optional = false, ignoreWhitespaces = true } = actualOptions ?? {};
-  let { needlesPrefix } = options;
+  const { filePath, optional = false, ignoreWhitespaces = true } = actualOptions;
+  let { needlesPrefix } = actualOptions;
   needlesPrefix = needlesPrefix ? `${needlesPrefix}-` : '';
 
   const callbacks = Object.entries(actualNeedles)

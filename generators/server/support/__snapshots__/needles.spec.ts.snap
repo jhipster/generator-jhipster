@@ -113,9 +113,6 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -297,21 +294,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/authority.csv": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user.csv": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/data/user_authority.csv": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/liquibase/master.xml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/tls/keystore.p12": {

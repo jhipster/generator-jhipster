@@ -20,7 +20,7 @@ import CoreGenerator from '../../base-core/index.js';
 import { createBaseNeedle } from '../../base/support/needles.js';
 import { SpringBootApplication } from '../types.js';
 
-type ApplicationPropertiesNeedles = {
+export type ApplicationPropertiesNeedles = {
   property?: string;
   propertyGetter?: string;
   propertyClass?: string;
@@ -56,17 +56,22 @@ type ApplicationPropertiesNeedles = {
  *   });
  * );
  */
-// eslint-disable-next-line import/prefer-default-export
 export function insertContentIntoApplicationProperties(
-  this: CoreGenerator | void,
+  this: CoreGenerator,
   application: SpringBootApplication,
   needles: ApplicationPropertiesNeedles,
+);
+export function insertContentIntoApplicationProperties(this: void, needles: ApplicationPropertiesNeedles);
+export function insertContentIntoApplicationProperties(
+  this: CoreGenerator | void,
+  application: SpringBootApplication | ApplicationPropertiesNeedles,
+  needles?: ApplicationPropertiesNeedles,
 ) {
   if (this) {
     return createBaseNeedle.call(
       this,
       {
-        filePath: `${application.javaPackageSrcDir}config/ApplicationProperties.java`,
+        filePath: `${(application as SpringBootApplication).javaPackageSrcDir}config/ApplicationProperties.java`,
         needlesPrefix: 'application-properties',
       },
       needles,
@@ -76,6 +81,6 @@ export function insertContentIntoApplicationProperties(
     {
       needlesPrefix: 'application-properties',
     },
-    needles,
+    application as ApplicationPropertiesNeedles,
   );
 }
