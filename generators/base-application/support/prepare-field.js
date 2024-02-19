@@ -16,12 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { snakeCase, startCase, upperFirst } from 'lodash-es';
 import * as _ from 'lodash-es';
 import { fieldTypes, validations } from '../../../jdl/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { fieldIsEnum } from './field-utils.js';
 import { mutateData } from '../../base/support/config.js';
+import { prepareProperty } from './prepare-property.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const {
@@ -268,15 +270,18 @@ export default function prepareField(entityWithConfig, field, generator) {
 
 function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   mutateData(field, {
+    __override__: false,
     path: [field.fieldName],
     propertyName: field.fieldName,
-    propertyNameCapitalized: ({ propertyName, propertyNameCapitalized }) => propertyNameCapitalized ?? _.upperFirst(propertyName),
-    fieldNameCapitalized: ({ fieldName, fieldNameCapitalized }) => fieldNameCapitalized ?? _.upperFirst(fieldName),
-    fieldNameUnderscored: ({ fieldName, fieldNameUnderscored }) => fieldNameUnderscored ?? _.snakeCase(fieldName),
-    fieldNameHumanized: ({ fieldName, fieldNameHumanized }) => fieldNameHumanized ?? _.startCase(fieldName),
-    fieldTranslationKey: ({ fieldName, fieldTranslationKey }) => fieldTranslationKey ?? `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
-    tsType: ({ fieldType, tsType }) => tsType ?? getTypescriptType(fieldType),
+
+    fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
+    fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
+    fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
+    fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
+    tsType: ({ fieldType }) => getTypescriptType(fieldType),
   });
+
+  prepareProperty(field);
 
   _.defaults(field, {
     entity: entityWithConfig,
