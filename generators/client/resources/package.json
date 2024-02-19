@@ -11,6 +11,6 @@
     "eslint-plugin-cypress": "2.15.1",
     "lighthouse": "11.5.0",
     "nyc": "15.1.0",
-    "swagger-ui-dist": "5.11.6"
+    "swagger-ui-dist": "5.11.7"
   }
 }
