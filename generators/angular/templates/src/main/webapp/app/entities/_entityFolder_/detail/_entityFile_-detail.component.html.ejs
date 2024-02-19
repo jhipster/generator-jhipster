@@ -72,7 +72,6 @@ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedde
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const relationshipNameHumanized = relationship.relationshipNameHumanized;
-    const otherEntityStateName = relationship.otherEntityStateName;
     const otherEntityField = relationship.otherEntityField;
     if (persistableRelationship) {
 _%>
@@ -92,13 +91,13 @@ _%>
       <%_ if (relationship.collection) { _%>
         @for (<%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
           <span>
-            <a [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
           </span>
         }
       <%_ } else { _%>
         @if (<%= entityInstance + '.' + relationshipFieldName %>) {
           <div>
-            <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
+            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance + '.' + relationshipFieldName + '.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>.<%= relationshipFieldName %>.<%= otherEntityField %> }}</a>
           </div>
         }
       <%_ } _%>
