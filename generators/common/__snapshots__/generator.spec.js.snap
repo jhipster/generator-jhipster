@@ -163,7 +163,8 @@ sonar.sourceEncoding = UTF-8
 sonar.exclusions = src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, \\
   target/classes/static/**/*.*
 
-sonar.issue.ignore.multicriteria = S1192,S3437,S4502,S4684,S5145,UndocumentedApi
+sonar.issue.ignore.multicriteria = \\
+  S1192,S125,S3437,S4502,S4684,S5145,UndocumentedApi
 
 # Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored, as a 
 # JPA-managed field cannot be transient
@@ -189,6 +190,10 @@ sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey = squid:UndocumentedApi
 sonar.issue.ignore.multicriteria.S1192.resourceKey = \\
   src/main/java/**/CacheConfiguration.java
 sonar.issue.ignore.multicriteria.S1192.ruleKey = java:S1192
+# Rule https://rules.sonarsource.com/xml/RSPEC-125
+sonar.issue.ignore.multicriteria.S125.resourceKey = \\
+  src/main/resources/logback-spring.xml
+sonar.issue.ignore.multicriteria.S125.ruleKey = xml:S125
 ",
     "stateCleared": "modified",
   },
