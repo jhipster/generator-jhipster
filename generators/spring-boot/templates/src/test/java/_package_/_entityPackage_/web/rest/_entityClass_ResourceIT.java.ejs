@@ -1241,7 +1241,7 @@ _%>
       <%_ } else if (!reactive) { _%>
         <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
-        <%= relationship.relationshipFieldName %>.set<%= relationship.otherEntityRelationshipNameCapitalized %>(<%= persistInstance %>);
+        <%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.propertyJavaBeanName %>(<%= persistInstance %>);
         <%_ } _%>
       <%_ } else { _%>
         <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
