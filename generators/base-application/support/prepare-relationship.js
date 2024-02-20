@@ -40,7 +40,7 @@ function _defineOnUpdateAndOnDelete(relationship, generator) {
 
 export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
   const entityName = entityWithConfig.name;
-  const otherEntityName = relationship.otherEntityName;
+  const { otherEntityName, relationshipSide, relationshipType, relationshipName } = relationship;
 
   if (!relationship.otherEntity) {
     throw new Error(
@@ -52,25 +52,61 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherEntityField = otherEntityData.primaryKey.name;
   }
 
+  // Prepare basic relationship data
   Object.assign(relationship, {
-    relationshipLeftSide: relationship.relationshipSide === 'left',
-    relationshipRightSide: relationship.relationshipSide === 'right',
-    collection: relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many',
-    relationshipOneToOne: relationship.relationshipType === 'one-to-one',
-    relationshipOneToMany: relationship.relationshipType === 'one-to-many',
-    relationshipManyToOne: relationship.relationshipType === 'many-to-one',
-    relationshipManyToMany: relationship.relationshipType === 'many-to-many',
-    otherEntityUser: relationship.otherEntityName === 'user',
+    relationshipLeftSide: relationshipSide === 'left',
+    relationshipRightSide: relationshipSide === 'right',
+    collection: relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
+    relationshipOneToOne: relationshipType === 'one-to-one',
+    relationshipOneToMany: relationshipType === 'one-to-many',
+    relationshipManyToOne: relationshipType === 'many-to-one',
+    relationshipManyToMany: relationshipType === 'many-to-many',
+    otherEntityUser: otherEntityName === 'user',
   });
 
+  const { collection, relationshipLeftSide, relationshipManyToOne, relationshipOneToMany, relationshipOneToOne, relationshipManyToMany } =
+    relationship;
+
+  // Prepare property name
   mutateData(relationship, {
+    __override__: false,
+    relationshipFieldName: lowerFirst(relationshipName),
+    relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName),
+    relationshipNamePlural: pluralize(relationshipName),
+    relationshipNameCapitalized: upperFirst(relationshipName),
+    relationshipNameHumanized: startCase(relationshipName),
+
+    propertyName: ({ relationshipFieldName, relationshipFieldNamePlural }) =>
+      collection ? relationshipFieldNamePlural : relationshipFieldName,
+  });
+
+  prepareProperty(relationship);
+
+  mutateData(relationship, {
+    __override__: false,
+    // Other entity properties
+    otherEntityNamePlural: pluralize(otherEntityName),
+    otherEntityNameCapitalized: upperFirst(otherEntityName),
+
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
-    ownerSide: ({ ownerSide, relationshipLeftSide, relationshipManyToOne, relationshipOneToMany }) =>
-      ownerSide ?? (relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany)),
-    persistableRelationship: ({ persistableRelationship, ownerSide }) => persistableRelationship ?? ownerSide,
-    relationshipUpdateBackReference: ({ relationshipUpdateBackReference, ownerSide, relationshipRightSide }) =>
-      relationshipUpdateBackReference ?? (entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide),
+    ownerSide: relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
+    persistableRelationship: ({ ownerSide }) => ownerSide,
+    relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide }) =>
+      entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide,
+
+    // DB properties
+    columnName: hibernateSnakeCase(relationshipName),
+    columnNamePrefix: relationship.id && relationshipOneToOne ? '' : `${hibernateSnakeCase(relationshipName)}_`,
+    shouldWriteJoinTable: ({ ownerSide }) => entityWithConfig.databaseType === 'sql' && relationshipManyToMany && ownerSide,
+    joinTable: ({ shouldWriteJoinTable }) =>
+      shouldWriteJoinTable
+        ? {
+            name: getJoinTableName(entityWithConfig.entityTableName, relationshipName, {
+              prodDatabaseType: entityWithConfig.prodDatabaseType,
+            }).value,
+          }
+        : undefined,
   });
 
   relationship.otherSideReferenceExists = false;
@@ -78,33 +114,24 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
   relationship.otherEntityIsEmbedded = otherEntityData.embedded;
 
   // Look for fields at the other other side of the relationship
-  if (otherEntityData.relationships) {
-    const otherRelationship = relationship.otherRelationship;
-    if (otherRelationship) {
-      relationship.otherSideReferenceExists = true;
-      mutateData(relationship, {
-        otherRelationship,
-        otherEntityRelationshipName: otherRelationship.relationshipName,
-        otherEntityRelationshipNamePlural: otherRelationship.relationshipNamePlural,
-        otherEntityRelationshipNameCapitalized: otherRelationship.relationshipNameCapitalized,
-        otherEntityRelationshipNameCapitalizedPlural: relationship.relationshipNameCapitalizedPlural,
-      });
-    } else if (
-      !ignoreMissingRequiredRelationship &&
-      !relationship.relationshipIgnoreBackReference &&
-      entityWithConfig.databaseType !== NEO4J &&
-      entityWithConfig.databaseType !== DATABASE_NO &&
-      (relationship.relationshipType === 'one-to-many' || relationship.ownerSide === false)
-    ) {
-      if (otherEntityData.builtInUser) {
-        throw new Error(`Error at entity ${entityName}: relationships with built-in User cannot have back reference`);
-      }
-      throw new Error(
-        `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`,
-      );
-    } else {
-      generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
+  const otherRelationship = relationship.otherRelationship;
+  if (otherRelationship) {
+    relationship.otherSideReferenceExists = true;
+  } else if (
+    !ignoreMissingRequiredRelationship &&
+    !relationship.relationshipIgnoreBackReference &&
+    entityWithConfig.databaseType !== NEO4J &&
+    entityWithConfig.databaseType !== DATABASE_NO &&
+    (relationshipOneToMany || !relationship.ownerSide)
+  ) {
+    if (otherEntityData.builtInUser) {
+      throw new Error(`Error at entity ${entityName}: relationships with built-in User cannot have back reference`);
     }
+    throw new Error(
+      `Error at entity ${entityName}: could not find the other side of the relationship ${stringifyApplicationData(relationship)}`,
+    );
+  } else {
+    generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
   }
 
   relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
@@ -122,43 +149,25 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherEntityFieldCapitalized = upperFirst(relationship.otherEntityField);
   }
 
-  if (relationship.otherEntityRelationshipName !== undefined) {
+  if (relationship.otherEntityRelationshipName !== undefined || relationship.otherRelationship) {
+    // TODO remove at v9.
     mutateData(relationship, {
-      otherEntityRelationshipNamePlural: pluralize(relationship.otherEntityRelationshipName),
-      otherEntityRelationshipNameCapitalized: upperFirst(relationship.otherEntityRelationshipName),
-    });
-    mutateData(relationship, {
-      otherEntityRelationshipNameCapitalizedPlural: pluralize(relationship.otherEntityRelationshipNameCapitalized),
+      otherEntityRelationshipName: ({ otherRelationship, otherEntityRelationshipName }) =>
+        lowerFirst(otherRelationship?.relationshipName ?? otherEntityRelationshipName),
+      otherEntityRelationshipNamePlural: ({ otherEntityRelationshipName }) => pluralize(otherEntityRelationshipName),
+      otherEntityRelationshipNameCapitalized: ({ otherEntityRelationshipName }) => upperFirst(otherEntityRelationshipName),
+      otherEntityRelationshipNameCapitalizedPlural: ({ otherEntityRelationshipNameCapitalized }) =>
+        pluralize(otherEntityRelationshipNameCapitalized),
     });
   }
 
-  const relationshipName = relationship.relationshipName;
   mutateData(relationship, {
-    relationshipNamePlural: pluralize(relationshipName),
-    relationshipFieldName: lowerFirst(relationshipName),
-    relationshipNameCapitalized: upperFirst(relationshipName),
-    relationshipNameHumanized: startCase(relationshipName),
-    columnName: hibernateSnakeCase(relationshipName),
-    columnNamePrefix: relationship.id && relationship.relationshipType === 'one-to-one' ? '' : `${hibernateSnakeCase(relationshipName)}_`,
-    otherEntityNamePlural: pluralize(otherEntityName),
-    otherEntityNameCapitalized: upperFirst(otherEntityName),
-  });
-
-  mutateData(relationship, {
-    relationshipFieldNamePlural: pluralize(relationship.relationshipFieldName),
     relationshipNameCapitalizedPlural:
       relationship.relationshipName.length > 1
         ? pluralize(relationship.relationshipNameCapitalized)
         : upperFirst(pluralize(relationship.relationshipName)),
     otherEntityNameCapitalizedPlural: pluralize(relationship.otherEntityNameCapitalized),
   });
-
-  mutateData(relationship, {
-    __override__: false,
-    propertyName: relationship.collection ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName,
-  });
-
-  prepareProperty(relationship);
 
   if (entityWithConfig.dto === MAPSTRUCT) {
     if (otherEntityData.dto !== MAPSTRUCT && !otherEntityData.builtInUser) {
@@ -175,7 +184,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     otherEntityFileName: otherEntityData.entityFileName,
     otherEntityFolderName: otherEntityData.entityFileName,
     jpaMetamodelFiltering: otherEntityData.jpaMetamodelFiltering,
-    unique: relationship.id || (relationship.ownerSide && relationship.relationshipType === 'one-to-one'),
+    unique: relationship.id || (relationship.ownerSide && relationshipOneToOne),
   });
 
   const otherEntityClientRootFolder = otherEntityData.clientRootFolder || otherEntityData.microserviceName || '';
@@ -210,15 +219,6 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     }
   }
   relationship.nullable = !(relationship.relationshipValidate === true && relationship.relationshipRequired);
-
-  relationship.shouldWriteJoinTable = relationship.relationshipType === 'many-to-many' && relationship.ownerSide;
-  if (relationship.shouldWriteJoinTable) {
-    relationship.joinTable = {
-      name: getJoinTableName(entityWithConfig.entityTableName, relationship.relationshipName, {
-        prodDatabaseType: entityWithConfig.prodDatabaseType,
-      }).value,
-    };
-  }
 
   relationship.reference = relationshipToReference(entityWithConfig, relationship);
 

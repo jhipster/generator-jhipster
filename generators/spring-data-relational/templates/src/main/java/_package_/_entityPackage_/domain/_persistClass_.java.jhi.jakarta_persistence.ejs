@@ -84,7 +84,7 @@ import org.hibernate.type.SqlTypes;
     @NotNull
       <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { -%>
-    @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%= relationship.otherEntityRelationshipNamePlural %>"<% } %>)
+    @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%= relationship.otherRelationship.propertyName %>"<% } %>)
       <%_ if (relationship.ownerSide) { _%>
         <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
