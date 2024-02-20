@@ -32,7 +32,7 @@ As of JHipster 6.5, the JHipster administrator's management and monitoring UI is
 
 [motivation]: #motivation
 
-In recent years the technology landscape has changed significantly for Java and non Java based microservices but JHipster has somehow failed to adapt because we invested too much in maintaining our Eureka based solution: the JHipster registry. Although this solution is great and very productive for developers, it is not a very popular choice nowadays and our support for microservices without Eureka is lacking. Moreover, if we want to support more languages and technologies (.NET, Node.JS, Micronaut, Quarkus) and integrate them in the JHipster platform, non portable technologies such as Spring Cloud and Eureka cannot be made mandatory.
+In recent years, the technology landscape has changed significantly for Java and non Java based microservices but JHipster has somehow failed to adapt because we invested too much in maintaining our Eureka based solution: the JHipster registry. Although this solution is great and very productive for developers, it is not a very popular choice nowadays and our support for microservices without Eureka is lacking. Moreover, if we want to support more languages and technologies (.NET, Node.JS, Micronaut, Quarkus) and integrate them in the JHipster platform, non portable technologies such as Spring Cloud and Eureka cannot be made mandatory.
 
 In the meantime, our experience with the JHipster Registry has showed that in a microservice architecture, it is very valuable to have an overview of your running applications instances either in development or production. Currently this overview is provided as part of the application itself (for JHipster monoliths) or the JHipster Registry (for JHipster microservices). The goal of this RFC is to describe a solution that provides this overview in a new external application which can be used to cover all current use cases and more.
 
@@ -63,7 +63,7 @@ The **JHipster Control Center** is a standard web application that connects to o
 
 ### Description of features
 
-Once logged into the **JHipster Control Center**, the user will be able to view his administrator UI which present operational data coming from his JHipster applications. Typical data available from there will include:
+Once logged into the **JHipster Control Center**, the user will be able to view his administrator UI which presents operational data coming from his JHipster applications. Typical data available from there will include:
 
 - Health and readiness statuses
 - List of application instances and their metadata
@@ -74,7 +74,7 @@ The goal of the **JHipster Control Center** is to be used in combination with an
 
 ### Usage in development
 
-In every JHipster app, docker-compose files are present in the `src/main/docker` folder to launch associated services such as databases, message brokers and registries using docker. Among them, a **jhipster-control-center.yml** will let the users starts the **JHipster control-center** which will then be available at [http://localhost:1337](http://localhost:1337). By default the docker-compose file will be generated in such a way that the Control Center will be able to connect to the locally running JHipster application out of the box. Another possible way to run the **JHipster Control Center** in development would be to develop a simple CLI that allows to start the **JHipster Control Center** server quickly. Such a CLI tool could be embedded into the JHipster package distributed on NPM.
+In every JHipster app, docker-compose files are present in the `src/main/docker` folder to launch associated services such as databases, message brokers and registries using docker. Among them, a **jhipster-control-center.yml** will let the users start the **JHipster control-center** which will then be available at [http://localhost:1337](http://localhost:1337). By default, the docker-compose file will be generated in such a way that the Control Center will be able to connect to the locally running JHipster application out of the box. Another possible way to run the **JHipster Control Center** in development would be to develop a simple CLI that allows to start the **JHipster Control Center** server quickly. Such a CLI tool could be embedded into the JHipster package distributed on NPM.
 
 ### Usage in production
 
@@ -89,7 +89,7 @@ Implementation details will be left to the discretion of the **JHipster Control 
 - A separate **JHipster Control Center** GitHub repository will host the application and allow collaboration.
 - The **JHipster Control Center** application will be based on a Java reactive Spring Boot application using Spring Cloud Gateway as embedded proxy technology.
 - The application will include Spring Cloud dependencies to allow it to plug into Eureka, Consul and Kubernetes service discovery mechanism.
-- The Management UI will be developed using Vue and can reuse some the existing code that currently lives in the "Admin pages" of a JHipster application.
+- The Management UI will be developed using Vue and can reuse some of the existing code that currently lives in the "Admin pages" of a JHipster application.
 - The application will be packaged as a docker image and a jar file which will be published on Docker Hub and Maven Central.
 - After the initial **JHipster Control Center** 1.0 release, it will be expected to keep backward compatibility with JHipster applications generated with JHipster version 7.0 or higher.
 - The **JHipster Control Center** will be an optional part of JHipster so that users will not have to use it. However, we think that it will provide sufficient improvements to the development and operational experience to convince users to adopt it.
