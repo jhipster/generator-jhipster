@@ -11,7 +11,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 - [Coding Rules](#rules)
 - [Git Commit Guidelines](#commit)
 
-And don't forget we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using OpenCollective.
+And don't forget, we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using OpenCollective.
 
 ## <a name="question"></a> Questions and help
 
@@ -27,7 +27,7 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 
 ## <a name="bounties"></a> Bug bounties
 
-If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then you are eligible to our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
+If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then you are eligible for our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
 
 ## <a name="feature"></a> Feature Requests
 
@@ -39,7 +39,7 @@ would like to implement a new feature then consider what kind of change it is:
 
 ## <a name="rfcs"></a> RFCs
 
-Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
+Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to present them because we will need a lot of going back and forth to reach a consensus.
 
 So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
 
@@ -129,7 +129,7 @@ Each commit message consists of a **header**, a **body** and a **footer**.
 <footer>
 ```
 
-Any line of the commit message cannot be longer 100 characters! This allows the message to be easier
+Any line of the commit message cannot be longer than 100 characters! This allows the message to be easier
 to read on GitHub as well as in various git tools.
 
 ### Header
