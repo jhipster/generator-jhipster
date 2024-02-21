@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import * as _ from 'lodash-es';
+import { camelCase } from 'lodash-es';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -450,7 +451,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} clientFramework - The name of the client framework
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = camelCase(routerName)) {
     this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }
