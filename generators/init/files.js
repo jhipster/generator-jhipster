@@ -30,13 +30,20 @@ export const files = {
   global: [
     {
       templates: [
-        'README.md',
         '.editorconfig.jhi',
         {
           override: false,
           file: 'package.json',
         },
       ],
+    },
+  ],
+};
+
+export const readme = {
+  global: [
+    {
+      templates: ['README.md'],
     },
   ],
 };

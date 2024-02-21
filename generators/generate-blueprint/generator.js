@@ -126,10 +126,11 @@ export default class extends BaseGenerator {
         this.config.defaults(requiredConfig());
       },
       conditionalConfig() {
-        if (!this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
           this.config.defaults({
             [SKIP_COMMIT_HOOK]: true,
             [DYNAMIC]: true,
+            js: false,
           });
         }
       },
@@ -144,7 +145,8 @@ export default class extends BaseGenerator {
     return {
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        await this.composeWithJHipster(GENERATOR_INIT);
+        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT);
+        initGenerator.generateReadme = false;
       },
     };
   }
@@ -214,7 +216,7 @@ export default class extends BaseGenerator {
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
-            js: this.jhipsterConfig.js,
+            js: this.application.js,
             application: this.application,
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
@@ -269,7 +271,6 @@ export default class extends BaseGenerator {
           devDependencies: {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
             eslint: `${mainDependencies.eslint}`,
-            'eslint-config-airbnb-base': `${mainDependencies['eslint-config-airbnb-base']}`,
             'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
             'eslint-plugin-import': `${mainDependencies['eslint-plugin-import']}`,
             'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,

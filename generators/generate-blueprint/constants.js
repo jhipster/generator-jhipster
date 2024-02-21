@@ -51,7 +51,7 @@ export const requiredConfig = () => ({});
 export const defaultConfig = ({ config = {} } = {}) => ({
   ...requiredConfig,
   [DYNAMIC]: false,
-  [JS]: false,
+  [JS]: !config[LOCAL_BLUEPRINT_OPTION],
   [LOCAL_BLUEPRINT_OPTION]: false,
   [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
   [SUB_GENERATORS]: [],
@@ -76,7 +76,7 @@ export const allGeneratorsConfig = () => ({
   [SUB_GENERATORS]: Object.values(GENERATOR_LIST),
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
-  [JS]: false,
+  [JS]: true,
   [GENERATORS]: Object.fromEntries(
     Object.values(GENERATOR_LIST).map(subGenerator => {
       return [subGenerator, allSubGeneratorConfig(subGenerator)];

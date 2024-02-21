@@ -3,7 +3,7 @@
     "node": true,
     "es2020": true
   },
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "parserOptions": {
     "ecmaVersion": 11,
     "sourceType": "module"
@@ -15,8 +15,6 @@
   ],
   "rules": {
     "func-names": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "import/no-unresolved": "off",
     "no-restricted-syntax": [
       "error",
       {
