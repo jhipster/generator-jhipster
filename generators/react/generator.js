@@ -16,10 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
-import { camelCase } from 'lodash-es';
+import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
@@ -213,7 +212,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     routerName,
     enableTranslation,
     entityTranslationKeyMenu = camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
+    entityTranslationValue = startCase(routerName),
   ) {
     this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }

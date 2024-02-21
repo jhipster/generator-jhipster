@@ -18,9 +18,8 @@
  */
 import { relative } from 'path';
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import { camelCase } from 'lodash-es';
+import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
@@ -229,7 +228,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
     routerName,
     enableTranslation,
     entityTranslationKeyMenu = camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
+    entityTranslationValue = startCase(routerName),
   ) {
     this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }

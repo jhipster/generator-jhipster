@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import * as _ from 'lodash-es';
-import { camelCase } from 'lodash-es';
+import { camelCase, startCase } from 'lodash-es';
 
 import { getDefaultAppName } from './support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
@@ -108,7 +108,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
         const { baseName, upperFirstCamelCaseBaseName } = application;
-        const humanizedBaseName = baseName.toLowerCase() === 'jhipster' ? 'JHipster' : _.startCase(baseName);
+        const humanizedBaseName = baseName.toLowerCase() === 'jhipster' ? 'JHipster' : startCase(baseName);
         _.defaults(application, {
           humanizedBaseName,
           camelizedBaseName: camelCase(baseName),
