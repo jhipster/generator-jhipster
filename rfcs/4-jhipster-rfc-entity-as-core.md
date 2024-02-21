@@ -24,7 +24,7 @@ Another reason is that JHipster has too many generators, this will allow a more 
 
 [guide-level-explanation]: #guide-level-explanation
 
-JHipster have a few generators related to entities.
+JHipster has a few generators related to entities:
 
 - `entities` generator is used to delegate selected entities to `entity` generator and `database-changelog` generator.
 - `entities-client` generator is used to rebuild webpack when some entity changes.
@@ -39,7 +39,7 @@ We have priorities to be used on entity generators.
 
 Those generators and priorities will be replaced by entity focused priorities and internal methods to support the workflow. Some entity related generators may be kept for more specific purpose like prompts.
 
-Planed priorities includes.
+Planed priorities include:
 
 - `configuringEachEntity`: priority to manipulate entities config.
 - `preparingEachEntity`: priority to create derived properties for entities to be used by the templates.
@@ -120,7 +120,7 @@ New priorities will have as first argument relevant resources to the priority/ta
 
 The implementation will require changes to `yeoman-generator` in order to allow tasks arguments and extract tasks to execute them for more than once (each entity/language).
 
-As advantages we can list:
+As advantages, we can list:
 
 - Fewer generators.
 - Remove some duplicated codes from entity related generators.

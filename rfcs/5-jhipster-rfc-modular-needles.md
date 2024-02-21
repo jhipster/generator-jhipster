@@ -39,14 +39,14 @@ JHipster 7 have lots of technology specific needles implemented at `generator-ba
 - `addMavenPluginRepository`
 - Many others
 
-Those needles should be implemented using modular approach at the technology specific generator.
+Those needles should be implemented using a modular approach at the technology-specific generator.
 
 ## Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
 
 Needles will be implemented as a stand-alone function having the generator as first parameter.
-For convenience it will be exposed at the technology specific generator as a class member method.
+For convenience, it will be exposed at the technology-specific generator as a class member method.
 
 ```mjs
 export function aNeedle(generator, needleData) {
@@ -73,7 +73,7 @@ export default class Generator {
 }
 ```
 
-Using at a child generator:
+Using needles api inside a child generator:
 
 ```mjs
 import Generator from './base-generator.mjs'
@@ -87,7 +87,7 @@ export default class ChildGenerator extends Generator {
 }
 ```
 
-Using at a non related generator:
+Using a non-related generator:
 
 ```mjs
 import { aNeedle } from './base-generator.mjs'
@@ -101,7 +101,7 @@ export default class UnrelatedGenerator {
 }
 ```
 
-Realistic example applying multiples needles at same file:
+Realistic example applying multiple needles in the same file:
 
 ```mjs
 import { addProperty, addDependency, addDependencyToDevProfile } from 'generator-jhipster/generators/maven'
@@ -124,13 +124,13 @@ export default class UnrelatedGenerator {
 [drawbacks]: #drawbacks
 
 Needles api will not be exposed to every generator by default.
-It need to be imported to be used.
+It needs to be imported to be used.
 
 ## Rationale and alternatives
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-This will allow to create a modular implementation.
+This will allow creating a modular implementation.
 
 ## Unresolved questions
 
