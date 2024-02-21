@@ -19,7 +19,7 @@
 export * from './build-specification-mapper.js';
 export * from './config.js';
 /**
- * @deprecated Use from maven generator support
+ * @deprecated Use from java generator support
  */
 export * from '../../java/support/doc.js';
 export * from './database.js';
