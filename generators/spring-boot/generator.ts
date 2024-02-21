@@ -41,6 +41,7 @@ import {
   getPrimaryKeyValue,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
+  javaBeanCase,
 } from '../server/support/index.js';
 import { addJavaAnnotation, generateKeyStore } from '../java/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
@@ -216,6 +217,19 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
             `${application.javaPackageSrcDir}config/ApplicationProperties.java`,
             insertContentIntoApplicationProperties(needles),
           );
+        source.addApplicationPropertiesProperty = ({ propertyName, propertyType }) =>
+          source.addApplicationPropertiesContent!({
+            property: `private ${propertyType} ${propertyName};`,
+            propertyGetter: `
+public ${propertyType} get${javaBeanCase(propertyName)}() {
+    return ${propertyName};
+}
+
+public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
+    this.${propertyName} = ${propertyName};
+}
+`,
+          });
       },
     });
   }
