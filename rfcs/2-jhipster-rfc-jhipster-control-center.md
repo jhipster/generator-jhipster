@@ -63,7 +63,7 @@ The **JHipster Control Center** is a standard web application that connects to o
 
 ### Description of features
 
-Once logged into the **JHipster Control Center**, the user will be able to view his administrator UI which presents operational data coming from his JHipster applications. Typical data available from there will include:
+Once logged into the **JHipster Control Center**, the user will be able to view their administrator UI which presents operational data coming from their JHipster applications. Typical data available will include:
 
 - Health and readiness statuses
 - List of application instances and their metadata
@@ -74,7 +74,7 @@ The goal of the **JHipster Control Center** is to be used in combination with an
 
 ### Usage in development
 
-In every JHipster app, docker-compose files are present in the `src/main/docker` folder to launch associated services such as databases, message brokers and registries using docker. Among them, a **jhipster-control-center.yml** will let the users start the **JHipster control-center** which will then be available at [http://localhost:1337](http://localhost:1337). By default, the docker-compose file will be generated in such a way that the Control Center will be able to connect to the locally running JHipster application out of the box. Another possible way to run the **JHipster Control Center** in development would be to develop a simple CLI that allows to start the **JHipster Control Center** server quickly. Such a CLI tool could be embedded into the JHipster package distributed on NPM.
+In every JHipster app, docker-compose files are present in the `src/main/docker` folder to launch associated services such as databases, message brokers, and registries using Docker. Among them, a **jhipster-control-center.yml** will let the users start the **JHipster control-center** which will then be available at [http://localhost:1337](http://localhost:1337). By default, the docker-compose file will be generated in such a way that the Control Center will be able to connect to the locally running JHipster application out of the box. Another possible way to run the **JHipster Control Center** in development would be to develop a simple CLI that allows to start the **JHipster Control Center** server quickly. Such a CLI tool could be embedded into the JHipster package distributed on NPM.
 
 ### Usage in production
 

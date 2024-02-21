@@ -39,14 +39,14 @@ JHipster 7 have lots of technology specific needles implemented at `generator-ba
 - `addMavenPluginRepository`
 - Many others
 
-Those needles should be implemented using a modular approach at the technology specific generator.
+Those needles should be implemented using a modular approach at the technology-specific generator.
 
 ## Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
 
 Needles will be implemented as a stand-alone function having the generator as first parameter.
-For convenience, it will be exposed at the technology specific generator as a class member method.
+For convenience, it will be exposed at the technology-specific generator as a class member method.
 
 ```mjs
 export function aNeedle(generator, needleData) {
@@ -73,7 +73,7 @@ export default class Generator {
 }
 ```
 
-Using a child generator:
+Using needles api inside a child generator:
 
 ```mjs
 import Generator from './base-generator.mjs'
@@ -87,7 +87,7 @@ export default class ChildGenerator extends Generator {
 }
 ```
 
-Using a non related generator:
+Using a non-related generator:
 
 ```mjs
 import { aNeedle } from './base-generator.mjs'
