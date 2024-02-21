@@ -41,7 +41,7 @@ In your cloned `generator-jhipster` project, run `npm ci` and then run `npm link
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+To overcome this, you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
 Also add the option `--skip-jhipster-dependencies` to generate the application ignoring the JHipster dependencies (otherwise a released version will be installed each time npm install/ci is called). You can later on re-add the dependency with the command `jhipster --no-skip-jhipster-dependencies`.
 
 To put it in a nutshell, you need to:
@@ -69,7 +69,7 @@ You should see your changes reflected in the generated project.
 
 Note: The generated project might not build properly in case the generator is using a
 snapshot version of [jhipster/jhipster-bom](https://github.com/jhipster/jhipster-bom). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
-this case clone the jhipster/jhipster-bom project and build it using:
+this case, clone the jhipster/jhipster-bom project and build it using:
 
 ```shell script
 ./mvnw clean install -Dgpg.skip=true
@@ -138,12 +138,12 @@ Daily builds samples are prefixed with `daily-`.
 #### Samples folder
 
 A common samples folder will be used if `--global` option is used like `jhipster generate-sample ng-default --global`.
-At first execution a prompt will ask for the samples folder, the choosen value will be reused at next executions.
+At first execution a prompt will ask for the samples folder, the chosen value will be reused at next executions.
 At samples folder, a `jhipster-samples.code-workspace` is generated. It provides a single vscode workspace for `generator-jhipster` and samples generated at the samples folder. It's very used for quick looks.
 
 ### Testing samples
 
-CI tests uses the following commands:
+CI tests use the following commands:
 
 ```
 npm ci:backend:test
@@ -167,7 +167,7 @@ Once up, you should have the stack maintainers recommends.
 Shortcuts are provided to easily generate integration tests samples.
 
 - go to `Execute and Debug`.
-- select the sample's github workflow.
+- select the sample's GitHub workflow.
 - run the shortcut.
 - select the sample.
 - sample is generated at `../jhipster-samples/` folder relative the `generator-jhipster` folder.
