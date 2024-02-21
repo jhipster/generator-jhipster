@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
-import { camelCase } from 'lodash-es';
+import { camelCase, upperFirst } from 'lodash-es';
 
 /**
  * Calculate a hash code for a given string.
@@ -45,5 +44,5 @@ export function stringHashCode(str: string): number {
  * @param value string to convert
  */
 export function upperFirstCamelCase(value: string): string {
-  return _.upperFirst(camelCase(value));
+  return upperFirst(camelCase(value));
 }

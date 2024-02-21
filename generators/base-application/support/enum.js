@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import { formatDocAsJavaDoc } from '../../java/support/doc.js';
 
 const doesTheEnumValueHaveACustomValue = enumValue => {
@@ -70,7 +70,7 @@ const getEnums = (enums, customValuesState, comments) => {
 
 const extractEnumInstance = field => {
   const fieldType = field.fieldType;
-  return _.lowerFirst(fieldType);
+  return lowerFirst(fieldType);
 };
 
 const extractEnumEntries = field => {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { kebabCase } from 'lodash-es';
 import { relationshipOptions, validations } from '../../jhipster/index.js';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
@@ -81,7 +81,7 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
     const otherSplitField: any = extractField(relationshipToConvert.injectedFieldInTo);
     const convertedRelationship: any = {
       relationshipSide: 'left',
-      relationshipType: _.kebabCase(relationshipToConvert.type),
+      relationshipType: kebabCase(relationshipToConvert.type),
       otherEntityName: camelCase(relationshipToConvert.to),
     };
     if (otherSplitField.relationshipName) {

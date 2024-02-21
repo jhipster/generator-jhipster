@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
 import { camelCase } from 'lodash-es';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
@@ -335,7 +334,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {boolean} enableTranslation - If translations are enabled or not
    * @param {string} translationKeyMenu - i18n key for entry in the admin menu
    */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName), jhiPrefix?) {
+  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = camelCase(routerName), jhiPrefix?) {
     this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
   }
 
