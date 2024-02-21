@@ -20,7 +20,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { defaultConfig } from './config.js';
 import { SKIP_COMMIT_HOOK } from './constants.js';
-import { files, commitHooksFiles } from './files.js';
+import { files, commitHooksFiles, readme } from './files.js';
 import command from './command.js';
 import { packageJson } from '../../lib/index.js';
 
@@ -29,6 +29,8 @@ import { packageJson } from '../../lib/index.js';
  * @extends {BaseApplicationGenerator<import('../base-application/types.js').BaseApplication>}
  */
 export default class InitGenerator extends BaseApplicationGenerator {
+  generateReadme = true;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_INIT);
@@ -92,6 +94,11 @@ export default class InitGenerator extends BaseApplicationGenerator {
       },
       async writeFiles({ application }) {
         await this.writeFiles({ sections: files, context: application });
+      },
+      async writeReadme({ application }) {
+        if (this.generateReadme) {
+          await this.writeFiles({ sections: readme, context: application });
+        }
       },
       async writeCommitHookFiles({ application }) {
         if (application.skipCommitHook) return;
