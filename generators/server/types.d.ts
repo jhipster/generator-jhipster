@@ -30,6 +30,7 @@ export type SpringBootSourceType = GradleSourceType &
     addIntegrationTestAnnotation?({ package, annotation }: { package?: string; annotation: string }): void;
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
+    addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<
