@@ -325,7 +325,7 @@ get [Generator.END]() {
 
 ## Blueprints
 
-Blueprint support allows to customize the generation process.
+Blueprint support allows customizing the generation process.
 
 A Blueprint package can include any number of sub-generators, each can be a replacement blueprint, a side-by-side blueprint, or a stand alone blueprint.
 

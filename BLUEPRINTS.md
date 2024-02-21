@@ -1,6 +1,6 @@
 # JHipster Blueprints
 
-Blueprints allows to add new features or change current features.
+Blueprints allow adding new features or changing current features.
 
 ## Creating a Blueprint
 
