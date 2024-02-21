@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import * as _ from 'lodash-es';
-import { formatDocAsJavaDoc } from '../../server/support/doc.js';
+import { formatDocAsJavaDoc } from '../../java/support/doc.js';
 
 const doesTheEnumValueHaveACustomValue = enumValue => {
   return enumValue.includes('(');

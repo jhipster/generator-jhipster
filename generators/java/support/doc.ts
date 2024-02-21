@@ -18,7 +18,7 @@
  */
 import { formatDocAsSingleLine } from '../../base-application/support/index.js';
 
-const escapeDoubleQuotes = text => {
+const escapeDoubleQuotes = (text: string): string => {
   if (text.includes('"')) {
     return text.replace(/"/g, '\\"');
   }
@@ -28,11 +28,11 @@ const escapeDoubleQuotes = text => {
 /**
  * Convert passed block of string to javadoc formatted string.
  *
- * @param {string} text text to convert to javadoc format
- * @param {number} indentSize indent size (default 0)
+ * @param text text to convert to javadoc format
+ * @param indentSize indent size (default 0)
  * @returns javadoc formatted string
  */
-export const formatDocAsJavaDoc = (text, indentSize = 0) => {
+export const formatDocAsJavaDoc = (text: string, indentSize = 0): string => {
   if (indentSize < 0) {
     indentSize = 0;
   }
@@ -45,7 +45,7 @@ export const formatDocAsJavaDoc = (text, indentSize = 0) => {
   return rows.join('\n');
 };
 
-export const formatDocAsApiDescription = text => {
+export const formatDocAsApiDescription = (text: string): string => {
   if (!text) {
     return text;
   }

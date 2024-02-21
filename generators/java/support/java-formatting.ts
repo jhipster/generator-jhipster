@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { upperFirst } from 'lodash-es';
 
 /**
  * @private
@@ -25,15 +25,15 @@ import * as _ from 'lodash-es';
  * Handle the specific case when the second letter is capitalized
  * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
  *
- * @param {string} beanName
- * @return {string}
+ * @param beanName
+ * @return
  */
-export const javaBeanCase = beanName => {
+export const javaBeanCase = (beanName: string): string => {
   const secondLetter = beanName.charAt(1);
   if (secondLetter && secondLetter === secondLetter.toUpperCase()) {
     return beanName;
   }
-  return _.upperFirst(beanName);
+  return upperFirst(beanName);
 };
 
 /**

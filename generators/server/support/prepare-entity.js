@@ -24,7 +24,7 @@ import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js'
 import { mutateData, normalizePathEnd } from '../../base/support/index.js';
 import { hibernateSnakeCase } from './string.js';
 import { getDatabaseTypeData } from './database.js';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.js';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 
 const { ELASTICSEARCH } = searchEngineTypes;
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;

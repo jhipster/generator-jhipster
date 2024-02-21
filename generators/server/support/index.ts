@@ -18,7 +18,10 @@
  */
 export * from './build-specification-mapper.js';
 export * from './config.js';
-export * from './doc.js';
+/**
+ * @deprecated Use from maven generator support
+ */
+export * from '../../java/support/doc.js';
 export * from './database.js';
 /**
  * @deprecated Use from maven generator support
@@ -28,8 +31,14 @@ export * from '../../maven/support/dependabot-maven.js';
  * @deprecated Use from gradle generator support
  */
 export * from '../../gradle/support/dependabot-gradle.js';
+/**
+ * @deprecated Use from java generator support
+ */
 export * from '../../java/support/files.js';
-export * from './java-formatting.js';
+/**
+ * @deprecated Use from java generator support
+ */
+export * from '../../java/support/java-formatting.js';
 /**
  * @deprecated Use from java generator support
  */

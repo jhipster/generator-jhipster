@@ -22,7 +22,7 @@ import * as _ from 'lodash-es';
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.js';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from './doc.js';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
