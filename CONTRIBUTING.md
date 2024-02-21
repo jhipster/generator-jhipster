@@ -11,7 +11,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 - [Coding Rules](#rules)
 - [Git Commit Guidelines](#commit)
 
-And don't forget, we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using OpenCollective.
+And don't forget, we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using Open Collective.
 
 ## <a name="question"></a> Questions and help
 
