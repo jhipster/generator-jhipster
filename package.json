@@ -133,7 +133,7 @@
     "dot-properties": "1.0.1",
     "ejs": "3.1.9",
     "escape-string-regexp": "5.0.0",
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-unused-imports": "3.1.0",
     "execa": "8.0.1",
