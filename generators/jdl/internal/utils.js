@@ -32,6 +32,6 @@ export const baseNameConfigExists = baseName => existsSync(baseName === undefine
  * @return {boolean}
  */
 export const allNewApplications = applications => {
-  if (applications.length === 1) return !baseNameConfigExists();
+  if (applications.length < 2) return !baseNameConfigExists();
   return !applications.find(application => baseNameConfigExists(application.config.baseName));
 };
