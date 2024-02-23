@@ -22,7 +22,7 @@
     "@angular-builders/custom-webpack": "17.0.1",
     "@angular-builders/jest": "17.0.1",
     "@angular-eslint/eslint-plugin": "17.2.1",
-    "@angular/cli": "17.2.0",
+    "@angular/cli": "17.2.1",
     "@types/jest": "29.5.12",
     "@types/node": "18.19.17",
     "@typescript-eslint/eslint-plugin": "7.0.2",
