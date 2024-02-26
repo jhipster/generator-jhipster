@@ -142,7 +142,7 @@ export default class BootstrapGenerator extends BaseGenerator {
             name: 'applying multi-step templates',
             filter: file => isFileStateModified(file) && multiStepTransform.templateFileFs.isTemplate(file.path),
             refresh: true,
-            allowOverride: true,
+            resolveConflict: (current, newFile) => (isFileStateModified(current) ? current : newFile),
           },
           multiStepTransform,
         );
