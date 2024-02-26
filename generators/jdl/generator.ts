@@ -199,7 +199,7 @@ export default class JdlGenerator extends BaseGenerator {
           return;
         }
 
-        const generatorOptions: any = { defaults: true, reproducible: this.reproducible, force: this.force };
+        const generatorOptions: any = { defaults: true, reproducible: this.options.reproducible ?? this.reproducible, force: this.force };
 
         if (this.ignoreApplication || this.applications.length === 0) {
           if (this.applications.length === 0) {
