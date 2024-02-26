@@ -35,7 +35,7 @@ export default defineComponent({
   },
   methods: {    
     retrieveSessions() {
-      return axios.get('api/account/sessions/').then(response => {
+      return axios.get('api/account/sessions').then(response => {
         this.error = null;
         this.sessions = response.data;
       });
