@@ -42,7 +42,7 @@ _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                         <div>
       <%_ if (field.blobContentTypeImage) { _%>
-                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
+                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %>"/>
       <%_ } _%>
                             <div v-if="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
