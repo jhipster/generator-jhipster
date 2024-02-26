@@ -24,14 +24,12 @@ import { Router } from '@angular/router';
 
 import { LoginService } from 'app/login/login.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import { AccountService } from 'app/core/auth/account.service';
 
 @Injectable()
 export class AuthExpiredInterceptor implements HttpInterceptor {
   private loginService = inject(LoginService);
   private stateStorageService = inject(StateStorageService);
   private router = inject(Router);
-  private accountService = inject(AccountService);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
