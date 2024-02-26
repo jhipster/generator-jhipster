@@ -134,19 +134,35 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     generator.debug(`Entity ${entityName}: Could not find the other side of the relationship ${stringifyApplicationData(relationship)}`);
   }
 
-  relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
-  if (!relationship.relatedField && otherEntityData.primaryKey && otherEntityData.primaryKey.derived) {
+  if (relationship.otherEntityField) {
+    relationship.relatedField = otherEntityData.fields.find(field => field.fieldName === relationship.otherEntityField);
+
+    if (relationship.relatedField) {
+      relationship.relatedField.relatedByOtherEntity = true;
+    }
+  }
+  if (!relationship.relatedField && !otherEntityData.embedded) {
     Object.defineProperty(relationship, 'relatedField', {
       get() {
-        return otherEntityData.primaryKey.derivedFields.find(field => field.fieldName === relationship.otherEntityField);
+        if (!otherEntityData.primaryKey) {
+          throw new Error(
+            `Error at entity ${entityName}: could not find the related field for the relationship ${relationship.relationshipName}`,
+          );
+        }
+        const { otherEntityField } = relationship;
+        const fields = otherEntityData.primaryKey.derived ? otherEntityData.primaryKey.derivedFields : otherEntityData.primaryKey.fields;
+        if (otherEntityField) {
+          const relatedField = fields.find(field => field.fieldName === otherEntityField);
+          if (!relatedField) {
+            throw new Error(
+              `Error at entity ${entityName}: could not find the related field ${otherEntityField} for the relationship ${relationshipName}`,
+            );
+          }
+          return relatedField;
+        }
+        return fields[0];
       },
     });
-  }
-  if (relationship.relatedField) {
-    relationship.otherEntityFieldCapitalized = relationship.relatedField.fieldNameCapitalized;
-    relationship.relatedField.relatedByOtherEntity = true;
-  } else {
-    relationship.otherEntityFieldCapitalized = upperFirst(relationship.otherEntityField);
   }
 
   if (relationship.otherEntityRelationshipName !== undefined || relationship.otherRelationship) {
