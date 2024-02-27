@@ -60,7 +60,7 @@ _%>
                     <div>
       <%_ if (field.blobContentTypeImage) { _%>
                     @if (editForm.get('<%= fieldName %>')!.value) {
-                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType')!.value + ';base64,' + editForm.get('<%= fieldName %>')!.value" style="max-height: 100px" alt="<%= entityInstance %> image"/>
+                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType')!.value + ';base64,' + editForm.get('<%= fieldName %>')!.value" style="max-height: 100px" alt="<%= entityInstance %>"/>
                     }
       <%_ } _%>
                     @if (editForm.get('<%= fieldName %>')!.value) {
