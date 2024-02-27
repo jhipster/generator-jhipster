@@ -24,13 +24,13 @@
       <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
       <div class="mb-3" [hidden]="!editForm.value.id">
-        <label <%= jhiPrefix %>Translate="global.field.id">__jhiTransformTranslate__('global.field.id')</label>
-        <input type="text" class="form-control" name="id" formControlName="id" readonly />
+        <label class="form-label" for="field_id" <%= jhiPrefix %>Translate="global.field.id">__jhiTransformTranslate__('global.field.id')</label>
+        <input type="text" id="field_id" class="form-control" name="id" formControlName="id" readonly />
       </div>
 
       <div class="mb-3">
-        <label class="form-label" <%= jhiPrefix %>Translate="userManagement.login">__jhiTransformTranslate__('userManagement.login')</label>
-        <input type="text" class="form-control" name="login" formControlName="login" />
+        <label class="form-label" for="field_login" <%= jhiPrefix %>Translate="userManagement.login">__jhiTransformTranslate__('userManagement.login')</label>
+        <input type="text" id="field_login" class="form-control" name="login" formControlName="login" />
 
       @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
         <div>
@@ -57,8 +57,8 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" <%= jhiPrefix %>Translate="userManagement.firstName">__jhiTransformTranslate__('userManagement.firstName')</label>
-        <input type="text" class="form-control" name="firstName" formControlName="firstName" />
+        <label class="form-label" for="field_firstName" <%= jhiPrefix %>Translate="userManagement.firstName">__jhiTransformTranslate__('userManagement.firstName')</label>
+        <input type="text" id="field_firstName" class="form-control" name="firstName" formControlName="firstName" />
 
       @if (editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)) {
         <div>
@@ -73,8 +73,8 @@
       </div>
 
       <div class="mb-3">
-        <label <%= jhiPrefix %>Translate="userManagement.lastName">__jhiTransformTranslate__('userManagement.lastName')</label>
-        <input type="text" class="form-control" name="lastName" formControlName="lastName" />
+        <label class="form-label" for="field_lastName" <%= jhiPrefix %>Translate="userManagement.lastName">__jhiTransformTranslate__('userManagement.lastName')</label>
+        <input type="text" id="field_lastName" class="form-control" name="lastName" formControlName="lastName" />
 
       @if (editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)) {
         <div>
@@ -89,8 +89,8 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label" <%= jhiPrefix %>Translate="userManagement.email">__jhiTransformTranslate__('userManagement.email')</label>
-        <input type="email" class="form-control" name="email" formControlName="email" />
+        <label class="form-label" for="field_email" <%= jhiPrefix %>Translate="userManagement.email">__jhiTransformTranslate__('userManagement.email')</label>
+        <input type="email" id="field_email" class="form-control" name="email" formControlName="email" />
 
       @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
         <div>
@@ -140,7 +140,7 @@
 
     @if (languages && languages.length > 0) {
       <div class="mb-3">
-        <label <%= jhiPrefix %>Translate="userManagement.langKey">__jhiTransformTranslate__('userManagement.langKey')</label>
+        <label class="form-label" for="langKey" <%= jhiPrefix %>Translate="userManagement.langKey">__jhiTransformTranslate__('userManagement.langKey')</label>
         <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
         @for (language of languages; track $index) {
           <option [value]="language">{{ language | findLanguageFromKey }}</option>
@@ -151,8 +151,8 @@
 <%_ } _%>
 
       <div class="mb-3">
-        <label <%= jhiPrefix %>Translate="userManagement.profiles">__jhiTransformTranslate__('userManagement.profiles')</label>
-        <select class="form-control" multiple name="authority" formControlName="authorities">
+        <label class="form-label" for="field_authority" <%= jhiPrefix %>Translate="userManagement.profiles">__jhiTransformTranslate__('userManagement.profiles')</label>
+        <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
         @for (authority of authorities(); track $index) {
           <option [value]="authority">{{ authority }}</option>
         }
