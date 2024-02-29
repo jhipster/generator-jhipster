@@ -19,7 +19,7 @@
 import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
-import Piscina from 'piscina';
+import { Piscina } from 'piscina';
 
 import BaseGenerator from '../../base-core/index.js';
 import { getPackageRoot } from '../../../lib/index.js';
