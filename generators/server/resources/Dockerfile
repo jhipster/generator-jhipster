@@ -58,7 +58,7 @@ LABEL ALIAS=consul
 FROM prom/prometheus:v2.50.1
 LABEL ALIAS=prometheus
 
-FROM prom/alertmanager:v0.26.0
+FROM prom/alertmanager:v0.27.0
 LABEL ALIAS=prometheus-alertmanager
 
 FROM quay.io/coreos/prometheus-operator:v0.42.1
