@@ -313,6 +313,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+    implementation "jakarta.persistence:jakarta.persistence-api"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
