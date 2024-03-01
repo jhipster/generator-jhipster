@@ -38,6 +38,9 @@ describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipst
 <%_ if (!customGenerator) { _%>
           blueprint: '<%= application.baseName %>',
 <%_ } _%>
+<%_ if (subGenerator === 'jdl') { _%>
+          inline: 'application { }',
+<%_ } _%>
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();
