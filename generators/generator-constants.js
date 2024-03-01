@@ -36,12 +36,12 @@ export const javaDependencies = {
   /**
    * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
    */
-  'spring-boot': '3.2.2',
+  'spring-boot': '3.2.3',
   /*
    * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to hibernate-jpamodelgen annotation processor.
    */
-  hibernate: '6.4.1.Final',
+  hibernate: '6.4.4.Final',
   /*
    * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
    * Required due to java-driver-mapper-processor annotation processor.

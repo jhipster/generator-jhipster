@@ -262,13 +262,9 @@ dependencies {
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql && !reactive) { _%>
     implementation "org.hibernate.orm:hibernate-core"
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
     implementation "org.hibernate.validator:hibernate-validator"
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -317,6 +313,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
+    implementation "jakarta.persistence:jakarta.persistence-api"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"

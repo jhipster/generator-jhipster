@@ -24,9 +24,11 @@ jhipsterDependenciesVersion=<%= jhipsterDependenciesVersion %>
 # The spring-boot version should match the one managed by
 # https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/<%= jhipsterDependenciesVersion %>
 springBootVersion=<%- javaDependencies['spring-boot'] %>
+<%_ if (databaseTypeSql && !reactive) { _%>
 # The hibernate version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%- javaDependencies['spring-boot'] %> -->
 hibernateVersion=<%- javaDependencies.hibernate %>
+<%_ } _%>
 mapstructVersion=<%- javaDependencies.mapstruct %>
 archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
 <%_ if (enableSwaggerCodegen) { _%>
