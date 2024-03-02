@@ -1,5 +1,5 @@
 import { JHipsterCommandDefinition } from '../base/api.js';
-import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../generator-list.js';
+import { GENERATOR_WORKSPACES } from '../generator-list.js';
 
 const command: JHipsterCommandDefinition = {
   arguments: {
@@ -8,6 +8,12 @@ const command: JHipsterCommandDefinition = {
     },
   },
   options: {
+    entrypointGenerator: {
+      description: 'Entrypoint generator to be used',
+      type: String,
+      scope: 'generator',
+      hide: true,
+    },
     interactive: {
       description:
         'Generate multiple applications in series so that questions can be interacted with. This is the default when there is an existing application configuration in any of the folders',
@@ -45,7 +51,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'generator',
     },
   },
-  import: [GENERATOR_APP, GENERATOR_WORKSPACES],
+  import: [GENERATOR_WORKSPACES],
 };
 
 export default command;

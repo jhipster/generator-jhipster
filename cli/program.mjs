@@ -33,6 +33,7 @@ import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
+import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../generators/generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,6 +42,7 @@ const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
 
 const moreInfo = `\n  For more info visit ${chalk.blue('https://www.jhipster.tech')}\n`;
+const alternativeEntrypoints = [GENERATOR_JDL, GENERATOR_WORKSPACES];
 
 export const printJHipsterLogo = () => {
   // eslint-disable-next-line no-console
@@ -160,7 +162,7 @@ export const createProgram = ({ executableName = CLI_NAME, executableVersion } =
 const rejectExtraArgs = ({ program, command, extraArgs }) => {
   // if extraArgs exists: Unknown commands or unknown argument.
   const first = extraArgs[0];
-  if (command.name() !== 'app') {
+  if (command.name() !== GENERATOR_APP) {
     logger.fatal(
       `${chalk.yellow(command.name())} command doesn't take ${chalk.yellow(first)} argument. See '${chalk.white(
         `${program.name()} ${command.name()} --help`,
@@ -184,7 +186,8 @@ export const buildCommands = async ({
   envBuilder,
   env,
   loadCommand,
-  defaultCommand = 'app',
+  defaultCommand = GENERATOR_APP,
+  entrypointGenerator,
   printLogo = printJHipsterLogo,
   printBlueprintLogo = () => {},
   createEnvBuilder,
@@ -242,7 +245,13 @@ export const buildCommands = async ({
           await addCommandRootGeneratorOptions(command, generatorMeta);
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
-          const boostrapGen = ['bootstrap', generator];
+          const boostrapGen = [GENERATOR_BOOTSTRAP, generator];
+          if (!entrypointGenerator && blueprint && alternativeEntrypoints.includes(cmdName)) {
+            entrypointGenerator = `${packageNameToNamespace(blueprint)}:${defaultCommand}`;
+          }
+          if (cmdName === GENERATOR_JDL) {
+            boostrapGen.push(entrypointGenerator ?? GENERATOR_APP);
+          }
           const allDependencies = await buildAllDependencies(boostrapGen, {
             env,
             blueprintNamespaces: envBuilder.getBlueprintsNamespaces(),
@@ -272,6 +281,7 @@ export const buildCommands = async ({
           ...cmdOptions,
           ...useOptions,
           commandName: cmdName,
+          entrypointGenerator,
           blueprints: envBuilder.getBlueprintsOption(),
           positionalArguments: args,
         };
