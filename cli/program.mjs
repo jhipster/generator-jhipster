@@ -246,7 +246,7 @@ export const buildCommands = async ({
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
           const boostrapGen = [GENERATOR_BOOTSTRAP, generator];
-          if (!entrypointGenerator && blueprint && alternativeEntrypoints.includes(cmdName)) {
+          if (!entrypointGenerator && blueprint && defaultCommand !== GENERATOR_APP && alternativeEntrypoints.includes(cmdName)) {
             entrypointGenerator = `${packageNameToNamespace(blueprint)}:${defaultCommand}`;
           }
           if (cmdName === GENERATOR_JDL) {
