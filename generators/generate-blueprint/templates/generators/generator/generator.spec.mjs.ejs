@@ -20,7 +20,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
-const SUB_GENERATOR = <% if(subGenerator = 'spring-data-relational') { %> 'server' <% } else { %> '<%= subGenerator %>' <% } %>;
+const SUB_GENERATOR = <% if(subGenerator === 'spring-data-relational') { %> 'server' <% } else { %> '<%= subGenerator %>' <% } %>;
 <%_ if (customGenerator) { _%>
 const SUB_GENERATOR_NAMESPACE = `jhipster-<%= application.baseName %>:${SUB_GENERATOR}`;
 <%_ } else { _%>
