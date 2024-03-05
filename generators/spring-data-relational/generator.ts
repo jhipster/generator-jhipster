@@ -18,7 +18,12 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_DATA_RELATIONAL, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_LIQUIBASE } from '../generator-list.js';
+import {
+  GENERATOR_SPRING_DATA_RELATIONAL,
+  GENERATOR_BOOTSTRAP_APPLICATION,
+  GENERATOR_LIQUIBASE,
+  GENERATOR_SPRING_BOOT,
+} from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -46,6 +51,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_SPRING_BOOT);
     }
   }
 
