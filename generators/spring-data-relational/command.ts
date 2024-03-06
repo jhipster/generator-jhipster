@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { JHipsterCommandDefinition } from '../base/api.js';
+import { GENERATOR_SERVER } from '../generator-list.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -26,6 +27,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
+  import: [GENERATOR_SERVER],
 };
 
 export default command;
