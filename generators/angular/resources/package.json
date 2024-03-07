@@ -24,7 +24,7 @@
     "@angular-eslint/eslint-plugin": "17.2.1",
     "@angular/cli": "17.2.2",
     "@types/jest": "29.5.12",
-    "@types/node": "18.19.21",
+    "@types/node": "18.19.22",
     "@typescript-eslint/eslint-plugin": "7.1.1",
     "browser-sync": "3.0.2",
     "browser-sync-webpack-plugin": "2.3.0",
