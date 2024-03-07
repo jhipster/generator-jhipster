@@ -33,7 +33,7 @@ import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
-import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../generators/generator-list.js';
+import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,7 +42,6 @@ const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
 
 const moreInfo = `\n  For more info visit ${chalk.blue('https://www.jhipster.tech')}\n`;
-const alternativeEntrypoints = [GENERATOR_JDL, GENERATOR_WORKSPACES];
 
 export const printJHipsterLogo = () => {
   // eslint-disable-next-line no-console
@@ -246,9 +245,6 @@ export const buildCommands = async ({
 
           // Add bootstrap options, may be dropped if every generator is migrated to new structure and correctly depends on bootstrap.
           const boostrapGen = [GENERATOR_BOOTSTRAP, generator];
-          if (!entrypointGenerator && blueprint && defaultCommand !== GENERATOR_APP && alternativeEntrypoints.includes(cmdName)) {
-            entrypointGenerator = `${packageNameToNamespace(blueprint)}:${defaultCommand}`;
-          }
           if (cmdName === GENERATOR_JDL) {
             boostrapGen.push(entrypointGenerator ?? GENERATOR_APP);
           }
@@ -338,6 +334,7 @@ export const buildJHipster = async ({
     return command;
   },
   defaultCommand,
+  entrypointGenerator,
 } = {}) => {
   // eslint-disable-next-line chai-friendly/no-unused-expressions
   createEnvBuilder =
@@ -346,7 +343,18 @@ export const buildJHipster = async ({
   env = env ?? envBuilder.getEnvironment();
   commands = commands ?? { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()) };
 
-  await buildCommands({ program, commands, envBuilder, env, loadCommand, defaultCommand, printLogo, printBlueprintLogo, createEnvBuilder });
+  await buildCommands({
+    program,
+    commands,
+    envBuilder,
+    env,
+    loadCommand,
+    defaultCommand,
+    entrypointGenerator,
+    printLogo,
+    printBlueprintLogo,
+    createEnvBuilder,
+  });
 
   return program;
 };
