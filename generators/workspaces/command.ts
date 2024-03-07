@@ -10,6 +10,12 @@ const command: JHipsterCommandDefinition = {
       default: [],
       scope: 'generator',
     },
+    entrypointGenerator: {
+      description: 'Entrypoint generator to be used',
+      type: String,
+      scope: 'generator',
+      hide: true,
+    },
     workspaces: {
       type: Boolean,
       description: 'Generate workspaces for multiples applications',

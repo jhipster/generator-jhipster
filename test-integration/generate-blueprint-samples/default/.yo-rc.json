@@ -129,6 +129,34 @@
         "sbs": false,
         "written": true
       },
+      "spring-data-relational": {
+        "command": true,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "configuringEachEntity",
+          "loadingEntities",
+          "preparingEachEntity",
+          "preparingEachEntityField",
+          "preparingEachEntityRelationship",
+          "postPreparingEachEntity",
+          "default",
+          "writing",
+          "writingEntities",
+          "postWriting",
+          "postWritingEntities",
+          "loadingTranslations",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false,
+        "written": true
+      },
       "languages": {
         "command": true,
         "priorities": [
@@ -162,6 +190,6 @@
     "mainGenerator": "generate-blueprint",
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",
-    "subGenerators": ["client", "common", "cypress", "server", "jdl", "languages"]
+    "subGenerators": ["client", "common", "cypress", "server", "jdl", "spring-data-relational", "languages"]
   }
 }

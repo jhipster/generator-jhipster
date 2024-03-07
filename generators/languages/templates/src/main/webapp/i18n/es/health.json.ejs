@@ -64,8 +64,9 @@
         "status": {
             "UNKNOWN": "DESCONOCIDO",
             "UP": "LEVANTADO",
-<%_ if (clientFrameworkAngular) { _%>
-            "OUT_OF_SERVICE": "OUT_OF_SERVICE",
+<%_
+    if (clientFrameworkAngular) { _%>
+            "OUT_OF_SERVICE":  "FUERA_DE_SERVICIO",
 <%_ } _%>
             "DOWN": "CAÍDO"
         }

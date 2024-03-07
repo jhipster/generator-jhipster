@@ -185,6 +185,11 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
           );
         }
       },
+      loadDomains({ application, entities }) {
+        (application as any).domains = [
+          ...new Set([application.packageName, ...entities.map(entity => (entity as any).entityAbsolutePackage).filter(Boolean)]),
+        ];
+      },
     });
   }
 

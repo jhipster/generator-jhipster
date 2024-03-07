@@ -34,6 +34,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   workspaces;
   generateApplications;
   generateWith;
+  entrypointGenerator;
 
   generateWorkspaces;
 
@@ -102,7 +103,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
           await this.generateApplications.call(this);
         } else {
           for (const appName of this.appsFolders) {
-            await this.composeWithJHipster(this.generateWith, { generatorOptions: { destinationRoot: this.destinationPath(appName) } });
+            await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {
+              generatorOptions: { destinationRoot: this.destinationPath(appName) },
+            });
           }
         }
       },

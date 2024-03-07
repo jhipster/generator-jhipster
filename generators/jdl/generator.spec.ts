@@ -488,4 +488,25 @@ entity Bar
       });
     });
   });
+  describe('with entrypointGenerator', () => {
+    const jdl = `
+application { config { baseName gatewayApp applicationType gateway } }
+`;
+    describe('generating application', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(GENERATOR_JDL)
+          .withMockedGenerators([...mockedGenerators, 'foo:bar'])
+          .withOptions({
+            inline: jdl,
+            entrypointGenerator: 'foo:bar',
+          });
+      });
+
+      it('should generate expected config', () => {
+        const mock = runResult.mockedGenerators['foo:bar'] as SinonSpy;
+        expect(mock.callCount).toBe(1);
+      });
+    });
+  });
 });
