@@ -55,6 +55,9 @@ export default class JdlGenerator extends BaseGenerator {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
+  entrypointGenerator = `${CLI_NAME}:${GENERATOR_APP}`;
+  entitiesGenerator = GENERATOR_ENTITIES;
+  workspacesGenerator = GENERATOR_WORKSPACES;
 
   interactive?: boolean;
   jsonOnly?: boolean;
@@ -204,13 +207,13 @@ export default class JdlGenerator extends BaseGenerator {
         if (this.ignoreApplication || this.applications.length === 0) {
           if (this.applications.length === 0) {
             const entities = this.exportedEntities;
-            await this.composeWithJHipster(GENERATOR_ENTITIES, {
+            await this.composeWithJHipster(this.entitiesGenerator, {
               generatorArgs: entities.map(entity => entity.name),
               generatorOptions,
             });
           } else {
             for (const app of this.applications) {
-              await this.composeWithJHipster(GENERATOR_ENTITIES, {
+              await this.composeWithJHipster(this.entitiesGenerator, {
                 generatorArgs: app.entities.map(entity => entity.name),
                 generatorOptions: {
                   ...generatorOptions,
@@ -221,10 +224,10 @@ export default class JdlGenerator extends BaseGenerator {
           }
         } else if (this.applications.length === 1) {
           this.log.info('Generating 1 application');
-          await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
+          await this.composeWithJHipster(this.entrypointGenerator, { generatorOptions });
         } else {
           this.log.info(`Generating ${this.applications.length} applications`);
-          await this.composeWithJHipster(GENERATOR_WORKSPACES, {
+          await this.composeWithJHipster(this.workspacesGenerator, {
             generatorOptions: {
               workspacesFolders: this.applications.map(app => app.folder),
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
@@ -291,7 +294,7 @@ export default class JdlGenerator extends BaseGenerator {
         }
         const envBuilder = await this.createEnvBuilder(envOptions);
         const env = envBuilder.getEnvironment();
-        await env.run([`${CLI_NAME}:${GENERATOR_APP}`], generatorOptions);
+        await env.run([this.entrypointGenerator], generatorOptions);
       }),
     );
   }

@@ -172,6 +172,10 @@ Options:
   --skip-install                           Do not automatically install dependencies (default: false)
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
+  --workspaces-folders <value...>          Folders to use as monorepository workspace
+  --workspaces                             Generate workspaces for multiples applications
+  --skip-git                               Skip git repository initialization
+  --monorepository                         Use monorepository
   --defaults                               Execute jhipster with default config
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
@@ -217,16 +221,12 @@ Options:
   --microfrontends <value>                 Microfrontends to load
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
-  --skip-git                               Skip git repository initialization
-  --monorepository                         Use monorepository
   --cypress-coverage                       Enable Cypress code coverage report generation
   --cypress-audit                          Enable cypress-audit/lighthouse report generation
   --enable-translation                     Enable translation
   -l, --language <value...>                Language to be added to application (existing languages are not removed)
   -n, --native-language [value]            Set application native language
   --regenerate-languages                   Regenerate languages
-  --workspaces-folders <value...>          Folders to use as monorepository workspace
-  --workspaces                             Generate workspaces for multiples applications
   -h, --help                               display help for command
 "
 `;
