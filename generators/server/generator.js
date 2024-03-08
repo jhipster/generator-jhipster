@@ -561,11 +561,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           );
         }
       },
-      loadDomains({ application, entities }) {
-        application.domains = [
-          ...new Set([application.packageName, ...entities.map(entity => entity.entityAbsolutePackage).filter(Boolean)]),
-        ];
-      },
 
       insight({ application }) {
         statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
