@@ -1,7 +1,7 @@
 import sinon, { SinonStub } from 'sinon';
 import { it, describe, expect, beforeEach } from 'esmocha';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { defaultHelpers as helpers, runResult } from '../../test/support/index.js';
+import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { GENERATOR_HEROKU } from '../generator-list.js';
 
 const expectedFiles = {

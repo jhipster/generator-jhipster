@@ -1,7 +1,7 @@
 import type { RunResult } from 'yeoman-test';
 
 import { JAVA_DOCKER_DIR } from '../../generator-constants.js';
-import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.js';
+import { matchWrittenConfig, matchWrittenFiles } from '../../../testing/index.js';
 
 const expectedEurekaFiles = () => {
   return [

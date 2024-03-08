@@ -9,7 +9,7 @@ import { BaseEnvironment } from '@yeoman/types';
 import { coerce } from 'semver';
 import quibble from 'quibble';
 
-import { defaultHelpers as helpers, createBlueprintFiles } from '../test/support/index.js';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../testing/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
 

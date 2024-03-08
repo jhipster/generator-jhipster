@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
-import { basicHelpers as helpers } from '../../test/support/index.js';
+import { basicHelpers as helpers } from '../../testing/index.js';
 
 import Base from './index.js';
 import { createJHipsterLogger } from '../base/support/logger.js';

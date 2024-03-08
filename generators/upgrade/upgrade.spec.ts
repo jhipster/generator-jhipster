@@ -6,7 +6,7 @@ import { before, it, describe, expect } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
 import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.js';
-import { basicHelpers as helpers, getGenerator, result as runResult } from '../../test/support/index.js';
+import { basicHelpers as helpers, getGenerator, result as runResult } from '../../testing/index.js';
 
 const { escapeRegExp } = _;
 

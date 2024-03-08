@@ -26,7 +26,7 @@ import { applicationTypes } from './jhipster/index.js';
 import { parseFromContent, parseFromFiles } from './readers/jdl-reader.js';
 import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import exportToJDL from './exporters/jdl-exporter.js';
-import { basicHelpers as helpers } from '../test/support/index.js';
+import { basicHelpers as helpers } from '../testing/index.js';
 import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { ApplicationWithEntities, createImporterFromContent } from './jdl-importer.js';
 

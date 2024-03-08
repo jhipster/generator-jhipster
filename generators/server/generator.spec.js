@@ -23,7 +23,7 @@ import { before, it, describe, expect } from 'esmocha';
 import lodash from 'lodash';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../test/support/index.js';
+import { defaultHelpers as helpers, checkEnforcements, result as runResult } from '../../testing/index.js';
 import Generator from './index.js';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.js';
 import { GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.js';
