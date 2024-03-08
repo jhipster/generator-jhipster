@@ -3,7 +3,7 @@ import type BaseApplicationGenerator from '../../base-application/index.js';
 import type { SpringBootApplication } from '../../server/types.js';
 
 import { SERVER_MAIN_SRC_DIR, JAVA_DOCKER_DIR } from '../../generator-constants.js';
-import { matchWrittenConfig, matchWrittenFiles } from '../../../test/support/matcher.js';
+import { matchWrittenConfig, matchWrittenFiles } from '../../../testing/index.js';
 
 const expectedElasticsearchFiles = () => {
   return [`${JAVA_DOCKER_DIR}elasticsearch.yml`];

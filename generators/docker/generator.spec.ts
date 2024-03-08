@@ -22,13 +22,18 @@ import { before, it, describe, expect } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.js';
-import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.js';
-import { defaultHelpers as helpers, runResult } from '../../testi/support/index.js';
+import {
+  buildSamplesFromMatrix,
+  extendFilteredMatrix,
+  extendMatrix,
+  defaultHelpers as helpers,
+  runResult,
+  buildServerMatrix,
+} from '../../testing/index.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
 
 import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, cacheTypes } from '../../jdl/jhipster/index.js';
-import { buildServerMatrix } from '../../test/support/server-samples.js';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 
