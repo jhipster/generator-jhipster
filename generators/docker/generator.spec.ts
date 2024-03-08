@@ -23,7 +23,7 @@ import lodash from 'lodash';
 
 import Generator from './index.js';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix } from '../../test/support/matrix-utils.js';
-import { defaultHelpers as helpers, runResult } from '../../test/support/index.js';
+import { defaultHelpers as helpers, runResult } from '../../testi/support/index.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
 

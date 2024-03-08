@@ -28,7 +28,7 @@ import {
   buildSamplesFromMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../test/support/index.js';
+} from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from './generator.js';
 

@@ -1,5 +1,5 @@
 import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers } from '../../test/support/index.js';
+import { defaultHelpers as helpers } from '../../testing/index.js';
 import {
   applicationTypes,
   databaseTypes,

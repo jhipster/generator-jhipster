@@ -1,3 +1,5 @@
+import sortKeys from 'sort-keys';
+
 const appendTitle = (title, config, value) => {
   if (Array.isArray(value)) value = value[0];
   if (value === undefined) return title;
@@ -73,7 +75,6 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
 export const extendMatrix = (matrix, configMatrix) => {
   return Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
 };
-import sortKeys from 'sort-keys';
 
 export const extendFilteredMatrix = (matrix, filter, extendedConfig) => {
   const matrixEntries = Object.entries(matrix);

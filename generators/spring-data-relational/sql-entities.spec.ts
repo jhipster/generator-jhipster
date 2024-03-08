@@ -7,7 +7,7 @@ import {
   buildSamplesFromMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../test/support/index.js';
+} from '../../testing/index.js';
 import { mockedGenerators as serverGenerators } from '../server/__test-support/index.js';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.js';

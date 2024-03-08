@@ -22,7 +22,7 @@ import { before, it, describe, expect } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.js';
-import { defaultHelpers as helpers } from '../../test/support/index.js';
+import { defaultHelpers as helpers } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 
 const { snakeCase } = lodash;

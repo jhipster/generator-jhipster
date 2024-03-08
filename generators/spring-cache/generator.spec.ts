@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import lodash from 'lodash';
 
-import { fromMatrix, defaultHelpers as helpers, result } from '../../test/support/index.js';
+import { fromMatrix, defaultHelpers as helpers, result } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from './index.js';
 

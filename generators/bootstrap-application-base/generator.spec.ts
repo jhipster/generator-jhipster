@@ -22,7 +22,7 @@ import { before, it, describe, expect, beforeEach } from 'esmocha';
 import lodash from 'lodash';
 
 import Generator from './index.js';
-import { defaultHelpers as helpers, runResult } from '../../test/support/index.js';
+import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { parseChangelog } from '../base/support/timestamp.ts';
 

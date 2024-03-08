@@ -21,7 +21,7 @@ import fs, { readFileSync } from 'fs';
 import path, { basename } from 'path';
 import fse from 'fs-extra';
 import { describe, it, before } from 'mocha';
-import { getGeneratorFolder } from '../../testing/get-generator.js';
+import { getGeneratorFolder } from '../get-generator.js';
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

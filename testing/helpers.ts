@@ -143,7 +143,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withWorkspacesSamples(...appNames: string[]): this {
     return this.onBeforePrepare(async () => {
       try {
-        const { default: deploymentTestSamples } = await import('../test/support/deployment-samples.js');
+        const { default: deploymentTestSamples } = await import('./support/deployment-samples.js');
         for (const appName of appNames) {
           const application = deploymentTestSamples[appName];
           if (!application) {

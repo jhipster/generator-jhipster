@@ -2,7 +2,7 @@ import { before, it, describe, expect } from 'esmocha';
 import monitoringTypes from '../../jdl/jhipster/monitoring-types.js';
 import applicationTypes from '../../jdl/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';
-import { defaultHelpers as helpers, getGenerator, runResult } from '../../test/support/index.js';
+import { defaultHelpers as helpers, getGenerator, runResult } from '../../testing/index.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
