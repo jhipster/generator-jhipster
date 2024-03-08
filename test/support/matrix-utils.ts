@@ -7,7 +7,7 @@ const appendTitle = (title, config, value) => {
 
 export const fromMatrix = configMatrix => {
   const configEntries = Object.entries(configMatrix);
-  const samples = configEntries.reduce((previousValue: any, currentValue: [string, any]) => {
+  const samples = configEntries.reduce((previousValue, currentValue) => {
     const [config, configValues] = currentValue;
     if (previousValue.length === 0) {
       return configValues.map(value => [
@@ -37,7 +37,7 @@ export const fromMatrix = configMatrix => {
 const applyExtendedMatrix = (matrixEntries, configMatrix) => {
   const configEntries = Object.entries(configMatrix);
   const additionalMatrixTemp = configEntries.reduce(
-    (currentArray, [configName, configValues]: [string, any]) => {
+    (currentArray, [configName, configValues]) => {
       const currentConfigObjects = configValues.map(configValue => ({ [configName]: configValue }));
       return currentArray
         .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
@@ -45,7 +45,7 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
     },
     [{}],
   );
-  const additionalMatrix: any = [];
+  const additionalMatrix = [];
   while (additionalMatrixTemp.length > 0) {
     additionalMatrix.push(additionalMatrixTemp.shift());
     if (additionalMatrixTemp.length > 0) {
@@ -56,7 +56,7 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
     let matrixName = entry[0];
     const matrixConfig = entry[1];
     let newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
-    Object.entries(newValues).forEach(([configName, configValue]: [string, any]) => {
+    Object.entries(newValues).forEach(([configName, configValue]) => {
       if (typeof configValue === 'object' && !Array.isArray(configValue)) {
         const additionalValues = configValue.additional;
         configValue = configValue.value;
