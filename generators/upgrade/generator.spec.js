@@ -24,7 +24,7 @@ import git from 'simple-git';
 
 import Generator from './index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { basicHelpers as helpers, result } from '../../test/support/index.js';
+import { basicHelpers as helpers, result } from '../../testing/index.js';
 import { UPGRADE_BRANCH } from './support/index.js';
 
 const __filename = fileURLToPath(import.meta.url);

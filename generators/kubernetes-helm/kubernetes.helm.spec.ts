@@ -1,5 +1,5 @@
 import { before, it, describe, expect } from 'esmocha';
-import { basicHelpers as helpers, getGenerator } from '../../test/support/index.js';
+import { basicHelpers as helpers, getGenerator } from '../../testing/index.js';
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.js';
 
 const expectedFiles = {

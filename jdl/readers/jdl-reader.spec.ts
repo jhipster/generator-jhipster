@@ -25,7 +25,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import * as JDLReader from '../readers/jdl-reader.js';
-import { basicHelpers as helpers } from '../../test/support/index.js';
+import { basicHelpers as helpers } from '../../testing/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

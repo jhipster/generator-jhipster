@@ -20,7 +20,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers } from '../../test/support/index.js';
+import { defaultHelpers as helpers } from '../../testing/index.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { GENERATOR_GRADLE } from '../generator-list.js';
 

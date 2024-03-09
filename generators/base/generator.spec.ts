@@ -23,7 +23,7 @@ import lodash from 'lodash';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import BaseGenerator from './index.js';
-import { defaultHelpers as helpers } from '../../test/support/index.js';
+import { defaultHelpers as helpers } from '../../testing/index.js';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.js';
 
 const { snakeCase } = lodash;

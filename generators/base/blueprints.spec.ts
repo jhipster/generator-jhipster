@@ -3,7 +3,7 @@ import { before, it, describe, expect, esmocha } from 'esmocha';
 import { RunResult } from 'yeoman-test';
 import { toHaveBeenCalledAfter } from 'jest-extended';
 
-import { basicHelpers as helpers } from '../../test/support/index.js';
+import { basicHelpers as helpers } from '../../testing/index.js';
 import { packageJson } from '../../lib/index.js';
 import BaseGenerator from './index.js';
 

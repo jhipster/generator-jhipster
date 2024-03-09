@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import { describe, it, beforeEach } from 'esmocha';
 
 import { createProgram } from './program.mjs';
-import { defaultHelpers as helpers } from '../test/support/index.js';
+import { defaultHelpers as helpers } from '../testing/index.js';
 
 describe('cli - program', () => {
   beforeEach(async () => {

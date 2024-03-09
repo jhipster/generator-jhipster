@@ -1,7 +1,7 @@
 import { before, it, describe } from 'esmocha';
 import ClientGenerator from '../../generators/client/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { dryRunHelpers as helpers, result as runResult, getGenerator } from '../../test/support/index.js';
+import { dryRunHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
