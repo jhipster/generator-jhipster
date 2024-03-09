@@ -70,8 +70,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
       this.supportedLanguages = supportedLanguages;
       this.composedBlueprints = await this.composeWithBlueprints('languages', {
         generatorArgs: this.options.languages,
-        // This is needed to prioritize languages generator over client and server generators.
-        schedule: false,
       });
     }
 
