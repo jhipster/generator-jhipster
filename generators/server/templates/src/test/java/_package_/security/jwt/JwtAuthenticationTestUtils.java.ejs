@@ -108,7 +108,7 @@ public class JwtAuthenticationTestUtils {
         return encoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
     }
 
-    public static String createInvalidToken(String jwtKey) throws Exception {
+    public static String createInvalidToken(String jwtKey) {
         return createValidToken(jwtKey).substring(1);
     }
 
