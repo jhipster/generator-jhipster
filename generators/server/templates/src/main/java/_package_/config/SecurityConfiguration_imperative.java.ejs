@@ -115,7 +115,7 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice) { _%>
+<%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice || authenticationTypeJwt) { _%>
 import static org.springframework.security.config.Customizer.withDefaults;
 <%_ } _%>
 
@@ -265,7 +265,7 @@ public class SecurityConfiguration {
             .exceptionHandling((exceptions) -> exceptions
 				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
 				.accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (applicationTypeMonolith) { _%>
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
