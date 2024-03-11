@@ -26,7 +26,7 @@ import {
   defineConfig,
 } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import copy from 'rollup-plugin-copy';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend) { _%>
 import federation from "@originjs/vite-plugin-federation";
 
@@ -45,7 +45,7 @@ const swaggerUiPath = getAbsoluteFSPath();
 let config = defineConfig({
   plugins: [
     vue(),
-    copy({
+    viteStaticCopy({
       targets: [
         {
           src: [
@@ -54,10 +54,9 @@ let config = defineConfig({
             getFileFromRepo('axios/dist/axios.min.js'),
             fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url)),
           ],
-          dest: '<%= this.relativeDir(clientRootDir, clientDistDir) %>swagger-ui',
+          dest: 'swagger-ui',
         },
       ],
-      hook: 'writeBundle',
     }),
   ],
   root: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>', import.meta.url)),
