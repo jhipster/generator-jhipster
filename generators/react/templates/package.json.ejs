@@ -151,7 +151,7 @@
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "jest:update": "<%= clientPackageManager %> run jest -- --updateSnapshot",
     "start": "<%= clientPackageManager %> run webapp:dev --",
-    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env tls",
 <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
 <%_ } _%>
