@@ -24,10 +24,10 @@ function setupProxy({ tls }) {
     '/v3/api-docs',
     '/h2-console',
 <%_ if (authenticationTypeOauth2) { _%>
+    '/auth',
     '/oauth2',
     '/login',
 <%_ } _%>
-    '/auth',
     '/health',
   ];
   const conf = [
