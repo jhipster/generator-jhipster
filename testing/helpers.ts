@@ -174,12 +174,12 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
    * @param packagePath overriden package path for the blueprint
    * @returns
    */
-  withParentBlueprintLookup(lookups = ['generators'], packagePath): this {
+  withParentBlueprintLookup(lookups = ['generators'], packagePath?: string | [string]): this {
     const packageRootParent = join(getPackageRoot(), '..');
     if (basename(packageRootParent) === 'node_modules') {
       this.withLookups([{ packagePaths: [join(packageRootParent, '..')], lookups }] as any);
     } else if (packagePath) {
-      this.withLookups([{ packagePaths: [packagePath], lookups }] as any);
+      this.withLookups([{ packagePaths: Array.isArray(packagePath) ? packagePath : [packagePath], lookups }] as any);
     }
     return this;
   }
