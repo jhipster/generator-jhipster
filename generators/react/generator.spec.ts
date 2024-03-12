@@ -3,13 +3,8 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, after, expect } from 'esmocha';
 import lodash from 'lodash';
 
-import {
-  buildClientSamples,
-  entitiesClientSamples as entities,
-  checkEnforcements,
-  defaultHelpers as helpers,
-} from '../../testing/index.js';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers } from '../../testing/index.js';
+import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import Generator from './index.js';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';

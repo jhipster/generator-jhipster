@@ -177,6 +177,9 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     const packageRootParent = join(getPackageRoot(), '..');
     if (basename(packageRootParent) === 'node_modules') {
       this.withLookups([{ packagePaths: [join(packageRootParent, '..')], lookups }] as any);
+    } else {
+      // Try to lookup at current path for linked generator-jhipster.
+      this.withLookups([{ packagePaths: [process.cwd()], lookups }] as any);
     }
     return this;
   }

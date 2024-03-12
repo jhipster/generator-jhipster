@@ -21,9 +21,9 @@ import { fileURLToPath } from 'url';
 import assert from 'assert';
 import lodash from 'lodash';
 import { before, it, describe, expect } from 'esmocha';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import Generator from './index.js';
-import { defaultHelpers as helpers, checkEnforcements, result } from '../../testing/index.js';
+import { defaultHelpers as helpers, result } from '../../testing/index.js';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_CLIENT } from '../generator-list.js';
 
