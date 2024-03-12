@@ -86,10 +86,12 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         '/services',
         '/management',
         '/v3/api-docs',
-        '/h2-console',<% if (authenticationTypeOauth2) { %>
+        '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
+        '/auth',
         '/oauth2',
-        '/login',<% } %>
-        '/auth'
+        '/login',
+<%_ } _%>
       ],
       target: `http${options.tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
       secure: false,
@@ -101,7 +103,6 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
       target: 'ws://127.0.0.1:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
       ws: true
     }<% } %>],
-    https: options.tls,
     historyApiFallback: true
   },
   stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
