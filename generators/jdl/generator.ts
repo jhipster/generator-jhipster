@@ -76,7 +76,7 @@ export default class JdlGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints('jdl');
+      await this.composeWithBlueprints('jdl', { generatorArgs: (this.options as any).jdlFiles });
     }
   }
 
