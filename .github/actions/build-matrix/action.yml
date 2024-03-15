@@ -53,8 +53,11 @@ inputs:
       }}
 outputs:
   matrix:
-    description: 'Build Matrix'
+    description: 'Build matrix'
     value: ${{ steps.build-matrix.outputs.matrix }}
+  empty-matrix:
+    description: 'Build matrix is empty'
+    value: ${{ steps.build-matrix.outputs.empty-matrix }}
   skip-workflow:
     description: 'Skip workflow'
     value: ${{ inputs.skip-workflow }}
@@ -135,5 +138,8 @@ runs:
         cat matrix.json >> $GITHUB_OUTPUT
         echo '' >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
+        EMPTY_MATRIX=$(cat matrix.json | jq '.include | length == 0')
+        echo "empty-matrix=${EMPTY_MATRIX}" >> $GITHUB_OUTPUT
+        cat $GITHUB_OUTPUT
         rm matrix.json
       shell: bash
