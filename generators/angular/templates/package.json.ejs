@@ -44,13 +44,13 @@
     "@ngx-translate/http-loader": "<%= nodeDependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
     "bootstrap": "<%= nodeDependencies.bootstrap %>",
-    <%_ if (!clientThemeNone) { _%>
+<%_ if (!clientThemeNone) { _%>
     "bootswatch": "<%= nodeDependencies.bootswatch %>",
-    <%_ } _%>
+<%_ } _%>
     "dayjs": "<%= nodeDependencies['dayjs'] %>",
-    <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
+<%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
     "ngx-cookie-service": "<%= nodeDependencies['ngx-cookie-service'] %>",
-    <%_ } _%>
+<%_ } _%>
     "ngx-infinite-scroll": "<%= nodeDependencies['ngx-infinite-scroll'] %>",
     "@popperjs/core": "<%= nodeDependencies['@popperjs/core'] %>",
     "rxjs": "<%= nodeDependencies['rxjs'] %>",
