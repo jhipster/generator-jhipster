@@ -411,14 +411,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         const { serviceDiscoveryAny } = application as any;
 
         source.addJavaDependencies?.([
-          {
-            groupId: 'tech.jhipster',
-            artifactId: 'jhipster-dependencies',
-            version: application.jhipsterDependenciesVersion!,
-            type: 'pom',
-            scope: 'import',
-          },
-          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework' },
+          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! },
         ]);
 
         if (applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny) {
@@ -435,7 +428,9 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
-        source.addJavaDependencies?.([{ groupId: 'org.springdoc', artifactId: springdocDependency }]);
+        source.addJavaDependencies?.([
+          { groupId: 'org.springdoc', artifactId: springdocDependency, version: application.javaDependencies!.springdoc },
+        ]);
       },
       addFeignReactor({ application, source }) {
         const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
@@ -481,6 +476,12 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               pluginName: 'spring-boot',
               id: 'org.springframework.boot',
               version: application.javaDependencies!['spring-boot'],
+              addToBuild: true,
+            },
+            {
+              pluginName: 'spring-dependency-management',
+              id: 'io.spring.dependency-management',
+              version: application.javaDependencies!['spring-dependency-management'],
               addToBuild: true,
             },
           ]);

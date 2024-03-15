@@ -160,9 +160,6 @@ repositories {
 }
 
 dependencies {
-    // Allows unversioned annotationProcessor
-    annotationProcessor platform(libs.jhipster.dependencies)
-
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 <%_ if (authenticationTypeOauth2) { _%>
