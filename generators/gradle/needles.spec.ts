@@ -22,6 +22,19 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
         source.addGradleBuildSrcDependency?.({ scope: 'scope5', groupId: 'group5', artifactId: 'name5', version: 'version5' });
         source.addGradleDependencyCatalogVersion?.({ name: 'version-name', version: 'version' });
         source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'version-name', version: 'version' });
+
+        source.addGradleDependencyCatalogLibraries?.([
+          { libraryName: 'library-foo1', module: 'group-foo1:artifact-foo1', version: 'version1' },
+          { libraryName: 'library-foo2', module: 'group-foo2:artifact-foo2', version: 'version2', scope: 'implementation' },
+          { libraryName: 'library-foo3', module: 'group-foo3:artifact-foo3', version: 'version3', scope: 'implementation platform' },
+          { libraryName: 'library-foo4', library: 'group-foo4:artifact-foo4:version4', scope: 'implementation' },
+          { libraryName: 'library-foo5', group: 'group-foo5', name: 'artifact-foo5', version: 'version5', scope: 'implementation' },
+        ]);
+        source.addGradleDependencyCatalogPlugins?.([
+          { pluginName: 'plugin-foo1', id: 'group-foo1:plugin-foo1', version: 'version1' },
+          { pluginName: 'plugin-foo2', id: 'group-foo2:plugin-foo2', version: 'version2', addToBuild: true },
+          { pluginName: 'plugin-foo3', plugin: 'group-foo3:plugin-foo3:version3', addToBuild: true },
+        ]);
       },
     });
   }
@@ -86,5 +99,39 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
 
   it('Assert buildSrc/gradle/libs.versions.toml has the version added', () => {
     runResult.assertFileContent('buildSrc/gradle/libs.versions.toml', 'version-name = "version"');
+  });
+
+  it('Assert gradle/libs.versions.toml has the library added', () => {
+    runResult.assertFileContent(
+      'gradle/libs.versions.toml',
+      'library-foo1 = { module = "group-foo1:artifact-foo1", version = "version1" }',
+    );
+    runResult.assertFileContent(
+      'gradle/libs.versions.toml',
+      'library-foo2 = { module = "group-foo2:artifact-foo2", version = "version2" }',
+    );
+    runResult.assertFileContent(
+      'gradle/libs.versions.toml',
+      'library-foo3 = { module = "group-foo3:artifact-foo3", version = "version3" }',
+    );
+    runResult.assertFileContent('gradle/libs.versions.toml', 'library-foo4 = "group-foo4:artifact-foo4:version4"');
+    runResult.assertFileContent(
+      'gradle/libs.versions.toml',
+      'library-foo5 = { group = "group-foo5", name = "artifact-foo5", version = "version5" }',
+    );
+
+    runResult.assertFileContent('build.gradle', 'implementation libs.library.foo2');
+    runResult.assertFileContent('build.gradle', 'implementation platform(libs.library.foo3)');
+    runResult.assertFileContent('build.gradle', 'implementation libs.library.foo4');
+    runResult.assertFileContent('build.gradle', 'implementation libs.library.foo5');
+  });
+
+  it('Assert gradle/libs.versions.toml has the plugin added', () => {
+    runResult.assertFileContent('gradle/libs.versions.toml', 'plugin-foo1 = { id = "group-foo1:plugin-foo1", version = "version1" }');
+    runResult.assertFileContent('gradle/libs.versions.toml', 'plugin-foo2 = { id = "group-foo2:plugin-foo2", version = "version2" }');
+    runResult.assertFileContent('gradle/libs.versions.toml', 'plugin-foo3 = "group-foo3:plugin-foo3:version3"');
+
+    runResult.assertFileContent('build.gradle', 'alias(libs.plugins.plugin.foo2)');
+    runResult.assertFileContent('build.gradle', 'alias(libs.plugins.plugin.foo3)');
   });
 });

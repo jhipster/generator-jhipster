@@ -17,7 +17,24 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../base/support/index.js';
-import { GradleScript, GradleDependency, GradlePlugin, GradleProperty, GradleRepository, GradleTomlVersion } from '../types.js';
+import type {
+  GradleScript,
+  GradleDependency,
+  GradlePlugin,
+  GradleProperty,
+  GradleRepository,
+  GradleTomlVersion,
+  GradleLibrary,
+  GradleTomlPlugin,
+} from '../types.js';
+
+const tomlItemToString = (item: Record<string, string>) =>
+  `{ ${Object.entries(item)
+    .filter(([_key, value]) => value !== undefined)
+    .map(([key, value]) => `${key} = "${value}"`)
+    .join(', ')} }`;
+
+const gradleNameToReference = (name: string) => name.replaceAll('-', '.');
 
 export const applyFromGradleCallback = ({ script }: GradleScript) =>
   createNeedleCallback({
@@ -43,11 +60,48 @@ export const addGradleDependencyCatalogVersionCallback = ({ name, version }: Gra
     contentToAdd: `${name} = "${version}"`,
   });
 
+export const addGradleDependencyCatalogLibrariesCallback = (libraries: GradleLibrary[]) =>
+  createNeedleCallback({
+    needle: 'gradle-dependency-catalog-libraries',
+    contentToAdd: libraries.map(({ libraryName, scope: _scope, ...others }) =>
+      'library' in others ? `${libraryName} = "${others.library}"` : `${libraryName} = ${tomlItemToString(others)}`,
+    ),
+  });
+
+export const addGradleDependencyFromCatalogCallback = (libraries: GradleLibrary[]) =>
+  createNeedleCallback({
+    needle: 'gradle-dependency',
+    contentToAdd: libraries
+      .filter(({ scope }) => scope)
+      .map(({ libraryName, scope }) =>
+        scope === 'implementation platform'
+          ? `${scope}(libs.${gradleNameToReference(libraryName)})`
+          : `${scope} libs.${gradleNameToReference(libraryName)}`,
+      ),
+  });
+
+export const addGradleDependencyCatalogPluginsCallback = (plugins: GradleTomlPlugin[]) =>
+  createNeedleCallback({
+    needle: 'gradle-dependency-catalog-plugins',
+    contentToAdd: plugins.map(({ pluginName, addToBuild: _addToBuild, ...others }) =>
+      'plugin' in others ? `${pluginName} = "${others.plugin}"` : `${pluginName} = ${tomlItemToString(others)}`,
+    ),
+  });
+
+export const addGradlePluginFromCatalogCallback = (plugins: GradleTomlPlugin[]) =>
+  createNeedleCallback({
+    needle: 'gradle-plugins',
+    contentToAdd: plugins
+      .filter(({ addToBuild }) => addToBuild)
+      .map(({ pluginName }) => `alias(libs.plugins.${gradleNameToReference(pluginName)})`),
+  });
+
 export const addGradleBuildSrcDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
   createNeedleCallback({
     needle: 'gradle-build-src-dependency-catalog-version',
     contentToAdd: `${name} = "${version}"`,
   });
+
 export const addGradlePluginCallback = ({ id, version }: GradlePlugin) =>
   createNeedleCallback({
     needle: 'gradle-plugins',
