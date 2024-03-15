@@ -584,6 +584,7 @@ export default class JHipsterBaseBlueprintGenerator<
     const finalOptions: ComposeOptions = {
       forwardOptions: true,
       schedule: generator => (generator as any).sbsBlueprint,
+      generatorArgs: this._args,
       ...extraOptions,
       generatorOptions: {
         jhipsterContext: this,
