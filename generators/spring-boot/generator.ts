@@ -386,28 +386,93 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      customizeMaven({ application, source }) {
-        if (!application.buildToolMaven) return;
-        if (application.addSpringMilestoneRepository) {
-          const springRepository = {
-            id: 'spring-milestone',
-            name: 'Spring Milestones',
-            url: 'https://repo.spring.io/milestone',
-          };
-          source.addMavenPluginRepository?.(springRepository);
-          source.addMavenRepository?.(springRepository);
-          source.addMavenDependency?.({
-            groupId: 'org.springframework.boot',
-            artifactId: 'spring-boot-properties-migrator',
-            scope: 'runtime',
+      addJHipsterBomDependencies({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenProperty?.({
+            property: 'spring-boot.version',
+            value: application.javaDependencies!['spring-boot'],
+          });
+          source.addMavenDependencyManagement?.({
+            groupId: 'tech.jhipster',
+            artifactId: 'jhipster-dependencies',
+            // eslint-disable-next-line no-template-curly-in-string
+            version: '${jhipster-dependencies.version}',
+            type: 'pom',
+            scope: 'import',
+          });
+          source.addMavenDefinition?.({
+            properties: [{ property: 'jhipster-dependencies.version', value: application.jhipsterDependenciesVersion }],
+            dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework' }],
           });
         }
-        if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
-          source.addMavenRepository?.({
-            id: 'ossrh-snapshots',
-            url: 'https://oss.sonatype.org/content/repositories/snapshots/',
-            releasesEnabled: false,
+
+        if (application.buildToolGradle) {
+          source.addGradleDependencyCatalogLibraries?.([
+            {
+              libraryName: 'jhipster-dependencies',
+              module: 'tech.jhipster:jhipster-dependencies',
+              version: application.jhipsterDependenciesVersion!,
+              scope: 'implementation platform',
+            },
+          ]);
+          source.addGradleDependency?.({
+            groupId: 'tech.jhipster',
+            artifactId: 'jhipster-framework',
+            scope: 'implementation',
           });
+        }
+      },
+      addSpringdoc({ application, source }) {
+        const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
+        if (application.buildToolMaven) {
+          source.addMavenDefinition?.({
+            dependencies: [{ groupId: 'org.springdoc', artifactId: springdocDependency }],
+          });
+        }
+
+        if (application.buildToolGradle) {
+          source.addGradleDependency?.({
+            groupId: 'org.springdoc',
+            artifactId: springdocDependency,
+            scope: 'implementation',
+          });
+        }
+      },
+      addSpringSnapshotRepository({ application, source }) {
+        if (application.buildToolMaven) {
+          if (application.addSpringMilestoneRepository) {
+            const springRepository = {
+              id: 'spring-milestone',
+              name: 'Spring Milestones',
+              url: 'https://repo.spring.io/milestone',
+            };
+            source.addMavenPluginRepository?.(springRepository);
+            source.addMavenRepository?.(springRepository);
+            source.addMavenDependency?.({
+              groupId: 'org.springframework.boot',
+              artifactId: 'spring-boot-properties-migrator',
+              scope: 'runtime',
+            });
+          }
+          if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
+            source.addMavenRepository?.({
+              id: 'ossrh-snapshots',
+              url: 'https://oss.sonatype.org/content/repositories/snapshots/',
+              releasesEnabled: false,
+            });
+          }
+        }
+      },
+      addSpringBootPlugin({ application, source }) {
+        if (application.buildToolGradle) {
+          source.addGradleDependencyCatalogPlugins?.([
+            {
+              pluginName: 'spring-boot',
+              id: 'org.springframework.boot',
+              version: application.javaDependencies!['spring-boot'],
+              addToBuild: true,
+            },
+          ]);
         }
       },
     });
