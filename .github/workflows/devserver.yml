@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
-      client: ${{ steps.build.outputs.client }}
+      empty-matrix: ${{ steps.build.outputs.empty-matrix }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
         uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
-    if: needs.build-matrix.outputs.client == 'true'
+    if: needs.build-matrix.outputs.empty-matrix != 'true'
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
