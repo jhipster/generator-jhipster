@@ -59,7 +59,6 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
       },
       applyPulsarGradleConventionPlugin({ source, application }) {
         if (application.buildToolGradle) {
-          const { javaDependencies } = application;
           source.addGradlePlugin?.({ id: 'jhipster.pulsar-conventions' });
         }
       },
