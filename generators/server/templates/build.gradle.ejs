@@ -164,7 +164,7 @@ repositories {
 
 dependencies {
     // Allows unversioned annotationProcessor
-    annotationProcessor platform("tech.jhipster:jhipster-dependencies:<%- jhipsterDependenciesVersion %>")
+    annotationProcessor platform(libs.jhipster.dependencies)
 
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
@@ -204,7 +204,7 @@ dependencies {
 <%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
 <%_ } _%>
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation "org.springframework.boot:spring-boot-loader-tools"
 <%_ /* This is useful for major Spring Boot migration */
 if (addSpringMilestoneRepository) { _%>

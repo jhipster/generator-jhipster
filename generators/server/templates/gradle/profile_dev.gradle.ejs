@@ -41,7 +41,7 @@ configurations {
 }
 
 dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+    compileOnly "org.springframework.boot:spring-boot-devtools"
   <%_ if (devDatabaseTypeH2Any && !reactive) { _%>
     implementation "com.h2database:h2"
   <%_ } _%>
