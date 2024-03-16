@@ -21,7 +21,6 @@ plugins {
     id "maven-publish"
     id "idea"
     id "eclipse"
-    id "org.springframework.boot"
     id "com.gorylenko.gradle-git-properties"
 <%_ if (enableSwaggerCodegen) { _%>
     id "org.openapi.generator"
@@ -56,7 +55,7 @@ apply from: "gradle/swagger.gradle"
 <%_ } _%>
 // jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
-if (project.hasProperty("prod") || project.hasProperty("gae")) {
+if (project.hasProperty("prod")) {
     apply from: "gradle/profile_prod.gradle"
 } else {
     apply from: "gradle/profile_dev.gradle"
@@ -64,19 +63,6 @@ if (project.hasProperty("prod") || project.hasProperty("gae")) {
 
 if (project.hasProperty("war")) {
     apply from: "gradle/war.gradle"
-}
-
-if (project.hasProperty("gae")) {
-    apply plugin: 'maven'
-    apply plugin: 'org.springframework.boot.experimental.thin-launcher'
-    apply plugin: 'io.spring.dependency-management'
-
-    dependencyManagement {
-        imports {
-            mavenBom "tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}"
-        }
-    }
-    appengineStage.dependsOn thinResolve
 }
 
 <%_ if (serviceDiscoveryAny || applicationTypeGateway || applicationTypeMicroservice) { _%>
@@ -177,10 +163,6 @@ repositories {
 }
 
 dependencies {
-    // import JHipster dependencies BOM
-    if (!project.hasProperty("gae")) {
-        implementation platform("tech.jhipster:jhipster-dependencies:${jhipsterDependenciesVersion}")
-    }
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.couchbase.client:java-client"
 <%_ } _%>
@@ -282,12 +264,6 @@ dependencies {
     implementation "org.reflections:reflections:0.10.1", {
         exclude group: "org.javassist", module: "javassist"
     }
-<%_ } _%>
-<%_ if (reactive) { _%>
-    implementation "org.springdoc:springdoc-openapi-starter-webflux-api"
-<%_ } _%>
-<%_ if (!reactive) { _%>
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-api"
 <%_ } _%>
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-loader-tools"
@@ -403,9 +379,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || databaseTypeSql) { _%>
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
-    // Use ", version: jhipsterDependenciesVersion, changing: true" if you want
-    // to use a SNAPSHOT release instead of a stable release
-    implementation "tech.jhipster:jhipster-framework"
 <%_ if (reactive) { _%>
     OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
     Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();

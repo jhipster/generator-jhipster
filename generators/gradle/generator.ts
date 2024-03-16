@@ -36,6 +36,10 @@ import {
   addGradleBuildSrcDependencyCallback,
   addGradleDependencyCatalogVersionCallback,
   addGradleBuildSrcDependencyCatalogVersionCallback,
+  addGradleDependencyCatalogLibrariesCallback,
+  addGradleDependencyCatalogPluginsCallback,
+  addGradleDependencyFromCatalogCallback,
+  addGradlePluginFromCatalogCallback,
 } from './internal/needles.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
@@ -81,6 +85,16 @@ export default class GradleGenerator extends BaseApplicationGenerator {
           this.editFile(`${GRADLE_BUILD_SRC_DIR}/build.gradle`, addGradleBuildSrcDependencyCallback(dependency));
         source.addGradleDependencyCatalogVersion = version =>
           this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogVersionCallback(version));
+        source.addGradleDependencyCatalogLibraries = libs => {
+          this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogLibrariesCallback(libs));
+          this.editFile('build.gradle', addGradleDependencyFromCatalogCallback(libs));
+        };
+        source.addGradleDependencyCatalogLibrary = lib => source.addGradleDependencyCatalogLibraries!([lib]);
+        source.addGradleDependencyCatalogPlugins = plugins => {
+          this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogPluginsCallback(plugins));
+          this.editFile('build.gradle', addGradlePluginFromCatalogCallback(plugins));
+        };
+        source.addGradleDependencyCatalogPlugin = plugin => source.addGradleDependencyCatalogPlugins!([plugin]);
         source.addGradleBuildSrcDependencyCatalogVersion = version =>
           this.editFile(`${GRADLE_BUILD_SRC_DIR}/gradle/libs.versions.toml`, addGradleBuildSrcDependencyCatalogVersionCallback(version));
       },
