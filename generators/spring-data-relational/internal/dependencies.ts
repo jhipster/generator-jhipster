@@ -83,8 +83,8 @@ export const getReactiveMavenDefinition = ({ javaDependencies }: { javaDependenc
   ],
 });
 
-export const getImperativeMavenDefinition = ({ javaDependencies }: { javaDependencies: Record<string, string> }) => ({
-  properties: [{ property: 'hibernate.version', value: javaDependencies.hibernate }],
+export const getImperativeMavenDefinition = ({ springBootDependencies }: { springBootDependencies: Record<string, string> }) => ({
+  properties: [{ property: 'hibernate.version', value: springBootDependencies.hibernate }],
   dependencies: [
     { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
     { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },

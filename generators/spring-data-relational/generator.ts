@@ -159,7 +159,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
       },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
-          const { reactive, javaDependencies, packageFolder } = application;
+          const { reactive, javaDependencies, packageFolder, springBootDependencies } = application;
           const applicationAny = application as any;
           const { prodDatabaseType } = applicationAny;
           source.addMavenDefinition?.(getCommonMavenDefinition({ javaDependencies }));
@@ -167,7 +167,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
           if (reactive) {
             source.addMavenDefinition?.(getReactiveMavenDefinition({ javaDependencies }));
           } else {
-            source.addMavenDefinition?.(getImperativeMavenDefinition({ javaDependencies }));
+            source.addMavenDefinition?.(getImperativeMavenDefinition({ springBootDependencies }));
           }
 
           const inProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;

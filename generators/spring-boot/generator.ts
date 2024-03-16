@@ -18,7 +18,7 @@
  */
 import os from 'node:os';
 import chalk from 'chalk';
-import { sortedUniqBy } from 'lodash-es';
+import { kebabCase, sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
   GENERATOR_SERVER,
@@ -56,6 +56,7 @@ import {
   websocketTypes,
 } from '../../jdl/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
+import { getPomVersionProperties } from '../maven/support/index.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -181,6 +182,19 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      loadSpringBootBom({ application }) {
+        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../resources/spring-boot-dependencies.pom'))?.toString();
+        if (this.useVersionPlaceholders) {
+          application.javaDependencies!['spring-boot'] = "'SPRING-BOOT-VERSION'";
+          application.springBootDependencies = {};
+        } else {
+          application.springBootDependencies = this.prepareDependencies(
+            getPomVersionProperties(pomFile!),
+            value => `'${kebabCase(value).toUpperCase()}-VERSION'`,
+          );
+          application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
+        }
+      },
       prepareForTemplates({ application }) {
         const SPRING_BOOT_VERSION = application.javaDependencies!['spring-boot'];
         application.addSpringMilestoneRepository =

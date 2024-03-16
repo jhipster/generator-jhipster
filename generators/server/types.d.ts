@@ -92,6 +92,7 @@ export type SpringBootApplication = JavaApplication &
   DatabaseTypeApplication &
   MessageBrokerApplicationType & {
     jhipsterDependenciesVersion: string;
+    springBootDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;
 
     addSpringMilestoneRepository: boolean;
