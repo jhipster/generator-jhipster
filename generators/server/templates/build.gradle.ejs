@@ -188,21 +188,6 @@ dependencies {
     }
     implementation "io.dropwizard.metrics:metrics-core"
     implementation "io.micrometer:micrometer-registry-prometheus"
-<%_ if (databaseTypeMongodb) { _%>
-    // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
-    implementation "io.mongock:mongock-springboot-v3", {
-        exclude group: "org.reflections", module: "reflections"
-    }
-<%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) { _%>
-    implementation "io.mongock:mongodb-reactive-driver"
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
-    implementation "io.mongock:mongodb-springdata-v4-driver", {
-        exclude group: "org.reflections", module: "reflections"
-    }
-<%_ } _%>
 <%_ if (reactive) { _%>
     runtimeOnly "io.netty:netty-tcnative-boringssl-static"
 <%_ } _%>
@@ -219,11 +204,6 @@ dependencies {
 <%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    implementation "org.reflections:reflections:0.10.1", {
-        exclude group: "org.javassist", module: "javassist"
-    }
-<%_ } _%>
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-loader-tools"
 <%_ /* This is useful for major Spring Boot migration */
@@ -231,12 +211,6 @@ if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-<%_ if (databaseTypeMongodb) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
-<%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-<%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
 <%_ if (authenticationTypeOauth2) { _%>
@@ -292,15 +266,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.retry:spring-retry"
 <%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
-<%_ if (databaseTypeMongodb) { _%>
-    testImplementation "org.testcontainers:junit-jupiter"
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    testImplementation "org.testcontainers:mongodb"
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    testImplementation "org.testcontainers:testcontainers"
-<%_ } _%>
 <%_ if (reactive) { _%>
     OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
     Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
