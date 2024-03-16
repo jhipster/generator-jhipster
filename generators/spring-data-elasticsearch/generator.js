@@ -81,11 +81,6 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
       },
       addDependencies({ application, source }) {
         if (application.buildToolMaven) {
-          source.addMavenProperty?.({
-            property: 'awaitility.version',
-            value: application.javaDependencies.awaitility,
-          });
-
           source.addMavenDependency?.([
             {
               groupId: 'org.springframework.boot',
@@ -94,8 +89,6 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
             {
               groupId: 'org.awaitility',
               artifactId: 'awaitility',
-              // eslint-disable-next-line no-template-curly-in-string
-              version: '${awaitility.version}',
               scope: 'test',
             },
             {

@@ -9,23 +9,17 @@
     <properties>
         <!-- Dependency versions -->
         <archunit-junit5.version>1.2.1</archunit-junit5.version>
-        <awaitility.version>4.2.0</awaitility.version>
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.10.4</gatling.version>
-        <h2.version>2.2.224</h2.version>
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.3.6</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-        <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
         <junit-platform-launcher.version>1.10.2</junit-platform-launcher.version>
-        <liquibase.version>4.26.0</liquibase.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.1.1</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
-        <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.3</typesafe.version>
-        <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.14.1</checkstyle.version>
@@ -89,19 +83,9 @@
               <version>${gatling.version}</version>
             </dependency>
             <dependency>
-              <groupId>com.h2database</groupId>
-              <artifactId>h2</artifactId>
-              <version>${h2.version}</version>
-            </dependency>
-            <dependency>
               <groupId>io.projectreactor.tools</groupId>
               <artifactId>blockhound-junit-platform</artifactId>
               <version>${blockhound-junit-platform.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>jakarta.validation</groupId>
-              <artifactId>jakarta.validation-api</artifactId>
-              <version>${validation-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.micrometer</groupId>
@@ -109,24 +93,9 @@
                 <version>${micrometer-context-propagation.version}</version>
             </dependency>
             <dependency>
-              <groupId>org.awaitility</groupId>
-              <artifactId>awaitility</artifactId>
-              <version>${awaitility.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.glassfish.jaxb</groupId>
-              <artifactId>jaxb-runtime</artifactId>
-              <version>${jaxb-runtime.version}</version>
-            </dependency>
-            <dependency>
               <groupId>org.junit.platform</groupId>
               <artifactId>junit-platform-launcher</artifactId>
               <version>${junit-platform-launcher.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-core</artifactId>
-                <version>${liquibase.version}</version>
             </dependency>
             <dependency>
               <groupId>org.mapstruct</groupId>
@@ -137,11 +106,6 @@
               <groupId>info.picocli</groupId>
               <artifactId>picocli</artifactId>
               <version>${picocli.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.springframework.pulsar</groupId>
-              <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
-              <version>${spring-pulsar.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openapitools</groupId>

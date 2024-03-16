@@ -1,8 +1,6 @@
 dependencies {
     implementation "org.springframework.cloud:spring-cloud-stream"
-    implementation ("org.springframework.pulsar:spring-pulsar-spring-cloud-stream-binder:${libs.versions.spring.pulsar.get()}") {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter'
-    }
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-pulsar"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:pulsar"
     testImplementation "org.testcontainers:testcontainers"

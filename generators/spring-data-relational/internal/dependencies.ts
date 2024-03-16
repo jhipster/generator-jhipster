@@ -57,11 +57,8 @@ const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
 
 export const getDatabaseDriverForDatabase = (databaseType: string) => databaseArtifactForDB[databaseType];
 
-export const getCommonMavenDefinition = ({ javaDependencies }: { javaDependencies: Record<string, string> }) => ({
-  properties: [
-    { property: 'jaxb-runtime.version', value: javaDependencies['jaxb-runtime'] },
-    { property: 'validation-api.version', value: javaDependencies['validation-api'] },
-  ],
+export const getCommonMavenDefinition = ({ springBootDependencies }: { springBootDependencies: Record<string, string> }) => ({
+  properties: [{ property: 'jaxb-runtime.version', value: springBootDependencies['glassfish-jaxb'] }],
   dependencies: [
     { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
     { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },

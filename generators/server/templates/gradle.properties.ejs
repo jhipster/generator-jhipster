@@ -40,9 +40,6 @@ blockhoundJunitPlatformVersion=<%- javaDependencies['blockhound-junit-platform']
 junitPlatformLauncherVersion=<%- javaDependencies['junit-platform-launcher'] %>
 <%_ } _%>
 
-<%_ if (databaseTypeSql) { _%>
-jaxbRuntimeVersion=<%- javaDependencies['jaxb-runtime'] %>
-<%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
 # The cassandra driver version should match the one managed by
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/<%- javaDependencies['spring-boot'] %>
@@ -61,9 +58,6 @@ openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ if (enableGradleEnterprise) { _%>
 gradleEnterprisePluginVersion=<%- javaDependencies['gradle-enterprise'] %>
 gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user-data-gradle-plugin'] %>
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-awaitilityVersion=<%- javaDependencies.awaitility %>
 <%_ } _%>
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
