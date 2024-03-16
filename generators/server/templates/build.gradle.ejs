@@ -275,9 +275,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>"
-<%_ if (communicationSpringWebsocket) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-websocket"
-<%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-test"
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
@@ -311,9 +308,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.retry:spring-retry"
-<%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-    implementation "org.springframework.security:spring-security-messaging"
 <%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
 <%_ if (databaseTypeCouchbase) { _%>
