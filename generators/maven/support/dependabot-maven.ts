@@ -31,9 +31,15 @@ export function getPomProperties(pomContent: string): Record<string, string> {
  * @param pomContent
  */
 export function getPomVersionProperties(pomContent: string): Record<string, string> {
-  return Object.fromEntries(
-    Object.entries(getPomProperties(pomContent))
+  const { properties, version, artifactId }: { properties: Record<string, string>; version: string; artifactId: string } =
+    new XMLParser().parse(pomContent).project;
+  const versions = Object.fromEntries(
+    Object.entries(properties)
       .filter(([property]) => property.endsWith('.version'))
       .map(([property, value]) => [property.slice(0, -8), value]),
   );
+  if (version && artifactId) {
+    versions[artifactId] = version;
+  }
+  return versions;
 }

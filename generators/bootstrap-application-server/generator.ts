@@ -29,7 +29,6 @@ import {
   SERVER_TEST_SRC_DIR,
   TEST_DIR,
   dockerContainers,
-  javaDependencies,
 } from '../generator-constants.js';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
 import {
@@ -86,7 +85,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         application.packageInfoJavadocs = [];
         application.javaDependencies = this.prepareDependencies(
           {
-            ...javaDependencies,
             ...getPomVersionProperties(pomFile!),
             ...getGradleLibsVersionsProperties(gradleLibsVersions!),
           },

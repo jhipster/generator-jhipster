@@ -92,7 +92,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
         if (application.buildToolMaven) {
           source.addMavenProperty?.({
             property: 'cassandra-driver.version',
-            value: application.javaDependencies.cassandra,
+            value: application.springBootDependencies['cassandra-driver'],
           });
 
           source.addMavenAnnotationProcessor?.({

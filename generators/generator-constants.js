@@ -29,27 +29,6 @@ export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 export const NODE_VERSION = '18.19.1';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
 
-/**
- * @type {Record<string, string>}
- */
-export const javaDependencies = {
-  /**
-   * spring-boot version should match the one managed by https://mvnrepository.com/artifact/tech.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-   */
-  'spring-boot': '3.2.3',
-  /*
-   * hibernate version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
-   * Required due to hibernate-jpamodelgen annotation processor.
-   */
-  hibernate: '6.4.4.Final',
-  /*
-   * cassandra driver version should match the one managed by https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/SPRING_BOOT_VERSION
-   * Required due to java-driver-mapper-processor annotation processor.
-   */
-  cassandra: '4.17.0',
-};
-Object.freeze(javaDependencies);
-
 // The version should be coherent with the one from spring-data-elasticsearch project
 export const ELASTICSEARCH_TAG = '8.10.4';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';

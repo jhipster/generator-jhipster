@@ -1,0 +1,62 @@
+#
+# Copyright the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: update spring-boot-dependencies bom
+on:
+  workflow_dispatch:
+    inputs:
+      springBootVersion:
+        description: 'Spring Boot version'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    permissions:
+      contents: write # for peter-evans/create-pull-request to create branch
+      pull-requests: write # for peter-evans/create-pull-request to create a PR
+    name: update spring-boot-dependencies bom
+    if: github.repository == 'jhipster/generator-jhipster'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/checkout@v4
+      - uses: jhipster/actions/setup-git@v0
+      - uses: jhipster/actions/restore-cache@v0
+        with:
+          npm: true
+      - name: Create commit
+        run: |
+          wget -O spring-boot-dependencies.pom https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-dependencies/${{ inputs.springBootVersion }}/spring-boot-dependencies-${{ inputs.springBootVersion }}.pom
+          git add .
+          git commit -a -m "update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}"
+        working-directory: generators/spring-boot/resources
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
+          title: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
+          body: update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}
+          labels: 'theme: dependencies'
