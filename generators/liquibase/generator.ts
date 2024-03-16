@@ -339,7 +339,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
             properties: [
               { property: 'liquibase-plugin.hibernate-dialect' },
               { property: 'liquibase-plugin.driver' },
-              { property: 'h2.version', value: application.javaDependencies.h2 },
+              { property: 'h2.version', value: application.springBootDependencies.h2 },
               { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
               { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
               { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },

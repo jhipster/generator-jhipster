@@ -12,7 +12,6 @@
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.10.4</gatling.version>
-        <h2.version>2.2.224</h2.version>
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.3.6</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
@@ -84,11 +83,6 @@
               <groupId>io.gatling.highcharts</groupId>
               <artifactId>gatling-charts-highcharts</artifactId>
               <version>${gatling.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.h2database</groupId>
-              <artifactId>h2</artifactId>
-              <version>${h2.version}</version>
             </dependency>
             <dependency>
               <groupId>io.projectreactor.tools</groupId>
