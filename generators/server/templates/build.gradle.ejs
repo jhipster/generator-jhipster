@@ -166,16 +166,10 @@ dependencies {
     // Allows unversioned annotationProcessor
     annotationProcessor platform("tech.jhipster:jhipster-dependencies:<%- jhipsterDependenciesVersion %>")
 
-<%_ if (databaseTypeCouchbase) { _%>
-    implementation "com.couchbase.client:java-client"
-<%_ } _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 <%_ if (authenticationTypeOauth2) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine"
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-    implementation "com.github.differentway:couchmove"
 <%_ } _%>
 <%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
     implementation "com.playtika.reactivefeign:feign-reactor-cloud"
@@ -192,9 +186,6 @@ dependencies {
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-<%_ if (databaseTypeCouchbase) { _%>
-    implementation "commons-codec:commons-codec"
-<%_ } _%>
     implementation "io.dropwizard.metrics:metrics-core"
     implementation "io.micrometer:micrometer-registry-prometheus"
 <%_ if (databaseTypeMongodb) { _%>
@@ -240,7 +231,7 @@ if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
 <%_ } _%>
 <%_ if (databaseTypeMongodb && reactive) { _%>
@@ -301,16 +292,13 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.retry:spring-retry"
 <%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
-<%_ if (databaseTypeCouchbase) { _%>
-    testImplementation "org.testcontainers:couchbase"
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     testImplementation "org.testcontainers:mongodb"
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb) { _%>
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (reactive) { _%>
