@@ -1,5 +1,16 @@
 import { BaseApplication } from '../base-application/types.js';
 
+export type JavaArtifactType = {
+  type?: 'jar' | 'pom';
+  scope?: 'compile' | 'provided' | 'runtime' | 'test' | 'system' | 'import' | 'annotationProcessor';
+};
+
+export type JavaArtifact = {
+  groupId: string;
+  artifactId: string;
+  version?: string;
+} & JavaArtifactType;
+
 export type JavaApplication = BaseApplication & {
   javaVersion: string;
 
@@ -24,4 +35,8 @@ export type JavaApplication = BaseApplication & {
   prettierJava: boolean;
 
   imperativeOrReactive: string;
+};
+
+export type JavaSourceType = {
+  addJavaDependencies?(dependency: JavaArtifact[]): void;
 };

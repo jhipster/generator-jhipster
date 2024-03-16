@@ -24,7 +24,7 @@ export type MavenArtifact = {
   inProfile?: string;
 };
 
-export type MavenAnnotationProcessor = MavenArtifact & Required<Pick<MavenArtifact, 'version'>>;
+export type MavenAnnotationProcessor = MavenArtifact;
 
 export type MavenPlugin = MavenArtifact & {
   additionalContent?: string;
