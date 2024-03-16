@@ -242,7 +242,7 @@ dependencies {
 <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
 <%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.awaitility:awaitility:${awaitilityVersion}"
+    testImplementation "org.awaitility:awaitility"
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
     implementation "org.hibernate.orm:hibernate-core"
