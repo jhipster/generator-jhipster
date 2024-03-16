@@ -89,53 +89,18 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
       },
       addDependencies({ application, source }) {
         const { reactive } = application;
-        if (application.buildToolMaven) {
-          source.addMavenProperty?.({
-            property: 'cassandra-driver.version',
-            value: application.springBootDependencies['cassandra-driver'],
-          });
 
-          source.addMavenAnnotationProcessor?.({
-            groupId: 'com.datastax.oss',
-            artifactId: 'java-driver-mapper-processor',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${cassandra-driver.version}',
-          });
-
-          source.addMavenDependency?.([
-            {
-              groupId: 'com.datastax.oss',
-              artifactId: 'java-driver-mapper-runtime',
-            },
-            {
-              groupId: 'commons-codec',
-              artifactId: 'commons-codec',
-            },
-            {
-              groupId: 'org.lz4',
-              artifactId: 'lz4-java',
-            },
-            {
-              groupId: 'org.springframework.boot',
-              artifactId: `spring-boot-starter-data-cassandra${reactive ? '-reactive' : ''}`,
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'junit-jupiter',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'cassandra',
-              scope: 'test',
-            },
-          ]);
-        }
+        const cassandraStarter = reactive ? 'spring-boot-starter-data-cassandra-reactive' : 'spring-boot-starter-data-cassandra';
+        source.addJavaDependencies?.([
+          { groupId: 'com.datastax.oss', artifactId: 'java-driver-mapper-runtime' },
+          { groupId: 'commons-codec', artifactId: 'commons-codec' },
+          { groupId: 'org.springframework.boot', artifactId: cassandraStarter },
+          { groupId: 'org.lz4', artifactId: 'lz4-java' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'cassandra' },
+          { scope: 'annotationProcessor', groupId: 'com.datastax.oss', artifactId: 'java-driver-mapper-processor' },
+        ]);
       },
     });
   }

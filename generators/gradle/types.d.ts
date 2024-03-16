@@ -27,6 +27,7 @@ export type GradleTomlPlugin = { pluginName: string; addToBuild?: boolean } & (
 export type GradleSourceType = {
   applyFromGradle?(script: GradleScript): void;
   addGradleDependency?(dependency: GradleDependency): void;
+  addGradleDependencies?(dependency: GradleDependency[]): void;
   addGradlePlugin?(plugin: GradlePlugin): void;
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
   addGradleProperty?(property: GradleProperty): void;

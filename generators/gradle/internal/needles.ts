@@ -42,10 +42,12 @@ export const applyFromGradleCallback = ({ script }: GradleScript) =>
     contentToAdd: `apply from: "${script}"`,
   });
 
-export const addGradleDependencyCallback = ({ groupId, artifactId, version, scope }: GradleDependency) =>
+export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency',
-    contentToAdd: `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
+    contentToAdd: dependencies.map(
+      ({ groupId, artifactId, version, scope }) => `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
+    ),
   });
 
 export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, version, scope }: GradleDependency) =>

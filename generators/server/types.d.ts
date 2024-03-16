@@ -1,4 +1,4 @@
-import { JavaApplication } from '../java/types.js';
+import { JavaApplication, JavaSourceType } from '../java/types.js';
 import { GradleSourceType } from '../gradle/types.js';
 import { MavenSourceType } from '../maven/types.js';
 import { LiquibaseSourceType } from '../liquibase/types.js';
@@ -19,7 +19,8 @@ export type SpringEntity = {
   skipJunitTests?: string;
 };
 
-export type SpringBootSourceType = GradleSourceType &
+export type SpringBootSourceType = JavaSourceType &
+  GradleSourceType &
   MavenSourceType &
   SpringCacheSourceType &
   LiquibaseSourceType & {

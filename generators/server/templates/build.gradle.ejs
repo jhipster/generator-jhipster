@@ -163,14 +163,11 @@ repositories {
 }
 
 dependencies {
+    // Allows unversioned annotationProcessor
+    annotationProcessor platform("tech.jhipster:jhipster-dependencies:<%- jhipsterDependenciesVersion %>")
+
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.couchbase.client:java-client"
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandraDriverVersion}"
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-    implementation "com.datastax.oss:java-driver-mapper-runtime"
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
@@ -207,7 +204,7 @@ dependencies {
 <%_ if (databaseTypeSql && reactive) { _%>
     implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
 <%_ } _%>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase) { _%>
     implementation "commons-codec:commons-codec"
 <%_ } _%>
 <%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
@@ -252,9 +249,6 @@ dependencies {
 <%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
 <%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-    implementation "org.lz4:lz4-java"
-<%_ } _%>
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 <%_ if (enableSwaggerCodegen) { _%>
@@ -272,7 +266,7 @@ if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-<%_ if (databaseTypeMongodb || databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -355,9 +349,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.security:spring-security-messaging"
 <%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
-<%_ if (databaseTypeCassandra) { _%>
-    testImplementation "org.testcontainers:cassandra"
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
 <%_ } _%>
@@ -367,7 +358,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (databaseTypeSql) { _%>
     testImplementation "org.testcontainers:jdbc"
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || databaseTypeSql) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch || databaseTypeSql) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
@@ -376,7 +367,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (databaseTypeNeo4j) { _%>
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || databaseTypeCassandra || searchEngineElasticsearch || databaseTypeSql) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch || databaseTypeSql) { _%>
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (reactive) { _%>

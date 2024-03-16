@@ -22,10 +22,13 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
-import { packageInfoTransform, generatedAnnotationTransform, checkJava, isReservedJavaKeyword } from './support/index.js';
-import { JavaApplication } from './types.js';
-import { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.js';
-import { GenericSourceTypeDefinition } from '../base/tasks.js';
+import {
+  packageInfoTransform,
+  generatedAnnotationTransform,
+  checkJava,
+  isReservedJavaKeyword,
+  mavenScopeToGradleScope,
+} from './support/index.js';
 import command from './command.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
 import { matchMainJavaFiles } from './support/package-info-transform.js';
@@ -34,10 +37,7 @@ import { getEnumInfo } from '../base-application/support/index.js';
 import { mutateData } from '../base/support/index.js';
 import { javaBeanCase } from '../server/support/index.js';
 
-export type ApplicationDefinition = GenericApplicationDefinition<JavaApplication>;
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<ApplicationDefinition & GenericSourceTypeDefinition>;
-
-export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDefinition> {
+export default class JavaGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;
   generateEntities!: boolean;
   useJakartaValidation!: boolean;
@@ -86,6 +86,71 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      prepareJavaApplication({ application, source }) {
+        source.addJavaDependencies = dependencies => {
+          if (application.buildToolMaven) {
+            const unversionedAnnotationProcessors = dependencies.filter(dep => !dep.version && dep.scope === 'annotationProcessor');
+            const versionedAnnotationProcessors = dependencies.filter(dep => dep.version && dep.scope === 'annotationProcessor');
+            const unversionedCommonDependencies = dependencies.filter(dep => !dep.version && dep.scope !== 'annotationProcessor');
+            const versionedCommonDependencies = dependencies.filter(dep => dep.version && dep.scope !== 'annotationProcessor');
+
+            source.addMavenDefinition?.({
+              properties: [
+                ...versionedCommonDependencies.map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
+                ...versionedAnnotationProcessors.map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
+              ],
+              dependencies: [
+                ...unversionedCommonDependencies,
+                ...versionedCommonDependencies.map(({ version: _version, artifactId, ...artifact }) => ({
+                  ...artifact,
+                  artifactId,
+                  version: `\${${artifactId}.version}`,
+                })),
+                // Add a provided scope for annotation processors so that version is not required in annotationProcessor dependencies
+                ...unversionedAnnotationProcessors.map(({ scope: _scope, ...artifact }) => ({ ...artifact, scope: 'provided' })),
+              ],
+              annotationProcessors: [
+                ...unversionedAnnotationProcessors.map(({ scope: _scope, ...artifact }) => ({ ...artifact })),
+                ...versionedAnnotationProcessors.map(({ version: _version, artifactId, ...artifact }) => ({
+                  ...artifact,
+                  artifactId,
+                  version: `\${${artifactId}.version}`,
+                })),
+              ],
+            });
+          }
+
+          if (application.buildToolGradle) {
+            source.addGradleDependencies?.([
+              ...dependencies
+                .filter(dep => !dep.version)
+                .map(({ scope, type, ...artifact }) => ({
+                  ...artifact,
+                  scope: mavenScopeToGradleScope({ scope, type }),
+                })),
+            ]);
+            source.addGradleDependencyCatalogLibraries?.([
+              ...dependencies
+                .filter(dep => dep.version)
+                .map(({ scope, type, groupId, artifactId, version }) => ({
+                  libraryName: artifactId,
+                  module: `${groupId}:${artifactId}`,
+                  version: version!,
+                  scope: mavenScopeToGradleScope({ scope, type }),
+                })),
+            ]);
+          }
+        };
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity() {
@@ -161,7 +226,7 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
         }
       },
       generatedPackageInfo({ application }) {
-        const mainPackageMatch = matchMainJavaFiles(application.srcMainJava);
+        const mainPackageMatch = matchMainJavaFiles(application.srcMainJava!);
         if (this.packageInfoFile) {
           this.queueTransformStream(
             {
@@ -171,9 +236,9 @@ export default class JavaGenerator extends BaseApplicationGenerator<GeneratorDef
               refresh: true,
             },
             packageInfoTransform({
-              javaRoots: [this.destinationPath(application.srcMainJava)],
+              javaRoots: [this.destinationPath(application.srcMainJava!)],
               javadocs: {
-                ...Object.fromEntries(application.packageInfoJavadocs.map(doc => [doc.packageName, doc.documentation])),
+                ...Object.fromEntries(application.packageInfoJavadocs!.map(doc => [doc.packageName, doc.documentation])),
                 [`${application.packageName}`]: 'Application root.',
                 [`${application.packageName}.config`]: 'Application configuration.',
                 [`${application.packageName}.domain`]: 'Domain objects.',
