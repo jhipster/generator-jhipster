@@ -20,7 +20,6 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.1.1</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
-        <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.3</typesafe.version>
 
         <!-- Plugin versions -->
@@ -113,11 +112,6 @@
               <groupId>info.picocli</groupId>
               <artifactId>picocli</artifactId>
               <version>${picocli.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.springframework.pulsar</groupId>
-              <artifactId>spring-pulsar-spring-cloud-stream-binder</artifactId>
-              <version>${spring-pulsar.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.openapitools</groupId>

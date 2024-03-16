@@ -61,8 +61,6 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
         if (application.buildToolGradle) {
           const { javaDependencies } = application;
           source.addGradlePlugin?.({ id: 'jhipster.pulsar-conventions' });
-          source.addGradleDependencyCatalogVersion?.({ name: 'pulsar-spring', version: javaDependencies?.['spring-pulsar'] });
-          source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'pulsar-spring', version: javaDependencies?.['spring-pulsar'] });
         }
       },
       addPulsarMavenDependencies({ application, source }) {
@@ -72,12 +70,7 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
             properties: [{ property: 'spring-pulsar.version', value: javaDependencies?.['spring-pulsar'] }],
             dependencies: [
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-stream' },
-              {
-                groupId: 'org.springframework.pulsar',
-                artifactId: 'spring-pulsar-spring-cloud-stream-binder',
-                // eslint-disable-next-line no-template-curly-in-string
-                version: '${spring-pulsar.version}',
-              },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-stream-binder-pulsar' },
               { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
               { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
               { groupId: 'org.testcontainers', artifactId: 'pulsar', scope: 'test' },
