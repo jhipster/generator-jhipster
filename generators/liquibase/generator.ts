@@ -355,7 +355,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           properties: [
             { inProfile: 'no-liquibase', property: 'profile.no-liquibase', value: ',no-liquibase' },
             { property: 'profile.no-liquibase' },
-            { property: 'liquibase.version', value: application.javaDependencies.liquibase },
+            { property: 'liquibase.version', value: application.springBootDependencies.liquibase },
             { property: 'liquibase-plugin.url' },
             { property: 'liquibase-plugin.username' },
             { property: 'liquibase-plugin.password' },
@@ -446,10 +446,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: application.javaDependencies['gradle-liquibase'] });
-        source.addGradleProperty?.({ property: 'liquibaseVersion', value: application.javaDependencies.liquibase });
-        if (application.databaseTypeSql && !application.reactive) {
-          source.addGradleProperty?.({ property: 'liquibaseHibernate6Version', value: application.javaDependencies.liquibase });
-        }
+        source.addGradleProperty?.({ property: 'liquibaseVersion', value: application.springBootDependencies!.liquibase });
 
         source.applyFromGradle?.({ script: 'gradle/liquibase.gradle' });
         source.addGradlePlugin?.({ id: 'org.liquibase.gradle' });

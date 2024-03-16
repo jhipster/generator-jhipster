@@ -9,7 +9,7 @@ dependencies {
   liquibaseRuntime "info.picocli:picocli:<%- javaDependencies.picocli %>"
 <%_ if (databaseTypeSql && !reactive) { _%>
 
-  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
+  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseVersion}"
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
   <%_ if (prodDatabaseType !== devDatabaseType) { _%>
@@ -26,7 +26,7 @@ dependencies {
   <%_ } _%>
   <%_ if (prodDatabaseTypeMssql) { _%>
   liquibaseRuntime "com.microsoft.sqlserver:mssql-jdbc"
-  liquibaseRuntime "org.liquibase.ext:liquibase-mssql:<%- javaDependencies.liquibase %>"
+  liquibaseRuntime "org.liquibase.ext:liquibase-mssql:${liquibaseVersion}"
   <%_ } _%>
   <%_ if (prodDatabaseTypeOracle) { _%>
   liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
@@ -93,16 +93,6 @@ liquibase {
 
 liquibaseDiff.dependsOn compileJava
 liquibaseDiffChangelog.dependsOn compileJava
-
-configurations {
-  all {
-    resolutionStrategy {
-      // Inherited version from Spring Boot can't be used because of regressions:
-      // To be removed as soon as spring-boot use the same version
-      force 'org.liquibase:liquibase-core:<%- javaDependencies.liquibase %>'
-    }
-  }
-}
 <%_ if (backendTypeSpringBoot) { _%>
 
 ext {
