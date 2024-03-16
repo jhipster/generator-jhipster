@@ -437,6 +437,18 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
         source.addJavaDependencies?.([{ groupId: 'org.springdoc', artifactId: springdocDependency }]);
       },
+      addFeignReactor({ application, source }) {
+        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
+        if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) {
+          const groupId = 'com.playtika.reactivefeign';
+          source.addJavaDependencies?.([
+            { groupId, artifactId: 'feign-reactor-bom', type: 'pom', scope: 'import', version: javaDependencies!['feign-reactor-bom'] },
+            { groupId, artifactId: 'feign-reactor-cloud' },
+            { groupId, artifactId: 'feign-reactor-spring-configuration' },
+            { groupId, artifactId: 'feign-reactor-webclient' },
+          ]);
+        }
+      },
       addSpringSnapshotRepository({ application, source }) {
         if (application.buildToolMaven) {
           if (application.addSpringMilestoneRepository) {

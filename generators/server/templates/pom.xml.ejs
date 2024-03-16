@@ -116,20 +116,6 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-cloud</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-spring-configuration</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-webclient</artifactId>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>

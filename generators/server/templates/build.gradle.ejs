@@ -168,15 +168,6 @@ dependencies {
 <%_ if (authenticationTypeOauth2) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine"
 <%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
-    implementation "com.playtika.reactivefeign:feign-reactor-cloud"
-<%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
-    implementation "com.playtika.reactivefeign:feign-reactor-spring-configuration"
-<%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
-    implementation "com.playtika.reactivefeign:feign-reactor-webclient"
-<%_ } _%>
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
