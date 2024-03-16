@@ -28,7 +28,7 @@ import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import {
   applyFromGradleCallback,
-  addGradleDependencyCallback,
+  addGradleDependenciesCallback,
   addGradleMavenRepositoryCallback,
   addGradlePluginCallback,
   addGradlePluginManagementCallback,
@@ -76,7 +76,8 @@ export default class GradleGenerator extends BaseApplicationGenerator {
       },
       addSourceNeddles({ source }) {
         source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
-        source.addGradleDependency = dependency => this.editFile('build.gradle', addGradleDependencyCallback(dependency));
+        source.addGradleDependency = dependency => this.editFile('build.gradle', addGradleDependenciesCallback([dependency]));
+        source.addGradleDependencies = dependencies => this.editFile('build.gradle', addGradleDependenciesCallback(dependencies));
         source.addGradlePlugin = plugin => this.editFile('build.gradle', addGradlePluginCallback(plugin));
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
