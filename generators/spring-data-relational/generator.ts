@@ -162,7 +162,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
           const { reactive, javaDependencies, packageFolder, springBootDependencies } = application;
           const applicationAny = application as any;
           const { prodDatabaseType } = applicationAny;
-          source.addMavenDefinition?.(getCommonMavenDefinition({ javaDependencies }));
+          source.addMavenDefinition?.(getCommonMavenDefinition({ springBootDependencies }));
 
           if (reactive) {
             source.addMavenDefinition?.(getReactiveMavenDefinition({ javaDependencies }));
