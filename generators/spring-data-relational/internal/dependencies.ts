@@ -60,7 +60,6 @@ export const getDatabaseDriverForDatabase = (databaseType: string) => databaseAr
 export const getCommonMavenDefinition = ({ javaDependencies }: { javaDependencies: Record<string, string> }) => ({
   properties: [
     { property: 'jaxb-runtime.version', value: javaDependencies['jaxb-runtime'] },
-    { property: 'validation-api.version', value: javaDependencies['validation-api'] },
   ],
   dependencies: [
     { groupId: 'com.zaxxer', artifactId: 'HikariCP' },

@@ -25,7 +25,6 @@
         <picocli.version>4.7.5</picocli.version>
         <spring-pulsar.version>0.2.0</spring-pulsar.version>
         <typesafe.version>1.4.3</typesafe.version>
-        <validation-api.version>3.0.2</validation-api.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.14.1</checkstyle.version>
@@ -97,11 +96,6 @@
               <groupId>io.projectreactor.tools</groupId>
               <artifactId>blockhound-junit-platform</artifactId>
               <version>${blockhound-junit-platform.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>jakarta.validation</groupId>
-              <artifactId>jakarta.validation-api</artifactId>
-              <version>${validation-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.micrometer</groupId>
