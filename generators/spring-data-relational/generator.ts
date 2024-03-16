@@ -26,14 +26,7 @@ import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
-import {
-  getCommonMavenDefinition,
-  getDatabaseDriverForDatabase,
-  getDatabaseTypeMavenDefinition,
-  getH2MavenDefinition,
-  getImperativeMavenDefinition,
-  getReactiveMavenDefinition,
-} from './internal/dependencies.js';
+import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2MavenDefinition } from './internal/dependencies.js';
 import command from './command.js';
 
 const { SQL } = databaseTypes;
@@ -158,20 +151,47 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
         });
       },
       addDependencies({ application, source }) {
+        const { reactive, javaDependencies, packageFolder } = application;
+
+        if (reactive) {
+          source.addJavaDependencies?.([
+            { groupId: 'commons-beanutils', artifactId: 'commons-beanutils', version: javaDependencies['commons-beanutils'] },
+            { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
+            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
+          ]);
+        } else {
+          source.addJavaDependencies?.([
+            { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
+            { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
+            { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
+            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
+            { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
+            { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
+          ]);
+        }
+
+        source.addJavaDependencies?.([
+          { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
+          { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
+          { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
+        ]);
+
+        source.addJavaDependencies?.([
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'jdbc' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+        ]);
+
         if (application.buildToolMaven) {
-          const { reactive, javaDependencies, packageFolder, springBootDependencies } = application;
-          const applicationAny = application as any;
-          const { prodDatabaseType } = applicationAny;
-          source.addMavenDefinition?.(getCommonMavenDefinition({ springBootDependencies }));
+          const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
 
-          if (reactive) {
-            source.addMavenDefinition?.(getReactiveMavenDefinition({ javaDependencies }));
-          } else {
-            source.addMavenDefinition?.(getImperativeMavenDefinition({ springBootDependencies }));
+          const inProfile = devDatabaseTypeH2Any ? 'prod' : undefined;
+          if (!reactive) {
+            source.addMavenDefinition?.({
+              dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }],
+            });
           }
-
-          const inProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;
-          if (applicationAny.devDatabaseTypeH2Any) {
+          if (devDatabaseTypeH2Any) {
             const h2Definitions = getH2MavenDefinition({ prodDatabaseType, packageFolder });
             source.addMavenDefinition?.(h2Definitions.jdbc);
             if (reactive) {

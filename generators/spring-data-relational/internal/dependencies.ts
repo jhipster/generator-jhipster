@@ -57,48 +57,6 @@ const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
 
 export const getDatabaseDriverForDatabase = (databaseType: string) => databaseArtifactForDB[databaseType];
 
-export const getCommonMavenDefinition = ({ springBootDependencies }: { springBootDependencies: Record<string, string> }) => ({
-  properties: [{ property: 'jaxb-runtime.version', value: springBootDependencies['glassfish-jaxb'] }],
-  dependencies: [
-    { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
-    { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
-    { groupId: 'org.testcontainers', artifactId: 'jdbc', scope: 'test' },
-  ],
-  annotationProcessors: [
-    // eslint-disable-next-line no-template-curly-in-string
-    { groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime', version: '${jaxb-runtime.version}' },
-  ],
-});
-
-export const getReactiveMavenDefinition = ({ javaDependencies }: { javaDependencies: Record<string, string> }) => ({
-  properties: [{ property: 'commons-beanutils.version', value: javaDependencies['commons-beanutils'] }],
-  dependencies: [
-    { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
-    // eslint-disable-next-line no-template-curly-in-string
-    { groupId: 'commons-beanutils', artifactId: 'commons-beanutils', version: '${commons-beanutils.version}' },
-    { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
-  ],
-});
-
-export const getImperativeMavenDefinition = ({ springBootDependencies }: { springBootDependencies: Record<string, string> }) => ({
-  properties: [{ property: 'hibernate.version', value: springBootDependencies.hibernate }],
-  dependencies: [
-    { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
-    { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
-    // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
-    // eslint-disable-next-line no-template-curly-in-string
-    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core', version: '${hibernate.version}' },
-    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen', scope: 'provided' },
-    { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
-    { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
-    { inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
-  ],
-  annotationProcessors: [
-    // eslint-disable-next-line no-template-curly-in-string
-    { groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen', version: '${hibernate.version}' },
-  ],
-});
-
 export const getH2MavenDefinition = ({
   prodDatabaseType,
   packageFolder,

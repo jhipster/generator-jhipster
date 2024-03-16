@@ -169,14 +169,8 @@ dependencies {
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "com.couchbase.client:java-client"
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
-<%_ } _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-<%_ if (databaseTypeSql) { _%>
-    implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine"
 <%_ } _%>
@@ -198,12 +192,6 @@ dependencies {
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-<%_ if (databaseTypeSql) { _%>
-    implementation "com.zaxxer:HikariCP"
-<%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
-    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
-<%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "commons-codec:commons-codec"
 <%_ } _%>
@@ -241,11 +229,6 @@ dependencies {
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.awaitility:awaitility"
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-    implementation "org.hibernate.orm:hibernate-core"
-    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
-    implementation "org.hibernate.validator:hibernate-validator"
-<%_ } _%>
 <%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
 <%_ } _%>
@@ -272,18 +255,11 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (searchEngineElasticsearch) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 <%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-<%_ } _%>
 <%_ if (databaseTypeMongodb && reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
-<%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
-    implementation "jakarta.persistence:jakarta.persistence-api"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
@@ -342,9 +318,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.retry:spring-retry"
 <%_ } _%>
-<%_ if (!reactive && databaseTypeSql) { _%>
-    implementation "org.springframework.security:spring-security-data"
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     implementation "org.springframework.security:spring-security-messaging"
 <%_ } _%>
@@ -355,10 +328,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:elasticsearch"
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-    testImplementation "org.testcontainers:jdbc"
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch || databaseTypeSql) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
@@ -367,7 +337,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (databaseTypeNeo4j) { _%>
     testImplementation "org.testcontainers:neo4j"
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch || databaseTypeSql) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (reactive) { _%>
