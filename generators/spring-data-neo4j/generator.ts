@@ -148,16 +148,14 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
         });
       },
       addDependencies({ application, source }) {
-        if (application.buildToolMaven) {
-          source.addMavenDependency?.([
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-neo4j' },
-            { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
-            { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
-            { groupId: 'org.testcontainers', artifactId: 'neo4j', scope: 'test' },
-          ]);
-          if (!application.databaseMigrationLiquibase) {
-            source.addMavenDependency?.([{ groupId: 'eu.michael-simons.neo4j', artifactId: 'neo4j-migrations-spring-boot-starter' }]);
-          }
+        source.addJavaDependencies?.([
+          { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-neo4j' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'neo4j' },
+        ]);
+        if (!application.databaseMigrationLiquibase) {
+          source.addJavaDependencies?.([{ groupId: 'eu.michael-simons.neo4j', artifactId: 'neo4j-migrations-spring-boot-starter' }]);
         }
       },
     });

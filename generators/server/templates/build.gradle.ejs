@@ -195,9 +195,6 @@ dependencies {
 <%_ if (databaseTypeCouchbase) { _%>
     implementation "commons-codec:commons-codec"
 <%_ } _%>
-<%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
-    implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
-<%_ } _%>
     implementation "io.dropwizard.metrics:metrics-core"
     implementation "io.micrometer:micrometer-registry-prometheus"
 <%_ if (databaseTypeMongodb) { _%>
@@ -257,9 +254,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb && reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
@@ -328,16 +322,13 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:elasticsearch"
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     testImplementation "org.testcontainers:mongodb"
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-    testImplementation "org.testcontainers:neo4j"
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase || searchEngineElasticsearch) { _%>
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (reactive) { _%>
