@@ -219,13 +219,7 @@ dependencies {
     testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
 <%_ } _%>
     implementation "jakarta.annotation:jakarta.annotation-api"
-<%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.apache.commons:commons-collections4"
-<%_ } _%>
     implementation "org.apache.commons:commons-lang3"
-<%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.awaitility:awaitility"
-<%_ } _%>
 <%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
 <%_ } _%>
@@ -248,9 +242,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.boot:spring-boot-starter-actuator"
 <%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 <%_ } _%>
 <%_ if (databaseTypeMongodb && reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
@@ -313,16 +304,13 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:couchbase"
 <%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.testcontainers:elasticsearch"
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || searchEngineElasticsearch) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:junit-jupiter"
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     testImplementation "org.testcontainers:mongodb"
 <%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || searchEngineElasticsearch) { _%>
+<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
     testImplementation "org.testcontainers:testcontainers"
 <%_ } _%>
 <%_ if (reactive) { _%>
