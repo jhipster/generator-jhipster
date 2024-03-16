@@ -406,6 +406,10 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addJHipsterBomDependencies({ application, source }) {
+        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, jhipsterDependenciesVersion, messageBrokerAny } =
+          application;
+        const { serviceDiscoveryAny } = application as any;
+
         source.addJavaDependencies?.([
           {
             groupId: 'tech.jhipster',
@@ -416,6 +420,18 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           },
           { groupId: 'tech.jhipster', artifactId: 'jhipster-framework' },
         ]);
+
+        if (applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny) {
+          source.addJavaDependencies?.([
+            {
+              groupId: 'org.springframework.cloud',
+              artifactId: 'spring-cloud-dependencies',
+              type: 'pom',
+              scope: 'import',
+              version: javaDependencies!['spring-cloud-dependencies'],
+            },
+          ]);
+        }
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
