@@ -27,6 +27,7 @@ import type {
   GradleLibrary,
   GradleTomlPlugin,
   GradleComment,
+  GradleNeedleOptions,
 } from '../types.js';
 
 const tomlItemToString = (item: Record<string, string | undefined>) =>
@@ -42,6 +43,11 @@ const scopeSortOrder = {
   implementation: 2,
   compileOnly: 3,
   runtimeOnly: 4,
+};
+
+export const gradleNeedleOptionsWithDefaults = (options: GradleNeedleOptions): Required<GradleNeedleOptions> => {
+  const { gradleFile = 'build.gradle', gradleVersionCatalogFile = 'gradle/libs.versions.toml' } = options;
+  return { gradleFile, gradleVersionCatalogFile };
 };
 
 export const sortDependencies = (a: GradleDependency, b: GradleDependency): number => {

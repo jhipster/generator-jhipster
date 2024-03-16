@@ -1,3 +1,8 @@
+[libraries]
+# Cucumber
+testng = { module = 'org.testng:testng', version = '7.9.0' }
+cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.15.0' }
+
 [plugins]
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.1' }
 
