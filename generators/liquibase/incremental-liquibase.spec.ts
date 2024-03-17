@@ -100,7 +100,7 @@ One{anotherEnt} to @OnDelete("SET NULL") @OnUpdate("CASCADE") Another,
 }`;
 
 const generatorPath = join(__dirname, '../server/index.js');
-const mockedGenerators = ['jhipster:common', 'jhipster:gradle', 'jhipster:maven'];
+const mockedGenerators = ['jhipster:common'];
 
 describe('generator - app - --incremental-changelog', function () {
   this.timeout(45000);

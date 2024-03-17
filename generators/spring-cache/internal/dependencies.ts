@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JavaDependency } from '../../java/types.js';
+import { JavaDependency, JavaDependencyVersion } from '../../java/types.js';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -28,9 +28,11 @@ const hibernateJCache = {
   artifactId: 'hibernate-jcache',
 };
 
+type CacheProviderDefinition = { versions?: JavaDependencyVersion[]; dependencies: JavaDependency[] };
+
 type CacheProviderDependencies = {
-  base: { dependencies: JavaDependency[] };
-  hibernateCache?: { dependencies: JavaDependency[] };
+  base: CacheProviderDefinition;
+  hibernateCache?: CacheProviderDefinition;
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -55,6 +57,7 @@ export const getCacheProviderMavenDefinition: (
           {
             groupId: 'org.redisson',
             artifactId: 'redisson',
+            version: javaDependencies.redisson,
           },
         ],
       },
@@ -151,19 +154,23 @@ export const getCacheProviderMavenDefinition: (
     },
     memcached: {
       base: {
+        versions: [{ name: 'xmemcached-provider', version: javaDependencies['xmemcached-provider'] }],
         dependencies: [
           javaxCacheApi,
           {
             groupId: 'com.google.code.simple-spring-memcached',
             artifactId: 'spring-cache',
+            versionRef: 'xmemcached-provider',
           },
           {
             groupId: 'com.google.code.simple-spring-memcached',
             artifactId: 'xmemcached-provider',
+            versionRef: 'xmemcached-provider',
           },
           {
             groupId: 'com.googlecode.xmemcached',
             artifactId: 'xmemcached',
+            version: javaDependencies.xmemcached,
           },
         ],
       },

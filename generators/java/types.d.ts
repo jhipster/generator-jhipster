@@ -23,8 +23,8 @@ export type JavaArtifactVersion = RequireOneOrNone<{ version: string; versionRef
 export type JavaDependency = JavaArtifact & JavaArtifactVersion;
 
 export type JavaDefinition = {
-  versions: JavaDependencyVersion[];
-  dependencies: JavaDependency[];
+  versions?: JavaDependencyVersion[];
+  dependencies?: JavaDependency[];
 };
 
 export type JavaNeedleOptions = GradleNeedleOptions;
