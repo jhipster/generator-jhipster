@@ -247,7 +247,7 @@ dependencies {
     implementation "org.hibernate.validator:hibernate-validator"
 <%_ } _%>
 <%_ if (reactive) { _%>
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 <%_ } _%>
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"

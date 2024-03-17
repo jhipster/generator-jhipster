@@ -15,7 +15,6 @@
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
         <hazelcast-spring.version>5.3.6</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-        <junit-platform-launcher.version>1.10.2</junit-platform-launcher.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.1.1</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
@@ -91,11 +90,6 @@
                 <groupId>io.micrometer</groupId>
                 <artifactId>context-propagation</artifactId>
                 <version>${micrometer-context-propagation.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-launcher</artifactId>
-              <version>${junit-platform-launcher.version}</version>
             </dependency>
             <dependency>
               <groupId>org.mapstruct</groupId>
