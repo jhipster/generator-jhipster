@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { MavenDefinition } from '../../maven/types.js';
+import { JavaArtifact } from '../../java/types.js';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -29,8 +29,8 @@ const hibernateJCache = {
 };
 
 type CacheProviderDependencies = {
-  base: MavenDefinition;
-  hibernateCache?: MavenDefinition;
+  base: { dependencies: JavaArtifact[] };
+  hibernateCache?: { dependencies: JavaArtifact[] };
 };
 
 // eslint-disable-next-line import/prefer-default-export
@@ -79,12 +79,6 @@ export const getCacheProviderMavenDefinition: (
     },
     caffeine: {
       base: {
-        properties: [
-          {
-            property: 'typesafe.version',
-            value: javaDependencies.typesafe,
-          },
-        ],
         dependencies: [
           javaxCacheApi,
           {
@@ -98,8 +92,7 @@ export const getCacheProviderMavenDefinition: (
           {
             groupId: 'com.typesafe',
             artifactId: 'config',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${typesafe.version}',
+            version: javaDependencies.typesafe,
           },
         ],
       },
@@ -109,35 +102,21 @@ export const getCacheProviderMavenDefinition: (
     },
     hazelcast: {
       base: {
-        properties: [
-          {
-            property: 'hazelcast-spring.version',
-            value: javaDependencies['hazelcast-spring'],
-          },
-        ],
         dependencies: [
           javaxCacheApi,
           {
             groupId: 'com.hazelcast',
             artifactId: 'hazelcast-spring',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${hazelcast-spring.version}',
+            version: javaDependencies['hazelcast-spring'],
           },
         ],
       },
       hibernateCache: {
-        properties: [
-          {
-            property: 'hazelcast-hibernate53.version',
-            value: javaDependencies['hazelcast-hibernate53'],
-          },
-        ],
         dependencies: [
           {
             groupId: 'com.hazelcast',
             artifactId: 'hazelcast-hibernate53',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${hazelcast-hibernate53.version}',
+            version: javaDependencies['hazelcast-hibernate53'],
           },
         ],
       },

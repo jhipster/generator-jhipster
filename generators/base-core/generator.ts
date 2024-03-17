@@ -27,6 +27,7 @@ import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import * as _ from 'lodash-es';
+import { kebabCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -58,6 +59,7 @@ import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { convertConfigToOption } from '../../lib/internal/index.js';
+import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 
 const { merge, get, set } = _;
 const {
@@ -1010,6 +1012,29 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
   loadNodeDependencies(destination: Record<string, string>, source: Record<string, string>): void {
     Object.assign(destination, this.prepareDependencies(source));
+  }
+
+  /**
+   * Load Java dependencies from a gradle catalog file.
+   * @param javaDependencies
+   * @param gradleCatalog Gradle catalog file path, true for generator-jhipster's generator catalog of falsy for blueprint catalog
+   */
+  loadJavaDependenciesFromGradleCatalog(javaDependencies: Record<string, string>, gradleCatalog?: string | boolean): void {
+    if (typeof gradleCatalog !== 'string') {
+      const tomlFile = '../resources/gradle/libs.versions.toml';
+      gradleCatalog = gradleCatalog ? this.jhipsterTemplatePath(tomlFile) : this.templatePath(tomlFile);
+    }
+
+    const gradleLibsVersions = this.readTemplate(gradleCatalog)?.toString();
+    if (gradleLibsVersions) {
+      Object.assign(
+        javaDependencies,
+        this.prepareDependencies(
+          getGradleLibsVersionsProperties(gradleLibsVersions!),
+          value => `'${kebabCase(value).toUpperCase()}-VERSION'`,
+        ),
+      );
+    }
   }
 
   loadNodeDependenciesFromPackageJson(
