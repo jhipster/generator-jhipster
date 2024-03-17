@@ -1,6 +1,6 @@
 export type GradleScript = { script: string };
 
-export type GradleDependency = { groupId: string; artifactId: string; version?: string; scope: string };
+export type GradleDependency = { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string };
 
 export type GradlePlugin = { id: string; version?: string };
 
@@ -24,18 +24,20 @@ export type GradleTomlPlugin = { pluginName: string; addToBuild?: boolean } & (
   | ({ id: string } & GradleTomlAnyItemVersion)
 );
 
+export type GradleNeedleOptions = { gradleFile?: string };
+
 export type GradleSourceType = {
   applyFromGradle?(script: GradleScript): void;
-  addGradleDependency?(dependency: GradleDependency): void;
-  addGradleDependencies?(dependency: GradleDependency[]): void;
+  addGradleDependency?(dependency: GradleDependency, options?: GradleNeedleOptions): void;
+  addGradleDependencies?(dependency: GradleDependency[], options?: GradleNeedleOptions): void;
   addGradlePlugin?(plugin: GradlePlugin): void;
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
   addGradleProperty?(property: GradleProperty): void;
   addGradleMavenRepository?(repository: GradleRepository): void;
   addGradleBuildSrcDependency?(dependency: GradleDependency): void;
   addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;
-  addGradleDependencyCatalogLibrary?(catalogVersion: GradleLibrary): void;
-  addGradleDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
+  addGradleDependencyCatalogLibrary?(catalogVersion: GradleLibrary, options?: GradleNeedleOptions): void;
+  addGradleDependencyCatalogLibraries?(catalogVersion: GradleLibrary[], options?: GradleNeedleOptions): void;
   addGradleDependencyCatalogPlugin?(catalogVersion: GradleTomlPlugin): void;
   addGradleDependencyCatalogPlugins?(catalogVersion: GradleTomlPlugin[]): void;
   addGradleBuildSrcDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;

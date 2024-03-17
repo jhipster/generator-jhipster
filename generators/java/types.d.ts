@@ -1,4 +1,5 @@
 import { BaseApplication } from '../base-application/types.js';
+import { GradleNeedleOptions } from '../gradle/types.js';
 
 export type JavaArtifactType = {
   type?: 'jar' | 'pom';
@@ -9,7 +10,10 @@ export type JavaArtifact = {
   groupId: string;
   artifactId: string;
   version?: string;
+  classifier?: string;
 } & JavaArtifactType;
+
+export type JavaNeedleOptions = GradleNeedleOptions;
 
 export type JavaApplication = BaseApplication & {
   javaVersion: string;
@@ -38,5 +42,5 @@ export type JavaApplication = BaseApplication & {
 };
 
 export type JavaSourceType = {
-  addJavaDependencies?(dependency: JavaArtifact[]): void;
+  addJavaDependencies?(dependency: JavaArtifact[], options?: JavaNeedleOptions): void;
 };

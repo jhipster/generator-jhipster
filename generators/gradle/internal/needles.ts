@@ -36,6 +36,32 @@ const tomlItemToString = (item: Record<string, string>) =>
 
 const gradleNameToReference = (name: string) => name.replaceAll('-', '.');
 
+const scopeSortOrder = {
+  'implementation platform': 1,
+  implementation: 2,
+  compileOnly: 3,
+  runtimeOnly: 4,
+};
+
+export const sortDependencies = (a: GradleDependency, b: GradleDependency): number => {
+  let ret = (scopeSortOrder[a.scope] ?? 100) - (scopeSortOrder[b.scope] ?? 100);
+  if (ret === 0) {
+    ret = a.groupId.localeCompare(b.groupId);
+    if (ret !== 0) {
+      // Keep Spring dependencies on top
+      const aIsSpring = a.groupId.startsWith('org.springframework.');
+      const bIsSpring = b.groupId.startsWith('org.springframework.');
+      if (aIsSpring !== bIsSpring && (aIsSpring || bIsSpring)) {
+        return aIsSpring ? -1 : 1;
+      }
+    }
+  }
+  if (ret === 0) {
+    ret = a.artifactId.localeCompare(b.artifactId);
+  }
+  return ret;
+};
+
 export const applyFromGradleCallback = ({ script }: GradleScript) =>
   createNeedleCallback({
     needle: 'gradle-apply-from',
@@ -45,8 +71,10 @@ export const applyFromGradleCallback = ({ script }: GradleScript) =>
 export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency',
-    contentToAdd: dependencies.map(
-      ({ groupId, artifactId, version, scope }) => `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
+    contentToAdd: dependencies.map(({ groupId, artifactId, version, scope, classifier }) =>
+      classifier && !version
+        ? `${scope} group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
+        : `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
     ),
   });
 

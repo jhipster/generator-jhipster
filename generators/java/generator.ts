@@ -92,7 +92,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareJavaApplication({ application, source }) {
-        source.addJavaDependencies = dependencies => {
+        source.addJavaDependencies = (dependencies, options) => {
           if (application.buildToolMaven) {
             const annotationProcessors = dependencies.filter(dep => dep.scope === 'annotationProcessor');
             const importDependencies = dependencies.filter(dep => dep.scope === 'import');
@@ -120,16 +120,17 @@ export default class JavaGenerator extends BaseApplicationGenerator {
           }
 
           if (application.buildToolGradle) {
-            source.addGradleDependencies?.([
-              ...dependencies
+            source.addGradleDependencies?.(
+              dependencies
                 .filter(dep => !dep.version)
                 .map(({ scope, type, ...artifact }) => ({
                   ...artifact,
                   scope: mavenScopeToGradleScope({ scope, type }),
                 })),
-            ]);
-            source.addGradleDependencyCatalogLibraries?.([
-              ...dependencies
+              options,
+            );
+            source.addGradleDependencyCatalogLibraries?.(
+              dependencies
                 .filter(dep => dep.version)
                 .map(({ scope, type, groupId, artifactId, version }) => ({
                   libraryName: artifactId,
@@ -137,7 +138,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
                   version: version!,
                   scope: mavenScopeToGradleScope({ scope, type }),
                 })),
-            ]);
+            );
           }
         };
       },
