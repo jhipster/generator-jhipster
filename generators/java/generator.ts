@@ -36,6 +36,7 @@ import { entityServerFiles, enumFiles } from './entity-files.js';
 import { getEnumInfo } from '../base-application/support/index.js';
 import { mutateData } from '../base/support/index.js';
 import { javaBeanCase } from '../server/support/index.js';
+import type { JavaArtifact } from './types.js';
 
 export default class JavaGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;
@@ -93,34 +94,28 @@ export default class JavaGenerator extends BaseApplicationGenerator {
       prepareJavaApplication({ application, source }) {
         source.addJavaDependencies = dependencies => {
           if (application.buildToolMaven) {
-            const unversionedAnnotationProcessors = dependencies.filter(dep => !dep.version && dep.scope === 'annotationProcessor');
-            const versionedAnnotationProcessors = dependencies.filter(dep => dep.version && dep.scope === 'annotationProcessor');
-            const unversionedCommonDependencies = dependencies.filter(dep => !dep.version && dep.scope !== 'annotationProcessor');
-            const versionedCommonDependencies = dependencies.filter(dep => dep.version && dep.scope !== 'annotationProcessor');
+            const annotationProcessors = dependencies.filter(dep => dep.scope === 'annotationProcessor');
+            const importDependencies = dependencies.filter(dep => dep.scope === 'import');
+            const commonDependencies = dependencies.filter(dep => !['annotationProcessor', 'import'].includes(dep.scope!));
+            const convertVersionToProp = ({ version, artifactId, ...artifact }: JavaArtifact) => ({
+              ...artifact,
+              artifactId,
+              version: version ? `\${${artifactId}.version}` : undefined,
+            });
 
             source.addMavenDefinition?.({
-              properties: [
-                ...versionedCommonDependencies.map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
-                ...versionedAnnotationProcessors.map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
-              ],
+              properties: dependencies
+                .filter(dep => dep.version)
+                .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
               dependencies: [
-                ...unversionedCommonDependencies,
-                ...versionedCommonDependencies.map(({ version: _version, artifactId, ...artifact }) => ({
-                  ...artifact,
-                  artifactId,
-                  version: `\${${artifactId}.version}`,
-                })),
+                ...commonDependencies.map(convertVersionToProp),
                 // Add a provided scope for annotation processors so that version is not required in annotationProcessor dependencies
-                ...unversionedAnnotationProcessors.map(({ scope: _scope, ...artifact }) => ({ ...artifact, scope: 'provided' })),
+                ...annotationProcessors
+                  .filter(dep => !dep.version)
+                  .map(({ scope: _scope, ...artifact }) => ({ ...artifact, scope: 'provided' })),
               ],
-              annotationProcessors: [
-                ...unversionedAnnotationProcessors.map(({ scope: _scope, ...artifact }) => ({ ...artifact })),
-                ...versionedAnnotationProcessors.map(({ version: _version, artifactId, ...artifact }) => ({
-                  ...artifact,
-                  artifactId,
-                  version: `\${${artifactId}.version}`,
-                })),
-              ],
+              dependencyManagement: importDependencies.map(convertVersionToProp),
+              annotationProcessors: annotationProcessors.map(convertVersionToProp).map(({ scope: _scope, ...artifact }) => artifact),
             });
           }
 

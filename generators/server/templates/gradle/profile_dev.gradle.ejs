@@ -30,14 +30,6 @@ sourceSets {
 configurations {
   all {
     resolutionStrategy {
-  <%_ if (!reactive) { _%>
-      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
-      force "org.hibernate.orm:hibernate-core:${hibernateVersion}"
-    <%_ if (enableHibernateCache && (cacheProviderEhcache || cacheProviderCaffeine || cacheProviderRedis)) { _%>
-      // TODO drop forced version. Refer to https://github.com/jhipster/generator-jhipster/issues/22579
-      force "org.hibernate.orm:hibernate-jcache:${hibernateVersion}"
-    <%_ } _%>
-  <%_ } _%>
   <%_ if (prodDatabaseDriver?.r2dbc?.version) { _%>
       force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
   <%_ } _%>
@@ -49,7 +41,7 @@ configurations {
 }
 
 dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+    compileOnly "org.springframework.boot:spring-boot-devtools"
   <%_ if (devDatabaseTypeH2Any && !reactive) { _%>
     implementation "com.h2database:h2"
   <%_ } _%>

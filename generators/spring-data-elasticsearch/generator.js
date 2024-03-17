@@ -79,40 +79,15 @@ export default class ElasticsearchGenerator extends BaseApplicationGenerator {
           value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
         });
       },
-      addDependencies({ application, source }) {
-        if (application.buildToolMaven) {
-          source.addMavenDependency?.([
-            {
-              groupId: 'org.springframework.boot',
-              artifactId: 'spring-boot-starter-data-elasticsearch',
-            },
-            {
-              groupId: 'org.awaitility',
-              artifactId: 'awaitility',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.apache.commons',
-              artifactId: 'commons-collections4',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'junit-jupiter',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'elasticsearch',
-              scope: 'test',
-            },
-          ]);
-        }
+      addDependencies({ source }) {
+        source.addJavaDependencies?.([
+          { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-elasticsearch' },
+          { scope: 'test', groupId: 'org.awaitility', artifactId: 'awaitility' },
+          { scope: 'test', groupId: 'org.apache.commons', artifactId: 'commons-collections4' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'elasticsearch' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+        ]);
       },
     });
   }

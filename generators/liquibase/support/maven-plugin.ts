@@ -42,7 +42,6 @@ export default function mavenPluginContent({
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-jpa</artifactId>
-        <version>\${spring-boot.version}</version>
       </dependency>` : ''}${devDatabaseTypeH2Any? `
       <dependency>
         <groupId>com.h2database</groupId>

@@ -401,56 +401,20 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addJHipsterBomDependencies({ application, source }) {
-        if (application.buildToolMaven) {
-          source.addMavenProperty?.({
-            property: 'spring-boot.version',
-            value: application.javaDependencies!['spring-boot'],
-          });
-          source.addMavenDependencyManagement?.({
+        source.addJavaDependencies?.([
+          {
             groupId: 'tech.jhipster',
             artifactId: 'jhipster-dependencies',
-            // eslint-disable-next-line no-template-curly-in-string
-            version: '${jhipster-dependencies.version}',
+            version: application.jhipsterDependenciesVersion,
             type: 'pom',
             scope: 'import',
-          });
-          source.addMavenDefinition?.({
-            properties: [{ property: 'jhipster-dependencies.version', value: application.jhipsterDependenciesVersion }],
-            dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework' }],
-          });
-        }
-
-        if (application.buildToolGradle) {
-          source.addGradleDependencyCatalogLibraries?.([
-            {
-              libraryName: 'jhipster-dependencies',
-              module: 'tech.jhipster:jhipster-dependencies',
-              version: application.jhipsterDependenciesVersion!,
-              scope: 'implementation platform',
-            },
-          ]);
-          source.addGradleDependency?.({
-            groupId: 'tech.jhipster',
-            artifactId: 'jhipster-framework',
-            scope: 'implementation',
-          });
-        }
+          },
+          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework' },
+        ]);
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
-        if (application.buildToolMaven) {
-          source.addMavenDefinition?.({
-            dependencies: [{ groupId: 'org.springdoc', artifactId: springdocDependency }],
-          });
-        }
-
-        if (application.buildToolGradle) {
-          source.addGradleDependency?.({
-            groupId: 'org.springdoc',
-            artifactId: springdocDependency,
-            scope: 'implementation',
-          });
-        }
+        source.addJavaDependencies?.([{ groupId: 'org.springdoc', artifactId: springdocDependency }]);
       },
       addSpringSnapshotRepository({ application, source }) {
         if (application.buildToolMaven) {

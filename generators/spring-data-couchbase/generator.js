@@ -65,41 +65,15 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
       },
       addDependencies({ application, source }) {
         const { reactive } = application;
-        if (application.buildToolMaven) {
-          source.addMavenDependency?.([
-            {
-              groupId: 'commons-codec',
-              artifactId: 'commons-codec',
-            },
-            {
-              groupId: 'com.couchbase.client',
-              artifactId: 'java-client',
-            },
-            {
-              groupId: 'com.github.differentway',
-              artifactId: 'couchmove',
-            },
-            {
-              groupId: 'org.springframework.boot',
-              artifactId: `spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`,
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'junit-jupiter',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'couchbase',
-              scope: 'test',
-            },
-          ]);
-        }
+        source.addJavaDependencies?.([
+          { groupId: 'commons-codec', artifactId: 'commons-codec' },
+          { groupId: 'com.couchbase.client', artifactId: 'java-client' },
+          { groupId: 'com.github.differentway', artifactId: 'couchmove' },
+          { groupId: 'org.springframework.boot', artifactId: `spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}` },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'couchbase' },
+        ]);
       },
     });
   }

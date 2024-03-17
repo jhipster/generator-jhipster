@@ -164,24 +164,12 @@ repositories {
 
 dependencies {
     // Allows unversioned annotationProcessor
-    annotationProcessor platform("tech.jhipster:jhipster-dependencies:<%- jhipsterDependenciesVersion %>")
+    annotationProcessor platform(libs.jhipster.dependencies)
 
-<%_ if (databaseTypeCouchbase) { _%>
-    implementation "com.couchbase.client:java-client"
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
-<%_ } _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-<%_ if (databaseTypeSql) { _%>
-    implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
     implementation "com.github.ben-manes.caffeine:caffeine"
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-    implementation "com.github.differentway:couchmove"
 <%_ } _%>
 <%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
     implementation "com.playtika.reactivefeign:feign-reactor-cloud"
@@ -198,35 +186,8 @@ dependencies {
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-<%_ if (databaseTypeSql) { _%>
-    implementation "com.zaxxer:HikariCP"
-<%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
-    implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-    implementation "commons-codec:commons-codec"
-<%_ } _%>
-<%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
-    implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
-<%_ } _%>
     implementation "io.dropwizard.metrics:metrics-core"
     implementation "io.micrometer:micrometer-registry-prometheus"
-<%_ if (databaseTypeMongodb) { _%>
-    // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
-    implementation "io.mongock:mongock-springboot-v3", {
-        exclude group: "org.reflections", module: "reflections"
-    }
-<%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) { _%>
-    implementation "io.mongock:mongodb-reactive-driver"
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    // Fix Mongock dependencies: https://github.com/mongock/mongock-jdk17/issues/6
-    implementation "io.mongock:mongodb-springdata-v4-driver", {
-        exclude group: "org.reflections", module: "reflections"
-    }
-<%_ } _%>
 <%_ if (reactive) { _%>
     runtimeOnly "io.netty:netty-tcnative-boringssl-static"
 <%_ } _%>
@@ -234,18 +195,7 @@ dependencies {
     testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
 <%_ } _%>
     implementation "jakarta.annotation:jakarta.annotation-api"
-<%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.apache.commons:commons-collections4"
-<%_ } _%>
     implementation "org.apache.commons:commons-lang3"
-<%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.awaitility:awaitility"
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-    implementation "org.hibernate.orm:hibernate-core"
-    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
-    implementation "org.hibernate.validator:hibernate-validator"
-<%_ } _%>
 <%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junitPlatformLauncherVersion}'
 <%_ } _%>
@@ -254,37 +204,13 @@ dependencies {
 <%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    implementation "org.reflections:reflections:0.10.1", {
-        exclude group: "org.javassist", module: "javassist"
-    }
-<%_ } _%>
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation "org.springframework.boot:spring-boot-loader-tools"
 <%_ /* This is useful for major Spring Boot migration */
 if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-<%_ } _%>
-<%_ if (databaseTypeMongodb && reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-mongodb"
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-neo4j"
-<%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
-    implementation "jakarta.persistence:jakarta.persistence-api"
-<%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
 <%_ if (authenticationTypeOauth2) { _%>
@@ -305,9 +231,6 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
 <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>"
-<%_ if (communicationSpringWebsocket) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-websocket"
-<%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-test"
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"
@@ -342,34 +265,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.retry:spring-retry"
 <%_ } _%>
-<%_ if (!reactive && databaseTypeSql) { _%>
-    implementation "org.springframework.security:spring-security-data"
-<%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-    implementation "org.springframework.security:spring-security-messaging"
-<%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
-<%_ if (databaseTypeCouchbase) { _%>
-    testImplementation "org.testcontainers:couchbase"
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-    testImplementation "org.testcontainers:elasticsearch"
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-    testImplementation "org.testcontainers:jdbc"
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch || databaseTypeSql) { _%>
-    testImplementation "org.testcontainers:junit-jupiter"
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-    testImplementation "org.testcontainers:mongodb"
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-    testImplementation "org.testcontainers:neo4j"
-<%_ } _%>
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j || searchEngineElasticsearch || databaseTypeSql) { _%>
-    testImplementation "org.testcontainers:testcontainers"
-<%_ } _%>
 <%_ if (reactive) { _%>
     OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
     Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
