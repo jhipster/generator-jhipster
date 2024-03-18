@@ -22,7 +22,7 @@
         <typesafe.version>1.4.3</typesafe.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>10.14.1</checkstyle.version>
+        <checkstyle.version>10.14.2</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.8.2</gatling-maven-plugin.version>
