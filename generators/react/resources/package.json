@@ -48,7 +48,7 @@
     "css-minimizer-webpack-plugin": "6.0.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-react": "7.34.0",
+    "eslint-plugin-react": "7.34.1",
     "eslint-webpack-plugin": "4.1.0",
     "folder-hash": "4.0.4",
     "fork-ts-checker-webpack-plugin": "9.0.2",
