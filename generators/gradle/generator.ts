@@ -40,6 +40,7 @@ import {
   addGradleDependencyCatalogPluginsCallback,
   addGradleDependencyFromCatalogCallback,
   addGradlePluginFromCatalogCallback,
+  sortDependencies,
 } from './internal/needles.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
@@ -76,8 +77,11 @@ export default class GradleGenerator extends BaseApplicationGenerator {
       },
       addSourceNeddles({ source }) {
         source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
-        source.addGradleDependency = dependency => this.editFile('build.gradle', addGradleDependenciesCallback([dependency]));
-        source.addGradleDependencies = dependencies => this.editFile('build.gradle', addGradleDependenciesCallback(dependencies));
+        source.addGradleDependencies = (dependencies, { gradleFile = 'build.gradle' } = {}) => {
+          dependencies = [...dependencies].sort(sortDependencies);
+          this.editFile(gradleFile, addGradleDependenciesCallback(dependencies));
+        };
+        source.addGradleDependency = (dependency, options) => source.addGradleDependencies!([dependency], options);
         source.addGradlePlugin = plugin => this.editFile('build.gradle', addGradlePluginCallback(plugin));
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
@@ -86,11 +90,12 @@ export default class GradleGenerator extends BaseApplicationGenerator {
           this.editFile(`${GRADLE_BUILD_SRC_DIR}/build.gradle`, addGradleBuildSrcDependencyCallback(dependency));
         source.addGradleDependencyCatalogVersion = version =>
           this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogVersionCallback(version));
-        source.addGradleDependencyCatalogLibraries = libs => {
+        source.addGradleDependencyCatalogLibraries = (libs, { gradleFile = 'build.gradle' } = {}) => {
+          libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogLibrariesCallback(libs));
-          this.editFile('build.gradle', addGradleDependencyFromCatalogCallback(libs));
+          this.editFile(gradleFile, addGradleDependencyFromCatalogCallback(libs));
         };
-        source.addGradleDependencyCatalogLibrary = lib => source.addGradleDependencyCatalogLibraries!([lib]);
+        source.addGradleDependencyCatalogLibrary = (lib, options) => source.addGradleDependencyCatalogLibraries!([lib], options);
         source.addGradleDependencyCatalogPlugins = plugins => {
           this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogPluginsCallback(plugins));
           this.editFile('build.gradle', addGradlePluginFromCatalogCallback(plugins));
