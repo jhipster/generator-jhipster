@@ -160,6 +160,42 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareField({ field }) {
+        mutateData(field, {
+          fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTimed }) => {
+            let returnValue: string | undefined;
+            if (fieldTsDefaultValue !== undefined || defaultValue !== undefined) {
+              let fieldDefaultValue;
+              if (fieldTsDefaultValue !== undefined) {
+                fieldDefaultValue = fieldTsDefaultValue;
+              } else {
+                fieldDefaultValue = defaultValue;
+              }
+
+              fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, "\\'");
+
+              if (fieldTypeCharSequence) {
+                returnValue = `'${fieldDefaultValue}'`;
+              } else if (fieldTypeTimed) {
+                returnValue = `dayjs('${fieldDefaultValue}')`;
+              } else {
+                returnValue = fieldDefaultValue;
+              }
+            }
+
+            return returnValue;
+          },
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       loadEntities() {
