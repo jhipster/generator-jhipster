@@ -28,7 +28,7 @@ import type {
   GradleTomlPlugin,
 } from '../types.js';
 
-const tomlItemToString = (item: Record<string, string>) =>
+const tomlItemToString = (item: Record<string, string | undefined>) =>
   `{ ${Object.entries(item)
     .filter(([_key, value]) => value !== undefined)
     .map(([key, value]) => `${key} = "${value}"`)
@@ -84,10 +84,10 @@ export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, versi
     contentToAdd: `${scope} "${groupId}:${artifactId}${version ? `:${version}` : ''}"`,
   });
 
-export const addGradleDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
+export const addGradleDependenciesCatalogVersionCallback = (versions: GradleTomlVersion[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency-catalog-version',
-    contentToAdd: `${name} = "${version}"`,
+    contentToAdd: versions.map(({ name, version }) => `${name} = "${version}"`),
   });
 
 export const addGradleDependencyCatalogLibrariesCallback = (libraries: GradleLibrary[]) =>

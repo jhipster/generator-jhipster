@@ -22,7 +22,7 @@ import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import { createNeedleCallback } from '../base/support/needles.js';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
-import { JavaArtifact } from '../java/types.js';
+import { JavaDependency } from '../java/types.js';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -135,7 +135,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
         const { javaDependencies } = application;
         const { cacheProvider, enableHibernateCache } = application as any;
 
-        const dependencies: JavaArtifact[] = [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache' }];
+        const dependencies: JavaDependency[] = [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache' }];
         const definition = getCacheProviderMavenDefinition(cacheProvider, javaDependencies);
         dependencies.push(...definition.base.dependencies);
         if (enableHibernateCache && definition.hibernateCache) {

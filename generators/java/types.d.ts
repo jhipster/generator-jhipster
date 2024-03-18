@@ -1,5 +1,11 @@
+import { RequireOneOrNone } from 'type-fest';
 import { BaseApplication } from '../base-application/types.js';
 import { GradleNeedleOptions } from '../gradle/types.js';
+
+export type JavaDependencyVersion = {
+  name: string;
+  version: string;
+};
 
 export type JavaArtifactType = {
   type?: 'jar' | 'pom';
@@ -9,9 +15,17 @@ export type JavaArtifactType = {
 export type JavaArtifact = {
   groupId: string;
   artifactId: string;
-  version?: string;
   classifier?: string;
 } & JavaArtifactType;
+
+export type JavaArtifactVersion = RequireOneOrNone<{ version: string; versionRef: string }, 'version' | 'versionRef'>;
+
+export type JavaDependency = JavaArtifact & JavaArtifactVersion;
+
+export type JavaDefinition = {
+  versions: JavaDependencyVersion[];
+  dependencies: JavaDependency[];
+};
 
 export type JavaNeedleOptions = GradleNeedleOptions;
 
@@ -42,5 +56,6 @@ export type JavaApplication = BaseApplication & {
 };
 
 export type JavaSourceType = {
-  addJavaDependencies?(dependency: JavaArtifact[], options?: JavaNeedleOptions): void;
+  addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;
+  addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
 };

@@ -1,6 +1,6 @@
 import { JavaArtifactType } from '../types.js';
 
-export const mavenScopeToGradleScope = (artifactType: JavaArtifactType): string => {
+export const javaScopeToGradleScope = (artifactType: JavaArtifactType): string => {
   const { scope = 'compile', type = 'jar' } = artifactType;
   if (type === 'pom') {
     if (scope === 'import') {

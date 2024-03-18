@@ -31,8 +31,8 @@ const testcontainerFileForDB = {
   postgresql: 'PostgreSqlTestContainer.java',
 };
 
-type JavaArtifact = { groupId: string; artifactId: string; version?: string };
-export type DatabaseArtifact = { jdbc: JavaArtifact; r2dbc: JavaArtifact };
+type JavaDependency = { groupId: string; artifactId: string; version?: string };
+export type DatabaseArtifact = { jdbc: JavaDependency; r2dbc: JavaDependency };
 
 const databaseArtifactForDB: Record<string, DatabaseArtifact> = {
   mariadb: {

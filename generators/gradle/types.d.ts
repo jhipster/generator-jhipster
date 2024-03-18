@@ -1,3 +1,5 @@
+import { RequireOneOrNone } from 'type-fest';
+
 export type GradleScript = { script: string };
 
 export type GradleDependency = { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string };
@@ -10,7 +12,7 @@ export type GradleRepository = { url: string; username?: string; password?: stri
 
 export type GradleTomlVersion = { name: string; version?: string };
 
-export type GradleTomlAnyItemVersion = { version: string } | { ['version.ref']: string };
+export type GradleTomlAnyItemVersion = RequireOneOrNone<{ version: string; 'version.ref': string }, 'version' | 'version.ref'>;
 
 export type GradleTomlLibraryId = { module: string } | { group: string; name: string };
 
@@ -36,6 +38,7 @@ export type GradleSourceType = {
   addGradleMavenRepository?(repository: GradleRepository): void;
   addGradleBuildSrcDependency?(dependency: GradleDependency): void;
   addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;
+  addGradleDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[]): void;
   addGradleDependencyCatalogLibrary?(catalogVersion: GradleLibrary, options?: GradleNeedleOptions): void;
   addGradleDependencyCatalogLibraries?(catalogVersion: GradleLibrary[], options?: GradleNeedleOptions): void;
   addGradleDependencyCatalogPlugin?(catalogVersion: GradleTomlPlugin): void;
