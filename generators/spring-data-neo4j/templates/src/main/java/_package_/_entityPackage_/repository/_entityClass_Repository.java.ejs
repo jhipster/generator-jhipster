@@ -19,12 +19,12 @@
 package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ if (!paginationNo) { _%>
+<%_ if (reactive && !paginationNo) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 import org.springframework.stereotype.Repository;
-<%_ if (!paginationNo) { _%>
+<%_ if (reactive && !paginationNo) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
@@ -37,7 +37,7 @@ import java.util.UUID;
  */
 @Repository
 public interface <%= entityClass %>Repository extends <% if (reactive) { %>Reactive<% } %>Neo4jRepository<<%= persistClass %>, <%= primaryKey.type %>> {
-<%_ if (!paginationNo) { _%>
+<%_ if (reactive && !paginationNo) { _%>
 
     Flux<<%= persistClass %>> findAllBy(Pageable pageable);
 <%_ } _%>
