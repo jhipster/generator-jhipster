@@ -24,7 +24,7 @@ import { ValidationResult } from '../../base/api.js';
 // eslint-disable-next-line import/prefer-default-export
 export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
-  for (const entity of entities) {
+  for (const entity of entities.filter(entity => !entity.builtIn)) {
     for (const relationship of entity.relationships ?? []) {
       if (
         !relationship.otherRelationship &&
