@@ -142,7 +142,7 @@ export default function prepareField(entity, field) {
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(entity, data),
-    shouldDropDefaultValue: data => data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT,
+    shouldDropDefaultValue: data => !data.fieldHasAnyDefaultValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
     columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules.includes('required')),
     nullable: data => !data.columnRequired,

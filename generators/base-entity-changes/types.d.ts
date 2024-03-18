@@ -14,5 +14,7 @@ export type BaseChangelog = {
   addedRelationships: any[];
   removedRelationships: any[];
   relationshipsToRecreateForeignKeysOnly: any[];
+  removedDefaultValueFields: any[];
+  addedDefaultValueFields: any[];
   changelogData: any;
 };

@@ -18,7 +18,7 @@
  */
 import { formatDocAsSingleLine } from '../../base-application/support/index.js';
 
-const htmlEncode = text => {
+export const htmlEncode = text => {
   let htmLifiedText = text;
   // escape & to &amp;
   htmLifiedText = htmLifiedText.replace(/&/g, '&amp;');
@@ -40,7 +40,7 @@ const htmlEncode = text => {
  * @param {boolean} addRemarksTag - add remarks tag
  * @returns formatted liquibase remarks
  */
-const formatAsLiquibaseRemarks = (text, addRemarksTag = false) => {
+export const formatAsLiquibaseRemarks = (text, addRemarksTag = false) => {
   if (!text) {
     return addRemarksTag ? '' : text;
   }
@@ -48,5 +48,3 @@ const formatAsLiquibaseRemarks = (text, addRemarksTag = false) => {
   const description = htmlEncode(formatDocAsSingleLine(text));
   return addRemarksTag ? ` remarks="${description}"` : description;
 };
-
-export default formatAsLiquibaseRemarks;

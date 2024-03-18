@@ -30,7 +30,7 @@
     <changeSet id="<%= changelogDate %>-1" author="jhipster">
         <createTable tableName="<%= entity.entityTableName %>"<%- this.formatAsLiquibaseRemarks(entity.documentation, true) %>>
 <%_ for (field of fields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.formatAsLiquibaseRemarks(field.documentation, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1500"<%_ } %>>
+            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1500"<%_ } %>>
     <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
     <%_ } else if (field.unique) { _%>

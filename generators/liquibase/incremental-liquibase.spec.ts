@@ -115,6 +115,50 @@ relationship ManyToOne {
 One{anotherEnt} to @OnDelete("SET NULL") @OnUpdate("CASCADE") Another,
 }`;
 
+const jdlApplicationWithEntitiesWithDefaultValues = `
+${jdlApplication}
+entity One {
+  @Id uuid UUID
+  @defaultValue(true)
+  active Boolean
+  @defaultValue(42)
+  someLong Long
+  someDate Instant
+}
+
+entity Two {
+  @defaultValue("some-default-string-value")
+  comment String
+  @defaultValueComputed("NOW(6)")
+  computedDate Instant
+}
+`;
+
+const jdlApplicationWithEntitiesWithChangedDefaultValuesAndNewRelationship = `
+${jdlApplication}
+entity One {
+  @Id uuid UUID
+  @defaultValue(true)
+  active Boolean
+  @defaultValue(69)
+  someLong Long
+  @defaultValueComputed("NOW(6)")
+  someDate Instant
+  @defaultValue(true)
+  anotherBoolean Boolean
+}
+
+entity Two {
+  @defaultValue("some-default-string-value")
+  commentNew String
+  computedDate Instant
+}
+
+relationship ManyToOne {
+  Two to One
+}
+`;
+
 const generatorPath = join(__dirname, '../server/index.js');
 const mockedGenerators = ['jhipster:common'];
 
@@ -1247,6 +1291,134 @@ entity Customer {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
     });
   });
+
+  describe('when creating entities with default values', () => {
+    let runResult;
+    before(async () => {
+      const baseName = 'JhipsterApp';
+      const initialState = createImporterFromContent(jdlApplicationWithEntitiesWithDefaultValues, {
+        ...options,
+        creationTimestampConfig: options.creationTimestamp,
+      }).import();
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(2);
+      runResult = await helpers
+        .create(generatorPath)
+        .withJHipsterConfig(config)
+        .withOptions({ ...options, applicationWithEntities })
+        .run();
+    });
+
+    after(() => runResult.cleanup());
+
+    it('should create application', () => {
+      runResult.assertFile(['.yo-rc.json']);
+    });
+    it('should create entity config file', () => {
+      runResult.assertFile([join('.jhipster', 'One.json'), join('.jhipster', 'Two.json')]);
+    });
+    it('should create entity initial changelog', () => {
+      runResult.assertFile([
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
+      ]);
+
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        'column name="active" type="boolean" defaultValueBoolean="true"',
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        'column name="some_long" type="bigint" defaultValueNumeric="42"',
+      );
+
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
+        'column name="comment" type="varchar(255)" defaultValue="some-default-string-value"',
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
+        /* eslint-disable no-template-curly-in-string */
+        'column name="computed_date" type="${datetimeType}" defaultValueComputed="NOW(6)"',
+      );
+    });
+
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
+  });
+
+  describe('when modifying default values, fields with default values and relationships', () => {
+    let runResult;
+    before(async () => {
+      const baseName = 'JhipsterApp';
+      const initialState = createImporterFromContent(jdlApplicationWithEntitiesWithDefaultValues, {
+        ...options,
+        creationTimestampConfig: options.creationTimestamp,
+      }).import();
+      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
+      expect(applicationWithEntities).toBeTruthy();
+      expect(applicationWithEntities.entities.length).toBe(2);
+      runResult = await helpers
+        .create(generatorPath)
+        .withJHipsterConfig(config)
+        .withOptions({ ...options, applicationWithEntities })
+        .run();
+
+      const state = createImporterFromContent(jdlApplicationWithEntitiesWithChangedDefaultValuesAndNewRelationship, {
+        ...options,
+      }).import();
+
+      runResult = await runResult
+        .create(generatorPath)
+        .withOptions({
+          ...options,
+          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
+          creationTimestamp: '2020-01-02',
+        })
+        .run();
+    });
+
+    after(() => runResult.cleanup());
+
+    it('should create application', () => {
+      runResult.assertFile(['.yo-rc.json']);
+    });
+    it('should create entity config file', () => {
+      runResult.assertFile([join('.jhipster', 'One.json'), join('.jhipster', 'Two.json')]);
+    });
+    it('should create entity initial changelog', () => {
+      runResult.assertFile([
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
+      ]);
+
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        'column name="active" type="boolean" defaultValueBoolean="true"',
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000100_added_entity_One.xml`,
+        'column name="some_long" type="bigint" defaultValueNumeric="42"',
+      );
+
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
+        'column name="comment" type="varchar(255)" defaultValue="some-default-string-value"',
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200101000200_added_entity_Two.xml`,
+        /* eslint-disable no-template-curly-in-string */
+        'column name="computed_date" type="${datetimeType}" defaultValueComputed="NOW(6)"',
+      );
+    });
+
+    it('should match snapshot', () => {
+      expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
+    });
+  });
+
   describe('entities with/without byte fields should create fake data', () => {
     [
       {

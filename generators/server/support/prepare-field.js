@@ -165,4 +165,20 @@ export default function prepareField(entityWithConfig, field, generator) {
     }
     field.javaValueGenerator = getJavaValueGeneratorForType(field.javaFieldType);
   }
+
+  if (field.defaultValueComputed) {
+    field.defaultValueAttributeValue = field.defaultValueComputed;
+    field.defaultValueAttributeName = 'defaultValueComputed';
+  } else if (field.fieldDefaultValueDefined) {
+    field.defaultValueAttributeValue = field.defaultValue;
+    if (field.fieldTypeNumeric) {
+      field.defaultValueAttributeName = 'defaultValueNumeric';
+    } else if (field.fieldTypeDateTime) {
+      field.defaultValueAttributeName = 'defaultValueDate';
+    } else if (field.fieldTypeBoolean) {
+      field.defaultValueAttributeName = 'defaultValueBoolean';
+    } else {
+      field.defaultValueAttributeName = 'defaultValue';
+    }
+  }
 }
