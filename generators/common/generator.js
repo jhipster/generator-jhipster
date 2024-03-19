@@ -248,7 +248,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         if (application.skipCommitHook) return;
         this.packageJson.merge({
           scripts: {
-            prepare: 'husky install',
+            prepare: 'husky',
           },
           devDependencies: {
             husky: application.nodeDependencies.husky,
