@@ -92,6 +92,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/base-entity-changes' \
   'generators/bootstrap-application-server' \
   'generators/cucumber' \
+  'generators/feign-client' \
   'generators/gatling' \
   'generators/gradle' \
   'generators/java' \
