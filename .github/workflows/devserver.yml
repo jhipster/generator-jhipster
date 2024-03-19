@@ -33,6 +33,7 @@ on:
       - 'generators/client/**'
       - 'generators/react/**'
       - 'generators/vue/**'
+      - 'generators/*'
   pull_request:
     types: [closed, opened, synchronize, reopened]
     branches:
