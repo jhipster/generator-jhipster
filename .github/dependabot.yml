@@ -135,6 +135,8 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+      - dependency-name: '@module-federation/utilities'
+        versions: ['*']
     groups:
       typescript-eslint:
         patterns:
@@ -169,6 +171,8 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+      - dependency-name: '@module-federation/utilities'
+        versions: ['*']
     groups:
       typescript-eslint:
         patterns:
