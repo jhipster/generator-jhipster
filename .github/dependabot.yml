@@ -192,6 +192,10 @@ updates:
       - 'theme: dependencies'
       - 'theme: docker :whale:'
       - 'skip-changelog'
+    ignore:
+      # https://github.com/jhipster/generator-jhipster/issues/25548
+      - dependency-name: 'mongo'
+        versions: ['>=7.0.6']
 
   - package-ecosystem: 'maven'
     directory: '/generators/server/resources/'
