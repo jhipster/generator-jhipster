@@ -27,7 +27,7 @@ export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
 export const NODE_VERSION = '18.19.1';
-export const OPENAPI_GENERATOR_CLI_VERSION = '2.7.0';
+export const OPENAPI_GENERATOR_CLI_VERSION = '2.13.1';
 
 // The version should be coherent with the one from spring-data-elasticsearch project
 export const ELASTICSEARCH_TAG = '8.10.4';
