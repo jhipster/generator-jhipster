@@ -136,6 +136,7 @@ updates:
       - dependency-name: '@types/node'
         versions: ['>=19']
       - dependency-name: @module-federation/utilities
+        versions: ['*']
     groups:
       typescript-eslint:
         patterns:
@@ -171,6 +172,7 @@ updates:
       - dependency-name: '@types/node'
         versions: ['>=19']
       - dependency-name: @module-federation/utilities
+        versions: ['*']
     groups:
       typescript-eslint:
         patterns:
