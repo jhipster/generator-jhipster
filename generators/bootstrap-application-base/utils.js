@@ -267,7 +267,7 @@ export function createAuthorityEntity(customAuthorityData = {}, application) {
     skipDbChangelog: true,
     entityDomainLayer: application.backendTypeSpringBoot,
     entityPersistenceLayer: application.backendTypeSpringBoot,
-    entityRestLayer: application.backendTypeSpringBoot,
+    entityRestLayer: application.backendTypeSpringBoot && !application.applicationTypeMicroservice,
     ...customAuthorityData,
   };
 

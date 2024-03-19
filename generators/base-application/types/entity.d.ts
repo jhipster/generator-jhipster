@@ -82,6 +82,8 @@ type Entity = Required<BaseEntity> &
     entityPluralFileName: string;
     entityServiceFileName: string;
 
+    /** Generate only the model at client side for relationships. */
+    entityClientModelOnly?: boolean;
     entityAngularName: string;
     entityAngularNamePlural: string;
     entityReactName: string;
