@@ -138,7 +138,7 @@ git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap' \
   'generators/bootstrap-application-base' \
   $(ls generators/*.*) \
-  || CLIENT=true SERVER=true COMMON=true ANY=true
+  || CLIENT=true SERVER=true COMMON=true ANY=true ANGULAR=true REACT=true VUE=true
 echo "::endgroup::"
 
 echo "::group::Check E2E"
