@@ -198,6 +198,20 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
   }
 
+  get preparingEachEntity() {
+    return {
+      prepareEntity({ entity }) {
+        if (entity.entityRestLayer === false) {
+          entity.entityClientModelOnly = true;
+        }
+      },
+    };
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       insight({ application }) {

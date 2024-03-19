@@ -126,7 +126,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
       }
     } else {
       await this.writeFiles({
-        sections: angularFiles,
+        sections: entity.entityClientModelOnly ? { model: [entityModelFiles] } : angularFiles,
         context: { ...application, ...entity },
       });
     }
@@ -135,7 +135,9 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
 
 export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
   const { source, application } = taskParam;
-  const entities = filterEntitiesForClient(taskParam.entities).filter(entity => !entity.builtInUser && !entity.embedded);
+  const entities = filterEntitiesForClient(taskParam.entities).filter(
+    entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
+  );
   source.addEntitiesToClient({ application, entities });
 }
 
