@@ -505,6 +505,7 @@ function fieldToId(field) {
  */
 export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity, config) {
   mutateData(entity, {
+    __override__: false,
     applicationType: config.applicationType,
     baseName: config.baseName,
     frontendAppName: config.frontendAppName,
@@ -525,6 +526,7 @@ export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity,
     dtoSuffix: config.dtoSuffix,
     packageName: config.packageName,
     packageFolder: config.packageFolder,
+    microserviceName: ({ builtIn }) => (!builtIn && config.applicationType === MICROSERVICE ? config.baseName : undefined),
   });
   if (entity.searchEngine === true && (!entity.microserviceName || entity.microserviceName === config.baseName)) {
     // If the entity belongs to this application and searchEngine is true.
@@ -535,11 +537,6 @@ export function loadRequiredConfigIntoEntity(this: BaseGenerator | void, entity,
       entity.searchEngine = NO_SEARCH_ENGINE;
       this?.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
     }
-  }
-  if (config.applicationType === MICROSERVICE) {
-    mutateData(entity, {
-      microserviceName: config.baseName,
-    });
   }
   return entity;
 }
