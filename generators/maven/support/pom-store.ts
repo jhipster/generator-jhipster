@@ -188,6 +188,25 @@ const ensureChild = (current: any, ...childPath) => {
   return current;
 };
 
+const reorderArtifact = <Artifact extends MavenArtifact = MavenArtifact>({
+  groupId,
+  artifactId,
+  inProfile,
+  version,
+  ...rest
+}: Artifact): Artifact => ({ inProfile, groupId, artifactId, version, ...rest }) as Artifact;
+
+const reorderDependency = <Dependency extends MavenDependency = MavenDependency>({
+  groupId,
+  artifactId,
+  inProfile,
+  version,
+  type,
+  scope,
+  classifier,
+  ...rest
+}: Dependency): Dependency => ({ inProfile, groupId, artifactId, version, type, scope, classifier, ...rest }) as Dependency;
+
 export default class PomStorage extends XmlStorage {
   constructor({ saveFile, loadFile }: { saveFile: (string) => void; loadFile: () => string }) {
     super({ saveFile, loadFile });
@@ -200,12 +219,12 @@ export default class PomStorage extends XmlStorage {
   }
 
   public addDependency({ inProfile, ...dependency }: MavenDependency): void {
-    this.addDependencyAt(this.getNode({ profile: inProfile }), dependency);
+    this.addDependencyAt(this.getNode({ profile: inProfile }), reorderDependency(dependency));
     this.persist();
   }
 
   public addDependencyManagement({ inProfile, ...dependency }: MavenDependency): void {
-    this.addDependencyAt(this.getNode({ profile: inProfile, nodePath: 'dependencyManagement' }), dependency);
+    this.addDependencyAt(this.getNode({ profile: inProfile, nodePath: 'dependencyManagement' }), reorderDependency(dependency));
     this.persist();
   }
 
@@ -268,7 +287,7 @@ export default class PomStorage extends XmlStorage {
       'configuration.annotationProcessorPaths',
     );
     const paths = ensureChildIsArray(annotationProcessorPaths, 'path');
-    appendOrReplace(paths, artifact, artifactEquals);
+    appendOrReplace(paths, reorderArtifact(artifact), artifactEquals);
     this.persist();
   }
 
@@ -282,12 +301,12 @@ export default class PomStorage extends XmlStorage {
 
   protected addDependencyAt(node, { additionalContent, ...dependency }: MavenDependency) {
     const dependencyArray = ensureChildIsArray(node, 'dependencies.dependency');
-    appendOrReplace(dependencyArray, this.mergeContent(dependency, additionalContent), dependencyEquals);
+    appendOrReplace(dependencyArray, this.mergeContent(reorderDependency(dependency), additionalContent), dependencyEquals);
   }
 
   protected addPluginAt(node, { additionalContent, ...artifact }: MavenPlugin) {
     const artifactArray = ensureChildIsArray(node, 'plugins.plugin');
-    appendOrReplace(artifactArray, this.mergeContent(artifact, additionalContent), artifactEquals);
+    appendOrReplace(artifactArray, this.mergeContent(reorderArtifact(artifact), additionalContent), artifactEquals);
   }
 
   protected addRepositoryAt(node, { releasesEnabled, snapshotsEnabled, ...repository }: MavenRepository): void {

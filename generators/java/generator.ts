@@ -27,7 +27,7 @@ import {
   generatedAnnotationTransform,
   checkJava,
   isReservedJavaKeyword,
-  mavenScopeToGradleScope,
+  javaScopeToGradleScope,
 } from './support/index.js';
 import command from './command.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
@@ -36,7 +36,8 @@ import { entityServerFiles, enumFiles } from './entity-files.js';
 import { getEnumInfo } from '../base-application/support/index.js';
 import { mutateData } from '../base/support/index.js';
 import { javaBeanCase } from '../server/support/index.js';
-import type { JavaArtifact } from './types.js';
+import type { JavaDependency } from './types.js';
+import type { MavenDependency } from '../maven/types.js';
 
 export default class JavaGenerator extends BaseApplicationGenerator {
   packageInfoFile!: boolean;
@@ -97,48 +98,63 @@ export default class JavaGenerator extends BaseApplicationGenerator {
             const annotationProcessors = dependencies.filter(dep => dep.scope === 'annotationProcessor');
             const importDependencies = dependencies.filter(dep => dep.scope === 'import');
             const commonDependencies = dependencies.filter(dep => !['annotationProcessor', 'import'].includes(dep.scope!));
-            const convertVersionToProp = ({ version, artifactId, ...artifact }: JavaArtifact) => ({
-              ...artifact,
-              artifactId,
-              version: version ? `\${${artifactId}.version}` : undefined,
-            });
+            const convertVersionToRef = ({ version, versionRef, ...artifact }: JavaDependency): MavenDependency =>
+              version || versionRef ? { ...artifact, version: `\${${versionRef ?? artifact.artifactId}.version}` } : artifact;
+            const removeScope = ({ scope: _scope, ...artifact }: MavenDependency) => artifact;
 
             source.addMavenDefinition?.({
               properties: dependencies
                 .filter(dep => dep.version)
                 .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
               dependencies: [
-                ...commonDependencies.map(convertVersionToProp),
+                ...commonDependencies.map(convertVersionToRef),
                 // Add a provided scope for annotation processors so that version is not required in annotationProcessor dependencies
-                ...annotationProcessors
-                  .filter(dep => !dep.version)
-                  .map(({ scope: _scope, ...artifact }) => ({ ...artifact, scope: 'provided' })),
+                ...annotationProcessors.filter(dep => !dep.version).map(artifact => ({ ...artifact, scope: 'provided' })),
               ],
-              dependencyManagement: importDependencies.map(convertVersionToProp),
-              annotationProcessors: annotationProcessors.map(convertVersionToProp).map(({ scope: _scope, ...artifact }) => artifact),
+              dependencyManagement: importDependencies.map(convertVersionToRef),
+              annotationProcessors: annotationProcessors.map(convertVersionToRef).map(removeScope),
             });
           }
 
           if (application.buildToolGradle) {
             source.addGradleDependencies?.(
               dependencies
-                .filter(dep => !dep.version)
+                .filter(dep => !dep.version && !dep.versionRef)
                 .map(({ scope, type, ...artifact }) => ({
                   ...artifact,
-                  scope: mavenScopeToGradleScope({ scope, type }),
+                  scope: javaScopeToGradleScope({ scope, type }),
                 })),
               options,
             );
             source.addGradleDependencyCatalogLibraries?.(
               dependencies
-                .filter(dep => dep.version)
-                .map(({ scope, type, groupId, artifactId, version }) => ({
-                  libraryName: artifactId,
-                  module: `${groupId}:${artifactId}`,
-                  version: version!,
-                  scope: mavenScopeToGradleScope({ scope, type }),
-                })),
+                .filter(dep => dep.version || dep.versionRef)
+                .map(({ scope, type, groupId, artifactId, version, versionRef }) => {
+                  const library = {
+                    libraryName: artifactId,
+                    module: `${groupId}:${artifactId}`,
+                    scope: javaScopeToGradleScope({ scope, type }),
+                  };
+                  return version ? { ...library, version } : { ...library, 'version.ref': versionRef! };
+                }),
             );
+          }
+        };
+
+        source.addJavaDefinition = (definition, options) => {
+          const { dependencies, versions } = definition;
+          if (dependencies) {
+            source.addJavaDependencies!(dependencies, options);
+          }
+          if (versions) {
+            if (application.buildToolMaven) {
+              source.addMavenDefinition!({
+                properties: versions.map(({ name, version }) => ({ property: `${name}.version`, value: version })),
+              });
+            }
+            if (application.buildToolGradle) {
+              source.addGradleDependencyCatalogVersions?.(versions);
+            }
           }
         };
       },

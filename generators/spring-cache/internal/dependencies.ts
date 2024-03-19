@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JavaArtifact } from '../../java/types.js';
+import { JavaDependency } from '../../java/types.js';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -29,8 +29,8 @@ const hibernateJCache = {
 };
 
 type CacheProviderDependencies = {
-  base: { dependencies: JavaArtifact[] };
-  hibernateCache?: { dependencies: JavaArtifact[] };
+  base: { dependencies: JavaDependency[] };
+  hibernateCache?: { dependencies: JavaDependency[] };
 };
 
 // eslint-disable-next-line import/prefer-default-export

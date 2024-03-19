@@ -34,7 +34,7 @@ import {
   addGradlePluginManagementCallback,
   addGradlePropertyCallback,
   addGradleBuildSrcDependencyCallback,
-  addGradleDependencyCatalogVersionCallback,
+  addGradleDependenciesCatalogVersionCallback,
   addGradleBuildSrcDependencyCatalogVersionCallback,
   addGradleDependencyCatalogLibrariesCallback,
   addGradleDependencyCatalogPluginsCallback,
@@ -88,8 +88,9 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         source.addGradleProperty = property => this.editFile('gradle.properties', addGradlePropertyCallback(property));
         source.addGradleBuildSrcDependency = dependency =>
           this.editFile(`${GRADLE_BUILD_SRC_DIR}/build.gradle`, addGradleBuildSrcDependencyCallback(dependency));
-        source.addGradleDependencyCatalogVersion = version =>
-          this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogVersionCallback(version));
+        source.addGradleDependencyCatalogVersions = versions =>
+          this.editFile('gradle/libs.versions.toml', addGradleDependenciesCatalogVersionCallback(versions));
+        source.addGradleDependencyCatalogVersion = version => source.addGradleDependencyCatalogVersions!([version]);
         source.addGradleDependencyCatalogLibraries = (libs, { gradleFile = 'build.gradle' } = {}) => {
           libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile('gradle/libs.versions.toml', addGradleDependencyCatalogLibrariesCallback(libs));

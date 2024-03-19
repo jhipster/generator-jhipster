@@ -405,7 +405,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           {
             groupId: 'tech.jhipster',
             artifactId: 'jhipster-dependencies',
-            version: application.jhipsterDependenciesVersion,
+            version: application.jhipsterDependenciesVersion!,
             type: 'pom',
             scope: 'import',
           },
