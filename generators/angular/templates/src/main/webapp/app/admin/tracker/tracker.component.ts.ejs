@@ -60,6 +60,7 @@ export default class TrackerComponent implements OnInit, OnDestroy {
         this.showActivity(activity);
       },
     });
+    this.trackerService.sendActivity();
   }
 
   ngOnDestroy(): void {
