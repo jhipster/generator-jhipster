@@ -958,14 +958,14 @@ jobs:
       NG_CLI_ANALYTICS: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: NODE_VERSION
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: JAVA_VERSION
-      - name: Install node.js packages
+      - name: Install Node.js packages
         run: npm install
       - name: Run backend test
         run: |
@@ -1031,18 +1031,18 @@ jobs:
       NG_CLI_ANALYTICS: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: NODE_VERSION
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: JAVA_VERSION
-      - name: Install node.js packages
+      - name: Install Node.js packages
         run: npm install
       - name: Install Snyk CLI
         run: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+          curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
           chmod +x snyk
       - name: Snyk test
         continue-on-error: true
@@ -1181,14 +1181,14 @@ jobs:
       NG_CLI_ANALYTICS: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: NODE_VERSION
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: JAVA_VERSION
-      - name: Install node.js packages
+      - name: Install Node.js packages
         run: npm install
       - name: Run backend test
         run: |
@@ -1248,18 +1248,18 @@ jobs:
       NG_CLI_ANALYTICS: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: NODE_VERSION
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: JAVA_VERSION
-      - name: Install node.js packages
+      - name: Install Node.js packages
         run: npm install
       - name: Install Snyk CLI
         run: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+          curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
           chmod +x snyk
       - name: Snyk test
         continue-on-error: true
@@ -1417,14 +1417,14 @@ jobs:
       NG_CLI_ANALYTICS: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: NODE_VERSION
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: JAVA_VERSION
-      - name: Install node.js packages
+      - name: Install Node.js packages
         run: npm install
       - name: Run backend test
         run: |
