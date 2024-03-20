@@ -132,7 +132,7 @@ export class TrackerService {
     });
   }
 
-  private sendActivity(): void {
+  sendActivity(): void {
     this.stomp.publish({
       destination: DESTINATION_ACTIVITY,
       body: JSON.stringify({ page: this.router.routerState.snapshot.url }),
