@@ -86,6 +86,7 @@
     "!**/*.spec.?(c|m)js"
   ],
   "scripts": {
+    "prebuild": "npm run clean",
     "build": "npm run compile && npm run copy-files && npm run compile-types && npm run copy-types",
     "clean": "rimraf dist",
     "compile": "tsc",
