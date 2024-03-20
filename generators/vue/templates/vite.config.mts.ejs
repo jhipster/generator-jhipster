@@ -103,10 +103,16 @@ let config = defineConfig({
 <%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
         '/services',
 <%_ } _%>
+<%_ if (communicationSpringWebsocket) { _%>
+        '/websocket',
+<%_ } _%>
       ].map(res => [
         res,
         {
           target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+<%_ if (communicationSpringWebsocket) { _%>
+          ws: res === '/websocket',
+<%_ } _%>
         },
       ])
     ),

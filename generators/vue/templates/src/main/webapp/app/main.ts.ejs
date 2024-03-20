@@ -1,7 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
 import Vue, { createApp, provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
-import { createPinia } from 'pinia'
+import { createPinia, storeToRefs } from 'pinia'
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -169,7 +169,8 @@ const app = createApp({
       }
     );
 
-    provide('authenticated', computed(() => store.authenticated));
+    const { authenticated } = storeToRefs(store);
+    provide('authenticated', authenticated);
     provide('currentUsername', computed(() => store.account?.login));
 
 <%_ if (enableTranslation) { _%>
@@ -179,7 +180,7 @@ const app = createApp({
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
 <%_ if (communicationSpringWebsocket) { _%>
 
-    provide('trackerService', useTrackerService());
+    provide('trackerService', useTrackerService({ authenticated }));
 <%_ } _%>
 <%_ if (applicationTypeMicroservice && microfrontend) { _%>
     provide('microfrontendI18n', false);
