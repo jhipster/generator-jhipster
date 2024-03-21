@@ -4,7 +4,8 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { VinylMemFsEditorFile } from 'mem-fs-editor';
 import { Piscina } from 'piscina';
 
-import CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.js';
+import { addLineNumbers } from '../internal/transform-utils.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const createRemoveUnusedImportsTransform = function (
@@ -33,7 +34,7 @@ export const createRemoveUnusedImportsTransform = function (
             file.contents = Buffer.from(result);
           }
           if (error) {
-            const errorMessage = `Error parsing file ${file.relative}: ${error} at ${fileContents}`;
+            const errorMessage = `Error parsing file ${file.relative}: ${error} at ${addLineNumbers(fileContents)}`;
             if (ignoreErrors) {
               this?.log?.warn?.(errorMessage);
               return;

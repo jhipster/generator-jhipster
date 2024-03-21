@@ -24,6 +24,7 @@ import { Piscina } from 'piscina';
 import BaseGenerator from '../../base-core/index.js';
 import { getPackageRoot } from '../../../lib/index.js';
 import { JS_PRETTIER_EXTENSIONS } from '../../generator-constants.js';
+import { addLineNumbers } from '../internal/transform-utils.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const createESLintTransform = function (
@@ -53,7 +54,7 @@ export const createESLintTransform = function (
         file.contents = Buffer.from(result);
       }
       if (error) {
-        const errorMessage = `Error parsing file ${file.relative}: ${error} at ${fileContents}`;
+        const errorMessage = `Error parsing file ${file.relative}: ${error} at ${addLineNumbers(fileContents)}`;
         if (!ignoreErrors) {
           throw new Error(errorMessage);
         }
