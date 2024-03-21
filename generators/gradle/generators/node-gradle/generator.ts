@@ -18,9 +18,8 @@
  */
 
 import BaseApplicationGenerator from '../../../base-application/index.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
 import { GENERATOR_GRADLE } from '../../../generator-list.js';
-import cleanup from './cleanup.js';
-import { files } from './files.js';
 
 export default class NodeGradleGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -34,36 +33,11 @@ export default class NodeGradleGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async promptCommand() {
-        await this.promptCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup,
       async writing({ application }) {
         await this.writeFiles({
-          sections: files,
+          blocks: [{ templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.node-gradle-conventions.gradle`] }],
           context: application,
         });
       },
