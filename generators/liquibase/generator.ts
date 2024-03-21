@@ -211,12 +211,21 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
         for (const databaseChangelog of changes) {
           if (databaseChangelog.newEntity) {
-            this.databaseChangelogs.push(this.prepareChangelog({ databaseChangelog, application }));
+            this.databaseChangelogs.push(
+              this.prepareChangelog({
+                databaseChangelog: {
+                  ...databaseChangelog,
+                  changelogData: { ...databaseChangelog.changelogData },
+                },
+                application,
+              }),
+            );
           } else if (databaseChangelog.addedFields.length > 0 || databaseChangelog.removedFields.length > 0) {
             this.databaseChangelogs.push(
               this.prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
+                  changelogData: { ...databaseChangelog.changelogData },
                   fieldChangelog: true,
                   addedRelationships: [],
                   removedRelationships: [],
@@ -237,6 +246,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               this.prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
+                  changelogData: { ...databaseChangelog.changelogData },
                   relationshipChangelog: true,
                   addedFields: [],
                   removedFields: [],
