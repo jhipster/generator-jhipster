@@ -61,7 +61,7 @@ export default class NodeGradleGenerator extends BaseApplicationGenerator {
           },
         ]);
 
-        source.addGradleProperty!({ property: 'nodeInstall', comment: '# Install and use a local version of node and npm.' });
+        source.addGradleProperty!({ property: 'nodeInstall', comment: 'Install and use a local version of node and npm.' });
       },
     });
   }

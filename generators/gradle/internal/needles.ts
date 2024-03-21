@@ -150,7 +150,7 @@ export const addGradlePluginManagementCallback = ({ id, version }: GradlePlugin)
 export const addGradlePropertyCallback = ({ comment, property, value }: GradleProperty & GradleComment) =>
   createNeedleCallback({
     needle: 'gradle-property',
-    contentToAdd: `${typeof comment === 'string' ? `#${comment}\n` : ''}${property}${typeof value === 'string' ? `=${value}` : ''}`,
+    contentToAdd: `${typeof comment === 'string' ? `## ${comment}\n` : ''}${property}${typeof value === 'string' ? `=${value}` : ''}`,
     contentToCheck: new RegExp(`\n${property}${typeof value === 'string' ? '=' : '\n'}`),
     autoIndent: false,
   });
