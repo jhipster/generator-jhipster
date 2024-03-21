@@ -2,6 +2,7 @@ import prettier from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginProperties from 'prettier-plugin-properties';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
+import { addLineNumbers } from '../internal/transform-utils.js';
 
 export default async ({
   relativeFilePath,
@@ -37,10 +38,7 @@ export default async ({
     if (fileContents) {
       errorMessage = `Error parsing file ${relativeFilePath}: ${error}
 
-At: ${fileContents
-        .split('\n')
-        .map((value, idx) => `${idx + 1}: ${value}`)
-        .join('\n')}`;
+At: ${addLineNumbers(fileContents)}`;
     } else {
       errorMessage = `Unknown prettier error: ${error}`;
     }
