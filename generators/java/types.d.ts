@@ -1,6 +1,6 @@
 import { RequireOneOrNone } from 'type-fest';
 import { BaseApplication } from '../base-application/types.js';
-import { GradleNeedleOptions } from '../gradle/types.js';
+import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
 
 export type JavaDependencyVersion = {
   name: string;
@@ -29,31 +29,32 @@ export type JavaDefinition = {
 
 export type JavaNeedleOptions = GradleNeedleOptions;
 
-export type JavaApplication = BaseApplication & {
-  javaVersion: string;
+export type JavaApplication = BaseApplication &
+  GradleApplication & {
+    javaVersion: string;
 
-  packageName: string;
-  packageFolder: string;
+    packageName: string;
+    packageFolder: string;
 
-  srcMainJava: string;
-  srcMainResources: string;
-  srcMainWebapp: string;
-  srcTestJava: string;
-  srcTestResources: string;
-  srcTestJavascript: string;
+    srcMainJava: string;
+    srcMainResources: string;
+    srcMainWebapp: string;
+    srcTestJava: string;
+    srcTestResources: string;
+    srcTestJavascript: string;
 
-  javaPackageSrcDir: string;
-  javaPackageTestDir: string;
+    javaPackageSrcDir: string;
+    javaPackageTestDir: string;
 
-  temporaryDir: string;
+    temporaryDir: string;
 
-  javaDependencies: Record<string, string>;
-  packageInfoJavadocs: { packageName: string; documentation: string }[];
+    javaDependencies: Record<string, string>;
+    packageInfoJavadocs: { packageName: string; documentation: string }[];
 
-  prettierJava: boolean;
+    prettierJava: boolean;
 
-  imperativeOrReactive: string;
-};
+    imperativeOrReactive: string;
+  };
 
 export type JavaSourceType = {
   addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;

@@ -1,12 +1,14 @@
 import { RequireOneOrNone } from 'type-fest';
 
+export type GradleComment = { comment?: string };
+
 export type GradleScript = { script: string };
 
 export type GradleDependency = { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string };
 
 export type GradlePlugin = { id: string; version?: string };
 
-export type GradleProperty = { property: string; value: string };
+export type GradleProperty = { property: string; value?: string };
 
 export type GradleRepository = { url: string; username?: string; password?: string };
 
@@ -26,22 +28,33 @@ export type GradleTomlPlugin = { pluginName: string; addToBuild?: boolean } & (
   | ({ id: string } & GradleTomlAnyItemVersion)
 );
 
-export type GradleNeedleOptions = { gradleFile?: string };
+export type GradleFileNeedleOptions = { gradleFile?: string };
+export type GradleCatalogNeedleOptions = { gradleVersionCatalogFile?: string };
+
+export type GradleNeedleOptions = GradleFileNeedleOptions & GradleCatalogNeedleOptions;
 
 export type GradleSourceType = {
   applyFromGradle?(script: GradleScript): void;
-  addGradleDependency?(dependency: GradleDependency, options?: GradleNeedleOptions): void;
-  addGradleDependencies?(dependency: GradleDependency[], options?: GradleNeedleOptions): void;
+  addGradleDependency?(dependency: GradleDependency, options?: GradleFileNeedleOptions): void;
+  addGradleDependencies?(dependency: GradleDependency[], options?: GradleFileNeedleOptions): void;
   addGradlePlugin?(plugin: GradlePlugin): void;
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
-  addGradleProperty?(property: GradleProperty): void;
+  addGradleProperty?(property: GradleProperty & GradleComment): void;
   addGradleMavenRepository?(repository: GradleRepository): void;
   addGradleBuildSrcDependency?(dependency: GradleDependency): void;
-  addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;
-  addGradleDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[]): void;
+
+  addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion, options?: GradleCatalogNeedleOptions): void;
+  addGradleDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[], options?: GradleCatalogNeedleOptions): void;
   addGradleDependencyCatalogLibrary?(catalogVersion: GradleLibrary, options?: GradleNeedleOptions): void;
   addGradleDependencyCatalogLibraries?(catalogVersion: GradleLibrary[], options?: GradleNeedleOptions): void;
   addGradleDependencyCatalogPlugin?(catalogVersion: GradleTomlPlugin): void;
   addGradleDependencyCatalogPlugins?(catalogVersion: GradleTomlPlugin[]): void;
+
   addGradleBuildSrcDependencyCatalogVersion?(catalogVersion: GradleTomlVersion): void;
+  addGradleBuildSrcDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[]): void;
+  addGradleBuildSrcDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
+};
+
+export type GradleApplication = {
+  gradleBuildSrc?: string;
 };
