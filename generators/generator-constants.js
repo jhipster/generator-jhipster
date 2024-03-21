@@ -18,7 +18,7 @@
  */
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.2.0';
+export const JHIPSTER_DEPENDENCIES_VERSION = '8.3.0-SNAPSHOT';
 // Version of Java
 export const JAVA_VERSION = '17';
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
