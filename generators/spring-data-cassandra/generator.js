@@ -88,14 +88,14 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
         });
       },
       addDependencies({ application, source }) {
-        const { reactive } = application;
+        const { reactive, javaDependencies } = application;
 
         const cassandraStarter = reactive ? 'spring-boot-starter-data-cassandra-reactive' : 'spring-boot-starter-data-cassandra';
         source.addJavaDependencies?.([
           { groupId: 'com.datastax.oss', artifactId: 'java-driver-mapper-runtime' },
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
           { groupId: 'org.springframework.boot', artifactId: cassandraStarter },
-          { groupId: 'org.lz4', artifactId: 'lz4-java' },
+          { groupId: 'org.lz4', artifactId: 'lz4-java', version: javaDependencies['lz4-java'] },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'cassandra' },
