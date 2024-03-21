@@ -453,6 +453,88 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           ]);
         }
       },
+      customizeGradle({ application, source }) {
+        const { buildToolGradle, javaDependencies } = application;
+        if (!buildToolGradle) return;
+        source.addGradleDependencyCatalogVersion?.({ name: 'checkstyle', version: javaDependencies!.checkstyle });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'checkstyle', version: javaDependencies!.checkstyle });
+        source.addGradleDependencyCatalogVersion?.({ name: 'jacoco', version: javaDependencies!['jacoco-maven-plugin'] });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'jacoco',
+          version: javaDependencies!['jacoco-maven-plugin'],
+        });
+        source.addGradleDependencyCatalogVersion?.({
+          name: 'sonarqube-plugin',
+          version: javaDependencies!['gradle-sonarqube'],
+        });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'sonarqube-plugin',
+          version: javaDependencies!['gradle-sonarqube'],
+        });
+        source.addGradleDependencyCatalogVersion?.({
+          name: 'spotless-plugin',
+          version: javaDependencies!['spotless-gradle-plugin'],
+        });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'spotless-plugin',
+          version: javaDependencies!['spotless-gradle-plugin'],
+        });
+        source.addGradleDependencyCatalogVersion?.({
+          name: 'modernizer-plugin',
+          version: javaDependencies!['gradle-modernizer-plugin'],
+        });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'modernizer-plugin',
+          version: javaDependencies!['gradle-modernizer-plugin'],
+        });
+        source.addGradleDependencyCatalogVersion?.({ name: 'nohttp-plugin', version: javaDependencies!['nohttp-checkstyle'] });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'nohttp-plugin',
+          version: javaDependencies!['nohttp-checkstyle'],
+        });
+        source.addGradleDependencyCatalogVersion?.({ name: 'jib-plugin', version: javaDependencies!['jib-maven-plugin'] });
+        source.addGradleBuildSrcDependencyCatalogVersion?.({
+          name: 'jib-plugin',
+          version: javaDependencies!['jib-maven-plugin'],
+        });
+        source.addGradleBuildSrcDependency?.({
+          groupId: 'org.sonarsource.scanner.gradle',
+          artifactId: 'sonarqube-gradle-plugin',
+          // eslint-disable-next-line no-template-curly-in-string
+          version: '${libs.versions.sonarqube.plugin.get()}',
+          scope: 'implementation',
+        });
+        source.addGradleBuildSrcDependency?.({
+          groupId: 'com.diffplug.spotless',
+          artifactId: 'spotless-plugin-gradle',
+          // eslint-disable-next-line no-template-curly-in-string
+          version: '${libs.versions.spotless.plugin.get()}',
+          scope: 'implementation',
+        });
+        source.addGradleBuildSrcDependency?.({
+          groupId: 'com.github.andygoossens',
+          artifactId: 'gradle-modernizer-plugin',
+          // eslint-disable-next-line no-template-curly-in-string
+          version: '${libs.versions.modernizer.plugin.get()}',
+          scope: 'implementation',
+        });
+        source.addGradleBuildSrcDependency?.({
+          groupId: 'io.spring.nohttp',
+          artifactId: 'nohttp-gradle',
+          // eslint-disable-next-line no-template-curly-in-string
+          version: '${libs.versions.nohttp.plugin.get()}',
+          scope: 'implementation',
+        });
+        source.addGradleBuildSrcDependency?.({
+          groupId: 'com.google.cloud.tools',
+          artifactId: 'jib-gradle-plugin',
+          // eslint-disable-next-line no-template-curly-in-string
+          version: '${libs.versions.jib.plugin.get()}',
+          scope: 'implementation',
+        });
+        source.addGradlePlugin?.({ id: 'jhipster.code-quality-conventions' });
+        source.addGradlePlugin?.({ id: 'jhipster.docker-conventions' });
+      },
     });
   }
 
