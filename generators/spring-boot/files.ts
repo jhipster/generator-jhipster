@@ -312,7 +312,6 @@ export const baseServerFiles = {
         'gradle/profile_prod.gradle',
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
-        `${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.docker-conventions.gradle`,
       ],
     },
     {

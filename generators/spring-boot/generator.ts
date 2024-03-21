@@ -150,6 +150,14 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         const { databaseType, messageBroker, searchEngine, websocket, cacheProvider, buildTool, skipClient, clientFramework } =
           this.jhipsterConfigWithDefaults;
 
+        if (buildTool === 'gradle') {
+          await this.composeWithJHipster('jhipster:gradle:code-quality');
+          await this.composeWithJHipster('jhipster:gradle:jib');
+          if (!skipClient && clientFramework !== 'no') {
+            await this.composeWithJHipster('jhipster:gradle:node-gradle');
+          }
+        }
+
         if (databaseType === SQL) {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_RELATIONAL);
         } else if (databaseType === CASSANDRA) {
@@ -172,10 +180,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         }
         if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider)) {
           await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
-        }
-
-        if (!skipClient && clientFramework !== 'no' && buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:node-gradle');
         }
       },
     });

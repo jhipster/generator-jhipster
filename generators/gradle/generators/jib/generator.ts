@@ -37,7 +37,7 @@ export default class CodeQualityGenerator extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       async writing({ application }) {
         await this.writeFiles({
-          blocks: [{ templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.code-quality-conventions.gradle`] }],
+          blocks: [{ templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.docker-conventions.gradle`] }],
           context: application,
         });
       },
