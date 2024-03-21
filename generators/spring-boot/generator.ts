@@ -147,7 +147,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { databaseType, messageBroker, searchEngine, websocket, cacheProvider } = this.jhipsterConfigWithDefaults;
+        const { databaseType, messageBroker, searchEngine, websocket, cacheProvider, buildTool, skipClient, clientFramework } =
+          this.jhipsterConfigWithDefaults;
 
         if (databaseType === SQL) {
           await this.composeWithJHipster(GENERATOR_SPRING_DATA_RELATIONAL);
@@ -171,6 +172,10 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         }
         if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider)) {
           await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
+        }
+
+        if (!skipClient && clientFramework !== 'no' && buildTool === 'gradle') {
+          await this.composeWithJHipster('jhipster:gradle:node-gradle');
         }
       },
     });

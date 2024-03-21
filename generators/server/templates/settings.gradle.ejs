@@ -32,9 +32,6 @@ pluginManagement {
 <%_ if (enableSwaggerCodegen) { _%>
         id "org.openapi.generator" version "${openapiPluginVersion}"
 <%_ } _%>
-<%_ if (!skipClient) { _%>
-        id 'com.github.node-gradle.node' version "${gradleNodePluginVersion}"
-<%_ } _%>
 <%_ if (enableGradleEnterprise) { _%>
         id "com.gradle.enterprise" version "${gradleEnterprisePluginVersion}"
         id "com.gradle.common-custom-user-data-gradle-plugin" version "${gradleCommonCustomUserDataPluginVersion}"

@@ -1,0 +1,101 @@
+plugins {
+    id "com.github.node-gradle.node"
+}
+
+if (project.hasProperty("nodeInstall")) {
+    node {
+        version = "<%= nodeVersion %>"
+        npmVersion = "<%= nodeDependencies.npm %>"
+        download = true
+    }
+
+    // Copy local node and npm to a fixed location for npmw
+    def deleteOldNpm = tasks.register("deleteOldNpm", Delete) {
+        delete '<%= temporaryDir %>node/lib/node_modules/npm'
+    }
+    def fixedNode = tasks.register("fixedNode", Copy) {
+        from nodeSetup
+        into '<%= temporaryDir %>node'
+        finalizedBy deleteOldNpm
+    }
+    tasks.named("nodeSetup").configure { finalizedBy fixedNode }
+
+    def fixedNpm = tasks.register("fixedNpm", Copy) {
+        from npmSetup
+        into '<%= temporaryDir %>node'
+    }
+    tasks.named("npmSetup").configure { finalizedBy fixedNpm }
+}
+
+<%_ if (!skipClient) { _%>
+task webapp_test(type: NpmTask) {
+    inputs.property('appVersion', project.version)
+    inputs.files("package-lock.json")
+        .withPropertyName('package-lock')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files("build.gradle")
+        .withPropertyName('build.gradle')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ if (clientFrameworkAngular) { _%>
+    inputs.files("angular.json")
+        .withPropertyName('angular.json')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files("tsconfig.json", "tsconfig.app.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.dir("<%= CLIENT_WEBPACK_DIR %>")
+        .withPropertyName("<%= CLIENT_WEBPACK_DIR %>")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+    inputs.dir("<%= clientSrcDir %>")
+        .withPropertyName("webapp-source-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ if (clientFrameworkReact) { _%>
+    inputs.files("tsconfig.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+  <%_ if (clientFrameworkVue) { _%>
+
+    inputs.files("tsconfig.json", "tsconfig.app.json")
+        .withPropertyName("tsconfig")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ if (microfrontend) { _%>
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } else { _%>
+
+    inputs.files("vite.config.ts")
+        .withPropertyName("vite")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } _%>
+
+    inputs.files(".postcssrc")
+        .withPropertyName("postcssrc")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+
+    outputs.dir("build/test-results/jest/")
+        .withPropertyName("jest-result-dir")
+    outputs.file("build/test-results/TESTS-results-jest.xml")
+        .withPropertyName("jest-result")
+        outputs.file("build/test-results/clover.xml")
+        .withPropertyName("clover-result")
+
+    dependsOn npmInstall,compileTestJava
+    args = ["run", "webapp:test"]
+}
+
+test.dependsOn webapp_test
+
+<%_ } _%>
