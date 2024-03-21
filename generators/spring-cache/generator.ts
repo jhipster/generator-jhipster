@@ -22,7 +22,7 @@ import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import { createNeedleCallback } from '../base/support/needles.js';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
-import { JavaDependency } from '../java/types.js';
+import { JavaDependency, JavaDependencyVersion } from '../java/types.js';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -37,6 +37,9 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      loadDependabot({ application }) {
+        this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!, true);
+      },
       addNeedles({ source, application }) {
         if (
           (application as any).cacheProviderEhcache ||
@@ -136,12 +139,18 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
         const { cacheProvider, enableHibernateCache } = application as any;
 
         const dependencies: JavaDependency[] = [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache' }];
+        const versions: JavaDependencyVersion[] = [];
         const definition = getCacheProviderMavenDefinition(cacheProvider, javaDependencies);
-        dependencies.push(...definition.base.dependencies);
+        versions.push(...(definition.base.versions ?? []));
+        dependencies.push(...definition.base.dependencies!);
         if (enableHibernateCache && definition.hibernateCache) {
-          dependencies.push(...definition.hibernateCache.dependencies);
+          versions.push(...(definition.hibernateCache.versions ?? []));
+          dependencies.push(...definition.hibernateCache.dependencies!);
         }
-        source.addJavaDependencies?.(dependencies, { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' });
+        source.addJavaDefinition?.(
+          { dependencies, versions },
+          { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' },
+        );
       },
     });
   }

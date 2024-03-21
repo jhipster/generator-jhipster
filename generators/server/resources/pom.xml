@@ -12,13 +12,10 @@
         <blockhound-junit-platform.version>1.0.8.RELEASE</blockhound-junit-platform.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <gatling.version>3.10.4</gatling.version>
-        <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
-        <hazelcast-spring.version>5.3.6</hazelcast-spring.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <micrometer-context-propagation.version>1.1.1</micrometer-context-propagation.version>
         <picocli.version>4.7.5</picocli.version>
-        <typesafe.version>1.4.3</typesafe.version>
 
         <!-- Plugin versions -->
         <checkstyle.version>10.14.2</checkstyle.version>
@@ -57,24 +54,9 @@
               <version>${commons-beanutils.version}</version>
             </dependency>
             <dependency>
-              <groupId>com.hazelcast</groupId>
-              <artifactId>hazelcast-hibernate53</artifactId>
-              <version>${hazelcast-hibernate53.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.hazelcast</groupId>
-              <artifactId>hazelcast-spring</artifactId>
-              <version>${hazelcast-spring.version}</version>
-            </dependency>
-            <dependency>
               <groupId>com.tngtech.archunit</groupId>
               <artifactId>archunit-junit5-api</artifactId>
               <version>${archunit-junit5.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.typesafe</groupId>
-              <artifactId>config</artifactId>
-              <version>${typesafe.version}</version>
             </dependency>
             <dependency>
               <groupId>io.gatling.highcharts</groupId>
