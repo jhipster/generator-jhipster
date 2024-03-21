@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "17.3.0",
+    "@angular/common": "17.3.1",
     "@fortawesome/angular-fontawesome": "0.14.1",
     "@fortawesome/fontawesome-svg-core": "6.5.1",
     "@fortawesome/free-solid-svg-icons": "6.5.1",
@@ -22,7 +22,7 @@
     "@angular-builders/custom-webpack": "17.0.1",
     "@angular-builders/jest": "17.0.2",
     "@angular-eslint/eslint-plugin": "17.3.0",
-    "@angular/cli": "17.3.0",
+    "@angular/cli": "17.3.1",
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
     "@typescript-eslint/eslint-plugin": "7.3.1",
@@ -43,7 +43,7 @@
     "postcss-rtlcss": "5.1.0",
     "rimraf": "5.0.5",
     "ts-jest": "29.1.2",
-    "typescript": "5.4.2",
+    "typescript": "5.4.3",
     "webpack": "5.90.3",
     "webpack-bundle-analyzer": "4.10.1",
     "webpack-merge": "5.10.0",
