@@ -111,7 +111,7 @@ import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
-import org.apache.commons.collections4.IterableUtils;
+import org.springframework.data.util.Streamable;
 import java.util.concurrent.TimeUnit;
 <%_ } _%>
 <%_ if ((databaseTypeSql && reactive) || searchEngineElasticsearch) { _%>
@@ -1474,7 +1474,7 @@ _%>
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-            List<<%= persistClass %>> <%= entityInstance %>SearchList = IterableUtils.toList(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+            List<<%= persistClass %>> <%= entityInstance %>SearchList = Streamable.of(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>).toList();
             <%= persistClass %> test<%= entityClass %>Search = <%= entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
 
     <%_ if (reactive && databaseTypeSql) { _%>
