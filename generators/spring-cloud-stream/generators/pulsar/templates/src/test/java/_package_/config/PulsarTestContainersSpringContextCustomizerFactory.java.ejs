@@ -62,4 +62,8 @@ public class PulsarTestContainersSpringContextCustomizerFactory implements Conte
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

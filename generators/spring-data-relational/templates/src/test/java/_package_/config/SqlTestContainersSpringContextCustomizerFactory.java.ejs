@@ -82,4 +82,8 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

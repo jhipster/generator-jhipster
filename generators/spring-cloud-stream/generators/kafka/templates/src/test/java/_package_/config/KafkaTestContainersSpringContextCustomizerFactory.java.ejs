@@ -54,4 +54,8 @@ public class KafkaTestContainersSpringContextCustomizerFactory implements Contex
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

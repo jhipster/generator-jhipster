@@ -60,4 +60,8 @@ public class Neo4jTestContainersSpringContextCustomizerFactory implements Contex
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

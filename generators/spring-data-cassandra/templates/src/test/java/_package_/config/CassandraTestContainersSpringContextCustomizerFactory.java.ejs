@@ -64,4 +64,8 @@ public class CassandraTestContainersSpringContextCustomizerFactory implements Co
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

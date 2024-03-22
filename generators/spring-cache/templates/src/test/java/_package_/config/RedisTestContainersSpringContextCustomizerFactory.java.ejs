@@ -58,4 +58,8 @@ public class RedisTestContainersSpringContextCustomizerFactory implements Contex
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }

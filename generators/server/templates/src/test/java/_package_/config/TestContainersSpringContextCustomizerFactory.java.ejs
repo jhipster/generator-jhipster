@@ -101,4 +101,8 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             testValues.applyTo(context);
         };
     }
+
+    public int hashCode() {
+        return 1;
+    }
 }
