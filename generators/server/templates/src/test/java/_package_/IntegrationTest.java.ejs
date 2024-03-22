@@ -40,9 +40,6 @@ import <%= packageName %>.config.EmbeddedElasticsearch;
 <%_ if (databaseTypeNeo4j) { _%>
 import <%= packageName %>.config.EmbeddedNeo4j;
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-import <%= packageName %>.config.EmbeddedSQL;
-<%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
 import <%= packageName %>.config.EmbeddedRedis;
 <%_ } _%>
@@ -53,6 +50,8 @@ import <%= packageName %>.config.TestSecurityConfiguration;
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -84,9 +83,8 @@ import java.lang.annotation.Target;
 <%_ if (databaseTypeNeo4j) { _%>
 @EmbeddedNeo4j
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-@EmbeddedSQL
-<%_ } _%>
+@ComponentScan({ "<%= packageName %>.web.rest", "<%= packageName %>.service", "<%= packageName %>.repository" })
+@AutoConfigureMockMvc
 public @interface IntegrationTest {
 <%_ if (reactive) { _%>
     // 5s is Spring's default https://github.com/spring-projects/spring-framework/blob/main/spring-test/src/main/java/org/springframework/test/web/reactive/server/DefaultWebTestClient.java#L106

@@ -39,51 +39,53 @@ import org.springframework.boot.test.util.TestPropertyValues;
 
 public class SqlTestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
-    private Logger log = LoggerFactory.getLogger(SqlTestContainersSpringContextCustomizerFactory.class);
-
-    private static SqlTestContainer prodTestContainer;
-
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
-
-        return (context, mergedConfig) -> {
-            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-            TestPropertyValues testValues = TestPropertyValues.empty();
-            EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
-<%_ if (prodDatabaseType !== devDatabaseType) { _%>
-            boolean usingTestProdProfile = Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-            if (null != sqlAnnotation && usingTestProdProfile) {
-<%_ } else { _%>
-            if (null != sqlAnnotation) {
-<%_ } _%>
-                log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
-                log.info("Warming up the sql database");
-                if (null == prodTestContainer) {
-                    try {
-                        Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgresql) { %>PostgreSql<% } %>TestContainer");
-                        prodTestContainer = beanFactory.createBean(containerClass);
-                        beanFactory.registerSingleton(containerClass.getName(), prodTestContainer);
-                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), prodTestContainer);
-                    } catch (ClassNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-<%_ if (reactive) { _%>
-                testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
-                testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
-                testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
-                testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- prodDatabaseExtraOptions %>");
-<%_ } else { _%>
-                testValues = testValues.and("spring.datasource.url=" + prodTestContainer.getTestContainer().getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
-                testValues = testValues.and("spring.datasource.username=" + prodTestContainer.getTestContainer().getUsername());
-                testValues = testValues.and("spring.datasource.password=" + prodTestContainer.getTestContainer().getPassword());
-<%_ } _%>
-            }
-            testValues.applyTo(context);
-        };
+        return new SqlContextCustomizer();
     }
 
-    public int hashCode() {
-        return 1;
+    static class SqlContextCustomizer implements ContextCustomizer {
+
+        private Logger log = LoggerFactory.getLogger(SqlContextCustomizer.class);
+
+        private static SqlTestContainer prodTestContainer;
+
+        @Override
+        public void customizeContext(org.springframework.context.ConfigurableApplicationContext context, org.springframework.test.context.MergedContextConfiguration mergedConfig) {
+            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+            TestPropertyValues testValues = TestPropertyValues.empty();
+<%_ if (prodDatabaseType !== devDatabaseType) { _%>
+            boolean usingTestProdProfile = Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+            if (!usingTestProdProfile) {
+                return;
+            }
+<%_ } _%>
+            log.info("Warming up the sql database");
+            if (null == prodTestContainer) {
+                try {
+                    Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".<% if (prodDatabaseTypeMysql) { %>Mysql<% } else if (prodDatabaseTypeMariadb) { %>Mariadb<% } else if (prodDatabaseTypeMssql) { %>MsSql<% } else if (prodDatabaseTypePostgresql) { %>PostgreSql<% } %>TestContainer");
+                    prodTestContainer = beanFactory.createBean(containerClass);
+                    beanFactory.registerSingleton(containerClass.getName(), prodTestContainer);
+                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(containerClass.getName(), prodTestContainer);
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+<%_ if (reactive) { _%>
+            testValues = testValues.and("spring.r2dbc.url=" + prodTestContainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
+            testValues = testValues.and("spring.r2dbc.username=" + prodTestContainer.getTestContainer().getUsername());
+            testValues = testValues.and("spring.r2dbc.password=" + prodTestContainer.getTestContainer().getPassword());
+            testValues = testValues.and("spring.liquibase.url=" + prodTestContainer.getTestContainer().getJdbcUrl()  + "<%- prodDatabaseExtraOptions %>");
+<%_ } else { _%>
+            testValues = testValues.and("spring.datasource.url=" + prodTestContainer.getTestContainer().getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
+            testValues = testValues.and("spring.datasource.username=" + prodTestContainer.getTestContainer().getUsername());
+            testValues = testValues.and("spring.datasource.password=" + prodTestContainer.getTestContainer().getPassword());
+<%_ } _%>
+            testValues.applyTo(context);
+        };
+
+        public int hashCode() {
+            return 1;
+        }
     }
 }
