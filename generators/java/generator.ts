@@ -137,6 +137,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
                   };
                   return version ? { ...library, version } : { ...library, 'version.ref': versionRef! };
                 }),
+              options,
             );
           }
         };
