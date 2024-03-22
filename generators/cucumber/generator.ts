@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_CUCUMBER, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_CUCUMBER, GENERATOR_JAVA } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
@@ -28,7 +28,7 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster(GENERATOR_JAVA);
     }
   }
 
@@ -46,15 +46,27 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
+        const { javaDependencies, gradleBuildSrc } = application;
+        source.addJavaDependencies?.(
+          [
+            {
+              groupId: 'io.cucumber',
+              artifactId: 'cucumber-bom',
+              version: javaDependencies!['cucumber-bom'],
+              type: 'pom',
+              scope: 'import',
+            },
+            { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
+            { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
+            { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
+            { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
+            { groupId: 'org.testng', artifactId: 'testng', scope: 'test', version: javaDependencies!.testng },
+          ],
+          { gradleFile: `${gradleBuildSrc}src/main/groovy/jhipster.cucumber-conventions.gradle` },
+        );
+
         if (application.buildToolMaven) {
           source.addMavenDefinition?.({
-            dependencies: [
-              { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
-              { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
-              { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
-              { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
-              { groupId: 'org.testng', artifactId: 'testng', scope: 'test' },
-            ],
             plugins: [{ groupId: 'org.apache.maven.plugins', artifactId: 'maven-antrun-plugin' }],
             pluginManagement: [
               {

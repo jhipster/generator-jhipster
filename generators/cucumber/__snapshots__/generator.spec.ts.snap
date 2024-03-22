@@ -2,147 +2,96 @@
 
 exports[`generator - cucumber with default config should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "baseName": "jhipster",
-    "creationTimestamp": 1577836800000,
-    "entities": [],
-    "testFrameworks": [
-      "cucumber"
-    ]
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/cucumber/CucumberIT.java": {
-    "contents": "package com.mycompany.myapp.cucumber;
+  "pom.xml": {
+    "contents": "<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-import com.mycompany.myapp.IntegrationTest;
-import io.cucumber.junit.platform.engine.Cucumber;
+    <properties>
+        <cucumber-bom.version>&apos;CUCUMBER-BOM-VERSION&apos;</cucumber-bom.version>
+        <testng.version>&apos;TESTNG-VERSION&apos;</testng.version>
+    </properties>
 
-@Cucumber
-@IntegrationTest
-class CucumberIT {
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>\${cucumber-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-}
-",
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/cucumber/CucumberTestContextConfiguration.java": {
-    "contents": "package com.mycompany.myapp.cucumber;
+    <dependencies>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-console</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>\${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-import com.mycompany.myapp.IntegrationTest;
-import io.cucumber.spring.CucumberContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
-
-@CucumberContextConfiguration
-@IntegrationTest
-@WebAppConfiguration
-public class CucumberTestContextConfiguration {
-
-}
-",
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/cucumber/stepdefs/StepDefs.java": {
-    "contents": "package com.mycompany.myapp.cucumber.stepdefs;
-
-import org.springframework.test.web.servlet.ResultActions;
-
-public abstract class StepDefs {
-
-    protected ResultActions actions;
-
-}
-",
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java": {
-    "contents": "package com.mycompany.myapp.cucumber.stepdefs;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import io.cucumber.java.Before;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-
-import com.mycompany.myapp.web.rest.UserResource;
-import com.mycompany.myapp.security.AuthoritiesConstants;
-
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-public class UserStepDefs extends StepDefs {
-
-    @Autowired
-    private UserResource userResource;
-
-    private MockMvc userResourceMock;
-
-    @Before
-    public void setup() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
-        User principal = new User("admin", "", true, true, true, true, grantedAuthorities);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-            principal,
-            principal.getPassword(),
-            principal.getAuthorities()
-        );
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
-    }
-
-    @When("I search user {string}")
-    public void i_search_user(String userId) throws Throwable {
-        actions = userResourceMock.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
-    }
-
-    @Then("the user is found")
-    public void the_user_is_found() throws Throwable {
-        actions
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
-    }
-
-    @Then("his last name is {string}")
-    public void his_last_name_is(String lastName) throws Throwable {
-        actions.andExpect(jsonPath("$.lastName").value(lastName));
-    }
-
-}
-",
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/mycompany/myapp/cucumber/gitkeep": {
-    "contents": "",
-    "stateCleared": "modified",
-  },
-  "src/test/resources/com/mycompany/myapp/cucumber/user.feature": {
-    "contents": "Feature: User management
-
-    Scenario: Retrieve administrator user
-        When I search user 'admin'
-        Then the user is found
-        And his last name is 'Administrator'
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
+                            <id>prepare cucumber feature files</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <target>
+                                    <echo message="Running JUnit Platform CLI"/>
+                                    <java classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true" newenvironment="true" maxmemory="512m" classpathref="maven.test.classpath">
+                                        <jvmarg value="-Dspring.profiles.active=testprod"/>
+                                        <arg value="--include-engine"/>
+                                        <arg value="cucumber"/>
+                                        <arg value="--scan-classpath"/>
+                                        <arg value="\${project.build.testOutputDirectory}"/>
+                                    </java>
+                                </target>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
 ",
     "stateCleared": "modified",
   },
@@ -151,28 +100,56 @@ public class UserStepDefs extends StepDefs {
 
 exports[`generator - cucumber with gradle build tool should match files snapshot 1`] = `
 {
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "baseName": "jhipster",
-    "buildTool": "gradle",
-    "creationTimestamp": 1577836800000,
-    "entities": [],
-    "testFrameworks": [
-      "cucumber"
-    ]
-  }
+  "build.gradle": {
+    "contents": "
+dependencies {
+    // jhipster-needle-gradle-dependency
 }
+plugins {
+    id "jhipster.cucumber-conventions"
+    // jhipster-needle-gradle-plugins
+}
+",
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
+    "contents": "plugins {
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies for convention plugins here
+    // jhipster-needle-gradle-build-src-dependency - Deprecated: JHipster will add additional dependencies for convention plugins here
+}
+",
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "contents": "[versions]
+# jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
+# jhipster-needle-gradle-build-src-dependency-catalog-version - Deprecated: JHipster will add additional versions for convention plugins here
+
+[libraries]
+# jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
+
+[plugins]
+# jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
 ",
     "stateCleared": "modified",
   },
   "buildSrc/src/main/groovy/jhipster.cucumber-conventions.gradle": {
     "contents": "dependencies {
-    testImplementation "io.cucumber:cucumber-junit-platform-engine"
     testImplementation "io.cucumber:cucumber-java"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
     testImplementation "io.cucumber:cucumber-spring"
     testImplementation "org.junit.platform:junit-platform-console"
-    testImplementation "org.testng:testng"
+    implementation platform(libs.cucumber.bom)
+    testImplementation libs.testng
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
 tasks.register('consoleLauncherTest', JavaExec) {
@@ -207,6 +184,39 @@ check.dependsOn cucumberTest
 ",
     "stateCleared": "modified",
   },
+  "gradle/libs.versions.toml": {
+    "contents": "[versions]
+# jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
+
+[libraries]
+cucumber-bom = { module = "io.cucumber:cucumber-bom", version = "'CUCUMBER-BOM-VERSION'" }
+testng = { module = "org.testng:testng", version = "'TESTNG-VERSION'" }
+# jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
+
+[plugins]
+# jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - cucumber with unknown buildTool should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "contents": "{
+  "generator-jhipster": {
+    "baseName": "jhipster",
+    "buildTool": "unknown",
+    "creationTimestamp": 1577836800000,
+    "entities": [],
+    "jhipsterVersion": "8.2.1",
+    "testFrameworks": ["cucumber"]
+  }
+}
+",
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/cucumber/CucumberIT.java": {
     "contents": "package com.mycompany.myapp.cucumber;
 
@@ -215,9 +225,7 @@ import io.cucumber.junit.platform.engine.Cucumber;
 
 @Cucumber
 @IntegrationTest
-class CucumberIT {
-
-}
+class CucumberIT {}
 ",
     "stateCleared": "modified",
   },
@@ -231,9 +239,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @CucumberContextConfiguration
 @IntegrationTest
 @WebAppConfiguration
-public class CucumberTestContextConfiguration {
-
-}
+public class CucumberTestContextConfiguration {}
 ",
     "stateCleared": "modified",
   },
@@ -244,8 +250,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public abstract class StepDefs {
 
-    protected ResultActions actions;
-
+  protected ResultActions actions;
 }
 ",
     "stateCleared": "modified",
@@ -253,13 +258,16 @@ public abstract class StepDefs {
   "src/test/java/com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java": {
     "contents": "package com.mycompany.myapp.cucumber.stepdefs;
 
-import java.util.List;
-import java.util.ArrayList;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.mycompany.myapp.security.AuthoritiesConstants;
+import com.mycompany.myapp.web.rest.UserResource;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -269,56 +277,62 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-
-import com.mycompany.myapp.web.rest.UserResource;
-import com.mycompany.myapp.security.AuthoritiesConstants;
-
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 public class UserStepDefs extends StepDefs {
 
-    @Autowired
-    private UserResource userResource;
+  @Autowired
+  private UserResource userResource;
 
-    private MockMvc userResourceMock;
+  private MockMvc userResourceMock;
 
-    @Before
-    public void setup() {
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
-        User principal = new User("admin", "", true, true, true, true, grantedAuthorities);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-            principal,
-            principal.getPassword(),
-            principal.getAuthorities()
-        );
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
-    }
+  @Before
+  public void setup() {
+    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+    grantedAuthorities.add(
+      new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN)
+    );
+    User principal = new User(
+      "admin",
+      "",
+      true,
+      true,
+      true,
+      true,
+      grantedAuthorities
+    );
+    Authentication authentication = new UsernamePasswordAuthenticationToken(
+      principal,
+      principal.getPassword(),
+      principal.getAuthorities()
+    );
+    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    context.setAuthentication(authentication);
+    SecurityContextHolder.setContext(context);
+    this.userResourceMock = MockMvcBuilders.standaloneSetup(
+      userResource
+    ).build();
+  }
 
-    @When("I search user {string}")
-    public void i_search_user(String userId) throws Throwable {
-        actions = userResourceMock.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
-    }
+  @When("I search user {string}")
+  public void i_search_user(String userId) throws Throwable {
+    actions = userResourceMock.perform(
+      get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON)
+    );
+  }
 
-    @Then("the user is found")
-    public void the_user_is_found() throws Throwable {
-        actions
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
-    }
+  @Then("the user is found")
+  public void the_user_is_found() throws Throwable {
+    actions
+      .andExpect(status().isOk())
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+  }
 
-    @Then("his last name is {string}")
-    public void his_last_name_is(String lastName) throws Throwable {
-        actions.andExpect(jsonPath("$.lastName").value(lastName));
-    }
-
+  @Then("his last name is {string}")
+  public void his_last_name_is(String lastName) throws Throwable {
+    actions.andExpect(jsonPath("$.lastName").value(lastName));
+  }
 }
 ",
     "stateCleared": "modified",

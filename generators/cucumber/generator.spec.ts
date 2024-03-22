@@ -23,9 +23,15 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('with default config', () => {
+  describe('with unknown buildTool', () => {
     before(async () => {
-      await helpers.runJHipster(GENERATOR_CUCUMBER).withJHipsterConfig({ testFrameworks: ['cucumber'] });
+      await helpers
+        .runJHipster(GENERATOR_CUCUMBER)
+        .onEnvironment(async env => {
+          await env.composeWith('jhipster:bootstrap-application');
+        })
+        .withMockedGenerators(['jhipster:java'])
+        .withJHipsterConfig({ buildTool: 'unknown', testFrameworks: ['cucumber'] });
     });
 
     it('should match files snapshot', () => {
@@ -33,13 +39,43 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with gradle build tool', () => {
+  describe('with default config', () => {
     before(async () => {
-      await helpers.runJHipster(GENERATOR_CUCUMBER).withJHipsterConfig({ buildTool: 'gradle', testFrameworks: ['cucumber'] });
+      await helpers
+        .runJHipster(GENERATOR_CUCUMBER)
+        .onEnvironment(async env => {
+          await env.composeWith('jhipster:maven');
+        })
+        .withJHipsterConfig({ testFrameworks: ['cucumber'] });
     });
 
     it('should match files snapshot', () => {
-      expect(result.getSnapshot()).toMatchSnapshot();
+      expect(result.getSnapshot('**/pom.xml')).toMatchSnapshot();
+    });
+  });
+
+  describe('with gradle build tool', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(GENERATOR_CUCUMBER)
+        .withFiles({
+          'build.gradle': `
+dependencies {
+    // jhipster-needle-gradle-dependency
+}
+plugins {
+    // jhipster-needle-gradle-plugins
+}
+`,
+        })
+        .onEnvironment(async env => {
+          await env.composeWith('jhipster:gradle');
+        })
+        .withJHipsterConfig({ buildTool: 'gradle', testFrameworks: ['cucumber'] });
+    });
+
+    it('should match files snapshot', () => {
+      expect(result.getSnapshot('**/{gradle/libs.versions.toml,build.gradle,buildSrc/**}')).toMatchSnapshot();
     });
   });
 });

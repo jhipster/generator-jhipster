@@ -39,6 +39,7 @@ import {
   addGradleDependencyFromCatalogCallback,
   addGradlePluginFromCatalogCallback,
   sortDependencies,
+  gradleNeedleOptionsWithDefaults,
 } from './internal/needles.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
@@ -79,7 +80,8 @@ export default class GradleGenerator extends BaseApplicationGenerator {
       addSourceNeddles({ application, source }) {
         const { gradleBuildSrc } = application;
         source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
-        source.addGradleDependencies = (dependencies, { gradleFile = 'build.gradle' } = {}) => {
+        source.addGradleDependencies = (dependencies, options = {}) => {
+          const { gradleFile } = gradleNeedleOptionsWithDefaults(options);
           dependencies = [...dependencies].sort(sortDependencies);
           this.editFile(gradleFile, addGradleDependenciesCallback(dependencies));
         };
@@ -91,10 +93,8 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         source.addGradleDependencyCatalogVersions = (versions, { gradleVersionCatalogFile = 'gradle/libs.versions.toml' } = {}) =>
           this.editFile(gradleVersionCatalogFile, addGradleDependenciesCatalogVersionCallback(versions));
         source.addGradleDependencyCatalogVersion = (version, options) => source.addGradleDependencyCatalogVersions!([version], options);
-        source.addGradleDependencyCatalogLibraries = (
-          libs,
-          { gradleFile = 'build.gradle', gradleVersionCatalogFile = 'gradle/libs.versions.toml' } = {},
-        ) => {
+        source.addGradleDependencyCatalogLibraries = (libs, options = {}) => {
+          const { gradleFile, gradleVersionCatalogFile } = gradleNeedleOptionsWithDefaults(options);
           libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile(gradleVersionCatalogFile, addGradleDependencyCatalogLibrariesCallback(libs));
           this.editFile(gradleFile, addGradleDependencyFromCatalogCallback(libs));
