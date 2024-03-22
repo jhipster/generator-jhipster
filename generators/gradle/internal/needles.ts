@@ -26,6 +26,7 @@ import type {
   GradleTomlVersion,
   GradleLibrary,
   GradleTomlPlugin,
+  GradleComment,
 } from '../types.js';
 
 const tomlItemToString = (item: Record<string, string | undefined>) =>
@@ -78,6 +79,7 @@ export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) 
     ),
   });
 
+/** @deprecated use addGradleDependenciesCallback */
 export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, version, scope }: GradleDependency) =>
   createNeedleCallback({
     needle: 'gradle-build-src-dependency',
@@ -126,6 +128,7 @@ export const addGradlePluginFromCatalogCallback = (plugins: GradleTomlPlugin[]) 
       .map(({ pluginName }) => `alias(libs.plugins.${gradleNameToReference(pluginName)})`),
   });
 
+/** @deprecated use addGradleDependenciesCatalogVersionCallback */
 export const addGradleBuildSrcDependencyCatalogVersionCallback = ({ name, version }: GradleTomlVersion) =>
   createNeedleCallback({
     needle: 'gradle-build-src-dependency-catalog-version',
@@ -144,11 +147,11 @@ export const addGradlePluginManagementCallback = ({ id, version }: GradlePlugin)
     contentToAdd: `id "${id}" version "${version}"`,
   });
 
-export const addGradlePropertyCallback = ({ property, value }: GradleProperty) =>
+export const addGradlePropertyCallback = ({ comment, property, value }: GradleProperty & GradleComment) =>
   createNeedleCallback({
     needle: 'gradle-property',
-    contentToAdd: `${property}=${value}`,
-    contentToCheck: new RegExp(`\n${property}=`),
+    contentToAdd: `${typeof comment === 'string' ? `## ${comment}\n` : ''}${property}${typeof value === 'string' ? `=${value}` : ''}`,
+    contentToCheck: new RegExp(`\n${property}${typeof value === 'string' ? '=' : '\n'}`),
     autoIndent: false,
   });
 

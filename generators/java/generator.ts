@@ -137,6 +137,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
                   };
                   return version ? { ...library, version } : { ...library, 'version.ref': versionRef! };
                 }),
+              options,
             );
           }
         };
@@ -153,7 +154,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
               });
             }
             if (application.buildToolGradle) {
-              source.addGradleDependencyCatalogVersions?.(versions);
+              source.addGradleDependencyCatalogVersions?.(versions, options);
             }
           }
         };

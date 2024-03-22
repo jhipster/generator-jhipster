@@ -32,9 +32,6 @@ blockhoundJunitPlatformVersion=<%- javaDependencies['blockhound-junit-platform']
 # gradle plugin version
 jibPluginVersion=<%- javaDependencies['jib-maven-plugin'] %>
 gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
-<%_ if (!skipClient) { _%>
-gradleNodePluginVersion=<%- javaDependencies['node-gradle'] %>
-<%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
 openapiPluginVersion=<%- javaDependencies['openapi-generator-maven-plugin'] %>
 <%_ } _%>
@@ -74,6 +71,3 @@ gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user
 ## uncomment the below line to enable the selective mode
 
 #org.gradle.configureondemand=true
-
-## Install and use a local version of node and npm.
-nodeInstall

@@ -15,7 +15,19 @@
  * limitations under the License.
  */
 import CoreGenerator from '../../base-core/generator.js';
+import { WriteFileSection, WriteFileBlock } from '../../base/api.js';
 import { GeneratorDefinition } from '../generator.js';
+
+export function asWriteFilesSection<Data = GeneratorDefinition['writingTaskParam']['application']>(
+  section: WriteFileSection<CoreGenerator, Data>,
+) {
+  return section;
+}
+export function asWriteFilesBlock<Data = GeneratorDefinition['writingTaskParam']['application']>(
+  section: WriteFileBlock<CoreGenerator, Data>,
+) {
+  return section;
+}
 
 export function asInitializingTask(task: (this: CoreGenerator, params: GeneratorDefinition['initializingTaskParam']) => void) {
   return task;
