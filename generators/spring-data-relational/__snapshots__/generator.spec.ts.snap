@@ -14,12 +14,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -482,12 +476,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -954,12 +942,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1403,12 +1385,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1799,12 +1775,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -2202,12 +2172,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -2469,12 +2433,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -3018,12 +2976,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -3556,12 +3508,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -4074,12 +4020,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -4608,12 +4548,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -5125,12 +5059,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -5383,12 +5311,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -5657,12 +5579,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -5921,12 +5837,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -6606,12 +6516,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -7359,12 +7263,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -8104,12 +8002,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -8826,12 +8718,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -9576,12 +9462,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -10186,12 +10066,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -10776,12 +10650,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -11394,12 +11262,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -12001,12 +11863,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -12588,12 +12444,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -13305,12 +13155,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -13982,12 +13826,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -14663,12 +14501,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -15339,12 +15171,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -16013,12 +15839,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {

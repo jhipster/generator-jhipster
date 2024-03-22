@@ -26,12 +26,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -954,12 +948,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -1380,12 +1368,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -2295,12 +2277,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
-    "stateCleared": "modified",
-  },
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
@@ -3161,12 +3137,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
@@ -4167,12 +4137,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {

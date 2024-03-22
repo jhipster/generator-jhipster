@@ -30,7 +30,7 @@ export const mockedGenerators = [
   `jhipster:${GENERATOR_DOCKER}`,
   `jhipster:${GENERATOR_GATLING}`,
   `jhipster:${GENERATOR_GRADLE}`,
-  `jhipster:${GENERATOR_GRADLE}:docker`,
+  `jhipster:${GENERATOR_GRADLE}:code-quality`,
   `jhipster:${GENERATOR_GRADLE}:jib`,
   `jhipster:${GENERATOR_GRADLE}:node-gradle`,
   `jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`,

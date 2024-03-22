@@ -78,7 +78,7 @@ describe(`generator - ${generator}`, () => {
         });
 
         it('should compose with gradle generator', () => {
-          assert(runResult.mockedGenerators['jhipster:gradle'].calledOnce);
+          assert(runResult.mockedGenerators['jhipster:gradle'].called);
         });
         it('should not compose with others buildTool generators', () => {
           assert(runResult.mockedGenerators['jhipster:maven'].notCalled);
