@@ -221,6 +221,19 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     return this.withSharedData({ sharedApplication: this.sharedApplication });
   }
 
+  withGradleBuildTool(): this {
+    return this.withFiles({
+      'build.gradle': `
+dependencies {
+// jhipster-needle-gradle-dependency
+}
+plugins {
+// jhipster-needle-gradle-plugins
+}
+`,
+    }).withJHipsterConfig({ buildTool: 'gradle' });
+  }
+
   private withSharedData(sharedData: Record<string, any>): this {
     if (!this.sharedData) {
       const applicationId = 'test-application';

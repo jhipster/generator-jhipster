@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const getGeneratorFolder = (generatorName: string) => {
-  return resolve(__dirname, '../generators', generatorName);
+  return resolve(__dirname, '../generators', generatorName.split(':').join('/generators/'));
 };
 
 const getGenerator = (generatorName: string) => {

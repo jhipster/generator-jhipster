@@ -1,11 +1,11 @@
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 import { existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import sinon from 'sinon';
 import { before, it, describe, after, expect } from 'esmocha';
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import { skipPrettierHelpers as helpers } from '../../testing/index.js';
+import { getGenerator, skipPrettierHelpers as helpers } from '../../testing/index.js';
 import * as GeneratorList from '../../generators/generator-list.js';
 import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
@@ -231,15 +231,9 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
   }
   const { skipSbsBlueprint = false, entity = false } = options;
 
-  let generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.cjs`);
+  const generatorPath = getGenerator(generatorName);
   if (!existsSync(generatorPath)) {
-    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
-  }
-  if (!existsSync(generatorPath)) {
-    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.ts`);
-  }
-  if (!existsSync(generatorPath)) {
-    generatorPath = path.join(__dirname, `../../generators/${generatorName}/index.js`);
+    throw new Error(`Generator ${generatorName} not found.`);
   }
   const addSpies = generator => {
     const { taskPrefix = '' } = generator.features;

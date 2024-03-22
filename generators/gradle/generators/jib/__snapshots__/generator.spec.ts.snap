@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - gradle:jib with gradle build tool should match files snapshot 1`] = `
+{
+  "build.gradle": {
+    "contents": "
+dependencies {
+// jhipster-needle-gradle-dependency
+}
+plugins {
+id "jhipster.docker-conventions"
+// jhipster-needle-gradle-plugins
+}
+",
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
+    "contents": "plugins {
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation libs.jib.plugin
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies for convention plugins here
+    // jhipster-needle-gradle-build-src-dependency - Deprecated: JHipster will add additional dependencies for convention plugins here
+}
+",
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "contents": "[versions]
+# jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
+# jhipster-needle-gradle-build-src-dependency-catalog-version - Deprecated: JHipster will add additional versions for convention plugins here
+
+[libraries]
+jib-plugin = { module = "com.google.cloud.tools:jib-gradle-plugin", version = "'JIB-MAVEN-PLUGIN-VERSION'" }
+# jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
+
+[plugins]
+# jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
+",
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "contents": "plugins {
+    id "com.google.cloud.tools.jib"
+}
+
+jib {
+    from {
+        image = "java-jre-placeholder"
+        platforms {
+            platform {
+                architecture = "\${findProperty('jibArchitecture') ?: 'amd64'}"
+                os = "linux"
+            }
+        }
+    }
+    to {
+        image = "jhipster:latest"
+    }
+    container {
+        entrypoint = ["bash", "-c", "/entrypoint.sh"]
+        ports = ["8080"]
+        environment = [
+            SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
+            JHIPSTER_SLEEP: "0"
+        ]
+        creationTime = "USE_CURRENT_TIMESTAMP"
+        user = 1000
+    }
+    extraDirectories {
+      paths = file("src/main/docker/jib")
+      permissions = ["/entrypoint.sh": "755"]
+    }
+}",
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
+    "contents": "[versions]
+# jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
+
+[libraries]
+# jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
+
+[plugins]
+# jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
+",
+    "stateCleared": "modified",
+  },
+}
+`;
