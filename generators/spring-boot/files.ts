@@ -425,6 +425,7 @@ export const baseServerFiles = {
       templates: [
         'TechnicalStructureTest.java',
         'config/AsyncSyncConfiguration.java',
+        'AbstractIntegrationTest.java',
         'IntegrationTest.java',
         'config/SpringBootTestClassOrderer.java',
       ],

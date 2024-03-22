@@ -63,7 +63,7 @@ _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%= packageName %>.web.rest.TestUtil;
 <% } %>
-import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.AbstractIntegrationTest;
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_
 var imported = [];
@@ -130,8 +130,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-<%_ } else { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch && !paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.PageImpl;
@@ -251,7 +249,6 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
-@IntegrationTest
 <%_ if (skipJunitTests) { _%>
 @Disabled("<%- skipJunitTests %>")
 <%_ } _%>
@@ -260,11 +257,9 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } _%>
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
-<%_ } else { _%>
-@AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser<% if (entityAuthority) { %>(authorities = {"<%- entityAuthority %>"})<% } %>
-class <%= entityClass %>ResourceIT {
+class <%= entityClass %>ResourceIT extends AbstractIntegrationTest {
 <%_
 for (field of fieldsToTest) {
 const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
