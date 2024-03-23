@@ -1,6 +1,6 @@
 import { type ComputedRef, inject, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import * as SockJS from 'sockjs-client';
+import <% if (microfrontend) { %>* as <% } %>SockJS from 'sockjs-client';
 import { map } from 'rxjs';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import Cookies from 'js-cookie';
@@ -8,9 +8,9 @@ import Cookies from 'js-cookie';
 const DESTINATION_TRACKER = '/topic/tracker';
 const DESTINATION_ACTIVITY = '/topic/activity';
 
-export const useTrackerService = ({ stomp }: { stomp?: RxStomp } = {}) => {
+export const useTrackerService = ({ stomp, authenticated }: { stomp?: RxStomp; authenticated?: ComputedRef<boolean> } = {}) => {
   const router = useRouter();
-  const authenticated = inject<ComputedRef<boolean>>('authenticated');
+  authenticated = authenticated ?? inject('authenticated');
   const trackerService = new TrackerService({ stomp });
 
   router.afterEach(to => trackerService.sendActivity(to.fullPath));
