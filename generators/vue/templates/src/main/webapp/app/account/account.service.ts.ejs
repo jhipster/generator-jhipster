@@ -29,7 +29,7 @@ export default class AccountService {
   public async retrieveAccount(): Promise<boolean> {
     try {
       const response = await axios.get<any>('api/account');
-      if (response.status === 200 && response.data) {
+      if (response.status === 200 && response.data?.login) {
         const account = response.data;
         this.store.setAuthentication(account);
         return true;

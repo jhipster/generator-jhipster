@@ -81,7 +81,7 @@ describe('Account Service test suite', () => {
   });
 
   it('should init service and check for authority after retrieving account', async () => {
-    axiosStub.get.resolves({ status: 200, data: { authorities: ['USER'], langKey: 'en' } });
+    axiosStub.get.resolves({ status: 200, data: { authorities: ['USER'], langKey: 'en', login: 'ADMIN' } });
     accountService = new AccountService(store);
     await accountService.update();
 
