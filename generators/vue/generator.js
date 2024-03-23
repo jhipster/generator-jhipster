@@ -141,7 +141,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {

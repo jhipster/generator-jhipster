@@ -71,7 +71,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get configuring() {
@@ -87,7 +87,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get preparing() {
@@ -221,7 +221,7 @@ export default class JavaGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.asPostPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.postPreparingEachEntity));
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {

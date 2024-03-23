@@ -90,7 +90,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   }
 
   get [BaseEntityChangesGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get preparing() {
@@ -467,7 +467,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
   }
 
   get [BaseEntityChangesGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {

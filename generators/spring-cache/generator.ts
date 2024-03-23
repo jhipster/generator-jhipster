@@ -156,7 +156,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {
@@ -175,6 +175,6 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.asPostWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.postWritingEntities));
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 }

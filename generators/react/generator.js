@@ -93,7 +93,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity() {
@@ -105,7 +105,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.asPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.preparingEachEntity));
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
   get default() {
@@ -175,7 +175,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**

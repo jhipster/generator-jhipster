@@ -79,6 +79,6 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

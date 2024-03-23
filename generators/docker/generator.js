@@ -53,7 +53,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {

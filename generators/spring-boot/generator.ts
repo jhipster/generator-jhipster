@@ -517,7 +517,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**

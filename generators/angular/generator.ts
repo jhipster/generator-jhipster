@@ -76,7 +76,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup(this.delegateTasksToBlueprint(() => this.loading));
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -138,7 +138,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity() {
@@ -180,7 +180,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
@@ -229,7 +229,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup(this.delegateTasksToBlueprint(() => this.end));
+    return this.delegateTasksToBlueprint(() => this.end);
   }
 
   /**
