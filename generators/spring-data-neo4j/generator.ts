@@ -155,13 +155,7 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'neo4j' },
         ]);
         if (!application.databaseMigrationLiquibase) {
-          source.addJavaDependencies?.([
-            {
-              groupId: 'eu.michael-simons.neo4j',
-              artifactId: 'neo4j-migrations-spring-boot-starter',
-              version: application.javaDependencies!['neo4j-migrations-spring-boot-starter'],
-            },
-          ]);
+          source.addJavaDependencies?.([{ groupId: 'eu.michael-simons.neo4j', artifactId: 'neo4j-migrations-spring-boot-starter' }]);
         }
       },
     });

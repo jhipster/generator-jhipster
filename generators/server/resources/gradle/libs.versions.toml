@@ -1,24 +1,9 @@
 [libraries]
-spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2023.0.0' }
-
-springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.4.0' }
-
-feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.0.3' }
-
 # Cucumber
 testng = { module = 'org.testng:testng', version = '7.9.0' }
 cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.15.0' }
 
-mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.4.0' }
-
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.9.2' }
-
-# Cassandra
-lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
-
 [plugins]
-spring-dependency-management = { id = 'io.spring.dependency-management', version = '1.1.4' }
-
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.1' }
 
 node-gradle = { id = 'com.github.node-gradle.node', version = '7.0.1' }

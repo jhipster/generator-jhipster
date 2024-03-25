@@ -410,43 +410,20 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addJHipsterBomDependencies({ application, source }) {
-        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, jhipsterDependenciesVersion, messageBrokerAny } =
-          application;
-        const { serviceDiscoveryAny } = application as any;
-
         source.addJavaDependencies?.([
-          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! },
+          {
+            groupId: 'tech.jhipster',
+            artifactId: 'jhipster-dependencies',
+            version: application.jhipsterDependenciesVersion!,
+            type: 'pom',
+            scope: 'import',
+          },
+          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework' },
         ]);
-
-        if (applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny) {
-          source.addJavaDependencies?.([
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-dependencies',
-              type: 'pom',
-              scope: 'import',
-              version: javaDependencies!['spring-cloud-dependencies'],
-            },
-          ]);
-        }
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
-        source.addJavaDependencies?.([
-          { groupId: 'org.springdoc', artifactId: springdocDependency, version: application.javaDependencies!.springdoc },
-        ]);
-      },
-      addFeignReactor({ application, source }) {
-        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
-        if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) {
-          const groupId = 'com.playtika.reactivefeign';
-          source.addJavaDependencies?.([
-            { groupId, artifactId: 'feign-reactor-bom', type: 'pom', scope: 'import', version: javaDependencies!['feign-reactor-bom'] },
-            { groupId, artifactId: 'feign-reactor-cloud' },
-            { groupId, artifactId: 'feign-reactor-spring-configuration' },
-            { groupId, artifactId: 'feign-reactor-webclient' },
-          ]);
-        }
+        source.addJavaDependencies?.([{ groupId: 'org.springdoc', artifactId: springdocDependency }]);
       },
       addSpringSnapshotRepository({ application, source }) {
         if (application.buildToolMaven) {
@@ -480,12 +457,6 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               pluginName: 'spring-boot',
               id: 'org.springframework.boot',
               version: application.javaDependencies!['spring-boot'],
-              addToBuild: true,
-            },
-            {
-              pluginName: 'spring-dependency-management',
-              id: 'io.spring.dependency-management',
-              version: application.javaDependencies!['spring-dependency-management'],
               addToBuild: true,
             },
           ]);

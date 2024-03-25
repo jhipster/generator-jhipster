@@ -65,9 +65,8 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
         });
       },
       addDependencies({ application, source }) {
-        const { reactive, javaDependencies } = application;
+        const { reactive } = application;
         source.addJavaDependencies?.([
-          { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies['mongock-bom'], scope: 'import' },
           { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },
           { groupId: 'org.springframework.boot', artifactId: `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}` },
           { groupId: 'io.mongock', artifactId: reactive ? 'mongodb-reactive-driver' : 'mongodb-springdata-v4-driver' },
