@@ -355,7 +355,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.asPostPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.postPreparingEachEntity));
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   get default() {

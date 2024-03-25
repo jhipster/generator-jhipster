@@ -74,7 +74,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -194,7 +194,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints

@@ -149,7 +149,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup(this.delegateTasksToBlueprint(() => this.initializing));
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get prompting() {
@@ -165,7 +165,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup(this.delegateTasksToBlueprint(() => this.prompting));
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -201,7 +201,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup(this.delegateTasksToBlueprint(() => this.configuring));
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
@@ -241,7 +241,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
-    return this.asComposingTaskGroup(this.delegateTasksToBlueprint(() => this.composing));
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -334,7 +334,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup(this.delegateTasksToBlueprint(() => this.preparing));
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get postPreparing() {
@@ -514,7 +514,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
-    return this.asConfiguringEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.configuringEachEntity));
+    return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
   get preparingEachEntity() {
@@ -545,7 +545,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.asPostPreparingEachEntityTaskGroup(this.delegateTasksToBlueprint(() => this.postPreparingEachEntity));
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
   /** @inheritdoc */
@@ -585,7 +585,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup(this.delegateTasksToBlueprint(() => this.default));
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get postWriting() {
@@ -678,7 +678,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.asPostWritingTaskGroup(this.delegateTasksToBlueprint(() => this.postWriting));
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {
@@ -709,7 +709,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.asPostWritingEntitiesTaskGroup(this.delegateTasksToBlueprint(() => this.postWritingEntities));
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   _configureServer(config = this.jhipsterConfigWithDefaults, dest = this.jhipsterConfig) {
