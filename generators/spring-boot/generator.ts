@@ -415,6 +415,13 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         const { serviceDiscoveryAny } = application as any;
 
         source.addJavaDependencies?.([
+          {
+            groupId: 'tech.jhipster',
+            artifactId: 'jhipster-dependencies',
+            version: jhipsterDependenciesVersion!,
+            type: 'pom',
+            scope: 'import',
+          },
           { groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! },
         ]);
 
@@ -480,12 +487,6 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               pluginName: 'spring-boot',
               id: 'org.springframework.boot',
               version: application.javaDependencies!['spring-boot'],
-              addToBuild: true,
-            },
-            {
-              pluginName: 'spring-dependency-management',
-              id: 'io.spring.dependency-management',
-              version: application.javaDependencies!['spring-dependency-management'],
               addToBuild: true,
             },
           ]);
