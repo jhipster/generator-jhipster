@@ -20,7 +20,6 @@ jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -56,7 +55,6 @@ describe('Navbar Component', () => {
         imports: [
           NavbarComponent,
           HttpClientTestingModule,
-          RouterTestingModule.withRoutes([]),
 <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
 <%_ } _%>

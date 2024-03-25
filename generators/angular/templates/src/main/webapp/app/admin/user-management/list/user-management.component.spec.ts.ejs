@@ -25,7 +25,6 @@ import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { UserManagementService } from '../service/user-management.service';
@@ -53,7 +52,7 @@ describe('User Management Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), UserManagementComponent],
+        imports: [HttpClientTestingModule, UserManagementComponent],
         providers: [{ provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
       })
         .overrideTemplate(UserManagementComponent, '')
