@@ -27,7 +27,7 @@ import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import * as _ from 'lodash-es';
-import { kebabCase } from 'lodash-es';
+import { kebabCase, snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -60,6 +60,7 @@ import command from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { convertConfigToOption } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
+import { dockerPlaceholderGenerator } from '../docker/utils.js';
 
 const { merge, get, set } = _;
 const {
@@ -1000,10 +1001,18 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   prepareDependencies(
     map: Record<string, string>,
-    valuePlaceholder: (value: string) => string = value => `${_.snakeCase(value).toUpperCase()}_VERSION`,
+    valuePlaceholder?: 'java' | 'docker' | ((value: string) => string),
   ): Record<string, string> {
+    let placeholder: (value: string) => string;
+    if (valuePlaceholder === 'java') {
+      placeholder = value => `'${kebabCase(value).toUpperCase()}-VERSION'`;
+    } else if (valuePlaceholder === 'docker') {
+      placeholder = dockerPlaceholderGenerator;
+    } else {
+      placeholder = valuePlaceholder ?? (value => `${snakeCase(value).toUpperCase()}_VERSION`);
+    }
     if (this.useVersionPlaceholders) {
-      return Object.fromEntries(Object.keys(map).map(dep => [dep, valuePlaceholder(dep)]));
+      return Object.fromEntries(Object.keys(map).map(dep => [dep, placeholder(dep)]));
     }
     return {
       ...map,
@@ -1027,13 +1036,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     const gradleLibsVersions = this.readTemplate(gradleCatalog)?.toString();
     if (gradleLibsVersions) {
-      Object.assign(
-        javaDependencies,
-        this.prepareDependencies(
-          getGradleLibsVersionsProperties(gradleLibsVersions!),
-          value => `'${kebabCase(value).toUpperCase()}-VERSION'`,
-        ),
-      );
+      Object.assign(javaDependencies, this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions!), 'java'));
     }
   }
 

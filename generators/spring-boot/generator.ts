@@ -18,7 +18,7 @@
  */
 import os from 'node:os';
 import chalk from 'chalk';
-import { kebabCase, sortedUniqBy } from 'lodash-es';
+import { sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
   GENERATOR_SERVER,
@@ -197,10 +197,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           application.javaDependencies!['spring-boot'] = "'SPRING-BOOT-VERSION'";
           application.springBootDependencies = {};
         } else {
-          application.springBootDependencies = this.prepareDependencies(
-            getPomVersionProperties(pomFile!),
-            value => `'${kebabCase(value).toUpperCase()}-VERSION'`,
-          );
+          application.springBootDependencies = this.prepareDependencies(getPomVersionProperties(pomFile!), 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
         }
       },
