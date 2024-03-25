@@ -211,6 +211,11 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
 <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-undertow"
+    modules {
+        module("org.springframework.boot:spring-boot-starter-tomcat") {
+            replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
+        }
+    }
 <%_ } _%>
 <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
