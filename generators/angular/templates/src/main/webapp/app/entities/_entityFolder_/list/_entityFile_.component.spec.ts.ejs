@@ -32,7 +32,6 @@ import {
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
   of,
 <%_ if (!readOnly) { _%>
@@ -60,7 +59,6 @@ describe('<%= entityAngularName %> Management Component', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-              RouterTestingModule.withRoutes([{ path: '<%= entityPage %>', component: <%= entityAngularName %>Component }]),
               HttpClientTestingModule,
               <%= entityAngularName %>Component,
             ],

@@ -24,7 +24,6 @@ jest.mock('app/login/login.service');
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 <%_ } _%>
 import { of<% if (!authenticationTypeOauth2) { %>, Subject<% } %> } from 'rxjs';
 
@@ -60,10 +59,7 @@ describe('Home Component', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [
-          HomeComponent,
-<%_ if (!authenticationTypeOauth2) { _%>
-          RouterTestingModule.withRoutes([]),
-<%_ } _%>
+          HomeComponent
         ],
         providers: [
           AccountService,
