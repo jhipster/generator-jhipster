@@ -5,6 +5,6 @@ const process = require('node:process');
 
 (async () => {
   if (process.platform !== 'win32') {
-    await chmod(join(__dirname, '../dist/cli/jhipster.cjs'), 0o755);
+    await chmod(join(__dirname, '../dist/cli/jhipster.cjs'), 0755);
   }
 })();
