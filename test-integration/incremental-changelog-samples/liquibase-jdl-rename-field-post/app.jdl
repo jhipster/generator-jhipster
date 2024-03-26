@@ -4,6 +4,7 @@ application {
     baseName jhipsterSampleApplication,
     packageName tech.jhipster.sample,
     authenticationType jwt,
+    devDatabaseType h2Disk,
     prodDatabaseType postgresql,
     buildTool maven,
     searchEngine no,

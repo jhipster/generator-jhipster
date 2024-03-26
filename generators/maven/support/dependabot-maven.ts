@@ -26,15 +26,38 @@ export function getPomProperties(pomContent: string): Record<string, string> {
   return new XMLParser().parse(pomContent).project.properties;
 }
 
+export type MavenPom = {
+  project: {
+    artifactId: string;
+    version: string;
+    properties?: Record<string, string>;
+  };
+};
+
+export type MavenPomAndVersions = {
+  pomContent: MavenPom;
+  versions: Record<string, string>;
+};
+
+/**
+ * Extract version properties from pom content
+ * @param fileContent
+ */
+export function parseMavenPom(fileContent: string): MavenPom {
+  return new XMLParser().parse(fileContent);
+}
+
 /**
  * Extract version properties from pom content
  * @param pomContent
  */
-export function getPomVersionProperties(pomContent: string): Record<string, string> {
-  const { properties, version, artifactId }: { properties: Record<string, string>; version: string; artifactId: string } =
-    new XMLParser().parse(pomContent).project;
+export function getPomVersionProperties(pomContent: string | MavenPom): Record<string, string> {
+  if (typeof pomContent === 'string') {
+    pomContent = parseMavenPom(pomContent);
+  }
+  const { properties, version, artifactId } = pomContent.project;
   const versions = Object.fromEntries(
-    Object.entries(properties)
+    Object.entries(properties ?? [])
       .filter(([property]) => property.endsWith('.version'))
       .map(([property, value]) => [property.slice(0, -8), value]),
   );

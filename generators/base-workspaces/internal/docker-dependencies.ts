@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { dockerContainers as elasticDockerContainer } from '../../generator-constants.js';
-import { dockerPlaceholderGenerator, getDockerfileContainers } from '../../docker/utils.js';
+import { getDockerfileContainers } from '../../docker/utils.js';
 
 export async function loadDockerDependenciesTask(this: any, { context = this } = {}) {
   const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
@@ -26,6 +26,6 @@ export async function loadDockerDependenciesTask(this: any, { context = this } =
       ...elasticDockerContainer,
       ...getDockerfileContainers(dockerfile),
     },
-    dockerPlaceholderGenerator,
+    'docker',
   );
 }

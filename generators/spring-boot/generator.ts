@@ -18,7 +18,7 @@
  */
 import os from 'node:os';
 import chalk from 'chalk';
-import { kebabCase, sortedUniqBy } from 'lodash-es';
+import { sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
   GENERATOR_SERVER,
@@ -56,7 +56,7 @@ import {
   websocketTypes,
 } from '../../jdl/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
-import { getPomVersionProperties } from '../maven/support/index.js';
+import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -192,20 +192,20 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       loadSpringBootBom({ application }) {
-        const pomFile = this.readTemplate(this.jhipsterTemplatePath('../resources/spring-boot-dependencies.pom'))?.toString();
         if (this.useVersionPlaceholders) {
-          application.javaDependencies!['spring-boot'] = "'SPRING-BOOT-VERSION'";
-          application.springBootDependencies = {};
+          application.springBootDependencies = {
+            'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
+          };
         } else {
-          application.springBootDependencies = this.prepareDependencies(
-            getPomVersionProperties(pomFile!),
-            value => `'${kebabCase(value).toUpperCase()}-VERSION'`,
-          );
+          const pomFile = this.readTemplate(this.jhipsterTemplatePath('../resources/spring-boot-dependencies.pom'))!.toString();
+          const pom = parseMavenPom(pomFile);
+          application.springBootDependencies = this.prepareDependencies(getPomVersionProperties(pom), 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
+          Object.assign(application.javaManagedProperties!, pom.project.properties);
         }
       },
       prepareForTemplates({ application }) {
-        const SPRING_BOOT_VERSION = application.javaDependencies!['spring-boot'];
+        const SPRING_BOOT_VERSION = application.springBootDependencies!['spring-boot-dependencies'];
         application.addSpringMilestoneRepository =
           (application.backendType ?? 'Java') === 'Java' &&
           (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
@@ -414,6 +414,14 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           application;
         const { serviceDiscoveryAny } = application as any;
 
+        if (application.buildToolMaven) {
+          source.addMavenProperty?.({
+            property: 'spring-boot.version',
+            // eslint-disable-next-line no-template-curly-in-string
+            value: '${project.parent.version}',
+          });
+        }
+
         source.addJavaDependencies?.([
           { groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! },
         ]);
@@ -480,12 +488,6 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               pluginName: 'spring-boot',
               id: 'org.springframework.boot',
               version: application.javaDependencies!['spring-boot'],
-              addToBuild: true,
-            },
-            {
-              pluginName: 'spring-dependency-management',
-              id: 'io.spring.dependency-management',
-              version: application.javaDependencies!['spring-dependency-management'],
               addToBuild: true,
             },
           ]);

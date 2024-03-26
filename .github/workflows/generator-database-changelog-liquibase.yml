@@ -103,6 +103,8 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
+      - name: 'TESTS: check liquibase:diff'
+        run: ./mvnw liquibase:diff
       - name: 'TESTS: backend'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend'

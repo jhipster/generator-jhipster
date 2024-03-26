@@ -74,7 +74,8 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
       async verify({ application }) {
         assert.equal(application.buildTool, MAVEN);
       },
-      addSourceNeddles({ source }) {
+      addSourceNeddles({ application, source }) {
+        const { javaProperties } = application;
         function createForEach<T>(callback: (arg: T) => any): (arg: T | T[]) => void {
           return (arg: T | T[]): void => {
             const argArray = Array.isArray(arg) ? arg : [arg];
@@ -91,7 +92,13 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         source.addMavenPluginManagement = createForEach(plugin => this.pomStorage.addPluginManagement(plugin));
         source.addMavenPluginRepository = createForEach(repository => this.pomStorage.addPluginRepository(repository));
         source.addMavenProfile = createForEach(profile => this.pomStorage.addProfile(profile));
-        source.addMavenProperty = createForEach(property => this.pomStorage.addProperty(property));
+        source.addMavenProperty = properties => {
+          properties = Array.isArray(properties) ? properties : [properties];
+          for (const property of properties) {
+            javaProperties![property.property] = property.value!;
+            this.pomStorage.addProperty(property);
+          }
+        };
         source.addMavenRepository = createForEach(repository => this.pomStorage.addRepository(repository));
 
         source.addMavenDefinition = definition => {
@@ -105,7 +112,9 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
           definition.distributionManagement?.forEach(distribution => this.pomStorage.addDistributionManagement(distribution));
           definition.plugins?.forEach(plugin => this.pomStorage.addPlugin(plugin));
           definition.pluginRepositories?.forEach(repository => this.pomStorage.addPluginRepository(repository));
-          definition.properties?.forEach(property => this.pomStorage.addProperty(property));
+          if (definition.properties) {
+            source.addMavenProperty!(definition.properties);
+          }
           definition.repositories?.forEach(repository => this.pomStorage.addRepository(repository));
           definition.annotationProcessors?.forEach(annotation => this.pomStorage.addAnnotationProcessor(annotation));
         };

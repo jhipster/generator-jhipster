@@ -89,7 +89,10 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         source.addGradlePlugin = plugin => this.editFile('build.gradle', addGradlePluginCallback(plugin));
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
-        source.addGradleProperty = property => this.editFile('gradle.properties', addGradlePropertyCallback(property));
+        source.addGradleProperty = property => {
+          application.javaProperties![property.property] = property.value!;
+          this.editFile('gradle.properties', addGradlePropertyCallback(property));
+        };
         source.addGradleDependencyCatalogVersions = (versions, { gradleVersionCatalogFile = 'gradle/libs.versions.toml' } = {}) =>
           this.editFile(gradleVersionCatalogFile, addGradleDependenciesCatalogVersionCallback(versions));
         source.addGradleDependencyCatalogVersion = (version, options) => source.addGradleDependencyCatalogVersions!([version], options);

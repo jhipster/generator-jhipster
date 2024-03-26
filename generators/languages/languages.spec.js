@@ -14,6 +14,7 @@ const generatorPath = join(__dirname, 'index.js');
 const createClientProject = options =>
   basicHelpers
     .runJHipster('app')
+    .withMockedGenerators(['jhipster:liquibase'])
     .withJHipsterConfig()
     .withOptions({
       ...options,

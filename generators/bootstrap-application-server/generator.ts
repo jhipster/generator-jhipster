@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
@@ -43,10 +42,10 @@ import {
 import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
 import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
-import { dockerPlaceholderGenerator, getDockerfileContainers } from '../docker/utils.js';
+import { getDockerfileContainers } from '../docker/utils.js';
 import { GRADLE_VERSION } from '../gradle/constants.js';
 import { normalizePathEnd } from '../base/support/path.js';
-import { getFrontendAppName } from '../base/support/index.js';
+import { getFrontendAppName, mutateData } from '../base/support/index.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import serverCommand from '../server/command.js';
@@ -82,24 +81,36 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         const gradleLibsVersions = this.readTemplate(
           this.jhipsterTemplatePath('../../server/resources/gradle/libs.versions.toml'),
         )?.toString();
-        application.packageInfoJavadocs = [];
-        application.javaDependencies = this.prepareDependencies(
+        const applicationJavaDependencies = this.prepareDependencies(
           {
             ...getPomVersionProperties(pomFile!),
             ...getGradleLibsVersionsProperties(gradleLibsVersions!),
           },
-          // Gradle doesn't allows snakeCase
-          value => `'${_.kebabCase(value).toUpperCase()}-VERSION'`,
+          'java',
         );
 
         const dockerfile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/Dockerfile'));
-        application.dockerContainers = this.prepareDependencies(
+        const applicationDockerContainers = this.prepareDependencies(
           {
             ...dockerContainers,
             ...getDockerfileContainers(dockerfile),
           },
-          dockerPlaceholderGenerator,
+          'docker',
         );
+
+        mutateData(application, {
+          packageInfoJavadocs: [],
+          javaProperties: {},
+          javaManagedProperties: {},
+          javaDependencies: ({ javaDependencies }) => ({
+            ...applicationJavaDependencies,
+            ...javaDependencies,
+          }),
+          dockerContainers: ({ dockerContainers: currentDockerContainers = {} }) => ({
+            ...applicationDockerContainers,
+            ...currentDockerContainers,
+          }),
+        });
       },
     });
   }
