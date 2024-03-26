@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
-import * as _ from 'lodash-es';
+import { merge, set } from 'lodash-es';
 
 import { basename, join } from 'path';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
@@ -16,8 +16,6 @@ import { getPackageRoot, isDistFolder } from '../lib/index.js';
 type BaseEntity = any;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
-
-const { set } = _;
 
 type JHipsterRunResult<GeneratorType extends YeomanGenerator = YeomanGenerator> = RunResult<GeneratorType> & {
   /**
@@ -217,7 +215,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
 
   withSharedApplication(sharedApplication: Record<string, any>): this {
     this.sharedApplication = this.sharedApplication ?? {};
-    Object.assign(this.sharedApplication, sharedApplication);
+    merge(this.sharedApplication, sharedApplication);
     return this.withSharedData({ sharedApplication: this.sharedApplication });
   }
 
