@@ -88,7 +88,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "npm run compile && npm run copy-files && npm run compile-types && npm run copy-types",
-    "postbuild": "chmod +x dist/cli/jhipster.cjs || true",
+    "postbuild": "node bin/fix-bin.cjs",
     "clean": "rimraf dist",
     "compile": "tsc",
     "compile-types": "tsc -p tsconfig.types.json",
