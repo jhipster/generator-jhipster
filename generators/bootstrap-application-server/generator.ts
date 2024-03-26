@@ -100,6 +100,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
         mutateData(application, {
           packageInfoJavadocs: [],
+          javaProperties: {},
+          javaManagedProperties: {},
           javaDependencies: ({ javaDependencies }) => ({
             ...applicationJavaDependencies,
             ...javaDependencies,

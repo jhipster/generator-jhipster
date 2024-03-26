@@ -46,6 +46,7 @@ import { prepareSqlApplicationProperties } from '../spring-data-relational/suppo
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
 import { fieldTypes } from '../../jdl/jhipster/index.js';
 import command from './command.js';
+import type { MavenProperty } from '../maven/types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
@@ -335,37 +336,66 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           throw new Error('Some application fields are be mandatory');
         }
 
+        const { javaDependencies } = application;
+        const checkProperty = (property: string) => {
+          if (!source.hasJavaManagedProperty?.(property) && !source.hasJavaProperty?.(property)) {
+            const message = `${property} is required by maven-liquibase-plugin, make sure to add it to your pom.xml`;
+            if (this.skipChecks) {
+              this.log.warn(message);
+            } else {
+              throw new Error(message);
+            }
+          }
+        };
+
+        const { 'jakarta-validation': validationVersion, h2: h2Version, liquibase: liquibaseVersion } = javaDependencies;
+
         const applicationAny = application as any;
         const databaseTypeProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;
 
         let liquibasePluginHibernateDialect;
         let liquibasePluginJdbcDriver;
+        const mavenProperties: MavenProperty[] = [];
         if (applicationAny.devDatabaseTypeH2Any) {
           // eslint-disable-next-line no-template-curly-in-string
           liquibasePluginHibernateDialect = '${liquibase-plugin.hibernate-dialect}';
           // eslint-disable-next-line no-template-curly-in-string
           liquibasePluginJdbcDriver = '${liquibase-plugin.driver}';
-          source.addMavenDefinition?.({
-            properties: [
-              { property: 'liquibase-plugin.hibernate-dialect' },
-              { property: 'liquibase-plugin.driver' },
-              { property: 'h2.version', value: application.springBootDependencies!.h2 },
-              { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
-              { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
-              { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },
-              { inProfile: 'prod', property: 'liquibase-plugin.driver', value: applicationAny.prodJdbcDriver },
-            ],
-          });
+          if (h2Version) {
+            mavenProperties.push({ property: 'h2.version', value: h2Version });
+          } else {
+            checkProperty('h2.version');
+          }
+          mavenProperties.push(
+            { property: 'liquibase-plugin.hibernate-dialect' },
+            { property: 'liquibase-plugin.driver' },
+            { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
+            { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
+            { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },
+            { inProfile: 'prod', property: 'liquibase-plugin.driver', value: applicationAny.prodJdbcDriver },
+          );
         } else {
           liquibasePluginHibernateDialect = applicationAny.prodHibernateDialect;
           liquibasePluginJdbcDriver = applicationAny.prodJdbcDriver;
         }
 
+        if (validationVersion) {
+          mavenProperties.push({ property: 'jakarta-validation.version', value: validationVersion });
+        } else {
+          checkProperty('jakarta-validation.version');
+        }
+
+        if (liquibaseVersion) {
+          mavenProperties.push({ property: 'liquibase.version', value: liquibaseVersion });
+        } else {
+          checkProperty('liquibase.version');
+        }
+
         source.addMavenDefinition?.({
           properties: [
+            ...mavenProperties,
             { inProfile: 'no-liquibase', property: 'profile.no-liquibase', value: ',no-liquibase' },
             { property: 'profile.no-liquibase' },
-            { property: 'liquibase.version', value: application.springBootDependencies!.liquibase },
             { property: 'liquibase-plugin.url' },
             { property: 'liquibase-plugin.username' },
             { property: 'liquibase-plugin.password' },
@@ -454,14 +484,33 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           throw new Error('Some application fields are be mandatory');
         }
 
+        const { liquibase: liquibaseVersion, 'gradle-liquibase': gradleLiquibaseVersion } = application.javaDependencies;
+        if (!liquibaseVersion) {
+          this.log.warn('liquibaseVersion is required by gradle-liquibase-plugin, make sure to add it to your dependencies');
+        } else {
+          source.addGradleProperty?.({ property: 'liquibaseVersion', value: liquibaseVersion });
+        }
+
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
-        source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: application.javaDependencies['gradle-liquibase'] });
-        source.addGradleProperty?.({ property: 'liquibaseVersion', value: application.springBootDependencies!.liquibase });
+        source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: gradleLiquibaseVersion });
 
         source.applyFromGradle?.({ script: 'gradle/liquibase.gradle' });
         source.addGradlePlugin?.({ id: 'org.liquibase.gradle' });
         // eslint-disable-next-line no-template-curly-in-string
         source.addGradlePluginManagement?.({ id: 'org.liquibase.gradle', version: '${liquibasePluginVersion}' });
+
+        if (application.databaseTypeSql && !application.reactive) {
+          source.addGradleDependency?.(
+            {
+              scope: 'liquibaseRuntime',
+              groupId: 'org.liquibase.ext',
+              artifactId: 'liquibase-hibernate6',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: liquibaseVersion ? '${liquibaseVersion}' : "${dependencyManagement.importedProperties['liquibase.version']}",
+            },
+            { gradleFile: 'gradle/liquibase.gradle' },
+          );
+        }
       },
     });
   }

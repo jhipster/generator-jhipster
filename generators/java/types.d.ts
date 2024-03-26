@@ -18,7 +18,7 @@ export type JavaArtifact = {
   classifier?: string;
 } & JavaArtifactType;
 
-export type JavaArtifactVersion = RequireOneOrNone<{ version: string; versionRef: string }, 'version' | 'versionRef'>;
+export type JavaArtifactVersion = RequireOneOrNone<{ version?: string; versionRef?: string }, 'version' | 'versionRef'>;
 
 export type JavaDependency = JavaArtifact & JavaArtifactVersion;
 
@@ -48,7 +48,13 @@ export type JavaApplication = BaseApplication &
 
     temporaryDir: string;
 
+    /** Java dependency versions */
     javaDependencies: Record<string, string>;
+    /** Known properties that can be used */
+    javaProperties: Record<string, string | null>;
+    /** Known managed properties that can be used */
+    javaManagedProperties: Record<string, string | null>;
+    /** Pre-defined package JavaDocs */
     packageInfoJavadocs: { packageName: string; documentation: string }[];
 
     prettierJava: boolean;
@@ -57,6 +63,13 @@ export type JavaApplication = BaseApplication &
   };
 
 export type JavaSourceType = {
+  /**
+   * Add a JavaDefinition to the application.
+   * A version requires a valid version otherwise it will be ignored.
+   * A dependency with versionRef requires a valid referenced version at `versions` otherwise it will be ignored.
+   */
   addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;
   addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
+  hasJavaProperty?(propertyName: string): boolean;
+  hasJavaManagedProperty?(propertyName: string): boolean;
 };
