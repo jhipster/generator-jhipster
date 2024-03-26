@@ -168,14 +168,15 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (!context.value) {
       return { optionName, type: 'UNARY' };
     }
-    let { image: optionValue } = context.value[0];
+    const image: string = context.value[0].image;
+    let optionValue;
     const { tokenType } = context.value[0];
     switch (tokenType.name) {
       case 'INTEGER':
-        optionValue = parseInt(optionValue, 10);
+        optionValue = parseInt(image, 10);
         break;
       case 'DECIMAL':
-        optionValue = parseFloat(optionValue);
+        optionValue = parseFloat(image);
         break;
       case 'TRUE':
         optionValue = true;
@@ -183,8 +184,11 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       case 'FALSE':
         optionValue = false;
         break;
+      case 'STRING':
+        optionValue = image.startsWith('"') ? image.substring(1, image.length - 1).replaceAll('\\"', '"') : image;
+        break;
       default:
-        optionValue = optionValue.replace(/"/g, '');
+        optionValue = image;
     }
     return { optionName, optionValue, type: 'BINARY' };
   }

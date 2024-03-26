@@ -70,8 +70,9 @@ describe('jdl - integration tests', () => {
 @BooleanFalse(false)
 @Integer(1)
 @Decimal(10.1)
-@Escaped("a.b")
-@String(foo)
+@String("a.b")
+@EscapedString("a\\".b")
+@Name(foo)
 @Unary
 entity A
 `;
@@ -102,9 +103,10 @@ Map {
         "booleanFalse": false,
         "booleanTrue": true,
         "decimal": 10.1,
-        "escaped": "a.b",
+        "escapedString": "a".b",
         "integer": 1,
-        "string": "foo",
+        "name": "foo",
+        "string": "a.b",
         "unary": true,
       },
       "applications": "*",
