@@ -479,12 +479,6 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               version: application.javaDependencies!['spring-boot'],
               addToBuild: true,
             },
-            {
-              pluginName: 'spring-dependency-management',
-              id: 'io.spring.dependency-management',
-              version: application.javaDependencies!['spring-dependency-management'],
-              addToBuild: true,
-            },
           ]);
         }
       },
