@@ -39,11 +39,13 @@ import {
   addIconImport,
 } from './support/index.js';
 import {
+  generateEntityClientImports as formatEntityClientImports,
+  generateTypescriptTestEntity as generateTestEntity,
+  generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-  generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.js';
 import type { CommonClientServerApplication } from '../base-application/types.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
@@ -346,6 +348,14 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    */
   addMainSCSSStyle(style, comment) {
     this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
+  }
+
+  generateEntityClientFields(primaryKey, fields, relationships, dto, customDateType = 'dayjs.Dayjs', embedded = false) {
+    return getHydratedEntityClientFields(primaryKey, fields, relationships, dto, customDateType, embedded, ANGULAR);
+  }
+
+  generateEntityClientImports(relationships, dto) {
+    return formatEntityClientImports(relationships, dto, ANGULAR);
   }
 
   /**
