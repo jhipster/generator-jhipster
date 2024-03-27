@@ -43,7 +43,7 @@
     "eslint-plugin-vue": "8.7.1",
     "flush-promises": "1.0.2",
     "folder-hash": "4.0.4",
-    "happy-dom": "14.3.8",
+    "happy-dom": "14.3.9",
     "html-webpack-plugin": "5.6.0",
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.8.1",
