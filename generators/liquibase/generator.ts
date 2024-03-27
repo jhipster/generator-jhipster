@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import * as _ from 'lodash-es';
+import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
@@ -27,7 +27,6 @@ import {
   postPrepareEntity,
   prepareRelationshipForLiquibase,
   liquibaseComment,
-  htmlEncode,
 } from './support/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
 import {
@@ -692,7 +691,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       return '';
     }
 
-    return `${leadingWhitespace ? ' ' : ''}${field.defaultValueAttributeName}="${htmlEncode(field.defaultValueAttributeValue.toString())}"`;
+    return `${leadingWhitespace ? ' ' : ''}${field.defaultValueAttributeName}="${escape(field.defaultValueAttributeValue.toString())}"`;
   }
 
   prepareChangelog({ databaseChangelog, application }) {
@@ -727,7 +726,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     Object.defineProperty(entity, 'fakeDataCount', {
       get: () => {
         const uniqueRelationships = entity.relationships.filter(rel => rel.unique && (rel.columnRequired || rel.id));
-        return _.min([entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
+        return min([entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
       },
       configurable: true,
     });

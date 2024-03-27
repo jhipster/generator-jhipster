@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { formatAsLiquibaseRemarks as liquibaseComment, htmlEncode } from './formatting.js';
+export { default as liquibaseComment } from './formatting.js';
 export { default as postPrepareEntity } from './post-prepare-entity.js';
 export { default as prepareField } from './prepare-field.js';
 export * from './relationship.js';
