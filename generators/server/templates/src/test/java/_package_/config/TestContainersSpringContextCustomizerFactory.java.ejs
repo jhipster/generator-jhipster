@@ -25,10 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import org.springframework.test.context.ContextConfigurationAttributes;
 import org.springframework.test.context.ContextCustomizer;
 import org.springframework.test.context.ContextCustomizerFactory;
+import org.springframework.test.context.MergedContextConfiguration;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.test.util.TestPropertyValues;
 
@@ -49,56 +51,70 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
 
-        return (context, mergedConfig) -> {
-            ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
-            TestPropertyValues testValues = TestPropertyValues.empty();
-<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
-            EmbeddedCouchbase couchbaseAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCouchbase.class);
-            if (null != couchbaseAnnotation) {
-                log.debug("detected the EmbeddedCouchbase annotation on class {}", testClass.getName());
-                log.info("Warming up the Couchbase database");
-                if (null == couchbaseBean) {
-                    couchbaseBean = beanFactory.createBean(CouchbaseTestContainer.class);
-                    beanFactory.registerSingleton(CouchbaseTestContainer.class.getName(), couchbaseBean);
-                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName(), couchbaseBean);
-                }
-                testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
-                testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
-                testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
-                testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getBucketName());
-                testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
-            }
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-                EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
-                if (null != mongoAnnotation) {
-                    log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
-                    log.info("Warming up the mongo database");
-                    if (null == mongoDbBean) {
-                        mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
-                        beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
-                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
+        return new ContextCustomizer() {
+            @Override
+            public void customizeContext(ConfigurableApplicationContext context,
+                    MergedContextConfiguration mergedConfig) {
+                ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+                TestPropertyValues testValues = TestPropertyValues.empty();
+    <%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
+                EmbeddedCouchbase couchbaseAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedCouchbase.class);
+                if (null != couchbaseAnnotation) {
+                    log.debug("detected the EmbeddedCouchbase annotation on class {}", testClass.getName());
+                    log.info("Warming up the Couchbase database");
+                    if (null == couchbaseBean) {
+                        couchbaseBean = beanFactory.createBean(CouchbaseTestContainer.class);
+                        beanFactory.registerSingleton(CouchbaseTestContainer.class.getName(), couchbaseBean);
+                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(CouchbaseTestContainer.class.getName(), couchbaseBean);
                     }
-                    testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
+                    testValues = testValues.and("spring.couchbase.connection-string=" + couchbaseBean.getCouchbaseContainer().getConnectionString());
+                    testValues = testValues.and("spring.couchbase.username=" + couchbaseBean.getCouchbaseContainer().getUsername());
+                    testValues = testValues.and("spring.couchbase.password=" + couchbaseBean.getCouchbaseContainer().getPassword());
+                    testValues = testValues.and("jhipster.database.couchbase.bucket-name=" + couchbaseBean.getBucketName());
+                    testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
                 }
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-            EmbeddedElasticsearch elasticsearchAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedElasticsearch.class);
-            if (null != elasticsearchAnnotation) {
-                log.debug("detected the EmbeddedElasticsearch annotation on class {}", testClass.getName());
-                log.info("Warming up the elastic database");
-                if (null == elasticsearchBean) {
-                    elasticsearchBean = beanFactory.createBean(ElasticsearchTestContainer.class);
-                    beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
-                    // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
+    <%_ } _%>
+    <%_ if (databaseTypeMongodb) { _%>
+                    EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
+                    if (null != mongoAnnotation) {
+                        log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
+                        log.info("Warming up the mongo database");
+                        if (null == mongoDbBean) {
+                            mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
+                            beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
+                            // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
+                        }
+                        testValues = testValues.and("spring.data.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
+                    }
+    <%_ } _%>
+    <%_ if (searchEngineElasticsearch) { _%>
+                EmbeddedElasticsearch elasticsearchAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedElasticsearch.class);
+                if (null != elasticsearchAnnotation) {
+                    log.debug("detected the EmbeddedElasticsearch annotation on class {}", testClass.getName());
+                    log.info("Warming up the elastic database");
+                    if (null == elasticsearchBean) {
+                        elasticsearchBean = beanFactory.createBean(ElasticsearchTestContainer.class);
+                        beanFactory.registerSingleton(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
+                        // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(ElasticsearchTestContainer.class.getName(), elasticsearchBean);
+                    }
+                    testValues =
+                        testValues.and(
+                            "spring.elasticsearch.uris=http://" + elasticsearchBean.getElasticsearchContainer().getHttpHostAddress()
+                        );
                 }
-                testValues =
-                    testValues.and(
-                        "spring.elasticsearch.uris=http://" + elasticsearchBean.getElasticsearchContainer().getHttpHostAddress()
-                    );
+    <%_ } _%>
+                testValues.applyTo(context);
             }
-<%_ } _%>
-            testValues.applyTo(context);
+    
+            @Override
+            public int hashCode() {
+                return 953;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                return true;
+            }
         };
     }
 }
