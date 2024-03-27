@@ -249,12 +249,10 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web<% if (reactive) { %>flux<% } %></artifactId>
