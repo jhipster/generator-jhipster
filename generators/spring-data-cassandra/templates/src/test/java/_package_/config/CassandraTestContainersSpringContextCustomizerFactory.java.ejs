@@ -71,12 +71,12 @@ public class CassandraTestContainersSpringContextCustomizerFactory implements Co
 
             @Override
             public int hashCode() {
-                return 983;
+                return cassandraBean.getClass().getName().hashCode();
             }
 
             @Override
             public boolean equals(Object obj) {
-                return true;
+                return this.hashCode() == obj.hashCode();
             }
         };
     }

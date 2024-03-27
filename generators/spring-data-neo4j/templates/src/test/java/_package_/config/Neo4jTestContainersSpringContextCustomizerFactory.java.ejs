@@ -67,12 +67,12 @@ public class Neo4jTestContainersSpringContextCustomizerFactory implements Contex
 
             @Override
             public int hashCode() {
-                return 991;
+                return neo4jBean.getClass().getName().hashCode();
             }
 
             @Override
             public boolean equals(Object obj) {
-                return true;
+                return this.hashCode() == obj.hashCode();
             }
         };
     }

@@ -61,12 +61,12 @@ public class KafkaTestContainersSpringContextCustomizerFactory implements Contex
 
             @Override
             public int hashCode() {
-                return 971;
+                return kafkaBean.getClass().getName().hashCode();
             }
 
             @Override
             public boolean equals(Object obj) {
-                return true;
+                return this.hashCode() == obj.hashCode();
             }
         };
     }

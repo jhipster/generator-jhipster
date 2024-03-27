@@ -65,12 +65,12 @@ public class RedisTestContainersSpringContextCustomizerFactory implements Contex
 
             @Override
             public int hashCode() {
-                return 967;
+                return redisBean.getClass().getName().hashCode();
             }
 
             @Override
             public boolean equals(Object obj) {
-                return true;
+                return this.hashCode() == obj.hashCode();
             }
         };
     }

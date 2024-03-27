@@ -88,12 +88,12 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
 
             @Override
             public int hashCode() {
-                return 997;
+                return prodTestContainer.getClass().getName().hashCode();
             }
 
             @Override
             public boolean equals(Object obj) {
-                return true;
+                return this.hashCode() == obj.hashCode();
             }
         };
     }
