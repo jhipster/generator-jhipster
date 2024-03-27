@@ -218,9 +218,7 @@ if (addSpringMilestoneRepository) { _%>
         }
     }
 <%_ } _%>
-<%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
-<%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>"
     testImplementation "org.springframework.boot:spring-boot-test"
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
