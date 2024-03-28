@@ -25,7 +25,7 @@
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "environment": "dev",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ng-h2mem-ws-nol2",
@@ -66,7 +66,7 @@
       "environment": "dev",
       "packaging": "war",
       "testcontainers": "false",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ng-webflux-mongodb",
@@ -117,7 +117,7 @@
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true",
       "node": "20",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ms-mf-ng-consul-oauth2-neo4j",
