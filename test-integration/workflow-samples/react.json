@@ -3,7 +3,8 @@
     {
       "name": "react-default",
       "app-sample": "react-default",
-      "entity": "sqlfull"
+      "entity": "sqlfull",
+      "java": "22"
     },
     {
       "name": "react-maven-h2mem-memcached",
@@ -30,13 +31,14 @@
       "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
       "extra-args": "--workspaces --monorepository",
       "workspaces": "true",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
       "jdl-samples": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
       "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "workspaces": "true",
+      "java": "22"
     }
   ]
 }

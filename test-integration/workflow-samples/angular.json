@@ -4,7 +4,8 @@
       "name": "ng-default",
       "app-sample": "ng-default",
       "entity": "sqlfull",
-      "sonar-analyse": "true"
+      "sonar-analyse": "true",
+      "java": "21"
     },
     {
       "name": "ng-default-additional",
@@ -25,7 +26,7 @@
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "environment": "dev",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ng-h2mem-ws-nol2",
@@ -37,7 +38,8 @@
       "name": "ng-couchbase",
       "disabled": "needs adjusts for sb3",
       "app-sample": "ng-couchbase",
-      "entity": "couchbase"
+      "entity": "couchbase",
+      "java": "22"
     },
     {
       "name": "ng-gradle-couchbase-search",
@@ -57,7 +59,8 @@
       "app-sample": "ng-gradle-mariadb-oauth2-infinispan",
       "entity": "sql",
       "environment": "dev",
-      "node": "20"
+      "node": "20",
+      "java": "22"
     },
     {
       "name": "ng-gradle-h2disk-ws-nocache",
@@ -71,14 +74,15 @@
     {
       "name": "ng-webflux-mongodb",
       "app-sample": "webflux-mongodb",
-      "entity": "mongodb"
+      "entity": "mongodb",
+      "java": "22"
     },
     {
       "name": "ng-webflux-gradle-mongodb-oauth2",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb",
       "node": "20",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ng-webflux-psql-default",
@@ -103,7 +107,7 @@
       "disabled": "needs adjusts for sb3",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "ms-ng-consul-oauth2-mongodb-caffeine",

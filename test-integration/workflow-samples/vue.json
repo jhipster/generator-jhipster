@@ -3,7 +3,8 @@
     {
       "name": "vue-default",
       "app-sample": "vue-default",
-      "entity": "sqlfull"
+      "entity": "sqlfull",
+      "java": "22"
     },
     {
       "name": "vue-default-additional",
@@ -18,7 +19,7 @@
       "app-sample": "vue-noi18n-ws-oauth2",
       "entity": "sqlfull",
       "node": "20",
-      "java": "21"
+      "java": "22"
     },
     {
       "name": "vue-fulli18n-mysql-es",
@@ -50,7 +51,8 @@
       "disabled": "needs adjusts for sb3",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "workspaces": "true",
+      "java": "22"
     },
     {
       "name": "ms-mf-vue-consul-oauth2-mysql-memcached",
