@@ -16,16 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { inspect } from 'node:util';
 import { it, describe, expect, esmocha, beforeEach } from 'esmocha';
 import { createTranslationReplacer } from './translate-angular.js';
 
 describe('generator - angular - transform', () => {
   describe('replaceAngularTranslations', () => {
     let replaceAngularTranslations;
+    let enabledAngularTranslations;
 
     beforeEach(() => {
       let value = 0;
-      replaceAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(key => `translated-value-${key}-${value++}`));
+      const testImpl = (key, data) => `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`;
+      replaceAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
+        jhiPrefix: 'jhi',
+        enableTranslation: false,
+      });
+      enabledAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
+        jhiPrefix: 'jhi',
+        enableTranslation: true,
+      });
     });
 
     describe('with translation disabled', () => {
@@ -39,8 +49,8 @@ describe('generator - angular - transform', () => {
 `;
           expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
 "
-<h1>translated-value-activate.title1-0</h1>
-<h1>translated-value-activate.title2-1</h1>
+<h1>translated-value-activate.title1-1</h1>
+<h1>translated-value-activate.title2-0</h1>
 "
 `);
         });
@@ -110,7 +120,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove placeholder attribute value with translated value', () => {
+        it('should replace placeholder attribute value with translated value', () => {
           const body = `
 <input placeholder="{{ 'global.form.currentpassword.placeholder1' | translate }}"/>
 <input placeholder="{{ 'global.form.currentpassword.placeholder2' | translate }}"/>
@@ -123,7 +133,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove title attribute value with translated value', () => {
+        it('should replace title attribute value with translated value', () => {
           const body = `
 <input title="{{ 'global.form.currentpassword.title1' | translate }}"/>
 <input title="{{ 'global.form.currentpassword.title2' | translate }}"/>
@@ -132,6 +142,66 @@ describe('generator - angular - transform', () => {
 "
 <input title="translated-value-global.form.currentpassword.title1-0"/>
 <input title="translated-value-global.form.currentpassword.title2-1"/>
+"
+`);
+        });
+
+        it('should replace __jhiTranslatePipe__ with translated value', () => {
+          const body = `
+<input title="__jhiTranslatePipe__('global.form.currentpassword.title1')"/>
+<input title="__jhiTranslatePipe__('global.form.currentpassword.title2')"/>
+`;
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+<input title="translated-value-global.form.currentpassword.title1-1"/>
+<input title="translated-value-global.form.currentpassword.title2-0"/>
+"
+`);
+        });
+
+        it('should replace __jhiTranslatePipe__ with translation pipe', () => {
+          const body = `
+<input title="__jhiTranslatePipe__('global.form.currentpassword.title1')"/>
+<input title="__jhiTranslatePipe__('global.form.currentpassword.title2')"/>
+`;
+          expect(enabledAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+<input title="{{ 'global.form.currentpassword.title1' | translate }}"/>
+<input title="{{ 'global.form.currentpassword.title2' | translate }}"/>
+"
+`);
+        });
+
+        it('should replace __jhiTranslateTag__ with translated value', () => {
+          const body = `
+<tag>__jhiTranslateTag__('global.form.currentpassword.title1', { "username": "account()!.login" })</tag>
+<tag>
+__jhiTranslateTag__('global.form.currentpassword.title2')
+</tag>
+`;
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+<tag>translated-value-global.form.currentpassword.title1-{ username: &apos;{{ account()!.login }}&apos; }-1</tag>
+<tag>
+translated-value-global.form.currentpassword.title2-0
+</tag>
+"
+`);
+        });
+
+        it('should replace __jhiTranslateTag__ with translation attribute and value', () => {
+          const body = `
+<tag>__jhiTranslateTag__('global.form.currentpassword.title1', { "username": "account()!.login" })</tag>
+<tag>
+__jhiTranslateTag__('global.form.currentpassword.title2')
+</tag>
+`;
+          expect(enabledAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+<tag jhiTranslate="global.form.currentpassword.title1" [translateValues]="{ username: account()!.login }">translated-value-global.form.currentpassword.title1-{ username: &apos;{{ account()!.login }}&apos; }-1</tag>
+<tag jhiTranslate="global.form.currentpassword.title2">
+translated-value-global.form.currentpassword.title2-0
+</tag>
 "
 `);
         });

@@ -19,7 +19,13 @@
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
-import { createJhiTransformTranslateReplacer, createJhiTransformTranslateStringifyReplacer } from '../../languages/support/index.js';
+import {
+  type JHITranslateConverterOptions,
+  createJhiTransformTranslateReplacer,
+  createJhiTransformTranslateStringifyReplacer,
+  createJhiTranslateReplacer,
+  escapeTranslationValue,
+} from '../../languages/support/index.js';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 
@@ -27,7 +33,9 @@ const JHI_TRANSLATE_REGEX = /(\n?\s*[a-z][a-zA-Z]*Translate="[a-zA-Z0-9 +{}'_!?.
 const TRANSLATE_VALUES_REGEX = /(\n?\s*\[translateValues\]="\{(?:(?!\}").)*?\}")/.source;
 const TRANSLATE_REGEX = [JHI_TRANSLATE_REGEX, TRANSLATE_VALUES_REGEX].join('|');
 
-function getTranslationValue(getWebappTranslation, key, data) {
+export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
+
+function getTranslationValue(getWebappTranslation, key, data?) {
   return getWebappTranslation(key, data) || undefined;
 }
 
@@ -40,9 +48,19 @@ function getTranslationValue(getWebappTranslation, key, data) {
  * @param {object} [options]
  * @param {number} [options.keyIndex]
  * @param {number} [options.replacementIndex]
+ * @param {any} [options.escape]
  * @returns {string}
  */
-function replaceTranslationKeysWithText(getWebappTranslation, content, regexSource, { keyIndex = 1, replacementIndex = 1, escape } = {}) {
+function replaceTranslationKeysWithText(
+  getWebappTranslation,
+  content,
+  regexSource,
+  {
+    keyIndex = 1,
+    replacementIndex = 1,
+    escape,
+  }: { keyIndex?: number; replacementIndex?: number; escape?: (str: string, match: any) => string } = {},
+) {
   const regex = new RegExp(regexSource, 'g');
   const allMatches = content.matchAll(regex);
   for (const match of allMatches) {
@@ -103,14 +121,75 @@ function replaceErrorMessage(getWebappTranslation, content) {
 }
 
 /**
+ * Generate the `translateValues` attribute.
+ */
+const translateValues = (parsedInterpolate: Record<string, string>) =>
+  ` [translateValues]="{ ${Object.entries(parsedInterpolate)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(',')} }"`;
+
+/**
+ * Convert interpolation values to angular template for later processing.
+ */
+const translationValueInterpolate = (parsedInterpolate: Record<string, string>): Record<string, string> =>
+  Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, `{{ ${value} }}`]));
+
+/**
+ * Creates a `jhiTranslate` attribute with optional translateValues.
+ * Or the translation value if translation is disabled.
+ */
+const tagTranslation = (
+  getWebappTranslation: any,
+  { enableTranslation, jhiPrefix }: ReplacerOptions,
+  { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
+) => {
+  const translatedValueInterpolate = parsedInterpolate ? translationValueInterpolate(parsedInterpolate) : undefined;
+  if (enableTranslation) {
+    return ` ${jhiPrefix}Translate="${key}"${
+      parsedInterpolate ? translateValues(parsedInterpolate) : ''
+    }${prefix}${escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate))}${suffix}`;
+  }
+
+  return `${prefix}${escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate))}${suffix}`;
+};
+
+/**
+ * Creates a `translate` pipe.
+ * Or the translation value if translation is disabled.
+ */
+const pipeTranslation = (getWebappTranslation: any, { enableTranslation }: ReplacerOptions, { key }: JHITranslateConverterOptions) => {
+  if (enableTranslation) {
+    return `{{ '${key}' | translate }}`;
+  }
+
+  return `${escapeTranslationValue(getTranslationValue(getWebappTranslation, key))}`;
+};
+
+/**
  * Replace and cleanup translations.
  *
  * @type {import('../generator-base.js').EditFileCallback}
  * @this {import('../generator-base.js')}
  */
-export const createTranslationReplacer = (getWebappTranslation, enableTranslation) => {
+export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
   const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
-  const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation, { escapeHtml: true });
+  const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
+  let translationReplacer: ((content: string) => string) | undefined;
+  const enableTranslation = typeof opts === 'boolean' ? opts : opts.enableTranslation;
+  if (typeof opts !== 'boolean') {
+    translationReplacer = createJhiTranslateReplacer(
+      optsReplacer => {
+        if (optsReplacer.type === 'Tag') {
+          return tagTranslation(getWebappTranslation, opts, optsReplacer);
+        }
+        if (optsReplacer.type === 'Pipe') {
+          return pipeTranslation(getWebappTranslation, opts, optsReplacer);
+        }
+        throw new Error(`Translation type not supported ${optsReplacer.type}`);
+      },
+      { prefixPattern: '>\\s*', suffixPattern: '\\s*<' },
+    );
+  }
   return function replaceAngularTranslations(content, filePath) {
     if (/\.html$/.test(filePath)) {
       if (!enableTranslation) {
@@ -122,6 +201,7 @@ export const createTranslationReplacer = (getWebappTranslation, enableTranslatio
     if (/(:?\.html|component\.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
+      content = translationReplacer?.(content);
     }
     if (!enableTranslation) {
       if (/(:?route|module)\.ts$/.test(filePath)) {
@@ -138,11 +218,9 @@ export const createTranslationReplacer = (getWebappTranslation, enableTranslatio
 const minimatch = new Minimatch('**/*{.html,.component.ts,.route.ts,.module.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
-const translateAngularFilesTransform = (getWebappTranslation, enableTranslation) => {
-  const translate = createTranslationReplacer(getWebappTranslation, enableTranslation);
+export const translateAngularFilesTransform = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
+  const translate = createTranslationReplacer(getWebappTranslation, opts);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));
   });
 };
-
-export default translateAngularFilesTransform;
