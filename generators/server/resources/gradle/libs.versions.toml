@@ -19,7 +19,7 @@ lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
 [plugins]
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.1' }
 
-node-gradle = { id = 'com.github.node-gradle.node', version = '7.0.1' }
+node-gradle = { id = 'com.github.node-gradle.node', version = '7.0.2' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '2.2.1' }
 
