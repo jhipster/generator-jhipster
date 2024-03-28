@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.test.annotation.DirtiesContext;
-
 import <%= packageName %>.config.SecurityConfiguration;
 import <%= packageName %>.config.SecurityJwtConfiguration;
 import <%= packageName %>.config.WebConfigurer;
@@ -72,7 +70,6 @@ import org.springframework.boot.test.context.SpringBootTest;
     }
 )
 <%_ } _%>
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public @interface AuthenticationIntegrationTest {
 
 }
