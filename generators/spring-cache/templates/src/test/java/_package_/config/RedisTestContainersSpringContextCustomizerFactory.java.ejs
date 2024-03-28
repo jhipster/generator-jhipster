@@ -65,7 +65,7 @@ public class RedisTestContainersSpringContextCustomizerFactory implements Contex
 
             @Override
             public int hashCode() {
-                return redisBean.getClass().getName().hashCode();
+                return RedisTestContainer.class.getName().hashCode();
             }
 
             @Override

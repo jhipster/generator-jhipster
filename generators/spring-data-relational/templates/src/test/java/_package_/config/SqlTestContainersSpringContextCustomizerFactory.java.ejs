@@ -88,7 +88,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
 
             @Override
             public int hashCode() {
-                return prodTestContainer.getClass().getName().hashCode();
+                return SqlTestContainer.class.getName().hashCode();
             }
 
             @Override

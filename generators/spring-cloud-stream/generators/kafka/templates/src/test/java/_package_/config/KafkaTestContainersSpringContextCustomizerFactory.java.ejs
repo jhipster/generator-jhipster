@@ -61,7 +61,7 @@ public class KafkaTestContainersSpringContextCustomizerFactory implements Contex
 
             @Override
             public int hashCode() {
-                return kafkaBean.getClass().getName().hashCode();
+                return KafkaTestContainer.class.getName().hashCode();
             }
 
             @Override

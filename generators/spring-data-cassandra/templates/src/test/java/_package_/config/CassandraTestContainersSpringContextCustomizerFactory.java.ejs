@@ -71,7 +71,7 @@ public class CassandraTestContainersSpringContextCustomizerFactory implements Co
 
             @Override
             public int hashCode() {
-                return cassandraBean.getClass().getName().hashCode();
+                return CassandraTestContainer.class.getName().hashCode();
             }
 
             @Override

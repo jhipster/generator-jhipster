@@ -67,7 +67,7 @@ public class Neo4jTestContainersSpringContextCustomizerFactory implements Contex
 
             @Override
             public int hashCode() {
-                return neo4jBean.getClass().getName().hashCode();
+                return Neo4jTestContainer.class.getName().hashCode();
             }
 
             @Override

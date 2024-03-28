@@ -108,17 +108,16 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
     
             @Override
             public int hashCode() {
-                int hash = 0;
+                return
                 <%_ if (databaseTypeMongodb) { _%>
-                    hash = hash + mongoDbBean.getClass().getName().hashCode();
+                    MongoDbTestContainer.class.getName().hashCode() <% if (searchEngineElasticsearch || databaseTypeCouchbase || searchEngineCouchbase) { %> + <% } else { %>;<% } %>
                 <%_ } _%>
                 <%_ if (searchEngineElasticsearch) { _%>
-                    hash = hash + elasticsearchBean.getClass().getName().hashCode();
+                    ElasticsearchTestContainer.class.getName().hashCode() <% if (databaseTypeCouchbase || searchEngineCouchbase) { %> + <% } else { %>;<% } %>
                 <%_ } _%>
                 <%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
-                    hash = hash + couchbaseBean.getClass().getName().hashCode();
+                    CouchbaseTestContainer.class.getName().hashCode();
                 <%_ } _%>
-                return hash;
             }
 
             @Override

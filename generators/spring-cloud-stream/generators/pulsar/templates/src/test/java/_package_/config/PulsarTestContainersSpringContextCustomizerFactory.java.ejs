@@ -69,7 +69,7 @@ public class PulsarTestContainersSpringContextCustomizerFactory implements Conte
 
             @Override
             public int hashCode() {
-                return pulsarBean.getClass().getName().hashCode();
+                return PulsarTestContainer.class.getName().hashCode();
             }
 
             @Override
