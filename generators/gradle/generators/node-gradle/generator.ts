@@ -28,7 +28,7 @@ export default class NodeGradleGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapAplication();
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_GRADLE);
     }
   }

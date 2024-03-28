@@ -28,7 +28,7 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapAplicationServer();
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 
