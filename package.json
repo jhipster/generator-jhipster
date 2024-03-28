@@ -165,7 +165,7 @@
     "randexp": "0.5.3",
     "run-async": "3.0.0",
     "semver": "7.6.0",
-    "simple-git": "3.23.0",
+    "simple-git": "3.24.0",
     "type-fest": "4.14.0",
     "uuid": "9.0.1",
     "winston": "3.13.0",
