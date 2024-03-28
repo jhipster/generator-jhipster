@@ -33,7 +33,7 @@
     </div>
     <%_ } _%>
 
-    <p <%= jhiPrefix %>Translate="logs.nbloggers" [translateValues]="{ total: loggers()?.length }">__jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers()?.length }}" })</p>
+    <p>__jhiTranslateTag__('logs.nbloggers', { "total": "loggers()?.length" })</p>
 
     <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
     <input type="text" [ngModel]="filter()" (ngModelChange)="filter.set($event)" class="form-control" />

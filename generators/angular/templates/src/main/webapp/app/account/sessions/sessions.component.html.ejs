@@ -18,7 +18,7 @@
 -%>
 <div>
 @if (account) {
-  <h2 id="session-page-heading" <%= jhiPrefix %>Translate="sessions.title" [translateValues]="{ username: account.login }">__jhiTransformTranslate__('sessions.title', { "username": "{{ account.login }}" })</h2>
+  <h2 id="session-page-heading">__jhiTranslateTag__('sessions.title', { "username": "account.login" })</h2>
 }
 
 @if (success) {
