@@ -121,18 +121,11 @@ function replaceErrorMessage(getWebappTranslation, content) {
 }
 
 /**
- * Generate the `translateValues` attribute.
- */
-const translateValues = (parsedInterpolate: Record<string, string>) =>
-  ` [translateValues]="{ ${Object.entries(parsedInterpolate)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join(',')} }"`;
-
-/**
  * Convert interpolation values to angular template for later processing.
+ * Numbers are left as is, strings are wrapped in `{{ }}`.
  */
 const translationValueInterpolate = (parsedInterpolate: Record<string, string>): Record<string, string> =>
-  Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, `{{ ${value} }}`]));
+  Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, /\d+/.test(value) ? value : `{{ ${value} }}`]));
 
 /**
  * Creates a `jhiTranslate` attribute with optional translateValues.
@@ -144,13 +137,44 @@ const tagTranslation = (
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
   const translatedValueInterpolate = parsedInterpolate ? translationValueInterpolate(parsedInterpolate) : undefined;
+  const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
+
   if (enableTranslation) {
-    return ` ${jhiPrefix}Translate="${key}"${
-      parsedInterpolate ? translateValues(parsedInterpolate) : ''
-    }${prefix}${escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate))}${suffix}`;
+    const translateValuesAttr = parsedInterpolate
+      ? ` [translateValues]="{ ${Object.entries(parsedInterpolate)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(', ')} }"`
+      : '';
+    return ` ${jhiPrefix}Translate="${key}"${translateValuesAttr}${prefix}${translatedValue}${suffix}`;
   }
 
-  return `${prefix}${escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate))}${suffix}`;
+  return `${prefix}${translatedValue}${suffix}`;
+};
+
+/**
+ * Creates a `jhiTranslate` attribute with optional translateValues.
+ * Or the translation value if translation is disabled.
+ */
+const tagPipeTranslation = (
+  getWebappTranslation: any,
+  { enableTranslation, jhiPrefix }: ReplacerOptions,
+  { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
+) => {
+  if (!parsedInterpolate || Object.keys(parsedInterpolate).length === 0) {
+    throw new Error(`No interpolation values found for translation key ${key}, use __jhiTranslateTag__ instead.`);
+  }
+  const translatedValueInterpolate = Object.fromEntries(
+    Object.entries(parsedInterpolate).map(([key, value]) => [key, getWebappTranslation(value)]),
+  );
+  const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
+  if (enableTranslation) {
+    const translateValuesAttr = ` [translateValues]="{ ${Object.entries(parsedInterpolate)
+      .map(([key, value]) => `${key}: ('${value}' | translate)`)
+      .join(', ')} }"`;
+    return ` ${jhiPrefix}Translate="${key}"${translateValuesAttr}${prefix}${translatedValue}${suffix}`;
+  }
+
+  return `${prefix}${translatedValue}${suffix}`;
 };
 
 /**
@@ -181,6 +205,9 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
       optsReplacer => {
         if (optsReplacer.type === 'Tag') {
           return tagTranslation(getWebappTranslation, opts, optsReplacer);
+        }
+        if (optsReplacer.type === 'TagPipe') {
+          return tagPipeTranslation(getWebappTranslation, opts, optsReplacer);
         }
         if (optsReplacer.type === 'Pipe') {
           return pipeTranslation(getWebappTranslation, opts, optsReplacer);

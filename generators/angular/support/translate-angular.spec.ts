@@ -205,6 +205,28 @@ translated-value-global.form.currentpassword.title2-0
 "
 `);
         });
+
+        it('should replace __jhiTranslateTagPipe__ with translated value', () => {
+          const body = `
+<tag>__jhiTranslateTagPipe__('global.form.currentpassword.title1', { "username": "translation.key" })</tag>
+`;
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+<tag>translated-value-global.form.currentpassword.title1-{ username: &apos;translated-value-translation.key-0&apos; }-1</tag>
+"
+`);
+        });
+
+        it('should replace __jhiTranslateTagPipe__ with translation attribute and value', () => {
+          const body = `
+<tag>__jhiTranslateTagPipe__('global.form.currentpassword.title1', { "username": "translation.key" })</tag>
+`;
+          expect(enabledAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+<tag jhiTranslate="global.form.currentpassword.title1" [translateValues]="{ username: ('translation.key' | translate) }">translated-value-global.form.currentpassword.title1-{ username: &apos;translated-value-translation.key-0&apos; }-1</tag>
+"
+`);
+        });
       });
 
       describe('.route.ts files', () => {
