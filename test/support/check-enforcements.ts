@@ -59,7 +59,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
             ['src/test/javascript', '<%= clientTestDir %>'],
             ...(client
               ? [
-                  ['jhiTranslate', '<%= jhiPrefix %>Translate'],
+                  [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
                   [' Java ', ' <%= backendType %> '],
                 ]
               : []),

@@ -167,13 +167,14 @@ export default class AngularGenerator extends BaseApplicationGenerator {
         this.localEntities = entities.filter(entity => !entity.builtIn && !entity.skipClient);
       },
       queueTranslateTransform({ control, application }) {
+        const { enableTranslation, jhiPrefix } = application;
         this.queueTransformStream(
           {
             name: 'translating angular application',
             filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedAngularFile(file),
             refresh: false,
           },
-          translateAngularFilesTransform(control.getWebappTranslation, application.enableTranslation),
+          translateAngularFilesTransform(control.getWebappTranslation, { enableTranslation, jhiPrefix }),
         );
       },
     });

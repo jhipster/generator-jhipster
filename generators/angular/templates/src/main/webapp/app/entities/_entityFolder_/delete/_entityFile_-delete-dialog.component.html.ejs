@@ -27,7 +27,7 @@
 
     <div class="modal-body">
         <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
-        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.delete.question" [translateValues]="{ id: <%= entityInstance %>.<%= primaryKey.name %> }">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.delete.question', { "id": "{{ <%- entityInstance%>.<%- primaryKey.name%> }}" })</p>
+        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.delete.question', { "id": "<%- entityInstance%>.<%- primaryKey.name%>" })</p>
     </div>
 
     <div class="modal-footer">

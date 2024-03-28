@@ -27,7 +27,7 @@
   <div class="modal-body">
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-    <p <%= jhiPrefix %>Translate="userManagement.delete.question" [translateValues]="{ login: user.login }">__jhiTransformTranslate__('userManagement.delete.question', { "login": "{{ user.login }}" })</p>
+    <p>__jhiTranslateTag__('userManagement.delete.question', { "login": "user.login" })</p>
   </div>
 
   <div class="modal-footer">
