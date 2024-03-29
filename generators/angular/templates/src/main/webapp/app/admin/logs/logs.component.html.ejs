@@ -18,7 +18,7 @@
 -%>
 @defer (when loggers() && !isLoading()) {
   <div class="table-responsive">
-    <h2 id="logs-page-heading" <%= jhiPrefix %>Translate="logs.title" data-cy="logsPageHeading">__jhiTransformTranslate__('logs.title')</h2>
+    <h2 id="logs-page-heading" data-cy="logsPageHeading">__jhiTranslateTag__('logs.title')</h2>
 
 <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
     <div class="float-end">
@@ -35,14 +35,14 @@
 
     <p>__jhiTranslateTag__('logs.nbloggers', { "total": "loggers()?.length" })</p>
 
-    <span <%= jhiPrefix %>Translate="logs.filter">__jhiTransformTranslate__('logs.filter')</span>
+    <span>__jhiTranslateTag__('logs.filter')</span>
     <input type="text" [ngModel]="filter()" (ngModelChange)="filter.set($event)" class="form-control" />
 
     <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
       <thead>
         <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="sortState.set($event)">
-          <th <%= jhiPrefix %>SortBy="name" scope="col"><span <%= jhiPrefix %>Translate="logs.table.name">__jhiTransformTranslate__('logs.table.name')</span> <fa-icon icon="sort"></fa-icon></th>
-          <th <%= jhiPrefix %>SortBy="level" scope="col"><span <%= jhiPrefix %>Translate="logs.table.level">__jhiTransformTranslate__('logs.table.level')</span> <fa-icon icon="sort"></fa-icon></th>
+          <th <%= jhiPrefix %>SortBy="name" scope="col"><span>__jhiTranslateTag__('logs.table.name')</span> <fa-icon icon="sort"></fa-icon></th>
+          <th <%= jhiPrefix %>SortBy="level" scope="col"><span>__jhiTranslateTag__('logs.table.level')</span> <fa-icon icon="sort"></fa-icon></th>
         </tr>
       </thead>
 

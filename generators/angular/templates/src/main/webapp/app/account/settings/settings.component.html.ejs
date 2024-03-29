@@ -24,7 +24,7 @@
     }
 
     @if (success()) {
-      <div class="alert alert-success" <%= jhiPrefix %>Translate="settings.messages.success">__jhiTransformTranslate__('settings.messages.success')</div>
+      <div class="alert alert-success">__jhiTranslateTag__('settings.messages.success')</div>
     }
 
       <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
@@ -32,13 +32,13 @@
     @if (settingsForm.value.login) {
       <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
         <div class="mb-3">
-          <label class="form-label" for="firstName" <%= jhiPrefix %>Translate="settings.form.firstname">__jhiTransformTranslate__('settings.form.firstname')</label>
+          <label class="form-label" for="firstName">__jhiTranslateTag__('settings.form.firstname')</label>
           <input
             type="text"
             class="form-control"
             id="firstName"
             name="firstName"
-            placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('settings.form.firstname.placeholder')"
             formControlName="firstName"
             data-cy="firstname"
           />
@@ -47,33 +47,30 @@
           <div>
           @if (settingsForm.get('firstName')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="settings.messages.validate.firstname.required"
-            >__jhiTransformTranslate__('settings.messages.validate.firstname.required')</small>
+            >__jhiTranslateTag__('settings.messages.validate.firstname.required')</small>
           }
 
           @if (settingsForm.get('firstName')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="settings.messages.validate.firstname.minlength"
-            >__jhiTransformTranslate__('settings.messages.validate.firstname.minlength')</small>
+            >__jhiTranslateTag__('settings.messages.validate.firstname.minlength')</small>
           }
 
           @if (settingsForm.get('firstName')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="settings.messages.validate.firstname.maxlength"
-            >__jhiTransformTranslate__('settings.messages.validate.firstname.maxlength')</small>
+            >__jhiTranslateTag__('settings.messages.validate.firstname.maxlength')</small>
           }
           </div>
         }
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="lastName" <%= jhiPrefix %>Translate="settings.form.lastname">__jhiTransformTranslate__('settings.form.lastname')</label>
+          <label class="form-label" for="lastName">__jhiTranslateTag__('settings.form.lastname')</label>
           <input
             type="text"
             class="form-control"
             id="lastName"
             name="lastName"
-            placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('settings.form.lastname.placeholder')"
             formControlName="lastName"
             data-cy="lastname"
           />
@@ -82,33 +79,30 @@
           <div>
           @if (settingsForm.get('lastName')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="settings.messages.validate.lastname.required"
-            >__jhiTransformTranslate__('settings.messages.validate.lastname.required')</small>
+            >__jhiTranslateTag__('settings.messages.validate.lastname.required')</small>
           }
 
           @if (settingsForm.get('lastName')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="settings.messages.validate.lastname.minlength"
-            >__jhiTransformTranslate__('settings.messages.validate.lastname.minlength')</small>
+            >__jhiTranslateTag__('settings.messages.validate.lastname.minlength')</small>
           }
 
           @if (settingsForm.get('lastName')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="settings.messages.validate.lastname.maxlength"
-            >__jhiTransformTranslate__('settings.messages.validate.lastname.maxlength')</small>
+            >__jhiTranslateTag__('settings.messages.validate.lastname.maxlength')</small>
           }
           </div>
         }
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label">__jhiTransformTranslate__('global.form["email.label"]')</label>
+          <label class="form-label" for="email">__jhiTranslateTag__('global.form.email.label')</label>
           <input
             type="email"
             class="form-control"
             id="email"
             name="email"
-            placeholder="{{ 'global.form.email.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('global.form.email.placeholder')"
             formControlName="email"
             data-cy="email"
           />
@@ -117,26 +111,22 @@
           <div>
           @if (settingsForm.get('email')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.required"
-            >__jhiTransformTranslate__('global.messages.validate.email.required')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.required')</small>
           }
 
           @if (settingsForm.get('email')?.errors?.email) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
-            >__jhiTransformTranslate__('global.messages.validate.email.invalid')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
           }
 
           @if (settingsForm.get('email')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.minlength"
-            >__jhiTransformTranslate__('global.messages.validate.email.minlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.minlength')</small>
           }
 
           @if (settingsForm.get('email')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.maxlength"
-            >__jhiTransformTranslate__('global.messages.validate.email.maxlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.maxlength')</small>
           }
           </div>
         }
@@ -145,7 +135,7 @@
 
       @if (languages && languages.length > 0) {
         <div class="mb-3">
-          <label for="langKey" <%= jhiPrefix %>Translate="settings.form.language">__jhiTransformTranslate__('settings.form.language')</label>
+          <label for="langKey">__jhiTranslateTag__('settings.form.language')</label>
           <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
           @for (language of languages; track $index) {
             <option [value]="language">{{ language | findLanguageFromKey }}</option>
@@ -159,9 +149,8 @@
           type="submit"
           [disabled]="settingsForm.invalid"
           class="btn btn-primary"
-          <%= jhiPrefix %>Translate="settings.form.button"
           data-cy="submit"
-        >__jhiTransformTranslate__('settings.form.button')</button>
+        >__jhiTranslateTag__('settings.form.button')</button>
       </form>
     }
     </div>

@@ -21,47 +21,47 @@
   @if (user) {
     <div>
       <h2>
-        <span <%= jhiPrefix %>Translate="userManagement.detail.title">__jhiTransformTranslate__('userManagement.detail.title')</span> [<strong>{{ user.login }}</strong>]
+        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ user.login }}</strong>]
       </h2>
 
       <dl class="row-md jh-entity-details">
-        <dt><span <%= jhiPrefix %>Translate="userManagement.login">__jhiTransformTranslate__('userManagement.login')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.login')</span></dt>
         <dd>
           <span>{{ user.login }}</span>
         @if (user.activated) {
-          <span class="badge bg-success" <%= jhiPrefix %>Translate="userManagement.activated">__jhiTransformTranslate__('userManagement.activated')</span>
+          <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
         } @else {
-          <span class="badge bg-danger" <%= jhiPrefix %>Translate="userManagement.deactivated">__jhiTransformTranslate__('userManagement.deactivated')</span>
+          <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
         }
         </dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.firstName">__jhiTransformTranslate__('userManagement.firstName')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.firstName')</span></dt>
         <dd>{{ user.firstName }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.lastName">__jhiTransformTranslate__('userManagement.lastName')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.lastName')</span></dt>
         <dd>{{ user.lastName }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.email">__jhiTransformTranslate__('userManagement.email')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.email')</span></dt>
         <dd>{{ user.email }}</dd>
 <%_ if (enableTranslation) { _%>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.langKey">__jhiTransformTranslate__('userManagement.langKey')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.langKey')</span></dt>
         <dd>{{ user.langKey }}</dd>
 <%_ } _%>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.createdBy">__jhiTransformTranslate__('userManagement.createdBy')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.createdBy')</span></dt>
         <dd>{{ user.createdBy }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.createdDate">__jhiTransformTranslate__('userManagement.createdDate')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.createdDate')</span></dt>
         <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedBy">__jhiTransformTranslate__('userManagement.lastModifiedBy')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span></dt>
         <dd>{{ user.lastModifiedBy }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.lastModifiedDate">__jhiTransformTranslate__('userManagement.lastModifiedDate')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span></dt>
         <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
-        <dt><span <%= jhiPrefix %>Translate="userManagement.profiles">__jhiTransformTranslate__('userManagement.profiles')</span></dt>
+        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
         <dd>
           <ul class="list-unstyled">
           @for (authority of user.authorities; track $index) {
@@ -74,7 +74,7 @@
       </dl>
 
       <button type="submit" routerLink="../../" class="btn btn-info">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">__jhiTransformTranslate__('entity.action.back')</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
     </div>
   }
