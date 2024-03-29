@@ -1,13 +1,13 @@
 @if (filters.hasAnyFilterSet()) {
 <div class="filter-display">
-  <span <%= jhiPrefix %>Translate="entity.filters.set">__jhiTransformTranslate__('entity.filters.set')</span>
-  <fa-icon icon="times" (click)="clearAllFilters()" title="<% if (enableTranslation) { %>{{ 'entity.filters.clearAll' | translate }}<% } else { %>__jhiTransformTranslate__('entity.filters.clearAll')<% } %>"></fa-icon>
+  <span>__jhiTranslateTag__('entity.filters.set')</span>
+  <fa-icon icon="times" (click)="clearAllFilters()" title="__jhiTranslatePipe__('entity.filters.clearAll')"></fa-icon>
   <ul>
 @for (filterOption of filters.filterOptions; track filterOption.name) {
   @for (value of filterOption.values; track value) {
     <li>
       <span>{{ filterOption.name }}:</span> {{ value }}
-      <fa-icon icon="times" (click)="clearFilter(filterOption.name, value)" title="<% if (enableTranslation) { %>{{ 'entity.filters.clear' | translate }}<% } else { %>__jhiTransformTranslate__('entity.filters.clear')<% } %>"></fa-icon>
+      <fa-icon icon="times" (click)="clearFilter(filterOption.name, value)" title="__jhiTranslatePipe__('entity.filters.clear')"></fa-icon>
     </li>
   }
 }

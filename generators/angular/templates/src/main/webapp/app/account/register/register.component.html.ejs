@@ -19,26 +19,26 @@
 <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-      <h1 <%= jhiPrefix %>Translate="register.title" data-cy="registerTitle">__jhiTransformTranslate__('register.title')</h1>
+      <h1 data-cy="registerTitle">__jhiTranslateTag__('register.title')</h1>
 
     @if (success()) {
-      <div class="alert alert-success" <%= jhiPrefix %>Translate="register.messages.success">__jhiTransformTranslate__('register.messages.success')</div>
+      <div class="alert alert-success">__jhiTranslateTag__('register.messages.success')</div>
     }
 
     @if (error()) {
-      <div class="alert alert-danger" <%= jhiPrefix %>Translate="register.messages.error.fail">__jhiTransformTranslate__('register.messages.error.fail')</div>
+      <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.fail')</div>
     }
 
     @if (errorUserExists()) {
-      <div class="alert alert-danger" <%= jhiPrefix %>Translate="register.messages.error.userexists">__jhiTransformTranslate__('register.messages.error.userexists')</div>
+      <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.userexists')</div>
     }
 
     @if (errorEmailExists()) {
-      <div class="alert alert-danger" <%= jhiPrefix %>Translate="register.messages.error.emailexists">__jhiTransformTranslate__('register.messages.error.emailexists')</div>
+      <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.emailexists')</div>
     }
 
     @if (doNotMatch()) {
-      <div class="alert alert-danger" <%= jhiPrefix %>Translate="global.messages.error.dontmatch">__jhiTransformTranslate__('global.messages.error.dontmatch')</div>
+      <div class="alert alert-danger">__jhiTranslateTag__('global.messages.error.dontmatch')</div>
     }
     </div>
   </div>
@@ -48,13 +48,13 @@
     @if (!success()) {
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm">
         <div class="mb-3">
-          <label class="form-label" for="login" <%= jhiPrefix %>Translate="global.form.username.label">__jhiTransformTranslate__('global.form["username.label"]')</label>
+          <label class="form-label" for="login">__jhiTranslateTag__('global.form.username.label')</label>
           <input
             type="text"
             class="form-control"
             id="login"
             name="login"
-            placeholder="{{ 'global.form.username.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('global.form.username.placeholder')"
             formControlName="login"
             data-cy="username"
             #login
@@ -64,39 +64,35 @@
           <div>
           @if (registerForm.get('login')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="register.messages.validate.login.required"
-            >__jhiTransformTranslate__('register.messages.validate.login.required')</small>
+            >__jhiTranslateTag__('register.messages.validate.login.required')</small>
           }
 
           @if (registerForm.get('login')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="register.messages.validate.login.minlength"
-            >__jhiTransformTranslate__('register.messages.validate.login.minlength')</small>
+            >__jhiTranslateTag__('register.messages.validate.login.minlength')</small>
           }
 
           @if (registerForm.get('login')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="register.messages.validate.login.maxlength"
-            >__jhiTransformTranslate__('register.messages.validate.login.maxlength')</small>
+            >__jhiTranslateTag__('register.messages.validate.login.maxlength')</small>
           }
 
           @if (registerForm.get('login')?.errors?.pattern) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="register.messages.validate.login.pattern"
-            >__jhiTransformTranslate__('register.messages.validate.login.pattern')</small>
+            >__jhiTranslateTag__('register.messages.validate.login.pattern')</small>
           }
           </div>
         }
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="email" <%= jhiPrefix %>Translate="global.form.email.label">__jhiTransformTranslate__('global.form["email.label"]')</label>
+          <label class="form-label" for="email">__jhiTranslateTag__('global.form.email.label')</label>
           <input
             type="email"
             class="form-control"
             id="email"
             name="email"
-            placeholder="{{ 'global.form.email.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('global.form.email.placeholder')"
             formControlName="email"
             data-cy="email"
           />
@@ -105,39 +101,35 @@
           <div>
           @if (registerForm.get('email')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.required"
-            >__jhiTransformTranslate__('global.messages.validate.email.required')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.required')</small>
           }
 
           @if (registerForm.get('email')?.errors?.invalid) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.invalid"
-            >__jhiTransformTranslate__('global.messages.validate.email.invalid')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
           }
 
           @if (registerForm.get('email')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.minlength"
-            >__jhiTransformTranslate__('global.messages.validate.email.minlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.minlength')</small>
           }
 
           @if (registerForm.get('email')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.email.maxlength"
-            >__jhiTransformTranslate__('global.messages.validate.email.maxlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.email.maxlength')</small>
           }
           </div>
         }
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="password" <%= jhiPrefix %>Translate="global.form.newpassword.label">__jhiTransformTranslate__('global.form["newpassword.label"]')</label>
+          <label class="form-label" for="password">__jhiTranslateTag__('global.form.newpassword.label')</label>
           <input
             type="password"
             class="form-control"
             id="password"
             name="password"
-            placeholder="{{ 'global.form.newpassword.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('global.form.newpassword.placeholder')"
             formControlName="password"
             data-cy="firstPassword"
           />
@@ -147,20 +139,17 @@
           <div>
           @if (registerForm.get('password')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.newpassword.required"
-            >__jhiTransformTranslate__('global.messages.validate.newpassword.required')</small>
+            >__jhiTranslateTag__('global.messages.validate.newpassword.required')</small>
           }
 
           @if (registerForm.get('password')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.newpassword.minlength"
-            >__jhiTransformTranslate__('global.messages.validate.newpassword.minlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.newpassword.minlength')</small>
           }
 
           @if (registerForm.get('password')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.newpassword.maxlength"
-            >__jhiTransformTranslate__('global.messages.validate.newpassword.maxlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.newpassword.maxlength')</small>
           }
           </div>
         }
@@ -169,13 +158,13 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="confirmPassword" <%= jhiPrefix %>Translate="global.form.confirmpassword.label">__jhiTransformTranslate__('global.form["confirmpassword.label"]')</label>
+          <label class="form-label" for="confirmPassword">__jhiTranslateTag__('global.form.confirmpassword.label')</label>
           <input
             type="password"
             class="form-control"
             id="confirmPassword"
             name="confirmPassword"
-            placeholder="{{ 'global.form.confirmpassword.placeholder' | translate }}"
+            placeholder="__jhiTranslatePipe__('global.form.confirmpassword.placeholder')"
             formControlName="confirmPassword"
             data-cy="secondPassword"
           />
@@ -185,20 +174,17 @@
           <div>
           @if (registerForm.get('confirmPassword')?.errors?.required) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.confirmpassword.required"
-            >__jhiTransformTranslate__('global.messages.validate.confirmpassword.required')</small>
+            >__jhiTranslateTag__('global.messages.validate.confirmpassword.required')</small>
           }
 
           @if (registerForm.get('confirmPassword')?.errors?.minlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.confirmpassword.minlength"
-            >__jhiTransformTranslate__('global.messages.validate.confirmpassword.minlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.confirmpassword.minlength')</small>
           }
 
           @if (registerForm.get('confirmPassword')?.errors?.maxlength) {
             <small class="form-text text-danger"
-              <%= jhiPrefix %>Translate="global.messages.validate.confirmpassword.maxlength"
-            >__jhiTransformTranslate__('global.messages.validate.confirmpassword.maxlength')</small>
+            >__jhiTranslateTag__('global.messages.validate.confirmpassword.maxlength')</small>
           }
           </div>
         }
@@ -208,15 +194,14 @@
           type="submit"
           [disabled]="registerForm.invalid"
           class="btn btn-primary"
-          <%= jhiPrefix %>Translate="register.form.button"
           data-cy="submit"
-        >__jhiTransformTranslate__('register.form.button')</button>
+        >__jhiTranslateTag__('register.form.button')</button>
       </form>
     }
 
       <div class="mt-3 alert alert-warning">
-        <span <%= jhiPrefix %>Translate="global.messages.info.authenticated.prefix">__jhiTransformTranslate__('global.messages.info.authenticated.prefix')</span>
-        <a class="alert-link" routerLink="/login" <%= jhiPrefix %>Translate="global.messages.info.authenticated.link">__jhiTransformTranslate__('global.messages.info.authenticated.link')</a><span <%= jhiPrefix %>Translate="global.messages.info.authenticated.suffix">__jhiTransformTranslate__('global.messages.info.authenticated.suffix')</span>
+        <span>__jhiTranslateTag__('global.messages.info.authenticated.prefix')</span>
+        <a class="alert-link" routerLink="/login">__jhiTranslateTag__('global.messages.info.authenticated.link')</a><span>__jhiTranslateTag__('global.messages.info.authenticated.suffix')</span>
       </div>
     </div>
   </div>

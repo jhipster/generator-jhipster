@@ -39,15 +39,19 @@ export type HealthKey =
   <%_ if (searchEngineElasticsearch) { _%>
   | 'elasticsearch'
   <%_ } _%>
-  <%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+  | 'r2dbc'
+  <%_ } else { _%>
   | 'db'
-  <%_ } else if (databaseTypeMongodb) { _%>
-  | 'mongo'
-  <%_ } else if (databaseTypeCassandra) { _%>
-  | 'cassandra'
-  <%_ } else if (databaseTypeCouchbase) { _%>
-  | 'couchbase'
   <%_ } _%>
+<%_ } else if (databaseTypeMongodb) { _%>
+  | 'mongo'
+<%_ } else if (databaseTypeCassandra) { _%>
+  | 'cassandra'
+<%_ } else if (databaseTypeCouchbase) { _%>
+  | 'couchbase'
+<%_ } _%>
   ;
 
 export interface Health {
