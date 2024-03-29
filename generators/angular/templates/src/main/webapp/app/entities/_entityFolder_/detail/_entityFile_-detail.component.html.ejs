@@ -20,7 +20,7 @@
   <div class="col-8">
   @if (<%= entityInstance %>) {
     <div>
-      <h2 data-cy="<%= entityInstance %>DetailsHeading"><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.detail.title">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.detail.title')</span></h2>
+      <h2 data-cy="<%= entityInstance %>DetailsHeading"><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.detail.title')</span></h2>
 
       <hr>
 
@@ -33,11 +33,11 @@
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-        <dt><span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTransformTranslate__('<%- field.fieldTranslationKey %>')</span></dt>
+        <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.fieldTranslationKey %>')</span></dt>
         <dd>
     <%_ if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label _%>
-          <span <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}</span>
+          <span>__jhiTranslateTagEnum__('<%= frontendAppName %>.<%= fieldType %>', { "value": "<%= entityInstance %>.<%= fieldName %> ?? 'null'" })</span>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
         @if (<%= entityInstance %>.<%= fieldName %>) {
           <div>
@@ -50,7 +50,7 @@ _%>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
         @if (<%= entityInstance %>.<%= fieldName %>) {
           <div>
-            <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">__jhiTransformTranslate__('entity.action.open')</a>
+            <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
             {{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}
           </div>
         }
@@ -75,7 +75,7 @@ for (const relationship of relationships.filter(rel => !rel.otherEntityIsEmbedde
     const otherEntityField = relationship.otherEntityField;
     if (persistableRelationship) {
 _%>
-        <dt><span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.<%= relationshipName %>">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.<%- relationshipName %>')</span></dt>
+        <dt><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.<%- relationshipName %>')</span></dt>
         <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.collection) { _%>
@@ -113,14 +113,14 @@ _%>
           (click)="previousState()"
           class="btn btn-info"
           data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.back">__jhiTransformTranslate__('entity.action.back')</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
 <%_ if (!readOnly && updatableEntity) { _%>
 
       <button type="button"
           [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
           class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span <%= jhiPrefix %>Translate="entity.action.edit">__jhiTransformTranslate__('entity.action.edit')</span>
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
       </button>
 <%_ } _%>
     </div>
