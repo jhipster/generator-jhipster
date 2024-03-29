@@ -121,13 +121,6 @@ function replaceErrorMessage(getWebappTranslation, content) {
 }
 
 /**
- * Convert interpolation values to angular template for later processing.
- * Numbers are left as is, strings are wrapped in `{{ }}`.
- */
-const translationValueInterpolate = (parsedInterpolate: Record<string, string>): Record<string, string> =>
-  Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, /\d+/.test(value) ? value : `{{ ${value} }}`]));
-
-/**
  * Creates a `jhiTranslate` attribute with optional translateValues.
  * Or the translation value if translation is disabled.
  */
@@ -136,13 +129,41 @@ const tagTranslation = (
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
-  const translatedValueInterpolate = parsedInterpolate ? translationValueInterpolate(parsedInterpolate) : undefined;
+  const translatedValueInterpolate = parsedInterpolate
+    ? Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, `{{ ${value} }}`]))
+    : undefined;
   const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
 
   if (enableTranslation) {
     const translateValuesAttr = parsedInterpolate
       ? ` [translateValues]="{ ${Object.entries(parsedInterpolate)
           .map(([key, value]) => `${key}: ${value}`)
+          .join(', ')} }"`
+      : '';
+    return ` ${jhiPrefix}Translate="${key}"${translateValuesAttr}${prefix}${translatedValue}${suffix}`;
+  }
+
+  return `${prefix}${translatedValue}${suffix}`;
+};
+
+/**
+ * Creates a `jhiTranslate` attribute with translateValues.
+ * Or the translation value if translation is disabled.
+ */
+const validationTagTranslation = (
+  getWebappTranslation: any,
+  { enableTranslation, jhiPrefix }: ReplacerOptions,
+  { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
+) => {
+  if (!parsedInterpolate || Object.keys(parsedInterpolate).length === 0) {
+    throw new Error(`No interpolation values found for translation key ${key}, use __jhiTranslateTag__ instead.`);
+  }
+  const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, parsedInterpolate));
+
+  if (enableTranslation) {
+    const translateValuesAttr = parsedInterpolate
+      ? ` [translateValues]="{ ${Object.entries(parsedInterpolate)
+          .map(([key, value]) => `${key}: '${value}'`)
           .join(', ')} }"`
       : '';
     return ` ${jhiPrefix}Translate="${key}"${translateValuesAttr}${prefix}${translatedValue}${suffix}`;
@@ -178,15 +199,61 @@ const tagPipeTranslation = (
 };
 
 /**
+ * Creates a `jhiTranslate` attribute with optional translateValues.
+ * Or the translation value if translation is disabled.
+ */
+const tagEnumTranslation = (
+  getWebappTranslation: any,
+  { enableTranslation, jhiPrefix }: ReplacerOptions,
+  { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
+) => {
+  if (!parsedInterpolate?.value) {
+    throw new Error(`Value is required for TagEnum ${key}.`);
+  }
+  const { value, fallback } = parsedInterpolate;
+  const translatedValue = `{{ ${JSON.stringify(getTranslationValue(getWebappTranslation, key))}[${value}]${fallback ? ` ?? ${fallback}` : ''} }}`;
+  if (enableTranslation) {
+    return ` [${jhiPrefix}Translate]="'${key}.' + (${parsedInterpolate?.value})"${prefix}${translatedValue}${suffix}`;
+  }
+
+  return `${prefix}${translatedValue}${suffix}`;
+};
+
+/**
  * Creates a `translate` pipe.
  * Or the translation value if translation is disabled.
  */
-const pipeTranslation = (getWebappTranslation: any, { enableTranslation }: ReplacerOptions, { key }: JHITranslateConverterOptions) => {
+const pipeTranslation = (
+  getWebappTranslation: any,
+  { enableTranslation }: ReplacerOptions,
+  { key, prefix, suffix }: JHITranslateConverterOptions,
+) => {
   if (enableTranslation) {
-    return `{{ '${key}' | translate }}`;
+    return `${prefix}{{ '${key}' | translate }}${suffix}`;
   }
 
-  return `${escapeTranslationValue(getTranslationValue(getWebappTranslation, key))}`;
+  return `${prefix}${escapeTranslationValue(getTranslationValue(getWebappTranslation, key))}${suffix}`;
+};
+
+/**
+ * Creates a `translate` pipe.
+ * Or the translation value if translation is disabled.
+ */
+const pipeEnumTranslation = (
+  getWebappTranslation: any,
+  { enableTranslation }: ReplacerOptions,
+  { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
+) => {
+  if (!parsedInterpolate?.value) {
+    throw new Error(`Value is required for TagEnum ${key}.`);
+  }
+  const { value, fallback } = parsedInterpolate;
+  if (enableTranslation) {
+    return `${prefix}{{ \`${key}.\${value}\` | translate }}${suffix}`;
+  }
+
+  const translatedValue = `{{ ${JSON.stringify(getTranslationValue(getWebappTranslation, key))}[${value}]${fallback ? ` ?? ${fallback}` : ''} }}`;
+  return `${prefix}${translatedValue}${suffix}`;
 };
 
 /**
@@ -209,8 +276,17 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
         if (optsReplacer.type === 'TagPipe') {
           return tagPipeTranslation(getWebappTranslation, opts, optsReplacer);
         }
+        if (optsReplacer.type === 'TagEnum') {
+          return tagEnumTranslation(getWebappTranslation, opts, optsReplacer);
+        }
+        if (optsReplacer.type === 'ValidationTag') {
+          return validationTagTranslation(getWebappTranslation, opts, optsReplacer);
+        }
         if (optsReplacer.type === 'Pipe') {
           return pipeTranslation(getWebappTranslation, opts, optsReplacer);
+        }
+        if (optsReplacer.type === 'PipeEnum') {
+          return pipeEnumTranslation(getWebappTranslation, opts, optsReplacer);
         }
         throw new Error(`Translation type not supported ${optsReplacer.type}`);
       },
