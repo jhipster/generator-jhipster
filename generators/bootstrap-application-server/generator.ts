@@ -43,7 +43,6 @@ import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';
 import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { getDockerfileContainers } from '../docker/utils.js';
-import { GRADLE_VERSION } from '../gradle/constants.js';
 import { normalizePathEnd } from '../base/support/path.js';
 import { getFrontendAppName, mutateData } from '../base/support/index.js';
 import { getMainClassName } from '../java/support/index.js';
@@ -73,7 +72,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
 
-        (application as any).gradleVersion = this.useVersionPlaceholders ? 'GRADLE_VERSION' : GRADLE_VERSION;
         application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
         application.backendType = this.jhipsterConfig.backendType ?? 'Java';
 
