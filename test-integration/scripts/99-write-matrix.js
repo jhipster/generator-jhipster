@@ -40,7 +40,7 @@ writeFileSync(
                   'setup-entities-sample': sample.entity ?? 'none',
                   'setup-jdl-entities-sample': sample['jdl-entity'] ?? '',
                   'setup-jdl-sample': sample['jdl-samples'] ?? '',
-                  java: sample['java'] ?? JAVA_VERSION,
+                  java: '22',
                   node: sample['node'] ?? NODE_VERSION,
                 }));
             } catch (error) {
