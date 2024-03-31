@@ -56,5 +56,6 @@ export type GradleSourceType = {
 };
 
 export type GradleApplication = {
+  gradleVersion?: string;
   gradleBuildSrc?: string;
 };

@@ -20,7 +20,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 import { GENERATOR_GRADLE } from '../generator-list.js';
 
@@ -35,9 +35,8 @@ describe(`generator - ${generator}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorFile).withJHipsterConfig({
+      await helpers.run(generatorFile).withJHipsterConfig({
         baseName: 'existing',
         packageName: 'tech.jhipster',
       });
@@ -50,15 +49,24 @@ describe(`generator - ${generator}`, () => {
     });
   });
   describe('with empty configuration', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorFile).withJHipsterConfig();
+      await helpers.run(generatorFile).withJHipsterConfig();
     });
     it('should generate only gradle files', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
     it('should set buildTool config', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { buildTool: 'gradle' } });
+    });
+  });
+
+  describe('with custom gradleVersion', () => {
+    const gradleVersion = 'fooVersion';
+    before(async () => {
+      await helpers.run(generatorFile).withSharedApplication({ gradleVersion }).withJHipsterConfig();
+    });
+    it('should set gradleVersion at gradle-wrapper.properties', () => {
+      runResult.assertFileContent('gradle/wrapper/gradle-wrapper.properties', `-${gradleVersion}-`);
     });
   });
 });
