@@ -210,8 +210,8 @@ const tagEnumTranslation = (
   if (!parsedInterpolate?.value) {
     throw new Error(`Value is required for TagEnum ${key}.`);
   }
-  const { value, fallback } = parsedInterpolate;
-  const translatedValue = `{{ ${JSON.stringify(getTranslationValue(getWebappTranslation, key))}[${value}]${fallback ? ` ?? ${fallback}` : ''} }}`;
+  const { value } = parsedInterpolate;
+  const translatedValue = `{{ ${JSON.stringify(getTranslationValue(getWebappTranslation, key))}[${value}] }}`;
   if (enableTranslation) {
     return ` [${jhiPrefix}Translate]="'${key}.' + (${parsedInterpolate?.value})"${prefix}${translatedValue}${suffix}`;
   }
