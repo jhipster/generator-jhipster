@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 id="cacheMetrics">__jhiTranslateTag__('metrics.cache.title')</h3>
+<h3 id="cacheMetrics()">__jhiTranslateTag__('metrics.cache.title')</h3>
 
-@if (!updating && cacheMetrics) {
+@if (!updating() && cacheMetrics()) {
 <div class="table-responsive">
   <table class="table table-striped" aria-describedby="cacheMetrics">
     <thead>
@@ -35,7 +35,7 @@
       </tr>
     </thead>
     <tbody>
-    @for (entry of cacheMetrics | keyvalue; track entry.key) {
+    @for (entry of cacheMetrics() | keyvalue; track entry.key) {
       <tr>
         <td>{{ entry.key }}</td>
         <td class="text-end">{{ entry.value['cache.gets.hit'] }}</td>

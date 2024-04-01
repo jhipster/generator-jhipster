@@ -18,9 +18,9 @@
 -%>
 <h4>__jhiTranslateTag__('metrics.jvm.memory.title')</h4>
 
-@if (!updating && jvmMemoryMetrics) {
+@if (!updating() && jvmMemoryMetrics()) {
 <div>
-  @for (entry of jvmMemoryMetrics | keyvalue; track $index) {
+  @for (entry of jvmMemoryMetrics() | keyvalue; track $index) {
   <div>
   @if (entry.value.max !== -1) {
     <span>
