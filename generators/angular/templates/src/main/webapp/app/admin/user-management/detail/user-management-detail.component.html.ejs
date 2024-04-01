@@ -18,17 +18,17 @@
 -%>
 <div class="d-flex justify-content-center">
   <div class="col-8">
-  @if (user) {
+  @if (user()) {
     <div>
       <h2>
-        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ user.login }}</strong>]
+        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ user()!.login }}</strong>]
       </h2>
 
       <dl class="row-md jh-entity-details">
         <dt><span>__jhiTranslateTag__('userManagement.login')</span></dt>
         <dd>
-          <span>{{ user.login }}</span>
-        @if (user.activated) {
+          <span>{{ user()!.login }}</span>
+        @if (user()!.activated) {
           <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
         } @else {
           <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
@@ -36,35 +36,35 @@
         </dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.firstName')</span></dt>
-        <dd>{{ user.firstName }}</dd>
+        <dd>{{ user()!.firstName }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.lastName')</span></dt>
-        <dd>{{ user.lastName }}</dd>
+        <dd>{{ user()!.lastName }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.email')</span></dt>
-        <dd>{{ user.email }}</dd>
+        <dd>{{ user()!.email }}</dd>
 <%_ if (enableTranslation) { _%>
 
         <dt><span>__jhiTranslateTag__('userManagement.langKey')</span></dt>
-        <dd>{{ user.langKey }}</dd>
+        <dd>{{ user()!.langKey }}</dd>
 <%_ } _%>
 
         <dt><span>__jhiTranslateTag__('userManagement.createdBy')</span></dt>
-        <dd>{{ user.createdBy }}</dd>
+        <dd>{{ user()!.createdBy }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.createdDate')</span></dt>
-        <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+        <dd>{{ user()!.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span></dt>
-        <dd>{{ user.lastModifiedBy }}</dd>
+        <dd>{{ user()!.lastModifiedBy }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span></dt>
-        <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+        <dd>{{ user()!.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
         <dd>
           <ul class="list-unstyled">
-          @for (authority of user.authorities; track $index) {
+          @for (authority of user()!.authorities; track $index) {
             <li>
               <span class="badge bg-info">{{ authority }}</span>
             </li>
