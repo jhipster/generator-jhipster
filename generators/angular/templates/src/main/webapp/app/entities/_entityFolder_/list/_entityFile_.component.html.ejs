@@ -18,18 +18,18 @@
 -%>
 <div>
     <h2 id="page-heading" data-cy="<%= entityClass %>Heading">
-        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.title">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.home.title')</span>
+        <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.title')</span>
 
         <div class="d-flex justify-content-end">
             <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
                 <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-                <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.refreshListLabel">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.home.refreshListLabel')</span>
+                <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.refreshListLabel')</span>
             </button>
             <%_ if (!readOnly) { _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityPage %>/new']">
                 <fa-icon icon="plus"></fa-icon>
-                <span <% if (searchEngineAny) { %>class="hidden-sm-down" <% } %> <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.createLabel">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.home.createLabel')</span>
+                <span <% if (searchEngineAny) { %>class="hidden-sm-down" <% } %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
             </button>
             <%_ } _%>
         </div>
@@ -43,8 +43,8 @@
     <form name="searchForm" class="row row-cols-sm-auto align-items-center">
         <div class="col-sm-12">
             <div class="input-group w-100 mt-3">
-                <label class="visually-hidden" for="currentSearch" <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.search">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.home.search')</label>
-                <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= i18nKeyPrefix %>.home.search' | translate }}<% } else { %>Query<% } %>">
+                <label class="visually-hidden" for="currentSearch">__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.search')</label>
+                <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="__jhiTranslatePipe__('<%= i18nKeyPrefix %>.home.search')">
 
                 <button class="btn btn-info" (click)="search(currentSearch)">
                     <fa-icon icon="search"></fa-icon>
@@ -66,7 +66,7 @@
 
 @if (<%= entityInstancePlural %>?.length === 0) {
     <div class="alert alert-warning" id="no-result">
-        <span <%= jhiPrefix %>Translate="<%= i18nKeyPrefix %>.home.notFound">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.home.notFound')</span>
+        <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.notFound')</span>
     </div>
 }
 
@@ -78,7 +78,7 @@
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= field.fieldName %>">
                         <div class="d-flex">
-                            <span <%= jhiPrefix %>Translate="<%= field.fieldTranslationKey %>">__jhiTransformTranslate__('<%- field.fieldTranslationKey %>')</span>
+                            <span>__jhiTranslateTag__('<%- field.fieldTranslationKey %>')</span>
   <%_ if (!field.transient) { _%>
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch) {<% } %>
                             <fa-icon class="p-1" icon="sort"></fa-icon>
@@ -93,7 +93,7 @@
   _%>
                     <th scope="col" <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>">
                         <div class="d-flex">
-                            <span <%= jhiPrefix %>Translate="<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>">__jhiTransformTranslate__('<%- i18nKeyPrefix %>.<%- relationship.relationshipName %>')</span>
+                            <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.<%- relationship.relationshipName %>')</span>
                             <fa-icon class="p-1" icon="sort"></fa-icon>
                         </div>
                     </th>
@@ -123,13 +123,13 @@ _%>
     <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
                     @if (<%= entityInstance %>.<%= fieldName %>) {
-                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)" <%= jhiPrefix %>Translate="entity.action.open">__jhiTransformTranslate__('entity.action.open')</a>
+                        <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>, <%= entityInstance %>.<%= fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
                         <span>{{ <%= entityInstance %>.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>.<%= fieldName %>) }}</span>
                     }
                     </td>
     <%_ } else if (field.fieldIsEnum) { _%>
                     <%# TODO: import enum and use its key as label _%>
-                    <td<% if (field.id) { %>><a<%- routerLink %><% } %> <%= jhiPrefix %>Translate="{{ '<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %> }}">{{ <%= entityInstance %>.<%= fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>__jhiTranslateTagEnum__('<%= frontendAppName %>.<%= fieldType %>', { "value": "<%= entityInstance %>.<%= fieldName %> ?? 'null'" })<% if (field.id) { %></a><% } %></td>
     <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%= entityInstance %>.<%= fieldName %> | formatMediumDatetime }}</td>
     <%_ } else if (field.fieldTypeLocalDate) { _%>
@@ -185,21 +185,21 @@ _%>
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.show"  [translateValues]="{ otherEntity: ('<%= otherEntityTranslationKey %>' | translate) }">__jhiTransformTranslate__('entity.action.show', { "otherEntity": "<%- relationship.otherEntity.entityClassHumanized %>" })</span>
+                                <span class="d-none d-md-inline">__jhiTranslateTagPipe__('entity.action.show', { "otherEntity": "<%= otherEntityTranslationKey %>" })</span>
                             </button>
     <%_ } _%>
 <%_ } _%>
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
                                class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                                 <fa-icon icon="eye"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.view">__jhiTransformTranslate__('entity.action.view')</span>
+                                <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
                             </a>
 <%_ if (!readOnly && updatableEntity) { _%>
 
                             <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
                                class="btn btn-primary btn-sm" data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.edit">__jhiTransformTranslate__('entity.action.edit')</span>
+                                <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
                             </a>
 <%_ } _%>
 <%_ if (!readOnly) { _%>
@@ -208,7 +208,7 @@ _%>
                                     class="btn btn-danger btn-sm"
                                     data-cy="entityDeleteButton">
                                 <fa-icon icon="times"></fa-icon>
-                                <span class="d-none d-md-inline" <%= jhiPrefix %>Translate="entity.action.delete">__jhiTransformTranslate__('entity.action.delete')</span>
+                                <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>
                             </button>
 <%_ } _%>
                         </div>

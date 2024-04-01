@@ -249,7 +249,7 @@ const pipeEnumTranslation = (
   }
   const { value, fallback } = parsedInterpolate;
   if (enableTranslation) {
-    return `${prefix}{{ \`${key}.\${value}\` | translate }}${suffix}`;
+    return `${prefix}{{ '${key}.' + ${value} | translate }}${suffix}`;
   }
 
   const translatedValue = `{{ ${JSON.stringify(getTranslationValue(getWebappTranslation, key))}[${value}]${fallback ? ` ?? ${fallback}` : ''} }}`;
