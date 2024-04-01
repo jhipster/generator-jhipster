@@ -73,7 +73,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
       const instance = await harness.navigateByUrl('/', <%= entityAngularName %>DetailComponent);
 
       // THEN
-      expect(instance.<%= entityInstance %>).toEqual(expect.objectContaining(<%- testEntity %>));
+      expect(instance.<%= entityInstance %>()).toEqual(expect.objectContaining(<%- testEntity %>));
     });
   });
 

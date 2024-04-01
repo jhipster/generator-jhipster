@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>Input } from '@angular/core';
+import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -33,7 +33,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
     imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
 })
 export class <%= entityAngularName %>DetailComponent {
-    @Input() <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+    <%= entityInstance %> = input<I<%= entityAngularName %> | null>(null);
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     protected dataUtils = inject(DataUtils);
