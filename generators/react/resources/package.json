@@ -22,7 +22,7 @@
     "reactstrap": "9.2.2",
     "redux": "5.0.1",
     "rxjs": "6.6.3",
-    "sockjs-client": "1.5.0",
+    "sockjs-client": "1.6.1",
     "sonar-scanner": "3.1.0",
     "tslib": "2.6.2",
     "uuid": "9.0.1",
