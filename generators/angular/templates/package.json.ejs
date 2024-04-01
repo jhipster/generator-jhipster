@@ -48,16 +48,9 @@
     "bootswatch": "<%= nodeDependencies.bootswatch %>",
     <%_ } _%>
     "dayjs": "<%= nodeDependencies['dayjs'] %>",
-    <%_ if (authenticationTypeSession && communicationSpringWebsocket) { _%>
-    "ngx-cookie-service": "<%= nodeDependencies['ngx-cookie-service'] %>",
-    <%_ } _%>
     "ngx-infinite-scroll": "<%= nodeDependencies['ngx-infinite-scroll'] %>",
     "@popperjs/core": "<%= nodeDependencies['@popperjs/core'] %>",
     "rxjs": "<%= nodeDependencies['rxjs'] %>",
-<%_ if (communicationSpringWebsocket) { _%>
-    "sockjs-client": "1.6.1",
-    "@stomp/rx-stomp": "1.2.0",
-<%_ } _%>
     "tslib": "<%= nodeDependencies['tslib'] %>",
     "zone.js": "<%= nodeDependencies['zone.js'] %>"
   },
@@ -70,9 +63,6 @@
     "@angular-architects/module-federation-runtime": "<%= nodeDependencies['@angular-architects/module-federation-runtime'] %>",
   <%_ } _%>
     "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
-<%_ } _%>
-<%_ if (communicationSpringWebsocket) { _%>
-    "@types/sockjs-client": "1.5.1",
 <%_ } _%>
 <%_ if (cypressTests) { _%>
     "cypress": "<%= nodeDependencies['cypress'] %>",

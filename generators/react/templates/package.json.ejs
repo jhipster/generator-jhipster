@@ -51,17 +51,11 @@
     "react-transition-group": "<%= nodeDependencies['react-transition-group'] %>",
     "reactstrap": "<%= nodeDependencies['reactstrap'] %>",
     "redux": "<%= nodeDependencies['redux'] %>",
-<%_ if (communicationSpringWebsocket) { _%>
-    "rxjs": "6.6.3",
-    "sockjs-client": "1.5.0",
-<%_ } _%>
 <%_ if (skipServer) { _%>
     "sonar-scanner": "<%= nodeDependencies['sonar-scanner'] %>",
 <%_ } _%>
     "tslib": "<%= nodeDependencies['tslib'] %>",
-    "uuid": "<%= nodeDependencies['uuid'] %>"<% if (communicationSpringWebsocket) { %>,
-    "webstomp-client": "1.2.6"
-    <%_ } _%>
+    "uuid": "<%= nodeDependencies['uuid'] %>"
   },
   "devDependencies": {
 <%_ if (applicationTypeGateway && microfrontend) { _%>
