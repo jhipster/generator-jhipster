@@ -206,6 +206,34 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addWebsocketDependencies({ application }) {
+        const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
+        const dependencies = {};
+        if (communicationSpringWebsocket) {
+          if (authenticationTypeSession) {
+            dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];
+          }
+          this.packageJson.merge({
+            dependencies: {
+              'sockjs-client': nodeDependencies['sockjs-client'],
+              '@stomp/rx-stomp': nodeDependencies['@stomp/rx-stomp'],
+              ...dependencies,
+            },
+            devDependencies: {
+              '@types/sockjs-client': nodeDependencies['@types/sockjs-client'],
+            },
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
   get postWritingEntities() {
     return this.asPostWritingEntitiesTaskGroup({
       postWriteEntitiesFiles,

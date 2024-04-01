@@ -157,6 +157,27 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     };
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addWebsocketDependencies({ application }) {
+        const { communicationSpringWebsocket, nodeDependencies } = application;
+        if (communicationSpringWebsocket) {
+          this.packageJson.merge({
+            dependencies: {
+              rxjs: nodeDependencies.rxjs,
+              'sockjs-client': nodeDependencies['sockjs-client'],
+              'webstomp-client': nodeDependencies['webstomp-client'],
+            },
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }

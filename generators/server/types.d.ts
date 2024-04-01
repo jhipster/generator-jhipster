@@ -109,4 +109,6 @@ export type SpringBootApplication = JavaApplication &
 
     databaseMigration: string;
     databaseMigrationLiquibase: boolean;
+
+    communicationSpringWebsocket: boolean;
   };

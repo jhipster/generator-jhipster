@@ -21,9 +21,12 @@
     "react-transition-group": "4.4.5",
     "reactstrap": "9.2.2",
     "redux": "5.0.1",
+    "rxjs": "6.6.3",
+    "sockjs-client": "1.5.0",
     "sonar-scanner": "3.1.0",
     "tslib": "2.6.2",
-    "uuid": "9.0.1"
+    "uuid": "9.0.1",
+    "webstomp-client": "1.2.6"
   },
   "devDependencies": {
     "@module-federation/utilities": "3.0.3-0",
