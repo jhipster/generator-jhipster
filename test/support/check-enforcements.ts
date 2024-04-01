@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import fs, { readFileSync } from 'fs';
+import { opendirSync, readFileSync, writeFileSync } from 'fs';
 import path, { basename } from 'path';
-import fse from 'fs-extra';
 import { describe, it, before } from 'mocha';
 import { getGeneratorFolder } from '../../testing/get-generator.js';
 
@@ -27,7 +26,7 @@ const fixEnforcements = process.argv.includes('--fix-enforcements');
 
 const readDir = dirPath => {
   const files: string[] = [];
-  const dir = fs.opendirSync(dirPath);
+  const dir = opendirSync(dirPath);
   let dirent = dir.readSync();
   while (dirent !== null) {
     const childPath = path.join(dirPath, dirent.name);
@@ -51,7 +50,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
         describe(`file ${path.basename(file)}`, () => {
           let content;
           before(() => {
-            content = fse.readFileSync(file, 'utf-8');
+            content = readFileSync(file, 'utf-8');
           });
 
           [
@@ -70,12 +69,12 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
               if (!fixEnforcements || !replacement) return;
               if (file.endsWith('.ejs')) {
                 if (regexSeparator.test(content)) {
-                  fse.writeFileSync(file, content.replace(regexSeparator, replacement));
-                  content = fse.readFileSync(file, 'utf-8');
+                  writeFileSync(file, content.replace(regexSeparator, replacement));
+                  content = readFileSync(file, 'utf-8');
                 }
                 if (regex.test(content)) {
-                  fse.writeFileSync(file, content.replace(regex, replacement));
-                  content = fse.readFileSync(file, 'utf-8');
+                  writeFileSync(file, content.replace(regex, replacement));
+                  content = readFileSync(file, 'utf-8');
                 }
               }
             });

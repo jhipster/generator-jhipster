@@ -18,14 +18,16 @@
  */
 import { before, it, describe } from 'esmocha';
 import assert from 'assert';
-import fs from 'fs';
+import fs, { existsSync, writeFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import fse from 'fs-extra';
 import sortKeys from 'sort-keys';
 
 import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.js';
 import { formatDateForChangelog } from '../generators/base/support/index.js';
+
+const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
+const readJsonSync = file => JSON.parse(fs.readFileSync(file, 'utf-8'));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,13 +48,13 @@ const itSamplesEntries = fs
   .filter(dirent => dirent.isDirectory())
   .map(({ name }) => name)
   .map(name => [name, path.join(itSamplesPath, name, '.yo-rc.json')])
-  .filter(([_name, yoFile]) => fs.existsSync(yoFile));
+  .filter(([_name, yoFile]) => existsSync(yoFile));
 const dailyBuildEntries = fs
   .readdirSync(dailyBuildsSamplesPath, { withFileTypes: true })
   .filter(dirent => dirent.isDirectory())
   .map(({ name }) => name)
   .map(name => [name, path.join(dailyBuildsSamplesPath, name, '.yo-rc.json')])
-  .filter(([_name, yoFile]) => fs.existsSync(yoFile));
+  .filter(([_name, yoFile]) => existsSync(yoFile));
 
 const itEntitiesSamplesEntries = fs
   .readdirSync(itEntitiesSamplesPath, { withFileTypes: true })
@@ -63,29 +65,29 @@ const itEntitiesSamplesEntries = fs
 describe('integration-test', () => {
   describe('::application samples', () => {
     for (const [name, yoFile] of [...itSamplesEntries, ...dailyBuildEntries]) {
-      let yoJson = fse.readJsonSync(yoFile);
-      const writeConfig = () => fse.writeJsonSync(yoFile, yoJson);
+      let yoJson = readJsonSync(yoFile);
+      const writeConfig = () => writeJsonSync(yoFile, yoJson);
       const config = yoJson['generator-jhipster'];
       describe(`${name} test`, () => {
         before(() => {
           if (fixSamples) {
             if (!config.creationTimestamp) {
               config.creationTimestamp = 1596513172471;
-              fse.writeJsonSync(yoFile, yoJson);
+              writeJsonSync(yoFile, yoJson);
             }
             if (config.authenticationType === SESSION && config.rememberMeKey !== REMEMBER_ME_KEY) {
               config.rememberMeKey = REMEMBER_ME_KEY;
-              fse.writeJsonSync(yoFile, yoJson);
+              writeJsonSync(yoFile, yoJson);
             } else if (
               (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
               config.jwtSecretKey !== JWT_SECRET_KEY
             ) {
               config.jwtSecretKey = JWT_SECRET_KEY;
-              fse.writeJsonSync(yoFile, yoJson);
+              writeJsonSync(yoFile, yoJson);
             }
             const yoJsonOrdered = sortKeys(yoJson, { deep: true });
             if (JSON.stringify(yoJson) !== JSON.stringify(yoJsonOrdered)) {
-              fse.writeJsonSync(yoFile, yoJsonOrdered);
+              writeJsonSync(yoFile, yoJsonOrdered);
               yoJson = yoJsonOrdered;
             }
           }
@@ -157,12 +159,12 @@ describe('integration-test', () => {
   describe('::entities samples reproducibility', () => {
     const changelogDates = [];
     for (const [name, entitySample] of itEntitiesSamplesEntries) {
-      let entityJson = fse.readJsonSync(entitySample);
+      let entityJson = readJsonSync(entitySample);
       before(() => {
         if (fixSamples) {
           const entityJsonOrdered = sortKeys(entityJson, { deep: true });
           if (JSON.stringify(entityJson) !== JSON.stringify(entityJsonOrdered)) {
-            fse.writeJsonSync(entitySample, entityJsonOrdered);
+            writeJsonSync(entitySample, entityJsonOrdered);
             entityJson = entityJsonOrdered;
           }
         }
@@ -171,7 +173,7 @@ describe('integration-test', () => {
         if (fixSamples) {
           if (!entityJson.changelogDate) {
             entityJson.changelogDate = formatDateForChangelog(new Date());
-            fse.writeJsonSync(entitySample, entityJson);
+            writeJsonSync(entitySample, entityJson);
           }
         }
         assert(entityJson.changelogDate);
@@ -180,7 +182,7 @@ describe('integration-test', () => {
         if (fixSamples) {
           while (changelogDates.includes(entityJson.changelogDate)) {
             entityJson.changelogDate = formatDateForChangelog(new Date());
-            fse.writeJsonSync(entitySample, entityJson);
+            writeJsonSync(entitySample, entityJson);
           }
         }
         assert(!changelogDates.includes(entityJson.changelogDate));

@@ -20,8 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
-import fse from 'fs-extra';
+import { readFileSync, rmSync } from 'fs';
+import { before, it, describe, after, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.js';
@@ -104,7 +104,7 @@ relationship OneToOne {
 }
 `,
           {
-            application: JSON.parse(fse.readFileSync(path.join(__dirname, '__test-files__', 'jhipster_app', '.yo-rc.json'), 'utf-8')),
+            application: JSON.parse(readFileSync(path.join(__dirname, '__test-files__', 'jhipster_app', '.yo-rc.json'), 'utf-8')),
           },
         );
       });
@@ -144,12 +144,6 @@ relationship OneToOne {
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'applications_with_and_without_entities.jdl')]);
         returned = importer.import();
-      });
-
-      after(() => {
-        APPLICATION_NAMES.forEach(applicationName => {
-          fse.removeSync(applicationName);
-        });
       });
 
       it('should return the import state', () => {
@@ -370,13 +364,13 @@ relationship OneToOne {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'deployments.jdl')]);
         importer.import();
         DEPLOYMENT_NAMES.forEach(name => {
-          contents.push(JSON.parse(fse.readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
+          contents.push(JSON.parse(readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
         });
       });
 
       after(() => {
         DEPLOYMENT_NAMES.forEach(name => {
-          fse.removeSync(name);
+          rmSync(name, { recursive: true });
         });
       });
 
@@ -432,10 +426,6 @@ relationship ManyToMany {
             applicationName: 'jhipster',
             databaseType: 'postgresql',
           });
-        });
-
-        after(() => {
-          fse.removeSync('.jhipster');
         });
 
         it('should not fail', () => {
