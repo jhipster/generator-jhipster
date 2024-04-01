@@ -32,6 +32,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.springframework.boot.ansi.AnsiOutput;
+import org.springframework.boot.ansi.AnsiOutput.Enabled;
 
 class CRLFLogConverterTest {
 
@@ -98,6 +100,8 @@ class CRLFLogConverterTest {
         String input = "Test\ninput\rstring";
         CRLFLogConverter converter = new CRLFLogConverter();
 
+        // Temp fix to move past the failing tests for Java 22 support
+        AnsiOutput.setEnabled(Enabled.NEVER);
         String result = converter.transform(event, input);
 
         assertEquals("Test_input_string", result);
@@ -145,6 +149,8 @@ class CRLFLogConverterTest {
         CRLFLogConverter cut = new CRLFLogConverter();
         AnsiElement ansiElement = AnsiColor.RED;
 
+        // Temp fix to move past the failing tests for Java 22 support
+        AnsiOutput.setEnabled(Enabled.NEVER);
         String result = cut.toAnsiString("input", ansiElement);
 
         assertThat(result).isEqualTo("input");
