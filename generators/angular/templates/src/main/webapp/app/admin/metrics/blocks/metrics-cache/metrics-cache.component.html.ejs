@@ -16,26 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 id="cacheMetrics" <%= jhiPrefix %>Translate="metrics.cache.title">__jhiTransformTranslate__('metrics.cache.title')</h3>
+<h3 id="cacheMetrics()">__jhiTranslateTag__('metrics.cache.title')</h3>
 
-@if (!updating && cacheMetrics) {
+@if (!updating() && cacheMetrics()) {
 <div class="table-responsive">
   <table class="table table-striped" aria-describedby="cacheMetrics">
     <thead>
       <tr>
-        <th scope="col" <%= jhiPrefix %>Translate="metrics.cache.cachename">__jhiTransformTranslate__('metrics.cache.cachename')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.hits">__jhiTransformTranslate__('metrics.cache.hits')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.misses">__jhiTransformTranslate__('metrics.cache.misses')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.gets">__jhiTransformTranslate__('metrics.cache.gets')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.puts">__jhiTransformTranslate__('metrics.cache.puts')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.removals">__jhiTransformTranslate__('metrics.cache.removals')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.evictions">__jhiTransformTranslate__('metrics.cache.evictions')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.hitPercent">__jhiTransformTranslate__('metrics.cache.hitPercent')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.cache.missPercent">__jhiTransformTranslate__('metrics.cache.missPercent')</th>
+        <th scope="col">__jhiTranslateTag__('metrics.cache.cachename')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.hits')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.misses')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.gets')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.puts')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.removals')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.evictions')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.hitPercent')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.cache.missPercent')</th>
       </tr>
     </thead>
     <tbody>
-    @for (entry of cacheMetrics | keyvalue; track entry.key) {
+    @for (entry of cacheMetrics() | keyvalue; track entry.key) {
       <tr>
         <td>{{ entry.key }}</td>
         <td class="text-end">{{ entry.value['cache.gets.hit'] }}</td>

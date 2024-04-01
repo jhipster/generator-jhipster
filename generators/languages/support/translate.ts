@@ -19,6 +19,9 @@
 
 const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:(?!\}\))[\s\S])*\}))?\)/gs.source;
 
+export const escapeTranslationValue = (translation: string) =>
+  translation.replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/@/g, '&#64;');
+
 function getTranslationValue(getWebappTranslation, key, data) {
   return getWebappTranslation(key, data) || undefined;
 }
@@ -26,8 +29,11 @@ function getTranslationValue(getWebappTranslation, key, data) {
 export type TranslationReplaceOptions = {
   keyPattern?: string;
   interpolatePattern?: string;
+  /** Wrap the replacement inside wrapTranslation chars */
   wrapTranslation?: string | string[];
+  /** Escape specific chars for html */
   escapeHtml?: boolean;
+  /** Apply JSON.stringify to the replacement */
   stringify?: boolean;
 };
 
@@ -37,14 +43,14 @@ export const replaceTranslationKeysWithText = (
   regexp: string,
   { keyPattern, interpolatePattern, wrapTranslation, escapeHtml, stringify }: TranslationReplaceOptions = {},
 ) => {
-  const matches = body.matchAll(new RegExp(regexp, 'g'));
+  const matches = [...body.matchAll(new RegExp(regexp, 'g'))].reverse();
   if (typeof wrapTranslation === 'string') {
     wrapTranslation = [wrapTranslation, wrapTranslation];
   }
   for (const match of matches) {
     const target = match[0];
 
-    let key = match?.groups?.key;
+    let key = match.groups?.key;
     if (!key && keyPattern) {
       const keyMatch = target.match(new RegExp(keyPattern));
       key = keyMatch?.groups?.key;
@@ -53,7 +59,7 @@ export const replaceTranslationKeysWithText = (
       throw new Error(`Translation key not found for ${target}`);
     }
 
-    let interpolate = match.groups && match.groups.interpolate;
+    let interpolate = match.groups?.interpolate;
     if (!interpolate && interpolatePattern) {
       const interpolateMatch = target.match(new RegExp(interpolatePattern));
       interpolate = interpolateMatch?.groups?.interpolate;
@@ -63,10 +69,7 @@ export const replaceTranslationKeysWithText = (
     if (interpolate) {
       data = {};
       try {
-        const interpolateValues = JSON.parse(interpolate);
-        for (const [field, value] of Object.entries(interpolateValues)) {
-          data[field] = value;
-        }
+        data = JSON.parse(interpolate);
       } catch {
         throw new Error(`Translation interpolations values should be a JSON, ${interpolate}`);
       }
@@ -81,11 +84,11 @@ export const replaceTranslationKeysWithText = (
       replacement = `${wrapTranslation[0]}${translation}${wrapTranslation[1]}`;
     } else if (escapeHtml) {
       // Escape specific chars
-      replacement = replacement.replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/@/g, '&#64;');
+      replacement = escapeTranslationValue(replacement);
     } else if (stringify) {
       replacement = JSON.stringify(replacement);
     }
-    body = body.replace(target, replacement);
+    body = `${body.slice(0, match.index!)}${replacement}${body.slice(match.index! + target.length)}`;
   }
   return body;
 };
@@ -97,3 +100,64 @@ export const createJhiTransformTranslateStringifyReplacer = getWebappTranslation
   replaceTranslationKeysWithText(getWebappTranslation, body, `__jhiTransformTranslateStringify__${TRANSLATE_FUNCTION_ARGS}`, {
     stringify: true,
   });
+
+export type JHITranslateConverterOptions = {
+  /** Translation tyoe */
+  type: string;
+  /** Translation key */
+  key: string;
+  /** Translation interpolation data */
+  interpolate: string;
+  /** Parse translation interpolation data */
+  parsedInterpolate: Record<string, string> | undefined;
+  /** Closing tag before the matched string */
+  prefix: string;
+  /** Opening tag after the matched string */
+  suffix: string;
+};
+
+export type JHITranslateConverter = (opts: JHITranslateConverterOptions) => string;
+
+export const replaceTranslateContents = (body: string, regexp: string, converter: JHITranslateConverter) => {
+  const matches = [...body.matchAll(new RegExp(regexp, 'g'))].reverse();
+  for (const match of matches) {
+    const target = match[0];
+    const { key, interpolate, type, prefix = '', suffix = '' } = match.groups ?? {};
+
+    if (!type) {
+      throw new Error(`Translation type not found for ${target}`);
+    }
+    if (!key) {
+      throw new Error(`Translation key not found for ${target}`);
+    }
+
+    let parsedInterpolate: Record<string, string> | undefined;
+    if (interpolate) {
+      parsedInterpolate = {};
+      try {
+        parsedInterpolate = JSON.parse(interpolate);
+      } catch {
+        throw new Error(`Translation interpolations values should be a JSON, ${interpolate}`);
+      }
+    }
+
+    body = `${body.slice(0, match.index!)}${converter({ key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index! + target.length)}`;
+  }
+  return body;
+};
+
+export type JHITranslateReplacerOptions = {
+  /** Allows a before part to be included in replacement */
+  prefixPattern?: string;
+  /** Allows an after part to be included in replacement */
+  suffixPattern?: string;
+};
+
+export const createJhiTranslateReplacer =
+  (converter: JHITranslateConverter, { prefixPattern = '', suffixPattern = '' }: JHITranslateReplacerOptions = {}) =>
+  (body: string) =>
+    replaceTranslateContents(
+      body,
+      `${prefixPattern ? `(?<prefix>(${prefixPattern}))?` : ''}__jhiTranslate(?<type>(\\w+))__${TRANSLATE_FUNCTION_ARGS}${suffixPattern ? `(?<suffix>(${suffixPattern}))?` : ''}`,
+      converter,
+    );

@@ -19,30 +19,26 @@
 <div class="modal-header">
 @if (health) {
   <h4 class="modal-title" id="showHealthLabel">
-    <%_ if (enableTranslation) { _%>
-    {{ 'health.indicator.' + health.key | translate }}
-    <%_ } else { _%>
-    <span class="text-capitalize">{{ health.key }}</span>
-    <%_ } _%>
+    __jhiTranslateTagEnum__('health.indicator', { "value": "health.key", "fallback": "health.key" })
   </h4>
 }
 
   <button aria-label="Close" data-dismiss="modal" class="btn-close" type="button" (click)="dismiss()">
-    <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true">&nbsp;</span>
   </button>
 </div>
 
 <div class="modal-body pad">
 @if (health) {
   <div>
-    <h5 <%= jhiPrefix %>Translate="health.details.properties">__jhiTransformTranslate__('health.details.properties')</h5>
+    <h5>__jhiTranslateTag__('health.details.properties')</h5>
 
     <div class="table-responsive">
       <table class="table table-striped" aria-describedby="showHealthLabel">
         <thead>
           <tr>
-            <th scope="col" class="text-start" <%= jhiPrefix %>Translate="health.details.name">__jhiTransformTranslate__('health.details.name')</th>
-            <th scope="col" class="text-start" <%= jhiPrefix %>Translate="health.details.value">__jhiTransformTranslate__('health.details.value')</th>
+            <th scope="col" class="text-start">__jhiTranslateTag__('health.details.name')</th>
+            <th scope="col" class="text-start">__jhiTranslateTag__('health.details.value')</th>
           </tr>
         </thead>
         <tbody>

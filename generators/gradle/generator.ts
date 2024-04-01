@@ -41,8 +41,11 @@ import {
   sortDependencies,
   gradleNeedleOptionsWithDefaults,
 } from './internal/needles.js';
+import { mutateData } from '../base/support/config.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
+  gradleVersionFromWrapper;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_GRADLE);
@@ -67,6 +70,25 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      loadGradleVersion({ application }) {
+        const propFile = this.readTemplate(this.jhipsterTemplatePath('gradle/wrapper/gradle-wrapper.properties'));
+        this.gradleVersionFromWrapper = propFile?.toString().match(/gradle-(\d+\.\d+(?:\.\d+)?)-/)?.[1];
+        if (!this.gradleVersionFromWrapper) {
+          throw new Error('Could not determine Gradle version from gradle-wrapper.properties');
+        }
+        mutateData(application, {
+          gradleVersion: this.useVersionPlaceholders ? 'GRADLE_VERSION' : this.gradleVersionFromWrapper,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -140,5 +162,22 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      updateGradleVersion({ application }) {
+        const { gradleVersion } = application;
+        if (gradleVersion !== this.gradleVersionFromWrapper) {
+          this.editFile('gradle/wrapper/gradle-wrapper.properties', content =>
+            content.replace(`-${this.gradleVersionFromWrapper!}-`, `-${gradleVersion!}-`),
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

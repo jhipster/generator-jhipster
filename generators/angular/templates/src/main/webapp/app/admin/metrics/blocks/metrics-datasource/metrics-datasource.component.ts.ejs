@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { Databases } from 'app/admin/metrics/metrics.model';
@@ -33,12 +33,12 @@ export class MetricsDatasourceComponent {
   /**
    * object containing all datasource related metrics
    */
-  @Input() datasourceMetrics?: Databases;
+  datasourceMetrics = input<Databases>();
 
   /**
    * boolean field saying if the metrics are in the process of being updated
    */
-  @Input() updating?: boolean;
+  updating = input<boolean>();
 
-  filterNaN = (input: number): number => filterNaN(input);
+  filterNaN = (n: number): number => filterNaN(n);
 }

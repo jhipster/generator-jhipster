@@ -18,14 +18,14 @@
 -%>
 <div>
   <h2>
-    <span id="metrics-page-heading" <%= jhiPrefix %>Translate="metrics.title" data-cy="metricsPageHeading">__jhiTransformTranslate__('metrics.title')</span>
+    <span id="metrics-page-heading" data-cy="metricsPageHeading">__jhiTranslateTag__('metrics.title')</span>
 
     <button class="btn btn-primary float-end" (click)="refresh()">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="metrics.refresh.button">__jhiTransformTranslate__('metrics["refresh.button"]')</span>
+      <fa-icon icon="sync"></fa-icon> <span>__jhiTranslateTag__('metrics.refresh.button')</span>
     </button>
   </h2>
 
-  <h3 <%= jhiPrefix %>Translate="metrics.jvm.title">__jhiTransformTranslate__('metrics.jvm.title')</h3>
+  <h3>__jhiTranslateTag__('metrics.jvm.title')</h3>
 
 @if (metrics() && !updatingMetrics()) {
   <div class="row">
@@ -45,7 +45,7 @@
 }
 
 @if (updatingMetrics()) {
-  <div class="well well-lg" <%= jhiPrefix %>Translate="metrics.updating">__jhiTransformTranslate__('metrics.updating')</div>
+  <div class="well well-lg">__jhiTranslateTag__('metrics.updating')</div>
 }
 
 @if (metrics() && metricsKeyExists('http.server.requests')) {

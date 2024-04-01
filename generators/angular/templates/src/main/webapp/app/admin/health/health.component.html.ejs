@@ -18,10 +18,10 @@
 -%>
 <div>
   <h2>
-    <span id="health-page-heading" <%= jhiPrefix %>Translate="health.title" data-cy="healthPageHeading">__jhiTransformTranslate__('health.title')</span>
+    <span id="health-page-heading" data-cy="healthPageHeading">__jhiTranslateTag__('health.title')</span>
 
     <button class="btn btn-primary float-end" (click)="refresh()">
-      <fa-icon icon="sync"></fa-icon> <span <%= jhiPrefix %>Translate="health.refresh.button">__jhiTransformTranslate__('health["refresh.button"]')</span>
+      <fa-icon icon="sync"></fa-icon> <span>__jhiTranslateTag__('health.refresh.button')</span>
     </button>
   </h2>
 
@@ -29,9 +29,9 @@
     <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
       <thead>
         <tr>
-          <th scope="col" <%= jhiPrefix %>Translate="health.table.service">__jhiTransformTranslate__('health.table.service')</th>
-          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.table.status">__jhiTransformTranslate__('health.table.status')</th>
-          <th scope="col" class="text-center" <%= jhiPrefix %>Translate="health.details.details">__jhiTransformTranslate__('health.details.details')</th>
+          <th scope="col">__jhiTranslateTag__('health.table.service')</th>
+          <th scope="col" class="text-center">__jhiTranslateTag__('health.table.status')</th>
+          <th scope="col" class="text-center">__jhiTranslateTag__('health.details.details')</th>
         </tr>
       </thead>
     @if (health) {
@@ -39,19 +39,14 @@
       @for (componentHealth of health.components | keyvalue; track componentHealth.key) {
         <tr>
           <td>
-            <%_ if (enableTranslation) { _%>
-            {{ 'health.indicator.' + componentHealth.key | translate }}
-            <%_ } else { _%>
-            <span class="text-capitalize">{{ componentHealth.key }}</span>
-            <%_ } _%>
+            __jhiTranslateTagEnum__('health.indicator', { "value": "componentHealth.key", "fallback": "componentHealth.key" })
           </td>
           <td class="text-center">
             <span
               class="badge"
               [ngClass]="getBadgeClass(componentHealth.value!.status)"
-              <%= jhiPrefix %>Translate="{{ 'health.status.' + componentHealth.value!.status }}"
             >
-              {{ __jhiTransformTranslateStringify__('health.status')[componentHealth.value!.status || 'UNKNOWN'] }}
+              __jhiTranslateTagEnum__('health.status', { "value": "componentHealth.value?.status ?? 'UNKNOWN'" })
             </span>
           </td>
           <td class="text-center">

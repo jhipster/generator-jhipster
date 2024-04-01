@@ -274,10 +274,6 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-wrapper {
-    gradleVersion = "<%= gradleVersion %>"
-}
-
 <%_ if (embeddableLaunchScript) { _%>
 
 bootJar {

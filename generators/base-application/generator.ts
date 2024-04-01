@@ -140,19 +140,19 @@ export default class BaseApplicationGenerator<
     }
   }
 
-  dependsOnBootstrapAplication(options?: ComposeOptions | undefined) {
+  dependsOnBootstrapApplication(options?: ComposeOptions | undefined) {
     return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options);
   }
 
-  dependsOnBootstrapAplicationBase(options?: ComposeOptions | undefined) {
+  dependsOnBootstrapApplicationBase(options?: ComposeOptions | undefined) {
     return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options);
   }
 
-  dependsOnBootstrapAplicationServer(options?: ComposeOptions | undefined) {
+  dependsOnBootstrapApplicationServer(options?: ComposeOptions | undefined) {
     return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
   }
 
-  dependsOnBootstrapAplicationClient(options?: ComposeOptions | undefined) {
+  dependsOnBootstrapApplicationClient(options?: ComposeOptions | undefined) {
     return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options);
   }
 

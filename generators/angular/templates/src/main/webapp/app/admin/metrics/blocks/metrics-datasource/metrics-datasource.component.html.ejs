@@ -16,60 +16,60 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<h3 id="datasourceMetrics" <%= jhiPrefix %>Translate="metrics.datasource.title">__jhiTransformTranslate__('metrics.datasource.title')</h3>
+<h3 id="datasourceMetrics">__jhiTranslateTag__('metrics.datasource.title')</h3>
 
-@if (!updating && datasourceMetrics) {
+@if (!updating() && datasourceMetrics()) {
 <div class="table-responsive">
   <table class="table table-striped" aria-describedby="datasourceMetrics">
     <thead>
       <tr>
         <th scope="col">
-          <span <%= jhiPrefix %>Translate="metrics.datasource.usage">__jhiTransformTranslate__('metrics.datasource.usage')</span> (active: {{ datasourceMetrics.active.value }},
-          min: {{ datasourceMetrics.min.value }}, max: {{ datasourceMetrics.max.value }}, idle: {{ datasourceMetrics.idle.value }})
+          <span>__jhiTranslateTag__('metrics.datasource.usage')</span> (active: {{ datasourceMetrics()!.active.value }},
+          min: {{ datasourceMetrics()!.min.value }}, max: {{ datasourceMetrics()!.max.value }}, idle: {{ datasourceMetrics()!.idle.value }})
         </th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.count">__jhiTransformTranslate__('metrics.datasource.count')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.mean">__jhiTransformTranslate__('metrics.datasource.mean')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.min">__jhiTransformTranslate__('metrics.servicesstats.table.min')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p50">__jhiTransformTranslate__('metrics.servicesstats.table.p50')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p75">__jhiTransformTranslate__('metrics.servicesstats.table.p75')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p95">__jhiTransformTranslate__('metrics.servicesstats.table.p95')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.servicesstats.table.p99">__jhiTransformTranslate__('metrics.servicesstats.table.p99')</th>
-        <th scope="col" class="text-end" <%= jhiPrefix %>Translate="metrics.datasource.max">__jhiTransformTranslate__('metrics.datasource.max')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.datasource.count')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.datasource.mean')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.servicesstats.table.min')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.servicesstats.table.p50')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.servicesstats.table.p75')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.servicesstats.table.p95')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.servicesstats.table.p99')</th>
+        <th scope="col" class="text-end">__jhiTranslateTag__('metrics.datasource.max')</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>Acquire</td>
-        <td class="text-end">{{ datasourceMetrics.acquire.count }}</td>
-        <td class="text-end">{{ filterNaN(datasourceMetrics.acquire.mean) | number: '1.0-2' }}</td>
-        <td class="text-end">{{ datasourceMetrics.acquire['0.0'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.acquire['0.5'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.acquire['0.75'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.acquire['0.95'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.acquire['0.99'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ filterNaN(datasourceMetrics.acquire.max) | number: '1.0-2' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.acquire.count }}</td>
+        <td class="text-end">{{ filterNaN(datasourceMetrics()!.acquire.mean) | number: '1.0-2' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.acquire['0.0'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.acquire['0.5'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.acquire['0.75'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.acquire['0.95'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.acquire['0.99'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ filterNaN(datasourceMetrics()!.acquire.max) | number: '1.0-2' }}</td>
       </tr>
       <tr>
         <td>Creation</td>
-        <td class="text-end">{{ datasourceMetrics.creation.count }}</td>
-        <td class="text-end">{{ filterNaN(datasourceMetrics.creation.mean) | number: '1.0-2' }}</td>
-        <td class="text-end">{{ datasourceMetrics.creation['0.0'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.creation['0.5'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.creation['0.75'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.creation['0.95'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.creation['0.99'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ filterNaN(datasourceMetrics.creation.max) | number: '1.0-2' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.creation.count }}</td>
+        <td class="text-end">{{ filterNaN(datasourceMetrics()!.creation.mean) | number: '1.0-2' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.creation['0.0'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.creation['0.5'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.creation['0.75'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.creation['0.95'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.creation['0.99'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ filterNaN(datasourceMetrics()!.creation.max) | number: '1.0-2' }}</td>
       </tr>
       <tr>
         <td>Usage</td>
-        <td class="text-end">{{ datasourceMetrics.usage.count }}</td>
-        <td class="text-end">{{ filterNaN(datasourceMetrics.usage.mean) | number: '1.0-2' }}</td>
-        <td class="text-end">{{ datasourceMetrics.usage['0.0'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.usage['0.5'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.usage['0.75'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.usage['0.95'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ datasourceMetrics.usage['0.99'] | number: '1.0-3' }}</td>
-        <td class="text-end">{{ filterNaN(datasourceMetrics.usage.max) | number: '1.0-2' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.usage.count }}</td>
+        <td class="text-end">{{ filterNaN(datasourceMetrics()!.usage.mean) | number: '1.0-2' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.usage['0.0'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.usage['0.5'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.usage['0.75'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.usage['0.95'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ datasourceMetrics()!.usage['0.99'] | number: '1.0-3' }}</td>
+        <td class="text-end">{{ filterNaN(datasourceMetrics()!.usage.max) | number: '1.0-2' }}</td>
       </tr>
     </tbody>
   </table>

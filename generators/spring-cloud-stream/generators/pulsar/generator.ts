@@ -27,7 +27,7 @@ export default class PulsarGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapAplicationServer();
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 

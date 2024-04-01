@@ -36,7 +36,7 @@ FROM neo4j:5.18.1
 FROM hazelcast/management-center:5.3.3
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.25-alpine
+FROM memcached:1.6.26-alpine
 
 FROM redis:7.2.4
 
@@ -55,7 +55,7 @@ LABEL ALIAS=sonar
 FROM docker.io/bitnami/consul:1.18.1
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v2.51.0
+FROM prom/prometheus:v2.51.1
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.27.0

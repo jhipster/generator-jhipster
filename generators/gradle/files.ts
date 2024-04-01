@@ -20,17 +20,11 @@
 export default {
   gradle: [
     {
-      templates: [
-        '.prettierignore.jhi.gradle',
-        'gradle/wrapper/gradle-wrapper.properties',
-        'buildSrc/build.gradle',
-        'buildSrc/gradle/libs.versions.toml',
-        'gradle/libs.versions.toml',
-      ],
+      templates: ['.prettierignore.jhi.gradle', 'buildSrc/build.gradle', 'buildSrc/gradle/libs.versions.toml', 'gradle/libs.versions.toml'],
     },
     {
       transform: false,
-      templates: ['gradlew', 'gradlew.bat', 'gradle/wrapper/gradle-wrapper.jar'],
+      templates: ['gradlew', 'gradlew.bat', 'gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.properties'],
     },
   ],
 };

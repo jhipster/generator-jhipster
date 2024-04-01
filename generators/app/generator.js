@@ -46,7 +46,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapAplicationBase();
+      await this.dependsOnBootstrapApplicationBase();
     }
   }
 

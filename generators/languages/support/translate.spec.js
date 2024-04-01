@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 import { beforeEach, it, describe, expect, esmocha } from 'esmocha';
-import { createJhiTransformTranslateReplacer, createJhiTransformTranslateStringifyReplacer } from './translate.js';
+import {
+  createJhiTransformTranslateReplacer,
+  createJhiTransformTranslateStringifyReplacer,
+  createJhiTranslateReplacer,
+} from './translate.js';
 
 describe('generator - languages - translate', () => {
   let getWebappTranslation;
@@ -94,13 +98,7 @@ __jhiTransformTranslate__('global', { "min": 20, "max": 50, "pattern": "^[a-zA-Z
 `;
           expect(jhiTransformTranslate(body)).toMatchInlineSnapshot(`
 "
-global-{&quot;min&quot;:20,&quot;max&quot;:50,&quot;pattern&quot;:&quot;^[a-zA-Z0-9]*__jhiTransformTranslate__('global', { "min": 20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
-  "anotherPattern": "^[a-zA-Z0-9]*$",
-  "dynamic": "exec()"
-})quot;,&quot;anotherPattern&quot;:&quot;^[a-zA-Z0-9]*__jhiTransformTranslate__('global', { "min": 20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
-  "anotherPattern": "^[a-zA-Z0-9]*$",
-  "dynamic": "exec()"
-})quot;,&quot;dynamic&quot;:&quot;exec()&quot;}-translated-&quot;-&apos;-value-0
+global-{&quot;min&quot;:20,&quot;max&quot;:50,&quot;pattern&quot;:&quot;^[a-zA-Z0-9]*$&quot;,&quot;anotherPattern&quot;:&quot;^[a-zA-Z0-9]*$&quot;,&quot;dynamic&quot;:&quot;exec()&quot;}-translated-&quot;-&apos;-value-0
 "
 `);
         });
@@ -139,8 +137,8 @@ __jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })
 `;
           expect(jhiTransformTranslate(body)).toMatchInlineSnapshot(`
 "
-"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0-9]*$","dynamic":"exec()"}-translated-"-'-value-0"
-"logs.nbloggers-{"total":"{{ loggers.length }}"}-translated-"-'-value-1"
+"global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0-9]*$","dynamic":"exec()"}-translated-"-'-value-1"
+"logs.nbloggers-{"total":"{{ loggers.length }}"}-translated-"-'-value-0"
 
 "
 `);
@@ -163,6 +161,34 @@ __jhiTransformTranslateStringify__('global')
       expect(jhiTransformTranslateStringify(body)).toMatchInlineSnapshot(`
 "
 "global-translated-\\"-'-value-0"
+"
+`);
+    });
+  });
+
+  describe('jhiTranslate', () => {
+    let jhiTranslateReplacer;
+
+    beforeEach(() => {
+      jhiTranslateReplacer = createJhiTranslateReplacer(opts => JSON.stringify(opts), { prefixPattern: '>\\s*', suffixPattern: '\\s*<' });
+    });
+
+    it('should replace __jhiTranslateFoo__ function', () => {
+      const body = `
+__jhiTranslateFoo__('global')
+>__jhiTranslateFoo__('global')<
+>
+__jhiTranslateFoo__('local', { "min":20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
+"anotherPattern": "^[a-zA-Z0-9]*$",
+"dynamic": "exec()"
+})
+<
+`;
+      expect(jhiTranslateReplacer(body)).toMatchInlineSnapshot(`
+"
+{"key":"global","type":"Foo","prefix":"","suffix":""}
+{"key":"global","type":"Foo","prefix":">","suffix":"<"}
+{"key":"local","interpolate":"{ \\"min\\":20, \\"max\\": 50, \\"pattern\\": \\"^[a-zA-Z0-9]*$\\",\\n\\"anotherPattern\\": \\"^[a-zA-Z0-9]*$\\",\\n\\"dynamic\\": \\"exec()\\"\\n}","parsedInterpolate":{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0-9]*$","dynamic":"exec()"},"type":"Foo","prefix":">\\n","suffix":"\\n<"}
 "
 `);
     });

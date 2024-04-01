@@ -18,9 +18,9 @@
 -%>
 @if (allBeans()) {
   <div>
-    <h2 id="configuration-page-heading" <%= jhiPrefix %>Translate="configuration.title" data-cy="configurationPageHeading">__jhiTransformTranslate__('configuration.title')</h2>
+    <h2 id="configuration-page-heading" data-cy="configurationPageHeading">__jhiTranslateTag__('configuration.title')</h2>
 
-    <span <%= jhiPrefix %>Translate="configuration.filter">__jhiTransformTranslate__('configuration.filter')</span>
+    <span>__jhiTranslateTag__('configuration.filter')</span>
     <input type="text" [ngModel]="beansFilter()" (ngModelChange)="beansFilter.set($event)" class="form-control" />
 
     <h3 id="spring-configuration">Spring configuration</h3>
@@ -29,9 +29,9 @@
       <thead>
         <tr <%= jhiPrefix %>Sort [sortState]="sortState" (sortChange)="sortState.set($event)">
           <th <%= jhiPrefix %>SortBy="prefix" scope="col" class="w-40">
-            <span <%= jhiPrefix %>Translate="configuration.table.prefix">__jhiTransformTranslate__('configuration.table.prefix')</span> <fa-icon icon="sort"></fa-icon>
+            <span>__jhiTranslateTag__('configuration.table.prefix')</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" class="w-60"><span <%= jhiPrefix %>Translate="configuration.table.properties">__jhiTransformTranslate__('configuration.table.properties')</span></th>
+          <th scope="col" class="w-60"><span>__jhiTranslateTag__('configuration.table.properties')</span></th>
         </tr>
       </thead>
       <tbody>
