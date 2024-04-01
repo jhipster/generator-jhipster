@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import * as _ from 'lodash-es';
-import escapeStringRegexp from 'escape-string-regexp';
+import { escapeRegExp } from 'lodash-es';
 import CoreGenerator from '../../base-core/index.js';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.js';
 import { joinCallbacks } from './write-files.js';
@@ -83,10 +83,10 @@ export const checkContentIn = (contentToCheck: string | RegExp, content, ignoreW
   let re: RegExp;
   if (typeof contentToCheck === 'string') {
     const pattern = ignoreWhitespaces
-      ? convertToPrettierExpressions(escapeStringRegexp(contentToCheck))
+      ? convertToPrettierExpressions(escapeRegExp(contentToCheck))
       : contentToCheck
           .split('\n')
-          .map(line => `\\s*${escapeStringRegexp(line)}`)
+          .map(line => `\\s*${escapeRegExp(line)}`)
           .join('\n');
     re = new RegExp(pattern);
   } else {
