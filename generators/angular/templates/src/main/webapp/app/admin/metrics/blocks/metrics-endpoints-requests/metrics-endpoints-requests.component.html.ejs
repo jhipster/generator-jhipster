@@ -18,7 +18,7 @@
 -%>
 <h3 id="endpointsRequestsMetrics">Endpoints requests (time in millisecond)</h3>
 
-@if (!updating && endpointsRequestsMetrics) {
+@if (!updating() && endpointsRequestsMetrics()) {
 <div class="table-responsive">
   <table class="table table-striped" aria-describedby="endpointsRequestsMetrics">
     <thead>
@@ -30,7 +30,7 @@
       </tr>
     </thead>
     <tbody>
-  @for (entry of endpointsRequestsMetrics | keyvalue; track entry.key) {
+  @for (entry of endpointsRequestsMetrics() | keyvalue; track entry.key) {
     @for (method of entry.value | keyvalue; track method.key) {
       <tr>
         <td>{{ method.key }}</td>
