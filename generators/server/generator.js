@@ -35,7 +35,6 @@ import {
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
 import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_COMMON,
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
@@ -133,7 +132,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }

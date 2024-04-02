@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.js';
 import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.js';
 
@@ -29,7 +28,7 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 

@@ -21,7 +21,7 @@ import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import statistics from '../statistics.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CI_CD } from '../generator-list.js';
+import { GENERATOR_CI_CD } from '../generator-list.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import command from './command.js';
@@ -38,7 +38,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 

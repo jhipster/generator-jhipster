@@ -29,7 +29,7 @@ import {
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
 } from '../generator-constants.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import command from './command.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
@@ -47,7 +47,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_GIT);
     }
   }

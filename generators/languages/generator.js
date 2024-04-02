@@ -23,7 +23,7 @@ import { padEnd, startCase } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { askForLanguages, askI18n } from './prompts.js';
 import statistics from '../statistics.js';
-import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_LANGUAGES } from '../generator-list.js';
 import { clientI18nFiles } from './files.js';
 import { writeEntityFiles } from './entity-files.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -70,7 +70,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
 
     if (

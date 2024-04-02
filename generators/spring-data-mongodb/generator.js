@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeMongodbFilesTask from './files.js';
 import cleanupMongodbFilesTask from './cleanup.js';
 import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.js';
@@ -30,7 +29,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 

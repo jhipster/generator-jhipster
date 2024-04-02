@@ -26,7 +26,7 @@ import { addEnumerationFiles } from './entity-files.js';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.js';
 import statistics from '../statistics.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
+import { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
@@ -49,7 +49,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }

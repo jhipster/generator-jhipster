@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntityTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -29,7 +28,7 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 

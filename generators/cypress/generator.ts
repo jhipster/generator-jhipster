@@ -22,7 +22,6 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { cypressFiles, cypressEntityFiles } from './files.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
 
@@ -36,7 +35,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 
