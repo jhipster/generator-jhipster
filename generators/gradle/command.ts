@@ -16,11 +16,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../base/api.js';
 
 const command: JHipsterCommandDefinition = {
   options: {},
-  import: ['jhipster:java:bootstrap', 'jhipster:java:domain', 'jhipster:java:build-tool'],
+  configs: {
+    enableGradleEnterprise: {
+      cli: {
+        type: Boolean,
+      },
+      prompt: {
+        type: 'confirm',
+        message: 'Do you want to enable Gradle Enterprise integration?',
+      },
+      default: false,
+      description: 'Enable Gradle Enterprise integration',
+      scope: 'storage',
+    },
+    gradleEnterpriseHost: {
+      cli: {
+        type: String,
+      },
+      prompt: {
+        when: answers => answers.enableGradleEnterprise,
+        type: 'input',
+        message: 'Enter your Gradle Enterprise host',
+        validate: input => (input.length === 0 ? 'Please enter your Gradle Enterprise host' : true),
+      },
+      description: 'Gradle Enterprise Host',
+      scope: 'storage',
+    },
+  },
+  import: [],
 };
 
 export default command;

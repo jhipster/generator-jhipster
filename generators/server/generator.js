@@ -34,18 +34,7 @@ import {
 } from './support/index.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
-import {
-  GENERATOR_COMMON,
-  GENERATOR_CUCUMBER,
-  GENERATOR_DOCKER,
-  GENERATOR_GATLING,
-  GENERATOR_GRADLE,
-  GENERATOR_LANGUAGES,
-  GENERATOR_MAVEN,
-  GENERATOR_SERVER,
-  GENERATOR_SPRING_BOOT,
-  GENERATOR_FEIGN_CLIENT,
-} from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { packageJson } from '../../lib/index.js';
 import {
@@ -74,7 +63,6 @@ import {
   reservedKeywords,
   searchEngineTypes,
   clientFrameworkTypes,
-  testFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
 import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
@@ -94,7 +82,6 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
-const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -204,32 +191,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       async composeBackendType() {
         if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
           await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
-        }
-      },
-      async composing() {
-        const { buildTool, enableTranslation, testFrameworks, feignClient } = this.jhipsterConfigWithDefaults;
-
-        if (buildTool === GRADLE) {
-          await this.composeWithJHipster(GENERATOR_GRADLE);
-        } else if (buildTool === MAVEN) {
-          await this.composeWithJHipster(GENERATOR_MAVEN);
-        } else {
-          throw new Error(`Build tool ${buildTool} is not supported`);
-        }
-
-        await this.composeWithJHipster(GENERATOR_DOCKER);
-
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
-        if (testFrameworks?.includes(CUCUMBER)) {
-          await this.composeWithJHipster(GENERATOR_CUCUMBER);
-        }
-        if (testFrameworks?.includes(GATLING)) {
-          await this.composeWithJHipster(GENERATOR_GATLING);
-        }
-        if (feignClient) {
-          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
         }
       },
     });

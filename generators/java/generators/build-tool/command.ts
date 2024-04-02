@@ -16,11 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import { buildToolTypes } from '../../../../jdl/index.js';
+import type { JHipsterCommandDefinition } from '../../../base/api.js';
+import { GENERATOR_GRADLE } from '../../../generator-list.js';
+
+const { GRADLE, MAVEN } = buildToolTypes;
 
 const command: JHipsterCommandDefinition = {
   options: {},
-  import: ['jhipster:java:bootstrap', 'jhipster:java:domain', 'jhipster:java:build-tool'],
+  configs: {
+    buildTool: {
+      cli: {
+        name: 'build',
+        type: String,
+      },
+      prompt: {
+        type: 'list',
+        message: 'Would you like to use Maven or Gradle for building the backend?',
+      },
+      choices: [MAVEN, GRADLE],
+      default: MAVEN,
+      description: 'Provide build tool for the application when skipping server side generation',
+      scope: 'storage',
+    },
+  },
+  import: [GENERATOR_GRADLE],
 };
 
 export default command;

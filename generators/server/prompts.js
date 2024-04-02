@@ -24,7 +24,6 @@ import {
   applicationOptions,
   applicationTypes,
   authenticationTypes,
-  buildToolTypes,
   databaseTypes,
   cacheTypes,
   serviceDiscoveryTypes,
@@ -37,12 +36,10 @@ const { OptionNames } = applicationOptions;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { GRADLE, MAVEN } = buildToolTypes;
 const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
 const { CONSUL, EUREKA } = serviceDiscoveryTypes;
 const {
   AUTHENTICATION_TYPE,
-  BUILD_TOOL,
   CACHE_PROVIDER,
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
@@ -261,36 +258,6 @@ export async function askForServerSideOpts({ control }) {
       name: 'enableHibernateCache',
       message: 'Do you want to use Hibernate 2nd level cache?',
       default: this.jhipsterConfigWithDefaults.enableHibernateCache,
-    },
-    {
-      type: 'list',
-      name: BUILD_TOOL,
-      message: 'Would you like to use Maven or Gradle for building the backend?',
-      choices: [
-        {
-          value: MAVEN,
-          name: 'Maven',
-        },
-        {
-          value: GRADLE,
-          name: 'Gradle',
-        },
-      ],
-      default: this.jhipsterConfigWithDefaults.buildTool,
-    },
-    {
-      when: answers => answers.buildTool === GRADLE && this.experimental,
-      type: 'confirm',
-      name: 'enableGradleEnterprise',
-      message: 'Do you want to enable Gradle Enterprise integration?',
-      default: this.jhipsterConfigWithDefaults.enableGradleEnterprise,
-    },
-    {
-      when: answers => answers.enableGradleEnterprise,
-      type: 'input',
-      name: 'gradleEnterpriseHost',
-      message: 'Enter your Gradle Enterprise host',
-      validate: input => (input.length === 0 ? 'Please enter your Gradle Enterprise host' : true),
     },
   ];
 

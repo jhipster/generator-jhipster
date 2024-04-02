@@ -18,9 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { javaScopeToGradleScope } from './support/index.js';
-import type { JavaDependency } from './types.js';
-import type { MavenDependency } from '../maven/types.js';
 
 export default class JavaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -33,87 +30,15 @@ export default class JavaGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      prepareJavaApplication({ application, source }) {
-        source.addJavaDependencies = (dependencies, options) => {
-          if (application.buildToolMaven) {
-            const annotationProcessors = dependencies.filter(dep => dep.scope === 'annotationProcessor');
-            const importDependencies = dependencies.filter(dep => dep.scope === 'import');
-            const commonDependencies = dependencies.filter(dep => !['annotationProcessor', 'import'].includes(dep.scope!));
-            const convertVersionToRef = ({ version, versionRef, ...artifact }: JavaDependency): MavenDependency =>
-              version || versionRef ? { ...artifact, version: `\${${versionRef ?? artifact.artifactId}.version}` } : artifact;
-            const removeScope = ({ scope: _scope, ...artifact }: MavenDependency) => artifact;
-
-            source.addMavenDefinition?.({
-              properties: dependencies
-                .filter(dep => dep.version)
-                .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version })),
-              dependencies: [
-                ...commonDependencies.map(convertVersionToRef),
-                // Add a provided scope for annotation processors so that version is not required in annotationProcessor dependencies
-                ...annotationProcessors.filter(dep => !dep.version).map(artifact => ({ ...artifact, scope: 'provided' })),
-              ],
-              dependencyManagement: importDependencies.map(convertVersionToRef),
-              annotationProcessors: annotationProcessors.map(convertVersionToRef).map(removeScope),
-            });
-          }
-
-          if (application.buildToolGradle) {
-            source.addGradleDependencies?.(
-              dependencies
-                .filter(dep => !dep.version && !dep.versionRef)
-                .map(({ scope, type, ...artifact }) => ({
-                  ...artifact,
-                  scope: javaScopeToGradleScope({ scope, type }),
-                })),
-              options,
-            );
-            source.addGradleDependencyCatalogLibraries?.(
-              dependencies
-                .filter(dep => dep.version || dep.versionRef)
-                .map(({ scope, type, groupId, artifactId, version, versionRef }) => {
-                  const library = {
-                    libraryName: artifactId,
-                    module: `${groupId}:${artifactId}`,
-                    scope: javaScopeToGradleScope({ scope, type }),
-                  };
-                  return version ? { ...library, version } : { ...library, 'version.ref': versionRef! };
-                }),
-              options,
-            );
-          }
-        };
-
-        source.addJavaDefinition = (definition, options) => {
-          const { dependencies, versions } = definition;
-          if (dependencies) {
-            source.addJavaDependencies!(
-              dependencies.filter(dep => {
-                if (dep.versionRef) {
-                  return versions?.find(({ name }) => name === dep.versionRef)?.version;
-                }
-                return true;
-              }),
-              options,
-            );
-          }
-          if (versions) {
-            if (application.buildToolMaven) {
-              source.addMavenDefinition!({
-                properties: versions.filter(v => v.version).map(({ name, version }) => ({ property: `${name}.version`, value: version })),
-              });
-            }
-            if (application.buildToolGradle) {
-              source.addGradleDependencyCatalogVersions?.(versions, options);
-            }
-          }
-        };
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 }

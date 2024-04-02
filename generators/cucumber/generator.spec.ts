@@ -21,22 +21,6 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('with unknown buildTool', () => {
-    before(async () => {
-      await helpers
-        .runJHipster(GENERATOR_CUCUMBER)
-        .onEnvironment(async env => {
-          await env.composeWith('jhipster:bootstrap-application');
-        })
-        .withMockedGenerators(['jhipster:java'])
-        .withJHipsterConfig({ buildTool: 'unknown', testFrameworks: ['cucumber'] });
-    });
-
-    it('should match files snapshot', () => {
-      expect(result.getSnapshot()).toMatchSnapshot();
-    });
-  });
-
   describe('with default config', () => {
     before(async () => {
       await helpers

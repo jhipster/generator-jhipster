@@ -21,6 +21,11 @@ import chalk from 'chalk';
 import { sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
+  GENERATOR_CUCUMBER,
+  GENERATOR_DOCKER,
+  GENERATOR_FEIGN_CLIENT,
+  GENERATOR_GATLING,
+  GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_CLOUD_STREAM,
@@ -53,6 +58,7 @@ import {
   fieldTypes,
   messageBrokerTypes,
   searchEngineTypes,
+  testFrameworkTypes,
   websocketTypes,
 } from '../../jdl/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
@@ -66,7 +72,7 @@ const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
-
+const { CUCUMBER, GATLING } = testFrameworkTypes;
 export default class SpringBootGenerator extends BaseApplicationGenerator {
   fakeKeytool;
 
@@ -77,7 +83,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_SERVER);
-      await this.dependsOnJHipster('jhipster:java');
+      await this.dependsOnJHipster('jhipster:java:domain');
+      await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
 
@@ -148,8 +155,34 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { databaseType, messageBroker, searchEngine, websocket, cacheProvider, buildTool, skipClient, clientFramework } =
-          this.jhipsterConfigWithDefaults;
+        const {
+          databaseType,
+          messageBroker,
+          searchEngine,
+          websocket,
+          cacheProvider,
+          buildTool,
+          skipClient,
+          clientFramework,
+          enableTranslation,
+          testFrameworks,
+          feignClient,
+        } = this.jhipsterConfigWithDefaults;
+
+        await this.composeWithJHipster(GENERATOR_DOCKER);
+
+        if (enableTranslation) {
+          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
+        if (testFrameworks?.includes(CUCUMBER)) {
+          await this.composeWithJHipster(GENERATOR_CUCUMBER);
+        }
+        if (testFrameworks?.includes(GATLING)) {
+          await this.composeWithJHipster(GENERATOR_GATLING);
+        }
+        if (feignClient) {
+          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
+        }
 
         if (buildTool === 'gradle') {
           await this.composeWithJHipster('jhipster:gradle:code-quality');
