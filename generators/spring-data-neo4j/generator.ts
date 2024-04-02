@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_NEO4J } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_JAVA, GENERATOR_LIQUIBASE } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -26,7 +26,7 @@ import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
 export default class Neo4jGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_NEO4J);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

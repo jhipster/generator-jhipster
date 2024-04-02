@@ -49,12 +49,12 @@ import { SKIP_COMMIT_HOOK } from '../init/constants.js';
 import command from './command.js';
 import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 
-const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
+const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;
 
 export default class extends BaseGenerator {
   async _beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

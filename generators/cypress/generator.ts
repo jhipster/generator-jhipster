@@ -22,7 +22,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { cypressFiles, cypressEntityFiles } from './files.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_CYPRESS, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
 
@@ -31,7 +31,7 @@ const { ANGULAR } = clientFrameworkTypes;
 export default class CypressGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_CYPRESS);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

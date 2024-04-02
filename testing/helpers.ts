@@ -299,7 +299,7 @@ class JHipsterTest extends YeomanTest {
     class BlueprintedGenerator extends BaseGenerator {
       async beforeQueue() {
         if (!this.fromBlueprint) {
-          await this.composeWithBlueprints('test-blueprint');
+          await this.composeWithBlueprints();
         }
       }
 

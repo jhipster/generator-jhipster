@@ -55,7 +55,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ANGULAR);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

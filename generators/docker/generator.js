@@ -20,7 +20,7 @@
 import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import { dockerFiles } from './files.js';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.js';
 import { stringHashCode, createFaker } from '../base/support/index.js';
@@ -31,7 +31,7 @@ export default class DockerGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DOCKER);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

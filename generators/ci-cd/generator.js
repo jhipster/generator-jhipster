@@ -34,7 +34,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_CI_CD);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

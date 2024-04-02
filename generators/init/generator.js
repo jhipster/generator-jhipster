@@ -33,7 +33,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_INIT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

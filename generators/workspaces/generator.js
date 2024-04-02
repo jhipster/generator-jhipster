@@ -19,7 +19,7 @@
 
 import { existsSync } from 'fs';
 
-import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_WORKSPACES } from '../generator-list.js';
+import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT } from '../generator-list.js';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import command from './command.js';
@@ -40,7 +40,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_WORKSPACES);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

@@ -66,7 +66,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     this.supportedLanguages = supportedLanguages;
     if (!this.fromBlueprint) {
-      this.composedBlueprints = await this.composeWithBlueprints('languages');
+      this.composedBlueprints = await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

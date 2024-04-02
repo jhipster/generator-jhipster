@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_DATA_RELATIONAL, GENERATOR_LIQUIBASE, GENERATOR_SERVER } from '../generator-list.js';
+import { GENERATOR_LIQUIBASE, GENERATOR_SERVER } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -34,7 +34,7 @@ const { SQL } = databaseTypes;
 export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_RELATIONAL);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

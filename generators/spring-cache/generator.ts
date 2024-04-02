@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_CACHE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import { createNeedleCallback } from '../base/support/needles.js';
@@ -27,7 +27,7 @@ import { JavaDependency, JavaDependencyVersion } from '../java/types.js';
 export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_CACHE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

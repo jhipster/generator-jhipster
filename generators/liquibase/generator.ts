@@ -20,7 +20,7 @@ import fs from 'fs';
 import { min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import { liquibaseFiles } from './files.js';
 import {
   prepareField as prepareFieldForLiquibase,
@@ -74,7 +74,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

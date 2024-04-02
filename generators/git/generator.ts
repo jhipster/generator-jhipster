@@ -21,7 +21,6 @@ import chalk from 'chalk';
 import type { QueuedAdapter } from '@yeoman/types';
 
 import BaseGenerator from '../base/index.js';
-import { GENERATOR_GIT } from '../generator-list.js';
 import { files } from './files.js';
 import command from './command.js';
 
@@ -36,7 +35,7 @@ export default class InitGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_GIT);
+      await this.composeWithBlueprints();
     }
   }
 

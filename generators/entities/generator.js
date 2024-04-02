@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_ENTITIES, GENERATOR_APP } from '../generator-list.js';
+import { GENERATOR_APP } from '../generator-list.js';
 import command from './command.js';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
@@ -25,7 +25,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ENTITIES);
+      await this.composeWithBlueprints();
     }
   }
 

@@ -47,7 +47,7 @@ const { REACT } = clientFrameworkTypes;
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_REACT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

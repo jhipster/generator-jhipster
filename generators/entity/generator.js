@@ -26,7 +26,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import prompts from './prompts.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
 import command from './command.js';
 
@@ -43,7 +43,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ENTITY);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

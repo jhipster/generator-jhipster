@@ -55,7 +55,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
+      await this.composeWithBlueprints();
     }
   }
 

@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_DATA_MONGODB, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeMongodbFilesTask from './files.js';
 import cleanupMongodbFilesTask from './cleanup.js';
 import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.js';
@@ -26,7 +26,7 @@ import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './en
 export default class MongoDBGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_MONGODB);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

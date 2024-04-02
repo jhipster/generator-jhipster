@@ -18,7 +18,6 @@
  */
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import command from './command.js';
 
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
@@ -31,7 +30,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
     this.parseJHipsterOptions(command.options);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_WORKSPACES);
+      await this.composeWithBlueprints();
     }
   }
 

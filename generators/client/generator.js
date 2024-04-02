@@ -44,7 +44,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     loadStoredAppOptions.call(this);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_CLIENT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

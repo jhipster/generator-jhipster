@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_DATA_CASSANDRA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeCassandraFilesTask from './files.js';
 import cleanupCassandraFilesTask from './cleanup.js';
 import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.js';
@@ -29,7 +29,7 @@ const { NO: NO_PAGINATION } = PaginationTypes;
 export default class CassandraGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_CASSANDRA);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

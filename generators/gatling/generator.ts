@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_GATLING, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntityTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -25,7 +25,7 @@ import writeEntityTask, { cleanupEntitiesTask } from './entity-files.js';
 export default class GatlingGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_GATLING);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

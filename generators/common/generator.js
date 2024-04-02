@@ -43,7 +43,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     loadStoredAppOptions.call(this);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_COMMON);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

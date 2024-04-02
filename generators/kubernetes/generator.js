@@ -46,7 +46,7 @@ const { MAVEN } = buildToolTypes;
 export default class KubernetesGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_KUBERNETES);
+      await this.composeWithBlueprints();
     }
   }
 
