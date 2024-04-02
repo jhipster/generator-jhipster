@@ -26,7 +26,6 @@ import {
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
 } from '../base-application/support/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT } from '../generator-list.js';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
@@ -55,7 +54,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
+    await this.dependsOnBootstrapApplicationClient();
     await this.dependsOnBootstrapApplicationServer();
   }
 
