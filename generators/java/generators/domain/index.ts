@@ -16,11 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
-
-const command: JHipsterCommandDefinition = {
-  options: {},
-  import: ['jhipster:java:bootstrap', 'jhipster:java:domain'],
-};
-
-export default command;
+export { default } from './generator.js';
+export { default as command } from './command.js';

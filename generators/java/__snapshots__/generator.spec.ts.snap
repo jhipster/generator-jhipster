@@ -2,12 +2,6 @@
 
 exports[`generator - java with default config should match files snapshot 1`] = `
 {
-  ".jhipster/Bar.json": {
-    "stateCleared": "modified",
-  },
-  ".jhipster/Foo.json": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
@@ -15,18 +9,6 @@ exports[`generator - java with default config should match files snapshot 1`] = 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/Bar.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/Foo.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/enumeration/MyEnum.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/enumeration/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/package-info.java": {
@@ -45,24 +27,6 @@ exports[`generator - java with default config should match files snapshot 1`] = 
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/BarAsserts.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/BarTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/BarTestSamples.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
     "stateCleared": "modified",
   },
 }

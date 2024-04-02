@@ -16,9 +16,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { JHipsterCommandDefinition } from '../../../base/api.js';
 
-/**
- * Removes server files that where generated in previous JHipster versions and therefore
- * need to be removed.
- */
-export default function cleanupTask() {}
+const command: JHipsterCommandDefinition = {
+  options: {
+    generateEntities: {
+      type: Boolean,
+      default: true,
+      scope: 'generator',
+      hide: true,
+    },
+    useJakartaValidation: {
+      type: Boolean,
+      default: true,
+      scope: 'generator',
+      hide: true,
+    },
+    useJacksonIdentityInfo: {
+      type: Boolean,
+      default: false,
+      scope: 'generator',
+      hide: true,
+    },
+    generateEnums: {
+      type: Boolean,
+      default: true,
+      scope: 'generator',
+      hide: true,
+    },
+  },
+  import: [],
+};
+
+export default command;

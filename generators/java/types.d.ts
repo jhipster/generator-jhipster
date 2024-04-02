@@ -35,6 +35,7 @@ export type JavaApplication = BaseApplication &
 
     packageName: string;
     packageFolder: string;
+    entityPackages: string[];
 
     srcMainJava: string;
     srcMainResources: string;

@@ -45,7 +45,6 @@ const {
   BUILD_TOOL,
   CACHE_PROVIDER,
   DATABASE_TYPE,
-  PACKAGE_NAME,
   DEV_DATABASE_TYPE,
   PROD_DATABASE_TYPE,
   REACTIVE,
@@ -98,17 +97,6 @@ export async function askForServerSideOpts({ control }) {
       message:
         'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
       default: defaultServerPort,
-    },
-    {
-      type: 'input',
-      name: PACKAGE_NAME,
-      validate: input =>
-        /^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)
-          ? true
-          : 'The package name you have provided is not a valid Java package name.',
-      message: 'What is your default Java package name?',
-      default: this.jhipsterConfigWithDefaults.packageName,
-      store: true,
     },
     {
       when: () => applicationType === 'gateway' || applicationType === 'microservice',

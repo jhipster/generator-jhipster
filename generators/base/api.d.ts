@@ -196,6 +196,7 @@ export type PromptSpec = {
   default?: any | ((any) => any);
   filter?: any | ((any) => any);
   transformer?: any | ((any) => any);
+  validate?: any | ((any) => any);
 };
 
 export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: 'storage' | 'blueprint' | 'generator' };

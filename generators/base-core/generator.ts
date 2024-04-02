@@ -310,6 +310,27 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return this.prompt(this.prepareQuestions(module?.command?.configs));
   }
 
+  /**
+   * Load the current JHipster command storage configuration into the context.
+   */
+  async loadCurrentJHipsterCommandConfig(context: any) {
+    const module: any = await this._meta?.importModule?.();
+    const command: JHipsterCommandDefinition | undefined = module?.command;
+    if (!command?.configs) {
+      throw new Error(`Configs not found for generator ${this.options.namespace}`);
+    }
+
+    const config = (this as any).jhipsterConfigWithDefaults;
+    Object.entries(command.configs).forEach(([name, def]) => {
+      if (def.scope === 'storage') {
+        context[name] = context[name] ?? config?.[name] ?? this.config.get(name);
+      }
+      if (def.scope === 'blueprint') {
+        context[name] = context[name] ?? this.blueprintStorage?.get(name);
+      }
+    });
+  }
+
   parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
     if (commandDef.arguments) {
       this.parseJHipsterArguments(commandDef.arguments);
