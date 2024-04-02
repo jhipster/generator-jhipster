@@ -25,5 +25,6 @@ export { default as generatedAnnotationTransform } from './generated-annotation-
 export * from './java-formatting.js';
 export * from './key-store.js';
 export { default as packageInfoTransform } from './package-info-transform.js';
+export * from './package-info-transform.js';
 export * from './reserved-keywords.js';
 export * from './util.js';

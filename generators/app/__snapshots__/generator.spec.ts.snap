@@ -51,6 +51,7 @@ Options:
   --feign-client                           Generate a feign client
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
+  --package-name <value>                   The package name for the generated application
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
@@ -440,6 +441,9 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "",
+  "entityPackages": [
+    "com.mycompany.myapp",
+  ],
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": undefined,
@@ -1018,6 +1022,9 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "",
+  "entityPackages": [
+    "com.mycompany.myapp",
+  ],
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": undefined,
@@ -1590,6 +1597,9 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "services/jhipster",
+  "entityPackages": [
+    "com.mycompany.myapp",
+  ],
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": undefined,

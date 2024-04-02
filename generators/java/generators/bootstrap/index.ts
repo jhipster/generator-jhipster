@@ -16,25 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Generator from './generator.js';
-import { WriteFileSection } from '../base/api.js';
-import { JavaApplication } from './types.js';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir } from './support/index.js';
-
-const files: WriteFileSection<Generator, JavaApplication> = {
-  baseFiles: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}_package_`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['GeneratedByJHipster.java'],
-    },
-  ],
-};
-
-export default async function writeTask(this: Generator, { application }) {
-  await this.writeFiles({
-    sections: files,
-    context: application,
-  });
-}
+export { default } from './generator.js';
+export { default as command } from './command.js';

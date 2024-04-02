@@ -20,29 +20,35 @@ import type { JHipsterCommandDefinition } from '../../../base/api.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    generateEntities: {
+    withGeneratedFlag: {
+      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
+      type: Boolean,
+      scope: 'storage',
+    },
+    packageInfoFile: {
+      description: 'write package-info.java file for every package',
       type: Boolean,
       default: true,
       scope: 'generator',
       hide: true,
     },
-    useJakartaValidation: {
-      type: Boolean,
-      default: true,
-      scope: 'generator',
-      hide: true,
-    },
-    useJacksonIdentityInfo: {
-      type: Boolean,
-      default: false,
-      scope: 'generator',
-      hide: true,
-    },
-    generateEnums: {
-      type: Boolean,
-      default: true,
-      scope: 'generator',
-      hide: true,
+  },
+  configs: {
+    packageName: {
+      cli: {
+        type: String,
+      },
+      prompt: gen => ({
+        type: 'input',
+        message: 'What is your default Java package name?',
+        default: gen.jhipsterConfigWithDefaults.packageName,
+        validate: input =>
+          /^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)
+            ? true
+            : 'The package name you have provided is not a valid Java package name.',
+      }),
+      scope: 'storage',
+      description: 'The package name for the generated application',
     },
   },
   import: [],

@@ -19,44 +19,8 @@
 import { JHipsterCommandDefinition } from '../base/api.js';
 
 const command: JHipsterCommandDefinition = {
-  options: {
-    withGeneratedFlag: {
-      description: 'Add a GeneratedByJHipster annotation to all generated java classes and interfaces',
-      type: Boolean,
-      scope: 'storage',
-    },
-    packageInfoFile: {
-      description: 'write package-info.java file for every package',
-      type: Boolean,
-      default: true,
-      scope: 'generator',
-      hide: true,
-    },
-    generateEntities: {
-      type: Boolean,
-      default: true,
-      scope: 'generator',
-      hide: true,
-    },
-    useJakartaValidation: {
-      type: Boolean,
-      default: true,
-      scope: 'generator',
-      hide: true,
-    },
-    useJacksonIdentityInfo: {
-      type: Boolean,
-      default: false,
-      scope: 'generator',
-      hide: true,
-    },
-    generateEnums: {
-      type: Boolean,
-      default: true,
-      scope: 'generator',
-      hide: true,
-    },
-  },
+  options: {},
+  import: ['jhipster:java:bootstrap', 'jhipster:java:domain'],
 };
 
 export default command;

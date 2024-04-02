@@ -16,96 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import writeTask from './files.js';
-import {
-  packageInfoTransform,
-  generatedAnnotationTransform,
-  checkJava,
-  isReservedJavaKeyword,
-  javaScopeToGradleScope,
-} from './support/index.js';
-import command from './command.js';
-import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
-import { matchMainJavaFiles } from './support/package-info-transform.js';
+import { GENERATOR_JAVA } from '../generator-list.js';
+import { javaScopeToGradleScope } from './support/index.js';
 import type { JavaDependency } from './types.js';
 import type { MavenDependency } from '../maven/types.js';
 
 export default class JavaGenerator extends BaseApplicationGenerator {
-  packageInfoFile!: boolean;
-  generateEntities!: boolean;
-  useJakartaValidation!: boolean;
-  useJacksonIdentityInfo!: boolean;
-  generateEnums!: boolean;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints(GENERATOR_JAVA);
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnJHipster('jhipster:java:domain');
     }
-  }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      loadConfig() {
-        this.parseJHipsterCommand(command);
-      },
-
-      validateJava() {
-        if (!this.skipChecks) {
-          this.checkJava();
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      checkConfig() {
-        const { packageName } = this.jhipsterConfigWithDefaults;
-        const reservedKeywork = packageName.split('.').find(isReservedJavaKeyword);
-        if (reservedKeywork) {
-          throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get composing() {
-    return this.asComposingTaskGroup({
-      async compose() {
-        const domainGenerator: any = await this.composeWithJHipster('jhipster:java:domain');
-        domainGenerator.generateEntities = domainGenerator.generateEntities ?? this.generateEntities;
-        domainGenerator.useJakartaValidation = domainGenerator.useJakartaValidation ?? this.useJakartaValidation;
-        domainGenerator.useJacksonIdentityInfo = domainGenerator.useJacksonIdentityInfo ?? this.useJacksonIdentityInfo;
-        domainGenerator.generateEnums = domainGenerator.generateEnums ?? this.generateEnums;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareJavaApplication({ application, source }) {
-        source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
-        source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
         source.addJavaDependencies = (dependencies, options) => {
           if (application.buildToolMaven) {
             const annotationProcessors = dependencies.filter(dep => dep.scope === 'annotationProcessor');
@@ -185,89 +116,5 @@ export default class JavaGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      loadDomains({ application, entities }) {
-        const entityPackages = [
-          ...new Set([application.packageName, ...entities.map(entity => (entity as any).entityAbsolutePackage).filter(Boolean)]),
-        ];
-        application.entityPackages = entityPackages;
-        (application as any).domains = entityPackages;
-      },
-      generatedAnnotation({ application }) {
-        if (this.jhipsterConfig.withGeneratedFlag) {
-          this.queueTransformStream(
-            {
-              name: 'adding @GeneratedByJHipster annotations',
-              filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && file.path.endsWith('.java'),
-              refresh: false,
-            },
-            generatedAnnotationTransform(application.packageName),
-          );
-        }
-      },
-      generatedPackageInfo({ application }) {
-        const mainPackageMatch = matchMainJavaFiles(application.srcMainJava!);
-        if (this.packageInfoFile) {
-          this.queueTransformStream(
-            {
-              name: 'adding package-info.java files',
-              filter: file =>
-                isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && mainPackageMatch.match(file.path),
-              refresh: true,
-            },
-            packageInfoTransform({
-              javaRoots: [this.destinationPath(application.srcMainJava!)],
-              javadocs: {
-                ...Object.fromEntries(application.packageInfoJavadocs!.map(doc => [doc.packageName, doc.documentation])),
-                [`${application.packageName}`]: 'Application root.',
-                [`${application.packageName}.config`]: 'Application configuration.',
-                ...Object.fromEntries(
-                  application.entityPackages!.map(pkg => [
-                    [`${pkg}.domain`, 'Domain objects.'],
-                    [`${pkg}.repository`, 'Repository layer.'],
-                    [`${pkg}.service`, 'Service layer.'],
-                    [`${pkg}.web.rest`, 'Rest layer.'],
-                  ]),
-                ),
-              },
-            }),
-          );
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
-  get writing() {
-    return this.asWritingTaskGroup({
-      writeTask,
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  /**
-   * Check if a supported Java is installed
-   *
-   * Blueprints can customize or disable java checks versions by overriding this method.
-   * @example
-   * // disable checks
-   * checkJava() {}
-   * @examples
-   * // enforce java lts versions
-   * checkJava() {
-   *   super.checkJava(['8', '11', '17'], { throwOnError: true });
-   * }
-   */
-  checkJava(javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS, checkResultValidation?) {
-    this.validateResult(checkJava(javaCompatibleVersions), { throwOnError: false, ...checkResultValidation });
   }
 }
