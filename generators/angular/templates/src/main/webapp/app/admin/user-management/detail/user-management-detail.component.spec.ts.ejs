@@ -69,7 +69,7 @@ describe('User Management Detail Component', () => {
       const instance = await harness.navigateByUrl('/', UserManagementDetailComponent);
 
       // THEN
-      expect(instance.user).toEqual(
+      expect(instance.user()).toEqual(
         expect.objectContaining({
           id: <%- tsKeyId %>,
           login: 'user',
