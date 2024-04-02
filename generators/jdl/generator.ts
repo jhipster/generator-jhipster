@@ -91,7 +91,7 @@ export default class JdlGenerator extends BaseGenerator {
         this.existingProject = this.jhipsterConfig.baseName !== undefined && (this.config as any).existed;
       },
       checkOptions() {
-        if (!this.inline && !this.jdlFiles?.length) {
+        if (!this.skipChecks && !this.inline && !this.jdlFiles?.length) {
           throw new Error('At least one jdl file is required.');
         }
       },
