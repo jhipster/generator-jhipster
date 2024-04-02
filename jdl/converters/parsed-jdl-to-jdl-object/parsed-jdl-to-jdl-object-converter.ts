@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import JDLObject from '../../models/jdl-object.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { applicationTypes, binaryOptions } from '../../jhipster/index.js';
@@ -142,7 +142,7 @@ function fillAssociations() {
 function convertAnnotationsToOptions(annotations) {
   const result = {};
   annotations.forEach(annotation => {
-    const annotationName = _.lowerFirst(annotation.optionName);
+    const annotationName = lowerFirst(annotation.optionName);
     const value = annotation.optionValue ? annotation.optionValue : true;
     if (annotationName in result) {
       const previousValue = result[annotationName];

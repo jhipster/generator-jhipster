@@ -1,6 +1,4 @@
-import * as _ from 'lodash-es';
-
-const { camelCase } = _;
+import { camelCase } from 'lodash-es';
 
 /**
  * get the frontend application name.

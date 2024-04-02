@@ -20,15 +20,13 @@ import assert from 'assert/strict';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 import Generator from './index.js';
 import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.js';
 import { GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

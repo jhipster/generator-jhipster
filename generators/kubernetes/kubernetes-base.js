@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import crypto from 'crypto';
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
 import { loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
@@ -80,7 +80,7 @@ export function loadConfig() {
     this.jhipsterConfig.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
   }
 
-  const kubernetesWithDefaults = _.defaults({}, this.jhipsterConfig, defaultKubernetesConfig);
+  const kubernetesWithDefaults = defaults({}, this.jhipsterConfig, defaultKubernetesConfig);
   this.kubernetesNamespace = kubernetesWithDefaults.kubernetesNamespace;
   this.kubernetesServiceType = kubernetesWithDefaults.kubernetesServiceType;
   this.ingressType = kubernetesWithDefaults.ingressType;
@@ -94,7 +94,7 @@ export function loadConfig() {
 
 export function saveConfig() {
   this.config.set(
-    _.defaults(
+    defaults(
       {
         appsFolders: this.appsFolders,
         directoryPath: this.directoryPath,

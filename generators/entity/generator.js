@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { upperFirst } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import prompts from './prompts.js';
@@ -56,7 +56,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       parseOptions() {
         this.parseJHipsterArguments(command.arguments);
-        const name = _.upperFirst(this.name).replace('.json', '');
+        const name = upperFirst(this.name).replace('.json', '');
         this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();
 
@@ -331,7 +331,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
    * @return {boolean} true if the entity is User.
    */
   isUserEntity(entityName) {
-    return _.upperFirst(entityName) === 'User';
+    return upperFirst(entityName) === 'User';
   }
 
   /**
@@ -341,7 +341,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
    * @return {boolean} true if the entity is Authority.
    */
   isAuthorityEntity(entityName) {
-    return _.upperFirst(entityName) === 'Authority';
+    return upperFirst(entityName) === 'Authority';
   }
 
   /**

@@ -17,12 +17,10 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { isString } from 'lodash-es';
 import { createToken, ITokenConfig } from 'chevrotain';
 
 import { NAME, KEYWORD, namePattern } from './shared-tokens.js';
-
-const { isString } = _;
 
 export default function createTokenFromConfig(config: ITokenConfig) {
   if (!config) {

@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-useless-escape */
 
-import * as _ from 'lodash-es';
+import { first, flatten, includes, values } from 'lodash-es';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import JDLParser from './jdl-parser.js';
@@ -374,7 +374,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
           actual.name !== 'qualifiedName' &&
           // a Boolean (true/false) is also a valid name.
           actual.tokenType &&
-          !_.includes(actual.tokenType.CATEGORIES, LexerTokens.BOOLEAN)
+          !includes(actual.tokenType.CATEGORIES, LexerTokens.BOOLEAN)
         ) {
           this.errors.push({
             message: `A name is expected, but found: "${getFirstToken(actual).image}"`,
@@ -565,7 +565,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
   }
 
   configValue(context, configKey) {
-    const configValue = _.first(_.first(Object.values(context)));
+    const configValue = first(first(Object.values(context)));
     this.checkConfigPropSyntax(configKey, configValue);
   }
 
@@ -574,7 +574,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
   }
 
   deploymentConfigValue(context, configKey) {
-    const configValue = _.first(_.first(_.values(context)));
+    const configValue = first(first(values(context)));
     this.checkDeploymentConfigPropSyntax(configKey, configValue);
   }
 }
@@ -598,7 +598,7 @@ function getFirstToken(tokOrCstNode) {
   }
 
   // CST Node - - assumes no nested CST Nodes, only terminals
-  return _.flatten(Object.values(tokOrCstNode.children)).reduce<any>(
+  return flatten(Object.values(tokOrCstNode.children)).reduce<any>(
     (firstTok: any, nextTok: any) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok),
     { startOffset: Infinity },
   );

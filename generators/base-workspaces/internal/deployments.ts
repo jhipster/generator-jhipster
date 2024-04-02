@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../../../jdl/index.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig, loadDerivedServerAndPlatformProperties } from '../../server/support/index.js';
 import type { GeneratorBaseCore } from '../../index.js';
@@ -29,7 +29,7 @@ const { JWT_SECRET_KEY } = OptionNames;
 export function loadDeploymentConfig(
   this: GeneratorBaseCore,
   {
-    config = _.defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
+    config = defaults({}, this.jhipsterConfig, DeploymentOptions.defaults(this.jhipsterConfig.deploymentType)),
     deployment = this,
   }: { config?: any; deployment?: any } = {},
 ) {

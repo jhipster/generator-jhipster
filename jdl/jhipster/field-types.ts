@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { snakeCase } from 'lodash-es';
 import validations from './validations.js';
 import JDLEnum from '../models/jdl-enum.js';
 import databaseTypes from './database-types.js';
@@ -95,7 +95,7 @@ export function isCommonDBType(type) {
     throw new Error('The passed type must not be nil.');
   }
 
-  return _.snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
+  return snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
 }
 
 export function isBlobType(type?: any) {

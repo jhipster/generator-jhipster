@@ -19,14 +19,12 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, basicHelpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import Generator from './index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

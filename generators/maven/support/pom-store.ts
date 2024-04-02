@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { set, get } from 'lodash-es';
 import sortKeys from 'sort-keys';
 
 import CoreGenerator from '../../base-core/index.js';
@@ -32,8 +32,6 @@ import {
   MavenProperty,
   MavenRepository,
 } from '../types.js';
-
-const { set, get } = _;
 
 const rootOrder = [
   'modelVersion',

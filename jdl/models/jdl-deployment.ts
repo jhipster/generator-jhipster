@@ -16,13 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { deploymentOptions, applicationOptions, serviceDiscoveryTypes } from '../jhipster/index.js';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 
 const { Options } = deploymentOptions;
-const { isEqual } = _;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 

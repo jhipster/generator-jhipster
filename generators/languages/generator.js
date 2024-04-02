@@ -18,7 +18,7 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { padEnd, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { askForLanguages, askI18n } from './prompts.js';
@@ -36,8 +36,6 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import command from './command.js';
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
-
-const { startCase } = _;
 
 /**
  * This is the base class for a generator that generates entities.
@@ -111,7 +109,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             throw new Error(
               `Unsupported language "${unsupportedLanguage}" passed as argument to language generator.` +
                 `\nSupported languages: ${this.supportedLanguages
-                  .map(language => `\n  ${_.padEnd(language.languageTag, 5)} (${language.name})`)
+                  .map(language => `\n  ${padEnd(language.languageTag, 5)} (${language.name})`)
                   .join('')}`,
             );
           }

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { snakeCase, startCase, upperFirst } from 'lodash-es';
-import * as _ from 'lodash-es';
+import { snakeCase, startCase, upperFirst, defaults, kebabCase } from 'lodash-es';
 import { fieldTypes, validations } from '../../../jdl/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
@@ -217,7 +216,7 @@ function _derivedProperties(field) {
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
   const validationRules = field.fieldValidate ? field.fieldValidateRules : [];
-  _.defaults(field, {
+  defaults(field, {
     blobContentTypeText: fieldTypeBlobContent === TEXT,
     blobContentTypeImage: fieldTypeBlobContent === IMAGE,
     blobContentTypeAny: fieldTypeBlobContent === ANY,
@@ -283,14 +282,14 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
 
   prepareProperty(field);
 
-  _.defaults(field, {
+  defaults(field, {
     entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
 
   field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
   if (field.fieldIsEnum) {
-    field.enumFileName = _.kebabCase(field.fieldType);
+    field.enumFileName = kebabCase(field.fieldType);
     field.enumValues = getEnumValuesWithCustomValues(field.fieldValues);
   }
 
@@ -300,7 +299,7 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   }
 
   field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
-  _.defaults(field, {
+  defaults(field, {
     nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED)),
   });
   field.unique = field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE);

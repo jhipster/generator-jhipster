@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { uniq } from 'lodash-es';
 import { EOF } from 'chevrotain';
 import JDLAstBuilderVisitor from './jdl-ast-builder-visitor.js';
 import { JDLLexer, tokens } from './lexer/lexer.js';
@@ -96,5 +96,5 @@ export function getSyntacticAutoCompleteSuggestions(input, startRule = 'prog') {
   // Each suggestion includes additional information such as the "Rule Stack" at suggestion point.
   // This may be handy for advanced implementations, e.g: different logic for suggesting a NAME token in an entity
   // or a field. But it is irrelevant in the scope of the POC.
-  return _.uniq(syntacticSuggestions.map(suggestion => suggestion.nextTokenType));
+  return uniq(syntacticSuggestions.map(suggestion => suggestion.nextTokenType));
 }

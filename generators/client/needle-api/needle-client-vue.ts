@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { startCase } from 'lodash-es';
+
 import needleClientBase from './needle-client.js';
 import { stripMargin } from '../../base/support/index.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
@@ -27,7 +28,7 @@ export default class extends needleClientBase {
     routerName: string,
     enableTranslation: boolean,
     entityTranslationKeyMenu: string,
-    entityTranslationValue: string = _.startCase(routerName),
+    entityTranslationValue: string = startCase(routerName),
   ) {
     const ignoreNonExisting =
       this.generator.sharedData.getControl().ignoreNeedlesError &&

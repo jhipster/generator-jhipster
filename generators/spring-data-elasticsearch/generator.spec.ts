@@ -19,7 +19,7 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import {
   buildServerMatrix,
@@ -35,8 +35,6 @@ import { matchElasticSearch, matchElasticSearchUser } from './__test-support/ela
 
 import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.js';
 import { mockedGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

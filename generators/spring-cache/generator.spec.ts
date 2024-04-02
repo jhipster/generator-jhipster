@@ -1,7 +1,7 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import { fromMatrix, defaultHelpers as helpers, result } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
@@ -9,8 +9,6 @@ import Generator from './index.js';
 
 import { GENERATOR_SPRING_CACHE } from '../generator-list.js';
 import { cacheTypes, buildToolTypes } from '../../jdl/jhipster/index.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
