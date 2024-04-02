@@ -24,7 +24,6 @@ import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
 import { readFile } from 'fs/promises';
 import BaseGenerator from '../base/index.js';
-import command from './command.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -80,14 +79,13 @@ export default class JdlGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       loadArguments() {
-        this.parseJHipsterArguments(command.arguments);
         if (this.jdlFiles) {
           this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
         }
-      },
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
       },
       existingProject() {
         this.existingProject = this.jhipsterConfig.baseName !== undefined && (this.config as any).existed;

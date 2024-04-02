@@ -22,7 +22,6 @@ import type { QueuedAdapter } from '@yeoman/types';
 
 import BaseGenerator from '../base/index.js';
 import { files } from './files.js';
-import command from './command.js';
 
 /**
  * @class
@@ -41,8 +40,8 @@ export default class InitGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      parseOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       async checkGit() {
         if (!this.skipGit) {

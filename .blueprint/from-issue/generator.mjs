@@ -1,7 +1,6 @@
 import { Octokit } from 'octokit';
 import { setOutput } from '@actions/core';
 import BaseGenerator from '../../generators/base/index.js';
-import command from './command.mjs';
 import { promptSamplesFolder } from '../support.mjs';
 import { join } from 'path';
 import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.js';
@@ -31,9 +30,8 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
-      async initializeOptions() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

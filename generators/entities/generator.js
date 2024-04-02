@@ -48,8 +48,8 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
           this.log.verboseInfo('Generating entities', ...this.entities);
         }
       },
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

@@ -1,8 +1,7 @@
 import { join } from 'path';
-import { defaults, merge } from 'lodash-es';
+import { merge } from 'lodash-es';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot } from '../../lib/index.js';
-import command from './command.mjs';
 import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '../support.mjs';
 
 export default class extends BaseGenerator {
@@ -10,9 +9,8 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
-      async initializeOptions() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

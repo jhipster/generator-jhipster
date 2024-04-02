@@ -27,7 +27,6 @@ import { databaseTypes } from '../../jdl/jhipster/index.js';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
 import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2MavenDefinition } from './internal/dependencies.js';
-import command from './command.js';
 
 const { SQL } = databaseTypes;
 
@@ -44,8 +43,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

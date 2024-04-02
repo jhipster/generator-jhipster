@@ -66,8 +66,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      parseOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       checkDocker,
       async checkDockerCompose() {

@@ -39,7 +39,6 @@ import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 import { GENERATOR_UPGRADE } from '../generator-list.js';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.js';
-import command from './command.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
@@ -81,8 +80,8 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterOptions(command.options, command.configs);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       validateBlueprint() {
         if (this.jhipsterConfig.blueprints && !this.skipChecks) {

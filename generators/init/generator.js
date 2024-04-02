@@ -21,7 +21,6 @@ import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../genera
 import { defaultConfig } from './config.js';
 import { SKIP_COMMIT_HOOK } from './constants.js';
 import { files, commitHooksFiles, readme } from './files.js';
-import command from './command.js';
 import { packageJson } from '../../lib/index.js';
 
 /**
@@ -43,8 +42,8 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

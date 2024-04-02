@@ -22,7 +22,6 @@ import { existsSync } from 'fs';
 import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT } from '../generator-list.js';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import command from './command.js';
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -50,9 +49,10 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       loadConfig() {
-        this.parseJHipsterOptions(command.options);
-
         // Generate workspaces file if workspace option is passed, or if workspace option is ommitted and monorepository is enabled, or if regenerating.
         this.generateWorkspaces = (this.workspaces ?? this.jhipsterConfig.monorepository) || Boolean(this.packageJson?.get('workspaces'));
 

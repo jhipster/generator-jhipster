@@ -44,7 +44,6 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
 import { fieldTypes } from '../../jdl/jhipster/index.js';
-import command from './command.js';
 import type { MavenProperty } from '../maven/types.js';
 
 const {
@@ -83,8 +82,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadConfig() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
