@@ -21,7 +21,6 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_JAVA, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
 import {
   packageInfoTransform,
   generatedAnnotationTransform,
@@ -32,10 +31,6 @@ import {
 import command from './command.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
 import { matchMainJavaFiles } from './support/package-info-transform.js';
-import { entityServerFiles, enumFiles } from './entity-files.js';
-import { getEnumInfo } from '../base-application/support/index.js';
-import { mutateData } from '../base/support/index.js';
-import { javaBeanCase } from '../server/support/index.js';
 import type { JavaDependency } from './types.js';
 import type { MavenDependency } from '../maven/types.js';
 
@@ -88,6 +83,22 @@ export default class JavaGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async compose() {
+        const domainGenerator: any = await this.composeWithJHipster('jhipster:java:domain');
+        domainGenerator.generateEntities = domainGenerator.generateEntities ?? this.generateEntities;
+        domainGenerator.useJakartaValidation = domainGenerator.useJakartaValidation ?? this.useJakartaValidation;
+        domainGenerator.useJacksonIdentityInfo = domainGenerator.useJacksonIdentityInfo ?? this.useJacksonIdentityInfo;
+        domainGenerator.generateEnums = domainGenerator.generateEnums ?? this.generateEnums;
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get preparing() {
@@ -176,66 +187,15 @@ export default class JavaGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get preparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity }) {
-        mutateData(entity, {
-          entityDomainLayer: true,
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
-  }
-
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareEntity({ entity, field }) {
-        field.propertyJavaBeanName = javaBeanCase(field.propertyName);
-        if (entity.dtoMapstruct || entity.builtIn) {
-          field.propertyDtoJavaType = field.blobContentTypeText ? 'String' : field.fieldType;
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
-  }
-
-  get preparingEachEntityRelationship() {
-    return this.asPreparingEachEntityRelationshipTaskGroup({
-      prepareEntity({ entity, relationship }) {
-        relationship.propertyJavaBeanName = javaBeanCase(relationship.propertyName);
-        if (entity.dtoMapstruct) {
-          relationship.propertyDtoJavaType = relationship.collection
-            ? `Set<${relationship.otherEntity.dtoClass}>`
-            : relationship.otherEntity.dtoClass;
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
-  }
-
-  get postPreparingEachEntity() {
-    return this.asPostPreparingEachEntityTaskGroup({
-      checkForCircularRelationships({ entity }) {
-        entity.skipJunitTests = entity.hasCyclicRequiredRelationship ? 'Cyclic required relationships detected' : undefined;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
-  }
-
   get default() {
     return this.asDefaultTaskGroup({
+      loadDomains({ application, entities }) {
+        const entityPackages = [
+          ...new Set([application.packageName, ...entities.map(entity => (entity as any).entityAbsolutePackage).filter(Boolean)]),
+        ];
+        application.entityPackages = entityPackages;
+        (application as any).domains = entityPackages;
+      },
       generatedAnnotation({ application }) {
         if (this.jhipsterConfig.withGeneratedFlag) {
           this.queueTransformStream(
@@ -264,19 +224,18 @@ export default class JavaGenerator extends BaseApplicationGenerator {
                 ...Object.fromEntries(application.packageInfoJavadocs!.map(doc => [doc.packageName, doc.documentation])),
                 [`${application.packageName}`]: 'Application root.',
                 [`${application.packageName}.config`]: 'Application configuration.',
-                [`${application.packageName}.domain`]: 'Domain objects.',
-                [`${application.packageName}.repository`]: 'Repository layer.',
-                [`${application.packageName}.service`]: 'Service layer.',
-                [`${application.packageName}.web.rest`]: 'Rest layer.',
+                ...Object.fromEntries(
+                  application.entityPackages!.map(pkg => [
+                    [`${pkg}.domain`, 'Domain objects.'],
+                    [`${pkg}.repository`, 'Repository layer.'],
+                    [`${pkg}.service`, 'Service layer.'],
+                    [`${pkg}.web.rest`, 'Rest layer.'],
+                  ]),
+                ),
               },
             }),
           );
         }
-      },
-      loadDomains({ application, entities }) {
-        (application as any).domains = [
-          ...new Set([application.packageName, ...entities.map(entity => (entity as any).entityAbsolutePackage).filter(Boolean)]),
-        ];
       },
     });
   }
@@ -287,54 +246,12 @@ export default class JavaGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanupTask,
       writeTask,
     });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get writingEntities() {
-    return this.asWritingEntitiesTaskGroup({
-      async writeServerFiles({ application, entities }) {
-        if (!this.generateEntities) return;
-
-        const { useJakartaValidation, useJacksonIdentityInfo } = this;
-        for (const entity of entities.filter(entity => !entity.skipServer)) {
-          await this.writeFiles({
-            sections: entityServerFiles,
-            context: { ...application, ...entity, useJakartaValidation, useJacksonIdentityInfo },
-          });
-        }
-      },
-
-      async writeEnumFiles({ application, entities }) {
-        if (!this.generateEnums) return;
-
-        for (const entity of entities.filter(entity => !entity.skipServer)) {
-          for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
-            const enumInfo = {
-              ...getEnumInfo(field, (entity as any).clientRootFolder),
-              frontendAppName: (entity as any).frontendAppName,
-              packageName: application.packageName,
-              javaPackageSrcDir: application.javaPackageSrcDir,
-              entityJavaPackageFolder: (entity as any).entityJavaPackageFolder,
-              entityAbsolutePackage: (entity as any).entityAbsolutePackage || application.packageName,
-            };
-            await this.writeFiles({
-              sections: enumFiles,
-              context: enumInfo,
-            });
-          }
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   /**

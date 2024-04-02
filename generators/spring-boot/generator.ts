@@ -378,7 +378,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       async writeFiles({ application }) {
         return this.writeFiles({
           sections: serverFiles,
-          rootTemplatesPath: ['', '../../server/templates/', '../../java/templates/'],
+          rootTemplatesPath: ['', '../../server/templates/', '../../java/generators/domain/templates/'],
           context: application,
         });
       },

@@ -203,8 +203,8 @@ export function writeFiles() {
 
     async writeServerFiles({ application, entities }) {
       const rootTemplatesPath = application.reactive
-        ? ['reactive', '', '../../server/templates/', '../../java/templates/']
-        : ['', '../../server/templates/', '../../java/templates/'];
+        ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
+        : ['', '../../server/templates/', '../../java/generators/domain/templates/'];
       for (const entity of entities.filter(entity => !entity.skipServer)) {
         if (entity.builtInUser) {
           await this.writeFiles({
