@@ -1,7 +1,7 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import {
   buildServerMatrix,
@@ -21,8 +21,6 @@ import {
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
 import { GENERATOR_SERVER, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-
-const { snakeCase } = lodash;
 
 const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`);
 

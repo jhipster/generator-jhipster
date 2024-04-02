@@ -19,7 +19,7 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import {
   buildServerMatrix,
@@ -39,8 +39,6 @@ import {
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
 import { GENERATOR_SPRING_DATA_COUCHBASE } from '../generator-list.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

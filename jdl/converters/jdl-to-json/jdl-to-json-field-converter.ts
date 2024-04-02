@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { capitalize } from 'lodash-es';
 
 import { validations } from '../../jhipster/index.js';
 import formatComment from '../../utils/format-utils.js';
@@ -128,7 +129,7 @@ function getFieldValidations(jdlField) {
   jdlField.forEachValidation(validation => {
     fieldValidations.fieldValidateRules.push(validation.name);
     if (validation.name !== REQUIRED && validation.name !== UNIQUE) {
-      fieldValidations[`fieldValidateRules${_.capitalize(validation.name)}`] = validation.value;
+      fieldValidations[`fieldValidateRules${capitalize(validation.name)}`] = validation.value;
     }
   });
   return fieldValidations;

@@ -19,10 +19,8 @@
 
 import chalk from 'chalk';
 import { Command, Option } from 'commander';
-import lodash from 'lodash';
+import { kebabCase } from 'lodash-es';
 import { convertConfigToOption } from '../lib/internal/index.js';
-
-const { kebabCase } = lodash;
 
 export default class JHipsterCommand extends Command {
   createCommand(name) {

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import { escapeRegExp } from 'lodash-es';
+import { escapeRegExp, kebabCase } from 'lodash-es';
 import CoreGenerator from '../../base-core/index.js';
 import { CascatedEditFileCallback, EditFileCallback } from '../api.js';
 import { joinCallbacks } from './write-files.js';

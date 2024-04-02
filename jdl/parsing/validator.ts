@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-useless-escape */
 
-import { first, flatten, values } from 'lodash-es';
+import { first, flatten, includes, values } from 'lodash-es';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import JDLParser from './jdl-parser.js';
@@ -374,7 +374,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
           actual.name !== 'qualifiedName' &&
           // a Boolean (true/false) is also a valid name.
           actual.tokenType &&
-          !_.includes(actual.tokenType.CATEGORIES, LexerTokens.BOOLEAN)
+          !includes(actual.tokenType.CATEGORIES, LexerTokens.BOOLEAN)
         ) {
           this.errors.push({
             message: `A name is expected, but found: "${getFirstToken(actual).image}"`,

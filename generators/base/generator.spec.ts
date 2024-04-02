@@ -19,14 +19,12 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect, esmocha } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import BaseGenerator from './index.js';
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import lodash from 'lodash';
+import { camelCase, upperFirst, snakeCase } from 'lodash-es';
 
 import BaseGenerator from '../base/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
@@ -49,7 +49,6 @@ import { SKIP_COMMIT_HOOK } from '../init/constants.js';
 import command from './command.js';
 import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 
-const { camelCase, upperFirst, snakeCase } = lodash;
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
 
 export default class extends BaseGenerator {

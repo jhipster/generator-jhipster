@@ -19,7 +19,7 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import Generator from './index.js';
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
@@ -29,8 +29,6 @@ import { shouldSupportFeatures } from '../../test/support/tests.js';
 const {
   CommonDBTypes: { UUID },
 } = fieldTypes;
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
