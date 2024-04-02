@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
 import { validations } from '../../jhipster/index.js';
 import formatComment from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import * as _ from 'lodash-es';
+import { snakeCase, upperFirst } from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.js';
 import { getUXConstraintName } from './database.js';
@@ -31,8 +31,6 @@ const { MapperTypes } = entityOptions;
 
 const { MAPSTRUCT } = MapperTypes;
 const { INTEGER, LONG, UUID } = CommonDBTypes;
-
-const { snakeCase, upperFirst } = _;
 
 export default function prepareField(entityWithConfig, field, generator) {
   if (field.mapstructExpression) {

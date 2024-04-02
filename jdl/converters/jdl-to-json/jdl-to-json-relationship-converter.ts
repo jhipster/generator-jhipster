@@ -111,7 +111,7 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
     const convertedRelationship: any = {
       relationshipSide: 'right',
-      relationshipType: otherRelationshipType(_.kebabCase(relationshipToConvert.type)),
+      relationshipType: otherRelationshipType(kebabCase(relationshipToConvert.type)),
       otherEntityName: camelCase(relationshipToConvert.from),
     };
     if (otherSplitField.relationshipName) {

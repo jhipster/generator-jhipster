@@ -18,7 +18,7 @@
  */
 import { extname } from 'path';
 import { QueuedAdapter } from '@yeoman/adapter';
-import * as _ from 'lodash-es';
+import { upperFirst } from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
@@ -36,8 +36,6 @@ import { addApplicationIndex, allNewApplications, customizeForMicroservices } fr
 import { mergeYoRcContent } from '../../jdl/index.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
-
-const { upperFirst } = _;
 
 /**
  * Add jdl extension to the file

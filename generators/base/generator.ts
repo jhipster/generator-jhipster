@@ -20,7 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.js';
@@ -33,8 +33,6 @@ import CoreGenerator from '../base-core/index.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
-
-const { defaults } = _;
 
 /**
  * Base class that contains blueprints support.

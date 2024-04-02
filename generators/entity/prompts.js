@@ -18,7 +18,7 @@
  */
 import fs from 'fs';
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
 import {
   reservedKeywords,
   databaseTypes,
@@ -75,7 +75,7 @@ export default prompts;
 const getFieldNameUndercored = fields =>
   ['id'].concat(
     fields.map(field => {
-      return _.snakeCase(field.fieldName);
+      return snakeCase(field.fieldName);
     }),
   );
 
@@ -458,7 +458,7 @@ async function askForField() {
         if (input.charAt(0) === input.charAt(0).toUpperCase()) {
           return 'Your field name cannot start with an upper case letter';
         }
-        if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
+        if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
           return 'Your field name cannot use an already existing field name';
         }
         if ((clientFramework === undefined || clientFramework === ANGULAR) && isReservedFieldName(input, ANGULAR)) {
@@ -547,7 +547,7 @@ async function askForField() {
           return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
         const enums = input.replace(/\s/g, '').split(',');
-        if (_.uniq(enums).length !== enums.length) {
+        if (uniq(enums).length !== enums.length) {
           return `Enum values cannot contain duplicates (typed values: ${input})`;
         }
         for (let i = 0; i < enums.length; i++) {
@@ -712,7 +712,7 @@ async function askForField() {
   ]);
 
   if (answers.fieldIsEnum) {
-    answers.fieldType = _.upperFirst(answers.fieldType);
+    answers.fieldType = upperFirst(answers.fieldType);
     answers.fieldValues = answers.fieldValues.toUpperCase();
   }
 
@@ -780,7 +780,7 @@ async function askForRelationship(...args) {
         if (input.charAt(0) === input.charAt(0).toUpperCase()) {
           return 'Your relationship cannot start with an upper case letter';
         }
-        if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
+        if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
           return 'Your relationship cannot use an already existing field name';
         }
         if (isReservedTableName(input, 'JAVA')) {
@@ -789,7 +789,7 @@ async function askForRelationship(...args) {
         return true;
       },
       message: 'What is the name of the relationship?',
-      default: response => _.lowerFirst(response.otherEntityName),
+      default: response => lowerFirst(response.otherEntityName),
     },
     {
       type: 'list',
@@ -835,7 +835,7 @@ async function askForRelationship(...args) {
       type: 'input',
       name: 'otherEntityRelationshipName',
       message: 'What is the name of this relationship in the other entity?',
-      default: () => _.lowerFirst(name),
+      default: () => lowerFirst(name),
     },
     {
       type: 'input',
@@ -872,7 +872,7 @@ async function askForRelationship(...args) {
   const relationship = {
     relationshipSide: 'left',
     relationshipName: answers.relationshipName,
-    otherEntityName: _.lowerFirst(answers.otherEntityName),
+    otherEntityName: lowerFirst(answers.otherEntityName),
     relationshipType: answers.relationshipType,
     relationshipValidateRules: answers.relationshipValidateRules,
     otherEntityField: answers.otherEntityField,
@@ -882,7 +882,7 @@ async function askForRelationship(...args) {
   };
 
   if (this.isBuiltInUser(answers.otherEntityName)) {
-    relationship.otherEntityRelationshipName = _.lowerFirst(name);
+    relationship.otherEntityRelationshipName = lowerFirst(name);
   }
 
   this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
@@ -902,7 +902,7 @@ function logFieldsAndRelationships() {
     this.log.log(chalk.white('Fields'));
     this.entityConfig.fields.forEach(field => {
       const validationDetails = [];
-      const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+      const fieldValidate = isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
       if (fieldValidate === true) {
         if (field.fieldValidateRules.includes(REQUIRED)) {
           validationDetails.push(REQUIRED);
@@ -948,7 +948,7 @@ function logFieldsAndRelationships() {
         validationDetails.push(REQUIRED);
       }
       this.log.log(
-        `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
+        `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
           relationship.relationshipType,
         )} ${chalk.cyan(validationDetails.join(' '))}`,
       );

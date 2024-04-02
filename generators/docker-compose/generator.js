@@ -21,7 +21,7 @@ import pathjs from 'path';
 import chalk from 'chalk';
 import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
@@ -38,7 +38,6 @@ import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
-const { defaults } = _;
 
 /* eslint-disable consistent-return */
 /**

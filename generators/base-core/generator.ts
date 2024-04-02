@@ -26,8 +26,7 @@ import { requireNamespace } from '@yeoman/namespace';
 import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import * as _ from 'lodash-es';
-import { kebabCase, snakeCase } from 'lodash-es';
+import { kebabCase, snakeCase, merge, get, set } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -62,7 +61,6 @@ import { convertConfigToOption } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 
-const { merge, get, set } = _;
 const {
   INITIALIZING,
   PROMPTING,

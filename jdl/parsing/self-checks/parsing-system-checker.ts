@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { difference, flatMap, includes, reject, some, uniq, values } from 'lodash-es';
 import { Lexer } from 'chevrotain';
 import TokenCollectorVisitor from './token-collector-visitor.js';
 
@@ -34,21 +34,21 @@ function getUsedTokens(rules) {
   return rules.reduce((result, currentRule) => {
     const collector = new TokenCollectorVisitor();
     currentRule.accept(collector);
-    return _.uniq(result.concat(collector.actualTokens));
+    return uniq(result.concat(collector.actualTokens));
   }, []);
 }
 
 function getUselessTokens(usedTokens: any[], allDefinedTokens: any[]) {
-  const usedCategories = _.uniq(_.flatMap(usedTokens, 'CATEGORIES'));
+  const usedCategories = uniq(flatMap(usedTokens, 'CATEGORIES'));
   // TODO: Calling uniq with two parameters is probably a bug.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  const notDirectlyUsedTokens = _.difference(allDefinedTokens, _.uniq(usedTokens, usedCategories));
-  const redundant = _.reject(notDirectlyUsedTokens, token => {
+  const notDirectlyUsedTokens = difference(allDefinedTokens, uniq(usedTokens, usedCategories));
+  const redundant = reject(notDirectlyUsedTokens, token => {
     const tokCategories = (token as any).CATEGORIES;
-    return _.some(tokCategories, category => _.includes(usedCategories, category));
+    return some(tokCategories, category => includes(usedCategories, category));
   });
-  return _.reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
+  return reject(redundant, tokenType => tokenType.GROUP === Lexer.SKIPPED);
 }
 
 export function checkConfigKeys(definedTokensMap, usedConfigKeys) {
@@ -57,18 +57,18 @@ export function checkConfigKeys(definedTokensMap, usedConfigKeys) {
 }
 
 function checkForUselessConfigurationKeys(definedTokensMap, usedConfigKeys) {
-  const redundantConfigKeys = _.difference(usedConfigKeys, Object.keys(definedTokensMap));
+  const redundantConfigKeys = difference(usedConfigKeys, Object.keys(definedTokensMap));
   if (!_.isEmpty(redundantConfigKeys)) {
     throw Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
   }
 }
 
 function checkForMissingConfigurationKeys(definedTokensMap, usedConfigKeys) {
-  const definedConfigKeyNames = _.values(definedTokensMap)
-    .filter(tokenType => _.includes(tokenType.CATEGORIES, definedTokensMap.CONFIG_KEY))
+  const definedConfigKeyNames = values(definedTokensMap)
+    .filter(tokenType => includes(tokenType.CATEGORIES, definedTokensMap.CONFIG_KEY))
     .map(tokenType => tokenType.name);
 
-  const missingConfigKeys = _.difference(definedConfigKeyNames, usedConfigKeys);
+  const missingConfigKeys = difference(definedConfigKeyNames, usedConfigKeys);
   if (!_.isEmpty(missingConfigKeys)) {
     throw Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
   }

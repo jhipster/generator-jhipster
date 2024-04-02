@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import * as _ from 'lodash-es';
-import { camelCase, startCase } from 'lodash-es';
+import { defaults, kebabCase, upperFirst, camelCase, startCase } from 'lodash-es';
 
 import { getDefaultAppName } from './support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
@@ -109,12 +108,12 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
       preparing({ application }) {
         const { baseName, upperFirstCamelCaseBaseName } = application;
         const humanizedBaseName = baseName.toLowerCase() === 'jhipster' ? 'JHipster' : startCase(baseName);
-        _.defaults(application, {
+        defaults(application, {
           humanizedBaseName,
           camelizedBaseName: camelCase(baseName),
           hipster: getHipster(baseName),
-          capitalizedBaseName: _.upperFirst(baseName),
-          dasherizedBaseName: _.kebabCase(baseName),
+          capitalizedBaseName: upperFirst(baseName),
+          dasherizedBaseName: kebabCase(baseName),
           lowercaseBaseName: baseName.toLowerCase(),
           upperFirstCamelCaseBaseName,
           projectDescription: `Description for ${humanizedBaseName}`,

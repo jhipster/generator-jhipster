@@ -21,7 +21,7 @@ import { existsSync, readFileSync } from 'fs';
 import path, { dirname, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
 import { QueuedAdapter } from '@yeoman/adapter';
 
@@ -407,7 +407,7 @@ export default class EnvironmentBuilder {
         const blueprintCommandsUrl = pathToFileURL(resolve(`${blueprintCommandFile}${blueprintCommandExtension}`));
         try {
           blueprintCommand = (await import(blueprintCommandsUrl)).default;
-          const blueprintCommands = _.cloneDeep(blueprintCommand);
+          const blueprintCommands = cloneDeep(blueprintCommand);
           Object.entries(blueprintCommands).forEach(([_command, commandSpec]) => {
             commandSpec.blueprint = commandSpec.blueprint || blueprint;
           });
@@ -480,7 +480,7 @@ export default class EnvironmentBuilder {
     for (const [blueprint, packagePath] of blueprintPackagePaths) {
       const errorMsg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
       const opts = await loadSharedOptionsFromFile(`${packagePath}/cli/sharedOptions`, undefined, errorMsg);
-      result = _.mergeWith(result, opts, joiner);
+      result = mergeWith(result, opts, joiner);
     }
     return result;
   }

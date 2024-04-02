@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { uniqBy } from 'lodash-es';
 import * as JDLReader from './readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import { readJSONFile } from './readers/json-file-reader.js';
@@ -32,8 +32,6 @@ import { applicationOptions } from './jhipster/index.js';
 
 const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
-
-const { uniqBy } = _;
 
 /**
  * Creates a new JDL importer from files.

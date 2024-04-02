@@ -18,7 +18,7 @@
  */
 
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { includes, intersection } from 'lodash-es';
 
 import {
   applicationOptions,
@@ -59,7 +59,6 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 const { GATLING, CUCUMBER } = testFrameworkTypes;
-const { intersection } = _;
 
 /**
  * Get Option From Array
@@ -71,7 +70,7 @@ const { intersection } = _;
 const getOptionFromArray = (array, option) => {
   let optionValue = false;
   array.forEach(value => {
-    if (_.includes(value, option)) {
+    if (includes(value, option)) {
       optionValue = value.split(':')[1];
     }
   });

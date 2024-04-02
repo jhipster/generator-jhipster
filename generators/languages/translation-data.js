@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import * as _ from 'lodash-es';
+import { defaultsDeep, get, merge, template } from 'lodash-es';
 import { transform } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
-
-const { get } = _;
 
 export const createTranslationsFilter = ({ clientSrcDir, nativeLanguage, fallbackLanguage }) => {
   const pattern =
@@ -65,9 +63,9 @@ export default class TranslationData {
 
   mergeTranslation(translation, fallback) {
     if (fallback) {
-      _.defaultsDeep(this.translations, translation);
+      defaultsDeep(this.translations, translation);
     } else {
-      _.merge(this.translations, translation);
+      merge(this.translations, translation);
     }
   }
 
@@ -98,7 +96,7 @@ export default class TranslationData {
     if (translatedValue.includes('{{ login }}') && !data.login) {
       data.login = data.id;
     }
-    const compiledTemplate = _.template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
+    const compiledTemplate = template(translatedValue, { interpolate: /{{([\s\S]+?)}}/g });
     return compiledTemplate(data);
   }
 }

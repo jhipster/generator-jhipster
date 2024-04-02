@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import os from 'os';
-import * as _ from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
@@ -43,8 +43,6 @@ import { exportJDLTransform, importJDLTransform } from './support/index.js';
 import command from './command.js';
 
 const isWin32 = os.platform() === 'win32';
-
-const { lowerFirst } = _;
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {

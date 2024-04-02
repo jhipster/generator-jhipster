@@ -19,9 +19,7 @@
 
 import assert from 'assert';
 import { XMLParser, XMLBuilder, XmlBuilderOptions, X2jOptions } from 'fast-xml-parser';
-import * as _ from 'lodash-es';
-
-const { merge } = _;
+import { merge } from 'lodash-es';
 
 const defaultXmlCommonOptions: Partial<X2jOptions & XmlBuilderOptions> = {
   ignoreAttributes: false,

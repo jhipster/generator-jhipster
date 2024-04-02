@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { upperFirst, lowerFirst } from 'lodash-es';
 
 import { Relationship, Entity } from '../../../jdl/converters/types.js';
 import { ValidationResult } from '../../base/api.js';
 import { stringifyApplicationData } from './debug.js';
 import { findEntityInEntities } from './entity.js';
-
-const { upperFirst, lowerFirst } = _;
 
 export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
 

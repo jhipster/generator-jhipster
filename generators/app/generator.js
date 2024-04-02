@@ -18,8 +18,7 @@
  */
 /* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
-import { camelCase } from 'lodash-es';
+import { camelCase, omit } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { checkNode, loadStoredAppOptions } from './support/index.js';
@@ -179,7 +178,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return this.asDefaultTaskGroup({
       insight({ control }) {
         const yorc = {
-          ..._.omit(this.jhipsterConfig, [JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY]),
+          ...omit(this.jhipsterConfig, [JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY]),
         };
         yorc.applicationType = this.jhipsterConfig.applicationType;
         statistics.sendYoRc(yorc, control.existingProject, this.jhipsterConfig.jhipsterVersion);
