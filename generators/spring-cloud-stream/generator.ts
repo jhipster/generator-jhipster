@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 
 export default class KafkaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -27,7 +26,7 @@ export default class KafkaGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 

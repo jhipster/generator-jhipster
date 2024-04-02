@@ -21,7 +21,6 @@ import assert from 'assert/strict';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import files from './files.js';
 import { GRADLE } from './constants.js';
 import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
@@ -52,7 +51,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 

@@ -26,7 +26,7 @@ import {
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
 } from '../base-application/support/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION_CLIENT } from '../generator-list.js';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
@@ -56,7 +56,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     }
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT);
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+    await this.dependsOnBootstrapApplicationServer();
   }
 
   get preparing() {
