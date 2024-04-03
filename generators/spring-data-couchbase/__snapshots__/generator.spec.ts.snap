@@ -38,12 +38,6 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.my
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -1579,12 +1573,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2109,12 +2097,6 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2472,12 +2454,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2857,12 +2833,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3229,12 +3199,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3726,12 +3690,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {

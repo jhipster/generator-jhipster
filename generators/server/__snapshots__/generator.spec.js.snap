@@ -14,12 +14,6 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -257,12 +251,6 @@ exports[`generator - server composing databaseType option no with oauth2 should 
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -505,12 +493,6 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {

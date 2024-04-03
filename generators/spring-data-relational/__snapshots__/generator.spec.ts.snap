@@ -32,12 +32,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -494,12 +488,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -960,12 +948,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -1403,12 +1385,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -1793,12 +1769,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -6093,12 +6063,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "checkstyle.xml": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -6536,12 +6500,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -6824,12 +6782,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -7281,12 +7233,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -7566,12 +7512,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -8020,12 +7960,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -8296,12 +8230,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -8738,12 +8666,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -9023,12 +8945,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -9480,12 +9396,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -9765,12 +9675,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -10084,12 +9988,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -10360,12 +10258,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -10670,12 +10562,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -10958,12 +10844,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -11280,12 +11160,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -11565,12 +11439,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -11881,12 +11749,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -12154,12 +12016,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -12464,12 +12320,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -12752,12 +12602,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -13173,12 +13017,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -13425,12 +13263,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -13846,12 +13678,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -14098,12 +13924,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -14519,12 +14339,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -14771,12 +14585,6 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -15189,12 +14997,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   "gradle/zipkin.gradle": {
     "stateCleared": "modified",
   },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -15438,12 +15240,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -15857,12 +15653,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
