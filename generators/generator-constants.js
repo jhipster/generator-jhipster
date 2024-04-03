@@ -26,7 +26,7 @@ export const JAVA_COMPATIBLE_VERSIONS = ['17', '18', '19', '20', '21'];
 export const ADD_SPRING_MILESTONE_REPOSITORY = false;
 
 // Version of Node, NPM
-export const NODE_VERSION = '20.12.0';
+export const NODE_VERSION = '20.12.1';
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.13.1';
 
 // The version should be coherent with the one from spring-data-elasticsearch project
