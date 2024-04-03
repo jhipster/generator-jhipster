@@ -281,12 +281,6 @@ const swaggerFiles = {
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 export const baseServerFiles = {
-  jib: [
-    {
-      path: 'src/main/docker/jib/',
-      templates: ['entrypoint.sh'],
-    },
-  ],
   readme: [
     {
       templates: ['README.md.jhi.spring-boot'],

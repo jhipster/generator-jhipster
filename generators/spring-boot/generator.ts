@@ -183,6 +183,16 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         } = this.jhipsterConfigWithDefaults;
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
+        await this.composeWithJHipster('jhipster:java:jib');
+
+        if (buildTool === 'gradle') {
+          await this.composeWithJHipster('jhipster:gradle:code-quality');
+        }
+        if (buildTool === 'gradle') {
+          if (!skipClient && clientFramework !== 'no') {
+            await this.composeWithJHipster('jhipster:gradle:node-gradle');
+          }
+        }
 
         if (enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
@@ -195,14 +205,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         }
         if (feignClient) {
           await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
-        }
-
-        if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:code-quality');
-          await this.composeWithJHipster('jhipster:gradle:jib');
-          if (!skipClient && clientFramework !== 'no') {
-            await this.composeWithJHipster('jhipster:gradle:node-gradle');
-          }
         }
 
         if (databaseType === SQL) {
