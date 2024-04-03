@@ -78,10 +78,11 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
           clientFrameworkReact,
           clientFrameworkVue,
           microfrontend,
+          srcMainWebapp,
         } = application;
 
         const checksumIncludedFiles = [
-          '<%= MAIN_DIR %>webapp/**/*.*',
+          `${srcMainWebapp}**/*.*`,
           'target/classes/static/**/*.*',
           'package-lock.json',
           'package.json',
@@ -142,40 +143,6 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
             },
           ],
           plugins: [
-            {
-              inProfile: 'webapp',
-              groupId: 'com.github.eirslett',
-              artifactId: 'frontend-maven-plugin',
-              additionalContent: `
-                  <executions>
-                      <execution>
-                          <id>install-node-and-npm</id>
-                          <goals>
-                              <goal>install-node-and-npm</goal>
-                          </goals>
-                      </execution>
-                      <execution>
-                          <id>npm install</id>
-                          <goals>
-                              <goal>npm</goal>
-                          </goals>
-                      </execution>
-                      <execution>
-                          <id>webapp build dev</id>
-                          <goals>
-                              <goal>npm</goal>
-                          </goals>
-                          <phase>generate-resources</phase>
-                          <configuration>
-                              <arguments>run webapp:build</arguments>
-                              <environmentVariables>
-                                  <APP_VERSION>\${project.version}</APP_VERSION>
-                              </environmentVariables>
-                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
-                          </configuration>
-                      </execution>
-                  </executions>`,
-            },
             {
               inProfile: 'webapp',
               groupId: 'net.nicoulaj.maven.plugins',
@@ -254,6 +221,40 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
                       </execution>
                   </executions>
 `,
+            },
+            {
+              inProfile: 'webapp',
+              groupId: 'com.github.eirslett',
+              artifactId: 'frontend-maven-plugin',
+              additionalContent: `
+                  <executions>
+                      <execution>
+                          <id>install-node-and-npm</id>
+                          <goals>
+                              <goal>install-node-and-npm</goal>
+                          </goals>
+                      </execution>
+                      <execution>
+                          <id>npm install</id>
+                          <goals>
+                              <goal>npm</goal>
+                          </goals>
+                      </execution>
+                      <execution>
+                          <id>webapp build dev</id>
+                          <goals>
+                              <goal>npm</goal>
+                          </goals>
+                          <phase>generate-resources</phase>
+                          <configuration>
+                              <arguments>run webapp:build</arguments>
+                              <environmentVariables>
+                                  <APP_VERSION>\${project.version}</APP_VERSION>
+                              </environmentVariables>
+                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                          </configuration>
+                      </execution>
+                  </executions>`,
             },
             {
               inProfile: 'prod',

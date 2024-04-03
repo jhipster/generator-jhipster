@@ -188,10 +188,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         if (buildTool === 'gradle') {
           await this.composeWithJHipster('jhipster:gradle:code-quality');
         }
-        if (buildTool === 'gradle') {
-          if (!skipClient && clientFramework !== 'no') {
-            await this.composeWithJHipster('jhipster:gradle:node-gradle');
-          }
+        if (!skipClient && clientFramework !== 'no') {
+          await this.composeWithJHipster('jhipster:java:node');
         }
 
         if (enableTranslation) {

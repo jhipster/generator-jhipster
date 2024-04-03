@@ -31,40 +31,6 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
           "additionalContent": "
                   <executions>
                       <execution>
-                          <id>install-node-and-npm</id>
-                          <goals>
-                              <goal>install-node-and-npm</goal>
-                          </goals>
-                      </execution>
-                      <execution>
-                          <id>npm install</id>
-                          <goals>
-                              <goal>npm</goal>
-                          </goals>
-                      </execution>
-                      <execution>
-                          <id>webapp build dev</id>
-                          <goals>
-                              <goal>npm</goal>
-                          </goals>
-                          <phase>generate-resources</phase>
-                          <configuration>
-                              <arguments>run webapp:build</arguments>
-                              <environmentVariables>
-                                  <APP_VERSION>\${project.version}</APP_VERSION>
-                              </environmentVariables>
-                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
-                          </configuration>
-                      </execution>
-                  </executions>",
-          "artifactId": "frontend-maven-plugin",
-          "groupId": "com.github.eirslett",
-          "inProfile": "webapp",
-        },
-        {
-          "additionalContent": "
-                  <executions>
-                      <execution>
                           <id>create-pre-compiled-webapp-checksum</id>
                           <goals>
                               <goal>files</goal>
@@ -87,7 +53,7 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
                           <fileSet>
                               <directory>\${project.basedir}</directory>
                               <includes>
-                                  <include><%= MAIN_DIR %>webapp/**/*.*</include>
+                                  <include>src/main/webapp/**/*.*</include>
                                   <include>target/classes/static/**/*.*</include>
                                   <include>package-lock.json</include>
                                   <include>package.json</include>
@@ -140,6 +106,40 @@ exports[`generator - maven:frontend-plugin with defaults options should call sou
 ",
           "artifactId": "maven-antrun-plugin",
           "groupId": "org.apache.maven.plugins",
+          "inProfile": "webapp",
+        },
+        {
+          "additionalContent": "
+                  <executions>
+                      <execution>
+                          <id>install-node-and-npm</id>
+                          <goals>
+                              <goal>install-node-and-npm</goal>
+                          </goals>
+                      </execution>
+                      <execution>
+                          <id>npm install</id>
+                          <goals>
+                              <goal>npm</goal>
+                          </goals>
+                      </execution>
+                      <execution>
+                          <id>webapp build dev</id>
+                          <goals>
+                              <goal>npm</goal>
+                          </goals>
+                          <phase>generate-resources</phase>
+                          <configuration>
+                              <arguments>run webapp:build</arguments>
+                              <environmentVariables>
+                                  <APP_VERSION>\${project.version}</APP_VERSION>
+                              </environmentVariables>
+                              <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                          </configuration>
+                      </execution>
+                  </executions>",
+          "artifactId": "frontend-maven-plugin",
+          "groupId": "com.github.eirslett",
           "inProfile": "webapp",
         },
         {

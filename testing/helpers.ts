@@ -2,12 +2,13 @@
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { merge, set } from 'lodash-es';
+import { globSync } from 'glob';
 
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
-import * as GENERATOR_LIST from '../generators/generator-list.js';
 import getGenerator from './get-generator.js';
 import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../generators/base/support/index.js';
 import BaseGenerator from '../generators/base/index.js';
@@ -38,9 +39,16 @@ const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
-const mockedGenerators = Object.values(GENERATOR_LIST)
+const generatorsDir = join(fileURLToPath(import.meta.url), '../../generators');
+const mockedGenerators = [
+  ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
+  ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
+]
   .filter(gen => !gen.startsWith('bootstrap-'))
-  .map(gen => `jhipster:${gen}`);
+  .map(gen => `jhipster:${gen}`)
+  .sort();
+
+const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(key => [key, undefined]));
 
 let defaultMockFactory;
 
@@ -224,13 +232,13 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   }
 
   withSharedApplication(sharedApplication: Record<string, any>): this {
-    this.sharedApplication = this.sharedApplication ?? {};
+    this.sharedApplication = this.sharedApplication ?? { ...defaultSharedApplication };
     merge(this.sharedApplication, sharedApplication);
     return this.withSharedData({ sharedApplication: this.sharedApplication });
   }
 
-  withMockedJHipsterGenerators(): this {
-    return this.withMockedGenerators(mockedGenerators);
+  withMockedJHipsterGenerators(exceptList: string[] = []): this {
+    return this.withMockedGenerators(mockedGenerators.filter(gen => !exceptList.includes(gen) && (this as any).Generator !== gen));
   }
 
   withGradleBuildTool(): this {
