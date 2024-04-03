@@ -23,7 +23,7 @@ import { padEnd, startCase } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { askForLanguages, askI18n } from './prompts.js';
 import statistics from '../statistics.js';
-import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
+import { GENERATOR_LANGUAGES } from '../generator-list.js';
 import { clientI18nFiles } from './files.js';
 import { writeEntityFiles } from './entity-files.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -33,7 +33,6 @@ import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
-import command from './command.js';
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
 
@@ -66,11 +65,11 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     this.supportedLanguages = supportedLanguages;
     if (!this.fromBlueprint) {
-      this.composedBlueprints = await this.composeWithBlueprints('languages');
+      this.composedBlueprints = await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
 
     if (
@@ -88,9 +87,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
-      parseCli() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       languagesToApply() {
         // Validate languages passed as argument.

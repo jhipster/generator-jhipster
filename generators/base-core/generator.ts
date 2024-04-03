@@ -136,6 +136,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   jhipsterTemplatesFolders!: string[];
 
   blueprintStorage?: Storage;
+  /** Allow to use a specific definition at current command operations */
+  generatorCommand?: JHipsterCommandDefinition;
 
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
@@ -292,36 +294,55 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return priorities;
   }
 
-  async parseCurrentJHipsterCommand() {
-    const module: any = await this._meta?.importModule?.();
-    if (!module?.command) {
-      throw new Error(`Command not found for generator ${this.options.namespace}`);
+  /**
+   * Get the current Command Definition for the generator.
+   * `generatorCommand` takes precedence.
+   */
+  async getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
+    if (!this.generatorCommand) {
+      const { command } = ((await this._meta?.importModule?.()) ?? {}) as any;
+      if (!command) {
+        throw new Error(`Command not found for generator ${this.options.namespace}`);
+      }
+      this.generatorCommand = command;
+      return command;
     }
-
-    this.parseJHipsterCommand(module?.command);
+    return this.generatorCommand;
   }
 
+  /**
+   * Parse command definition arguments, options and configs.
+   * Blueprints with command override takes precedence.
+   */
+  async parseCurrentJHipsterCommand() {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    this.parseJHipsterCommand(generatorCommand!);
+  }
+
+  /**
+   * Prompts for command definition configs.
+   * Blueprints with command override takes precedence.
+   */
   async promptCurrentJHipsterCommand() {
-    const module: any = await this._meta?.importModule?.();
-    if (!module?.command?.configs) {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
-
-    return this.prompt(this.prepareQuestions(module?.command?.configs));
+    return this.prompt(this.prepareQuestions(generatorCommand.configs));
   }
 
   /**
    * Load the current JHipster command storage configuration into the context.
+   * Blueprints with command override takes precedence.
    */
   async loadCurrentJHipsterCommandConfig(context: any) {
-    const module: any = await this._meta?.importModule?.();
-    const command: JHipsterCommandDefinition | undefined = module?.command;
-    if (!command?.configs) {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
 
     const config = (this as any).jhipsterConfigWithDefaults;
-    Object.entries(command.configs).forEach(([name, def]) => {
+    Object.entries(generatorCommand.configs).forEach(([name, def]) => {
       if (def.scope === 'storage') {
         context[name] = context[name] ?? config?.[name] ?? this.config.get(name);
       }

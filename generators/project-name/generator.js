@@ -22,10 +22,8 @@ import { defaults, kebabCase, upperFirst, camelCase, startCase } from 'lodash-es
 import { getDefaultAppName } from './support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { BASE_NAME } from './constants.js';
 import { getHipster } from '../base/support/index.js';
-import command from './command.js';
 import { validateProjectName } from './support/name-resolver.js';
 
 /**
@@ -40,14 +38,14 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
       this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_PROJECT_NAME);
+      await this.composeWithBlueprints();
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       parseOptions() {
         if (this.options.defaults) {

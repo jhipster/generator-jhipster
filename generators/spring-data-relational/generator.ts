@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_DATA_RELATIONAL, GENERATOR_LIQUIBASE, GENERATOR_SERVER } from '../generator-list.js';
+import { GENERATOR_LIQUIBASE, GENERATOR_SERVER } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -27,14 +27,13 @@ import { databaseTypes } from '../../jdl/jhipster/index.js';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
 import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2MavenDefinition } from './internal/dependencies.js';
-import command from './command.js';
 
 const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_RELATIONAL);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
@@ -44,8 +43,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

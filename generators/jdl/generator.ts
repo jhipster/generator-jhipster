@@ -24,7 +24,6 @@ import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
 import { readFile } from 'fs/promises';
 import BaseGenerator from '../base/index.js';
-import command from './command.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
@@ -74,26 +73,25 @@ export default class JdlGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints('jdl');
+      await this.composeWithBlueprints();
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       loadArguments() {
-        this.parseJHipsterArguments(command.arguments);
         if (this.jdlFiles) {
           this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
         }
-      },
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
       },
       existingProject() {
         this.existingProject = this.jhipsterConfig.baseName !== undefined && (this.config as any).existed;
       },
       checkOptions() {
-        if (!this.inline && !this.jdlFiles?.length) {
+        if (!this.skipChecks && !this.inline && !this.jdlFiles?.length) {
           throw new Error('At least one jdl file is required.');
         }
       },

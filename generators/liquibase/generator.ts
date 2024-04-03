@@ -20,7 +20,6 @@ import fs from 'fs';
 import { min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import { liquibaseFiles } from './files.js';
 import {
   prepareField as prepareFieldForLiquibase,
@@ -45,7 +44,6 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
 import { fieldTypes } from '../../jdl/jhipster/index.js';
-import command from './command.js';
 import type { MavenProperty } from '../maven/types.js';
 
 const {
@@ -74,18 +72,18 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadConfig() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

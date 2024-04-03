@@ -18,16 +18,15 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_CLOUD_STREAM, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 
 export default class KafkaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_CLOUD_STREAM);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 

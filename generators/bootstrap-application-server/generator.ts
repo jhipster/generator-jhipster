@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import {
   JAVA_VERSION,
   MAIN_DIR,
@@ -56,14 +55,14 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.composeWithBlueprints();
     }
 
     if (this.delegateToBlueprint) {
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
+    await this.dependsOnBootstrapApplicationBase();
   }
 
   get loading() {

@@ -28,7 +28,7 @@ import { packageNameToNamespace, removeFieldsWithNullishValues } from './support
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
-import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import CoreGenerator from '../base-core/index.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
@@ -479,6 +479,11 @@ export default class JHipsterBaseBlueprintGenerator<
           // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
           this.delegateToBlueprint = true;
           this.checkBlueprintImplementsPriorities(blueprintGenerator);
+        }
+        const blueprintModule: any = await blueprintGenerator._meta?.importModule?.();
+        // Use the blueprint command if it is set to override.
+        if (blueprintModule?.command?.override) {
+          this.generatorCommand = blueprintModule.command;
         }
       }
     }

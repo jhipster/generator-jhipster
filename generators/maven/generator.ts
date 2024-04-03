@@ -21,7 +21,6 @@ import assert from 'assert/strict';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { GENERATOR_MAVEN, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
@@ -33,11 +32,11 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_MAVEN);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 

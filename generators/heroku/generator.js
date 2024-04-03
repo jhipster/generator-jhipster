@@ -25,7 +25,7 @@ import BaseGenerator from '../base-application/index.js';
 
 import statistics from '../statistics.js';
 import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_HEROKU } from '../generator-list.js';
+import { GENERATOR_HEROKU } from '../generator-list.js';
 import { mavenProfileContent } from './templates.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
@@ -67,10 +67,10 @@ export default class HerokuGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_HEROKU);
+      await this.composeWithBlueprints();
     }
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 

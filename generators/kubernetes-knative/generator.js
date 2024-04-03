@@ -55,7 +55,7 @@ const { K8S } = GeneratorTypes;
 export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_KUBERNETES_KNATIVE);
+      await this.composeWithBlueprints();
     }
   }
 

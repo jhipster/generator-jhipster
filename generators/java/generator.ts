@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_JAVA } from '../generator-list.js';
 import { javaScopeToGradleScope } from './support/index.js';
 import type { JavaDependency } from './types.js';
 import type { MavenDependency } from '../maven/types.js';
@@ -26,7 +25,7 @@ import type { MavenDependency } from '../maven/types.js';
 export default class JavaGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_JAVA);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {

@@ -55,7 +55,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
+      await this.composeWithBlueprints();
     }
   }
 
@@ -66,8 +66,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      parseOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       checkDocker,
       async checkDockerCompose() {

@@ -35,7 +35,6 @@ import {
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
 import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_COMMON,
   GENERATOR_CUCUMBER,
   GENERATOR_DOCKER,
@@ -79,7 +78,6 @@ import {
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
 import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
-import command from './command.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 
@@ -124,24 +122,23 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
-  command = command;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
       loadStoredAppOptions.call(this);
-      await this.composeWithBlueprints(GENERATOR_SERVER);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadConfig() {
-        this.parseJHipsterCommand(this.command);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
@@ -154,7 +151,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(this.command.configs));
+        await this.promptCurrentJHipsterCommand();
       },
       askForServerTestOpts,
       askForServerSideOpts,

@@ -12,12 +12,13 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       async initializeOptions() {
-        this.parseJHipsterArguments(command.arguments);
         if (this.sampleName && !this.sampleName.endsWith('.jdl')) {
           this.sampleName += '.jdl';
         }
-        this.parseJHipsterOptions(command.options);
       },
     });
   }

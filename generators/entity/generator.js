@@ -26,9 +26,8 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import prompts from './prompts.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.js';
+import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
-import command from './command.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { isReservedClassName } = reservedKeywords;
@@ -43,19 +42,21 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ENTITY);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       parseOptions() {
-        this.parseJHipsterArguments(command.arguments);
         const name = upperFirst(this.name).replace('.json', '');
         this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();

@@ -17,18 +17,17 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_WEBSOCKET, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
 export default class SpringWebsocketGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_WEBSOCKET);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 
