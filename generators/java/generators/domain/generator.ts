@@ -109,20 +109,6 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
   }
 
-  get default() {
-    return this.asDefaultTaskGroup({
-      loadDomains({ application, entities }) {
-        (application as any).domains = [
-          ...new Set([application.packageName, ...entities.map(entity => (entity as any).entityAbsolutePackage).filter(Boolean)]),
-        ];
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async writeDomainBaseFiles({ application }) {

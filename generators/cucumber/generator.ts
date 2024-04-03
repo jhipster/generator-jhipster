@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_JAVA } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 
@@ -28,7 +27,7 @@ export default class CucumberGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_JAVA);
+      await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
 

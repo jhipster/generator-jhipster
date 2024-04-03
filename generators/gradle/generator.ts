@@ -55,6 +55,31 @@ export default class GradleGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      async promptCommand({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.promptCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
   get configuring() {
     return this.asConfiguringTaskGroup({
       configure() {
@@ -73,6 +98,9 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
+      async loadConfig({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       loadGradleVersion({ application }) {
         const propFile = this.readTemplate(this.jhipsterTemplatePath('gradle/wrapper/gradle-wrapper.properties'));
         this.gradleVersionFromWrapper = propFile?.toString().match(/gradle-(\d+\.\d+(?:\.\d+)?)-/)?.[1];

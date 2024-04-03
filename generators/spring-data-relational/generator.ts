@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_LIQUIBASE, GENERATOR_SERVER } from '../generator-list.js';
+import { GENERATOR_LIQUIBASE } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -37,7 +37,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_SERVER);
+      await this.dependsOnJHipster('jhipster:java:domain');
     }
   }
 

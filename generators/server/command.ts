@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.js';
-import { GENERATOR_COMMON, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
@@ -46,12 +46,6 @@ const command: JHipsterCommandDefinition = {
     recreateInitialChangelog: {
       description: 'Recreate the initial database changelog based on the current config',
       type: Boolean,
-    },
-    buildTool: {
-      name: 'build',
-      description: 'Provide build tool for the application when skipping server side generation',
-      type: String,
-      scope: 'storage',
     },
     cacheProvider: {
       description: 'Cache provider',
@@ -140,35 +134,8 @@ const command: JHipsterCommandDefinition = {
         },
       ],
     },
-    feignClient: {
-      description: 'Generate a feign client',
-      cli: {
-        type: Boolean,
-      },
-      prompt: {
-        type: 'confirm',
-        message: 'Do you want to generate a feign client?',
-        when: currentAnswer =>
-          currentAnswer.applicationType === APPLICATION_TYPE_MICROSERVICE &&
-          currentAnswer.reactive !== undefined &&
-          !currentAnswer.reactive,
-      },
-      default: false,
-    },
-    syncUserWithIdp: {
-      description: 'Allow relationships with User for oauth2 applications',
-      cli: {
-        type: Boolean,
-      },
-      prompt: gen => ({
-        type: 'confirm',
-        message: 'Do you want to allow relationships with User entity?',
-        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
-      }),
-      default: false,
-    },
   },
-  import: [GENERATOR_COMMON, GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
+  import: [GENERATOR_COMMON, GENERATOR_SPRING_BOOT],
 };
 
 export default command;
