@@ -79,9 +79,6 @@
 <%_ } _%>
         <git-commit-id-maven-plugin.version><%- javaDependencies['git-commit-id-maven-plugin'] %></git-commit-id-maven-plugin.version>
         <jacoco-maven-plugin.version><%- javaDependencies['jacoco-maven-plugin'] %></jacoco-maven-plugin.version>
-        <jib-maven-plugin.version><%- javaDependencies['jib-maven-plugin'] %></jib-maven-plugin.version>
-        <jib-maven-plugin.image><%- dockerContainers.javaJre %></jib-maven-plugin.image>
-        <jib-maven-plugin.architecture>amd64</jib-maven-plugin.architecture>
         <lifecycle-mapping.version><%- javaDependencies['lifecycle-mapping'] %></lifecycle-mapping.version>
 <%_ if (!skipClient) { _%>
         <maven-antrun-plugin.version><%- javaDependencies['maven-antrun-plugin'] %></maven-antrun-plugin.version>
@@ -393,10 +390,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
             </plugin>
@@ -614,56 +607,6 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
-                <plugin>
-                    <groupId>com.google.cloud.tools</groupId>
-                    <artifactId>jib-maven-plugin</artifactId>
-                    <version>${jib-maven-plugin.version}</version>
-                    <configuration>
-                        <from>
-                            <image>${jib-maven-plugin.image}</image>
-                            <platforms>
-                                <platform>
-                                    <architecture>${jib-maven-plugin.architecture}</architecture>
-                                    <os>linux</os>
-                                </platform>
-                            </platforms>
-                        </from>
-                        <to>
-                            <image><%= baseName.toLowerCase() %>:latest</image>
-                        </to>
-                        <container>
-                            <entrypoint>
-                                <shell>bash</shell>
-                                <option>-c</option>
-                                <arg>/entrypoint.sh</arg>
-                            </entrypoint>
-                            <ports>
-                                <port><%= serverPort %></port>
-<%_ if (cacheProviderHazelcast) { _%>
-                                <port>5701/udp</port>
-<%_ } _%>
-                            </ports>
-                            <environment>
-<%_ if (cacheProviderInfinispan) { _%>
-                                <JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS>
-<%_ } _%>
-                                <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
-                                <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
-                            </environment>
-                            <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                            <user>1000</user>
-                        </container>
-                        <extraDirectories>
-                            <paths><%= dockerServicesDir %>jib</paths>
-                            <permissions>
-                                <permission>
-                                    <file>/entrypoint.sh</file>
-                                    <mode>755</mode>
-                                </permission>
-                            </permissions>
-                        </extraDirectories>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

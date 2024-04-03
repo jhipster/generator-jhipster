@@ -27,7 +27,6 @@ pluginManagement {
         // jhipster-needle-gradle-plugin-management-repositories - JHipster will add additional entries here
     }
     plugins {
-        id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
         id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
 <%_ if (enableSwaggerCodegen) { _%>
         id "org.openapi.generator" version "${openapiPluginVersion}"
