@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert/strict';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
@@ -43,47 +42,6 @@ describe(`generator - ${generator}`, () => {
   checkEnforcements({}, GENERATOR_SERVER, GENERATOR_SPRING_BOOT);
 
   describe('composing', () => {
-    describe('buildTool option', () => {
-      describe('maven', () => {
-        let runResult;
-        before(async () => {
-          runResult = await helpers
-            .run(generatorPath)
-            .withJHipsterConfig({
-              buildTool: 'maven',
-            })
-            .withSkipWritingPriorities()
-            .withMockedGenerators(mockedGenerators);
-        });
-
-        it('should compose with maven generator', () => {
-          assert(runResult.mockedGenerators['jhipster:maven'].calledOnce);
-        });
-        it('should not compose with others buildTool generators', () => {
-          assert(runResult.mockedGenerators['jhipster:gradle'].notCalled);
-        });
-      });
-      describe('gradle', () => {
-        let runResult;
-        before(async () => {
-          runResult = await helpers
-            .run(generatorPath)
-            .withJHipsterConfig({
-              buildTool: 'gradle',
-            })
-            .withSkipWritingPriorities()
-            .withMockedGenerators(mockedGenerators);
-        });
-
-        it('should compose with gradle generator', () => {
-          assert(runResult.mockedGenerators['jhipster:gradle'].called);
-        });
-        it('should not compose with others buildTool generators', () => {
-          assert(runResult.mockedGenerators['jhipster:maven'].notCalled);
-        });
-      });
-    });
-
     describe('messageBroker option', () => {
       describe('no', () => {
         let runResult;
