@@ -83,4 +83,25 @@ export default class JibGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
+
+  get writing() {
+    return this.asWritingTaskGroup({
+      async write({ application }) {
+        const { dockerServicesDir } = application;
+        await this.writeFiles({
+          blocks: [
+            {
+              path: `${dockerServicesDir}jib/`,
+              templates: ['entrypoint.sh'],
+            },
+          ],
+          context: application,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
 }

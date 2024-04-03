@@ -41,6 +41,10 @@ describe(`generator - ${generator}`, () => {
     it('should match source snapshot', () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
+
+    it('should match files snapshot', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
   });
 
   describe('with gradle buildTool', () => {
@@ -50,6 +54,10 @@ describe(`generator - ${generator}`, () => {
 
     it('should match source snapshot', () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should match files snapshot', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
 });

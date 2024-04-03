@@ -1,5 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator - java:jib with defaults options should match files snapshot 1`] = `
+{
+  ".mvn/jvm.config": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "mvnw": {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": {
+    "stateCleared": "modified",
+  },
+  "pom.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
 exports[`generator - java:jib with defaults options should match source snapshot 1`] = `
 {
   "addMavenDefinition": [
@@ -72,6 +107,47 @@ exports[`generator - java:jib with defaults options should match source snapshot
       ],
     },
   ],
+}
+`;
+
+exports[`generator - java:jib with gradle buildTool should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
