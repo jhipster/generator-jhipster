@@ -18,6 +18,7 @@
  */
 import { JHipsterCommandDefinition } from '../base/api.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -27,6 +28,35 @@ const command: JHipsterCommandDefinition = {
       env: 'FAKE_KEYTOOL',
       scope: 'generator',
       hide: true,
+    },
+  },
+  configs: {
+    feignClient: {
+      description: 'Generate a feign client',
+      cli: {
+        type: Boolean,
+      },
+      prompt: {
+        type: 'confirm',
+        message: 'Do you want to generate a feign client?',
+        when: currentAnswer =>
+          currentAnswer.applicationType === APPLICATION_TYPE_MICROSERVICE &&
+          currentAnswer.reactive !== undefined &&
+          !currentAnswer.reactive,
+      },
+      default: false,
+    },
+    syncUserWithIdp: {
+      description: 'Allow relationships with User for oauth2 applications',
+      cli: {
+        type: Boolean,
+      },
+      prompt: gen => ({
+        type: 'confirm',
+        message: 'Do you want to allow relationships with User entity?',
+        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
+      }),
+      default: false,
     },
   },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],

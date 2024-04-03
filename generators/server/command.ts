@@ -134,33 +134,6 @@ const command: JHipsterCommandDefinition = {
         },
       ],
     },
-    feignClient: {
-      description: 'Generate a feign client',
-      cli: {
-        type: Boolean,
-      },
-      prompt: {
-        type: 'confirm',
-        message: 'Do you want to generate a feign client?',
-        when: currentAnswer =>
-          currentAnswer.applicationType === APPLICATION_TYPE_MICROSERVICE &&
-          currentAnswer.reactive !== undefined &&
-          !currentAnswer.reactive,
-      },
-      default: false,
-    },
-    syncUserWithIdp: {
-      description: 'Allow relationships with User for oauth2 applications',
-      cli: {
-        type: Boolean,
-      },
-      prompt: gen => ({
-        type: 'confirm',
-        message: 'Do you want to allow relationships with User entity?',
-        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
-      }),
-      default: false,
-    },
   },
   import: [GENERATOR_COMMON, GENERATOR_SPRING_BOOT],
 };

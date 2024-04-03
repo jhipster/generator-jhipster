@@ -100,6 +100,19 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      async promptCommand({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.promptCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
   get configuring() {
     return this.asConfiguringTaskGroup({
       forceReactiveGateway() {
