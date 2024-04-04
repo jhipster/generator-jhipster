@@ -36,7 +36,7 @@
     "axios-mock-adapter": "1.22.0",
     "browser-sync-webpack-plugin": "2.3.0",
     "copy-webpack-plugin": "12.0.2",
-    "css-loader": "6.10.0",
+    "css-loader": "6.11.0",
     "css-minimizer-webpack-plugin": "6.0.0",
     "eslint": "8.57.0",
     "eslint-plugin-prettier": "5.1.3",
