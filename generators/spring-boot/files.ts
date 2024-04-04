@@ -312,11 +312,6 @@ export const baseServerFiles = {
       condition: generator => generator.buildToolMaven,
       templates: ['pom.xml'],
     },
-    {
-      condition: generator => generator.useNpmWrapper,
-      transform: false,
-      templates: ['npmw', 'npmw.cmd'],
-    },
   ],
   serverResource: [
     {

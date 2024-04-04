@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - java:node with defaults options should call source snapshot 1`] = `{}`;
+
+exports[`generator - java:node with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java:node with gradle build tool should call source snapshot 1`] = `{}`;
+
+exports[`generator - java:node with gradle build tool should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "npmw": {
+    "stateCleared": "modified",
+  },
+  "npmw.cmd": {
+    "stateCleared": "modified",
+  },
+}
+`;
