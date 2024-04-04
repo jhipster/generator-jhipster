@@ -294,7 +294,7 @@ export const baseServerFiles = {
   ],
   serverBuild: [
     {
-      templates: ['checkstyle.xml', '.devcontainer/devcontainer.json', '.devcontainer/Dockerfile'],
+      templates: ['.devcontainer/devcontainer.json', '.devcontainer/Dockerfile'],
     },
     {
       condition: generator => generator.buildToolGradle,

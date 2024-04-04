@@ -11,9 +11,6 @@ exports[`generator - server composing databaseType option no with jwt should mat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -248,9 +245,6 @@ exports[`generator - server composing databaseType option no with oauth2 should 
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -490,9 +484,6 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {

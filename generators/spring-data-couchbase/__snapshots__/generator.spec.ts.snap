@@ -20,9 +20,6 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.my
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -538,9 +535,6 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -868,9 +862,6 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -1229,9 +1220,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -1568,9 +1556,6 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2079,9 +2064,6 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -2453,9 +2435,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2813,9 +2792,6 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -3196,9 +3172,6 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3672,9 +3645,6 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {

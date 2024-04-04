@@ -174,7 +174,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           searchEngine,
           websocket,
           cacheProvider,
-          buildTool,
           skipClient,
           clientFramework,
           enableTranslation,
@@ -184,10 +183,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
         await this.composeWithJHipster('jhipster:java:jib');
+        await this.composeWithJHipster('jhipster:java:code-quality');
 
-        if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:code-quality');
-        }
         if (!skipClient && clientFramework !== 'no') {
           await this.composeWithJHipster('jhipster:java:node');
         }
