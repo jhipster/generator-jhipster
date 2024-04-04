@@ -564,7 +564,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
             'app:start': './mvnw',
-            'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
+            'backend:info': './mvnw --version',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
             'backend:start': `./mvnw${excludeWebapp}`,
