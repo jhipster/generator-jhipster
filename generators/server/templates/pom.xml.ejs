@@ -263,17 +263,18 @@
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
+<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
+  <%_ if (reactive) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
         </dependency>
-<%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && !reactive) { _%>
+  <%_ } else { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
         </dependency>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
         <dependency>
@@ -289,12 +290,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
 <%_ } _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>

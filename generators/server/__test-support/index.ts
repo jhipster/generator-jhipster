@@ -47,6 +47,7 @@ export const mockedGenerators = [
   `jhipster:${GENERATOR_MAVEN}:code-quality`,
   `jhipster:${GENERATOR_MAVEN}:jib`,
   `jhipster:${GENERATOR_MAVEN}:node`,
+  'jhipster:spring-cloud:gateway',
   `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`,
   `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`,
   `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,

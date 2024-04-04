@@ -69,7 +69,7 @@ eureka:
       git-branch: ${git.branch:}
       context-path: ${server.servlet.context-path:}
 <%_ } _%>
-<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+<%_ if ((applicationTypeGateway || applicationTypeMicroservice) && reactive) { _%>
 reactive:
   feign:
     circuit:
@@ -99,7 +99,7 @@ management:
         include:
           - configprops
           - env
-<% if (applicationTypeGateway && reactive) { -%>
+<% if (applicationTypeGateway) { -%>
           - gateway
 <% } -%>
           - health
@@ -175,7 +175,7 @@ spring:
 <%_ } _%>
   application:
     name: <%= baseName %>
-<%_ if (serviceDiscoveryConsul || (applicationTypeGateway && reactive) || messageBrokerKafka) { _%>
+<%_ if (serviceDiscoveryConsul || applicationTypeGateway || messageBrokerKafka) { _%>
   cloud:
   <%_ if (serviceDiscoveryConsul) { _%>
     consul:
@@ -187,8 +187,9 @@ spring:
         watch:
           enabled: false
   <%_ } _%>
-  <%_ if (applicationTypeGateway && reactive) { _%>
+  <%_ if (applicationTypeGateway) { _%>
     gateway:
+    <%_ if (reactive) { _%>
       default-filters:
         - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
       discovery:
@@ -207,6 +208,16 @@ spring:
       httpclient:
         pool:
           max-connections: 1000
+    <%_ } else { _%>
+      mvc:
+        routes:
+          - id: <%= lowercaseBaseName %>_route
+            uri: lb://<%= lowercaseBaseName %>:<%= serverPort %>
+            predicates:
+              - Path=/services/<%= lowercaseBaseName %>/**
+            filters:
+              - RewritePath=/services/<%= lowercaseBaseName %>/?(?<segment>.*), /$\{segment}
+    <%_ } _%>
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>
     function:

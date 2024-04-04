@@ -115,28 +115,11 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      forceReactiveGateway() {
-        if (this.jhipsterConfig.applicationType === GATEWAY) {
-          if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
-            this.log.warn('Non reactive gateway is not supported. Switching to reactive.');
-          }
-          this.jhipsterConfig.reactive = true;
-        }
-      },
       checks() {
         const config = this.jhipsterConfigWithDefaults;
         if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
           this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
           this.jhipsterConfig.enableHibernateCache = false;
-        }
-
-        if (config.websocket && config.websocket !== NO_WEBSOCKET) {
-          if (config.reactive) {
-            throw new Error('Spring Websocket is not supported with reactive applications.');
-          }
-          if (config.applicationType === MICROSERVICE) {
-            throw new Error('Spring Websocket is not supported with microservice applications.');
-          }
         }
       },
       feignMigration() {
@@ -169,6 +152,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         const {
+          applicationType,
           databaseType,
           messageBroker,
           searchEngine,
@@ -187,6 +171,10 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
         if (!skipClient && clientFramework !== 'no') {
           await this.composeWithJHipster('jhipster:java:node');
+        }
+
+        if (applicationType === GATEWAY) {
+          await this.composeWithJHipster('jhipster:spring-cloud:gateway');
         }
 
         if (enableTranslation) {
@@ -235,6 +223,17 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      checksWebsocket({ application }) {
+        const { websocket } = application as any;
+        if (websocket && websocket !== NO_WEBSOCKET) {
+          if (application.reactive) {
+            throw new Error('Spring Websocket is not supported with reactive applications.');
+          }
+          if (application.applicationType === MICROSERVICE) {
+            throw new Error('Spring Websocket is not supported with microservice applications.');
+          }
+        }
+      },
       loadSpringBootBom({ application }) {
         if (this.useVersionPlaceholders) {
           application.springBootDependencies = {
