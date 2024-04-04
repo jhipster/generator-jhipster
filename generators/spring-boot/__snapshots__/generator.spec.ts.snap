@@ -11,9 +11,6 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -386,9 +383,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {

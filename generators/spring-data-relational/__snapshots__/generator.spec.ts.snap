@@ -14,9 +14,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -470,9 +467,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -930,9 +924,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -1367,9 +1358,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -1751,9 +1739,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -2142,9 +2127,6 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -2403,9 +2385,6 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -2677,9 +2656,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2944,9 +2920,6 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -3215,9 +3188,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3478,9 +3448,6 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -3735,9 +3702,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3990,9 +3954,6 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -4264,9 +4225,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -4516,9 +4474,6 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -4778,9 +4733,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -5027,9 +4979,6 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -5281,9 +5230,6 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -5549,9 +5495,6 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -5809,9 +5752,6 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -6058,9 +5998,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -6482,9 +6419,6 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -6779,9 +6713,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -7215,9 +7146,6 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -7509,9 +7437,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -7942,9 +7867,6 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -8227,9 +8149,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -8648,9 +8567,6 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -8942,9 +8858,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -9378,9 +9291,6 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -9672,9 +9582,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -9970,9 +9877,6 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -10257,9 +10161,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -10542,9 +10443,6 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -10843,9 +10741,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -11142,9 +11037,6 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -11438,9 +11330,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -11731,9 +11620,6 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -12013,9 +11899,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -12300,9 +12183,6 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -12599,9 +12479,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -12999,9 +12876,6 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -13260,9 +13134,6 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -13660,9 +13531,6 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -13921,9 +13789,6 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -14321,9 +14186,6 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -14582,9 +14444,6 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -14979,9 +14838,6 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -15237,9 +15093,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -15635,9 +15488,6 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {

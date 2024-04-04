@@ -26,9 +26,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -556,9 +553,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -940,9 +934,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -1364,9 +1355,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -1739,9 +1727,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2265,9 +2250,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -2682,9 +2664,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3113,9 +3092,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
@@ -3571,9 +3547,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -4101,9 +4074,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "build.gradle": {
-    "stateCleared": "modified",
-  },
-  "checkstyle.xml": {
     "stateCleared": "modified",
   },
   "gradle.properties": {
