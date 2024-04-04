@@ -92,7 +92,7 @@ if [[ "$JHI_CLI" == "" ]]; then
 fi
 
 # node version
-JHI_NODE_VERSION=$(grep -o "NODE_VERSION = '[^']*'" $JHI_HOME/generators/generator-constants.js | cut -f2 -d "'")
+JHI_NODE_VERSION=$(cat $JHI_HOME/generators/init/resources/.node-version)
 
 # npm version
 JHI_NPM_VERSION=$(grep -o '"npm": "[^"]*"' $JHI_HOME/generators/common/resources/package.json | cut -f4 -d '"')
