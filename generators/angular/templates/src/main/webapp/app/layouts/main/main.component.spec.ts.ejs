@@ -22,7 +22,7 @@ import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angul
 import { Router, TitleStrategy } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -47,6 +47,7 @@ describe('MainComponent', () => {
   <%_ } _%>
 <%_ } _%>
   let mockAccountService: AccountService;
+  let ngZone: NgZone;
   const routerState: any = { snapshot: { root: { data: {} } } };
   let router: Router;
   let document: Document;
@@ -87,6 +88,7 @@ describe('MainComponent', () => {
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(null));
     mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+    ngZone = TestBed.inject(NgZone);
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
   });
@@ -112,7 +114,7 @@ describe('MainComponent', () => {
     describe('navigation end', () => {
       it('should set page title to default title if pageTitle is missing on routes', fakeAsync(() => {
         // WHEN
-        router.navigateByUrl('');
+        ngZone.run(() => router.navigateByUrl(''));
         tick();
 
         // THEN
@@ -124,7 +126,7 @@ describe('MainComponent', () => {
         router.resetConfig([{ path: '', title: parentRoutePageTitle, component: BlankComponent }]);
 
         // WHEN
-        router.navigateByUrl('');
+        ngZone.run(() => router.navigateByUrl(''));
         tick();
 
         // THEN
@@ -144,7 +146,7 @@ describe('MainComponent', () => {
         ]);
 
         // WHEN
-        router.navigateByUrl('home');
+        ngZone.run(() => router.navigateByUrl('home'));
         tick();
 
         // THEN
@@ -164,22 +166,15 @@ describe('MainComponent', () => {
         ]);
 
         // WHEN
-        router.navigateByUrl('home');
+        ngZone.run(() => router.navigateByUrl('home'));
         tick();
 
         // THEN
         expect(document.title).toBe(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
       }));
     });
-
-
-
-
-
-
-
-
 <%_ if (enableTranslation) { _%>
+
     describe('language change', () => {
       it('should set page title to default title if pageTitle is missing on routes', () => {
         // WHEN
@@ -195,7 +190,7 @@ describe('MainComponent', () => {
         router.resetConfig([{ path: '', title: parentRoutePageTitle, component: BlankComponent }]);
 
         // WHEN
-        router.navigateByUrl('');
+        ngZone.run(() => router.navigateByUrl(''));
         tick();
 
         // THEN
@@ -224,7 +219,7 @@ describe('MainComponent', () => {
         ]);
 
         // WHEN
-        router.navigateByUrl('home');
+        ngZone.run(() => router.navigateByUrl('home'));
         tick();
 
         // THEN
@@ -253,7 +248,7 @@ describe('MainComponent', () => {
         ]);
 
         // WHEN
-        router.navigateByUrl('home');
+        ngZone.run(() => router.navigateByUrl('home'));
         tick();
 
         // THEN
