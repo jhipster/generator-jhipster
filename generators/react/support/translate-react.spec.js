@@ -62,7 +62,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
 `);
         });
 
-        it('should replace multine Translate tag with interpolate comming first', () => {
+        it('should replace multine Translate tag with interpolate coming first', () => {
           const body = `
 <Translate interpolate={{ username: account.login }} contentKey="sessions.title">
 Active sessions for [<strong>{account.login}</strong>]
