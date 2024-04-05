@@ -155,12 +155,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -200,9 +194,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
   "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/filter/ModifyServersOpenApiFilter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
@@ -216,9 +207,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/PublicUserResource.java": {
@@ -261,9 +249,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/RouteVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
@@ -381,9 +366,6 @@ exports[`generator - sql gateway-jwt-mysql-gradle-enableTranslation(true)-com.my
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/service/mapper/UserMapperTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/web/filter/ModifyServersOpenApiFilterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
@@ -613,12 +595,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
   "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },
@@ -658,9 +634,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
   "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/filter/ModifyServersOpenApiFilter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/SpaWebFilter.java": {
     "stateCleared": "modified",
   },
@@ -674,9 +647,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/PublicUserResource.java": {
@@ -719,9 +689,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/vm/ManagedUserVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/RouteVM.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
@@ -836,9 +803,6 @@ exports[`generator - sql gateway-jwt-oracle-gradle-enableTranslation(true)-com.m
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/service/mapper/UserMapperTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/web/filter/ModifyServersOpenApiFilterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
@@ -1063,12 +1027,6 @@ exports[`generator - sql gateway-jwt-postgresql-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/package-info.java": {
@@ -1520,9 +1478,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
   "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/filter/ModifyServersOpenApiFilter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
@@ -1539,9 +1494,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/LogoutResource.java": {
@@ -1566,12 +1518,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/RouteVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -1665,9 +1611,6 @@ exports[`generator - sql gateway-oauth2-mariadb-gradle-enableTranslation(true)-c
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/test/util/OAuth2TestUtil.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/web/filter/ModifyServersOpenApiFilterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {
@@ -1906,9 +1849,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
   "src/main/java/com/mycompany/service/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/web/filter/ModifyServersOpenApiFilter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
     "stateCleared": "modified",
   },
@@ -1925,9 +1865,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/AuthorityResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/LogoutResource.java": {
@@ -1952,12 +1889,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/RouteVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/.h2.server.properties": {
@@ -2051,9 +1982,6 @@ exports[`generator - sql gateway-oauth2-mssql-gradle-enableTranslation(true)-com
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/test/util/OAuth2TestUtil.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/web/filter/ModifyServersOpenApiFilterTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/web/filter/SpaWebFilterIT.java": {

@@ -63,7 +63,7 @@ mongock:
 spring:
   application:
     name: <%= baseName %>
-<%_ if (applicationTypeGateway && reactive) { _%>
+<%_ if (applicationTypeGateway) { _%>
   autoconfigure:
     exclude:
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration

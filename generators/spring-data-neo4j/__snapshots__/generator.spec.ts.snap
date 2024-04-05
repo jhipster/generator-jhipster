@@ -161,12 +161,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/security/package-info.java": {
     "stateCleared": "modified",
   },

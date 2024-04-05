@@ -42,9 +42,12 @@ public class SpaWebFilter extends OncePerRequestFilter {
 <%_ if (devDatabaseTypeH2Any) { _%>            
             !path.startsWith("/h2-console") &&
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>
+<%_ if (authenticationTypeOauth2 && (applicationTypeGateway || applicationTypeMonolith)) { _%>
             !path.startsWith("/login") &&
             !path.startsWith("/oauth2") &&
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+            !path.startsWith("/services") &&
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
             !path.startsWith("/websocket") &&

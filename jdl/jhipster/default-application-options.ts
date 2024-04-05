@@ -235,8 +235,8 @@ export function getServerConfigForGatewayApplication(customOptions: any = {}): a
   options[ENABLE_HIBERNATE_CACHE] = false;
 
   return {
-    ...options,
     [REACTIVE]: true,
+    ...options,
     [APPLICATION_TYPE]: GATEWAY,
   };
 }

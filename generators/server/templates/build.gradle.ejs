@@ -243,9 +243,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
 <%_ } _%>
-<%_ if (applicationTypeGateway) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-gateway"
-<%_ } _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
 <%_ } _%>
