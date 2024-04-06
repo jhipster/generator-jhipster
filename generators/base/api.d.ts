@@ -233,6 +233,11 @@ export type JHipsterCommandDefinition = {
    */
   import?: string[];
   /**
+   * Compose with generator.
+   * @example ['server', 'jhipster-blueprint:server']
+   */
+  compose?: string[];
+  /**
    * Override options from the generator been blueprinted.
    */
   override?: boolean;
