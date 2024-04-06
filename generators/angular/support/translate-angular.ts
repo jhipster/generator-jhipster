@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { extname } from 'node:path';
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
 
@@ -24,7 +25,8 @@ import {
   createJhiTransformTranslateReplacer,
   createJhiTransformTranslateStringifyReplacer,
   createJhiTranslateReplacer,
-  escapeTranslationValue,
+  escapeHtmlTranslationValue,
+  escapeTsTranslationValue,
 } from '../../languages/support/index.js';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
@@ -132,7 +134,7 @@ const tagTranslation = (
   const translatedValueInterpolate = parsedInterpolate
     ? Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, `{{ ${value} }}`]))
     : undefined;
-  const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
+  const translatedValue = escapeHtmlTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
 
   if (enableTranslation) {
     const translateValuesAttr = parsedInterpolate
@@ -158,7 +160,7 @@ const validationTagTranslation = (
   if (!parsedInterpolate || Object.keys(parsedInterpolate).length === 0) {
     throw new Error(`No interpolation values found for translation key ${key}, use __jhiTranslateTag__ instead.`);
   }
-  const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, parsedInterpolate));
+  const translatedValue = escapeHtmlTranslationValue(getTranslationValue(getWebappTranslation, key, parsedInterpolate));
 
   if (enableTranslation) {
     const translateValuesAttr = parsedInterpolate
@@ -187,7 +189,7 @@ const tagPipeTranslation = (
   const translatedValueInterpolate = Object.fromEntries(
     Object.entries(parsedInterpolate).map(([key, value]) => [key, getWebappTranslation(value)]),
   );
-  const translatedValue = escapeTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
+  const translatedValue = escapeHtmlTranslationValue(getTranslationValue(getWebappTranslation, key, translatedValueInterpolate));
   if (enableTranslation) {
     const translateValuesAttr = ` [translateValues]="{ ${Object.entries(parsedInterpolate)
       .map(([key, value]) => `${key}: ('${value}' | translate)`)
@@ -232,7 +234,25 @@ const pipeTranslation = (
     return `${prefix}{{ '${key}' | translate }}${suffix}`;
   }
 
-  return `${prefix}${escapeTranslationValue(getTranslationValue(getWebappTranslation, key))}${suffix}`;
+  return `${prefix}${escapeHtmlTranslationValue(getTranslationValue(getWebappTranslation, key))}${suffix}`;
+};
+
+/**
+ * Get translation value.
+ */
+const valueTranslation = (
+  getWebappTranslation: any,
+  _replacerOptions: ReplacerOptions,
+  { filePath, key, prefix, suffix }: JHITranslateConverterOptions,
+) => {
+  let translationValue = getTranslationValue(getWebappTranslation, key);
+  const fileExtension = extname(filePath);
+  if (fileExtension === '.html') {
+    translationValue = escapeHtmlTranslationValue(translationValue);
+  } else if (fileExtension === '.ts') {
+    translationValue = escapeTsTranslationValue(translationValue);
+  }
+  return `${prefix}${translationValue}${suffix}`;
 };
 
 /**
@@ -256,6 +276,19 @@ const pipeEnumTranslation = (
   return `${prefix}${translatedValue}${suffix}`;
 };
 
+const replaceImplementations: Record<
+  string,
+  (getWebappTranslation: any, replacerOpts: ReplacerOptions, translateOpts: JHITranslateConverterOptions) => string
+> = {
+  Tag: tagTranslation,
+  TagPipe: tagPipeTranslation,
+  TagEnum: tagEnumTranslation,
+  ValidationTag: validationTagTranslation,
+  Pipe: pipeTranslation,
+  PipeEnum: pipeEnumTranslation,
+  Value: valueTranslation,
+};
+
 /**
  * Replace and cleanup translations.
  *
@@ -265,30 +298,17 @@ const pipeEnumTranslation = (
 export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
   const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
   const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
-  let translationReplacer: ((content: string) => string) | undefined;
+  let translationReplacer: ((content: string, filePath: string) => string) | undefined;
   const enableTranslation = typeof opts === 'boolean' ? opts : opts.enableTranslation;
   if (typeof opts !== 'boolean') {
     translationReplacer = createJhiTranslateReplacer(
       optsReplacer => {
-        if (optsReplacer.type === 'Tag') {
-          return tagTranslation(getWebappTranslation, opts, optsReplacer);
-        }
-        if (optsReplacer.type === 'TagPipe') {
-          return tagPipeTranslation(getWebappTranslation, opts, optsReplacer);
-        }
-        if (optsReplacer.type === 'TagEnum') {
-          return tagEnumTranslation(getWebappTranslation, opts, optsReplacer);
-        }
-        if (optsReplacer.type === 'ValidationTag') {
-          return validationTagTranslation(getWebappTranslation, opts, optsReplacer);
-        }
-        if (optsReplacer.type === 'Pipe') {
-          return pipeTranslation(getWebappTranslation, opts, optsReplacer);
-        }
-        if (optsReplacer.type === 'PipeEnum') {
-          return pipeEnumTranslation(getWebappTranslation, opts, optsReplacer);
-        }
-        throw new Error(`Translation type not supported ${optsReplacer.type}`);
+        const replacer =
+          replaceImplementations[optsReplacer.type] ??
+          (() => {
+            throw new Error(`Translation type not supported ${optsReplacer.type}`);
+          });
+        return replacer(getWebappTranslation, opts, optsReplacer);
       },
       { prefixPattern: '>\\s*', suffixPattern: '\\s*<' },
     );
@@ -304,7 +324,9 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
     if (/(:?\.html|component\.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
-      content = translationReplacer?.(content);
+    }
+    if (/(:?\.html|.ts)$/.test(filePath)) {
+      content = translationReplacer?.(content, filePath);
     }
     if (!enableTranslation) {
       if (/(:?route|module)\.ts$/.test(filePath)) {
@@ -318,7 +340,7 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
   };
 };
 
-const minimatch = new Minimatch('**/*{.html,.component.ts,.route.ts,.module.ts}');
+const minimatch = new Minimatch('**/*{.html,.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
 export const translateAngularFilesTransform = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
