@@ -82,6 +82,19 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('imperative option requires experimental flag', () => {
+    it('should throw error', async () => {
+      await expect(
+        helpers
+          .runJHipster(generator)
+          .withMockedJHipsterGenerators()
+          .withMockedSource()
+          .withSharedApplication({})
+          .withJHipsterConfig({ reactive: false }),
+      ).rejects.toThrowError('Spring Cloud Gateway MVC support is experimental');
+    });
+  });
+
   describe('with imperative option', () => {
     before(async () => {
       await helpers
@@ -89,6 +102,7 @@ describe(`generator - ${generator}`, () => {
         .withMockedJHipsterGenerators()
         .withMockedSource()
         .withSharedApplication({})
+        .withOptions({ experimental: true })
         .withJHipsterConfig({ reactive: false });
     });
 
