@@ -102,7 +102,7 @@ export const createJhiTransformTranslateStringifyReplacer = getWebappTranslation
   });
 
 export type JHITranslateConverterOptions = {
-  /** Translation tyoe */
+  /** Translation type */
   type: string;
   /** Translation key */
   key: string;
