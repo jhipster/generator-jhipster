@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import os from 'os';
-import { v4 as uuid } from 'uuid';
+import { randomUUID } from 'crypto';
 import Conf from 'conf';
 import { osLocaleSync } from 'os-locale';
 import axios from 'axios';
@@ -54,7 +54,7 @@ class Statistics {
       configName: 'jhipster-insight',
       projectName: packagejs.name,
       defaults: {
-        clientId: uuid(),
+        clientId: randomUUID().toString(),
         doNotAskCounter: 0,
         isLinked: false,
       },
