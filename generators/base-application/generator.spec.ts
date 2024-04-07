@@ -259,7 +259,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(4, { ...fieldArg, description: 'User#lastName' });
-      // Ommit UserManagement fields
+      // Omit UserManagement fields
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 4, { ...fieldArg, description: 'Authority#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 3, { ...fieldArg, description: 'One#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 2, { ...fieldArg, description: 'Two#id' });
@@ -267,7 +267,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
       expect(preparingEachEntityRelationship).toBeCalledTimes(4);
-      // Ommit UserManagement relationships
+      // Omit UserManagement relationships
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
@@ -510,7 +510,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(4, { ...fieldArg, description: 'User#lastName' });
-      // Ommit UserManagement fields
+      // Omit UserManagement fields
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 4, { ...fieldArg, description: 'Authority#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 3, { ...fieldArg, description: 'One#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 2, { ...fieldArg, description: 'Two#id' });
@@ -518,7 +518,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
       expect(preparingEachEntityRelationship).toBeCalledTimes(4);
-      // Ommit UserManagement relationships
+      // Omit UserManagement relationships
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
