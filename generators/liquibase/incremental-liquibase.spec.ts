@@ -356,7 +356,7 @@ entity Customer {
       );
       runResult.assertNoFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'dropColump',
+        'dropColumn',
       );
     });
     it('should not create the entity constraint update changelog', () => {
@@ -441,7 +441,7 @@ entity Customer {
       );
       runResult.assertNoFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`,
-        'dropColump',
+        'dropColumn',
       );
     });
     it('should create the entity constraint update changelog', () => {
