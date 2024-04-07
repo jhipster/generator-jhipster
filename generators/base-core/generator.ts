@@ -356,7 +356,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
   /**
    * Compose the current JHipster command compose.
-   * Blueprints with command override takes precedence.
+   * Blueprints commands compose without generators will be composed.
    */
   async composeCurrentJHipsterCommand() {
     const generatorCommand = await this.getCurrentJHipsterCommand();
