@@ -484,7 +484,7 @@ export default class JHipsterBaseBlueprintGenerator<
         const blueprintModule = (await blueprintGenerator._meta?.importModule?.()) as any;
         blueprintCommand = blueprintModule?.command;
       } else {
-        const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprint));
+        const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprint.name));
         const generatorNamespace = `${generatorName}:${subGen}`;
         const blueprintMeta = await this.env.findMeta(generatorNamespace);
         const blueprintModule = (await blueprintMeta?.importModule?.()) as any;
