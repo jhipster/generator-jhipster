@@ -138,6 +138,11 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   blueprintStorage?: Storage;
   /** Allow to use a specific definition at current command operations */
   generatorCommand?: JHipsterCommandDefinition;
+  /**
+   * @experimental
+   * Additional commands to be considered
+   */
+  generatorsToCompose: string[] = [];
 
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
@@ -350,6 +355,22 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         context[name] = context[name] ?? this.blueprintStorage?.get(name);
       }
     });
+  }
+
+  /**
+   * @experimental
+   * Compose the current JHipster command compose.
+   * Blueprints commands compose without generators will be composed.
+   */
+  async composeCurrentJHipsterCommand() {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    for (const compose of generatorCommand.compose ?? []) {
+      await this.composeWithJHipster(compose);
+    }
+
+    for (const compose of this.generatorsToCompose) {
+      await this.composeWithJHipster(compose);
+    }
   }
 
   parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {

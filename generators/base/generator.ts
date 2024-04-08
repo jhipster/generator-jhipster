@@ -470,6 +470,7 @@ export default class JHipsterBaseBlueprintGenerator<
     const composedBlueprints: any[] = [];
     for (const blueprint of blueprints) {
       const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, options);
+      let blueprintCommand;
       if (blueprintGenerator) {
         composedBlueprints.push(blueprintGenerator);
         if ((blueprintGenerator as any).sbsBlueprint) {
@@ -480,11 +481,24 @@ export default class JHipsterBaseBlueprintGenerator<
           this.delegateToBlueprint = true;
           this.checkBlueprintImplementsPriorities(blueprintGenerator);
         }
-        const blueprintModule: any = await blueprintGenerator._meta?.importModule?.();
-        // Use the blueprint command if it is set to override.
-        if (blueprintModule?.command?.override) {
-          this.generatorCommand = blueprintModule.command;
+        const blueprintModule = (await blueprintGenerator._meta?.importModule?.()) as any;
+        blueprintCommand = blueprintModule?.command;
+      } else {
+        const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprint.name));
+        const generatorNamespace = `${generatorName}:${subGen}`;
+        const blueprintMeta = await this.env.findMeta(generatorNamespace);
+        const blueprintModule = (await blueprintMeta?.importModule?.()) as any;
+        blueprintCommand = blueprintModule?.command;
+        if (blueprintCommand?.compose) {
+          this.generatorsToCompose.push(...blueprintCommand.compose);
         }
+      }
+      if (blueprintCommand?.override) {
+        if (this.generatorCommand) {
+          this.log.warn('Command already set, multiple blueprints may be overriding the command. Unexpected behavior may occur.');
+        }
+        // Use the blueprint command if it is set to override.
+        this.generatorCommand = blueprintCommand;
       }
     }
     return composedBlueprints;

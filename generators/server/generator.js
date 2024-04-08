@@ -188,6 +188,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get composing() {
     return this.asComposingTaskGroup({
+      async composeCommand() {
+        await this.composeCurrentJHipsterCommand();
+      },
       async composeBackendType() {
         if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
           await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
