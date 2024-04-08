@@ -138,7 +138,10 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   blueprintStorage?: Storage;
   /** Allow to use a specific definition at current command operations */
   generatorCommand?: JHipsterCommandDefinition;
-  /** Additional commands to be considered */
+  /**
+   * @experimental
+   * Additional commands to be considered
+   */
   generatorsToCompose: string[] = [];
 
   private _jhipsterGenerator?: string;
@@ -355,6 +358,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
+   * @experimental
    * Compose the current JHipster command compose.
    * Blueprints commands compose without generators will be composed.
    */
