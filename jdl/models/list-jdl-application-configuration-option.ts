@@ -21,8 +21,11 @@ import JDLApplicationConfigurationOption from './jdl-application-configuration-o
 import { join } from '../utils/set-utils.js';
 
 export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
-  constructor(name, value) {
+  quoted: boolean;
+
+  constructor(name: string, value: string[], quoted: boolean = false) {
     super(name, new Set(value));
+    this.quoted = quoted;
   }
 
   getValue(): any[] {
@@ -30,6 +33,6 @@ export default class ListJDLApplicationConfigurationOption extends JDLApplicatio
   }
 
   toString() {
-    return `${this.name} [${join(this.value, ', ')}]`;
+    return `${this.name} [${join(this.value, ', ', this.quoted)}]`;
   }
 }

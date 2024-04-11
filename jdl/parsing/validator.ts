@@ -52,7 +52,7 @@ const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
-export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING';
+export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
 
 export type JDLValidatorOption = {
   type: JDLValidatorOptionType;
@@ -404,6 +404,16 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
         }
         return true;
 
+      case 'quotedList':
+        if (actual.name !== 'quotedList') {
+          this.errors.push({
+            message: `An array of names is expected, but found: "${getFirstToken(actual).image}"`,
+            token: getFirstToken(actual),
+          });
+          return false;
+        }
+        return true;
+
       case 'INTEGER':
         if (actual.tokenType !== LexerTokens.INTEGER) {
           this.errors.push({
@@ -446,8 +456,13 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
       throw Error(`Got an invalid application config property: '${propertyName}'.`);
     }
 
-    if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children && value.children.NAME) {
-      value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
+    if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children) {
+      if (value.children.NAME) {
+        value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
+      }
+      if (value.children.STRING) {
+        value.children.STRING.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
+      }
     }
   }
 

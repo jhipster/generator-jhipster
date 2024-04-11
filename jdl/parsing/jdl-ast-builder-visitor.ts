@@ -581,6 +581,9 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.list) {
       return this.visit(context.list);
     }
+    if (context.quotedList) {
+      return this.visit(context.quotedList);
+    }
     if (context.INTEGER) {
       return context.INTEGER[0].image;
     }
@@ -631,6 +634,9 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.list) {
       return this.visit(context.list);
     }
+    if (context.quotedList) {
+      return this.visit(context.quotedList);
+    }
     if (context.INTEGER) {
       return context.INTEGER[0].image;
     }
@@ -655,6 +661,13 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
       return [];
     }
     return context.NAME.map(namePart => namePart.image, this);
+  }
+
+  quotedList(context) {
+    if (!context.STRING) {
+      return [];
+    }
+    return context.STRING.map(namePart => namePart.image.slice(1, -1), this);
   }
 }
 
