@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "17.3.3",
+    "@angular/common": "17.3.4",
     "@fortawesome/angular-fontawesome": "0.14.1",
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-solid-svg-icons": "6.5.2",
@@ -46,7 +46,7 @@
     "postcss-rtlcss": "5.1.0",
     "rimraf": "5.0.5",
     "ts-jest": "29.1.2",
-    "typescript": "5.4.4",
+    "typescript": "5.4.5",
     "webpack": "5.91.0",
     "webpack-bundle-analyzer": "4.10.1",
     "webpack-merge": "5.10.0",
