@@ -156,7 +156,7 @@
     "pluralize": "8.0.0",
     "prettier": "3.2.5",
     "prettier-plugin-java": "2.6.0",
-    "prettier-plugin-packagejson": "2.4.14",
+    "prettier-plugin-packagejson": "2.5.0",
     "prettier-plugin-properties": "0.3.0",
     "randexp": "0.5.3",
     "semver": "7.6.0",
