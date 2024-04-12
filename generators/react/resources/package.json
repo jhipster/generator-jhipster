@@ -35,7 +35,7 @@
     "@types/lodash": "4.17.0",
     "@types/node": "20.11.25",
     "@types/react": "18.2.75",
-    "@types/react-dom": "18.2.24",
+    "@types/react-dom": "18.2.25",
     "@types/react-redux": "7.1.33",
     "@types/redux": "3.6.31",
     "@types/webpack-env": "1.18.4",
