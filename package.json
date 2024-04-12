@@ -132,7 +132,7 @@
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.6.1",
     "dot-properties": "1.0.1",
-    "ejs": "3.1.9",
+    "ejs": "3.1.10",
     "eslint": "8.57.0",
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-unused-imports": "3.1.0",
