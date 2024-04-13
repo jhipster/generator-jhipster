@@ -52,7 +52,7 @@ export default class extends BaseGenerator {
           transform(() => {}),
         );
 
-        let generatorOptions = {};
+        let generatorOptions = { ...sample.sample.generatorOptions };
         if (sample.sample.workspaces && sample.sample.workspaces !== 'false') {
           generatorOptions = { ...generatorOptions, workspaces: true, monorepository: true };
         }
