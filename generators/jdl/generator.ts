@@ -30,7 +30,6 @@ import { CLI_NAME } from '../../cli/utils.mjs';
 import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.js';
 import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jdl-importer.js';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import statistics from '../statistics.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 import { mergeYoRcContent } from '../../jdl/index.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
@@ -104,9 +103,6 @@ export default class JdlGenerator extends BaseGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      insight() {
-        statistics.sendSubGenEvent('generator', 'import-jdl');
-      },
       async downloadJdlFiles() {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(

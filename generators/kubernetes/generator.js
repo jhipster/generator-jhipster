@@ -25,8 +25,6 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import prompts from './prompts.js';
 import { writeFiles } from './files.js';
 import { buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_KUBERNETES } from '../generator-list.js';
-import statistics from '../statistics.js';
 
 import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import { checkKubernetes, loadConfig, setupKubernetesConstants, derivedKubernetesPlatformProperties } from './kubernetes-base.js';
@@ -98,10 +96,6 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
 
   get configuring() {
     return {
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES);
-      },
-
       generateJwtSecret,
     };
   }

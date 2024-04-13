@@ -25,7 +25,6 @@ import { writeFiles as writeCommonFiles } from './files-common.js';
 import { addEnumerationFiles } from './entity-files.js';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.js';
-import statistics from '../statistics.js';
 import { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
@@ -210,25 +209,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      insight({ application }) {
-        statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
-          app: {
-            clientFramework: application.clientFramework,
-            enableTranslation: application.enableTranslation,
-            nativeLanguage: application.nativeLanguage,
-            languages: application.languages,
-          },
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints

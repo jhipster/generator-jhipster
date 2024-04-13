@@ -22,8 +22,6 @@ import { padEnd, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { askForLanguages, askI18n } from './prompts.js';
-import statistics from '../statistics.js';
-import { GENERATOR_LANGUAGES } from '../generator-list.js';
 import { clientI18nFiles } from './files.js';
 import { writeEntityFiles } from './entity-files.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -241,10 +239,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
         control.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
-
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_LANGUAGES);
-      },
     });
   }
 
@@ -306,7 +300,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
                 },
               });
             }
-            statistics.sendSubGenEvent('languages/language', language);
           }),
         );
       },

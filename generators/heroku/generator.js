@@ -23,9 +23,7 @@ import { glob } from 'glob';
 
 import BaseGenerator from '../base-application/index.js';
 
-import statistics from '../statistics.js';
 import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { GENERATOR_HEROKU } from '../generator-list.js';
 import { mavenProfileContent } from './templates.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
@@ -214,10 +212,6 @@ export default class HerokuGenerator extends BaseGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_HEROKU);
-      },
-
       async gitInit() {
         if (!this.herokuDeployType === 'git') return;
 
