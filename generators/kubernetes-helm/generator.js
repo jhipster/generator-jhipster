@@ -24,7 +24,6 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
 import prompts from '../kubernetes/prompts.js';
 import { writeFiles } from './files.js';
-import { GENERATOR_KUBERNETES_HELM } from '../generator-list.js';
 import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
   checkKubernetes,
@@ -34,7 +33,6 @@ import {
   setupHelmConstants,
   derivedKubernetesPlatformProperties,
 } from '../kubernetes/kubernetes-base.js';
-import statistics from '../statistics.js';
 import { messageBrokerTypes } from '../../jdl/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
@@ -103,10 +101,6 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
 
   get configuring() {
     return {
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_KUBERNETES_HELM);
-      },
-
       generateJwtSecret,
     };
   }

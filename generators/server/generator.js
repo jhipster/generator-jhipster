@@ -34,7 +34,7 @@ import {
 } from './support/index.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
-import { GENERATOR_COMMON, GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { packageJson } from '../../lib/index.js';
 import {
@@ -50,7 +50,6 @@ import {
   JAVA_COMPATIBLE_VERSIONS,
   JHIPSTER_DEPENDENCIES_VERSION,
 } from '../generator-constants.js';
-import statistics from '../statistics.js';
 
 import {
   applicationTypes,
@@ -519,26 +518,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
             )}`,
           );
         }
-      },
-
-      insight({ application }) {
-        statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
-          app: {
-            authenticationType: application.authenticationType,
-            cacheProvider: application.cacheProvider,
-            enableHibernateCache: application.enableHibernateCache,
-            websocket: application.websocket,
-            databaseType: application.databaseType,
-            devDatabaseType: application.devDatabaseType,
-            prodDatabaseType: application.prodDatabaseType,
-            searchEngine: application.searchEngine,
-            messageBroker: application.messageBroker,
-            serviceDiscoveryType: application.serviceDiscoveryType,
-            buildTool: application.buildTool,
-            enableSwaggerCodegen: application.enableSwaggerCodegen,
-            enableGradleEnterprise: application.enableGradleEnterprise,
-          },
-        });
       },
     });
   }

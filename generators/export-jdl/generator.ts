@@ -20,8 +20,6 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.js';
 
-import statistics from '../statistics.js';
-import { GENERATOR_EXPORT_JDL } from '../generator-list.js';
 import { applicationOptions } from '../../jdl/jhipster/index.js';
 import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
 import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures } from '../base/api.js';
@@ -50,10 +48,6 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.DEFAULT]() {
     return this.asDefaultTaskGroup({
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_EXPORT_JDL);
-      },
-
       convertToJDL() {
         try {
           const jdlObject = JSONToJDLConverter.convertToJDL(this.destinationPath(), false);

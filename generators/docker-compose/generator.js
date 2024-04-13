@@ -27,11 +27,10 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
 import { writeFiles } from './files.js';
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret } from '../base/support/index.js';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import statistics from '../statistics.js';
 import command from './command.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.js';
 
@@ -169,9 +168,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get default() {
     return {
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
-      },
       async setAppsYaml({ workspaces, deployment, applications }) {
         const faker = await createFaker();
 
