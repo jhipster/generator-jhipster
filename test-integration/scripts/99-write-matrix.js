@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 import { writeFileSync, readFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
-import { JAVA_VERSION, NODE_VERSION } from '../../generators/generator-constants.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const packageRoot = join(dirname(__filename), '../..');
+import { join } from 'path';
+import {
+  packageRoot,
+  JAVA_VERSION,
+  NODE_VERSION,
+  NPM_VERSION,
+  JHIPSTER_BOM_BRANCH,
+  JHIPSTER_BOM_CICD_VERSION,
+  BUILD_JHIPSTER_BOM,
+} from '../integration-test-constants.js';
 
 const MATRIX_FILE = 'matrix.json';
 
@@ -42,6 +46,10 @@ writeFileSync(
                   'setup-jdl-sample': sample['jdl-samples'] ?? '',
                   java: sample['java'] ?? JAVA_VERSION,
                   node: sample['node'] ?? NODE_VERSION,
+                  npm: NPM_VERSION,
+                  'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+                  'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : '',
+                  'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : '',
                 }));
             } catch (error) {
               console.log(`File ${file} not found`, error);
