@@ -11,7 +11,7 @@ export const BUILD_JHIPSTER_BOM = FORCE_BUILD_JHIPSTER_BOM || JHIPSTER_DEPENDENC
 export { NODE_VERSION, JAVA_VERSION } from '../generators/generator-constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
-export const packageRoot = join(dirname(__filename), '../..');
+export const packageRoot = join(dirname(__filename), '..');
 
 export const NPM_VERSION = JSON.parse(readFileSync(join(packageRoot, 'generators/common/resources/package.json'), 'utf-8')).devDependencies
   .npm;
