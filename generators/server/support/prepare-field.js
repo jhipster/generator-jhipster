@@ -23,6 +23,7 @@ import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../.
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
+import { mutateData } from '../../base/support/config.js';
 
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
@@ -46,8 +47,12 @@ export default function prepareField(entityWithConfig, field, generator) {
   }
 
   if (field.documentation) {
-    field.fieldJavadoc = formatDocAsJavaDoc(field.documentation, 4);
-    field.fieldApiDescription = formatDocAsApiDescription(field.documentation);
+    mutateData(field, {
+      __override__: false,
+      fieldJavadoc: formatDocAsJavaDoc(field.documentation, 4),
+      fieldApiDescription: formatDocAsApiDescription(field.documentation),
+      propertyApiDescription: ({ fieldApiDescription }) => fieldApiDescription,
+    });
   }
 
   if (field.id && entityWithConfig.primaryKey) {
