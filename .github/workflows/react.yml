@@ -89,47 +89,27 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
-        with:
-          application-sample: ${{ matrix.setup-application-sample }}
-          entities-sample: ${{ matrix.setup-entities-sample }}
-          jdl-entities-sample: ${{ matrix.setup-jdl-entities-sample }}
-          jdl-sample: ${{ matrix.setup-jdl-sample }}
-          application-environment: ${{ matrix.setup-application-environment }}
-          application-packaging: ${{ matrix.setup-application-packaging }}
-      - uses: actions/setup-node@v4
+      - uses: jhipster/actions/setup-runner@v0
         with:
           node-version: ${{ matrix.node }}
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - uses: jhipster/actions/restore-cache@v0
-        with:
-          npm: true
-          maven: true
-          gradle: ${{ matrix.workspaces == 'true' || matrix.gradle == 1 || contains(matrix.name, 'gradle') }}
-      - uses: jhipster/actions/setup-keycloak-hostname@v0
-      - uses: jhipster/actions/setup-git@v0
-      # Update global NPM for workspaces support
-      - name: 'Install required NPM version'
-        if: matrix.workspaces == 'true'
-        run: npm install -g npm@${{ matrix.npm }} || true
+          npm-version: ${{ matrix.npm-version }}
+          maven-cache: true
+          gradle-cache: ${{ matrix.gradle-cache }}
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
+      - uses: ./generator-jhipster/.github/actions/setup-generator-jhipster-jit
+        with:
+          generator-path: generator-jhipster
       - name: 'GENERATION: project'
-        run: jhipster generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
-      - name: 'GENERATION: workspace git'
-        if: matrix.workspaces == 'true'
-        run: |
-          git add .
-          git commit --allow-empty -m "Commit workspaces"
-      - run: jhipster info
+        run: jh generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+        env:
+          JHI_FOLDER_APP: ${{ github.workspace }}/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+      - run: jh info
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
@@ -137,13 +117,18 @@ jobs:
         id: compare
         with:
           generator-path: generator-jhipster
-          cmd: ${{ github.workspace }}/generator-jhipster/bin/jhipster.cjs generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+          cmd: jh generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
+        with:
+          jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
       - name: 'TESTS: backend'
         id: backend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 'true' && needs.build-matrix.outputs.server != 'false'

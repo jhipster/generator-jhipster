@@ -30,40 +30,52 @@
       "name": "vue-gradle-h2mem-ws-session",
       "app-sample": "vue-gradle-ws-session",
       "entity": "sql",
-      "environment": "dev",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
       "java": "21"
     },
     {
       "name": "vue-h2disk-ws-theme",
       "app-sample": "vue-ws-theme",
       "entity": "sql",
-      "environment": "dev"
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      }
     },
     {
       "name": "vue-session-cassandra-fr",
       "app-sample": "vue-session-cassandra-fr",
       "entity": "cassandra",
-      "environment": "dev"
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      }
     },
     {
       "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "disabled": "needs adjusts for sb3",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      }
     },
     {
       "name": "ms-mf-vue-consul-oauth2-mysql-memcached",
       "jdl-samples": "ms-mf-vue-consul-oauth2-mysql-memcached",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      }
     },
     {
       "name": "stack-vue-no-db",
       "jdl-samples": "stack-vue-no-db",
       "skip-frontend-tests": "backend tests only",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      }
     }
   ]
 }

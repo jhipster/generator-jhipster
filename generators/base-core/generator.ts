@@ -349,10 +349,13 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const config = (this as any).jhipsterConfigWithDefaults;
     Object.entries(generatorCommand.configs).forEach(([name, def]) => {
       if (def.scope === 'storage') {
-        context[name] = context[name] ?? config?.[name] ?? this.config.get(name);
+        context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
+      }
+      if (def.scope === 'generator') {
+        context[name] = context[name] ?? this[name] ?? def.default;
       }
       if (def.scope === 'blueprint') {
-        context[name] = context[name] ?? this.blueprintStorage?.get(name);
+        context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
       }
     });
   }

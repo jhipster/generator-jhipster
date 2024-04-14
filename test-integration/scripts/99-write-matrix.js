@@ -34,22 +34,25 @@ writeFileSync(
             try {
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
-                .map(sample => ({
-                  ...sample,
+                .map(({ generatorOptions, ...sample }) => ({
+                  workspaces: generatorOptions?.workspaces ? 'true' : undefined,
+                  'extra-args': `${generatorOptions?.workspaces ? ' --workspaces' : ''}${generatorOptions?.monorepository ? ' --monorepository' : ''}`,
                   'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
                   'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
                   'setup-application-sample': sample['jhi-app-sample'] || sample['app-sample'] || 'jdl',
-                  'setup-application-environment': sample.environment ?? 'prod',
-                  'setup-application-packaging': sample.packaging ?? 'jar',
+                  'setup-application-environment': generatorOptions?.defaultEnvironment ?? 'prod',
+                  'setup-application-packaging': generatorOptions?.defaultPackaging ?? 'jar',
                   'setup-entities-sample': sample.entity ?? 'none',
                   'setup-jdl-entities-sample': sample['jdl-entity'] ?? '',
                   'setup-jdl-sample': sample['jdl-samples'] ?? '',
-                  java: sample['java'] ?? JAVA_VERSION,
-                  node: sample['node'] ?? NODE_VERSION,
-                  npm: NPM_VERSION,
+                  java: JAVA_VERSION,
+                  node: NODE_VERSION,
+                  'npm-version': generatorOptions?.workspaces ? NPM_VERSION : undefined,
                   'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-                  'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : '',
-                  'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : '',
+                  'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+                  'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
+                  'gradle-cache': generatorOptions?.workspaces || sample.name.includes('gradle') ? true : undefined,
+                  ...sample,
                 }));
             } catch (error) {
               console.log(`File ${file} not found`, error);

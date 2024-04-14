@@ -32,6 +32,19 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
+  configs: {
+    defaultEnvironment: {
+      description: 'Default environment for the application',
+      cli: {
+        type: String,
+        hide: true,
+        env: 'JHI_PROFILE',
+      },
+      choices: ['prod', 'dev'],
+      default: 'prod',
+      scope: 'storage',
+    },
+  },
   import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE],
 };
 

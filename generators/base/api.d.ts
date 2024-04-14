@@ -205,7 +205,7 @@ export type ConfigSpec = {
   description?: string;
   choices?: JHispterChoices;
 
-  cli?: SetOptional<CliOptionSpec, 'name'>;
+  cli?: SetOptional<CliOptionSpec, 'name'> & { env?: string };
   argument?: JHipsterArgumentConfig;
   prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
   scope?: 'storage' | 'blueprint' | 'generator';

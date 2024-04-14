@@ -24,14 +24,18 @@
       "name": "ng-mongodb-kafka-cucumber",
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
-      "environment": "dev",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
       "java": "21"
     },
     {
       "name": "ng-h2mem-ws-nol2",
       "app-sample": "ng-h2mem-ws-nol2",
       "entity": "sql",
-      "environment": "dev"
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      }
     },
     {
       "name": "ng-couchbase",
@@ -56,16 +60,19 @@
       "name": "ng-gradle-mariadb-oauth2-infinispan",
       "app-sample": "ng-gradle-mariadb-oauth2-infinispan",
       "entity": "sql",
-      "environment": "dev",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
       "node": "20"
     },
     {
       "name": "ng-gradle-h2disk-ws-nocache",
       "app-sample": "ng-gradle-h2disk-ws-nocache",
       "entity": "sql",
-      "environment": "dev",
-      "packaging": "war",
-      "testcontainers": "false",
+      "generatorOptions": {
+        "defaultEnvironment": "dev",
+        "defaultPackaging": "war"
+      },
       "java": "21"
     },
     {
@@ -94,7 +101,9 @@
     {
       "name": "ng-webflux-gradle-session-h2mem-es",
       "app-sample": "webflux-gradle-session-h2mem-es",
-      "environment": "dev",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
       "entity": "sqllight",
       "node": "20"
     },
@@ -108,22 +117,28 @@
     {
       "name": "ms-ng-consul-oauth2-mongodb-caffeine",
       "jdl-samples": "ms-ng-consul-oauth2-mongodb-caffeine",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      }
     },
     {
       "name": "mf-ng-eureka-jwt-psql-ehcache",
       "jdl-samples": "mf-ng-eureka-jwt-psql-ehcache",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
       "node": "20",
       "java": "21"
     },
     {
       "name": "ms-mf-ng-consul-oauth2-neo4j",
       "jdl-samples": "ms-mf-ng-consul-oauth2-neo4j",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
       "node": "20"
     }
   ]

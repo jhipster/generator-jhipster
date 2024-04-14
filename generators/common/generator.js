@@ -54,8 +54,8 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterCommand(this.command);
+      async loadOptions() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
@@ -68,7 +68,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(this.command.configs));
+        await this.promptCurrentJHipsterCommand();
       },
     });
   }
@@ -136,6 +136,9 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
+      async loadCommand({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
@@ -234,6 +237,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      setConfig({ application }) {
+        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
+        if (application.defaultEnvironment) {
+          packageJsonConfigStorage.default_environment = application.defaultEnvironment;
+        }
+      },
       addJHipsterDependencies({ application }) {
         if (application.skipJhipsterDependencies) return;
 

@@ -151,6 +151,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      configuring() {
+        if (process.env.JHI_WAR === '1') {
+          this.jhipsterConfig.defaultPackaging = 'war';
+        }
+      },
       configServerPort() {
         if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
           this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
@@ -204,6 +209,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
+      async loadCommand({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       loadEnvironmentVariables({ application }) {
         application.packageInfoJavadocs?.push(
           { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },
@@ -216,18 +224,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           { packageName: `${application.packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
           { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
         );
-        application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+
         if (application.defaultPackaging === 'war') {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
-
-        const JHI_PROFILE = process.env.JHI_PROFILE;
-        application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
-        if (JHI_PROFILE) {
-          this.log.info(`Using ${application.defaultEnvironment} as default profile`);
-        }
       },
-
       setupServerconsts({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
@@ -532,7 +533,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
         packageJsonConfigStorage.packaging = application.defaultPackaging;
-        packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
       packageJsonBackendScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');

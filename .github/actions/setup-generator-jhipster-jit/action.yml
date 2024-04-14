@@ -23,6 +23,9 @@ inputs:
   generator-path:
     description: Generator folder relative to workspace, git checkout, npm remove, install, and link will be executed in the folder.
     required: true
+  command:
+    description: Command
+    default: jh
 runs:
   using: composite
   steps:
@@ -30,10 +33,10 @@ runs:
       shell: bash
       run: |
         set -x
-        npm install
         mkdir -p "${HOME}/.bin"
         echo "${HOME}/.bin" >> $GITHUB_PATH
-        ln -s "${{ github.workspace }}/${{ inputs.generator-path }}/bin/jhipster.cjs" "${HOME}/.bin/jh"
-        ls -la "${HOME}/.bin/jh"
-        "${{ github.workspace }}/${{ inputs.generator-path }}/bin/jhipster.cjs" --install-path
+        ln -s "${{ github.workspace }}/${{ inputs.generator-path }}/bin/jhipster.cjs" "${HOME}/.bin/${{ inputs.command }}"
+        ls -la "${HOME}/.bin/${{ inputs.command }}"
       working-directory: ${{ github.workspace }}/${{ inputs.generator-path }}
+    - run: ${{ inputs.command }} --install-path
+      shell: bash
