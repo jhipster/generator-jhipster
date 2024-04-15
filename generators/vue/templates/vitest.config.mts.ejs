@@ -48,7 +48,7 @@ export default mergeConfig(
         statements: 85,
         branches: 75,
         lines: 85,
-        reportsDirectory: fileURLToPath(new URL('./target/vite-coverage', import.meta.url)),
+        reportsDirectory: fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, temporaryDir) %>vite-coverage', import.meta.url)),
       },
     },
   }),
