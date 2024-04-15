@@ -3,8 +3,7 @@
     {
       "app-sample": "ng-default",
       "cache": "angular",
-      "entity": "sqllight",
-      "environment": "prod"
+      "entity": "sqllight"
     }
   ]
 }

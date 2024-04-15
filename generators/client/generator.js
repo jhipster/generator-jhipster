@@ -251,11 +251,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
-        const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
-        if (process.env.JHI_PROFILE) {
-          packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
-        }
-
         const devDependencies = packageJsonStorage.createStorage('devDependencies');
         devDependencies.set('wait-on', application.nodeDependencies['wait-on']);
         devDependencies.set('concurrently', application.nodeDependencies.concurrently);

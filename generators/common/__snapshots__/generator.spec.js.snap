@@ -126,6 +126,9 @@ This application was generated using JHipster JHIPSTER_VERSION, you can find doc
   },
   "package.json": {
     "contents": "{
+  "config": {
+    "default_environment": "prod"
+  },
   "devDependencies": {
     "generator-jhipster": "JHIPSTER_VERSION",
     "husky": "HUSKY_VERSION",

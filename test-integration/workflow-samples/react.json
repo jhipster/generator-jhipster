@@ -9,7 +9,9 @@
       "name": "react-maven-h2mem-memcached",
       "app-sample": "react-maven-h2mem-memcached",
       "entity": "sql",
-      "environment": "dev",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
       "node": "20",
       "java": "21"
     },
@@ -28,15 +30,19 @@
     {
       "name": "ms-react-consul-jwt-cassandra-redis",
       "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
       "java": "21"
     },
     {
       "name": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
       "jdl-samples": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      }
     }
   ]
 }

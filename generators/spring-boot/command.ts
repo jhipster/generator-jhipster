@@ -58,6 +58,16 @@ const command: JHipsterCommandDefinition = {
       }),
       default: false,
     },
+    defaultPackaging: {
+      description: 'Default packaging for the application',
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['jar', 'war'],
+      default: 'jar',
+      scope: 'storage',
+    },
   },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 };

@@ -223,6 +223,9 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      async loadCommand({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       checksWebsocket({ application }) {
         const { websocket } = application as any;
         if (websocket && websocket !== NO_WEBSOCKET) {
