@@ -64,14 +64,10 @@ jobs:
         id: setup
         uses: ./generator-jhipster/.github/actions/setup
       - uses: ./generator-jhipster/.github/actions/setup-default-node-java
-      - uses: jhipster/actions/create-app-path@v0
-      - uses: jhipster/actions/setup-keycloak-hostname@v0
-      - uses: jhipster/actions/setup-git@v0
-      - uses: jhipster/actions/restore-cache@v0
+      - uses: jhipster/actions/setup-runner@v0
         with:
-          npm: true
-          maven: true
-          gradle: true
+          maven-cache: true
+          gradle-cache: true
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------

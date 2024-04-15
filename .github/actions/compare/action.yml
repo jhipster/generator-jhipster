@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: 'Compare generated applications'
+name: 'Deprecated: Compare generated applications'
 description: 'Experimental compare generated applications action'
 inputs:
   application-path:

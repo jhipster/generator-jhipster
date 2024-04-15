@@ -35,20 +35,16 @@ jobs:
     if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm install -g npm@latest
       - uses: actions/checkout@v4
-      - uses: jhipster/actions/restore-cache@v0
+      - uses: ./.github/actions/setup-default-node-java
         with:
-          npm: true
+          generator-path: '.'
+      - uses: jhipster/actions/setup-runner@v0
       - name: Create commit
         run: |
           rm package-lock.json
           npm install || npm install --force
           git add .
-          ./test-integration/scripts/04-git-config.sh
           git commit -a -m "Bump transitional dependencies" || true
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6

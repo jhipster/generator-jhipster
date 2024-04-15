@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: 'Setup environment'
+name: 'Deprecated: Setup environment'
 description: 'Setup environment for test-integration scripts'
 inputs:
   application-path:
@@ -59,7 +59,6 @@ inputs:
   generator-jhipster-branch:
     description: 'JHipster Generator branch'
     required: false
-    default: main
   jhipster-bom-repository:
     description: 'JHipster BOM repository'
     required: false
@@ -123,7 +122,6 @@ runs:
         echo "JHI_LIB_BRANCH=${{inputs.jhipster-bom-branch}}" >> $GITHUB_ENV
         echo "JHI_LIB_HOME=${{inputs.jhipster-bom-directory}}" >> $GITHUB_ENV
         echo "JHI_GEN_REPO=${{inputs.generator-jhipster-repository}}" >> $GITHUB_ENV
-        echo "JHI_GEN_BRANCH=${{inputs.generator-jhipster-branch}}" >> $GITHUB_ENV
         echo "JHI_FOLDER_APP=${{inputs.application-path}}" >> $GITHUB_ENV
 
         echo "JHI_JDL_APP=${{ inputs.jdl-sample }}" >> $GITHUB_ENV
@@ -152,6 +150,12 @@ runs:
           JHI_PROJECT_VERSION="$JHI_VERSION-git"
         fi
         echo "JHI_PROJECT_VERSION=$JHI_PROJECT_VERSION" >> $GITHUB_ENV
+
+        if [[ "${{inputs.jhipster-bom-branch}}" != "" ]]; then
+          echo "JHI_GEN_BRANCH=${{inputs.generator-jhipster-branch}}" >> $GITHUB_ENV
+        else 
+          echo "JHI_GEN_BRANCH=${JHI_GEN_BRANCH}" >> $GITHUB_ENV
+        fi
 
         if [[ "${{inputs.jhipster-bom-branch}}" != "release" && "${{inputs.jhipster-bom-branch}}" != "ignore" ]]; then
           echo "JHIPSTER_DEPENDENCIES_VERSION=0.0.0-CICD" >> $GITHUB_ENV

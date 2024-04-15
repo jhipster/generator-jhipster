@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: 'Generate'
+name: 'Deprecated: Generate'
 description: 'Generate application for test-integration scripts'
 inputs:
   extra-args:
