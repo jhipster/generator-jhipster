@@ -85,22 +85,11 @@ jobs:
           jdl-sample: ${{ matrix.setup-jdl-sample }}
           application-environment: ${{ matrix.setup-application-environment }}
           application-packaging: ${{ matrix.setup-application-packaging }}
-      - uses: actions/setup-node@v4
+      - uses: jhipster/actions/setup-runner@v0
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
           java-version: ${{ steps.setup.outputs.java-version }}
-      - uses: jhipster/actions/restore-cache@v0
-        with:
-          npm: true
-          maven: true
-          gradle: ${{ matrix.workspaces == 'true' || matrix.gradle == 1 || contains(matrix.name, 'gradle') }}
-      - name: 'TOOLS: configure tools installed by the system'
-        run: $JHI_SCRIPTS/03-system.sh
-      - name: 'TOOLS: configure git'
-        run: $JHI_SCRIPTS/04-git-config.sh
+          maven-cache: true
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------

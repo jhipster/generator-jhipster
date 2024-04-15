@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: 'Generate application using merge base commit to compare'
+name: 'Deprecated: Generate application using merge base commit to compare'
 description: 'Experimental generate application using merge base commit to compare action'
 inputs:
   application-path:
