@@ -242,7 +242,7 @@ function _derivedProperties(field) {
       fieldType === INTEGER || fieldType === LONG || fieldType === FLOAT || fieldType === DOUBLE || fieldType === BIG_DECIMAL,
     fieldTypeBinary: fieldType === BYTES || fieldType === BYTE_BUFFER,
     fieldTypeTimed: fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
-    fieldTypeCharSequence: fieldType === STRING || fieldType === UUID,
+    fieldTypeCharSequence: fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
     fieldTypeTemporal: fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
     fieldValidationRequired: validationRules.includes(REQUIRED),
     fieldValidationMin: validationRules.includes(MIN),

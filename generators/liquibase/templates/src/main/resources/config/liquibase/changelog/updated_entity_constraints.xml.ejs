@@ -48,6 +48,31 @@ if (hasFieldConstraint) { _%>
     } _%>
     </changeSet>
 <% } _%>
+<%_ if (removedDefaultValueFields && removedDefaultValueFields.length) { _%>
+    <!--
+        Removed the default value for the fields for entity <%= entityClass %>.
+    -->
+    <changeSet id="<%= changelogDate %>-fields-remove-default-value" author="jhipster">
+    <%_ for (field of removedDefaultValueFields) { _%>
+        <dropDefaultValue tableName="<%= entityTableName %>"
+            columnName="<%= field.columnName %>"
+            columnDataType="<%= field.columnType %>"/>
+    <%_ } _%>
+    </changeSet>
+<% } _%>
+<%_ if (addedDefaultValueFields && addedDefaultValueFields.length) { _%>
+    <!--
+        Added the default value for the fields for entity <%= entityClass %>.
+    -->
+    <changeSet id="<%= changelogDate %>-fields-add-default-value" author="jhipster">
+    <%_ for (field of addedDefaultValueFields) { _%>
+        <addDefaultValue tableName="<%= entityTableName %>"
+            columnName="<%= field.columnName %>"
+            columnDataType="<%= field.columnType %>"
+            <%- this.createDefaultValueLiquibaseAttribute(field) -%>/>
+    <%_ } _%>
+    </changeSet>
+<% } _%>
 <%_ if (hasRelationshipConstraint) { _%>
 
     <!--
@@ -74,7 +99,7 @@ if (hasFieldConstraint) { _%>
      } _%>
     </changeSet>
 <%_ } _%>
-<%_ if (shouldWriteAnyRelationship) { %>
+<%_ if (addedRelationships && addedRelationships.length) { %>
 
     <!--
         Added the relationship constraints for entity <%= entityClass %>.

@@ -25,15 +25,15 @@
     <changeSet id="<%= changelogDate %>-1-add-columns" author="jhipster">
         <addColumn tableName="<%= entity.entityTableName %>">
     <%_ for (field of addedFields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
+            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
         <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%= field.columnName %>_content_type" type="varchar(255)"/>
         <%_ }
     } // End for (field of addedFields) _%>
         </addColumn>
     <%_ for (field of addedFields) {
-        if (field.fieldType === 'ZonedDateTime' || field.fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="datetime"/>
+        if (field.shouldDropDefaultValue) { _%>
+        <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="${datetimeType}"/>
         <%_ } _%>
     <%_ } _%>
     </changeSet>
