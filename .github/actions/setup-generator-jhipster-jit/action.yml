@@ -22,7 +22,7 @@ description: Make generator-jhipster jit executable available globally as jh
 inputs:
   generator-path:
     description: Generator folder relative to workspace, git checkout, npm remove, install, and link will be executed in the folder.
-    required: true
+    default: generator-jhipster
   command:
     description: Command
     default: jh
