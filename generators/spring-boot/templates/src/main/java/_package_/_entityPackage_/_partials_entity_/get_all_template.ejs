@@ -78,7 +78,11 @@ _%>
     public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");
     <%_ if (viaService) { _%>
+      <% if (implementsEagerLoadApis && !dtoMapstruct) { %>
+        return <%= entityInstance %>Repository.findAllWithEagerRelationships()<% if (reactive) { %>.collectList()<% } %>;
+      <%_ } else { _%>
         return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
+      <%_ } _%>
     <%_ } else if (dtoMapstruct) { _%>
         <%= reactive ? 'Flux' : 'List' %><<%= persistClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll();
       <%_ if (reactive) { _%>
