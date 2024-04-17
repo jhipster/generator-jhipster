@@ -23,10 +23,6 @@ inputs:
   generator-path:
     description: 'path to the generator-jhipster repository relative to workspace'
     default: generator-jhipster
-  java-version:
-    description: 'Java version'
-    required: true
-    default: '17'
 runs:
   using: composite
   steps:
