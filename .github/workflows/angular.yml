@@ -115,6 +115,9 @@ jobs:
       #----------------------------------------------------------------------
       - uses: jhipster/actions/compare-sample@v0
         id: compare
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster
           cmd: jh generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight

@@ -118,6 +118,9 @@ jobs:
         with:
           generator-path: generator-jhipster
           cmd: jh generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app
