@@ -32,7 +32,6 @@ import {
   getPrimaryKeyValue as getPKValue,
   hibernateSnakeCase,
 } from './support/index.js';
-import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
@@ -139,9 +138,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (control.existingProject && this.options.askAnswered !== true) return;
         await this.promptCurrentJHipsterCommand();
       },
-      askForServerTestOpts,
-      askForServerSideOpts,
-      askForOptionalItems,
     });
   }
 

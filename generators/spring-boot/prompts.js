@@ -29,8 +29,8 @@ import {
   serviceDiscoveryTypes,
   testFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
-import { MESSAGE_BROKER } from './options/index.js';
-import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from './support/database.js';
+import { MESSAGE_BROKER } from '../server/options/index.js';
+import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 
 const { OptionNames } = applicationOptions;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
