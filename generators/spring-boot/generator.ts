@@ -63,6 +63,7 @@ import {
 } from '../../jdl/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
+import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -106,6 +107,9 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         if (control.existingProject && this.options.askAnswered !== true) return;
         await this.promptCurrentJHipsterCommand();
       },
+      askForServerTestOpts,
+      askForServerSideOpts,
+      askForOptionalItems,
     });
   }
 
