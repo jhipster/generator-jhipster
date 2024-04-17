@@ -26,7 +26,7 @@ inputs:
   java-version:
     description: 'Java version'
     required: true
-    default: '11'
+    default: '17'
 runs:
   using: composite
   steps:
