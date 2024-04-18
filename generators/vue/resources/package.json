@@ -18,7 +18,7 @@
     "sockjs-client": "1.6.1",
     "vue": "3.4.21",
     "vue-i18n": "9.13.0",
-    "vue-router": "4.3.0"
+    "vue-router": "4.3.1"
   },
   "devDependencies": {
     "@module-federation/utilities": "3.0.3-0",
