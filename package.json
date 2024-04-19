@@ -180,7 +180,7 @@
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-chai-friendly": "0.7.4",
-    "eslint-plugin-mocha": "10.4.2",
+    "eslint-plugin-mocha": "10.4.3",
     "eslint-plugin-prettier": "5.1.3",
     "esmocha": "1.2.0",
     "jest-extended": "4.0.2",
