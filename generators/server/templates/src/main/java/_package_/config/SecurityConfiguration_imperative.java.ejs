@@ -173,7 +173,6 @@ public class SecurityConfiguration {
             .csrf(csrf -> csrf
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                // See https://stackoverflow.com/q/74447118/65681 and https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#csrf-integration-javascript-spa
                 .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
 <%_ } else { _%>
                 .disable())
@@ -372,8 +371,16 @@ public class SecurityConfiguration {
 
         return jwtDecoder;
     }
-  <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+<%_ } _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 
+    /**
+     * Custom CSRF handler to provide BREACH protection.
+     *
+     * @see <a href="https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#csrf-integration-javascript-spa">Spring Security Documentation - Integrating with CSRF Protection</a>
+     * @see <a href="https://github.com/jhipster/generator-jhipster/pull/25907">JHipster - use customized SpaCsrfTokenRequestHandler to handle CSRF token</a>
+     * @see <a href="https://stackoverflow.com/q/74447118/65681">CSRF protection not working with Spring Security 6</a>
+     */
     static final class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
         private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
 
@@ -406,6 +413,5 @@ public class SecurityConfiguration {
             return this.delegate.resolveCsrfTokenValue(request, csrfToken);
         }
     }
-  <%_ } _%>
 <%_ } _%>
 }
