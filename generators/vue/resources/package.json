@@ -58,7 +58,7 @@
     "terser-webpack-plugin": "5.3.10",
     "ts-loader": "9.5.1",
     "typescript": "5.4.5",
-    "vite": "5.2.9",
+    "vite": "5.2.10",
     "vite-plugin-static-copy": "1.0.3",
     "vitest": "1.5.0",
     "vitest-sonar-reporter": "2.0.0",
