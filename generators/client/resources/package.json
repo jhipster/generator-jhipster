@@ -9,7 +9,7 @@
     "cypress": "13.8.0",
     "cypress-audit": "1.1.0",
     "eslint-plugin-cypress": "2.15.2",
-    "lighthouse": "11.7.1",
+    "lighthouse": "12.0.0",
     "nyc": "15.1.0",
     "swagger-ui-dist": "5.17.0"
   }
