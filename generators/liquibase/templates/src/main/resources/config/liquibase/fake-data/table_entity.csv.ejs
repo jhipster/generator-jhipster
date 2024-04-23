@@ -21,14 +21,14 @@ let table = [];
 
 // Generate CSV header
 let header = [];
-const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)];
+const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)].filter(field => field.liquibaseGenerateFakeData);
 for (field of fieldsToGenerate) {
   header.push(field.columnName);
   if (field.shouldCreateContentType) {
     header.push(field.columnName + '_content_type');
   }
 }
-for (relationship of relationships.filter(relationship => relationship.columnRequired && relationship.persistableRelationship && !relationship.collection)) {
+for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
   const { joinColumnNames } = relationship;
   header.push(joinColumnNames[0]);
 }
@@ -57,7 +57,7 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
     }
   }
 
-  for (relationship of relationships.filter(relationship => relationship.columnRequired && relationship.persistableRelationship && !relationship.collection)) {
+  for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
     const relationshipType = relationship.relationshipType;
     const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
     let relationshipRow = lineNb;

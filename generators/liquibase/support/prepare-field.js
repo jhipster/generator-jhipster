@@ -157,6 +157,7 @@ export default function prepareField(entity, field) {
     columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules.includes('required')),
     nullable: data => !data.columnRequired,
     loadColumnType: data => parseLiquibaseLoadColumnType(entity, data),
+    liquibaseGenerateFakeData: true,
   });
 
   return field;
