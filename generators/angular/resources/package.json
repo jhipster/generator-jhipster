@@ -28,7 +28,7 @@
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
-    "@typescript-eslint/eslint-plugin": "7.7.0",
+    "@typescript-eslint/eslint-plugin": "7.7.1",
     "browser-sync": "3.0.2",
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
