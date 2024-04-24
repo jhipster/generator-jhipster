@@ -25,7 +25,7 @@ export const clientI18nFiles = {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
       to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
       transform: false,
-      templates: ['error.json', 'login.json', 'home.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
+      templates: ['error.json', 'login.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
     },
     {
       condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
@@ -36,7 +36,7 @@ export const clientI18nFiles = {
     {
       from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
       to: context => `${context.clientSrcDir}/i18n/${context.lang}/`,
-      templates: ['activate.json', 'global.json', 'reset.json'],
+      templates: ['activate.json', 'global.json', 'home.json', 'reset.json'],
     },
     {
       condition: context => context.withAdminUi,
