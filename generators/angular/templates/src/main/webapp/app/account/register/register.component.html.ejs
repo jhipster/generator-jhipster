@@ -46,7 +46,7 @@
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
     @if (!success()) {
-      <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm">
+      <form name="form" (ngSubmit)="register()" [formGroup]="registerForm">
         <div class="mb-3">
           <label class="form-label" for="login">__jhiTranslateTag__('global.form.username.label')</label>
           <input

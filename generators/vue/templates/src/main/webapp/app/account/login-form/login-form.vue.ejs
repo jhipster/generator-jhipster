@@ -7,7 +7,7 @@
         </b-alert>
       </div>
       <div class="col-md-8">
-        <b-form role="form" v-on:submit.prevent="doLogin()">
+        <b-form v-on:submit.prevent="doLogin()">
           <b-form-group v-bind:label="t$('global.form[\'username.label\']')" label-for="username">
             <b-form-input
               id="username"
