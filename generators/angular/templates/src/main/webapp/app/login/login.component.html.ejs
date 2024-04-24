@@ -25,7 +25,7 @@
         data-cy="loginError"
       >__jhiTranslateTag__('login.messages.error.authentication')</div>
     }
-      <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+      <form class="form" (ngSubmit)="login()" [formGroup]="loginForm">
         <div class="mb-3">
           <label class="username-label" for="username">__jhiTranslateTag__('global.form.username.label')</label>
           <input
