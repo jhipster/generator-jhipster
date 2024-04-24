@@ -50,7 +50,7 @@ export const Home = () => {
         <span className="hipster rounded" />
       </Col>
       <Col md="9">
-        <h1 className="display-4"><Translate contentKey="home.title">Welcome, <%= backendType %> Hipster!</Translate></h1>
+        <h1 className="display-4"><Translate contentKey="home.title">Welcome, <%- hipsterName %>!</Translate></h1>
         <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
         {
           (account?.login) ? (
