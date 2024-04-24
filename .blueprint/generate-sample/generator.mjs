@@ -19,7 +19,7 @@ export default class extends BaseGenerator {
       },
       projectVersion() {
         this.projectVersion = `${packageJson.version}-git`;
-      }
+      },
     });
   }
 
