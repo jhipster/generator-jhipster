@@ -123,6 +123,8 @@ export type CommonClientServerApplication = BaseApplication &
 
     skipUserManagement?: boolean;
     generateUserManagement?: boolean;
+    generateRegisterUser?: boolean;
+    generateResetPassword?: boolean;
   };
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;

@@ -186,4 +186,10 @@ export const loadDerivedAppConfig = ({ application }: { application: any }) => {
   application.generateBuiltInUserEntity = application.generateUserManagement || application.syncUserWithIdp;
 
   application.generateBuiltInAuthorityEntity = application.generateBuiltInUserEntity && application.databaseType !== CASSANDRA;
+
+  mutateData(application, {
+    __override__: false,
+    generateResetPassword: ({ generateUserManagement }) => generateUserManagement,
+    generateRegisterUser: ({ generateUserManagement }) => generateUserManagement,
+  });
 };
