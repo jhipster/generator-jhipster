@@ -374,7 +374,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       checkUserRelationships({ entity, entityName, relationship }) {
         if (!entity.dtoMapstruct && relationship.otherEntity.builtInUser) {
           this.log.warn(
-            `Entity ${entityName} doesn't uses DTO mapstruct. You should check for User data leakage through ${relationship.relationshipName} relationship.`,
+            `Entity ${entityName} doesn't use DTO. You should check for User data leakage through ${relationship.relationshipName} relationship.`,
           );
         }
       },
