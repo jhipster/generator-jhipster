@@ -75,7 +75,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     return this.asPreparingEachEntityFieldTaskGroup({
       checkForReservedKeyword({ entityName, field }) {
         if (isReservedJavaKeyword(field.fieldName)) {
-          throw new Error(`The field ${field.fieldName} in entity '${entityName}' is a reserved Java keyword.`);
+          throw new Error(`The field '${field.fieldName}' in entity '${entityName}' is a reserved Java keyword.`);
         }
       },
       prepareEntity({ entity, field }) {
@@ -95,7 +95,7 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       checkForReservedKeyword({ entityName, relationship }) {
         if (isReservedJavaKeyword(relationship.relationshipName)) {
-          throw new Error(`The field ${relationship.relationshipName} in entity '${entityName}' is a reserved Java keyword.`);
+          throw new Error(`The relationship '${relationship.relationshipName}' in entity '${entityName}' is a reserved Java keyword.`);
         }
       },
       prepareEntity({ entity, relationship }) {
