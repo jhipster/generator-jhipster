@@ -140,7 +140,7 @@
     "fast-xml-parser": "4.3.6",
     "glob": "10.3.12",
     "isbinaryfile": "5.0.2",
-    "java-lint": "0.1.1",
+    "java-lint": "0.2.0",
     "js-yaml": "4.1.0",
     "latest-version": "9.0.0",
     "lodash-es": "4.17.21",
