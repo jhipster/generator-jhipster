@@ -21,6 +21,7 @@ import { mutateData } from '../../../base/support/index.js';
 import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../../server/support/index.js';
 import { entityServerFiles, enumFiles } from './entity-files.js';
 import { getEnumInfo } from '../../../base-application/support/index.js';
+import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';
 
 export default class DomainGenerator extends BaseApplicationGenerator {
   generateEntities!: boolean;
@@ -53,6 +54,11 @@ export default class DomainGenerator extends BaseApplicationGenerator {
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
+      checkForReservedKeyword({ entityName }) {
+        if (isReservedJavaKeyword(entityName)) {
+          throw new Error(`The entity name '${entityName}' is a reserved Java keyword.`);
+        }
+      },
       prepareEntity({ entity }) {
         mutateData(entity, {
           entityDomainLayer: true,
@@ -67,6 +73,11 @@ export default class DomainGenerator extends BaseApplicationGenerator {
 
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
+      checkForReservedKeyword({ entityName, field }) {
+        if (isReservedJavaKeyword(field.fieldName)) {
+          throw new Error(`The field '${field.fieldName}' in entity '${entityName}' is a reserved Java keyword.`);
+        }
+      },
       prepareEntity({ entity, field }) {
         field.propertyJavaBeanName = javaBeanCase(field.propertyName);
         if (entity.dtoMapstruct || entity.builtIn) {
@@ -82,6 +93,11 @@ export default class DomainGenerator extends BaseApplicationGenerator {
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
+      checkForReservedKeyword({ entityName, relationship }) {
+        if (isReservedJavaKeyword(relationship.relationshipName)) {
+          throw new Error(`The relationship '${relationship.relationshipName}' in entity '${entityName}' is a reserved Java keyword.`);
+        }
+      },
       prepareEntity({ entity, relationship }) {
         relationship.propertyJavaBeanName = javaBeanCase(relationship.propertyName);
         if (entity.dtoMapstruct) {
