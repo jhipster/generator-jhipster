@@ -66,6 +66,7 @@ import { stringifyApplicationData } from '../base-application/support/index.js';
 import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
+import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -380,10 +381,16 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
+        const { jhiTablePrefix, devDatabaseTypeH2Any } = application;
+
         const databaseType =
           entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
         const entityTableName = entityConfig.entityTableName ?? hibernateSnakeCase(entityName);
-        const fixedEntityTableName = this._fixEntityTableName(entityTableName, databaseType, application.jhiTablePrefix);
+        const fixedEntityTableName =
+          (isReservedTableName(entityTableName, databaseType) || (devDatabaseTypeH2Any && isReservedH2Keyword(entityTableName))) &&
+          jhiTablePrefix
+            ? `${jhiTablePrefix}_${entityTableName}`
+            : entityTableName;
         if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
@@ -776,13 +783,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
-  }
-
-  _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
-    if (isReservedTableName(entityTableName, prodDatabaseType) && jhiTablePrefix) {
-      entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-    }
-    return entityTableName;
   }
 
   /**
