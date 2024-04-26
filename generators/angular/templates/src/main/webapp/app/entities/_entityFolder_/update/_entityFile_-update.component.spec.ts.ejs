@@ -19,8 +19,8 @@
 <%_
 const tsKeyId = this.generateTestEntityId(primaryKey.type);
 const allRelationshipsByEntityNeedingOptions = Object
-  .values(differentRelationships)
-  .map(relationships => relationships.filter(rel => rel.persistableRelationship))
+  .values(relationshipsByOtherEntity)
+  .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
   .filter(relationships => relationships.length > 0);
 const testEntityPrimaryKey0 = this.generateTestEntityPrimaryKey(primaryKey, 0);
 const testEntityPrimaryKey1 = this.generateTestEntityPrimaryKey(primaryKey, 1);
@@ -245,7 +245,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 <%_ } _%>
     });
 
-<%_ const trackedRelationships = Object.values(differentRelationships).filter(arr => arr.some(rel => rel.persistableRelationship && rel.otherEntity.primaryKey));
+<%_ const trackedRelationships = Object.values(relationshipsByOtherEntity).filter(arr => arr.some(rel => rel.persistableRelationship && !rel.otherEntity.embedded));
     if (trackedRelationships.length > 0) {
 _%>
 

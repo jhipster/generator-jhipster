@@ -28,6 +28,7 @@ export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationRes
     for (const relationship of entity.relationships ?? []) {
       if (
         !relationship.otherRelationship &&
+        !relationship.otherEntity.embedded &&
         (relationship.otherEntityRelationshipName ||
           relationship.relationshipType === 'many-to-many' ||
           // OneToOne back reference is required due to filtering

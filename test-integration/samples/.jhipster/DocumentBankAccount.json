@@ -21,8 +21,14 @@
     {
       "otherEntityName": "embeddedOperation",
       "otherEntityRelationshipName": "documentBankAccount",
-      "relationshipName": "embeddedOperation",
+      "relationshipName": "manyEmbeddedOperation",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "embeddedOperation",
+      "otherEntityRelationshipName": "documentBankAccountToMany",
+      "relationshipName": "oneEmbeddedOperation",
+      "relationshipType": "many-to-one"
     }
   ],
   "service": "serviceImpl"
