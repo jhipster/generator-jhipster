@@ -282,6 +282,12 @@
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
 <%_ } _%>
+<%_ if (applicationTypeGateway && !reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+<%_ } _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
