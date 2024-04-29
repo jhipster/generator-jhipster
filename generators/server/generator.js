@@ -486,12 +486,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
-      checkRelationship({ entity, entityName, relationship }) {
-        if (entity.embedded && !relationship.otherEntity.embedded) {
-          throw new Error(
-            `Entity ${entityName}: embedded entity cannot have a relationship with a non-embedded entity ${relationship.otherEntity.name}`,
-          );
-        }
+      checkRelationship({ entityName, relationship }) {
         if (relationship.otherEntity.embedded) {
           if (relationship.relationshipType === 'one-to-one') {
             throw new Error(

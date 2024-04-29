@@ -22,7 +22,7 @@ const enumImports = this.generateEntityClientEnumImports(fields);
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs/esm';
 <%_ } _%>
-<%_ for (const relationshipsByType of Object.values(relationshipsByOtherEntity).filter(relationships => relationships.some(rel => (!embedded || rel.otherEntity.embedded) && rel.otherEntity.entityAngularName !== entityAngularName))) {
+<%_ for (const relationshipsByType of Object.values(differentRelationships).filter(relationshipsByType => relationshipsByType.some(relationship => relationship.otherEntity.entityAngularName !== entityAngularName))) {
       const { otherEntity } = relationshipsByType[0];
 _%>
 import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%= otherEntity.entityClientRootFolder %><%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.model';
@@ -41,7 +41,7 @@ _%>
   <%= fieldName %>ContentType<% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: string<% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>,
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => (!embedded || rel.otherEntity.embedded) && (rel.persistableRelationship || rel.relationshipEagerLoad))) {
+<%_ for (const relationship of relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad)) {
       const { propertyName, relationshipRequired, otherEntity, collection, otherEntityField } = relationship;
 _%>
   <%= propertyName %>?: <% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>Pick<<% } %>I<%= otherEntity.entityAngularName %><% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>, '<%= otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%= otherEntityField %>'<% } %>><% } %><% if (collection) { %>[]<% } %> | null;

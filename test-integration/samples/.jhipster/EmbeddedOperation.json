@@ -10,6 +10,13 @@
   ],
   "fluentMethods": true,
   "pagination": "infinite-scroll",
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "documentBankAccount",
+      "relationshipName": "documentBankAccount",
+      "relationshipType": "many-to-one"
+    }
+  ],
   "service": "no"
 }

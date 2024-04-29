@@ -134,7 +134,7 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 
 <%_
 // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
-for (relationship of relationships.filter(rel => !embedded || (rel.otherEntity.embedded && rel.ownerSide))) {
+for (relationship of relationships) {
   if (typeof relationship.fieldApiDescription) { _%>
 <%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct && relationship.relationshipyApiDescription) { _%>
@@ -222,7 +222,7 @@ for (relationship of relationships.filter(rel => !embedded || (rel.otherEntity.e
 
 <&- fragments.classAdditionalFieldsMethodsSection('\n\n') -&>
 <%_
-for (const relationship of relationships.filter(rel => !embedded || (rel.otherEntity.embedded && rel.ownerSide))) {
+for (const relationship of relationships) {
 _%>
   <%_ if (relationship.collection) { _%>
     public Set<<%= relationship.otherEntity.persistClass %>> get<%= relationship.relationshipNameCapitalizedPlural %>() {
