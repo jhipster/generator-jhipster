@@ -754,6 +754,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/main/webapp/app/entities/simple/simple.vue": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/main/webapp/app/entities/user/user.service.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/main/webapp/app/locale/translation.service.ts": {
     "stateCleared": "modified",
   },

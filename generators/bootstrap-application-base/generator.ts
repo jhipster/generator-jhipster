@@ -110,13 +110,18 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadApplication({ application, control }) {
+      loadApplication({ application, control, applicationDefaults }) {
         loadAppConfig({
           config: this.jhipsterConfigWithDefaults,
           application,
           useVersionPlaceholders: (this as any).useVersionPlaceholders,
         });
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
+
+        applicationDefaults({
+          backendType: this.jhipsterConfig.backendType ?? 'Java',
+          syncUserWithIdp: this.jhipsterConfig.syncUserWithIdp,
+        });
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
@@ -143,6 +148,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         loadDerivedAppConfig({ application });
 
         applicationDefaults({
+          __override__: false,
           nodePackageManager: 'npm',
           dockerServicesDir: JAVA_DOCKER_DIR,
           // TODO drop clientPackageManager
@@ -160,6 +166,33 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           hipsterStackoverflowLink: 'https://stackoverflow.com/tags/jhipster/info',
           hipsterBugTrackerLink: 'https://github.com/jhipster/generator-jhipster/issues?state=open',
           hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
+
+          backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
+          backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
+        });
+      },
+      syncUserWithIdp({ application, applicationDefaults }) {
+        if (!application.backendTypeSpringBoot) return;
+
+        if (application.syncUserWithIdp === undefined && application.authenticationType === 'oauth2') {
+          applicationDefaults({
+            __override__: false,
+            syncUserWithIdp: data =>
+              data.databaseType !== 'no' &&
+              (data.applicationType === 'gateway' ||
+                this.getExistingEntities().some(entity =>
+                  (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
+                )),
+          });
+        } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
+          throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
+        }
+      },
+      userManagement({ applicationDefaults }) {
+        applicationDefaults({
+          generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
+          generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
+            generateBuiltInUserEntity && databaseType !== 'cassandra',
         });
       },
     });

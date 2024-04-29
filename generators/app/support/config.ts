@@ -11,7 +11,7 @@ import { packageJson } from '../../../lib/index.js';
 const { GATLING, CUCUMBER, CYPRESS } = testFrameworkTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
-const { CASSANDRA, NO: NO_DATABASE } = databaseTypes;
+const { NO: NO_DATABASE } = databaseTypes;
 
 /**
  * Load common options to be stored.
@@ -182,8 +182,4 @@ export const loadDerivedAppConfig = ({ application }: { application: any }) => {
   application.generateUserManagement =
     !application.skipUserManagement && application.databaseType !== NO_DATABASE && authenticationApiWithUserManagement;
   application.generateInMemoryUserCredentials = !application.generateUserManagement && authenticationApiWithUserManagement;
-
-  application.generateBuiltInUserEntity = application.generateUserManagement || application.syncUserWithIdp;
-
-  application.generateBuiltInAuthorityEntity = application.generateBuiltInUserEntity && application.databaseType !== CASSANDRA;
 };

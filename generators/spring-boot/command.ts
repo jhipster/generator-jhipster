@@ -56,7 +56,6 @@ const command: JHipsterCommandDefinition = {
         message: 'Do you want to allow relationships with User entity?',
         when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
       }),
-      default: false,
     },
     defaultPackaging: {
       description: 'Default packaging for the application',

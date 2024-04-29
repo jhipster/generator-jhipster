@@ -163,18 +163,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
       syncUserWithIdp() {
         if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfig.authenticationType === OAUTH2) {
-          if (this.jhipsterConfig.databaseType === NO_DATABASE) {
-            this.jhipsterConfig.syncUserWithIdp = false;
-          } else if (this.isJhipsterVersionLessThan('8.1.1')) {
+          if (this.isJhipsterVersionLessThan('8.1.1')) {
             this.jhipsterConfig.syncUserWithIdp = true;
-          } else if (this.jhipsterConfig.applicationType === GATEWAY) {
-            // For compatibility with v8 microservices allow syncUserWithIdp by default.
-            // Switch to false at v9.
-            this.jhipsterConfig.syncUserWithIdp = true;
-          } else {
-            this.jhipsterConfig.syncUserWithIdp = this.getExistingEntities().some(entity =>
-              (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
-            );
           }
         } else if (this.jhipsterConfig.syncUserWithIdp && this.jhipsterConfig.authenticationType !== OAUTH2) {
           throw new Error(`syncUserWithIdp is only supported with authenticationType ${OAUTH2}`);

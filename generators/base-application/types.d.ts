@@ -136,6 +136,7 @@ export type CommonClientServerApplication = BaseApplication &
     prettierExtensions?: string;
 
     skipUserManagement?: boolean;
+    syncUserWithIdp?: boolean;
     generateUserManagement?: boolean;
   };
 
