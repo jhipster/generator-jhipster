@@ -167,14 +167,14 @@ processResources {
         }
 <%_ if (!serviceDiscoveryAny) { _%>
         filter {
-            it.replace("#spring.profiles.active#", springProfiles)
+            it.replace("@spring.profiles.active@", springProfiles)
         }
 <%_ } _%>
     }
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     filesMatching("**/bootstrap.yml") {
         filter {
-            it.replace("#spring.profiles.active#", springProfiles)
+            it.replace("@spring.profiles.active@", springProfiles)
         }
     }
 <%_ } _%>
