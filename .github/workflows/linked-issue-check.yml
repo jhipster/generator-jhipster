@@ -59,38 +59,38 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: generator-jhipster
-          fetch-depth: 1
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
+          fetch-depth: 2
       - uses: ./generator-jhipster/.github/actions/setup-default-node-java
       - uses: jhipster/actions/setup-runner@v0
         with:
           maven-cache: true
           gradle-cache: true
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         id: project
-        run: jhipster from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints
-      - name: 'GENERATION: jhipster info'
+        run: jhipster.cjs from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints
+      - run: jhipster.cjs info
         if: steps.project.outputs.contains-sample != 'false'
-        run: $JHI_SCRIPTS/14-jhipster-info.sh
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - name: 'PREPARE: npm install'
-        if: steps.project.outputs.contains-sample != 'false'
-        run: npm install
-        timeout-minutes: 7
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        with:
+          jhipster-bom-ref: main
       - name: 'TESTS: backend'
         if: steps.project.outputs.contains-sample != 'false'
         id: backend
         run: npm run ci:backend:test --if-present
         timeout-minutes: 15
+      - name: 'PREPARE: npm install'
+        if: steps.project.outputs.contains-sample != 'false'
+        run: npm install
+        timeout-minutes: 7
       - name: 'TESTS: frontend'
         if: steps.project.outputs.contains-sample != 'false'
         id: frontend
