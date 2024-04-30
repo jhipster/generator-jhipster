@@ -53,9 +53,6 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -425,9 +422,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {

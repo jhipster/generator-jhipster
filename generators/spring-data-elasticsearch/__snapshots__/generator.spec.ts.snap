@@ -83,9 +83,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -592,9 +589,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -988,9 +982,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -1406,9 +1397,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -1766,9 +1754,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2301,9 +2286,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2703,9 +2685,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -3151,9 +3130,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3586,9 +3562,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -4125,9 +4098,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
