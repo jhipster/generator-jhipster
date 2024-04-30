@@ -216,6 +216,7 @@ Map {
       let convertedJdl: string;
       const jdl = `entity A
 entity B
+
 relationship ManyToOne {
   A{b} to @AnnotationAtASide B
 }

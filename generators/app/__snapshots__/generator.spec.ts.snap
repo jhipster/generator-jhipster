@@ -125,7 +125,6 @@ exports[`generator - app jdlStore with application should match snapshot 1`] = `
     skipServer true
   }
 }
-
 ",
     "stateCleared": "modified",
   },

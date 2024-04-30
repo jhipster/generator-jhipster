@@ -63,7 +63,7 @@ export function convertToJDL(directory = '.', output: string | false = 'app.jdl'
   return jdlObject;
 }
 
-export function convertSingleContentToJDL(yoRcFileContent, entities?: Map<string, Entity>) {
+export function convertSingleContentToJDL(yoRcFileContent: Record<string, any>, entities?: Map<string, Entity>) {
   return getJDLObjectFromSingleApplication(yoRcFileContent, entities).toString();
 }
 
@@ -86,7 +86,7 @@ function getJDLObjectFromMultipleApplications(directory) {
 }
 
 export function getJDLObjectFromSingleApplication(
-  yoRcFileContent,
+  yoRcFileContent: Record<string, any>,
   entities?: Map<string, Entity>,
   existingJDLObject = new JDLObject(),
 ): JDLObject {
@@ -102,7 +102,7 @@ export function getJDLObjectFromSingleApplication(
   return mergeJDLObjects(existingJDLObject, jdlObject);
 }
 
-function cleanYoRcFileContent(yoRcFileContent) {
+function cleanYoRcFileContent(yoRcFileContent: Record<string, any>) {
   for (const key of Object.keys(yoRcFileContent)) {
     yoRcFileContent[key] = removeFieldsWithNullishValues(yoRcFileContent[key]);
   }

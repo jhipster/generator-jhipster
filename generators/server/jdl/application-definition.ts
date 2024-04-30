@@ -53,7 +53,7 @@ const applicationConfig: JDLApplicationConfig = {
     jdlOptions.map(option => [
       option.name,
       {
-        type: messageBrokerOption.type,
+        type: option.type,
       },
     ]),
   ),

@@ -29,8 +29,8 @@ import BinaryOptionValidator from './binary-option-validator.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLApplication from '../models/jdl-application.js';
-import ListJDLApplicationConfigurationOption from '../models/list-jdl-application-configuration-option.js';
 import { ValidatorOptions } from './validator.js';
+import type JDLApplicationConfigurationOption from '../models/jdl-application-configuration-option.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -69,7 +69,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
 
   function checkForNamespaceConfigErrors(jdlApplication: JDLApplication) {
     jdlApplication.forEachNamespaceConfiguration(config => {
-      const blueprints: ListJDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
+      const blueprints: JDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
       if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === config.namespace)) {
         throw new Error(`Blueprint namespace config ${config.namespace} requires the blueprint ${config.namespace}`);
       }

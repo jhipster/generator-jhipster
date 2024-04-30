@@ -113,7 +113,6 @@ describe('jdl - JDLExporter', () => {
     clientFramework no
   }
 }
-
 "
 `);
             });

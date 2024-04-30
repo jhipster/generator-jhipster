@@ -1016,6 +1016,7 @@ ${deployment.toString()}
 
 ${entityA.toString()}
 ${entityB.toString()}
+
 ${enumObject.toString()}
 
 ${relationship.toString()}
