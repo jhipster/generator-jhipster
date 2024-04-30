@@ -66,7 +66,7 @@ inputs:
   jhipster-bom-branch:
     description: 'JHipster BOM branch'
     required: false
-    default: release 
+    default: release
   jhipster-bom-directory:
     description: 'JHipster BOM path'
     required: false
