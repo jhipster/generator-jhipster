@@ -194,7 +194,6 @@ Options:
   --jdl-store <value>                      JDL store
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
-  --auth <value>                           Provide authentication type for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
@@ -212,6 +211,7 @@ Options:
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
+  --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --feign-client                           Generate a feign client
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces

@@ -26,20 +26,17 @@ import {
   authenticationTypes,
   databaseTypes,
   cacheTypes,
-  serviceDiscoveryTypes,
   testFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { MESSAGE_BROKER } from '../server/options/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 
 const { OptionNames } = applicationOptions;
-const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
+const { GATEWAY, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
-const { JWT, OAUTH2, SESSION } = authenticationTypes;
+const { OAUTH2 } = authenticationTypes;
 const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
-const { EUREKA } = serviceDiscoveryTypes;
 const {
-  AUTHENTICATION_TYPE,
   CACHE_PROVIDER,
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
@@ -76,33 +73,6 @@ export async function askForServerSideOpts({ control }) {
 
   const { applicationType } = this.jhipsterConfigWithDefaults;
   const prompts = [
-    {
-      when: answers =>
-        (applicationType === MONOLITH && answers.serviceDiscoveryType !== EUREKA) || [GATEWAY, MICROSERVICE].includes(applicationType),
-      type: 'list',
-      name: AUTHENTICATION_TYPE,
-      message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
-      choices: answers => {
-        const opts = [
-          {
-            value: JWT,
-            name: 'JWT authentication (stateless, with a token)',
-          },
-        ];
-        opts.push({
-          value: OAUTH2,
-          name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)',
-        });
-        if (applicationType === MONOLITH && answers.serviceDiscoveryType !== EUREKA) {
-          opts.push({
-            value: SESSION,
-            name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)',
-          });
-        }
-        return opts;
-      },
-      default: this.jhipsterConfigWithDefaults.authenticationType,
-    },
     {
       type: 'list',
       name: DATABASE_TYPE,
