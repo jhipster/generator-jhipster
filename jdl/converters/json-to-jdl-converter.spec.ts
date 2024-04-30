@@ -81,7 +81,6 @@ describe('jdl - JSONToJDLConverter', () => {
                 websocket no
               }
             }
-
             "
           `);
         });
@@ -166,6 +165,7 @@ describe('jdl - JSONToJDLConverter', () => {
               title String
               description String
             }
+
             relationship OneToOne {
               Country{region required} to Region
               Department{location required} to Location
@@ -322,6 +322,7 @@ describe('jdl - JSONToJDLConverter', () => {
               city String
               stateProvince String
             }
+
             relationship OneToOne {
               Location{country required} to Country
             }
