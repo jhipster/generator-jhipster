@@ -23,12 +23,6 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TY
 
 const command: JHipsterCommandDefinition = {
   options: {
-    authenticationType: {
-      name: 'auth',
-      description: 'Provide authentication type for the application when skipping server side generation',
-      type: String,
-      scope: 'storage',
-    },
     db: {
       description: 'Provide DB name for the application when skipping server side generation',
       type: String,
@@ -65,11 +59,6 @@ const command: JHipsterCommandDefinition = {
     messageBroker: {
       description: 'message broker',
       type: String,
-      scope: 'storage',
-    },
-    reactive: {
-      description: 'Generate a reactive backend',
-      type: Boolean,
       scope: 'storage',
     },
     searchEngine: {
