@@ -67,11 +67,6 @@ const command: JHipsterCommandDefinition = {
       type: String,
       scope: 'storage',
     },
-    reactive: {
-      description: 'Generate a reactive backend',
-      type: Boolean,
-      scope: 'storage',
-    },
     searchEngine: {
       description: 'Provide search engine for the application when skipping server side generation',
       type: String,

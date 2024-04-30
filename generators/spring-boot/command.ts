@@ -31,6 +31,44 @@ const command: JHipsterCommandDefinition = {
     },
   },
   configs: {
+    reactive: {
+      cli: {
+        description: 'Generate a reactive backend',
+        type: Boolean,
+      },
+      prompt: gen => ({
+        when: () => ['monolith', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        type: 'confirm',
+        message: 'Do you want to make it reactive with Spring WebFlux?',
+      }),
+    },
+    serverPort: {
+      prompt: gen => ({
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        type: 'input',
+        validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+        message:
+          'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
+        default: () => gen.jhipsterConfigWithDefaults.defaultServerPort,
+      }),
+    },
+    serviceDiscoveryType: {
+      cli: {
+        description: 'Service discovery type',
+        type: String,
+      },
+      prompt: gen => ({
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        type: 'list',
+        message: 'Which service discovery server do you want to use?',
+        default: 'consul',
+      }),
+      choices: [
+        { value: 'consul', name: 'Consul (recommended)' },
+        { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
+        { value: 'no', name: 'No service discovery' },
+      ],
+    },
     feignClient: {
       description: 'Generate a feign client',
       cli: {

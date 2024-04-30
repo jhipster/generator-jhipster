@@ -37,21 +37,18 @@ const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { EUREKA } = serviceDiscoveryTypes;
 const {
   AUTHENTICATION_TYPE,
   CACHE_PROVIDER,
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
   PROD_DATABASE_TYPE,
-  REACTIVE,
-  SERVER_PORT,
   SERVICE_DISCOVERY_TYPE,
   WEBSOCKET,
   SEARCH_ENGINE,
   ENABLE_SWAGGER_CODEGEN,
 } = OptionNames;
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 const { GATLING, CUCUMBER } = testFrameworkTypes;
@@ -77,45 +74,8 @@ const getOptionFromArray = (array, option) => {
 export async function askForServerSideOpts({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const { applicationType, serverPort: defaultServerPort, reactive } = this.jhipsterConfigWithDefaults;
+  const { applicationType } = this.jhipsterConfigWithDefaults;
   const prompts = [
-    {
-      when: () => [MONOLITH, MICROSERVICE].includes(applicationType),
-      type: 'confirm',
-      name: REACTIVE,
-      message: 'Do you want to make it reactive with Spring WebFlux?',
-      default: reactive,
-    },
-    {
-      when: () => applicationType === GATEWAY || applicationType === MICROSERVICE,
-      type: 'input',
-      name: SERVER_PORT,
-      validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
-      message:
-        'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
-      default: defaultServerPort,
-    },
-    {
-      when: () => applicationType === 'gateway' || applicationType === 'microservice',
-      type: 'list',
-      name: SERVICE_DISCOVERY_TYPE,
-      message: 'Which service discovery server do you want to use?',
-      choices: [
-        {
-          value: CONSUL,
-          name: 'Consul (recommended)',
-        },
-        {
-          value: EUREKA,
-          name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)',
-        },
-        {
-          value: NO_SERVICE_DISCOVERY,
-          name: 'No service discovery',
-        },
-      ],
-      default: CONSUL,
-    },
     {
       when: answers =>
         (applicationType === MONOLITH && answers.serviceDiscoveryType !== EUREKA) || [GATEWAY, MICROSERVICE].includes(applicationType),
