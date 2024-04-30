@@ -115,10 +115,11 @@
       "java-version": "21"
     },
     {
-      "name": "ms-ng-consul-oauth2-mongodb-caffeine",
-      "jdl-samples": "ms-ng-consul-oauth2-mongodb-caffeine",
+      "name": "ms-ng-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ng-oauth2-mongodb-caffeine",
       "generatorOptions": {
         "workspaces": true,
+        "experimental": true,
         "monorepository": true
       }
     },
