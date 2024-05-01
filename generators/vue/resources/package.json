@@ -60,7 +60,7 @@
     "typescript": "5.4.5",
     "vite": "5.2.10",
     "vite-plugin-static-copy": "1.0.3",
-    "vitest": "1.5.2",
+    "vitest": "1.5.3",
     "vitest-sonar-reporter": "2.0.0",
     "vue-loader": "17.4.2",
     "vue-style-loader": "4.1.3",
