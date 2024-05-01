@@ -74,6 +74,9 @@ jobs:
       - name: 'GENERATION: project'
         id: project
         run: jhipster.cjs from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints
+        env:
+          # generate-sample uses JHI_FOLDER_APP to generate the application.
+          JHI_FOLDER_APP: ${{ github.workspace }}/base/app
       - run: jhipster.cjs info
         if: steps.project.outputs.contains-sample != 'false'
       #----------------------------------------------------------------------
