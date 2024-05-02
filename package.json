@@ -184,7 +184,7 @@
     "eslint-plugin-prettier": "5.1.3",
     "esmocha": "1.2.0",
     "jest-extended": "4.0.2",
-    "jsdoc": "4.0.2",
+    "jsdoc": "4.0.3",
     "octokit": "3.2.0",
     "open-cli": "8.0.0",
     "prettier2": "npm:prettier@2.8.8",
