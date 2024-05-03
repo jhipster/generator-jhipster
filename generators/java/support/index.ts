@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addJavaAnnotation } from './add-java-annotation.js';
+export * from './add-java-annotation.js';
 export * from './artifacts.js';
 export * from './checks/index.js';
 export * from './doc.js';
