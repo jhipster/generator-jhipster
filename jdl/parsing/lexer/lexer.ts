@@ -127,7 +127,7 @@ ValidationTokens.tokens.forEach(token => {
 createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
 createTokenFromConfig({ name: 'DECIMAL', pattern: /-?\d+\.\d+/ });
 createTokenFromConfig({ name: 'INTEGER', pattern: /-?\d+/ });
-createTokenFromConfig({ name: 'STRING', pattern: /"(?:[^"\\]|\\.)*"/ });
+createTokenFromConfig({ name: 'STRING', pattern: /"(?<!\\)(?:\\\\)*"/ });
 
 // punctuation
 createTokenFromConfig({ name: 'LPAREN', pattern: '(' });
