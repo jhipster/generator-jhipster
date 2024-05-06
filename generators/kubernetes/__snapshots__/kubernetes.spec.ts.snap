@@ -416,7 +416,6 @@ spec:
               value: samplekafka
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -808,7 +807,6 @@ spec:
               value: msmysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -1706,7 +1704,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -2523,7 +2520,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -5938,7 +5934,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -9287,7 +9282,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -9547,7 +9541,6 @@ spec:
               value: msmysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -10363,7 +10356,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -11151,7 +11143,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -12255,7 +12246,6 @@ spec:
               value: msmysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -13293,7 +13283,6 @@ spec:
               value: samplemysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -16341,7 +16330,6 @@ spec:
               value: msmysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -17038,7 +17026,6 @@ spec:
               value: msmysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -17653,7 +17640,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -18757,7 +18743,6 @@ spec:
               value: msmysql
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -19645,7 +19630,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
@@ -20347,7 +20331,6 @@ spec:
               value: jhgate
           args:
             - --lower_case_table_names=1
-            - --skip-ssl
             - --character_set_server=utf8mb4
             - --explicit_defaults_for_timestamp
           ports:
