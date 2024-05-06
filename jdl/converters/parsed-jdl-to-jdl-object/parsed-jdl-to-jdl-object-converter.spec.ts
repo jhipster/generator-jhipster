@@ -531,6 +531,7 @@ JDLApplication {
       },
       "languages": ListJDLApplicationConfigurationOption {
         "name": "languages",
+        "quoted": false,
         "value": Set {},
       },
       "packageFolder": StringJDLApplicationConfigurationOption {

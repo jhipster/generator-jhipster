@@ -28,9 +28,11 @@ export function addAll<T>(set: Set<T>, elements: T[]) {
   return set;
 }
 
-export function join(set: Set<unknown>, separator = ',') {
+export function join(set: Set<unknown>, separator = ',', quoted = false) {
   if (!set) {
     throw new Error('A Set must be passed so as to join elements.');
   }
-  return Array.from(set).join(separator);
+  return Array.from(set)
+    .map(val => (quoted ? `"${val}"` : val))
+    .join(separator);
 }

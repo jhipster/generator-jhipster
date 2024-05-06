@@ -84,6 +84,8 @@ function createJDLConfigurationOption(type: string, name: string, value: any) {
       return new BooleanJDLApplicationConfigurationOption(name, value);
     case 'list':
       return new ListJDLApplicationConfigurationOption(name, value);
+    case 'quotedList':
+      return new ListJDLApplicationConfigurationOption(name, value, true);
     /* istanbul ignore next */
     default:
       // It should not happen! This is a developer error.
