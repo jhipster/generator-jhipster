@@ -279,7 +279,7 @@ export default class extends BaseGenerator {
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
              */
-            'yeoman-test': '>=8.0.0-rc.1',
+            'yeoman-test': '>=8.2.0',
           },
           engines: {
             node: packagejs.engines.node,
