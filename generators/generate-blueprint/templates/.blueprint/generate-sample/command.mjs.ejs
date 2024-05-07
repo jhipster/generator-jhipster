@@ -26,6 +26,15 @@ const command = {
       type: String,
     },
   },
+  configs: {
+    all: {
+      description: 'Generate every sample in a workspace',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
+  },
   options: {},
   import: [GENERATOR_APP],
 };
