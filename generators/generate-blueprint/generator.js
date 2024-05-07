@@ -63,9 +63,10 @@ export default class extends BaseGenerator {
   }
 
   get initializing() {
-    return {
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+    return this.asInitializingTaskGroup({
+      async loadOptions() {
+        await this.parseCurrentJHipsterCommand();
+
         if (this[ALL_GENERATORS]) {
           this.config.set(allGeneratorsConfig());
         }
@@ -73,7 +74,7 @@ export default class extends BaseGenerator {
           this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.INITIALIZING]() {
@@ -155,14 +156,15 @@ export default class extends BaseGenerator {
   }
 
   get loading() {
-    return {
-      createContext() {
+    return this.asLoadingTaskGroup({
+      async createContext() {
         this.application = { ...defaultConfig(), ...this.config.getAll() };
+        await this.loadCurrentJHipsterCommandConfig(this.application);
       },
       async load() {
         this.application.packagejs = packageJson;
       },
-    };
+    });
   }
 
   get [BaseGenerator.LOADING]() {

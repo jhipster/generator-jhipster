@@ -32,6 +32,15 @@ import {
 } from './constants.js';
 
 const command: JHipsterCommandDefinition = {
+  configs: {
+    githubWorkflows: {
+      cli: {
+        description: 'Generate github workflows',
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+  },
   options: {
     [GENERATE_SNAPSHOTS]: {
       description: 'Generate test snapshots',

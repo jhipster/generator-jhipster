@@ -22,6 +22,12 @@ const defaultCommands = {
     desc: 'Generate a test sample',
     blueprint: '@jhipster/jhipster-dev',
   },
+<%_ if (githubWorkflows) { _%>
+  'github-build-matrix': {
+    desc: 'Build a matrix of jobs for github actions',
+    blueprint: '@jhipster/jhipster-dev',
+  },
+<%_ } _%>
 };
 
 export default defaultCommands;
