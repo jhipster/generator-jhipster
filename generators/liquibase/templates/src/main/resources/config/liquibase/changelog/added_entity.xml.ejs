@@ -46,10 +46,10 @@
     <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-    if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
+    if ((relationship.relationshipManyToOne || (relationship.relationshipOneToOne && relationship.ownerSide === true))
                 && !relationship.id) {
         relationship.otherEntity.primaryKey.fields.forEach(idField => {
-        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+        const uniqueConstraintName = relationship.relationshipOneToOne ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
          _%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
                 <constraints nullable="<%= !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />

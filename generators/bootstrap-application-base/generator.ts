@@ -41,7 +41,7 @@ import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 import command from './command.js';
-import { LEFT, MANY_TO_ONE, ONE_TO_MANY, RelationshipDirections, RelationshipTypes } from '../entity/support/index.js';
+import { LEFT, MANY_TO_ONE, ONE_TO_MANY, RelationshipDirections, RelationshipTypes, RIGHT } from '../entity/support/index.js';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -239,8 +239,10 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
             } else {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
               const unidirectionalRelationship = !relationship.otherEntityRelationshipName;
-              const bidirectionalOneToManySide = !unidirectionalRelationship && relationship.relationshipType === 'one-to-many';
-              relationship.relationshipSide = unidirectionalRelationship || bidirectionalOneToManySide ? 'left' : 'right';
+              const bidirectionalOneToManySide =
+                !unidirectionalRelationship && relationship.relationshipType === RelationshipTypes[ONE_TO_MANY];
+              relationship.relationshipSide =
+                unidirectionalRelationship || bidirectionalOneToManySide ? RelationshipDirections[LEFT] : RelationshipDirections[RIGHT];
             }
           }
 
