@@ -44,6 +44,9 @@ const END = 'end';
 const COMPOSING = 'composing';
 const COMPOSING_QUEUE = `${QUEUE_PREFIX}${COMPOSING}`;
 
+const COMPOSING_COMPONENT = 'composingComponent';
+const COMPOSING_COMPONENT_QUEUE = `${QUEUE_PREFIX}${COMPOSING_COMPONENT}`;
+
 const LOADING = 'loading';
 const LOADING_QUEUE = `${QUEUE_PREFIX}${LOADING}`;
 
@@ -89,6 +92,12 @@ export const CUSTOM_PRIORITIES = [
   {
     priorityName: COMPOSING,
     queueName: COMPOSING_QUEUE,
+    before: COMPOSING_COMPONENT,
+    args: generator => generator.getArgsForPriority(COMPOSING),
+  },
+  {
+    priorityName: COMPOSING_COMPONENT,
+    queueName: COMPOSING_COMPONENT_QUEUE,
     before: LOADING,
     args: generator => generator.getArgsForPriority(COMPOSING),
   },
@@ -160,6 +169,7 @@ export const PRIORITY_NAMES = {
   PROMPTING,
   CONFIGURING,
   COMPOSING,
+  COMPOSING_COMPONENT,
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -180,6 +190,7 @@ export const PRIORITY_NAMES_LIST = [
   PROMPTING,
   CONFIGURING,
   COMPOSING,
+  COMPOSING_COMPONENT,
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -199,6 +210,7 @@ export const QUEUES = {
   PROMPTING_QUEUE: PROMPTING,
   CONFIGURING_QUEUE: CONFIGURING,
   COMPOSING_QUEUE,
+  COMPOSING_COMPONENT_QUEUE,
   LOADING_QUEUE,
   PREPARING_QUEUE,
   POST_PREPARING_QUEUE,
