@@ -46,7 +46,6 @@ import * as GENERATOR_LIST from '../generator-list.js';
 import { files, generatorFiles } from './files.js';
 import { packageJson } from '../../lib/index.js';
 import { SKIP_COMMIT_HOOK } from '../init/constants.js';
-import command from './command.js';
 import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;
