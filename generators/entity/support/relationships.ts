@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const RELATIONSHIP_VALUE_ONE_TO_ONE = 'one-to-one';
-const RELATIONSHIP_VALUE_ONE_TO_MANY = 'one-to-many';
-const RELATIONSHIP_VALUE_MANY_TO_ONE = 'many-to-one';
-const RELATIONSHIP_VALUE_MANY_TO_MANY = 'many-to-many';
+export const RELATIONSHIP_VALUE_ONE_TO_ONE = 'one-to-one';
+export const RELATIONSHIP_VALUE_ONE_TO_MANY = 'one-to-many';
+export const RELATIONSHIP_VALUE_MANY_TO_ONE = 'many-to-one';
+export const RELATIONSHIP_VALUE_MANY_TO_MANY = 'many-to-many';
 
 export const ONE_TO_ONE = 'ONE_TO_ONE';
 export const ONE_TO_MANY = 'ONE_TO_MANY';

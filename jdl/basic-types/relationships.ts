@@ -1,7 +1,20 @@
+import {
+  RELATIONSHIP_VALUE_ONE_TO_ONE,
+  RELATIONSHIP_VALUE_ONE_TO_MANY,
+  RELATIONSHIP_VALUE_MANY_TO_ONE,
+  RELATIONSHIP_VALUE_MANY_TO_MANY,
+} from '../../generators/entity/support/index.js';
+
 export const JDL_RELATIONSHIP_ONE_TO_ONE = 'OneToOne';
 export const JDL_RELATIONSHIP_ONE_TO_MANY = 'OneToMany';
 export const JDL_RELATIONSHIP_MANY_TO_ONE = 'ManyToOne';
 export const JDL_RELATIONSHIP_MANY_TO_MANY = 'ManyToMany';
+
+export type RelationshipType =
+  | typeof RELATIONSHIP_VALUE_ONE_TO_ONE
+  | typeof RELATIONSHIP_VALUE_ONE_TO_MANY
+  | typeof RELATIONSHIP_VALUE_MANY_TO_ONE
+  | typeof RELATIONSHIP_VALUE_MANY_TO_MANY;
 
 export type JDLRelationshipType =
   | typeof JDL_RELATIONSHIP_ONE_TO_ONE
