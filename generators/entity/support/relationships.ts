@@ -26,9 +26,9 @@ export const ONE_TO_MANY = 'ONE_TO_MANY';
 export const MANY_TO_ONE = 'MANY_TO_ONE';
 export const MANY_TO_MANY = 'MANY_TO_MANY';
 
-type JhipsterOptionRelationshipTypeValue = 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
+type JHipsterOptionRelationshipTypeValue = 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
 
-export const RelationshipTypes: Record<'ONE_TO_ONE' | 'ONE_TO_MANY' | 'MANY_TO_ONE' | 'MANY_TO_MANY', JhipsterOptionRelationshipTypeValue> =
+export const RelationshipTypes: Record<'ONE_TO_ONE' | 'ONE_TO_MANY' | 'MANY_TO_ONE' | 'MANY_TO_MANY', JHipsterOptionRelationshipTypeValue> =
   {
     ONE_TO_ONE: RELATIONSHIP_VALUE_ONE_TO_ONE,
     ONE_TO_MANY: RELATIONSHIP_VALUE_ONE_TO_MANY,
@@ -41,9 +41,9 @@ const RELATIONSHIP_SIDE_VALUE_RIGHT = 'right';
 export const LEFT = 'LEFT';
 export const RIGHT = 'RIGHT';
 
-type JhipsterOptionRelationshipSideValue = 'left' | 'right';
+type JHipsterOptionRelationshipSideValue = 'left' | 'right';
 
-export const RelationshipDirections: Record<'LEFT' | 'RIGHT', JhipsterOptionRelationshipSideValue> = {
+export const RelationshipDirections: Record<'LEFT' | 'RIGHT', JHipsterOptionRelationshipSideValue> = {
   LEFT: RELATIONSHIP_SIDE_VALUE_LEFT,
   RIGHT: RELATIONSHIP_SIDE_VALUE_RIGHT,
 };

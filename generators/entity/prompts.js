@@ -28,6 +28,7 @@ import {
   validations,
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
+import { ONE_TO_MANY, MANY_TO_MANY, ONE_TO_ONE, MANY_TO_ONE, RelationshipTypes, RelationshipDirections } from '../entity/support/index.js';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
@@ -791,10 +792,10 @@ async function askForRelationship(...args) {
       name: 'relationshipType',
       message: 'What is the type of the relationship?',
       choices: response => [
-        'many-to-one',
-        'many-to-many',
-        'one-to-one',
-        ...(this.isBuiltInUser(response.otherEntityName) ? [] : ['one-to-many']),
+        RelationshipTypes[MANY_TO_ONE],
+        RelationshipTypes[MANY_TO_MANY],
+        RelationshipTypes[ONE_TO_ONE],
+        ...(this.isBuiltInUser(response.otherEntityName) ? [] : [RelationshipTypes[ONE_TO_MANY]]),
       ],
       default: 0,
     },
@@ -841,9 +842,10 @@ async function askForRelationship(...args) {
     },
     {
       when: response =>
-        (response.otherEntityName.toLowerCase() !== context.name.toLowerCase() && response.relationshipType === 'many-to-one') ||
-        response.relationshipType === 'many-to-many' ||
-        response.relationshipType === 'one-to-one',
+        (response.otherEntityName.toLowerCase() !== context.name.toLowerCase() &&
+          response.relationshipType === RelationshipTypes[MANY_TO_ONE]) ||
+        response.relationshipType === RelationshipTypes[MANY_TO_MANY] ||
+        response.relationshipType === RelationshipTypes[ONE_TO_ONE],
       type: 'confirm',
       name: 'relationshipValidate',
       message: 'Do you want to add any validation rules to this relationship?',
@@ -865,7 +867,7 @@ async function askForRelationship(...args) {
   ]);
 
   const relationship = {
-    relationshipSide: 'left',
+    relationshipSide: RelationshipDirections[LEFT],
     relationshipName: answers.relationshipName,
     otherEntityName: lowerFirst(answers.otherEntityName),
     relationshipType: answers.relationshipType,
