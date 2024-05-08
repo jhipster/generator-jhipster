@@ -20,6 +20,9 @@
 import { Entity } from '../../../jdl/converters/types.js';
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import { ValidationResult } from '../../base/api.js';
+import { databaseTypes } from '../../../jdl/index.js';
+
+const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
 // eslint-disable-next-line import/prefer-default-export
 export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationResult => {
@@ -31,8 +34,8 @@ export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationRes
         (relationship.otherEntityRelationshipName ||
           relationship.relationshipType === 'many-to-many' ||
           // OneToOne back reference is required due to filtering
-          (relationship.relationshipType === 'one-to-one' && entity.databaseType === 'sql') ||
-          (relationship.relationshipType === 'one-to-many' && entity.databaseType !== 'neo4j' && entity.databaseType !== 'no'))
+          (relationship.relationshipType === 'one-to-one' && entity.databaseType === SQL) ||
+          (relationship.relationshipType === 'one-to-many' && entity.databaseType !== NEO4J && entity.databaseType !== NO_DATABASE))
       ) {
         if (relationship.otherEntity.builtIn) {
           result.warning.push(
