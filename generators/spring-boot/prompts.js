@@ -264,7 +264,7 @@ export async function askForServerTestOpts({ control }) {
     {
       type: 'checkbox',
       name: 'serverTestFrameworks',
-      message: 'Besides Junit, which testing frameworks would you like to use?',
+      message: 'Besides JUnit, which testing frameworks would you like to use?',
       choices: [
         { name: 'Gatling', value: GATLING },
         { name: 'Cucumber', value: CUCUMBER },
