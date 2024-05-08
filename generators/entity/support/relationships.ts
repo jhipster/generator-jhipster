@@ -26,7 +26,7 @@ export const ONE_TO_MANY = 'ONE_TO_MANY';
 export const MANY_TO_ONE = 'MANY_TO_ONE';
 export const MANY_TO_MANY = 'MANY_TO_MANY';
 
-type JHipsterOptionRelationshipTypeValue = 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
+export type JHipsterOptionRelationshipTypeValue = 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
 
 export const RelationshipTypes: Record<'ONE_TO_ONE' | 'ONE_TO_MANY' | 'MANY_TO_ONE' | 'MANY_TO_MANY', JHipsterOptionRelationshipTypeValue> =
   {

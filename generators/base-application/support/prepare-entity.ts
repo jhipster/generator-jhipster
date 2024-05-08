@@ -18,7 +18,7 @@
  */
 import { camelCase, kebabCase, startCase, upperFirst, sortedUniq, intersection, lowerFirst, uniq } from 'lodash-es';
 import pluralize from 'pluralize';
-
+import { RelationshipTypes, ONE_TO_ONE, ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE } from '../../entity/support/index.js';
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import {
@@ -572,7 +572,7 @@ export function preparePostEntityCommonDerivedProperties(entity: Entity) {
 
 function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   const { relationships, fields } = entity;
-  const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
+  const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === RelationshipTypes[ONE_TO_ONE]);
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
 
   entity.anyPropertyHasValidation =
@@ -618,7 +618,9 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     });
 
   entity.relationships.forEach(relationship => {
-    relationship.relationshipCollection = ['one-to-many', 'many-to-many'].includes(relationship.relationshipType);
+    relationship.relationshipCollection = [RelationshipTypes[ONE_TO_MANY], RelationshipTypes[MANY_TO_MANY]].includes(
+      relationship.relationshipType,
+    );
     relationship.relationshipReferenceField = relationship.relationshipCollection
       ? relationship.relationshipFieldNamePlural
       : relationship.relationshipFieldName;
@@ -666,7 +668,9 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);
 
   entity.reactiveEagerRelations = entity.relationships.filter(
-    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true),
+    rel =>
+      rel.relationshipType === RelationshipTypes[MANY_TO_ONE] ||
+      (rel.relationshipType === RelationshipTypes[ONE_TO_ONE] && rel.ownerSide === true),
   );
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }

@@ -49,6 +49,7 @@ import {
   JAVA_COMPATIBLE_VERSIONS,
   JHIPSTER_DEPENDENCIES_VERSION,
 } from '../generator-constants.js';
+import { RelationshipTypes, ONE_TO_ONE, MANY_TO_MANY } from '../entity/support/index.js';
 
 import {
   applicationTypes,
@@ -767,7 +768,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
     if (
       relationship.relationshipSide === undefined &&
-      (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')
+      (relationship.relationshipType === RelationshipTypes[ONE_TO_ONE] || relationship.relationshipType === RelationshipTypes[MANY_TO_MANY])
     ) {
       throw new Error(
         `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,

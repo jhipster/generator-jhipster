@@ -28,7 +28,15 @@ import {
   validations,
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
-import { ONE_TO_MANY, MANY_TO_MANY, ONE_TO_ONE, MANY_TO_ONE, RelationshipTypes, RelationshipDirections } from '../entity/support/index.js';
+import {
+  ONE_TO_MANY,
+  MANY_TO_MANY,
+  ONE_TO_ONE,
+  MANY_TO_ONE,
+  RelationshipTypes,
+  RelationshipDirections,
+  LEFT,
+} from '../entity/support/index.js';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
@@ -800,7 +808,7 @@ async function askForRelationship(...args) {
       default: 0,
     },
     {
-      when: response => application.databaseType === SQL && response.relationshipType === 'one-to-one',
+      when: response => application.databaseType === SQL && response.relationshipType === RelationshipTypes[ONE_TO_ONE],
       type: 'confirm',
       name: 'id',
       message: 'Do you want to use JPA Derived Identifier - @MapsId?',
@@ -813,7 +821,7 @@ async function askForRelationship(...args) {
           return false;
         }
 
-        if (!application.databaseTypeNeo4j && answers.relationshipType !== 'many-to-one') {
+        if (!application.databaseTypeNeo4j && answers.relationshipType !== RelationshipTypes[MANY_TO_ONE]) {
           // Relationships requires bidirectional.
           answers.bidirectional = true;
           return false;

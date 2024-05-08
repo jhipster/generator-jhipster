@@ -27,6 +27,7 @@ import { databaseTypes } from '../../jdl/jhipster/index.js';
 import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
 import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2MavenDefinition } from './internal/dependencies.js';
+import { MANY_TO_MANY, RelationshipTypes } from '../entity/support/index.js';
 
 const { SQL } = databaseTypes;
 
@@ -85,7 +86,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         entity.relationships.forEach(relationship => {
-          if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
+          if (relationship.persistableRelationship === undefined && relationship.relationshipType === RelationshipTypes[MANY_TO_MANY]) {
             relationship.persistableRelationship = true;
           }
         });
