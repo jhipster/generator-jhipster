@@ -34,7 +34,10 @@ const command: JHipsterCommandDefinition = {
         type: 'list',
         message: 'Would you like to use Maven or Gradle for building the backend?',
       },
-      choices: [MAVEN, GRADLE],
+      choices: [
+        { name: 'Maven', value: MAVEN },
+        { name: 'Gradle', value: GRADLE },
+      ],
       default: MAVEN,
       description: 'Provide build tool for the application when skipping server side generation',
       scope: 'storage',
