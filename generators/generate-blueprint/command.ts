@@ -33,6 +33,13 @@ import {
 
 const command: JHipsterCommandDefinition = {
   configs: {
+    githubRepository: {
+      cli: {
+        description: 'Github Repository',
+        type: String,
+      },
+      scope: 'storage',
+    },
     githubWorkflows: {
       cli: {
         description: 'Generate github workflows',

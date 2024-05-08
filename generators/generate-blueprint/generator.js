@@ -187,6 +187,13 @@ export default class extends BaseGenerator {
       preparePath() {
         this.application.blueprintsPath = this.application[LOCAL_BLUEPRINT_OPTION] ? '.blueprint/' : 'generators/';
       },
+      prepare() {
+        const { cli, cliName, baseName } = this.application;
+        this.application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
+        if (cli) {
+          this.application.cliName = cliName ?? `jhipster-${baseName}`;
+        }
+      },
     };
   }
 
@@ -290,7 +297,7 @@ export default class extends BaseGenerator {
       },
       addCliToPackageJson() {
         if (!this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const { baseName, cliName = `jhipster-${baseName}` } = this.application;
+        const { cliName } = this.application;
         this.packageJson.merge({
           bin: {
             [cliName]: 'cli/cli.cjs',
