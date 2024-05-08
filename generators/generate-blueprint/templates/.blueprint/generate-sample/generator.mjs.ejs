@@ -26,15 +26,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
       async askForSample() {
-        if (!this.sampleName && !this.all) {
-          const answers = await this.prompt({
-            type: 'list',
-            name: 'sampleName',
-            message: 'which sample do you want to generate?',
-            choices: async () => readdir(this.templatePath('samples')),
-          });
-          this.sampleName = answers.sampleName;
-        }
+        await this.promptCurrentJHipsterCommand();
       },
     });
   }
