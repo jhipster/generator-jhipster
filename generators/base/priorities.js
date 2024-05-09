@@ -99,7 +99,7 @@ export const CUSTOM_PRIORITIES = [
     priorityName: COMPOSING_COMPONENT,
     queueName: COMPOSING_COMPONENT_QUEUE,
     before: LOADING,
-    args: generator => generator.getArgsForPriority(COMPOSING),
+    args: generator => generator.getArgsForPriority(COMPOSING_COMPONENT),
   },
   {
     priorityName: LOADING,
