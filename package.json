@@ -138,7 +138,7 @@
     "eslint-plugin-unused-imports": "3.2.0",
     "execa": "8.0.1",
     "fast-xml-parser": "4.3.6",
-    "glob": "10.3.12",
+    "glob": "10.3.14",
     "isbinaryfile": "5.0.2",
     "java-lint": "0.3.0",
     "js-yaml": "4.1.0",
