@@ -198,5 +198,77 @@ describe(`generator - ${generator}`, () => {
 `);
       });
     });
+
+    describe('with gateway, gradle and no cacheProvider', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withAnswers({ applicationType: 'gateway', buildTool: 'gradle', cacheProvider: 'no' })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "baseName",
+  "applicationType",
+  "packageName",
+  "buildTool",
+  "serverPort",
+  "serviceDiscoveryType",
+  "authenticationType",
+  "serverTestFrameworks",
+  "databaseType",
+  "prodDatabaseType",
+  "devDatabaseType",
+  "cacheProvider",
+  "enableHibernateCache",
+  "serverSideOptions",
+  "enableGradleEnterprise",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
+  "clientFramework",
+  "microfrontend",
+  "clientTestFrameworks",
+  "withAdminUi",
+  "clientTheme",
+]
+`);
+      });
+    });
+
+    describe('with microservice', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "baseName",
+  "applicationType",
+  "packageName",
+  "buildTool",
+  "reactive",
+  "serverPort",
+  "serviceDiscoveryType",
+  "authenticationType",
+  "feignClient",
+  "serverTestFrameworks",
+  "databaseType",
+  "cacheProvider",
+  "serverSideOptions",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
+  "clientFramework",
+]
+`);
+      });
+    });
   });
 });
