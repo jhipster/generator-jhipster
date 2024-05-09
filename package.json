@@ -192,10 +192,10 @@
     "rimraf": "5.0.5",
     "sinon": "17.0.2",
     "sinon-chai": "3.7.0",
-    "yeoman-test": "8.2.0"
+    "yeoman-test": "8.3.0"
   },
   "peerDependencies": {
-    "yeoman-test": "8.2.0"
+    "yeoman-test": "8.3.0"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
