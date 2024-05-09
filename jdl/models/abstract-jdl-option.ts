@@ -25,7 +25,7 @@ export default class AbstractJDLOption {
   entityNames: Set<string>;
   excludedNames: Set<string>;
 
-  constructor(args: Partial<AbstractJDLOption> & Pick<AbstractJDLOption, 'name'>) {
+  constructor(args: Partial<AbstractJDLOption>) {
     const merged = merge(defaults(), args);
     if (!merged.name) {
       throw new Error("The option's name must be passed to create an option.");

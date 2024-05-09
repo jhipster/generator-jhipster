@@ -18,5 +18,4 @@ export type Entity = {
   documentation?: string;
   fields?: Field[];
   relationships?: Relationship[];
-  fluentMethods: boolean;
 } & Record<string, any>;

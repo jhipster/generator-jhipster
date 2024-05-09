@@ -26,7 +26,7 @@ export default class JDLEntity {
   name: string;
   tableName: string;
   fields: Record<string, JDLField>;
-  comment: string;
+  comment: string | undefined;
   annotations: Record<string, boolean | string | number>;
 
   constructor(args) {
