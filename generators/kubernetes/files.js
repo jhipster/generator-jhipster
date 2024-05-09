@@ -115,7 +115,7 @@ export function writeFiles() {
           }
 
           this.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*",
-            "https://localhost:${appConfig.composePort}/*", `;
+            "https://localhost:${appConfig.composePort}/*",`;
 
           if (appConfig.devServerPort !== undefined) {
             this.keycloakRedirectUris += `"http://localhost:${appConfig.devServerPort}/*", `;
