@@ -245,11 +245,15 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   isJhipsterVersionLessThan(version) {
     const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare (the project may be null) and return false
-      return false;
-    }
-    return semverLessThan(jhipsterOldVersion, version);
+    return this.isVersionLessThan(jhipsterOldVersion, version);
+  }
+
+  /**
+   * Wrapper for `semver.lt` to check if the oldVersion exists and is less than the newVersion.
+   * Can be used by blueprints.
+   */
+  isVersionLessThan(oldVersion: string | null, newVersion: string) {
+    return oldVersion ? semverLessThan(oldVersion, newVersion) : false;
   }
 
   /**
