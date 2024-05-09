@@ -70,15 +70,21 @@ export const searchEntities = createAsyncThunk(
 <%_ } _%>
 export const getEntities = createAsyncThunk(
   '<%= entityInstance %>/fetch_entity_list',
-  async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
+  async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams, thunkApi) => {
 <%_ if (!paginationNo) { _%>
     const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
 <%_ } else { _%>
     const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
 <%_ } _%>
-    return axios.get<I<%= entityReactName %>[]>(requestUrl);
+    try {
+      return await axios.get<I<%= entityReactName %>[]>(requestUrl);
+    } catch (error) {
+      if (isAxiosError(error) && isProblemWithMessage(error.response?.data)) {
+        return thunkApi.rejectWithValue(error.response.data);
+      }
+      throw error;
+    }
   },
-  { serializeError: serializeAxiosError },
 );
 
 export const getEntity = createAsyncThunk(
