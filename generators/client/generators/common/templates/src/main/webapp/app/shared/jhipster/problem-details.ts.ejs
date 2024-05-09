@@ -1,0 +1,51 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+/**
+ * Problem details defined in RFC 7807.
+ * @see https://datatracker.ietf.org/doc/html/rfc7807#section-3.1
+ */
+export type ProblemDetails = {
+  /** A URI reference that identifies the problem type */
+  type: string;
+  /** A short, human-readable summary of the problem type */
+  title: string;
+  /** The HTTP status code */
+  status: number;
+  /** A human-readable explanation specific to this occurrence of the problem */
+  detail: string;
+  /** A URI reference that identifies the specific occurrence of the problem */
+  instance: string;
+}
+
+export const ProblemWithMessageType = 'https://www.jhipster.tech/problem/problem-with-message';
+
+export type FieldErrorVM = { message: string; objectName: string; field: string };
+
+export type ProblemWithMessage = ProblemDetails & {
+  type: typeof ProblemWithMessageType;
+
+  /** Translation message key */
+  message?: string;
+  /** Request path */
+  path?: string;
+  /** Field errors */
+  fieldErrors?: FieldErrorVM[];
+};
+
+export const isProblemWithMessage = (data: any): data is ProblemWithMessage => data?.type === ProblemWithMessageType;

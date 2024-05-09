@@ -56,6 +56,18 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeClientCommon() {
+        await this.composeWithJHipster('jhipster:client:common');
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
