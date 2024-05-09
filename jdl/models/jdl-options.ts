@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import JDLBinaryOption from './jdl-binary-option.js';
+import JDLUnaryOption from './jdl-unary-option.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLOptions {
   options: Record<any, any>;
@@ -26,14 +29,14 @@ export default class JDLOptions {
     this.optionSize = 0;
   }
 
-  addOption(option) {
+  addOption(option: AbstractJDLOption) {
     if (!option || !option.getType) {
       throw new Error("Can't add nil option.");
     }
     if (option.getType() === 'UNARY') {
-      addUnaryOption(this.options, option);
+      addUnaryOption(this.options, option as JDLUnaryOption);
     } else {
-      addBinaryOption(this.options, option);
+      addBinaryOption(this.options, option as JDLBinaryOption);
     }
     this.optionSize++;
   }
@@ -68,7 +71,7 @@ export default class JDLOptions {
     return this.optionSize;
   }
 
-  forEach(passedFunction, thisArg?: any) {
+  forEach(passedFunction: (option: AbstractJDLOption) => void, thisArg?: any) {
     if (!passedFunction) {
       return;
     }
@@ -87,7 +90,7 @@ export default class JDLOptions {
   }
 }
 
-function addUnaryOption(options, optionToAdd) {
+function addUnaryOption(options: Record<string, JDLUnaryOption | JDLBinaryOption>, optionToAdd: JDLUnaryOption) {
   const key = optionToAdd.name;
   if (!options[key]) {
     options[key] = optionToAdd;
@@ -96,7 +99,7 @@ function addUnaryOption(options, optionToAdd) {
   options[key].addEntitiesFromAnotherOption(optionToAdd);
 }
 
-function addBinaryOption(options, optionToAdd) {
+function addBinaryOption(options: Record<string, any>, optionToAdd: JDLBinaryOption) {
   const { name, value } = optionToAdd;
 
   if (!options[name]) {

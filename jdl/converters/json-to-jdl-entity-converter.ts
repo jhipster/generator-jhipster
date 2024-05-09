@@ -145,7 +145,7 @@ function addEnumsToJDL(entity: Entity) {
   });
 }
 
-function getEnumValuesFromString(valuesAsString) {
+function getEnumValuesFromString(valuesAsString: string) {
   return valuesAsString.split(',').map(fieldValue => {
     // if fieldValue looks like ENUM_VALUE (something)
     if (fieldValue.includes('(')) {
@@ -319,21 +319,21 @@ function addEntityOptionsToJDL(entity: Entity, entityName: string) {
   }
 }
 
-function addUnaryOptionToJDL(unaryOption, entityName: string) {
+function addUnaryOptionToJDL(unaryOption: string, entityName: string) {
   jdlObject.addOption(
     new JDLUnaryOption({
       name: unaryOption,
-      entityNames: [entityName],
+      entityNames: new Set([entityName]),
     }),
   );
 }
 
-function addBinaryOptionToJDL(binaryOption, value, entityName: string) {
+function addBinaryOptionToJDL(binaryOption: string, value: string, entityName: string) {
   jdlObject.addOption(
     new JDLBinaryOption({
       name: binaryOption,
       value,
-      entityNames: [entityName],
+      entityNames: new Set([entityName]),
     }),
   );
 }

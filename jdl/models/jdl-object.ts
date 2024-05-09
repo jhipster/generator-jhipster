@@ -23,6 +23,7 @@ import JDLOptions from './jdl-options.js';
 import { binaryOptions } from '../jhipster/index.js';
 import JDLEntity from './jdl-entity.js';
 import JDLRelationship from './jdl-relationship.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 /**
  * The JDL object class, containing applications, entities etc.
@@ -216,7 +217,7 @@ export default class JDLObject {
     return this.relationships.toArray();
   }
 
-  addOption(option): void {
+  addOption(option: AbstractJDLOption): void {
     if (!option || !option.getType) {
       throw new Error("Can't add nil option.");
     }

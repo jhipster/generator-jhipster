@@ -23,10 +23,10 @@ import { shouldWriteEntityTableName } from '../jhipster/index.js';
 import JDLField from './jdl-field.js';
 
 export default class JDLEntity {
-  name: any;
-  tableName: any;
+  name: string;
+  tableName: string;
   fields: Record<string, JDLField>;
-  comment: any;
+  comment: string;
   annotations: Record<string, boolean | string | number>;
 
   constructor(args) {

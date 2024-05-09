@@ -21,13 +21,13 @@ import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
 
 export default class JDLField {
-  name: any;
+  name: string;
   type: any;
-  comment: any;
+  comment: string | undefined;
   validations: any;
   options: any;
 
-  constructor(args) {
+  constructor(args: Partial<JDLField>) {
     const merged = merge(defaults(), args);
     if (!merged.name || !merged.type) {
       throw new Error('The field name and type are mandatory to create a field.');
@@ -68,7 +68,7 @@ export default class JDLField {
     return Object.keys(this.options).length;
   }
 
-  toString() {
+  toString(): string {
     let string = '';
     if (this.comment) {
       string += `/**\n${this.comment
@@ -94,7 +94,7 @@ export default class JDLField {
   }
 }
 
-function defaults() {
+function defaults(): Partial<JDLField> {
   return {
     validations: {},
     options: {},

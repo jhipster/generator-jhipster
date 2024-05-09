@@ -85,7 +85,7 @@ export default class JDLApplication {
     return this.entityNames.toArray();
   }
 
-  hasEntityName(entityName) {
+  hasEntityName(entityName: string) {
     if (!entityName) {
       return false;
     }
