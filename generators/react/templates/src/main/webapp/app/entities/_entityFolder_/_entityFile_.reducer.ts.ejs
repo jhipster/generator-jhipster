@@ -20,7 +20,7 @@
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>
 import { loadMoreDataWhenScrolled, parseHeaderForLinks } from 'react-jhipster';
@@ -30,6 +30,7 @@ import { ASC } from 'app/shared/util/pagination.constants';
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { isProblemWithMessage } from 'app/shared/jhipster/problem-details';
 
 const initialState: EntityState<I<%= entityReactName %>> = {
   loading: false,
