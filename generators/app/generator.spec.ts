@@ -165,4 +165,38 @@ describe(`generator - ${generator}`, () => {
       });
     });
   });
+  describe('questions', () => {
+    describe('without answers', () => {
+      before(async () => {
+        await helpers.run(generatorPath).withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "baseName",
+  "applicationType",
+  "packageName",
+  "buildTool",
+  "reactive",
+  "authenticationType",
+  "serverTestFrameworks",
+  "databaseType",
+  "prodDatabaseType",
+  "devDatabaseType",
+  "cacheProvider",
+  "enableHibernateCache",
+  "serverSideOptions",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
+  "clientFramework",
+  "clientTestFrameworks",
+  "withAdminUi",
+  "clientTheme",
+]
+`);
+      });
+    });
+  });
 });
