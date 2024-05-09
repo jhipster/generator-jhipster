@@ -820,7 +820,7 @@ async function askForRelationship(...args) {
 
         return true;
       },
-      type: 'input',
+      type: 'confirm',
       name: 'bidirectional',
       message: 'Do you want to generate a bidirectional relationship',
       default: true,
