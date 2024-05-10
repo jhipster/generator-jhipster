@@ -19,12 +19,13 @@
 
 import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
+import JDLValidation from './jdl-validation.js';
 
 export default class JDLField {
   name: string;
   type: any;
   comment: string | undefined;
-  validations: any;
+  validations: Record<string, JDLValidation>;
   options: any;
 
   constructor(args: Partial<JDLField>) {
@@ -35,7 +36,7 @@ export default class JDLField {
     this.name = merged.name;
     this.type = merged.type;
     this.comment = merged.comment;
-    this.validations = merged.validations;
+    this.validations = merged.validations ?? {};
     this.options = merged.options;
   }
 

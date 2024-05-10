@@ -111,7 +111,7 @@ function convertJSONToJDLField(field: Field) {
   return jdlField;
 }
 
-function getTypeForBlob(blobContentType) {
+function getTypeForBlob(blobContentType: string) {
   if ([ANY, IMAGE, TEXT].includes(blobContentType)) {
     return CommonDBTypes[`${blobContentType.toUpperCase()}_BLOB`];
   }

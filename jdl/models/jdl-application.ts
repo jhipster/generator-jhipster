@@ -38,18 +38,18 @@ export default class JDLApplication {
     this.options = new JDLOptions();
   }
 
-  setConfigurationOption(option) {
+  setConfigurationOption(option: JDLApplicationConfigurationOption) {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.config.setOption(option);
   }
 
-  hasConfigurationOption(optionName) {
+  hasConfigurationOption(optionName: string) {
     return this.config.hasOption(optionName);
   }
 
-  getConfigurationOptionValue(optionName) {
+  getConfigurationOptionValue(optionName: string) {
     if (!optionName) {
       throw new Error('An option name has to be passed to get a value.');
     }
