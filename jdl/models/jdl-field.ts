@@ -28,7 +28,7 @@ export default class JDLField {
   options: any;
 
   constructor(args: Partial<JDLField>) {
-    const merged = merge(defaults(), args);
+    const merged: Partial<JDLField> = merge(defaults(), args);
     if (!merged.name || !merged.type) {
       throw new Error('The field name and type are mandatory to create a field.');
     }
@@ -94,7 +94,7 @@ export default class JDLField {
   }
 }
 
-function defaults(): Partial<JDLField> {
+function defaults(): Pick<JDLField, 'validations' | 'options'> {
   return {
     validations: {},
     options: {},

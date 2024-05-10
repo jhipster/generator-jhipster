@@ -52,18 +52,18 @@ let jdlObject: JDLObject;
  * @param params.entities - a Map having for keys the entity names and values the JSON entity files.
  * @return the parsed entities in the JDL form.
  */
-export function convertEntitiesToJDL(params: { entities: Map<string, Entity> }): JDLObject {
-  if (!params.entities) {
+export function convertEntitiesToJDL(entities: Map<string, Entity> | undefined): JDLObject {
+  if (!entities) {
     throw new Error('Entities have to be passed to be converted.');
   }
-  init(params);
+  init(entities);
   addEntities();
   addRelationshipsToJDL();
   return jdlObject;
 }
 
-function init(params) {
-  entities = params.entities;
+function init(ents: Map<string, Entity>) {
+  entities = ents;
   jdlObject = new JDLObject();
 }
 
@@ -118,7 +118,7 @@ function getTypeForBlob(blobContentType) {
   throw new Error(`Unrecognised blob type: '${blobContentType}'`);
 }
 
-function addValidations(jdlField, field) {
+function addValidations(jdlField: JDLField, field: Field) {
   field.fieldValidateRules.forEach(rule => {
     jdlField.addValidation(convertJSONToJDLValidation(rule, field));
   });

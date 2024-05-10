@@ -24,19 +24,19 @@ import JDLField from './jdl-field.js';
 
 export default class JDLEntity {
   name: string;
-  tableName: string;
+  tableName: string | undefined;
   fields: Record<string, JDLField>;
   comment: string | undefined;
   annotations: Record<string, boolean | string | number>;
 
-  constructor(args) {
-    const merged = merge(defaults(), args);
+  constructor(args: Partial<JDLEntity>) {
+    const merged: Partial<JDLEntity> = merge(defaults(), args);
     if (!merged.name) {
       throw new Error('The entity name is mandatory to create an entity.');
     }
     this.name = merged.name;
     this.tableName = merged.tableName;
-    this.fields = merged.fields;
+    this.fields = merged.fields ?? {};
     this.comment = merged.comment;
     this.annotations = merged.annotations ?? {};
   }
@@ -92,7 +92,7 @@ export default class JDLEntity {
   }
 }
 
-function defaults() {
+function defaults(): Pick<JDLEntity, 'fields' | 'annotations'> {
   return {
     fields: {},
     annotations: {},

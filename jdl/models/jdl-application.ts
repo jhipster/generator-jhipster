@@ -110,11 +110,11 @@ export default class JDLApplication {
     this.options.forEach(passedFunction);
   }
 
-  getOptionQuantity() {
+  getOptionQuantity(): number {
     return this.options.size();
   }
 
-  toString() {
+  toString(): string {
     let stringifiedApplication = `application {
 ${this.config.toString(2)}
 ${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
