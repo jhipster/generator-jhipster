@@ -187,13 +187,13 @@ describe(`generator - ${generator}`, () => {
   "cacheProvider",
   "enableHibernateCache",
   "serverSideOptions",
-  "enableTranslation",
-  "nativeLanguage",
-  "languages",
   "clientFramework",
   "clientTestFrameworks",
   "withAdminUi",
   "clientTheme",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
 ]
 `);
       });
@@ -225,14 +225,14 @@ describe(`generator - ${generator}`, () => {
   "enableHibernateCache",
   "serverSideOptions",
   "enableGradleEnterprise",
-  "enableTranslation",
-  "nativeLanguage",
-  "languages",
   "clientFramework",
   "microfrontend",
   "clientTestFrameworks",
   "withAdminUi",
   "clientTheme",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
 ]
 `);
       });
@@ -262,10 +262,10 @@ describe(`generator - ${generator}`, () => {
   "databaseType",
   "cacheProvider",
   "serverSideOptions",
+  "clientFramework",
   "enableTranslation",
   "nativeLanguage",
   "languages",
-  "clientFramework",
 ]
 `);
       });
