@@ -24,40 +24,40 @@
 
 <div class="modal-body">
   <div class="mb-3">
-    <span class="badge bg-primary hand" (click)="threadStateFilter = undefined">
+    <button class="badge bg-primary hand" (click)="threadStateFilter = undefined" (keydown.enter)="threadStateFilter = undefined">
     @if (threadStateFilter === undefined) {
       <fa-icon icon="check"></fa-icon>
     }
       All&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpAll }}</span>
-    </span>
+    </button>
 
-    <span class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable">
+    <button class="badge bg-success hand" (click)="threadStateFilter = ThreadState.Runnable" (keydown.enter)="threadStateFilter = ThreadState.Runnable">
     @if (threadStateFilter === ThreadState.Runnable) {
       <fa-icon icon="check"></fa-icon>
     }
       Runnable&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpRunnable }}</span>
-    </span>
+    </button>
 
-    <span class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting">
+    <button class="badge bg-info hand" (click)="threadStateFilter = ThreadState.Waiting" (keydown.enter)="threadStateFilter = ThreadState.Waiting">
     @if (threadStateFilter === ThreadState.Waiting) {
       <fa-icon icon="check"></fa-icon>
     }
       Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpWaiting }}</span>
-    </span>
+    </button>
 
-    <span class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting">
+    <button class="badge bg-warning hand" (click)="threadStateFilter = ThreadState.TimedWaiting" (keydown.enter)="threadStateFilter = ThreadState.TimedWaiting">
     @if (threadStateFilter === ThreadState.TimedWaiting) {
       <fa-icon icon="check"></fa-icon>
     }
       Timed Waiting&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpTimedWaiting }}</span>
-    </span>
+    </button>
 
-    <span class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked">
+    <button class="badge bg-danger hand" (click)="threadStateFilter = ThreadState.Blocked" (keydown.enter)="threadStateFilter = ThreadState.Blocked">
     @if (threadStateFilter === ThreadState.Blocked) {
       <fa-icon icon="check"></fa-icon>
     }
       Blocked&nbsp;<span class="badge rounded-pill bg-default">{{ threadDumpBlocked }}</span>
-    </span>
+    </button>
   </div>
 
 @for (thread of getThreads(); track $index) {
