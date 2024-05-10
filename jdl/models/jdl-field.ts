@@ -96,11 +96,7 @@ export default class JDLField {
   }
 }
 
-<<<<<<< HEAD
 function defaults(): Pick<JDLField, 'validations' | 'options'> {
-=======
-function defaults(): Partial<JDLField> {
->>>>>>> ddb978d402 (add few typesafe params)
   return {
     validations: {},
     options: {},
