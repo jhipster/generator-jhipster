@@ -96,7 +96,7 @@ export function getJDLObjectFromSingleApplication(
     existingJDLObject.addApplication(jdlApplication);
     return existingJDLObject;
   }
-  const jdlObject = convertEntitiesToJDL({ entities });
+  const jdlObject = convertEntitiesToJDL(entities);
   entities.forEach((entity, entityName) => jdlApplication.addEntityName(entityName));
   jdlObject.addApplication(jdlApplication);
   return mergeJDLObjects(existingJDLObject, jdlObject);

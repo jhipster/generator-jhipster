@@ -28,6 +28,7 @@ import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-co
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { replaceSensitiveConfig } from './support/utils.js';
+import { Entity } from '../../jdl/converters/types.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
 
@@ -131,14 +132,12 @@ export default class InfoGenerator extends BaseApplicationGenerator {
    */
   generateJDLFromEntities() {
     let jdlObject;
-    const entities = new Map();
+    const entities = new Map<string, Entity>();
     try {
       this.getExistingEntities().forEach(entity => {
         entities.set(entity.name, entity.definition);
       });
-      jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({
-        entities,
-      });
+      jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities);
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
     } catch (error) {
       this.log.error('Error while parsing entities to JDL', error);

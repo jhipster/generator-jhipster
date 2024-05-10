@@ -19,23 +19,24 @@
 
 import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
+import JDLValidation from './jdl-validation.js';
 
 export default class JDLField {
-  name: any;
+  name: string;
   type: any;
-  comment: any;
-  validations: any;
+  comment: string | undefined;
+  validations: Record<string, JDLValidation>;
   options: any;
 
-  constructor(args) {
-    const merged = merge(defaults(), args);
+  constructor(args: Partial<JDLField>) {
+    const merged: Partial<JDLField> = merge(defaults(), args);
     if (!merged.name || !merged.type) {
       throw new Error('The field name and type are mandatory to create a field.');
     }
     this.name = merged.name;
     this.type = merged.type;
     this.comment = merged.comment;
-    this.validations = merged.validations;
+    this.validations = merged.validations ?? {};
     this.options = merged.options;
   }
 
@@ -68,7 +69,7 @@ export default class JDLField {
     return Object.keys(this.options).length;
   }
 
-  toString() {
+  toString(): string {
     let string = '';
     if (this.comment) {
       string += `/**\n${this.comment
@@ -94,7 +95,7 @@ export default class JDLField {
   }
 }
 
-function defaults() {
+function defaults(): Pick<JDLField, 'validations' | 'options'> {
   return {
     validations: {},
     options: {},

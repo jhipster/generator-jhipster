@@ -18,8 +18,8 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import JDLUnaryOption from '../models/jdl-unary-option.js';
 import { unaryOptions } from '../jhipster/index.js';
+import JDLUnaryOption from '../models/jdl-unary-option.js';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
@@ -41,7 +41,6 @@ export function convertServerOptionsToJDL(config, jdl: JDLObject): JDLObject {
       jdlObject.addOption(
         new JDLUnaryOption({
           name: option,
-          value: jhipsterConfig[option],
         }),
       );
     }

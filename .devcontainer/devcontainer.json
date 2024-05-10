@@ -27,7 +27,7 @@
       "settings": {
         "java.jdt.ls.java.home": "/docker-java-home",
         "mochaExplorer.files": "**/*.spec.*(j|t)s",
-        "mochaExplorer.require": "@node-loaders/esbuildx,esmocha",
+        "mochaExplorer.require": "@node-loaders/esbuildx",
         "mochaExplorer.parallel": true,
         "mochaExplorer.timeout": 50000,
         "mochaExplorer.configFile": ".mocharc.cjs"

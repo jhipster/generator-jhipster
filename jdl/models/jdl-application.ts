@@ -38,18 +38,18 @@ export default class JDLApplication {
     this.options = new JDLOptions();
   }
 
-  setConfigurationOption(option) {
+  setConfigurationOption(option: JDLApplicationConfigurationOption) {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.config.setOption(option);
   }
 
-  hasConfigurationOption(optionName) {
+  hasConfigurationOption(optionName: string) {
     return this.config.hasOption(optionName);
   }
 
-  getConfigurationOptionValue(optionName) {
+  getConfigurationOptionValue(optionName: string) {
     if (!optionName) {
       throw new Error('An option name has to be passed to get a value.');
     }
@@ -85,7 +85,7 @@ export default class JDLApplication {
     return this.entityNames.toArray();
   }
 
-  hasEntityName(entityName) {
+  hasEntityName(entityName: string) {
     if (!entityName) {
       return false;
     }
@@ -110,11 +110,11 @@ export default class JDLApplication {
     this.options.forEach(passedFunction);
   }
 
-  getOptionQuantity() {
+  getOptionQuantity(): number {
     return this.options.size();
   }
 
-  toString() {
+  toString(): string {
     let stringifiedApplication = `application {
 ${this.config.toString(2)}
 ${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;

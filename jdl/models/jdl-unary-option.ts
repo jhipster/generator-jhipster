@@ -36,7 +36,7 @@ export default class JDLUnaryOption extends AbstractJDLOption {
       return firstPart;
     }
     const excludedNames = join(this.excludedNames, ', ');
-    excludedNames.slice(1, this.excludedNames.length - 1);
+    excludedNames.slice(1, this.excludedNames.size - 1);
     return `${firstPart} except ${excludedNames}`;
   }
 }
