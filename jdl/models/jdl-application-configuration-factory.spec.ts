@@ -129,9 +129,9 @@ JDLApplicationConfiguration {
     "testFrameworks": ListJDLApplicationConfigurationOption {
       "name": "testFrameworks",
       "quoted": false,
-      "value": Set {
+      "value": [
         "gatling",
-      },
+      ],
     },
   },
 }
