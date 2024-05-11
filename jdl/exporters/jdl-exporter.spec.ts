@@ -106,7 +106,6 @@ describe('jdl - JDLExporter', () => {
               jdlObject = new JDLObject();
               const jdlApplication: JSONApplication = {
                 config: { [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK },
-                entities: {},
               };
               jdlObject.addApplication(new JDLApplication(jdlApplication));
             });

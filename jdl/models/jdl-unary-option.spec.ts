@@ -51,8 +51,8 @@ describe('jdl - JDLUnaryOption', () => {
       before(() => {
         option = new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-          entityNames: ['A', 'B', 'C', 'A'],
-          excludedNames: ['E', 'E', 'D'],
+          entityNames: new Set(['A', 'B', 'C', 'A']),
+          excludedNames: new Set(['E', 'E', 'D']),
         });
       });
 
@@ -73,7 +73,7 @@ describe('jdl - JDLUnaryOption', () => {
     before(() => {
       option = new JDLUnaryOption({
         name: unaryOptions.SKIP_CLIENT,
-        entityNames: ['A', 'B', 'C'],
+        entityNames: new Set(['A', 'B', 'C']),
       });
       option.setEntityNames(['A']);
     });
@@ -143,8 +143,8 @@ describe('jdl - JDLUnaryOption', () => {
     before(() => {
       option = new JDLUnaryOption({
         name: unaryOptions.SKIP_SERVER,
-        entityNames: ['B', 'C'],
-        excludedNames: ['Z'],
+        entityNames: new Set(['B', 'C']),
+        excludedNames: new Set(['Z']),
       });
     });
 
@@ -159,8 +159,8 @@ describe('jdl - JDLUnaryOption', () => {
       before(() => {
         const option2 = new JDLUnaryOption({
           name: unaryOptions.SKIP_SERVER,
-          entityNames: ['A', 'C'],
-          excludedNames: ['Y'],
+          entityNames: new Set(['A', 'C']),
+          excludedNames: new Set(['Y']),
         });
         returned = option.addEntitiesFromAnotherOption(option2);
       });

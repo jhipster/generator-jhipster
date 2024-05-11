@@ -63,8 +63,8 @@ describe('jdl - JDLBinaryOption', () => {
         option = new JDLBinaryOption({
           name: binaryOptions.Options.DTO,
           value: binaryOptions.Values.dto.MAPSTRUCT,
-          entityNames: ['A', 'B', 'C', 'A'],
-          excludedNames: ['E', 'E', 'D'],
+          entityNames: new Set(['A', 'B', 'C', 'A']),
+          excludedNames: new Set(['E', 'E', 'D']),
         });
       });
 
@@ -86,7 +86,7 @@ describe('jdl - JDLBinaryOption', () => {
       option = new JDLBinaryOption({
         name: binaryOptions.Options.DTO,
         value: binaryOptions.Values.dto.MAPSTRUCT,
-        entityNames: ['A', 'B', 'C'],
+        entityNames: new Set(['A', 'B', 'C']),
       });
       option.setEntityNames(['A']);
     });
@@ -207,13 +207,13 @@ describe('jdl - JDLBinaryOption', () => {
     const option = new JDLBinaryOption({
       name: binaryOptions.Options.DTO,
       value: binaryOptions.Values.dto.MAPSTRUCT,
-      entityNames: ['B', 'C'],
-      excludedNames: ['Z'],
+      entityNames: new Set(['B', 'C']),
+      excludedNames: new Set(['Z']),
     });
 
     describe('when passing an invalid option', () => {
       it('should return false', () => {
-        expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
+        expect(option.addEntitiesFromAnotherOption()).to.be.false;
       });
     });
     describe('when passing a valid option', () => {
@@ -223,8 +223,8 @@ describe('jdl - JDLBinaryOption', () => {
         const option2 = new JDLBinaryOption({
           name: binaryOptions.Options.DTO,
           value: binaryOptions.Values.dto.MAPSTRUCT,
-          entityNames: ['A', 'C'],
-          excludedNames: ['Y'],
+          entityNames: new Set(['A', 'C']),
+          excludedNames: new Set(['Y']),
         });
         returned = option.addEntitiesFromAnotherOption(option2);
       });

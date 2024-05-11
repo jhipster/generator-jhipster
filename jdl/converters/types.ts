@@ -22,5 +22,5 @@ export type JSONEntity = {
 
 export type JSONApplication = {
   config: Record<string, string>;
-  entities: any;
+  entities?: any;
 } & Record<string, any>;
