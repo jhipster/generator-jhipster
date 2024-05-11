@@ -19,8 +19,3 @@ export type JSONEntity = {
   fields?: JSONField[];
   relationships?: JSONRelationship[];
 } & Record<string, any>;
-
-export type JSONApplication = {
-  config: Record<string, string>;
-  entities?: any;
-} & Record<string, any>;
