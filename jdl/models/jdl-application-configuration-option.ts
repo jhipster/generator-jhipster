@@ -26,7 +26,7 @@ export default class JDLApplicationConfigurationOption {
    * @param {String} name - the option's name.
    * @param {any} value - the option's value, can be virtually anything: a String, an Int, a boolean...
    */
-  constructor(name: string, value) {
+  constructor(name: string, value: any) {
     this.name = name;
     this.value = value;
   }

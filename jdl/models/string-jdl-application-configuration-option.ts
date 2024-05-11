@@ -22,7 +22,7 @@ import JDLApplicationConfigurationOption from './jdl-application-configuration-o
 export default class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
   quoted: boolean;
 
-  constructor(name, value, quoted = false) {
+  constructor(name: string, value, quoted = false) {
     super(name, value);
     this.quoted = quoted;
   }

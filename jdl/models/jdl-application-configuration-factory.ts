@@ -23,7 +23,7 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
-import JDLApplicationDefinition from './jdl-application-definition.js';
+import JDLApplicationDefinition, { JDLApplicationOptionTypeValue } from './jdl-application-definition.js';
 
 const applicationDefinition = new JDLApplicationDefinition();
 
@@ -52,7 +52,7 @@ export function createApplicationNamespaceConfigurationFromObject(
   });
 }
 
-function createUnknownJDLConfigurationOption(name, value) {
+function createUnknownJDLConfigurationOption(name: string, value: any) {
   let type;
   if (typeof value === 'boolean') {
     type = 'boolean';
@@ -74,7 +74,7 @@ function createApplicationJDLConfigurationOption(name: string, value: any) {
   return createJDLConfigurationOption(type, name, value);
 }
 
-function createJDLConfigurationOption(type: string, name: string, value: any) {
+function createJDLConfigurationOption(type: JDLApplicationOptionTypeValue, name: string, value: any) {
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));

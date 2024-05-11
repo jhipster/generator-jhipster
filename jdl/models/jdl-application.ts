@@ -24,12 +24,13 @@ import JDLApplicationConfigurationOption from './jdl-application-configuration-o
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import JDLApplicationEntities from './jdl-application-entities.js';
 import JDLOptions from './jdl-options.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLApplication {
   config: JDLApplicationConfiguration;
   namespaceConfigs: Array<JDLApplicationConfiguration>;
-  entityNames: any;
-  options: any;
+  entityNames: JDLApplicationEntities;
+  options: JDLOptions;
 
   constructor({ config = {}, entityNames = [], namespaceConfigs = {} }: any = {}) {
     this.config = createApplicationConfigurationFromObject(config);
@@ -70,18 +71,18 @@ export default class JDLApplication {
     }
   }
 
-  addEntityName(entityName) {
+  addEntityName(entityName: string) {
     if (!entityName) {
       throw new Error('An entity name has to be passed so as to be added to the application.');
     }
     this.entityNames.add(entityName);
   }
 
-  addEntityNames(entityNames: any = []) {
+  addEntityNames(entityNames: string[] = []) {
     this.entityNames.addEntityNames(entityNames);
   }
 
-  getEntityNames() {
+  getEntityNames(): string[] {
     return this.entityNames.toArray();
   }
 
@@ -96,7 +97,7 @@ export default class JDLApplication {
     this.entityNames.forEach(passedFunction);
   }
 
-  addOption(jdlOption) {
+  addOption(jdlOption: AbstractJDLOption | undefined) {
     if (!jdlOption) {
       throw new Error("Can't add a nil option.");
     }
@@ -115,7 +116,7 @@ export default class JDLApplication {
   }
 
   toString(): string {
-    let stringifiedApplication = `application {
+    let stringifiedApplication: string = `application {
 ${this.config.toString(2)}
 ${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
     if (this.entityNames.size() !== 0) {

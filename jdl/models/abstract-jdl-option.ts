@@ -51,7 +51,7 @@ export default class AbstractJDLOption {
     return this.entityNames.add(entityName);
   }
 
-  addEntitiesFromAnotherOption(option: AbstractJDLOption) {
+  addEntitiesFromAnotherOption(option?: AbstractJDLOption) {
     if (!option) {
       return false;
     }

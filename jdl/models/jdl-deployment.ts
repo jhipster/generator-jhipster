@@ -57,7 +57,7 @@ function stringifyConfig(applicationConfig) {
   return `${config}\n  }`;
 }
 
-function stringifyOptionValue(name, value) {
+function stringifyOptionValue(name: string, value): string {
   if (arrayTypes.includes(name)) {
     if (value.size === 0) {
       return ' []';

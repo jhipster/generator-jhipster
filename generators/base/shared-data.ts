@@ -55,7 +55,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     return this._storage.sharedApplication;
   }
 
-  setEntity(entityName, entity) {
+  setEntity(entityName: string, entity) {
     this._storage.sharedEntities[entityName] = entity;
   }
 

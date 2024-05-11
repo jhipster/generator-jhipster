@@ -78,7 +78,7 @@ ${spaceBeforeConfigKeyword}}`;
   }
 }
 
-function getFormattedConfigOptionsString(options, indent) {
+function getFormattedConfigOptionsString(options: Record<string, JDLApplicationConfigurationOption>, indent: string) {
   const filteredOptions = filterOutUnwantedOptions(options);
   return Object.keys(filteredOptions)
     .sort()
@@ -89,11 +89,11 @@ function getFormattedConfigOptionsString(options, indent) {
     .join('\n');
 }
 
-function filterOutUnwantedOptions(options) {
+function filterOutUnwantedOptions(options: Record<string, JDLApplicationConfigurationOption>) {
   return filterOutOptionsThatShouldNotBeExported(filterOutOptionsWithoutValues(options));
 }
 
-function filterOutOptionsWithoutValues(options) {
+function filterOutOptionsWithoutValues(options: Record<string, JDLApplicationConfigurationOption>) {
   const filteredOptions = { ...options };
   if (!(OptionNames.ENTITY_SUFFIX in options) || !options[OptionNames.ENTITY_SUFFIX].getValue()) {
     delete filteredOptions[OptionNames.ENTITY_SUFFIX];
@@ -107,7 +107,7 @@ function filterOutOptionsWithoutValues(options) {
   return filteredOptions;
 }
 
-function filterOutOptionsThatShouldNotBeExported(options) {
+function filterOutOptionsThatShouldNotBeExported(options: Record<string, JDLApplicationConfigurationOption>) {
   const filteredOptions = { ...options };
   delete filteredOptions[OptionNames.PACKAGE_FOLDER];
   return filteredOptions;
