@@ -6,7 +6,7 @@ import { Minimatch } from 'minimatch';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { getJDLObjectFromSingleApplication } from '../../../jdl/converters/json-to-jdl-converter.js';
-import { Entity } from '../../../jdl/converters/types.js';
+import { JSONEntity } from '../../../jdl/converters/types.js';
 
 export const exportJDLTransform = ({
   destinationPath,
@@ -23,7 +23,7 @@ export const exportJDLTransform = ({
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesMatcher = new Minimatch(`${destinationPath}/.jhipster/*.json`);
     const entitiesFiles: MemFsEditorFile[] = [];
-    const entitiesMap: Map<string, Entity> = new Map();
+    const entitiesMap: Map<string, JSONEntity> = new Map();
 
     let yoRcFileInMemory: MemFsEditorFile | undefined;
     let jdlStoreFileInMemory: MemFsEditorFile | undefined;

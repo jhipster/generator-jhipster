@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { Entity } from '../../../jdl/converters/types.js';
+import { JSONEntity } from '../../../jdl/converters/types.js';
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import { ValidationResult } from '../../base/api.js';
 import { databaseTypes } from '../../../jdl/index.js';
@@ -25,7 +25,7 @@ import { databaseTypes } from '../../../jdl/index.js';
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
 // eslint-disable-next-line import/prefer-default-export
-export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationResult => {
+export const addEntitiesOtherRelationships = (entities: JSONEntity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities.filter(entity => !entity.builtIn)) {
     for (const relationship of entity.relationships ?? []) {
