@@ -178,8 +178,8 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           ]);
           const jdlObject = convertEntitiesToJDL(entities);
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
-          expect(relationship.commentInFrom).to.equal('Another side of the same relationship');
-          expect(relationship.commentInTo).to.equal('A relationship');
+          expect(relationship!.commentInFrom).to.equal('Another side of the same relationship');
+          expect(relationship!.commentInTo).to.equal('A relationship');
         });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');

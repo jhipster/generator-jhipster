@@ -24,10 +24,11 @@ import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
 import JDLApplicationDefinition, { JDLApplicationOptionTypeValue } from './jdl-application-definition.js';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const applicationDefinition = new JDLApplicationDefinition();
 
-export default function createApplicationConfigurationFromObject(configurationObject = {}) {
+export default function createApplicationConfigurationFromObject(configurationObject = {}): JDLApplicationConfiguration {
   const configuration = new JDLApplicationConfiguration();
   Object.keys(configurationObject).forEach(optionName => {
     const optionValue = configurationObject[optionName];
@@ -52,7 +53,7 @@ export function createApplicationNamespaceConfigurationFromObject(
   });
 }
 
-function createUnknownJDLConfigurationOption(name: string, value: any) {
+function createUnknownJDLConfigurationOption(name: string, value: any): JDLApplicationConfigurationOption<any> {
   let type;
   if (typeof value === 'boolean') {
     type = 'boolean';
@@ -69,12 +70,16 @@ function createUnknownJDLConfigurationOption(name: string, value: any) {
   return createJDLConfigurationOption(type, name, value);
 }
 
-function createApplicationJDLConfigurationOption(name: string, value: any) {
+function createApplicationJDLConfigurationOption(name: string, value: any): JDLApplicationConfigurationOption<any> {
   const type = applicationDefinition.getTypeForOption(name);
   return createJDLConfigurationOption(type, name, value);
 }
 
-function createJDLConfigurationOption(type: JDLApplicationOptionTypeValue, name: string, value: any) {
+function createJDLConfigurationOption(
+  type: JDLApplicationOptionTypeValue,
+  name: string,
+  value: any,
+): JDLApplicationConfigurationOption<any> {
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));

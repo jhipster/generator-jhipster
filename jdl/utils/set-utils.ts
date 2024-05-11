@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { join as arrayJoin } from './array-utils.js';
 
 export function addAll<T>(set: Set<T>, elements: T[]) {
   if (!set) {
@@ -32,7 +33,5 @@ export function join(set: Set<unknown>, separator = ',', quoted = false) {
   if (!set) {
     throw new Error('A Set must be passed so as to join elements.');
   }
-  return Array.from(set)
-    .map(val => (quoted ? `"${val}"` : val))
-    .join(separator);
+  return arrayJoin(Array.from(set), separator, quoted);
 }

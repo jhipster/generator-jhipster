@@ -24,6 +24,7 @@ import { binaryOptions } from '../jhipster/index.js';
 import JDLEntity from './jdl-entity.js';
 import JDLRelationship from './jdl-relationship.js';
 import AbstractJDLOption from './abstract-jdl-option.js';
+import JDLEnum from './jdl-enum.js';
 
 /**
  * The JDL object class, containing applications, entities etc.
@@ -174,7 +175,7 @@ export default class JDLObject {
     return this.enums.size();
   }
 
-  forEachEnum(passedFunction: (jdlEnum: JDLEnums) => void): void {
+  forEachEnum(passedFunction: (jdlEnum: JDLEnum) => void): void {
     if (!passedFunction) {
       return;
     }

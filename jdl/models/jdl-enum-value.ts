@@ -1,9 +1,9 @@
 export default class JDLEnumValue {
-  name: any;
-  value: any;
-  comment: any;
+  name: string;
+  value: string;
+  comment: string;
 
-  constructor(name, value, comment) {
+  constructor(name: string, value: string, comment: string) {
     if (!name) {
       throw new Error('The enum value name has to be passed to create an enum.');
     }

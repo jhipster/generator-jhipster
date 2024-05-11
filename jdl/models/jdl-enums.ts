@@ -16,34 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import JDLEnum from './jdl-enum.js';
 
 export default class JDLEnums {
-  enums: Map<any, any>;
+  enums: Map<string, JDLEnum>;
 
   constructor() {
     this.enums = new Map();
   }
 
-  add(jdlEnum) {
+  add(jdlEnum: JDLEnum) {
     if (!jdlEnum) {
       throw new Error("Can't add a nil JDL enum to the JDL enums.");
     }
     this.enums.set(jdlEnum.name, jdlEnum);
   }
 
-  get(enumName) {
+  get(enumName: string) {
     return this.enums.get(enumName);
   }
 
-  has(enumName) {
+  has(enumName: string): boolean {
     return this.enums.has(enumName);
   }
 
-  size() {
+  size(): number {
     return this.enums.size;
   }
 
-  forEach(passedFunction) {
+  forEach(passedFunction: (jdlEnum: JDLEnum) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -52,7 +53,7 @@ export default class JDLEnums {
     });
   }
 
-  toString() {
+  toString(): string {
     let string = '';
     this.enums.forEach(jdlEnum => {
       string += `${jdlEnum.toString()}\n`;

@@ -39,14 +39,14 @@ export default class JDLApplication {
     this.options = new JDLOptions();
   }
 
-  setConfigurationOption(option: JDLApplicationConfigurationOption) {
+  setConfigurationOption(option: JDLApplicationConfigurationOption<any>): void {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.config.setOption(option);
   }
 
-  hasConfigurationOption(optionName: string) {
+  hasConfigurationOption(optionName: string): boolean {
     return this.config.hasOption(optionName);
   }
 
@@ -61,7 +61,7 @@ export default class JDLApplication {
     return option!.getValue();
   }
 
-  forEachConfigurationOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
+  forEachConfigurationOption(passedFunction: (option: JDLApplicationConfigurationOption<any>) => void) {
     this.config.forEachOption(passedFunction);
   }
 
@@ -104,7 +104,7 @@ export default class JDLApplication {
     this.options.addOption(jdlOption);
   }
 
-  forEachOption(passedFunction) {
+  forEachOption(passedFunction: (option: AbstractJDLOption) => void): void {
     if (!passedFunction) {
       return;
     }

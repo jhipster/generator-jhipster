@@ -116,7 +116,7 @@ function getJSONOptionKeyAndValue(jdlOption) {
   }
 }
 
-function preventEntitiesFromBeingSearched(entityNames) {
+function preventEntitiesFromBeingSearched(entityNames: string[]) {
   entityNames.forEach(entityName => {
     setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
   });

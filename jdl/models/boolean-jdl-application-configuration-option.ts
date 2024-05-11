@@ -19,4 +19,4 @@
 
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
-export default class BooleanJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {}
+export default class BooleanJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<boolean> {}
