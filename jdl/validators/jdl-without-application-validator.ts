@@ -105,10 +105,10 @@ export default function createValidator(jdlObject: JDLObject, applicationSetting
         }
       }
       const typeCheckingFunction = getTypeCheckingFunction(entityName, applicationSettings);
-      if (!jdlObject.hasEnum(jdlField.type) && !typeCheckingFunction(jdlField.type)) {
+      const isAnEnum = jdlObject.hasEnum(jdlField.type);
+      if (!isAnEnum && !typeCheckingFunction(jdlField.type)) {
         throw new Error(`The type '${jdlField.type}' is an unknown field type for field '${fieldName}' of entity '${entityName}'.`);
       }
-      const isAnEnum = jdlObject.hasEnum(jdlField.type);
       checkForValidationErrors(jdlField, isAnEnum);
     });
   }
@@ -186,7 +186,7 @@ function checkForAbsentEntities({
   doesEntityExist,
 }: {
   jdlRelationship: JDLRelationship;
-  doesEntityExist: (string) => boolean;
+  doesEntityExist: (entityName: string) => boolean;
 }) {
   const absentEntities: any[] = [];
   if (!doesEntityExist(jdlRelationship.from)) {
@@ -204,6 +204,7 @@ function checkForAbsentEntities({
     );
   }
 }
+
 function checkForPaginationInAppWithCassandra(jdlOption: AbstractJDLOption, applicationSettings): void {
   if (applicationSettings.databaseType === databaseTypes.CASSANDRA && jdlOption.name === binaryOptions.Options.PAGINATION) {
     throw new Error("Pagination isn't allowed when the application uses Cassandra.");

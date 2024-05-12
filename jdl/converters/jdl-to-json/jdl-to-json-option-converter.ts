@@ -21,6 +21,8 @@ import logger from '../../utils/objects/logger.js';
 import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.js';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
+import AbstractJDLOption from '../../models/abstract-jdl-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
@@ -94,7 +96,7 @@ function setOptionsToEachEntityName(jdlOption) {
   }
 }
 
-function getJSONOptionKeyAndValue(jdlOption) {
+function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; value: string | boolean } {
   switch (jdlOption.name) {
     case SKIP_CLIENT:
     case SKIP_SERVER:
@@ -102,17 +104,17 @@ function getJSONOptionKeyAndValue(jdlOption) {
     case EMBEDDED:
       return { key: jdlOption.name, value: true };
     case MICROSERVICE:
-      return { key: 'microserviceName', value: jdlOption.value };
+      return { key: 'microserviceName', value: (jdlOption as JDLBinaryOption).value };
     case NO_FLUENT_METHOD:
       return { key: 'fluentMethods', value: false };
     case ANGULAR_SUFFIX:
-      return { key: 'angularJSSuffix', value: jdlOption.value };
+      return { key: 'angularJSSuffix', value: (jdlOption as JDLBinaryOption).value };
     case SEARCH:
-      return { key: 'searchEngine', value: jdlOption.value };
+      return { key: 'searchEngine', value: (jdlOption as JDLBinaryOption).value };
     case FILTER:
       return { key: 'jpaMetamodelFiltering', value: true };
     default:
-      return { key: jdlOption.name, value: jdlOption.getType() === 'UNARY' ? true : jdlOption.value };
+      return { key: jdlOption.name, value: jdlOption.getType() === 'UNARY' ? true : (jdlOption as JDLBinaryOption).value };
   }
 }
 

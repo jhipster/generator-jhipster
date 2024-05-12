@@ -25,6 +25,7 @@ import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { JSONField } from '../types.js';
 import { JDLEntity } from '../../models/index.js';
+import JDLField from '../../models/jdl-field.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },
@@ -122,7 +123,7 @@ function getBlobFieldData(fieldType: string) {
   return blobFieldData;
 }
 
-function getFieldValidations(jdlField) {
+function getFieldValidations(jdlField: JDLField) {
   const fieldValidations: any = {
     fieldValidateRules: [],
   };
