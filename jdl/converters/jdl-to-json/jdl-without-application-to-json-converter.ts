@@ -21,8 +21,9 @@ import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';
 import RelationshipConverter from './jdl-to-json-relationship-converter.js';
 import OptionConverter from './jdl-to-json-option-converter.js';
-import JDLObject, { JDLObjectWrapper } from '../../models/jdl-object.js';
+import JDLObject from '../../models/jdl-object.js';
 import JSONEntity from '../../jhipster/json-entity.js';
+import { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
 
 let entities: Record<string, JSONEntity> | null | undefined;
 let jdlObject: JDLObject | null | undefined;
@@ -40,7 +41,7 @@ export default {
  * @param {string} args.applicationType - the application's type
  * @returns {Map} entities that can be exported to JSON
  */
-export function convert(args: JDLObjectWrapper = {}) {
+export function convert(args: JdlObjectWrapper = {}) {
   if (!args.jdlObject || !args.applicationName || !args.databaseType) {
     throw new Error("The JDL object, the application's name, and its the database type are mandatory.");
   }
@@ -53,7 +54,7 @@ export function convert(args: JDLObjectWrapper = {}) {
   return new Map([[args.applicationName, Object.values(entities!)]]);
 }
 
-function init(args: JDLObjectWrapper) {
+function init(args: JdlObjectWrapper) {
   if (jdlObject) {
     resetState();
   }

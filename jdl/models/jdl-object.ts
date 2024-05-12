@@ -292,26 +292,6 @@ function relationshipsToString(relationships: JDLRelationships): string {
   return relationships.toString();
 }
 
-function optionsToString(options: JDLOptions) {
+function optionsToString(options: JDLOptions): string {
   return options.toString();
 }
-
-export type JDLObjectWrapper = {
-  jdlObject?: JDLObject;
-  applicationName?: string;
-  applicationType?: 'monolith' | 'microservice' | 'gateway';
-  databaseType?:
-    | 'sql'
-    | 'mysql'
-    | 'mariadb'
-    | 'postgresql'
-    | 'mssql'
-    | 'oracle'
-    | 'h2Disk'
-    | 'h2Memory'
-    | 'mongodb'
-    | 'cassandra'
-    | 'couchbase'
-    | 'neo4j'
-    | 'no';
-};
