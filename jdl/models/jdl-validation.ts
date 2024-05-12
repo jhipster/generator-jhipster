@@ -26,7 +26,7 @@ const {
 
 export default class JDLValidation {
   name: string;
-  value?: string | number | RegExp;
+  value?: string | number | RegExp | boolean;
 
   constructor(args: Partial<JDLValidation>) {
     const merged = merge(defaults(), args);
@@ -50,14 +50,14 @@ function defaults(): JDLValidation {
   };
 }
 
-function formatValidationValue(name: string, value: string | number | RegExp) {
+function formatValidationValue(name: string, value: string | number | RegExp | boolean) {
   if (name === PATTERN) {
     return getPatternValidationValue(value);
   }
   return value;
 }
 
-function getPatternValidationValue(value: string | number | RegExp) {
+function getPatternValidationValue(value: string | number | RegExp | boolean) {
   if (value instanceof RegExp) {
     return value.toString();
   }

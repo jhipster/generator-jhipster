@@ -20,13 +20,14 @@
 import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
 import JDLValidation from './jdl-validation.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLField {
   name: string;
   type: any;
   comment: string | undefined;
   validations: Record<string, JDLValidation>;
-  options: any;
+  options: Record<string, AbstractJDLOption | boolean | number>;
 
   constructor(args: Partial<JDLField>) {
     const merged: Partial<JDLField> = merge(defaults(), args);
@@ -37,7 +38,7 @@ export default class JDLField {
     this.type = merged.type;
     this.comment = merged.comment;
     this.validations = merged.validations ?? {};
-    this.options = merged.options;
+    this.options = merged.options ?? {};
   }
 
   addValidation(validation) {
@@ -47,7 +48,7 @@ export default class JDLField {
     this.validations[validation.name] = validation;
   }
 
-  forEachValidation(functionToApply) {
+  forEachValidation(functionToApply: (validation: JDLValidation) => void) {
     if (!functionToApply) {
       throw new Error('A function must be passed to iterate over validations');
     }
@@ -58,7 +59,7 @@ export default class JDLField {
     return Object.keys(this.validations).length;
   }
 
-  forEachOption(functionToApply) {
+  forEachOption(functionToApply: (value: [string, AbstractJDLOption | boolean | number]) => void) {
     if (!functionToApply) {
       throw new Error('A function must be passed to iterate over options');
     }

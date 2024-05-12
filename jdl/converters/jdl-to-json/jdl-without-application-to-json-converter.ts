@@ -21,10 +21,11 @@ import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';
 import RelationshipConverter from './jdl-to-json-relationship-converter.js';
 import OptionConverter from './jdl-to-json-option-converter.js';
-import JDLObject from '../../models/jdl-object.js';
+import JDLObject, { JDLObjectWrapper } from '../../models/jdl-object.js';
+import JSONEntity from '../../jhipster/json-entity.js';
 
-let entities;
-let jdlObject: JDLObject | null;
+let entities: Record<string, JSONEntity> | null | undefined;
+let jdlObject: JDLObject | null | undefined;
 
 export default {
   convert,
@@ -39,7 +40,7 @@ export default {
  * @param {string} args.applicationType - the application's type
  * @returns {Map} entities that can be exported to JSON
  */
-export function convert(args: any = {}) {
+export function convert(args: JDLObjectWrapper = {}) {
   if (!args.jdlObject || !args.applicationName || !args.databaseType) {
     throw new Error("The JDL object, the application's name, and its the database type are mandatory.");
   }
@@ -49,10 +50,10 @@ export function convert(args: any = {}) {
   setFields();
   setRelationships();
   setApplicationToEntities();
-  return new Map([[args.applicationName, Object.values(entities)]]);
+  return new Map([[args.applicationName, Object.values(entities!)]]);
 }
 
-function init(args) {
+function init(args: JDLObjectWrapper) {
   if (jdlObject) {
     resetState();
   }
@@ -60,41 +61,41 @@ function init(args) {
   entities = {};
 }
 
-function resetState() {
+function resetState(): void {
   jdlObject = null;
   entities = null;
 }
 
-function setBasicEntityInformation() {
+function setBasicEntityInformation(): void {
   const convertedEntities = BasicEntityConverter.convert(jdlObject!.getEntities());
   convertedEntities.forEach((jsonEntity, entityName) => {
-    entities[entityName] = jsonEntity;
+    entities![entityName] = jsonEntity;
   });
 }
 
-function setOptions() {
+function setOptions(): void {
   const convertedOptionContents = OptionConverter.convert(jdlObject!);
   convertedOptionContents.forEach((optionContent, entityName) => {
-    entities[entityName].setOptions(optionContent);
+    entities![entityName].setOptions(optionContent);
   });
 }
 
-function setFields() {
+function setFields(): void {
   const convertedFields = FieldConverter.convert(jdlObject!);
   convertedFields.forEach((entityFields, entityName) => {
-    entities[entityName].addFields(entityFields);
+    entities![entityName].addFields(entityFields);
   });
 }
 
-function setRelationships() {
+function setRelationships(): void {
   const convertedRelationships = RelationshipConverter.convert(jdlObject!.getRelationships(), jdlObject!.getEntityNames());
   convertedRelationships.forEach((entityRelationships, entityName) => {
-    entities[entityName].addRelationships(entityRelationships);
+    entities![entityName].addRelationships(entityRelationships);
   });
 }
 
-function setApplicationToEntities() {
-  Object.keys(entities).forEach(entityName => {
-    entities[entityName].applications = '*';
+function setApplicationToEntities(): void {
+  Object.keys(entities!).forEach(entityName => {
+    entities![entityName].applications = '*';
   });
 }

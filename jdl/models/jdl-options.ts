@@ -41,7 +41,7 @@ export default class JDLOptions {
     this.optionSize++;
   }
 
-  getOptions() {
+  getOptions(): AbstractJDLOption[] {
     const options: any[] = [];
     Object.values(this.options).forEach(item => {
       if (item.getType && item.getType() === 'UNARY') {
@@ -53,7 +53,7 @@ export default class JDLOptions {
     return options;
   }
 
-  getOptionsForName(optionName: string) {
+  getOptionsForName(optionName: string): AbstractJDLOption[] {
     if (!optionName) {
       return [];
     }

@@ -48,7 +48,7 @@ export default class JDLObject {
     this.options = new JDLOptions();
   }
 
-  getOptions(): any[] {
+  getOptions(): AbstractJDLOption[] {
     return this.options.getOptions();
   }
 
@@ -68,18 +68,18 @@ export default class JDLObject {
     return Object.keys(this.applications).length;
   }
 
-  getApplication(applicationName: string): any {
+  getApplication(applicationName: string): JDLApplication | undefined {
     if (!applicationName) {
       return undefined;
     }
     return this.applications[applicationName];
   }
 
-  getApplications(): any[] {
+  getApplications(): JDLApplication[] {
     return Object.values(this.applications);
   }
 
-  forEachApplication(passedFunction): void {
+  forEachApplication(passedFunction: (app: JDLApplication) => void | undefined | null): void {
     if (!passedFunction) {
       return;
     }
@@ -295,3 +295,23 @@ function relationshipsToString(relationships: JDLRelationships): string {
 function optionsToString(options: JDLOptions) {
   return options.toString();
 }
+
+export type JDLObjectWrapper = {
+  jdlObject?: JDLObject;
+  applicationName?: string;
+  applicationType?: 'monolith' | 'microservice' | 'gateway';
+  databaseType?:
+    | 'sql'
+    | 'mysql'
+    | 'mariadb'
+    | 'postgresql'
+    | 'mssql'
+    | 'oracle'
+    | 'h2Disk'
+    | 'h2Memory'
+    | 'mongodb'
+    | 'cassandra'
+    | 'couchbase'
+    | 'neo4j'
+    | 'no';
+};

@@ -42,7 +42,7 @@ export default { convert };
  * @param jdlObject - the JDL object containing entities, fields and enums.
  * @return a map having for keys an entity's name and for values its JSON fields.
  */
-export function convert(jdlObject: JDLObject): Map<string, JSONField[]> {
+export function convert(jdlObject?: JDLObject | null): Map<string, JSONField[]> {
   if (!jdlObject) {
     throw new Error('A JDL Object must be passed to convert JDL fields to JSON.');
   }
@@ -102,7 +102,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   return convertedEntityFields;
 }
 
-function getBlobFieldData(fieldType: string) {
+function getBlobFieldData(fieldType: string): { fieldType: 'bytes'; fieldTypeBlobContent: 'image' | 'any' | 'text' } {
   const blobFieldData: any = {
     fieldType: BYTES,
   };
@@ -136,7 +136,7 @@ function getFieldValidations(jdlField: JDLField) {
   return fieldValidations;
 }
 
-function getOptionsForField(jdlField) {
+function getOptionsForField(jdlField: JDLField) {
   const fieldOptions = {
     options: {},
   };
