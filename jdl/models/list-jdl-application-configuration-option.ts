@@ -18,18 +18,19 @@
  */
 
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
-import { join } from '../utils/array-utils.js';
+import { join } from '../utils/set-utils.js';
 
-export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<string[]> {
+export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<any> {
+  // TODO for v9, use set everywhere
   quoted: boolean;
 
   constructor(name: string, value: string[], quoted: boolean = false) {
-    super(name, value);
+    super(name, new Set(value));
     this.quoted = quoted;
   }
 
   getValue(): string[] {
-    return this.value;
+    return Array.from(this.value);
   }
 
   toString(): string {

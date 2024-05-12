@@ -23,7 +23,7 @@ export default function deduplicate<T>(array: T[]): T[] {
 
 export function join(set: unknown[], separator = ',', quoted = false) {
   if (!set) {
-    throw new Error('A Set must be passed so as to join elements.');
+    throw new Error('An Array must be passed so as to join elements.');
   }
   return set.map(val => (quoted ? `"${val}"` : val)).join(separator);
 }

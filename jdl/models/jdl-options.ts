@@ -21,7 +21,7 @@ import JDLUnaryOption from './jdl-unary-option.js';
 import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLOptions {
-  options: Record<string, any>;
+  options: Record<string, AbstractJDLOption>;
   optionSize: number;
 
   constructor() {

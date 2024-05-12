@@ -65,12 +65,12 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
       fieldData.documentation = comment;
     }
     if (jdlObject.hasEnum(jdlField.type)) {
-      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType).getValuesAsString();
-      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType).comment;
+      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType)?.getValuesAsString();
+      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType)?.comment;
       if (fieldTypeComment) {
         fieldData.fieldTypeDocumentation = fieldTypeComment;
       }
-      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType).getValueJavadocs();
+      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType)?.getValueJavadocs();
       if (fieldValuesJavadocs && Object.keys(fieldValuesJavadocs).length > 0) {
         fieldData.fieldValuesJavadocs = fieldValuesJavadocs;
       }
@@ -101,7 +101,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   return convertedEntityFields;
 }
 
-function getBlobFieldData(fieldType) {
+function getBlobFieldData(fieldType: string) {
   const blobFieldData: any = {
     fieldType: BYTES,
   };

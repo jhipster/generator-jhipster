@@ -6,6 +6,10 @@ export type JSONField = {
   options?: Record<string, boolean | string | number>;
 } & Record<string, any>;
 
+export type JSONFieldBlob = JSONField & {
+  fieldTypeBlobContent: string;
+};
+
 export type JSONRelationship = {
   relationshipSide?: RelationshipSide;
   relationshipName: string;
