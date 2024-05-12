@@ -52,7 +52,7 @@ let jdlObject: JDLObject;
  * @param params.entities - a Map having for keys the entity names and values the JSON entity files.
  * @return the parsed entities in the JDL form.
  */
-export function convertEntitiesToJDL(entities: Map<string, JSONEntity>): JDLObject {
+export function convertEntitiesToJDL(entities?: Map<string, JSONEntity>): JDLObject {
   if (!entities) {
     throw new Error('Entities have to be passed to be converted.');
   }

@@ -25,6 +25,7 @@ import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { JSONField } from '../types.js';
 import { JDLEntity } from '../../models/index.js';
+import JDLField from '../../models/jdl-field.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },
@@ -65,12 +66,12 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
       fieldData.documentation = comment;
     }
     if (jdlObject.hasEnum(jdlField.type)) {
-      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType).getValuesAsString();
-      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType).comment;
+      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType)?.getValuesAsString();
+      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType)?.comment;
       if (fieldTypeComment) {
         fieldData.fieldTypeDocumentation = fieldTypeComment;
       }
-      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType).getValueJavadocs();
+      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType)?.getValueJavadocs();
       if (fieldValuesJavadocs && Object.keys(fieldValuesJavadocs).length > 0) {
         fieldData.fieldValuesJavadocs = fieldValuesJavadocs;
       }
@@ -101,7 +102,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   return convertedEntityFields;
 }
 
-function getBlobFieldData(fieldType) {
+function getBlobFieldData(fieldType: string) {
   const blobFieldData: any = {
     fieldType: BYTES,
   };
@@ -122,7 +123,7 @@ function getBlobFieldData(fieldType) {
   return blobFieldData;
 }
 
-function getFieldValidations(jdlField) {
+function getFieldValidations(jdlField: JDLField) {
   const fieldValidations: any = {
     fieldValidateRules: [],
   };

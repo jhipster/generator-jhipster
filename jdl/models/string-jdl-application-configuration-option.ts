@@ -19,15 +19,15 @@
 
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
-export default class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
+export default class StringJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<string> {
   quoted: boolean;
 
-  constructor(name: string, value, quoted = false) {
+  constructor(name: string, value: string, quoted = false) {
     super(name, value);
     this.quoted = quoted;
   }
 
-  toString() {
+  toString(): string {
     const value = this.quoted && !this.value.includes('"') ? `"${this.value}"` : this.value;
     return `${this.name} ${value}`;
   }

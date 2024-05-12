@@ -175,36 +175,36 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: unaryOptions.SKIP_SERVER,
-              entityNames: ['Country'],
+              entityNames: new Set(['Country']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.DTO,
-              entityNames: ['Employee'],
+              entityNames: new Set(['Employee']),
               value: BinaryOptionValues.dto.MAPSTRUCT,
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.SERVICE,
-              entityNames: ['Employee'],
+              entityNames: new Set(['Employee']),
               value: BinaryOptionValues.service.SERVICE_CLASS,
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.PAGINATION,
-              entityNames: ['JobHistory', 'Employee'],
+              entityNames: new Set(['JobHistory', 'Employee']),
               value: BinaryOptionValues.pagination['INFINITE-SCROLL'],
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.PAGINATION,
-              entityNames: ['Job'],
+              entityNames: new Set(['Job']),
               value: BinaryOptionValues.pagination.PAGINATION,
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.MICROSERVICE,
-              entityNames: ['*'],
+              entityNames: new Set(['*']),
               value: 'mymicroservice',
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.SEARCH,
-              entityNames: ['Employee'],
+              entityNames: new Set(['Employee']),
               value: BinaryOptionValues.search.ELASTICSEARCH,
             }),
           ]);
@@ -357,7 +357,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: unaryOptions.NO_FLUENT_METHOD,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           ]);
         });
@@ -746,8 +746,8 @@ JDLDeployment {
             entityB = jdlObject.entities.B;
             entityC = jdlObject.entities.C;
             fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
-            relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
-            relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.destination;
+            relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}')!.options.source;
+            relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}')!.options.destination;
           });
 
           it('should set the annotations as options', () => {
@@ -807,8 +807,8 @@ JDLDeployment {
             entityB = jdlObject.entities.B;
             entityC = jdlObject.entities.C;
             fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
-            relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.source;
-            relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.destination;
+            relationshipAnnotationOnSource = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}')!.options.source;
+            relationshipAnnotationOnDestination = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}')!.options.destination;
           });
 
           it('should set the annotations as options with lower-case letters first', () => {

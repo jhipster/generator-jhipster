@@ -25,7 +25,7 @@ import { join } from '../utils/set-utils.js';
  * For options like the DTO, the service, etc.
  */
 export default class JDLBinaryOption extends AbstractJDLOption {
-  value: any;
+  value: string;
 
   constructor(args: Partial<JDLBinaryOption>) {
     super(args);

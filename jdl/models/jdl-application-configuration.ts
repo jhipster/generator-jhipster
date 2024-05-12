@@ -23,7 +23,7 @@ import JDLApplicationConfigurationOption from './jdl-application-configuration-o
 const { OptionNames } = ApplicationOptions;
 
 export default class JDLApplicationConfiguration {
-  options: Record<string, JDLApplicationConfigurationOption>;
+  options: Record<string, JDLApplicationConfigurationOption<any>>;
   namespace?: string;
 
   constructor(namespace?: string) {
@@ -31,14 +31,14 @@ export default class JDLApplicationConfiguration {
     this.namespace = namespace;
   }
 
-  hasOption(optionName: string) {
+  hasOption(optionName: string): boolean {
     if (!optionName) {
       return false;
     }
     return optionName in this.options;
   }
 
-  getOption(optionName: string) {
+  getOption(optionName: string): JDLApplicationConfigurationOption<any> | undefined {
     if (!optionName) {
       throw new Error('An option name has to be passed to get the option.');
     }
@@ -48,14 +48,14 @@ export default class JDLApplicationConfiguration {
     return this.options[optionName];
   }
 
-  setOption(option: JDLApplicationConfigurationOption) {
+  setOption(option: JDLApplicationConfigurationOption<any>): void {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.options[option.name] = option;
   }
 
-  forEachOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
+  forEachOption(passedFunction: (option: JDLApplicationConfigurationOption<any>) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -64,7 +64,7 @@ export default class JDLApplicationConfiguration {
     });
   }
 
-  toString(indent = 0) {
+  toString(indent = 0): string {
     const spaceBeforeConfigKeyword = ' '.repeat(indent);
     const namespace = this.namespace ? `:${this.namespace}` : '';
     if (Object.keys(this.options).length === 0) {
@@ -78,7 +78,7 @@ ${spaceBeforeConfigKeyword}}`;
   }
 }
 
-function getFormattedConfigOptionsString(options: Record<string, JDLApplicationConfigurationOption>, indent: string) {
+function getFormattedConfigOptionsString(options: Record<string, JDLApplicationConfigurationOption<any>>, indent: string): string {
   const filteredOptions = filterOutUnwantedOptions(options);
   return Object.keys(filteredOptions)
     .sort()
@@ -89,11 +89,15 @@ function getFormattedConfigOptionsString(options: Record<string, JDLApplicationC
     .join('\n');
 }
 
-function filterOutUnwantedOptions(options: Record<string, JDLApplicationConfigurationOption>) {
+function filterOutUnwantedOptions(
+  options: Record<string, JDLApplicationConfigurationOption<any>>,
+): Record<string, JDLApplicationConfigurationOption<any>> {
   return filterOutOptionsThatShouldNotBeExported(filterOutOptionsWithoutValues(options));
 }
 
-function filterOutOptionsWithoutValues(options: Record<string, JDLApplicationConfigurationOption>) {
+function filterOutOptionsWithoutValues(
+  options: Record<string, JDLApplicationConfigurationOption<any>>,
+): Record<string, JDLApplicationConfigurationOption<any>> {
   const filteredOptions = { ...options };
   if (!(OptionNames.ENTITY_SUFFIX in options) || !options[OptionNames.ENTITY_SUFFIX].getValue()) {
     delete filteredOptions[OptionNames.ENTITY_SUFFIX];
@@ -107,7 +111,9 @@ function filterOutOptionsWithoutValues(options: Record<string, JDLApplicationCon
   return filteredOptions;
 }
 
-function filterOutOptionsThatShouldNotBeExported(options: Record<string, JDLApplicationConfigurationOption>) {
+function filterOutOptionsThatShouldNotBeExported(
+  options: Record<string, JDLApplicationConfigurationOption<any>>,
+): Record<string, JDLApplicationConfigurationOption<any>> {
   const filteredOptions = { ...options };
   delete filteredOptions[OptionNames.PACKAGE_FOLDER];
   return filteredOptions;

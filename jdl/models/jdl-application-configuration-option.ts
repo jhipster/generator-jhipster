@@ -17,25 +17,25 @@
  * limitations under the License.
  */
 
-export default class JDLApplicationConfigurationOption {
+export default class JDLApplicationConfigurationOption<T> {
   name: string;
-  value: any;
+  value: T;
 
   /**
    * Creates a new application option.
    * @param {String} name - the option's name.
    * @param {any} value - the option's value, can be virtually anything: a String, an Int, a boolean...
    */
-  constructor(name: string, value: any) {
+  constructor(name: string, value: T) {
     this.name = name;
     this.value = value;
   }
 
-  getValue() {
+  getValue(): T {
     return this.value;
   }
 
-  toString() {
+  toString(): string {
     return `${this.name} ${this.value}`;
   }
 }

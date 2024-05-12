@@ -34,30 +34,30 @@ export default class JDLRelationships {
     };
   }
 
-  add(relationship: JDLRelationship) {
+  add(relationship: JDLRelationship): void {
     if (!relationship) {
       throw new Error('A relationship must be passed so as to be added.');
     }
     this.relationships[relationship.type].set(relationship.getId(), relationship);
   }
 
-  getOneToOne(relationshipId) {
+  getOneToOne(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.ONE_TO_ONE, relationshipId);
   }
 
-  getOneToMany(relationshipId) {
+  getOneToMany(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.ONE_TO_MANY, relationshipId);
   }
 
-  getManyToOne(relationshipId) {
+  getManyToOne(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.MANY_TO_ONE, relationshipId);
   }
 
-  getManyToMany(relationshipId) {
+  getManyToMany(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.MANY_TO_MANY, relationshipId);
   }
 
-  get(type, relationshipId): JDLRelationship {
+  get(type: JDLRelationshipType, relationshipId: string): JDLRelationship | undefined {
     if (!relationshipTypeExists(type)) {
       throw new Error(`A valid relationship type must be passed so as to retrieve the relationship, got '${type}'.`);
     }
@@ -67,23 +67,23 @@ export default class JDLRelationships {
     return this.relationships[type].get(relationshipId);
   }
 
-  oneToOneQuantity() {
+  oneToOneQuantity(): number {
     return this.relationships.OneToOne.size;
   }
 
-  oneToManyQuantity() {
+  oneToManyQuantity(): number {
     return this.relationships.OneToMany.size;
   }
 
-  manyToOneQuantity() {
+  manyToOneQuantity(): number {
     return this.relationships.ManyToOne.size;
   }
 
-  manyToManyQuantity() {
+  manyToManyQuantity(): number {
     return this.relationships.ManyToMany.size;
   }
 
-  size() {
+  size(): number {
     return this.oneToOneQuantity() + this.oneToManyQuantity() + this.manyToOneQuantity() + this.manyToManyQuantity();
   }
 
@@ -106,7 +106,7 @@ export default class JDLRelationships {
     return relationships;
   }
 
-  toString() {
+  toString(): string {
     if (this.size() === 0) {
       return '';
     }

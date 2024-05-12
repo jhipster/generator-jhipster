@@ -20,7 +20,8 @@
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 import { join } from '../utils/set-utils.js';
 
-export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {
+export default class ListJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<any> {
+  // TODO for v9, use set everywhere
   quoted: boolean;
 
   constructor(name: string, value: string[], quoted: boolean = false) {
@@ -28,11 +29,11 @@ export default class ListJDLApplicationConfigurationOption extends JDLApplicatio
     this.quoted = quoted;
   }
 
-  getValue(): any[] {
+  getValue(): string[] {
     return Array.from(this.value);
   }
 
-  toString() {
+  toString(): string {
     return `${this.name} [${join(this.value, ', ', this.quoted)}]`;
   }
 }

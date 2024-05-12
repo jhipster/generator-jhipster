@@ -24,13 +24,16 @@ import { binaryOptions } from '../jhipster/index.js';
 import JDLEntity from './jdl-entity.js';
 import JDLRelationship from './jdl-relationship.js';
 import AbstractJDLOption from './abstract-jdl-option.js';
+import JDLEnum from './jdl-enum.js';
+import JDLDeployment from './jdl-deployment.js';
+import JDLApplication from './jdl-application.js';
 
 /**
  * The JDL object class, containing applications, entities etc.
  */
 export default class JDLObject {
-  applications: Record<string, any>;
-  deployments: Record<string, any>;
+  applications: Record<string, JDLApplication>;
+  deployments: Record<string, JDLDeployment>;
   entities: Record<string, JDLEntity>;
   enums: JDLEnums;
   relationships: JDLRelationships;
@@ -90,7 +93,7 @@ export default class JDLObject {
    * Adds or replaces a deployment.
    * @param deployment the deployment.
    */
-  addDeployment(deployment): void {
+  addDeployment(deployment: JDLDeployment): void {
     if (!deployment) {
       throw new Error("Can't add nil deployment.");
     }
@@ -101,7 +104,7 @@ export default class JDLObject {
     return Object.keys(this.deployments).length;
   }
 
-  forEachDeployment(passedFunction): void {
+  forEachDeployment(passedFunction: (deployment: JDLDeployment, index: number, array: string[]) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -115,7 +118,7 @@ export default class JDLObject {
    * Adds or replaces an entity.
    * @param entity the entity to add.
    */
-  addEntity(entity: JDLEntity) {
+  addEntity(entity: JDLEntity): void {
     if (!entity) {
       throw new Error("Can't add nil entity.");
     }
@@ -141,7 +144,7 @@ export default class JDLObject {
     return Object.keys(this.entities);
   }
 
-  forEachEntity(passedFunction: (entity: JDLEntity, index: number, entityNames: string[]) => void) {
+  forEachEntity(passedFunction: (entity: JDLEntity, index: number, entityNames: string[]) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -155,7 +158,7 @@ export default class JDLObject {
    * Adds or replaces an enum.
    * @param enumToAdd the enum to add.
    */
-  addEnum(enumToAdd: any): void {
+  addEnum(enumToAdd: JDLEnum): void {
     if (!enumToAdd) {
       throw new Error("Can't add nil enum.");
     }
@@ -166,7 +169,7 @@ export default class JDLObject {
     return this.enums.has(enumName);
   }
 
-  getEnum(enumName: string): any {
+  getEnum(enumName: string): JDLEnum | undefined {
     return this.enums.get(enumName);
   }
 
@@ -174,7 +177,7 @@ export default class JDLObject {
     return this.enums.size();
   }
 
-  forEachEnum(passedFunction: (jdlEnum: JDLEnums) => void): void {
+  forEachEnum(passedFunction: (jdlEnum: JDLEnum) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -183,7 +186,7 @@ export default class JDLObject {
     });
   }
 
-  addRelationship(relationship): void {
+  addRelationship(relationship: JDLRelationship): void {
     if (!relationship) {
       throw new Error("Can't add nil relationship.");
     }
@@ -204,7 +207,7 @@ export default class JDLObject {
     return count;
   }
 
-  forEachRelationship(passedFunction?: (relationship: JDLRelationship) => void): void {
+  forEachRelationship(passedFunction: (relationship: JDLRelationship) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -235,14 +238,14 @@ export default class JDLObject {
     this.options.forEach(passedFunction);
   }
 
-  hasOption(optionName): boolean {
+  hasOption(optionName: string): boolean {
     if (!optionName) {
       return false;
     }
     return this.options.has(optionName);
   }
 
-  isEntityInMicroservice(entityName): boolean {
+  isEntityInMicroservice(entityName: string): boolean {
     const options = this.getOptionsForName(binaryOptions.Options.MICROSERVICE);
     return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
   }
@@ -267,13 +270,13 @@ export default class JDLObject {
   }
 }
 
-function applicationsToString(applications: Record<string, any>): string {
+function applicationsToString(applications: Record<string, JDLApplication>): string {
   return Object.values(applications)
     .map(application => application.toString())
     .join('\n');
 }
 
-function deploymentsToString(deployments: Record<any, any>): string {
+function deploymentsToString(deployments: Record<any, JDLDeployment>): string {
   return Object.values(deployments)
     .map(deployment => deployment.toString())
     .join('\n');

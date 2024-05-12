@@ -49,10 +49,10 @@ describe('jdl - JDLOptions', () => {
         options = new JDLOptions();
         option1 = new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-          entityNames: ['A', 'B', 'C'],
-          excludedNames: ['M'],
+          entityNames: new Set(['A', 'B', 'C']),
+          excludedNames: new Set(['M']),
         });
-        option2 = new JDLUnaryOption({ name: unaryOptions.SKIP_SERVER, entityNames: ['D'] });
+        option2 = new JDLUnaryOption({ name: unaryOptions.SKIP_SERVER, entityNames: new Set(['D']) });
         options.addOption(option1);
         options.addOption(option2);
       });
@@ -66,7 +66,9 @@ describe('jdl - JDLOptions', () => {
 
       describe('that has been added before', () => {
         before(() => {
-          options.addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT, entityNames: ['A', 'J'], excludedNames: ['N', 'O'] }));
+          options.addOption(
+            new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT, entityNames: new Set(['A', 'J']), excludedNames: new Set(['N', 'O']) }),
+          );
         });
 
         it('should not duplicate it', () => {
@@ -76,8 +78,8 @@ describe('jdl - JDLOptions', () => {
           expect(options.getOptions()[0]).to.deep.eq(
             new JDLUnaryOption({
               name: unaryOptions.SKIP_CLIENT,
-              entityNames: ['A', 'B', 'C', 'J'],
-              excludedNames: ['M', 'N', 'O'],
+              entityNames: new Set(['A', 'B', 'C', 'J']),
+              excludedNames: new Set(['M', 'N', 'O']),
             }),
           );
         });
@@ -87,7 +89,7 @@ describe('jdl - JDLOptions', () => {
   describe('has', () => {
     describe('with an invalid input', () => {
       it('should return false', () => {
-        expect(new JDLOptions().has(null)).to.be.false;
+        expect(new JDLOptions().has()).to.be.false;
       });
     });
     describe('with a valid input', () => {
@@ -101,7 +103,7 @@ describe('jdl - JDLOptions', () => {
         options.addOption(
           new JDLUnaryOption({
             name: unaryOptions.SKIP_CLIENT,
-            entityNames: ['A'],
+            entityNames: new Set(['A']),
           }),
         );
         expect(options.has(unaryOptions.SKIP_CLIENT)).to.be.true;
@@ -121,8 +123,8 @@ describe('jdl - JDLOptions', () => {
       options.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-          entityNames: ['A', 'B', 'C'],
-          excludedNames: ['M'],
+          entityNames: new Set(['A', 'B', 'C']),
+          excludedNames: new Set(['M']),
         }),
       );
       expect(options.size()).to.equal(1);
@@ -226,16 +228,16 @@ describe('jdl - JDLOptions', () => {
       options.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-          entityNames: ['A', 'B', 'C'],
-          excludedNames: ['M'],
+          entityNames: new Set(['A', 'B', 'C']),
+          excludedNames: new Set(['M']),
         }),
       );
-      options.addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_SERVER, entityNames: ['D'] }));
+      options.addOption(new JDLUnaryOption({ name: unaryOptions.SKIP_SERVER, entityNames: new Set(['D']) }));
       options.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
-          entityNames: ['A', 'J'],
-          excludedNames: ['N', 'O'],
+          entityNames: new Set(['A', 'J']),
+          excludedNames: new Set(['N', 'O']),
         }),
       );
     });
