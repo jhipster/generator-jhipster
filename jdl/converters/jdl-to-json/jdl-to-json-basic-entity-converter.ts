@@ -31,7 +31,7 @@ export default {
  * @param jdlEntities - the JDL entities to convert.
  * @return a map having for keys entity names and for values the corresponding JSON entities.
  */
-export function convert(jdlEntities: JDLEntity[]): Map<string, JSONEntity> {
+export function convert(jdlEntities?: JDLEntity[] | null): Map<string, JSONEntity> {
   if (!jdlEntities) {
     throw new Error('JDL entities must be passed to get the basic entity information.');
   }

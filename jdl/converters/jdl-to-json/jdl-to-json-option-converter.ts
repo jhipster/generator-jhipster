@@ -50,7 +50,7 @@ type JDLOptionHolder = JDLObject | JDLApplication;
  * @param jdlOptionHolder - a JDL object (a JDLObject or a JDLApplication) containing the options.
  * @return {Map<String, Object>} a map having for keys entity names and for values the JSON option contents.
  */
-export function convert(jdlOptionHolder: JDLOptionHolder) {
+export function convert(jdlOptionHolder?: JDLOptionHolder | null): Map<string, any> {
   if (!jdlOptionHolder) {
     throw new Error('A JDL object or application must be passed to convert JDL options to JSON.');
   }
@@ -60,7 +60,7 @@ export function convert(jdlOptionHolder: JDLOptionHolder) {
   return convertedOptionContent;
 }
 
-function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder) {
+function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder): void {
   jdlOptionHolder.forEachOption(jdlOption => {
     if (jdlOption.entityNames.has('*')) {
       jdlOption.setEntityNames(jdlOptionHolder.getEntityNames().filter(entityName => !jdlOption.excludedNames.has(entityName)));
@@ -68,13 +68,13 @@ function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder) {
   });
 }
 
-function setConvertedOptionContents(jdlOptionHolder: JDLOptionHolder) {
+function setConvertedOptionContents(jdlOptionHolder: JDLOptionHolder): void {
   jdlOptionHolder.forEachOption(jdlOption => {
     setOptionsToEachEntityName(jdlOption);
   });
 }
 
-function setOptionsToEachEntityName(jdlOption) {
+function setOptionsToEachEntityName(jdlOption: AbstractJDLOption): void {
   const { key, value } = getJSONOptionKeyAndValue(jdlOption);
 
   jdlOption.entityNames.forEach(entityName => {
@@ -118,13 +118,13 @@ function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; 
   }
 }
 
-function preventEntitiesFromBeingSearched(entityNames: string[]) {
+function preventEntitiesFromBeingSearched(entityNames: Set<string>) {
   entityNames.forEach(entityName => {
     setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
   });
 }
 
-function setOptionToEntityName(option, entityName: string) {
+function setOptionToEntityName(option, entityName: string): void {
   const { optionName, optionValue } = option;
   const optionContentForEntity = convertedOptionContent.get(entityName) ?? {};
   optionContentForEntity[optionName] = optionValue;
