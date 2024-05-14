@@ -1,5 +1,5 @@
 {
-  "entities": [ "Country", "Department", "Employee", "Job", "JobHistory", "Location", "Region", "Task"],
+  "entities": [ "Country"],
   "generator-jhipster": {
     "promptValues": {
       "packageName": "com.mycompany.myapp"

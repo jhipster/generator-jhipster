@@ -30,3 +30,12 @@ export type JSONEntity = {
   fields?: JSONField[];
   relationships?: JSONRelationship[];
 } & Record<string, any>;
+
+export type JSONGeneratorJhipsterContent = {
+  applicationType: string;
+} & Record<string, any>;
+
+export type JSONRootObject = {
+  entities: string[];
+  ['generator-jhipster']: JSONGeneratorJhipsterContent;
+};

@@ -85,6 +85,14 @@ describe('jdl - JSONToJDLConverter', () => {
           `);
         });
       });
+      describe('with entities inconsistent informations', () => {
+        it('should fail with an error', () => {
+          dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_inconsistent_information');
+          jdlFilename = 'app.jdl';
+          expect(() => convertToJDL(dir)).to.throw();
+        });
+      });
+
       describe('with entities', () => {
         beforeEach(() => {
           dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_entities');
