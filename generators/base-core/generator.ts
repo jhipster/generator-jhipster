@@ -66,6 +66,7 @@ const {
   PROMPTING,
   CONFIGURING,
   COMPOSING,
+  COMPOSING_COMPONENT,
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -100,6 +101,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   static CONFIGURING = asPriority(CONFIGURING);
 
   static COMPOSING = asPriority(COMPOSING);
+
+  static COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
   static LOADING = asPriority(LOADING);
 

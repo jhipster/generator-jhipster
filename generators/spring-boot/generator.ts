@@ -164,7 +164,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           cacheProvider,
           skipClient,
           clientFramework,
-          enableTranslation,
           testFrameworks,
           feignClient,
         } = this.jhipsterConfigWithDefaults;
@@ -181,9 +180,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster('jhipster:spring-cloud:gateway');
         }
 
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
         if (testFrameworks?.includes(CUCUMBER)) {
           await this.composeWithJHipster(GENERATOR_CUCUMBER);
         }
@@ -223,6 +219,20 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  get composingComponent() {
+    return this.asComposingComponentTaskGroup({
+      async composeLanguages() {
+        if (this.jhipsterConfigWithDefaults.enableTranslation) {
+          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
+    return this.delegateTasksToBlueprint(() => this.composingComponent);
   }
 
   get preparing() {

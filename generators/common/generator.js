@@ -161,6 +161,11 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
+      checkSuffix({ application }) {
+        if (application.entitySuffix === application.dtoSuffix) {
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
+        }
+      },
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;

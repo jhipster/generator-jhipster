@@ -130,8 +130,8 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  get composing() {
-    return this.asComposingTaskGroup({
+  get composingComponent() {
+    return this.asComposingComponentTaskGroup({
       /**
        * Composing with others generators, must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
@@ -154,20 +154,11 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
-      /**
-       * At this point every other generator should already be configured, so, enforce defaults fallback.
-       */
-      saveConfigWithDefaults() {
-        const config = this.jhipsterConfigWithDefaults;
-        if (config.entitySuffix === config.dtoSuffix) {
-          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-        }
-      },
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+  get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
+    return this.delegateTasksToBlueprint(() => this.composingComponent);
   }
 
   get writing() {

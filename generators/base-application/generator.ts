@@ -577,6 +577,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queueConfiguringEachEntity',
       cancellable: true,
       method: () => {
+        if (this.options.skipPriorities?.includes(CONFIGURING_EACH_ENTITY)) return;
         this.log.debug(`Queueing entity tasks ${CONFIGURING_EACH_ENTITY}`);
         const tasks = this.extractTasksFromPriority(CONFIGURING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToConfigure().forEach(({ entityName, entityStorage, entityConfig }) => {
@@ -597,6 +598,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queueLoadingEntities',
       cancellable: true,
       method: () => {
+        if (this.options.skipPriorities?.includes(LOADING_ENTITIES)) return;
         this.log.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
         const tasks = this.extractTasksFromPriority(LOADING_ENTITIES, { skip: false });
         this.log.debug(`Queueing entity tasks ${LOADING_ENTITIES}`);
@@ -615,6 +617,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePreparingEachEntity',
       cancellable: true,
       method: () => {
+        if (this.options.skipPriorities?.includes(PREPARING_EACH_ENTITY)) return;
         this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY}`);
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPrepare().forEach(({ description, ...data }) => {
@@ -635,6 +638,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePreparingEachEntityField',
       cancellable: true,
       method: () => {
+        if (this.options.skipPriorities?.includes(PREPARING_EACH_ENTITY_FIELD)) return;
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_FIELD, { skip: false });
         this.getEntitiesFieldsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_FIELD} for ${description}`);
@@ -654,6 +658,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePreparingEachEntityRelationship',
       cancellable: true,
       method: () => {
+        if (this.options.skipPriorities?.includes(PREPARING_EACH_ENTITY_RELATIONSHIP)) return;
         const tasks = this.extractTasksFromPriority(PREPARING_EACH_ENTITY_RELATIONSHIP, { skip: false });
         this.getEntitiesRelationshipsDataToPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${PREPARING_EACH_ENTITY_RELATIONSHIP} for ${description}`);
@@ -673,6 +678,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePostPreparingEachEntity',
       cancellable: true,
       method: () => {
+        if (this.options.skipPriorities?.includes(POST_PREPARING_EACH_ENTITY)) return;
         const tasks = this.extractTasksFromPriority(POST_PREPARING_EACH_ENTITY, { skip: false });
         this.getEntitiesDataToPostPrepare().forEach(({ description, ...data }) => {
           this.log.debug(`Queueing entity tasks ${POST_PREPARING_EACH_ENTITY} for ${description}`);
@@ -692,7 +698,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queueWritingEachEntity',
       cancellable: true,
       method: () => {
-        if (this.options.skipWriting) return;
+        if (this.options.skipWriting || this.options.skipPriorities?.includes(WRITING_ENTITIES)) return;
         const tasks = this.extractTasksFromPriority(WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(WRITING_ENTITIES);
         tasks.forEach(task => {
@@ -709,7 +715,7 @@ export default class BaseApplicationGenerator<
       taskName: 'queuePostWritingEachEntity',
       cancellable: true,
       method: () => {
-        if (this.options.skipWriting) return;
+        if (this.options.skipWriting || this.options.skipPriorities?.includes(POST_WRITING_ENTITIES)) return;
         const tasks = this.extractTasksFromPriority(POST_WRITING_ENTITIES, { skip: false });
         const args = this.getArgsForPriority(POST_WRITING_ENTITIES);
         tasks.forEach(task => {
