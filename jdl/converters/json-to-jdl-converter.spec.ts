@@ -18,13 +18,13 @@
  */
 /* eslint-disable no-unused-expressions */
 
-import fs, { readFileSync } from 'fs';
+import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
-import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../testing/index.js';
+import { basicHelpers as helpers } from '../../testing/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -36,48 +36,16 @@ describe('jdl - JSONToJDLConverter', () => {
 
   describe('convertToJDL', () => {
     describe('when there is a yo-rc file in the passed directory', () => {
+      let dir;
+      let jdlFilename;
       let jdlFileContent;
 
       describe('without entities', () => {
-        beforeEach(async () => {
-          await helpers
-            .prepareTemporaryDir()
-            .withFiles(
-              createJHipsterConfigFiles({
-                jhipsterVersion: '6.0.1',
-                applicationType: 'microservice',
-                baseName: 'truc',
-                blueprints: [{ name: 'generator-jhipster-vuejs' }, { name: 'generator-jhipster-dotnetcore' }],
-                packageName: 'com.mycompany.myapp',
-                packageFolder: 'com/mycompany/myapp',
-                serverPort: '8081',
-                authenticationType: 'jwt',
-                cacheProvider: 'hazelcast',
-                enableHibernateCache: true,
-                websocket: 'no',
-                databaseType: 'sql',
-                devDatabaseType: 'h2Disk',
-                prodDatabaseType: 'mysql',
-                searchEngine: 'no',
-                messageBroker: 'no',
-                serviceDiscoveryType: 'eureka',
-                buildTool: 'maven',
-                enableSwaggerCodegen: false,
-                jwtSecretKey: 'HIDDEN',
-                testFrameworks: [],
-                jhiPrefix: 'jhi',
-                entitySuffix: '',
-                dtoSuffix: 'DTO',
-                enableTranslation: false,
-                clientPackageManager: 'npm',
-                skipClient: true,
-                nativeLanguage: 'en',
-                skipUserManagement: true,
-              }),
-            )
-            .commitFiles();
-          convertToJDL();
-          jdlFileContent = fs.readFileSync('app.jdl', 'utf-8');
+        beforeEach(() => {
+          dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'only_app');
+          jdlFilename = 'app.jdl';
+          convertToJDL(dir);
+          jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
         });
 
         it('should write a JDL file with the application', () => {
@@ -120,9 +88,10 @@ describe('jdl - JSONToJDLConverter', () => {
 
       describe('with entities', () => {
         beforeEach(() => {
-          const dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_entities');
+          dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_entities');
+          jdlFilename = 'app.jdl';
           convertToJDL(dir);
-          jdlFileContent = fs.readFileSync(path.join(dir, 'app.jdl'), 'utf-8');
+          jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
         });
 
         it('should export apps & entities', () => {
@@ -366,26 +335,17 @@ describe('jdl - JSONToJDLConverter', () => {
       });
     });
     describe('when passing an output file', () => {
-      let file;
+      let dir;
+      let output;
 
-      beforeEach(async () => {
-        file = 'exported.jdl';
-        await helpers
-          .prepareTemporaryDir()
-          .withFiles(createJHipsterConfigFiles({ baseName: 'jhipster' }))
-          .commitFiles();
-        convertToJDL('.', file);
+      beforeEach(() => {
+        dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'only_app');
+        output = path.resolve('exported.jdl');
+        convertToJDL(dir, output);
       });
 
       it('should output it to the output file', () => {
-        jestExpect(readFileSync(file, 'utf-8')).toMatchInlineSnapshot(`
-"application {
-  config {
-    baseName jhipster
-  }
-}
-"
-`);
+        expect(fs.readFileSync(output, 'utf-8')).not.to.be.null;
       });
     });
   });

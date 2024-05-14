@@ -47,7 +47,7 @@ export function convertToJDL(directory = '.', output: string | false = 'app.jdl'
     const yoRcFileContent: JSONRootObject = readJSONFile(path.join(directory, '.yo-rc.json'));
     let entities: Map<string, JSONEntity> | undefined;
     if (doesDirectoryExist(path.join(directory, '.jhipster'))) {
-      entities = getJSONEntityFiles(directory);
+      entities = getJSONEntityFiles(directory, yoRcFileContent);
     }
     jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities);
   } else {
@@ -79,7 +79,7 @@ function getJDLObjectFromMultipleApplications(directory: string): JDLObject {
     const yoRcFileContent: JSONRootObject = readJSONFile(path.join(applicationDirectory, '.yo-rc.json'));
     let entities: Map<string, JSONEntity> = new Map();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
-      entities = getJSONEntityFiles(applicationDirectory);
+      entities = getJSONEntityFiles(applicationDirectory, yoRcFileContent);
     }
     jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, jdlObject);
   });
