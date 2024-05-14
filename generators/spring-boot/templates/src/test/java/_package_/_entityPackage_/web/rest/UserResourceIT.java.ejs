@@ -80,9 +80,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-<%_ if (databaseTypeSql && !reactive) { _%>
-import jakarta.persistence.EntityManager;
-<%_ } _%>
 <%_ if (!databaseTypeCassandra) { _%>
 import java.time.Instant;
 <%_ } _%>
@@ -183,8 +180,10 @@ class UserResourceIT {
     private UserMapper userMapper;
 <%_ if (databaseTypeSql) { _%>
 
+<%_ if (databaseTypeSql && reactive) { _%>
     @Autowired
     private EntityManager em;
+<%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 
@@ -222,7 +221,7 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= user.persistClass %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+    public static <%= user.persistClass %> createEntity() {
         <%= user.persistClass %> user = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -262,12 +261,12 @@ class UserResourceIT {
     /**
      * Setups the database with one user.
      */
-    public static <%= user.persistClass %> initTestUser(UserRepository userRepository<% if (databaseTypeSql) { %>, EntityManager em<% } _%>) {
+    public static <%= user.persistClass %> initTestUser(UserRepository userRepository) {
 <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
 <%_ } _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-        <%= user.persistClass %> user = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
+        <%= user.persistClass %> user = createEntity();
 <%_ if (databaseTypeSql) { _%>
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
@@ -277,7 +276,7 @@ class UserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = initTestUser(userRepository<% if (databaseTypeSql) { %>, em<% } _%>);
+        user = initTestUser(userRepository);
     }
 <%_ if (!authenticationTypeOauth2) { _%>
 

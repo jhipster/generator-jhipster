@@ -162,7 +162,7 @@ class PublicUserResourceIT {
 <%_ } _%>
     @BeforeEach
     public void initTest() {
-        user = UserResourceIT.initTestUser(userRepository<% if (databaseTypeSql) { %>, em<% } %>);
+        user = UserResourceIT.initTestUser(userRepository);
     }
 
     @Test
