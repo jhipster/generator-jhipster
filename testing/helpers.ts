@@ -14,8 +14,9 @@ import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '
 import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
+import type { JSONEntity } from '../jdl/converters/types.js';
 
-type BaseEntity = any;
+type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
 
@@ -79,6 +80,9 @@ const createFiles = (workspaceFolder: string, configuration: Record<string, unkn
     ...entityFiles,
   };
 };
+
+export const createJHipsterConfigFiles = (configuration: Record<string, unknown>, entities?: BaseEntity[]) =>
+  createFiles('', configuration, entities);
 
 export type FakeBlueprintOptions = {
   packageJson?: any;
