@@ -516,7 +516,7 @@ filterTestableRelationships.forEach((relationship) => { _%>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+    public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && persistableRelationships.length > 0) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
@@ -648,7 +648,7 @@ _%>
 <%_ } else if (databaseTypeSql && reactive) {  _%>
         deleteEntities(em);
 <%_ } _%>
-        <%= persistInstance %> = createEntity(<% if (databaseTypeSql) { %>em<% } %>);
+        <%= persistInstance %> = createEntity(<% if (databaseTypeSql && persistableRelationships.length > 0) { %>em<% } %>);
     }
 <%_ if (!readOnly) { _%>
 
