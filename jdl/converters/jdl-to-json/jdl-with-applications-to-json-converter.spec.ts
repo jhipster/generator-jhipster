@@ -64,6 +64,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
       describe('such as no JDL object', () => {
         it('should throw an error', () => {
           expect(() => {
+            // @ts-expect-error
             convert();
           }).to.throw(/^The JDL object is mandatory\.$/);
         });
@@ -1107,11 +1108,11 @@ JSONEntity {
                 injectedFieldInTo: 'a',
                 injectedFieldInFrom: 'b',
                 options: {
+                  source: {},
+                  destination: {},
                   global: {
                     custom: 42,
                   },
-                  source: {},
-                  destination: {},
                 },
               });
               jdlObject.addEntity(entityA);
@@ -1780,7 +1781,7 @@ JSONEntity {
           });
           const dtoWithMapstructOption = new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
-            value: binaryOptions.Values.dto.MAPSTRUCT,
+            value: binaryOptions.Values.dto.MAPSTRUCT!,
             entityNames: new Set(['D', 'F']),
           });
           jdlObject.addOption(paginationWithInfiniteScrollOption);

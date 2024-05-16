@@ -32,6 +32,7 @@ describe('jdl - RelationshipTypes', () => {
     });
     describe('when checking for an invalid relationship type', () => {
       it('should return false', () => {
+        // @ts-expect-error
         expect(relationshipTypeExists('NOTHING')).to.be.false;
       });
     });

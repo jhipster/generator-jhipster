@@ -107,7 +107,7 @@ export function isBlobType(type?: any): boolean {
   );
 }
 
-export function hasValidation(type?: any, validation?, isAnEnum?: boolean): boolean {
+export function hasValidation(type: any, validation, isAnEnum?: boolean): boolean {
   if (!type || !validation) {
     throw new Error('The passed type and value must not be nil.');
   }

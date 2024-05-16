@@ -63,6 +63,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       describe('such as no parameter', () => {
         it('should throw an error', () => {
           expect(() => {
+            // @ts-expect-error
             convert();
           }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });

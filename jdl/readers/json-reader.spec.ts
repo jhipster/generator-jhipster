@@ -38,6 +38,7 @@ describe('jdl - JSONReader', () => {
       describe('such as nil', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             parseFromDir(null);
           }).to.throw(/^The app directory must be passed to read JSON files\.$/);
         });

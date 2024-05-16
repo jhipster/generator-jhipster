@@ -44,7 +44,7 @@ class JSONEntity {
    *        - fluentMethods, defaults to true,
    *        - clientRootFolder
    */
-  constructor(args?: Partial<JSONEntity>) {
+  constructor(args: Partial<JSONEntity>) {
     if (!args || !args.entityName) {
       throw new Error('At least an entity name must be passed.');
     }

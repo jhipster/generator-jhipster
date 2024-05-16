@@ -27,7 +27,7 @@ import JSONEntity from '../../jhipster/json-entity.js';
 import { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
 
 let entities: Record<string, JSONEntity> | null | undefined;
-let jdlObject: JDLObject | null | undefined;
+let jdlObject: JDLObject;
 let entitiesPerApplication: Map<string, string[]>;
 
 export default { convert };
@@ -38,8 +38,8 @@ export default { convert };
  * @param {JDLObject} args.jdlObject - the JDLObject to convert to JSON
  * @returns {Map} entities that can be exported to JSON
  */
-export function convert(args: JdlObjectWrapper = {}) {
-  if (!args.jdlObject) {
+export function convert(args: JdlObjectWrapper) {
+  if (!args?.jdlObject) {
     throw new Error('The JDL object is mandatory.');
   }
   init(args);
@@ -69,7 +69,7 @@ function init(args: JdlObjectWrapper): void {
 }
 
 function resetState(): void {
-  jdlObject = null;
+  jdlObject = null as any;
   entities = null;
 }
 
@@ -85,7 +85,7 @@ function setEntitiesPerApplication(): void {
 }
 
 function setBasicEntityInformation(): void {
-  const convertedEntities = BasicEntityConverter.convert(jdlObject?.getEntities());
+  const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
   convertedEntities.forEach((jsonEntity, entityName) => {
     entities![entityName] = jsonEntity;
   });

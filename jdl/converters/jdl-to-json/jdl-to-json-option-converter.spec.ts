@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, after, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -247,9 +247,9 @@ describe('jdl - JDLToJSONOptionConverter', () => {
           });
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
-            new JDLUnaryOption({
+            new JDLBinaryOption({
               name: binaryOptions.Options.SEARCH,
-              values: binaryOptions.Values.search.COUCHBASE,
+              value: binaryOptions.Values.search.COUCHBASE,
               entityNames: ['*'],
               excludedNames: ['A'],
             }),

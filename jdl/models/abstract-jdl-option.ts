@@ -20,12 +20,18 @@
 import { merge } from '../utils/object-utils.js';
 import { addAll } from '../utils/set-utils.js';
 
+export type JDLOptionParams = {
+  name: string;
+  entityNames?: Set<string> | string[];
+  excludedNames?: Set<string> | string[];
+};
+
 export default class AbstractJDLOption {
   name: string;
   entityNames: Set<string>;
   excludedNames: Set<string>;
 
-  constructor(args: Partial<AbstractJDLOption>) {
+  constructor(args: JDLOptionParams) {
     const merged = merge(defaults(), args);
     if (!merged.name) {
       throw new Error("The option's name must be passed to create an option.");

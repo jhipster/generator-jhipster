@@ -46,7 +46,8 @@ describe('jdl - JSONToJDLEntityConverter', () => {
   describe('convertEntitiesToJDL', () => {
     describe('when not passing entities', () => {
       it('should fail', () => {
-        expect(() => convertEntitiesToJDL(undefined)).to.throw('Entities have to be passed to be converted.');
+        // @ts-expect-error
+        expect(() => convertEntitiesToJDL()).to.throw('Entities have to be passed to be converted.');
       });
     });
     describe('when passing entities', () => {
