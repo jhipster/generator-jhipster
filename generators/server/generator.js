@@ -484,28 +484,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
-  get preparingEachEntityRelationship() {
-    return this.asPreparingEachEntityRelationshipTaskGroup({
-      checkRelationship({ entityName, relationship }) {
-        if (relationship.otherEntity.embedded) {
-          if (relationship.relationshipType === 'one-to-one') {
-            throw new Error(
-              `Entity ${entityName}: one-to-one ${relationship.relationshipName} relationship is not supported for embedded entities. Convert to many-to-one.`,
-            );
-          } else if (relationship.relationshipType === 'many-to-many') {
-            throw new Error(
-              `Entity ${entityName}: many-to-many ${relationship.relationshipName} relationship is not supported for embedded entities. Convert to one-to-many`,
-            );
-          }
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
-  }
-
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       checkForTableName({ application, entity }) {
