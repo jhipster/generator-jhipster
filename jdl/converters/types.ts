@@ -33,6 +33,7 @@ export type JSONEntity = {
   relationships?: JSONRelationship[];
 } & Record<string, any>;
 
+<<<<<<< HEAD
 export type JSONBlueprint = {
   name: string;
   version?: string;

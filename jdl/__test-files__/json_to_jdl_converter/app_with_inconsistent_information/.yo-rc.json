@@ -1,6 +1,6 @@
 {
-  "entities": ["Country"],
   "generator-jhipster": {
+    "entities": ["Country"],
     "promptValues": {
       "packageName": "com.mycompany.myapp"
     },
