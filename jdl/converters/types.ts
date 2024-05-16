@@ -34,6 +34,9 @@ export type JSONEntity = {
 } & Record<string, any>;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 96a54823b7 (typesafe for json to jdl)
 export type JSONBlueprint = {
   name: string;
   version?: string;
