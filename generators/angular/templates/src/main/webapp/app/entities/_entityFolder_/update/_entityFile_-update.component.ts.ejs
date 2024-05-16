@@ -18,8 +18,8 @@
 -%>
 <%_
   const allRelationshipsByEntityNeedingOptions = Object
-    .values(differentRelationships)
-    .map(relationships => relationships.filter(rel => rel.persistableRelationship))
+    .values(relationshipsByOtherEntity)
+    .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
     .filter(relationships => relationships.length > 0);
 _%>
 import { Component, inject, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
@@ -39,10 +39,8 @@ import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
-<%_
-Object.keys(differentRelationships).forEach(key => {
-  if (differentRelationships[key].some(rel => rel.persistableRelationship)) {
-    const uniqueRel = differentRelationships[key][0];
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
+    const uniqueRel = relationshipsByEntityNeedingOptions[0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.model';
@@ -50,7 +48,6 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
 <%_
     }
   }
-});
 _%>
 <%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
@@ -70,7 +67,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ }); _%>
 
-<%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.persistableRelationship)).filter(relationships => relationships.length > 0)) { _%>
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
   <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
     <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
@@ -87,17 +84,14 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
 <%_ } _%>
     protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
     protected <%= entityInstance %>FormService = inject(<%= entityAngularName %>FormService);
-<%_
-Object.keys(differentRelationships).forEach(key => {
-  if (differentRelationships[key].some(rel => rel.persistableRelationship)) {
-    const uniqueRel = differentRelationships[key][0];
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
+    const uniqueRel = relationshipsByEntityNeedingOptions[0];
     if (uniqueRel.otherEntityAngularName !== entityAngularName) {
 _%>
     protected <%= uniqueRel.otherEntity.entityInstance %>Service = inject(<%= uniqueRel.otherEntityAngularName %>Service);
 <%_
     }
   }
-});
 _%>
 <%_ if (anyFieldHasImageContentType) { _%>
     protected elementRef = inject(ElementRef);
@@ -107,8 +101,8 @@ _%>
     // eslint-disable-next-line @typescript-eslint/member-ordering
     editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
 
-<%_ for (const relationshipsByEntity of Object.values(differentRelationships).filter(arr => arr.some(rel => rel.persistableRelationship && rel.otherEntity.primaryKey))) {
-      const { otherEntity } = relationshipsByEntity[0];
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
+      const { otherEntity } = relationshipsByEntityNeedingOptions[0];
 _%>
 
     compare<%= otherEntity.entityAngularName %> = (o1: I<%= otherEntity.entityAngularName %> | null, o2: I<%= otherEntity.entityAngularName %> | null): boolean =>
@@ -122,7 +116,7 @@ _%>
                 this.updateForm(<%= entityInstance %>);
             }
 
-<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntityIsEmbedded).length > 0) { _%>
+<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
         });
@@ -225,7 +219,7 @@ _%>
 
 <%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntityIsEmbedded).length > 0) { _%>
     protected loadRelationshipsOptions(): void {
-  <%_ for (const relationshipsByEntityNeedingOptions of Object.values(differentRelationships).map(relationships => relationships.filter(rel => rel.persistableRelationship)).filter(relationships => relationships.length > 0)) { _%>
+  <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
     <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); %>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); %>
     <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0] _%>

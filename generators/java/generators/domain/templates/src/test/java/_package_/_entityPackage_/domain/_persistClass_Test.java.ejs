@@ -62,7 +62,7 @@ class <%= persistClass %>Test {
         assertThat(<%= persistInstance %>).hasSameHashCodeAs(<%= persistInstance %>1);
     }
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => !relationship.otherEntity.builtIn)) { _%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.builtIn && (!embedded || (rel.otherEntity.embedded && rel.ownerSide)))) { _%>
 
     @Test
     void <%- relationship.relationshipName %>Test() throws Exception {

@@ -90,8 +90,8 @@ export function preparePostEntityServerDerivedProperties(entity) {
     .forEach(relationship => {
       relationship.ignoreOtherSideProperty =
         entity.databaseType !== NEO4J &&
-        !relationship.embedded &&
-        !!relationship.otherEntity &&
+        !entity.embedded &&
+        !relationship.otherEntity.embedded &&
         relationship.otherEntity.relationships.length > 0;
     });
   entity.relationshipsContainOtherSideIgnore = entity.relationships.some(relationship => relationship.ignoreOtherSideProperty);
