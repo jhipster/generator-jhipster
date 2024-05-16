@@ -25,6 +25,13 @@ const { REQUIRED } = Validations;
 
 export type JDLRelationshipOptions = Record<'global' | 'source' | 'destination', Record<string, any>>;
 
+export type JDLSourceEntitySide = {
+  sourceEntity: string;
+  injectedFieldInSourceEntity?: string;
+  injectedFieldInSourceIsRequired: boolean;
+  commentForSourceEntity?: string;
+};
+
 export type JDLRelationshipModel = {
   side?: RelationshipSide;
   from: string;

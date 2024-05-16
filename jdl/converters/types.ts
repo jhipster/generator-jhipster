@@ -1,10 +1,12 @@
 import { RelationshipType, RelationshipSide } from '../basic-types/relationships.js';
+import { GENERATOR_JHIPSTER } from '../../generators/index.js';
 
 export type JSONField = {
   fieldName: string;
   fieldType: string;
   documentation?: string;
   options?: Record<string, boolean | string | number>;
+  fieldValidateRules?: string[];
 } & Record<string, any>;
 
 export type JSONFieldEnum = JSONField & {
@@ -30,6 +32,15 @@ export type JSONEntity = {
   fields?: JSONField[];
   relationships?: JSONRelationship[];
 } & Record<string, any>;
+
+export type JSONBlueprint = {
+  name: string;
+  version?: string;
+} & Record<string, any>;
+
+export type JSONMicrofrontend = {
+  baseName: string;
+};
 
 export type JSONGeneratorJhipsterContent = {
   baseName: string;
@@ -60,8 +71,23 @@ export type JSONGeneratorJhipsterContent = {
   skipUserManagement?: boolean;
   testFrameworks: string[];
   websocket: string;
+  promptValues?: Partial<JSONGeneratorJhipsterContent>;
+  blueprints?: JSONBlueprint[];
+  microfrontends?: JSONMicrofrontend[];
 } & Record<string, any>;
 
+export type PostProcessedJSONGeneratorJhipsterContent = Omit<
+  JSONGeneratorJhipsterContent,
+  'promptValues' | 'blueprints' | 'microfrontends'
+> & {
+  blueprints?: string[];
+  microfrontends?: string[];
+};
+
+export type PostProcessedJSONRootObject = {
+  [GENERATOR_JHIPSTER]: PostProcessedJSONGeneratorJhipsterContent;
+};
+
 export type JSONRootObject = {
-  ['generator-jhipster']: JSONGeneratorJhipsterContent;
+  [GENERATOR_JHIPSTER]: JSONGeneratorJhipsterContent;
 };
