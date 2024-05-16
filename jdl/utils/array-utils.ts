@@ -20,3 +20,10 @@
 export default function deduplicate<T>(array: T[]): T[] {
   return Array.from(new Set(array));
 }
+
+export function join(set: unknown[], separator = ',', quoted = false) {
+  if (!set) {
+    throw new Error('An Array must be passed so as to join elements.');
+  }
+  return set.map(val => (quoted ? `"${val}"` : val)).join(separator);
+}

@@ -89,6 +89,21 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      prepareGateway({ application }) {
+        application.gatewayRoutes = (application.routes ?? []).map(routeDef => {
+          const [route, host = route, serverPort = '8080'] = routeDef.split(':');
+          return { route, serverPort, host };
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {

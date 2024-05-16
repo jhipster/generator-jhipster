@@ -25,6 +25,7 @@ import JDLObject from '../models/jdl-object.js';
 import { JDLEntity } from '../models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../models/jdl-application.js';
+import { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
 import { applicationOptions, clientFrameworkTypes } from '../jhipster/index.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
 
@@ -103,7 +104,10 @@ describe('jdl - JDLExporter', () => {
             let jdlObject;
             beforeEach(() => {
               jdlObject = new JDLObject();
-              jdlObject.addApplication(new JDLApplication({ config: { [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK } }));
+              const jdlApplication: JDLJSONApplicationConfiguration = {
+                config: { [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK },
+              };
+              jdlObject.addApplication(new JDLApplication(jdlApplication));
             });
 
             it('should export the JDL and match snapshot', () => {
@@ -113,7 +117,6 @@ describe('jdl - JDLExporter', () => {
     clientFramework no
   }
 }
-
 "
 `);
             });

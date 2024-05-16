@@ -21,12 +21,14 @@ import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/typ
 import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';
 import { feignClientDefinition, syncUserWithIdpDefinition } from '../options/index.js';
+import { jdlRoutesOptions } from '../../spring-cloud/generators/gateway/jdl/jdl-routes-option.js';
 
 const jdlOptions: JHipsterOptionDefinition[] = [
   databaseMigrationOption,
   messageBrokerOption,
   feignClientDefinition,
   syncUserWithIdpDefinition,
+  jdlRoutesOptions,
 ];
 
 const applicationConfig: JDLApplicationConfig = {
@@ -53,7 +55,7 @@ const applicationConfig: JDLApplicationConfig = {
     jdlOptions.map(option => [
       option.name,
       {
-        type: messageBrokerOption.type,
+        type: option.type,
       },
     ]),
   ),

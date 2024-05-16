@@ -19,4 +19,4 @@
 
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
-export default class IntegerJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption {}
+export default class IntegerJDLApplicationConfigurationOption extends JDLApplicationConfigurationOption<number> {}

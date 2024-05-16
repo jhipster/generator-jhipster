@@ -188,6 +188,22 @@ spring:
           enabled: false
   <%_ } _%>
   <%_ if (applicationTypeGateway) { _%>
+    <%_ if (!serviceDiscoveryAny) { _%>
+    discovery:
+      client:
+        simple:
+          instances:
+            <%= lowercaseBaseName %>:
+              - instanceId: <%= lowercaseBaseName %>1
+                host: localhost
+                port: <%= serverPort %>
+      <%_ for (const ms of gatewayRoutes ?? []) { _%>
+            <%= ms.route %>:
+              - instanceId: <%= ms.route %>1
+                host: <%= ms.host %>
+                port: <%= ms.serverPort %>
+      <%_ } _%>
+    <%_ } _%>
     gateway:
     <%_ if (reactive) { _%>
       default-filters:
@@ -212,11 +228,22 @@ spring:
       mvc:
         routes:
           - id: <%= lowercaseBaseName %>_route
-            uri: lb://<%= lowercaseBaseName %>:<%= serverPort %>
+            uri: lb://<%= lowercaseBaseName %>
             predicates:
               - Path=/services/<%= lowercaseBaseName %>/**
             filters:
-              - RewritePath=/services/<%= lowercaseBaseName %>/?(?<segment>.*), /$\{segment}
+              - StripPrefix=2
+      <%_ for (const ms of gatewayRoutes ?? []) { _%>
+          - id: <%= ms.route %>_route
+            uri: lb://<%= ms.route %>
+            predicates:
+              - Path=/services/<%= ms.route %>/**
+            filters:
+              - StripPrefix=2
+        <%_ if (authenticationTypeOauth2) { _%>
+              - TokenRelay
+        <%_ } _%>
+      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>

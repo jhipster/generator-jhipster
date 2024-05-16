@@ -34,30 +34,30 @@ export default class JDLRelationships {
     };
   }
 
-  add(relationship: JDLRelationship) {
+  add(relationship: JDLRelationship): void {
     if (!relationship) {
       throw new Error('A relationship must be passed so as to be added.');
     }
     this.relationships[relationship.type].set(relationship.getId(), relationship);
   }
 
-  getOneToOne(relationshipId) {
+  getOneToOne(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.ONE_TO_ONE, relationshipId);
   }
 
-  getOneToMany(relationshipId) {
+  getOneToMany(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.ONE_TO_MANY, relationshipId);
   }
 
-  getManyToOne(relationshipId) {
+  getManyToOne(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.MANY_TO_ONE, relationshipId);
   }
 
-  getManyToMany(relationshipId) {
+  getManyToMany(relationshipId: string): JDLRelationship | undefined {
     return this.get(relationshipTypes.MANY_TO_MANY, relationshipId);
   }
 
-  get(type, relationshipId): JDLRelationship {
+  get(type: JDLRelationshipType, relationshipId: string): JDLRelationship | undefined {
     if (!relationshipTypeExists(type)) {
       throw new Error(`A valid relationship type must be passed so as to retrieve the relationship, got '${type}'.`);
     }
@@ -67,23 +67,23 @@ export default class JDLRelationships {
     return this.relationships[type].get(relationshipId);
   }
 
-  oneToOneQuantity() {
+  oneToOneQuantity(): number {
     return this.relationships.OneToOne.size;
   }
 
-  oneToManyQuantity() {
+  oneToManyQuantity(): number {
     return this.relationships.OneToMany.size;
   }
 
-  manyToOneQuantity() {
+  manyToOneQuantity(): number {
     return this.relationships.ManyToOne.size;
   }
 
-  manyToManyQuantity() {
+  manyToManyQuantity(): number {
     return this.relationships.ManyToMany.size;
   }
 
-  size() {
+  size(): number {
     return this.oneToOneQuantity() + this.oneToManyQuantity() + this.manyToOneQuantity() + this.manyToManyQuantity();
   }
 
@@ -106,28 +106,20 @@ export default class JDLRelationships {
     return relationships;
   }
 
-  toString() {
+  toString(): string {
     if (this.size() === 0) {
       return '';
     }
-    let string = '';
-    Object.keys(this.relationships).forEach(type => {
-      if (this.relationships[type].size !== 0) {
-        const result = relationshipTypeToString(this.relationships[type], type);
-        string += `${result}\n`;
-      }
-    });
-    return string.slice(0, string.length - 1);
+    return Object.entries(this.relationships)
+      .map(([key, relationships]) => (relationships.size > 0 ? relationshipTypeToString(relationships, key) : undefined))
+      .filter(Boolean)
+      .join('\n');
   }
 }
 
-function relationshipTypeToString(relationships, type) {
-  let relationship = `relationship ${type} {\n`;
-  relationships.forEach(internalRelationship => {
-    let lines = internalRelationship.toString().split('\n');
-    lines = lines.slice(1, lines.length - 1);
-    relationship += `${lines.join('\n')}\n`;
-  });
-  relationship = `${relationship.slice(0, relationship.length - 1)}\n}`;
-  return relationship;
+function relationshipTypeToString(relationships: Map<string, JDLRelationship>, type: string) {
+  const relationshipsLines = [...relationships.values()].map(relationship => relationship.toString().split('\n').slice(1, -1)).flat();
+  return `relationship ${type} {
+${relationshipsLines.join('\n')}
+}`;
 }

@@ -46,7 +46,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
   describe('convertEntitiesToJDL', () => {
     describe('when not passing entities', () => {
       it('should fail', () => {
-        expect(() => convertEntitiesToJDL({})).to.throw('Entities have to be passed to be converted.');
+        expect(() => convertEntitiesToJDL(undefined)).to.throw('Entities have to be passed to be converted.');
       });
     });
     describe('when passing entities', () => {
@@ -63,7 +63,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           ['Job', readJsonEntity('Job')],
           ['Task', readJsonEntity('Task')],
         ]);
-        jdlObject = convertEntitiesToJDL({ entities });
+        jdlObject = convertEntitiesToJDL(entities);
       });
 
       describe('when parsing a JSON entity to JDL', () => {
@@ -176,10 +176,10 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             ['Department', readJsonEntity('Department')],
             ['Employee', readJsonEntity('Employee')],
           ]);
-          const jdlObject = convertEntitiesToJDL({ entities });
+          const jdlObject = convertEntitiesToJDL(entities);
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
-          expect(relationship.commentInFrom).to.equal('Another side of the same relationship');
-          expect(relationship.commentInTo).to.equal('A relationship');
+          expect(relationship!.commentInFrom).to.equal('Another side of the same relationship');
+          expect(relationship!.commentInTo).to.equal('A relationship');
         });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
@@ -199,7 +199,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             let jdlObject;
 
             before(() => {
-              jdlObject = convertEntitiesToJDL({ entities: new Map([['Country', readJsonEntity('Country')]]) });
+              jdlObject = convertEntitiesToJDL(new Map([['Country', readJsonEntity('Country')]]));
             });
 
             it('should parse relationships to the JHipster managed User entity', () => {
@@ -211,9 +211,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           let jdlObject;
 
           before(() => {
-            jdlObject = convertEntitiesToJDL({
-              entities: new Map([['CassBankAccount', readJsonEntity('CassBankAccount')]]),
-            });
+            jdlObject = convertEntitiesToJDL(new Map([['CassBankAccount', readJsonEntity('CassBankAccount')]]));
           });
 
           it('should parse the tableName', () => {
@@ -233,7 +231,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
 
       describe('when parsing an unrecognised blob-typed field', () => {
         it('should fail', () => {
-          expect(() => convertEntitiesToJDL({ entities: new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]) })).to.throw(
+          expect(() => convertEntitiesToJDL(new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]))).to.throw(
             "Unrecognised blob type: 'unknown'",
           );
         });
@@ -259,7 +257,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
 
       it('should not fail', () => {
-        expect(() => convertEntitiesToJDL({ entities })).not.to.throw();
+        expect(() => convertEntitiesToJDL(entities)).not.to.throw();
       });
     });
     describe('when parsing relationships including the Authority entity', () => {
@@ -282,7 +280,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
 
       it('should not fail', () => {
-        expect(() => convertEntitiesToJDL({ entities })).not.to.throw();
+        expect(() => convertEntitiesToJDL(entities)).not.to.throw();
       });
     });
   });

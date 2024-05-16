@@ -30,23 +30,23 @@ export default class JDLApplicationEntities {
     this.entityNames = new Set(entityNames);
   }
 
-  add(entityName) {
+  add(entityName: string) {
     if (!entityName) {
       throw new Error('An entity name has to be passed so as to be added.');
     }
     this.entityNames.add(entityName);
   }
 
-  addEntityNames(entityNames = []) {
+  addEntityNames(entityNames: string[] = []) {
     const filteredNames = entityNames.filter(entityName => !!entityName);
     this.entityNames = new Set([...this.entityNames, ...filteredNames]);
   }
 
-  has(entityName) {
+  has(entityName: string): boolean {
     return this.entityNames.has(entityName);
   }
 
-  forEach(passedFunction) {
+  forEach(passedFunction: (name: string) => void) {
     if (!passedFunction) {
       return;
     }
@@ -55,15 +55,15 @@ export default class JDLApplicationEntities {
     });
   }
 
-  toArray() {
+  toArray(): string[] {
     return Array.from(this.entityNames);
   }
 
-  size() {
+  size(): number {
     return this.entityNames.size;
   }
 
-  toString(indent = 0) {
+  toString(indent = 0): string {
     if (this.entityNames.size === 0) {
       return '';
     }

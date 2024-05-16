@@ -42,7 +42,7 @@ describe('jdl - AbstractJDLOption', () => {
         const option = new JDLBinaryOption({
           name: binaryOptions.Options.SERVICE,
           value: binaryOptions.Values.service.SERVICE_CLASS,
-          excludedNames: ['C'],
+          excludedNames: new Set(['C']),
         });
         result = option.resolveEntityNames(['A', 'B', 'C']);
       });

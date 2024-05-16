@@ -237,6 +237,9 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-config"
 <%_ } _%>
+<%_ if (applicationTypeGateway && !reactive) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-loadbalancer"
+<%_ } _%>
 <%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
 <%_ } _%>

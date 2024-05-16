@@ -203,6 +203,24 @@ export default class JHipsterBaseBlueprintGenerator<
   /**
    * Priority API stub for blueprints.
    *
+   * ComposingComponent priority should be used to handle component configuration order.
+   */
+  get composingComponent(): GenericTaskGroup<this, Definition['composingTaskParam']> {
+    return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asComposingComponentTaskGroup(
+    taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>,
+  ): GenericTaskGroup<this, Definition['composingTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
    * Loading should be used to load application configuration from jhipster configuration.
    * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
    */

@@ -29,6 +29,7 @@ import exportEntities from './exporters/jhipster-entity-exporter.js';
 import createWithApplicationValidator from './validators/jdl-with-application-validator.js';
 import createWithoutApplicationValidator from './validators/jdl-without-application-validator.js';
 import { applicationOptions } from './jhipster/index.js';
+import JDLObject from './models/jdl-object.js';
 
 const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
@@ -212,7 +213,7 @@ function importOnlyEntities(jdlObject, configuration) {
   return exportJSONEntities(jsonEntities, configuration);
 }
 
-function importOneApplicationAndEntities(jdlObject, configuration) {
+function importOneApplicationAndEntities(jdlObject: JDLObject, configuration) {
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},

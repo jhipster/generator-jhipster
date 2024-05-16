@@ -33,7 +33,9 @@ import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
+import { clientFrameworkTypes } from '../../jdl/index.js';
 
+const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 /**
  * This is the base class for a generator that generates entities.
  *
@@ -72,8 +74,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
     if (
       !this.jhipsterConfigWithDefaults.skipClient &&
-      this.jhipsterConfigWithDefaults.clientFramework !== 'no' &&
-      (!this.jhipsterConfig.enableTranslation || this.jhipsterConfigWithDefaults.clientFramework === 'angular')
+      this.jhipsterConfigWithDefaults.clientFramework !== NO_CLIENT_FRAMEWORK &&
+      (!this.jhipsterConfig.enableTranslation || this.jhipsterConfigWithDefaults.clientFramework === ANGULAR)
     ) {
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.

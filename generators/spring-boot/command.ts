@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../jdl/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -31,19 +31,77 @@ const command: JHipsterCommandDefinition = {
     },
   },
   configs: {
+    reactive: {
+      cli: {
+        description: 'Generate a reactive backend',
+        type: Boolean,
+      },
+      prompt: gen => ({
+        when: () => ['monolith', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        type: 'confirm',
+        message: 'Do you want to make it reactive with Spring WebFlux?',
+      }),
+    },
+    serverPort: {
+      prompt: gen => ({
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        type: 'input',
+        validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+        message:
+          'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
+        default: () => gen.jhipsterConfigWithDefaults.serverPort,
+      }),
+    },
+    serviceDiscoveryType: {
+      cli: {
+        description: 'Service discovery type',
+        type: String,
+      },
+      prompt: gen => ({
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        type: 'list',
+        message: 'Which service discovery server do you want to use?',
+        default: 'consul',
+      }),
+      choices: [
+        { value: 'consul', name: 'Consul (recommended)' },
+        { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
+        { value: 'no', name: 'No service discovery' },
+      ],
+    },
+    authenticationType: {
+      cli: {
+        name: 'auth',
+        description: 'Provide authentication type for the application when skipping server side generation',
+        type: String,
+      },
+      prompt: (gen, config) => ({
+        type: 'list',
+        message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
+        choices: () =>
+          gen.jhipsterConfigWithDefaults.applicationType !== 'monolith'
+            ? (config.choices as any).filter(({ value }) => value !== 'session')
+            : config.choices,
+        default: () => gen.jhipsterConfigWithDefaults.authenticationType,
+      }),
+      choices: [
+        { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
+        { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
+        { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
+      ],
+    },
     feignClient: {
       description: 'Generate a feign client',
       cli: {
         type: Boolean,
       },
-      prompt: {
+      prompt: gen => ({
         type: 'confirm',
         message: 'Do you want to generate a feign client?',
-        when: currentAnswer =>
-          currentAnswer.applicationType === APPLICATION_TYPE_MICROSERVICE &&
-          currentAnswer.reactive !== undefined &&
-          !currentAnswer.reactive,
-      },
+        when: ({ reactive }) =>
+          ['microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
+          (reactive ?? gen.jhipsterConfigWithDefaults.reactive) === false,
+      }),
       default: false,
     },
     syncUserWithIdp: {

@@ -23,13 +23,17 @@ import JDLOptions from './jdl-options.js';
 import { binaryOptions } from '../jhipster/index.js';
 import JDLEntity from './jdl-entity.js';
 import JDLRelationship from './jdl-relationship.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
+import JDLEnum from './jdl-enum.js';
+import JDLDeployment from './jdl-deployment.js';
+import JDLApplication from './jdl-application.js';
 
 /**
  * The JDL object class, containing applications, entities etc.
  */
 export default class JDLObject {
-  applications: Record<string, any>;
-  deployments: Record<string, any>;
+  applications: Record<string, JDLApplication>;
+  deployments: Record<string, JDLDeployment>;
   entities: Record<string, JDLEntity>;
   enums: JDLEnums;
   relationships: JDLRelationships;
@@ -44,7 +48,7 @@ export default class JDLObject {
     this.options = new JDLOptions();
   }
 
-  getOptions() {
+  getOptions(): AbstractJDLOption[] {
     return this.options.getOptions();
   }
 
@@ -52,7 +56,7 @@ export default class JDLObject {
    * Adds or replaces an application.
    * @param application the application.
    */
-  addApplication(application) {
+  addApplication(application: any): void {
     if (!application) {
       throw new Error("Can't add nil application.");
     }
@@ -60,22 +64,22 @@ export default class JDLObject {
     this.applications[baseName] = application;
   }
 
-  getApplicationQuantity() {
+  getApplicationQuantity(): number {
     return Object.keys(this.applications).length;
   }
 
-  getApplication(applicationName) {
+  getApplication(applicationName: string): JDLApplication | undefined {
     if (!applicationName) {
       return undefined;
     }
     return this.applications[applicationName];
   }
 
-  getApplications() {
+  getApplications(): JDLApplication[] {
     return Object.values(this.applications);
   }
 
-  forEachApplication(passedFunction) {
+  forEachApplication(passedFunction: (app: JDLApplication) => void | undefined | null): void {
     if (!passedFunction) {
       return;
     }
@@ -89,18 +93,18 @@ export default class JDLObject {
    * Adds or replaces a deployment.
    * @param deployment the deployment.
    */
-  addDeployment(deployment) {
+  addDeployment(deployment: JDLDeployment): void {
     if (!deployment) {
       throw new Error("Can't add nil deployment.");
     }
     this.deployments[deployment.deploymentType] = deployment;
   }
 
-  getDeploymentQuantity() {
+  getDeploymentQuantity(): number {
     return Object.keys(this.deployments).length;
   }
 
-  forEachDeployment(passedFunction) {
+  forEachDeployment(passedFunction: (deployment: JDLDeployment, index: number, array: string[]) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -114,7 +118,7 @@ export default class JDLObject {
    * Adds or replaces an entity.
    * @param entity the entity to add.
    */
-  addEntity(entity: JDLEntity) {
+  addEntity(entity: JDLEntity): void {
     if (!entity) {
       throw new Error("Can't add nil entity.");
     }
@@ -128,19 +132,19 @@ export default class JDLObject {
     return this.entities[entityName];
   }
 
-  getEntities() {
+  getEntities(): JDLEntity[] {
     return Object.values(this.entities);
   }
 
-  getEntityQuantity() {
+  getEntityQuantity(): number {
     return this.getEntityNames().length;
   }
 
-  getEntityNames() {
+  getEntityNames(): string[] {
     return Object.keys(this.entities);
   }
 
-  forEachEntity(passedFunction: (entity: JDLEntity, index: number, entityNames: string[]) => void) {
+  forEachEntity(passedFunction: (entity: JDLEntity, index: number, entityNames: string[]) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -154,26 +158,26 @@ export default class JDLObject {
    * Adds or replaces an enum.
    * @param enumToAdd the enum to add.
    */
-  addEnum(enumToAdd) {
+  addEnum(enumToAdd: JDLEnum): void {
     if (!enumToAdd) {
       throw new Error("Can't add nil enum.");
     }
     this.enums.add(enumToAdd);
   }
 
-  hasEnum(enumName) {
+  hasEnum(enumName: string): boolean {
     return this.enums.has(enumName);
   }
 
-  getEnum(enumName) {
+  getEnum(enumName: string): JDLEnum | undefined {
     return this.enums.get(enumName);
   }
 
-  getEnumQuantity() {
+  getEnumQuantity(): number {
     return this.enums.size();
   }
 
-  forEachEnum(passedFunction) {
+  forEachEnum(passedFunction: (jdlEnum: JDLEnum) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -182,14 +186,14 @@ export default class JDLObject {
     });
   }
 
-  addRelationship(relationship) {
+  addRelationship(relationship: JDLRelationship): void {
     if (!relationship) {
       throw new Error("Can't add nil relationship.");
     }
     this.relationships.add(relationship);
   }
 
-  getRelationshipQuantity(applicationName?: string) {
+  getRelationshipQuantity(applicationName?: string): number {
     if (!applicationName) {
       return this.relationships.size();
     }
@@ -203,7 +207,7 @@ export default class JDLObject {
     return count;
   }
 
-  forEachRelationship(passedFunction?: (relationship: JDLRelationship) => void) {
+  forEachRelationship(passedFunction: (relationship: JDLRelationship) => void): void {
     if (!passedFunction) {
       return;
     }
@@ -212,18 +216,18 @@ export default class JDLObject {
     });
   }
 
-  getRelationships() {
+  getRelationships(): JDLRelationship[] {
     return this.relationships.toArray();
   }
 
-  addOption(option) {
+  addOption(option: AbstractJDLOption): void {
     if (!option || !option.getType) {
       throw new Error("Can't add nil option.");
     }
     this.options.addOption(option);
   }
 
-  getOptionsForName(optionName) {
+  getOptionsForName(optionName: string): any[] {
     return this.options.getOptionsForName(optionName);
   }
 
@@ -234,81 +238,60 @@ export default class JDLObject {
     this.options.forEach(passedFunction);
   }
 
-  hasOption(optionName) {
+  hasOption(optionName: string): boolean {
     if (!optionName) {
       return false;
     }
     return this.options.has(optionName);
   }
 
-  isEntityInMicroservice(entityName) {
+  isEntityInMicroservice(entityName: string): boolean {
     const options = this.getOptionsForName(binaryOptions.Options.MICROSERVICE);
     return options.some(option => option.entityNames.has('*') || option.entityNames.has(entityName));
   }
 
-  getOptionQuantity() {
+  getOptionQuantity(): number {
     return this.options.size();
   }
 
-  toString() {
-    let string = '';
-    if (this.getApplicationQuantity() !== 0) {
-      string += `${applicationsToString(this.applications)}\n`;
-    }
-    if (this.getDeploymentQuantity() !== 0) {
-      string += `${deploymentsToString(this.deployments)}\n`;
-    }
-    if (this.getEntityQuantity() !== 0) {
-      string += `${entitiesToString(this.entities)}\n`;
-    }
-    if (this.getEnumQuantity() !== 0) {
-      string += `${this.enums.toString()}\n`;
-    }
-    if (this.getRelationshipQuantity() !== 0) {
-      string += `${relationshipsToString(this.relationships)}`;
-    }
-    if (this.getOptionQuantity() !== 0) {
-      string += `\n${optionsToString(this.options)}`;
-    }
-    return string;
+  toString(): string {
+    return [
+      applicationsToString(this.applications),
+      deploymentsToString(this.deployments),
+      entitiesToString(this.entities),
+      this.enums.toString(),
+      relationshipsToString(this.relationships),
+      optionsToString(this.options),
+    ]
+      .map(section => section.trim())
+      .filter(Boolean)
+      .join('\n\n')
+      .concat('\n');
   }
 }
 
-function applicationsToString(applications) {
-  let string = '';
-  Object.keys(applications).forEach(applicationName => {
-    string += `${applications[applicationName].toString()}\n`;
-  });
-  return string;
+function applicationsToString(applications: Record<string, JDLApplication>): string {
+  return Object.values(applications)
+    .map(application => application.toString())
+    .join('\n');
 }
 
-function deploymentsToString(deployments: Record<any, any>) {
-  let string = '';
-  Object.values(deployments).forEach(deployment => {
-    string += `${deployment.toString()}\n`;
-  });
-  return string;
+function deploymentsToString(deployments: Record<any, JDLDeployment>): string {
+  return Object.values(deployments)
+    .map(deployment => deployment.toString())
+    .join('\n');
 }
 
-function entitiesToString(entities) {
-  let string = '';
-  Object.keys(entities).forEach(entityName => {
-    string += `${entities[entityName].toString()}\n`;
-  });
-  return string.slice(0, string.length - 1);
+function entitiesToString(entities: Record<string, JDLEntity>): string {
+  return Object.values(entities)
+    .map(entity => entity.toString())
+    .join('\n');
 }
 
-function relationshipsToString(relationships) {
-  const string = relationships.toString();
-  if (string === '') {
-    return '';
-  }
-  return `${string}\n`;
+function relationshipsToString(relationships: JDLRelationships): string {
+  return relationships.toString();
 }
-function optionsToString(options) {
-  const string = options.toString();
-  if (string === '') {
-    return '';
-  }
-  return `${string}\n`;
+
+function optionsToString(options: JDLOptions): string {
+  return options.toString();
 }

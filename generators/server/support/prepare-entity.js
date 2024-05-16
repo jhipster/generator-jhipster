@@ -26,10 +26,8 @@ import { hibernateSnakeCase } from './string.js';
 import { getDatabaseTypeData } from './database.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 
-const { ELASTICSEARCH } = searchEngineTypes;
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
-
-const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL } = databaseTypes;
+const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
+const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;
 
 export default function prepareEntity(entity) {
   const { entityPackage, packageName, packageFolder, persistClass } = entity;
@@ -91,7 +89,7 @@ export function preparePostEntityServerDerivedProperties(entity) {
     .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
     .forEach(relationship => {
       relationship.ignoreOtherSideProperty =
-        entity.databaseType !== 'neo4j' &&
+        entity.databaseType !== NEO4J &&
         !entity.embedded &&
         !relationship.otherEntity.embedded &&
         relationship.otherEntity.relationships.length > 0;

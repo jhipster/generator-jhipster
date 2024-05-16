@@ -26,7 +26,9 @@ const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
-  constructor(args) {
+  deploymentType: any;
+
+  constructor(args: Partial<JDLDeployment>) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }
@@ -57,7 +59,7 @@ function stringifyConfig(applicationConfig) {
   return `${config}\n  }`;
 }
 
-function stringifyOptionValue(name, value) {
+function stringifyOptionValue(name: string, value: any): string {
   if (arrayTypes.includes(name)) {
     if (value.size === 0) {
       return ' []';

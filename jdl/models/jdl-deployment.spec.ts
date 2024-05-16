@@ -77,9 +77,9 @@ describe('jdl - JDLDeployment', () => {
       it('should stringify its content without default values', () => {
         expect(deployment.toString()).toMatchInlineSnapshot(`
 "deployment {
+    deploymentType docker-compose
     appsFolders [foo, bar]
     clusteredDbApps []
-    deploymentType docker-compose
     dockerRepositoryName test
   }"
 `);
@@ -103,10 +103,10 @@ describe('jdl - JDLDeployment', () => {
       it('should stringify it', () => {
         expect(deployment.toString()).toMatchInlineSnapshot(`
 "deployment {
+    deploymentType docker-compose
     appsFolders [foo, bar]
     directoryPath ../parent
     clusteredDbApps []
-    deploymentType docker-compose
     dockerRepositoryName test
   }"
 `);

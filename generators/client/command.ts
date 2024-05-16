@@ -48,8 +48,8 @@ const command: JHipsterCommandDefinition = {
         type: 'list',
         message: () =>
           generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE
-            ? `Which ${chalk.yellow('*Framework*')} would you like to use as microfrontend?`
-            : `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
+            ? `Which ${chalk.yellow('*framework*')} would you like to use as microfrontend?`
+            : `Which ${chalk.yellow('*framework*')} would you like to use for the client?`,
       }),
       choices: [
         { value: ANGULAR, name: 'Angular' },

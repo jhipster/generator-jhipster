@@ -1,12 +1,23 @@
 import { RelationshipType, RelationshipSide } from '../basic-types/relationships.js';
 
-export type Field = {
+export type JSONField = {
   fieldName: string;
   fieldType: string;
+  documentation?: string;
   options?: Record<string, boolean | string | number>;
 } & Record<string, any>;
 
-export type Relationship = {
+export type JSONFieldEnum = JSONField & {
+  fieldValues: string;
+  fieldTypeDocumentation?: string;
+  fieldValuesJavadocs?: Record<string, string>;
+};
+
+export type JSONFieldBlob = JSONField & {
+  fieldTypeBlobContent: string;
+};
+
+export type JSONRelationship = {
   relationshipSide?: RelationshipSide;
   relationshipName: string;
   relationshipType: RelationshipType;
@@ -14,8 +25,8 @@ export type Relationship = {
   options?: Record<string, boolean | string | number>;
 } & Record<string, any>;
 
-export type Entity = {
+export type JSONEntity = {
   documentation?: string;
-  fields?: Field[];
-  relationships?: Relationship[];
+  fields?: JSONField[];
+  relationships?: JSONRelationship[];
 } & Record<string, any>;

@@ -1,7 +1,7 @@
 import { jhipsterOptionTypes, jhipsterOptionValues, jhipsterQuotedOptionNames } from '../jhipster/application-options.js';
 
 export type JDLApplicationOptionValue = string | number | boolean | undefined | never[] | Record<string, string>;
-export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list';
+export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list' | 'quotedList';
 export type JDLApplicationOptionType = { type: JDLApplicationOptionTypeValue };
 
 export default class JDLApplicationDefinition {
@@ -30,11 +30,11 @@ export default class JDLApplicationDefinition {
    * @param {String|Boolean|Number} value - the option value.
    * @returns {Boolean} whether the option value exists for the name.
    */
-  doesOptionValueExist(name, value) {
+  doesOptionValueExist(name: string, value: string): boolean {
     if (!this.doesOptionExist(name)) {
       return false;
     }
-    const values = this.optionValues[name];
+    const values: JDLApplicationOptionValue = this.optionValues[name];
     if (typeof values !== 'object' || Array.isArray(values)) {
       return true;
     }
@@ -49,7 +49,7 @@ export default class JDLApplicationDefinition {
    * @param {String} optionName - the option's name.
    * @returns {Boolean} the option's existence.
    */
-  doesOptionExist(optionName) {
+  doesOptionExist(optionName: string): boolean {
     return !!optionName && optionName in this.optionTypes;
   }
 
@@ -59,7 +59,7 @@ export default class JDLApplicationDefinition {
    * @param {String} optionName - the name of the option to check.
    * @return {boolean} whether it should be quoted in the JDL.
    */
-  shouldTheValueBeQuoted(optionName) {
+  shouldTheValueBeQuoted(optionName: string): boolean {
     if (!optionName) {
       throw new Error('An option name has to be passed to know whether it is quoted.');
     }

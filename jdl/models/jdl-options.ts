@@ -16,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import JDLBinaryOption from './jdl-binary-option.js';
+import JDLUnaryOption from './jdl-unary-option.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLOptions {
-  options: Record<any, any>;
+  options: Record<string, AbstractJDLOption>;
   optionSize: number;
 
   constructor() {
@@ -26,19 +29,19 @@ export default class JDLOptions {
     this.optionSize = 0;
   }
 
-  addOption(option) {
+  addOption(option: AbstractJDLOption): void {
     if (!option || !option.getType) {
       throw new Error("Can't add nil option.");
     }
     if (option.getType() === 'UNARY') {
-      addUnaryOption(this.options, option);
+      addUnaryOption(this.options, option as JDLUnaryOption);
     } else {
-      addBinaryOption(this.options, option);
+      addBinaryOption(this.options, option as JDLBinaryOption);
     }
     this.optionSize++;
   }
 
-  getOptions() {
+  getOptions(): AbstractJDLOption[] {
     const options: any[] = [];
     Object.values(this.options).forEach(item => {
       if (item.getType && item.getType() === 'UNARY') {
@@ -50,25 +53,25 @@ export default class JDLOptions {
     return options;
   }
 
-  getOptionsForName(optionName: string) {
+  getOptionsForName(optionName: string): AbstractJDLOption[] {
     if (!optionName) {
       return [];
     }
     return this.getOptions().filter(option => option.name === optionName);
   }
 
-  has(optionName: string) {
+  has(optionName?: string): boolean {
     if (!optionName) {
       return false;
     }
     return !!this.options[optionName] || this.getOptions().filter(option => option.name === optionName).length !== 0;
   }
 
-  size() {
+  size(): number {
     return this.optionSize;
   }
 
-  forEach(passedFunction, thisArg?: any) {
+  forEach(passedFunction: (option: AbstractJDLOption) => void, thisArg?: any) {
     if (!passedFunction) {
       return;
     }
@@ -77,7 +80,7 @@ export default class JDLOptions {
     });
   }
 
-  toString(indent = 0) {
+  toString(indent = 0): string {
     if (this.optionSize === 0) {
       return '';
     }
@@ -87,7 +90,7 @@ export default class JDLOptions {
   }
 }
 
-function addUnaryOption(options, optionToAdd) {
+function addUnaryOption(options: Record<string, JDLUnaryOption | JDLBinaryOption>, optionToAdd: JDLUnaryOption): void {
   const key = optionToAdd.name;
   if (!options[key]) {
     options[key] = optionToAdd;
@@ -96,7 +99,7 @@ function addUnaryOption(options, optionToAdd) {
   options[key].addEntitiesFromAnotherOption(optionToAdd);
 }
 
-function addBinaryOption(options, optionToAdd) {
+function addBinaryOption(options: Record<string, any>, optionToAdd: JDLBinaryOption): void {
   const { name, value } = optionToAdd;
 
   if (!options[name]) {

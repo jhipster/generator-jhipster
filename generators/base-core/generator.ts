@@ -66,6 +66,7 @@ const {
   PROMPTING,
   CONFIGURING,
   COMPOSING,
+  COMPOSING_COMPONENT,
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -100,6 +101,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   static CONFIGURING = asPriority(CONFIGURING);
 
   static COMPOSING = asPriority(COMPOSING);
+
+  static COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
   static LOADING = asPriority(LOADING);
 
@@ -245,11 +248,15 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   isJhipsterVersionLessThan(version) {
     const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare (the project may be null) and return false
-      return false;
-    }
-    return semverLessThan(jhipsterOldVersion, version);
+    return this.isVersionLessThan(jhipsterOldVersion, version);
+  }
+
+  /**
+   * Wrapper for `semver.lt` to check if the oldVersion exists and is less than the newVersion.
+   * Can be used by blueprints.
+   */
+  isVersionLessThan(oldVersion: string | null, newVersion: string) {
+    return oldVersion ? semverLessThan(oldVersion, newVersion) : false;
   }
 
   /**
@@ -482,7 +489,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return Object.entries(configs)
       .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {
-        const promptSpec = typeof def.prompt === 'function' ? def.prompt(this) : { ...def.prompt };
+        const promptSpec = typeof def.prompt === 'function' ? def.prompt(this as any, def) : { ...def.prompt };
         let storage: any;
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;

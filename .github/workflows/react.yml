@@ -96,20 +96,18 @@ jobs:
           npm-version: ${{ matrix.npm-version }}
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
       - run: npm ci --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
-      - uses: ./generator-jhipster/.github/actions/setup-generator-jhipster-jit
-        with:
-          generator-path: generator-jhipster
       - name: 'GENERATION: project'
-        run: jh generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+        run: jhipster.cjs generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
         env:
           JHI_FOLDER_APP: ${{ github.workspace }}/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
-      - run: jh info
+      - run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
@@ -117,7 +115,7 @@ jobs:
         id: compare
         with:
           generator-path: generator-jhipster
-          cmd: jh generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+          cmd: jhipster.cjs generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
         if: >-
           github.event.pull_request &&
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')

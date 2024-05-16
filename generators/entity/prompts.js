@@ -31,20 +31,15 @@ import {
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
-const { CASSANDRA, SQL } = databaseTypes;
+const { NO: NO_DATABASE, CASSANDRA, SQL } = databaseTypes;
 const { GATEWAY } = applicationTypes;
 const { FilteringTypes, MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 const { ANGULAR, REACT } = clientFrameworkTypes;
-const { JPA_METAMODEL } = FilteringTypes;
-const NO_FILTERING = FilteringTypes.NO;
-const { INFINITE_SCROLL, PAGINATION } = PaginationTypes;
-const NO_PAGINATION = PaginationTypes.NO;
-const { SERVICE_IMPL, SERVICE_CLASS } = ServiceTypes;
-const NO_SERVICE = ServiceTypes.NO;
-const { MAPSTRUCT } = MapperTypes;
-const NO_MAPPER = MapperTypes.NO;
+const { NO: NO_FILTERING, JPA_METAMODEL } = FilteringTypes;
+const { NO: NO_PAGINATION, INFINITE_SCROLL, PAGINATION } = PaginationTypes;
+const { NO: NO_SERVICE, SERVICE_IMPL, SERVICE_CLASS } = ServiceTypes;
+const { NO: NO_MAPPER, MAPSTRUCT } = MapperTypes;
 
-const NO_DATABASE = databaseTypes.NO;
 const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
 const { BIG_DECIMAL, BOOLEAN, DOUBLE, DURATION, ENUM, FLOAT, INTEGER, INSTANT, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME } =
@@ -825,7 +820,7 @@ async function askForRelationship(...args) {
 
         return true;
       },
-      type: 'input',
+      type: 'confirm',
       name: 'bidirectional',
       message: 'Do you want to generate a bidirectional relationship',
       default: true,

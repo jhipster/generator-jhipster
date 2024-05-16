@@ -23,18 +23,14 @@ import {
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../../server/options/index.js';
 import { PlatformApplication } from '../../base-application/types.js';
 
-const { SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
-const NO_DATABASE = databaseTypes.NO;
+const { NO: NO_DATABASE, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;
 const { OAUTH2, SESSION } = authenticationTypes;
-const { CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
+const { NO: NO_CACHE, CAFFEINE, EHCACHE, REDIS, HAZELCAST, INFINISPAN, MEMCACHED } = cacheTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
 const { SPRING_WEBSOCKET } = websocketTypes;
-const { CONSUL, EUREKA } = serviceDiscoveryTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
-const NO_CACHE = cacheTypes.NO;
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
-const NO_SEARCH_ENGINE = searchEngineTypes.NO;
+const { NO: NO_SERVICE_DISCOVERY, CONSUL, EUREKA } = serviceDiscoveryTypes;
+const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 
 /**
  * Load server configs into application.

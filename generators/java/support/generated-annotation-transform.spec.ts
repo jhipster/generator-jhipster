@@ -15,8 +15,8 @@ interface Foo {
     await pipeline(Readable.from([file]), generatedAnnotationTransform('generated.by.package'));
     expect(file.contents.toString()).toMatchInlineSnapshot(`
 "package package.name;
-import generated.by.package.GeneratedByJHipster;
 
+import generated.by.package.GeneratedByJHipster;
 @GeneratedByJHipster
 interface Foo {
 }"
@@ -34,8 +34,8 @@ interface Foo {
     await pipeline(Readable.from([file]), generatedAnnotationTransform('generated.by.package'));
     expect(file.contents.toString()).toMatchInlineSnapshot(`
 "package package.name;
-import generated.by.package.GeneratedByJHipster;
 
+import generated.by.package.GeneratedByJHipster;
 @GeneratedByJHipster
 @interface Foo {
 }"

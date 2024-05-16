@@ -93,7 +93,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     ownerSide: relationship.otherEntity.embedded || relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
     persistableRelationship: ({ ownerSide }) => ownerSide,
     relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide, otherEntity }) =>
-      !otherEntity.embedded && (entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide),
+      !otherEntity.embedded && (entityWithConfig.databaseType === NEO4J ? relationshipRightSide : !ownerSide),
 
     // DB properties
     columnName: hibernateSnakeCase(relationshipName),

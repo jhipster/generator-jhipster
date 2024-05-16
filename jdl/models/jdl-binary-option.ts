@@ -25,9 +25,9 @@ import { join } from '../utils/set-utils.js';
  * For options like the DTO, the service, etc.
  */
 export default class JDLBinaryOption extends AbstractJDLOption {
-  value: any;
+  value: string;
 
-  constructor(args) {
+  constructor(args: Partial<JDLBinaryOption>) {
     super(args);
     if (args.value == null) {
       throw new Error('A binary option must have a value.');
@@ -35,11 +35,11 @@ export default class JDLBinaryOption extends AbstractJDLOption {
     this.value = args.value;
   }
 
-  getType() {
+  getType(): string {
     return 'BINARY';
   }
 
-  toString() {
+  toString(): string {
     const entityNames = join(this.entityNames, ', ');
     entityNames.slice(1, entityNames.length - 1);
     let optionName = this.name;
@@ -51,7 +51,7 @@ export default class JDLBinaryOption extends AbstractJDLOption {
       return firstPart;
     }
     const excludedNames = join(this.excludedNames, ', ');
-    excludedNames.slice(1, this.excludedNames.length - 1);
+    excludedNames.slice(1, this.excludedNames.size - 1);
     return `${firstPart} except ${excludedNames}`;
   }
 }

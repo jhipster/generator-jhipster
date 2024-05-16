@@ -6,6 +6,7 @@ import { SpringCacheSourceType } from '../spring-cache/types.js';
 import { MessageBrokerApplicationType } from './options/message-broker.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
 import { ApplicationPropertiesNeedles } from './support/needles.ts';
+import { GatewayApplication } from '../spring-cloud/generators/gateway/types.ts';
 
 export type SpringEntity = {
   /* Generate entity's Entity */
@@ -91,6 +92,7 @@ export type SpringBootApplication = JavaApplication &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication &
+  GatewayApplication &
   MessageBrokerApplicationType & {
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;

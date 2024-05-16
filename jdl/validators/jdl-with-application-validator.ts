@@ -29,8 +29,9 @@ import BinaryOptionValidator from './binary-option-validator.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLApplication from '../models/jdl-application.js';
-import ListJDLApplicationConfigurationOption from '../models/list-jdl-application-configuration-option.js';
 import { ValidatorOptions } from './validator.js';
+import JDLField from '../models/jdl-field.js';
+import JDLApplicationConfigurationOption from '../models/jdl-application-configuration-option.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -48,7 +49,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
   }
 
   return {
-    checkForErrors: () => {
+    checkForErrors: (): void => {
       jdlObject.forEachApplication(jdlApplication => {
         const blueprints = jdlApplication.getConfigurationOptionValue(BLUEPRINTS);
         const checkReservedKeywords = (blueprints?.length ?? 0) === 0;
@@ -67,16 +68,16 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     },
   };
 
-  function checkForNamespaceConfigErrors(jdlApplication: JDLApplication) {
+  function checkForNamespaceConfigErrors(jdlApplication: JDLApplication): void {
     jdlApplication.forEachNamespaceConfiguration(config => {
-      const blueprints: ListJDLApplicationConfigurationOption | undefined = jdlApplication.config.getOption('blueprints');
+      const blueprints: JDLApplicationConfigurationOption<string[]> | undefined = jdlApplication.config.getOption('blueprints');
       if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === config.namespace)) {
         throw new Error(`Blueprint namespace config ${config.namespace} requires the blueprint ${config.namespace}`);
       }
     });
   }
 
-  function checkForEntityErrors(jdlApplication, options: ValidatorOptions) {
+  function checkForEntityErrors(jdlApplication: JDLApplication, options: ValidatorOptions): void {
     if (jdlObject.getEntityQuantity() === 0) {
       return;
     }
@@ -90,7 +91,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForFieldErrors(_entityName, jdlFields, _jdlApplication) {
+  function checkForFieldErrors(_entityName: string, jdlFields: Record<string, JDLField>, _jdlApplication: JDLApplication): void {
     const validator = new FieldValidator();
     Object.keys(jdlFields).forEach(fieldName => {
       const jdlField = jdlFields[fieldName];
@@ -100,7 +101,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForValidationErrors(jdlField, isAnEnum) {
+  function checkForValidationErrors(jdlField: JDLField, isAnEnum: boolean): void {
     const validator = new ValidationValidator();
     Object.keys(jdlField.validations).forEach(validationName => {
       const jdlValidation = jdlField.validations[validationName];
@@ -111,7 +112,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForRelationshipErrors() {
+  function checkForRelationshipErrors(): void {
     if (jdlObject.getRelationshipQuantity() === 0) {
       return;
     }
@@ -125,7 +126,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForEnumErrors(options: ValidatorOptions) {
+  function checkForEnumErrors(options: ValidatorOptions): void {
     if (jdlObject.getEnumQuantity() === 0) {
       return;
     }
@@ -135,7 +136,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkDeploymentsErrors() {
+  function checkDeploymentsErrors(): void {
     if (jdlObject.getDeploymentQuantity() === 0) {
       return;
     }
@@ -145,7 +146,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForOptionErrors() {
+  function checkForOptionErrors(): void {
     if (jdlObject.getOptionQuantity() === 0) {
       return;
     }
@@ -160,7 +161,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
     });
   }
 
-  function checkForRelationshipsBetweenApplications() {
+  function checkForRelationshipsBetweenApplications(): void {
     const applicationsPerEntityNames = getApplicationsPerEntityNames(jdlObject);
     jdlObject.forEachRelationship(jdlRelationship => {
       checkIfRelationshipIsBetweenApplications({
@@ -212,7 +213,7 @@ function checkIfRelationshipIsBetweenApplications({ jdlRelationship, application
     );
   }
 }
-function getApplicationsPerEntityNames(jdlObject) {
+function getApplicationsPerEntityNames(jdlObject: JDLObject) {
   const applicationsPerEntityName = {};
   jdlObject.forEachApplication(jdlApplication => {
     jdlApplication.forEachEntityName(entityName => {

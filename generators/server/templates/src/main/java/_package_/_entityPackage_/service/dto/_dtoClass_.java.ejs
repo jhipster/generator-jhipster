@@ -88,7 +88,7 @@ public class <%- dtoClass %> implements Serializable {
     @NotNull
   <%_ } _%>
   <%_ if (property.propertyApiDescription) { _%>
-    @Schema(description = "<%- property.propertyApiDescription %>"<% if (required) { %>, required = true<% } %>)
+    @Schema(description = "<%- property.propertyApiDescription %>"<% if (required) { %>, requiredMode = Schema.RequiredMode.REQUIRED<% } %>)
   <%_ } _%>
   <%_ if (property.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob

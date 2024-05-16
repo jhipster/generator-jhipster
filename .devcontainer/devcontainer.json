@@ -25,7 +25,12 @@
     "vscode": {
       // Set *default* container specific settings.json values on container create.
       "settings": {
-        "java.jdt.ls.java.home": "/docker-java-home"
+        "java.jdt.ls.java.home": "/docker-java-home",
+        "mochaExplorer.files": "**/*.spec.*(j|t)s",
+        "mochaExplorer.require": "@node-loaders/esbuildx",
+        "mochaExplorer.parallel": true,
+        "mochaExplorer.timeout": 50000,
+        "mochaExplorer.configFile": ".mocharc.cjs"
       },
 
       // Add the IDs of extensions you want installed when the container is created.

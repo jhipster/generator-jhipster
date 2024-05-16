@@ -21,29 +21,29 @@ import { merge } from '../utils/object-utils.js';
 import JDLEnumValue from './jdl-enum-value.js';
 
 export default class JDLEnum {
-  comment: any;
-  name: any;
-  values: Map<any, any>;
+  comment?: string;
+  name: string;
+  values: Map<string, JDLEnumValue>;
 
-  constructor(args) {
-    const merged = merge(defaults(), args);
+  constructor(args: Partial<Omit<JDLEnum, 'values'> & { values: any[] }>) {
+    const merged: Partial<Omit<JDLEnum, 'values'> & { values: any[] }> = merge(defaults(), args);
     if (!merged.name) {
       throw new Error("The enum's name must be passed to create an enum.");
     }
     this.comment = merged.comment;
     this.name = merged.name;
     this.values = new Map(
-      merged.values.map(entry => {
+      merged.values!.map(entry => {
         return [entry.key, new JDLEnumValue(entry.key, entry.value, entry.comment)];
       }),
     );
   }
 
-  getValuesAsString() {
+  getValuesAsString(): string {
     return stringifyValues(this.values).join(',');
   }
 
-  getValueJavadocs() {
+  getValueJavadocs(): Record<string, string> {
     const documentations = {};
     this.values.forEach(jdlEnumValue => {
       if (jdlEnumValue.comment) {
@@ -53,7 +53,7 @@ export default class JDLEnum {
     return documentations;
   }
 
-  toString() {
+  toString(): string {
     let comment = '';
     if (this.comment) {
       comment += `/**\n * ${this.comment}\n */\n`;
@@ -63,13 +63,13 @@ export default class JDLEnum {
   }
 }
 
-function defaults() {
+function defaults(): { values: any[] } {
   return {
     values: [],
   };
 }
 
-function stringifyValues(jdlEnumValues) {
+function stringifyValues(jdlEnumValues: Map<string, JDLEnumValue>): string[] {
   const values: string[] = [];
   jdlEnumValues.forEach(jdlEnumValue => {
     values.push(jdlEnumValue.toString());

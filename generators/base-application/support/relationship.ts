@@ -19,14 +19,18 @@
 
 import { upperFirst, lowerFirst } from 'lodash-es';
 
-import { Relationship, Entity } from '../../../jdl/converters/types.js';
+import { JSONRelationship, JSONEntity } from '../../../jdl/converters/types.js';
 import { ValidationResult } from '../../base/api.js';
 import { stringifyApplicationData } from './debug.js';
 import { findEntityInEntities } from './entity.js';
 
 export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
 
-export const findOtherRelationshipInRelationships = (entityName: string, relationship: Relationship, inRelationships: Relationship[]) => {
+export const findOtherRelationshipInRelationships = (
+  entityName: string,
+  relationship: JSONRelationship,
+  inRelationships: JSONRelationship[],
+) => {
   return inRelationships.find(otherRelationship => {
     if (upperFirst(otherRelationship.otherEntityName) !== entityName) {
       return false;
@@ -43,7 +47,7 @@ export const findOtherRelationshipInRelationships = (entityName: string, relatio
   });
 };
 
-export const loadEntitiesAnnotations = (entities: Entity[]) => {
+export const loadEntitiesAnnotations = (entities: JSONEntity[]) => {
   for (const entity of entities) {
     // Load field annotations
     for (const field of entity.fields ?? []) {
@@ -61,7 +65,7 @@ export const loadEntitiesAnnotations = (entities: Entity[]) => {
   }
 };
 
-export const loadEntitiesOtherSide = (entities: Entity[], { application }: { application?: any } = {}): ValidationResult => {
+export const loadEntitiesOtherSide = (entities: JSONEntity[], { application }: { application?: any } = {}): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
@@ -111,9 +115,9 @@ export const loadEntitiesOtherSide = (entities: Entity[], { application }: { app
   return result;
 };
 
-export const addOtherRelationship = (entity: Entity, otherEntity: Entity, relationship: Relationship) => {
+export const addOtherRelationship = (entity: JSONEntity, otherEntity: JSONEntity, relationship: JSONRelationship) => {
   relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
-  const otherRelationship: Relationship = {
+  const otherRelationship: JSONRelationship = {
     otherEntity: entity,
     otherEntityName: lowerFirst(entity.name),
     ownerSide: !relationship.ownerSide,

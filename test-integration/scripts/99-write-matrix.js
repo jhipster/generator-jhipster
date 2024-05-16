@@ -37,8 +37,6 @@ writeFileSync(
                 .map(({ generatorOptions, ...sample }) => ({
                   workspaces: generatorOptions?.workspaces ? 'true' : undefined,
                   'extra-args': `${generatorOptions?.workspaces ? ' --workspaces' : ''}${generatorOptions?.monorepository ? ' --monorepository' : ''}`,
-                  'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
-                  'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
                   'setup-application-sample': sample['jhi-app-sample'] || sample['app-sample'] || 'jdl',
                   'setup-application-environment': generatorOptions?.defaultEnvironment ?? 'prod',
                   'setup-application-packaging': generatorOptions?.defaultPackaging ?? 'jar',
@@ -55,6 +53,8 @@ writeFileSync(
                   'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
                   'gradle-cache': generatorOptions?.workspaces || sample.name.includes('gradle') ? true : undefined,
                   ...sample,
+                  'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
+                  'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
                 }));
             } catch (error) {
               console.log(`File ${file} not found`, error);

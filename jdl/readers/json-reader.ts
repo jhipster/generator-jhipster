@@ -24,6 +24,7 @@ import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
 import { readJSONFile } from './json-file-reader.js';
 import JDLObject from '../models/jdl-object.js';
+import { JSONEntity } from '../converters/types.js';
 
 /* Parse the given jhipster app dir and return a JDLObject */
 export default function parseFromDir(dir: string): JDLObject {
@@ -37,7 +38,7 @@ export default function parseFromDir(dir: string): JDLObject {
   if (!doesDirectoryExist(entityDir)) {
     throw new Error(`'${entityDir}' must exist as a directory.`);
   }
-  const entities = new Map();
+  const entities = new Map<string, JSONEntity>();
   const files = fs.readdirSync(entityDir);
   files.forEach(file => {
     if (file.endsWith('.json')) {
@@ -54,6 +55,6 @@ export default function parseFromDir(dir: string): JDLObject {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const jdlObject = convertServerOptionsToJDL(applicationOptions);
-  const convertedJDLObject = convertEntitiesToJDL({ entities });
+  const convertedJDLObject = convertEntitiesToJDL(entities);
   return mergeJDLObjects(jdlObject, convertedJDLObject);
 }

@@ -90,7 +90,7 @@ export default {
   BlobTypes,
 };
 
-export function isCommonDBType(type) {
+export function isCommonDBType(type): boolean {
   if (!type) {
     throw new Error('The passed type must not be nil.');
   }
@@ -98,7 +98,7 @@ export function isCommonDBType(type) {
   return snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
 }
 
-export function isBlobType(type?: any) {
+export function isBlobType(type?: any): boolean {
   if (!type) {
     return false;
   }
@@ -107,7 +107,7 @@ export function isBlobType(type?: any) {
   );
 }
 
-export function hasValidation(type, validation, isAnEnum?: any) {
+export function hasValidation(type?: any, validation?, isAnEnum?: boolean): boolean {
   if (!type || !validation) {
     throw new Error('The passed type and value must not be nil.');
   }
@@ -117,7 +117,7 @@ export function hasValidation(type, validation, isAnEnum?: any) {
   return isCommonDBType(type) && CommonDBValidations[type].has(validation);
 }
 
-export function getIsType(databaseType, callback?: any) {
+export function getIsType(databaseType?: string, callback?: any): (type: any) => boolean {
   if (!databaseType) {
     throw new Error('The passed type must not be nil.');
   }

@@ -336,11 +336,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           !application.searchEngineAny &&
-          !entityConfig.searchEngine
+          entityConfig.searchEngine !== NO_SEARCH_ENGINE
         ) {
+          if (entityConfig.searchEngine) {
+            this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+          }
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
           entityConfig.searchEngine = NO_SEARCH_ENGINE;
-          this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
         }
       },
       configureModelFiltering({ application, entityConfig }) {

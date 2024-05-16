@@ -207,7 +207,7 @@ export type ConfigSpec = {
 
   cli?: SetOptional<CliOptionSpec, 'name'> & { env?: string };
   argument?: JHipsterArgumentConfig;
-  prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
+  prompt?: PromptSpec | ((gen: CoreGenerator & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec) => PromptSpec);
   scope?: 'storage' | 'blueprint' | 'generator';
   /**
    * The callback receives the generator as input for 'generator' scope.

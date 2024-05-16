@@ -19,7 +19,11 @@
 import type { JHipsterCommandDefinition } from '../../../base/api.js';
 
 const command: JHipsterCommandDefinition = {
-  configs: {},
+  configs: {
+    routes: {
+      scope: 'storage',
+    },
+  },
   import: [],
 };
 

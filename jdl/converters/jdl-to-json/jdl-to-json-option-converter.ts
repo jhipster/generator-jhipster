@@ -21,6 +21,8 @@ import logger from '../../utils/objects/logger.js';
 import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.js';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
+import AbstractJDLOption from '../../models/abstract-jdl-option.js';
+import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
@@ -48,7 +50,7 @@ type JDLOptionHolder = JDLObject | JDLApplication;
  * @param jdlOptionHolder - a JDL object (a JDLObject or a JDLApplication) containing the options.
  * @return {Map<String, Object>} a map having for keys entity names and for values the JSON option contents.
  */
-export function convert(jdlOptionHolder: JDLOptionHolder) {
+export function convert(jdlOptionHolder?: JDLOptionHolder | null): Map<string, any> {
   if (!jdlOptionHolder) {
     throw new Error('A JDL object or application must be passed to convert JDL options to JSON.');
   }
@@ -58,7 +60,7 @@ export function convert(jdlOptionHolder: JDLOptionHolder) {
   return convertedOptionContent;
 }
 
-function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder) {
+function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder): void {
   jdlOptionHolder.forEachOption(jdlOption => {
     if (jdlOption.entityNames.has('*')) {
       jdlOption.setEntityNames(jdlOptionHolder.getEntityNames().filter(entityName => !jdlOption.excludedNames.has(entityName)));
@@ -66,13 +68,13 @@ function resolveEntityNamesForEachOption(jdlOptionHolder: JDLOptionHolder) {
   });
 }
 
-function setConvertedOptionContents(jdlOptionHolder: JDLOptionHolder) {
+function setConvertedOptionContents(jdlOptionHolder: JDLOptionHolder): void {
   jdlOptionHolder.forEachOption(jdlOption => {
     setOptionsToEachEntityName(jdlOption);
   });
 }
 
-function setOptionsToEachEntityName(jdlOption) {
+function setOptionsToEachEntityName(jdlOption: AbstractJDLOption): void {
   const { key, value } = getJSONOptionKeyAndValue(jdlOption);
 
   jdlOption.entityNames.forEach(entityName => {
@@ -94,7 +96,7 @@ function setOptionsToEachEntityName(jdlOption) {
   }
 }
 
-function getJSONOptionKeyAndValue(jdlOption) {
+function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; value: string | boolean } {
   switch (jdlOption.name) {
     case SKIP_CLIENT:
     case SKIP_SERVER:
@@ -102,27 +104,27 @@ function getJSONOptionKeyAndValue(jdlOption) {
     case EMBEDDED:
       return { key: jdlOption.name, value: true };
     case MICROSERVICE:
-      return { key: 'microserviceName', value: jdlOption.value };
+      return { key: 'microserviceName', value: (jdlOption as JDLBinaryOption).value };
     case NO_FLUENT_METHOD:
       return { key: 'fluentMethods', value: false };
     case ANGULAR_SUFFIX:
-      return { key: 'angularJSSuffix', value: jdlOption.value };
+      return { key: 'angularJSSuffix', value: (jdlOption as JDLBinaryOption).value };
     case SEARCH:
-      return { key: 'searchEngine', value: jdlOption.value };
+      return { key: 'searchEngine', value: (jdlOption as JDLBinaryOption).value };
     case FILTER:
       return { key: 'jpaMetamodelFiltering', value: true };
     default:
-      return { key: jdlOption.name, value: jdlOption.getType() === 'UNARY' ? true : jdlOption.value };
+      return { key: jdlOption.name, value: jdlOption.getType() === 'UNARY' ? true : (jdlOption as JDLBinaryOption).value };
   }
 }
 
-function preventEntitiesFromBeingSearched(entityNames) {
+function preventEntitiesFromBeingSearched(entityNames: Set<string>) {
   entityNames.forEach(entityName => {
     setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
   });
 }
 
-function setOptionToEntityName(option, entityName: string) {
+function setOptionToEntityName(option, entityName: string): void {
   const { optionName, optionValue } = option;
   const optionContentForEntity = convertedOptionContent.get(entityName) ?? {};
   optionContentForEntity[optionName] = optionValue;
