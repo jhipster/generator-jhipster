@@ -37,6 +37,7 @@ describe('jdl - JDLEntity', () => {
     describe('when not passing the name', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error
           new JDLEntity({ name: null, comment: 'My entity' });
         }).to.throw('The entity name is mandatory to create an entity.');
       });

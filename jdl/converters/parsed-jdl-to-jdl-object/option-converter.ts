@@ -92,7 +92,7 @@ function convertUseOptions(useOptions) {
       }
       convertedUseOptions.push(
         new JDLBinaryOption({
-          name: getOptionName(OptionValues[optionValue]),
+          name: getOptionName(OptionValues[optionValue])!,
           value: optionValue,
           entityNames: list,
           excludedNames: excluded,

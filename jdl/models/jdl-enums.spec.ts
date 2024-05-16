@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { before, it, describe, after, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, after, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLEnums from '../models/jdl-enums.js';
 import { JDLEnum } from '../models/index.js';

@@ -1,8 +1,9 @@
 {
-  "include": ["**/*"],
-  "exclude": [],
+  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*"],
+  "exclude": ["generators/**/*.spec.*", "cli/*.spec.*"],
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "noEmit": true,
     "types": []
   }
 }

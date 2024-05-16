@@ -46,6 +46,7 @@ describe('jdl - JDLRelationship', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
+            // @ts-expect-error
             type: 'WRONG_TYPE',
           });
         }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');

@@ -36,15 +36,20 @@ const Options = {
 
 const optionNames = Object.values(Options);
 
+const dtoValues = { MAPSTRUCT, NO: NO_MAPPER };
+const serviceValues = { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE };
+const paginationValues = {
+  PAGINATION: PaginationTypes.PAGINATION,
+  'INFINITE-SCROLL': PaginationTypes.INFINITE_SCROLL,
+  NO: PaginationTypes.NO,
+};
+const searchValues = { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH };
+
 const Values = {
-  [Options.DTO]: { MAPSTRUCT, NO: NO_MAPPER },
-  [Options.SERVICE]: { SERVICE_CLASS, SERVICE_IMPL, NO: NO_SERVICE },
-  [Options.PAGINATION]: {
-    PAGINATION: PaginationTypes.PAGINATION,
-    'INFINITE-SCROLL': PaginationTypes.INFINITE_SCROLL,
-    NO: PaginationTypes.NO,
-  },
-  [Options.SEARCH]: { ELASTICSEARCH, COUCHBASE, NO: NO_SEARCH },
+  dto: dtoValues,
+  service: serviceValues,
+  pagination: paginationValues,
+  search: searchValues,
 };
 
 const DefaultValues = {

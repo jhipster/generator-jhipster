@@ -99,7 +99,13 @@ describe('jdl - RelationshipValidator', () => {
               type: ONE_TO_ONE,
               injectedFieldInTo: 'a',
               injectedFieldInFrom: 'b',
-              options: { [BUILT_IN_ENTITY]: true },
+              options: {
+                source: {},
+                destination: {},
+                global: {
+                  [BUILT_IN_ENTITY]: true,
+                },
+              },
             });
           });
 
@@ -118,6 +124,8 @@ describe('jdl - RelationshipValidator', () => {
                 type,
                 injectedFieldInTo: 'a',
                 options: {
+                  source: {},
+                  destination: {},
                   global: {
                     [BUILT_IN_ENTITY]: true,
                   },

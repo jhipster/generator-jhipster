@@ -36,6 +36,7 @@ describe('jdl - JDLBinaryOption', () => {
     describe('when passing a name but no value', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error
           new JDLBinaryOption({ name: binaryOptions.Options.DTO });
         }).to.throw(/^A binary option must have a value\.$/);
       });

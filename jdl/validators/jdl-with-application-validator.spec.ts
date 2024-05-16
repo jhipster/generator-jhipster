@@ -327,14 +327,14 @@ describe('jdl - JDLWithApplicationValidator', () => {
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
-            value: binaryOptions.Values.dto.MAPSTRUCT,
+            value: binaryOptions.Values.dto.MAPSTRUCT!,
             entityNames: new Set(['A', 'B', 'C']),
           }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
-            value: binaryOptions.Values.service.SERVICE_CLASS,
+            value: binaryOptions.Values.service.SERVICE_CLASS!,
             entityNames: new Set(['B']),
           }),
         );
@@ -378,14 +378,14 @@ describe('jdl - JDLWithApplicationValidator', () => {
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
-            value: binaryOptions.Values.dto.MAPSTRUCT,
+            value: binaryOptions.Values.dto.MAPSTRUCT!,
             entityNames: new Set(['A', 'B']),
           }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
-            value: binaryOptions.Values.service.SERVICE_CLASS,
+            value: binaryOptions.Values.service.SERVICE_CLASS!,
             excludedNames: new Set(['C']),
           }),
         );

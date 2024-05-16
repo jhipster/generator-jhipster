@@ -26,9 +26,9 @@ const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
-  deploymentType: any;
+  deploymentType!: string;
 
-  constructor(args: Partial<JDLDeployment>) {
+  constructor(args: { deploymentType: string; appsFolders?: string[]; dockerRepositoryName?: string }) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }

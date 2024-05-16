@@ -316,7 +316,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.PAGINATION,
-            value: binaryOptions.Values.pagination.PAGINATION,
+            value: binaryOptions.Values.pagination.PAGINATION!,
           }),
         );
         validator = createValidator(jdlObject, { databaseType: databaseTypes.CASSANDRA });

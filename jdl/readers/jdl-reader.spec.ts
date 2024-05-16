@@ -39,6 +39,7 @@ describe('jdl - JDLReader', () => {
       describe('such as nil', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             JDLReader.parseFromFiles(null);
           }).to.throw(/^The files must be passed to be parsed\.$/);
         });

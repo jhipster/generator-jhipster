@@ -42,7 +42,7 @@ export default { convert };
  * @param jdlObject - the JDL object containing entities, fields and enums.
  * @return a map having for keys an entity's name and for values its JSON fields.
  */
-export function convert(jdlObject?: JDLObject | null): Map<string, JSONField[]> {
+export function convert(jdlObject: JDLObject): Map<string, JSONField[]> {
   if (!jdlObject) {
     throw new Error('A JDL Object must be passed to convert JDL fields to JSON.');
   }

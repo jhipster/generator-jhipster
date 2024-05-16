@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import AbstractJDLOption from './abstract-jdl-option.js';
+import AbstractJDLOption, { JDLOptionParams } from './abstract-jdl-option.js';
 import BinaryOptions from '../jhipster/binary-options.js';
 import { join } from '../utils/set-utils.js';
 
@@ -27,9 +27,9 @@ import { join } from '../utils/set-utils.js';
 export default class JDLBinaryOption extends AbstractJDLOption {
   value: string;
 
-  constructor(args: Partial<JDLBinaryOption>) {
+  constructor(args: JDLOptionParams & { value: string }) {
     super(args);
-    if (args.value == null) {
+    if (typeof args.value !== 'string') {
       throw new Error('A binary option must have a value.');
     }
     this.value = args.value;

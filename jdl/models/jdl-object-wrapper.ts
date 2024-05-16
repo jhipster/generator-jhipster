@@ -19,7 +19,7 @@
 import JDLObject from './jdl-object.js';
 
 export type JdlObjectWrapper = {
-  jdlObject?: JDLObject;
+  jdlObject: JDLObject;
   applicationName?: string;
   applicationType?: 'monolith' | 'microservice' | 'gateway';
   databaseType?:

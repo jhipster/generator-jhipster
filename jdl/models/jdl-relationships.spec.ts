@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
@@ -69,6 +69,7 @@ describe('jdl - JDLRelationships', () => {
     describe('when passing an invalid type', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error
           new JDLRelationships().get('oops', 42);
         }).to.throw("A valid relationship type must be passed so as to retrieve the relationship, got 'oops'.");
       });
@@ -84,7 +85,7 @@ describe('jdl - JDLRelationships', () => {
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().get(relationshipTypes.ONE_TO_MANY, 42)).to.be.undefined;
+          expect(new JDLRelationships().get(relationshipTypes.ONE_TO_MANY, '42')).to.be.undefined;
         });
       });
       describe('for an existing relationship', () => {
@@ -120,7 +121,7 @@ describe('jdl - JDLRelationships', () => {
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getOneToOne(42)).to.be.undefined;
+          expect(new JDLRelationships().getOneToOne('42')).to.be.undefined;
         });
       });
       describe('for an existing relationship', () => {
@@ -156,7 +157,7 @@ describe('jdl - JDLRelationships', () => {
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getOneToMany(42)).to.be.undefined;
+          expect(new JDLRelationships().getOneToMany('42')).to.be.undefined;
         });
       });
       describe('for an existing relationship', () => {
@@ -192,7 +193,7 @@ describe('jdl - JDLRelationships', () => {
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getManyToOne(42)).to.be.undefined;
+          expect(new JDLRelationships().getManyToOne('42')).to.be.undefined;
         });
       });
       describe('for an existing relationship', () => {
@@ -228,7 +229,7 @@ describe('jdl - JDLRelationships', () => {
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getManyToMany(42)).to.be.undefined;
+          expect(new JDLRelationships().getManyToMany('42')).to.be.undefined;
         });
       });
       describe('for an existing relationship', () => {

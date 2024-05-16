@@ -89,6 +89,7 @@
     "prebuild": "npm run clean",
     "build": "npm run compile && npm run copy-files && npm run compile-types && npm run copy-types",
     "postbuild": "node bin/fix-bin.cjs",
+    "check-types": "tsc -p tsconfig.spec.json",
     "clean": "rimraf dist",
     "compile": "tsc",
     "compile-types": "tsc -p tsconfig.types.json",
@@ -106,7 +107,7 @@
     "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
-    "pretest": "npm run lint",
+    "pretest": "npm run lint && npm run check-types",
     "test": "npm run mocha-test test generators cli",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
     "update-snapshots": "esmocha jdl generators cli --update-snapshot --no-insight --forbid-only"

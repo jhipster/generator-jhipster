@@ -41,8 +41,8 @@ export default {
  * @param {string} args.applicationType - the application's type
  * @returns {Map} entities that can be exported to JSON
  */
-export function convert(args: JdlObjectWrapper = {}) {
-  if (!args.jdlObject || !args.applicationName || !args.databaseType) {
+export function convert(args: JdlObjectWrapper) {
+  if (!args?.jdlObject || !args.applicationName || !args.databaseType) {
     throw new Error("The JDL object, the application's name, and its the database type are mandatory.");
   }
   init(args);
