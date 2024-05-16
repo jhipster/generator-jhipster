@@ -46,7 +46,7 @@ export function convertToJDL(directory = '.', output: string | false = 'app.jdl'
     const yoRcFileContent: Partial<JSONRootObject> = readJSONFile(path.join(directory, '.yo-rc.json'));
     let entities: Map<string, JSONEntity> | undefined;
     if (doesDirectoryExist(path.join(directory, '.jhipster'))) {
-      entities = getJSONEntityFiles(directory, yoRcFileContent);
+      entities = getJSONEntityFiles(directory);
     }
     jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities);
   } else {
@@ -78,7 +78,7 @@ function getJDLObjectFromMultipleApplications(directory: string): JDLObject {
     const yoRcFileContent: Partial<JSONRootObject> = readJSONFile(path.join(applicationDirectory, '.yo-rc.json'));
     let entities: Map<string, JSONEntity> = new Map();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
-      entities = getJSONEntityFiles(applicationDirectory, yoRcFileContent);
+      entities = getJSONEntityFiles(applicationDirectory);
     }
     jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, jdlObject);
   });
@@ -116,19 +116,10 @@ function cleanYoRcFileContent(yoRcFileContent: Record<string, any>) {
   return yoRcFileContent;
 }
 
-function getJSONEntityFiles(applicationDirectory: string, yoRcFileContent: Partial<JSONRootObject>): Map<string, JSONEntity> {
+function getJSONEntityFiles(applicationDirectory: string): Map<string, JSONEntity> {
   const entities: Map<string, JSONEntity> = new Map();
   fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
     const entityName = file.slice(0, file.indexOf('.json'));
-    if (
-      yoRcFileContent['generator-jhipster'] &&
-      yoRcFileContent['generator-jhipster']!.entities &&
-      !yoRcFileContent['generator-jhipster']!.entities!.includes(entityName)
-    ) {
-      throw new Error(
-        `Mismatch identified between the application description amount of entity listed and the entity found in the .jhipster folder for entity name: ${entityName}`,
-      );
-    }
     const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
     if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
       entities.set(entityName, readJSONFile(jsonFilePath));
