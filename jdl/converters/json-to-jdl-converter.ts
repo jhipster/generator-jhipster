@@ -120,7 +120,11 @@ function getJSONEntityFiles(applicationDirectory: string, yoRcFileContent: Parti
   const entities: Map<string, JSONEntity> = new Map();
   fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
     const entityName = file.slice(0, file.indexOf('.json'));
-    if (!yoRcFileContent.entities?.includes(entityName)) {
+    if (
+      yoRcFileContent['generator-jhipster'] &&
+      yoRcFileContent['generator-jhipster']!.entities &&
+      !yoRcFileContent['generator-jhipster']!.entities!.includes(entityName)
+    ) {
       throw new Error(
         `Mismatch identified between the application description amount of entity listed and the entity found in the .jhipster folder for entity name: ${entityName}`,
       );
