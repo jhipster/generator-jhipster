@@ -45,7 +45,7 @@ describe('generator - liquibase - needles', () => {
       .withOptions({
         skipPriorities: ['writing'],
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:liquibase']]);
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:liquibase' }]]);
   });
 
   it('Assert changelog is added to master.xml', () => {

@@ -15,7 +15,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   get [ClientGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       webpackPhase({ source }) {
-        source.addWebpackConfig({ config: '{devServer:{}}' });
+        source!.addWebpackConfig!({ config: '{devServer:{}}' });
       },
     });
   }

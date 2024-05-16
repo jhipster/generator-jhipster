@@ -1,10 +1,11 @@
 import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
-import { ExecaSyncReturnValue } from 'execa';
+import { SyncResult } from 'execa';
 import quibble from 'quibble';
 
 const execa = { execa: esmocha.fn(), execaSync: esmocha.fn(), execaCommandSync: esmocha.fn(), execaCommand: esmocha.fn() };
 
-const baseResult: ExecaSyncReturnValue<string> = {
+const baseResult: SyncResult = {
+  cwd: '',
   command: 'java',
   escapedCommand: 'java',
   exitCode: 0,
@@ -12,8 +13,7 @@ const baseResult: ExecaSyncReturnValue<string> = {
   stderr: '',
   failed: false,
   timedOut: false,
-  killed: false,
-};
+} as any;
 
 describe('generator - server - checkJava', () => {
   before(async () => {
@@ -34,7 +34,7 @@ describe('generator - server - checkJava', () => {
     before(async () => {
       execa.execaCommandSync.mockReturnValue({ ...baseResult, stderr } as any);
       const { default: checkJava } = await import('./check-java.js');
-      result = checkJava();
+      result = checkJava([]);
     });
 
     it('should return info and javaVersion', async () => {
@@ -53,7 +53,7 @@ describe('generator - server - checkJava', () => {
     before(async () => {
       execa.execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr } as any);
       const { default: checkJava } = await import('./check-java.js');
-      result = checkJava();
+      result = checkJava([]);
     });
 
     it('should return error', async () => {
@@ -69,7 +69,7 @@ describe('generator - server - checkJava', () => {
         throw new Error('foo');
       });
       const { default: checkJava } = await import('./check-java.js');
-      result = checkJava();
+      result = checkJava([]);
     });
 
     it('should return error', async () => {

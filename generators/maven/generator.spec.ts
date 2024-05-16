@@ -94,7 +94,7 @@ describe(`generator - ${generator}`, () => {
                 });
               }
             },
-            'jhipster-blueprint:maven',
+            { namespace: 'jhipster-blueprint:maven' },
           ],
         ]);
     });

@@ -17,15 +17,15 @@
  * limitations under the License.
  */
 import { before, it, describe, expect } from 'esmocha';
-import { defaultHelpers as helpers } from '../../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../../testing/index.js';
 import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
 import { insertContentIntoApplicationProperties } from './needles.js';
+import type { SpringBootApplication } from '../types.js';
 
 describe('generator - server - support - needles', () => {
   describe('generated project', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runJHipster(GENERATOR_SPRING_BOOT)
         .withMockedGenerators(['jhipster:common', 'jhipster:languages', 'jhipster:liquibase']);
     });
@@ -36,7 +36,7 @@ describe('generator - server - support - needles', () => {
 
     describe('insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
-        const application = runResult.generator.sharedData.getApplication();
+        const application: SpringBootApplication = runResult.generator.sharedData.getApplication();
         expect(() => insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' })).toThrow(
           /Missing required jhipster-needle application-properties-foo not found at/,
         );

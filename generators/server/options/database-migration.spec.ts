@@ -4,7 +4,7 @@ import { DATABASE_MIGRATION as optionName } from './index.js';
 import optionDefinition from './database-migration.js';
 
 describe(`generators - server - jdl - ${optionName}`, () => {
-  optionDefinition.knownChoices.forEach(optionValue => {
+  optionDefinition.knownChoices!.forEach(optionValue => {
     describe(`with ${optionValue} value`, () => {
       let state: ImportState;
 

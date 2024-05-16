@@ -19,7 +19,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     return this.asPostWritingTaskGroup({
       // @ts-ignore
       async additionalResource({ source }) {
-        source.addExternalResourceToRoot({
+        source!.addExternalResourceToRoot!({
           resource: '<link rel="stylesheet" href="content/css/my.css">',
           comment: 'Comment added by JHipster API',
         });
@@ -38,7 +38,7 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
       .withOptions({
         blueprint: 'myblueprint',
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']]);
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]]);
   });
 
   it('Assert index.html contain the comment and the resource added', () => {

@@ -49,7 +49,7 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
         clientFramework: 'no',
         buildTool: 'gradle',
       })
-      .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']]);
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:server' }]]);
   });
 
   it('Assert gradle.properties has the property added', () => {

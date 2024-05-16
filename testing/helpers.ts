@@ -15,12 +15,13 @@ import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
 import type { JSONEntity } from '../jdl/converters/types.js';
+import CoreGenerator from '../generators/base-core/generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
 
-type JHipsterRunResult<GeneratorType extends YeomanGenerator = YeomanGenerator> = RunResult<GeneratorType> & {
+type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = RunResult<GeneratorType> & {
   /**
    * First argument of mocked source calls.
    */
