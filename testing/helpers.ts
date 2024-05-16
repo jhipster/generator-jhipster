@@ -130,6 +130,10 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
 
+  withOptions(options: Partial<Omit<JHipsterGeneratorOptions, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
+    return super.withOptions(options as any);
+  }
+
   withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
     return this.withFiles(
       createFiles('', { baseName: 'jhipster', creationTimestamp: parseCreationTimestamp('2020-01-01'), ...configuration }, entities),

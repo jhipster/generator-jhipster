@@ -76,7 +76,7 @@ describe(`generator - ${generator}`, () => {
     const writingEntities = esmocha.fn();
     const postWritingEntities = esmocha.fn();
 
-    class CustomGenerator extends Generator<BaseApplication> {
+    class CustomGenerator extends Generator {
       async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }

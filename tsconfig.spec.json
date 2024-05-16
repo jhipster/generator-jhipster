@@ -1,6 +1,6 @@
 {
   "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*"],
-  "exclude": ["generators/**/*.spec.*", "cli/*.spec.*"],
+  "exclude": ["generators/**/*.spec.*"],
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
