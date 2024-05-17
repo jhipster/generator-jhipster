@@ -62,7 +62,6 @@ exports[`generator - jdl for application jdl with valid jdl should write expecte
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "baseName": "jhipster",
     "entities": []
   }
@@ -109,7 +108,6 @@ exports[`generator - jdl for one application and entity jdl with valid jdl shoul
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "baseName": "jhipster",
     "entities": [
       "Foo"
@@ -254,7 +252,6 @@ exports[`generator - jdl with a gateway generating json should generate expected
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "applicationType": "gateway",
     "applications": {
       "ms": {}

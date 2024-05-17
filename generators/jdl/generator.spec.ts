@@ -174,7 +174,6 @@ describe(`generator - ${generator}`, () => {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "baseName": "jhipster",
     "blueprints": [
       {
