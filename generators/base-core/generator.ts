@@ -26,7 +26,7 @@ import { requireNamespace } from '@yeoman/namespace';
 import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { kebabCase, snakeCase, merge, get, set } from 'lodash-es';
+import { kebabCase, snakeCase, merge, get, set, defaults } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -36,7 +36,13 @@ import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.js';
-import { createJHipster7Context, formatDateForChangelog, joinCallbacks, Logger } from '../base/support/index.js';
+import {
+  createJHipster7Context,
+  formatDateForChangelog,
+  joinCallbacks,
+  Logger,
+  removeFieldsWithNullishValues,
+} from '../base/support/index.js';
 
 import type {
   JHipsterGeneratorOptions,
@@ -60,6 +66,7 @@ import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { convertConfigToOption } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
+import { getConfigWithDefaults } from '../../jdl/index.js';
 
 const {
   INITIALIZING,
@@ -229,6 +236,20 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   /**
+   * JHipster config with default values fallback
+   */
+  get jhipsterConfigWithDefaults() {
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
+    defaults(configWithDefaults, {
+      skipFakeData: false,
+      skipCheckLengthOfIdentifier: false,
+      enableGradleEnterprise: false,
+      pages: [],
+    });
+    return configWithDefaults;
+  }
+
+  /**
    * Warn or throws check failure based on current skipChecks option.
    * @param message
    */
@@ -341,6 +362,21 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
     return this.prompt(this.prepareQuestions(generatorCommand.configs));
+  }
+
+  /**
+   * Configure the current JHipster command.
+   * Blueprints with command override takes precedence.
+   */
+  async configureCurrentJHipsterCommandConfig() {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    if (!generatorCommand.configs) {
+      throw new Error(`Configs not found for generator ${this.options.namespace}`);
+    }
+
+    for (const def of Object.values(generatorCommand.configs)) {
+      def.configure?.(this);
+    }
   }
 
   /**

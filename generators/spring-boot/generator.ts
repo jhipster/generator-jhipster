@@ -119,6 +119,9 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      async configureCommand() {
+        await this.configureCurrentJHipsterCommandConfig();
+      },
       checks() {
         const config = this.jhipsterConfigWithDefaults;
         if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
@@ -235,11 +238,20 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composingComponent);
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get loading() {
+    return this.asLoadingTaskGroup({
       async loadCommand({ application }) {
         await this.loadCurrentJHipsterCommandConfig(application);
       },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
       checksWebsocket({ application }) {
         const { websocket } = application as any;
         if (websocket && websocket !== NO_WEBSOCKET) {
