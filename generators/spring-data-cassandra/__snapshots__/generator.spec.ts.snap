@@ -520,6 +520,9 @@ exports[`generator - cassandra microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -856,6 +859,9 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
@@ -2014,6 +2020,9 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
@@ -3543,6 +3552,9 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
