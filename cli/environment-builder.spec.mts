@@ -126,9 +126,9 @@ describe('cli - EnvironmentBuilder', () => {
       // @ts-expect-error
       _lookupJHipsterSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
       // @ts-expect-error
-      _loadBlueprints = sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
+      _loadBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
       // @ts-expect-error
-      _lookupBlueprintsSpye = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
+      _lookupBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       EnvironmentBuilder.createDefaultBuilder();
     });
