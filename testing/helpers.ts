@@ -15,12 +15,13 @@ import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
 import type { JSONEntity } from '../jdl/converters/types.js';
+import CoreGenerator from '../generators/base-core/generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
 
-type JHipsterRunResult<GeneratorType extends YeomanGenerator = YeomanGenerator> = RunResult<GeneratorType> & {
+type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = RunResult<GeneratorType> & {
   /**
    * First argument of mocked source calls.
    */
@@ -129,6 +130,10 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private workspaceApplications: string[] = [];
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
+
+  withOptions(options: Partial<Omit<JHipsterGeneratorOptions, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
+    return super.withOptions(options as any);
+  }
 
   withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
     return this.withFiles(

@@ -115,32 +115,41 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('createDefaultBuilder', () => {
-    before(async () => {
+    let createSpy: sinon.SinonSpy;
+    let _lookupJHipsterSpy: sinon.SinonSpy;
+    let _loadBlueprintsSpy: sinon.SinonSpy;
+    let _lookupBlueprintsSpy: sinon.SinonSpy;
+
+    beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      sinon.spy(EnvironmentBuilder, 'create');
-      sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
-      sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
-      sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
+      createSpy = sinon.spy(EnvironmentBuilder, 'create');
+      // @ts-expect-error
+      _lookupJHipsterSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
+      // @ts-expect-error
+      _loadBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
+      // @ts-expect-error
+      _lookupBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      EnvironmentBuilder.createDefaultBuilder();
+      await EnvironmentBuilder.createDefaultBuilder();
     });
-    after(() => {
-      EnvironmentBuilder.create.restore();
-      EnvironmentBuilder.prototype._lookupJHipster.restore();
-      EnvironmentBuilder.prototype._loadBlueprints.restore();
-      EnvironmentBuilder.prototype._lookupBlueprints.restore();
+    afterEach(() => {
+      createSpy.restore();
+      _lookupJHipsterSpy.restore();
+      _loadBlueprintsSpy.restore();
+      _lookupBlueprintsSpy.restore();
     });
     it('should call create, _lookupJHipster, _loadBlueprints and _lookupBlueprints', () => {
-      expect(EnvironmentBuilder.create.callCount).to.be.equal(1);
-      expect(EnvironmentBuilder.prototype._lookupJHipster.callCount).to.be.equal(1);
-      expect(EnvironmentBuilder.prototype._loadBlueprints.callCount).to.be.equal(1);
-      expect(EnvironmentBuilder.prototype._lookupBlueprints.callCount).to.be.equal(1);
+      expect(createSpy.callCount).to.be.equal(1);
+      expect(_lookupJHipsterSpy.callCount).to.be.equal(1);
+      expect(_loadBlueprintsSpy.callCount).to.be.equal(1);
+      expect(_lookupBlueprintsSpy.callCount).to.be.equal(1);
     });
   });
 
   describe('_loadBlueprints', () => {
     let envBuilder;
     beforeEach(() => {
+      // @ts-expect-error
       envBuilder = EnvironmentBuilder.create([])._loadBlueprints();
     });
     describe('when there is no .yo-rc.json', () => {
@@ -311,6 +320,7 @@ describe('cli - EnvironmentBuilder', () => {
     let envBuilder;
     beforeEach(async () => {
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
+      // @ts-expect-error
       envBuilder = await EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
       await envBuilder._loadSharedOptions();
     });

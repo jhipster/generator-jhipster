@@ -24,7 +24,11 @@ describe('generator - upgrade', function () {
           baseName: 'upgradeTest',
         })
         .withOptions({ useVersionPlaceholders: false });
-      await runResult.create(getGenerator(GENERATOR_UPGRADE)).withSpawnMock().withOptions({ useVersionPlaceholders: false }).run();
+      await runResult
+        .create(getGenerator(GENERATOR_UPGRADE))
+        .withSpawnMock()
+        .withOptions({ useVersionPlaceholders: false } as any)
+        .run();
     });
 
     it('generated git commits to match snapshot', () => {

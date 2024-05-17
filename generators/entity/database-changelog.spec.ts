@@ -21,7 +21,7 @@ describe('generator - entity database changelogs', () => {
       before(async () => {
         await helpers
           .run(getGenerator('entity'))
-          .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
@@ -35,7 +35,7 @@ describe('generator - entity database changelogs', () => {
       before(async () => {
         await helpers
           .run(getGenerator('entity'))
-          .withGenerators([[MockedLanguagesGenerator, 'jhipster:languages']])
+          .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
           .withJHipsterConfig({ applicationType: 'gateway' }, [
             { ...entityFoo, microservicePath: 'microservice1', microserviceName: 'microservice1' },
           ])

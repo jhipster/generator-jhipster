@@ -5,7 +5,8 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
 import { execaCommandSync } from 'execa';
-import { BaseEnvironment } from '@yeoman/types';
+import type { GeneratorMeta } from '@yeoman/types';
+import type FullEnvironment from 'yeoman-environment';
 import { coerce } from 'semver';
 import quibble from 'quibble';
 
@@ -99,6 +100,7 @@ describe('cli', () => {
     const { buildJHipster } = await import('./program.mjs');
 
     mockCli = async (argv: string[], opts = {}) => {
+      // @ts-expect-error
       const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
       return program.parseAsync(argv);
     };
@@ -161,13 +163,14 @@ describe('cli', () => {
     const commands = { mocked: {} };
     let generator;
     let runArgs;
-    let env: BaseEnvironment;
+    let env: FullEnvironment;
 
     beforeEach(async () => {
-      getCommand.mockImplementation(actualGetCommonand);
+      getCommand.mockImplementation(actualGetCommonand as any);
 
       const BaseGenerator = (await import('../generators/base/index.js')).default;
-      env = await helpers.createTestEnv();
+      env = (await helpers.createTestEnv()) as FullEnvironment;
+      // @ts-expect-error
       generator = new (helpers.createDummyGenerator(BaseGenerator))({ env, sharedData: {} });
       generator._options = {
         foo: {
@@ -181,17 +184,21 @@ describe('cli', () => {
         runArgs = args;
         return Promise.resolve();
       });
-      env.composeWith = esmocha.fn<typeof env.composeWith>();
+      env.composeWith = esmocha.fn<typeof env.composeWith>() as any;
       const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
-      env.getGeneratorMeta = esmocha.fn<typeof env.create>().mockImplementation((namespace, args, options) => {
+      env.getGeneratorMeta = esmocha.fn((namespace: any): GeneratorMeta | undefined => {
         if (namespace === 'jhipster:mocked') {
           return {
-            importModule: () => ({}),
+            namespace,
+            importModule: async () => ({}),
             resolved: __filename,
             instantiateHelp: () => generator,
+            packageNamespace: undefined,
+            importGenerator: undefined as any,
+            instantiate: generator,
           };
         }
-        return originalGetGeneratorMeta(namespace, args, options);
+        return originalGetGeneratorMeta(namespace);
       });
     });
 

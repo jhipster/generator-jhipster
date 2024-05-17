@@ -24,7 +24,6 @@ import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.js';
-import type { BaseApplication } from '../base-application/types.js';
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 
@@ -76,7 +75,7 @@ describe(`generator - ${generator}`, () => {
     const writingEntities = esmocha.fn();
     const postWritingEntities = esmocha.fn();
 
-    class CustomGenerator extends Generator<BaseApplication> {
+    class CustomGenerator extends Generator {
       async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
@@ -318,7 +317,7 @@ describe(`generator - ${generator}`, () => {
     const writingEntities = esmocha.fn();
     const postWritingEntities = esmocha.fn();
 
-    class CustomGenerator extends Generator<BaseApplication> {
+    class CustomGenerator extends Generator {
       async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
