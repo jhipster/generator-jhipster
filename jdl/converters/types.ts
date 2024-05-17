@@ -69,11 +69,11 @@ export type JSONGeneratorJhipsterContent = {
   serviceDiscoveryType?: string;
   skipClient?: boolean;
   skipUserManagement?: boolean;
-  testFrameworks: string[];
-  websocket: string;
+  testFrameworks?: string[];
+  websocket?: string;
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
-  blueprints?: JSONBlueprint[];
-  microfrontends?: JSONMicrofrontend[];
+  blueprints?: JSONBlueprint[] | null;
+  microfrontends?: JSONMicrofrontend[] | null;
 } & Record<string, any>;
 
 export type PostProcessedJSONGeneratorJhipsterContent = Omit<
