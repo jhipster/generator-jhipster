@@ -130,7 +130,7 @@ describe('cli - EnvironmentBuilder', () => {
       // @ts-expect-error
       _lookupBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
-      EnvironmentBuilder.createDefaultBuilder();
+      await EnvironmentBuilder.createDefaultBuilder();
     });
     afterEach(() => {
       createSpy.restore();
