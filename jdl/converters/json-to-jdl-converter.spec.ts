@@ -117,6 +117,7 @@ describe('jdl - JSONToJDLConverter', () => {
           `);
         });
       });
+
       describe('with entities', () => {
         beforeEach(() => {
           const dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_entities');
@@ -394,6 +395,7 @@ describe('jdl - JSONToJDLConverter', () => {
       beforeEach(() => {
         jdl = convertSingleContentToJDL({
           'generator-jhipster': {
+            baseName: 'x',
             microfrontends: [
               {
                 baseName: 'foo',
@@ -414,6 +416,7 @@ describe('jdl - JSONToJDLConverter', () => {
       it('should not fail', () => {
         convertSingleContentToJDL({
           'generator-jhipster': {
+            baseName: 'x',
             blueprints: null,
             microfrontends: undefined,
           },
