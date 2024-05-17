@@ -174,8 +174,8 @@ export default class JdlGenerator extends BaseGenerator {
               app.sharedFs = createMemFs();
             }
           }
+          addApplicationIndex(this.applications);
         }
-        addApplicationIndex(this.applications);
         customizeForMicroservices(this.exportedApplicationsWithEntities);
       },
       async generateJson() {
