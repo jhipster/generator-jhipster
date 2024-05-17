@@ -143,7 +143,7 @@ _%>
     const entity = {
       ...<%= entityInstance %>Entity,
       ...values,
-<%_ for (const rel of persistableRelationships) { _%>
+<%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (rel.collection) { _%>
       <%= rel.propertyName %>: mapIdList(values.<%= rel.propertyName %>),
   <%_ } else { _%>
@@ -186,7 +186,7 @@ _%>
           <%= fieldName %>: convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>),
   <%_ } _%>
 <%_ } _%>
-<%_ for (const rel of persistableRelationships) {
+<%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
@@ -297,7 +297,7 @@ _%>
           </UncontrolledTooltip>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const rel of persistableRelationships) {
+<%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const otherEntityNamePlural = rel.otherEntityNamePlural;
     const relationshipName = rel.relationshipName;

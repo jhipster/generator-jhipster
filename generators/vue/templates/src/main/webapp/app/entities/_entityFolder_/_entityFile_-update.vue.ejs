@@ -120,7 +120,7 @@ _%>
   <%_ } _%>
                     </div>
 <%_ } _%>
-<%_ for (relationship of relationships) {
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
   const otherEntityName = relationship.otherEntityName;
   const otherEntityNamePlural = relationship.otherEntityNamePlural;
   const relationshipName = relationship.relationshipName;
