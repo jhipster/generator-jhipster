@@ -413,12 +413,6 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator =>
-        generator.generateUserManagement ||
-        generator.authenticationTypeOauth2 ||
-        generator.databaseTypeSql ||
-        generator.databaseTypeMongodb ||
-        generator.databaseTypeCouchbase,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/Constants.java'],

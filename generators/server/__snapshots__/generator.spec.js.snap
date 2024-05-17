@@ -44,6 +44,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/Constants.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -511,6 +514,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CRLFLogConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/Constants.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/DateTimeFormatConfiguration.java": {
