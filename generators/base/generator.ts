@@ -20,18 +20,16 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import { defaults } from 'lodash-es';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.js';
-import { packageNameToNamespace, removeFieldsWithNullishValues } from './support/index.js';
+import { packageNameToNamespace } from './support/index.js';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import CoreGenerator from '../base-core/index.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
-import { getConfigWithDefaults } from '../../jdl/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 
 /**
@@ -441,20 +439,6 @@ export default class JHipsterBaseBlueprintGenerator<
    */
   asEndTaskGroup(taskGroup: GenericTaskGroup<this, Definition['endTaskParam']>): GenericTaskGroup<this, Definition['endTaskParam']> {
     return taskGroup;
-  }
-
-  /**
-   * JHipster config with default values fallback
-   */
-  get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
-    defaults(configWithDefaults, {
-      skipFakeData: false,
-      skipCheckLengthOfIdentifier: false,
-      enableGradleEnterprise: false,
-      pages: [],
-    });
-    return configWithDefaults;
   }
 
   /**

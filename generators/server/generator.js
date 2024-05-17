@@ -23,7 +23,6 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 
 import {
-  getDBTypeFromDBValue,
   buildJavaGet as javaGetCall,
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
@@ -52,7 +51,6 @@ import {
 
 import {
   applicationTypes,
-  authenticationTypes,
   buildToolTypes,
   databaseTypes,
   fieldTypes,
@@ -63,7 +61,7 @@ import {
   clientFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
+import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
@@ -85,10 +83,9 @@ const {
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
-const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
-const { MICROSERVICE, GATEWAY } = applicationTypes;
+const { CASSANDRA, SQL, NO: NO_DATABASE } = databaseTypes;
+const { GATEWAY } = applicationTypes;
 
 const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -144,37 +141,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      configuring() {
-        if (process.env.JHI_WAR === '1') {
-          this.jhipsterConfig.defaultPackaging = 'war';
-        }
-      },
-      configServerPort() {
-        if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
-          this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
-        }
-      },
-      configure() {
-        this._configureServer();
-      },
-      syncUserWithIdp() {
-        if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfig.authenticationType === OAUTH2) {
-          if (this.isJhipsterVersionLessThan('8.1.1')) {
-            this.jhipsterConfig.syncUserWithIdp = true;
-          }
-        } else if (this.jhipsterConfig.syncUserWithIdp && this.jhipsterConfig.authenticationType !== OAUTH2) {
-          throw new Error(`syncUserWithIdp is only supported with authenticationType ${OAUTH2}`);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
@@ -612,43 +578,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  _configureServer(config = this.jhipsterConfigWithDefaults, dest = this.jhipsterConfig) {
-    // Generate JWT secret key if key does not already exist in config
-    if (
-      (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
-      config.jwtSecretKey === undefined
-    ) {
-      dest.jwtSecretKey = createBase64Secret(64, this.options.reproducibleTests);
-    }
-    // Generate remember me key if key does not already exist in config
-    if (config.authenticationType === SESSION && !dest.rememberMeKey) {
-      dest.rememberMeKey = createSecret();
-    }
-
-    if (config.authenticationType === OAUTH2) {
-      dest.skipUserManagement = true;
-    }
-
-    if (!config.databaseType && config.prodDatabaseType) {
-      dest.databaseType = getDBTypeFromDBValue(config.prodDatabaseType);
-    }
-    if (!config.devDatabaseType && config.prodDatabaseType) {
-      dest.devDatabaseType = config.prodDatabaseType;
-    }
-
-    const databaseType = config.databaseType;
-    if (databaseType === NO_DATABASE) {
-      dest.devDatabaseType = NO_DATABASE;
-      dest.prodDatabaseType = NO_DATABASE;
-      dest.enableHibernateCache = false;
-      dest.skipUserManagement = true;
-    } else if ([MONGODB, NEO4J, COUCHBASE, CASSANDRA].includes(databaseType)) {
-      dest.devDatabaseType = databaseType;
-      dest.prodDatabaseType = databaseType;
-      dest.enableHibernateCache = false;
-    }
   }
 
   /**

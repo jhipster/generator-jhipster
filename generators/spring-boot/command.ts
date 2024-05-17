@@ -19,6 +19,7 @@
 import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
+import { createBase64Secret, createSecret } from '../base/support/secret.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -51,6 +52,11 @@ const command: JHipsterCommandDefinition = {
           'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
         default: () => gen.jhipsterConfigWithDefaults.serverPort,
       }),
+      configure: gen => {
+        if (gen.jhipsterConfig.serverPort === undefined && gen.jhipsterConfig.applicationIndex !== undefined) {
+          gen.jhipsterConfig.serverPort = 8080 + gen.jhipsterConfig.applicationIndex;
+        }
+      },
     },
     serviceDiscoveryType: {
       cli: {
@@ -89,6 +95,19 @@ const command: JHipsterCommandDefinition = {
         { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
         { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
       ],
+      configure: gen => {
+        const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
+        if (authenticationType === 'session' && !rememberMeKey) {
+          gen.jhipsterConfig.rememberMeKey = createSecret();
+        } else if (authenticationType === 'oauth2' && gen.jhipsterConfig.skipUserManagement === undefined) {
+          gen.jhipsterConfig.skipUserManagement = true;
+        } else if (
+          jwtSecretKey === undefined &&
+          (authenticationType === 'jwt' || applicationType === 'microservice' || applicationType === 'gateway')
+        ) {
+          gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
+        }
+      },
     },
     feignClient: {
       description: 'Generate a feign client',
@@ -114,6 +133,15 @@ const command: JHipsterCommandDefinition = {
         message: 'Do you want to allow relationships with User entity?',
         when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
       }),
+      configure: gen => {
+        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
+          if (gen.isJhipsterVersionLessThan('8.1.1')) {
+            gen.jhipsterConfig.syncUserWithIdp = true;
+          }
+        } else if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== 'oauth2') {
+          throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
+        }
+      },
     },
     defaultPackaging: {
       description: 'Default packaging for the application',
@@ -124,6 +152,11 @@ const command: JHipsterCommandDefinition = {
       choices: ['jar', 'war'],
       default: 'jar',
       scope: 'storage',
+      configure: gen => {
+        if (process.env.JHI_WAR === '1') {
+          gen.jhipsterConfig.defaultPackaging = 'war';
+        }
+      },
     },
   },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],

@@ -215,6 +215,10 @@ export type ConfigSpec = {
    * The callback receives blueprintStorage contents as input for 'blueprint' scope.
    */
   default?: string | boolean | string[] | ((any) => string | boolean | string[]);
+  /**
+   * Configure the generator according to the selected configuration.
+   */
+  configure?: (gen: CoreGenerator) => void;
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
