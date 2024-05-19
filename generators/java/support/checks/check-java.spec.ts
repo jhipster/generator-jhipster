@@ -1,10 +1,9 @@
 import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
-import { SyncResult } from 'execa';
 import quibble from 'quibble';
 
 const execa = { execa: esmocha.fn(), execaSync: esmocha.fn(), execaCommandSync: esmocha.fn(), execaCommand: esmocha.fn() };
 
-const baseResult: SyncResult = {
+const baseResult = {
   cwd: '',
   command: 'java',
   escapedCommand: 'java',
