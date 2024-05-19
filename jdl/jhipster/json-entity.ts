@@ -24,7 +24,7 @@ import { upperFirst } from '../utils/string-utils.js';
  * The JSONEntity class represents a read-to-be exported to JSON entity.
  */
 class JSONEntity {
-  annotations: Record<string, boolean | string | number>;
+  annotations: Record<string, boolean | string | number | undefined>;
   [x: string]: any;
 
   /**

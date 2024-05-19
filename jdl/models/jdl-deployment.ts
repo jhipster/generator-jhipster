@@ -20,6 +20,7 @@ import { isEqual } from 'lodash-es';
 import { deploymentOptions, applicationOptions, serviceDiscoveryTypes } from '../jhipster/index.js';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
+import { ParsedJDLDeployment } from '../converters/parsed-jdl-to-jdl-object/types.js';
 
 const { Options } = deploymentOptions;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
@@ -28,7 +29,7 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 export default class JDLDeployment {
   deploymentType!: string;
 
-  constructor(args: { deploymentType: string; appsFolders?: string[]; dockerRepositoryName?: string }) {
+  constructor(args: ParsedJDLDeployment) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }

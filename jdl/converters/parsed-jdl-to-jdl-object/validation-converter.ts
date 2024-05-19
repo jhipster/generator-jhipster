@@ -19,6 +19,7 @@
 
 import JDLValidation from '../../models/jdl-validation.js';
 import { validations } from '../../jhipster/index.js';
+import { ParsedJDLValidation } from './types.js';
 
 const {
   Validations: { PATTERN },
@@ -32,13 +33,16 @@ export default { convertValidations };
  * @param constantValueGetter - the function to get a constant's value.
  * @return the converted JDLValidations.
  */
-export function convertValidations(validations, constantValueGetter): JDLValidation[] {
+export function convertValidations(
+  validations: ParsedJDLValidation[],
+  constantValueGetter: (constant: string) => string | number | boolean | RegExp,
+): JDLValidation[] {
   if (!validations) {
     throw new Error('Validations have to be passed so as to be converted.');
   }
-  return validations.reduce((jdlValidations, parsedValidation) => {
+  return validations.reduce((jdlValidations: JDLValidation[], parsedValidation: ParsedJDLValidation) => {
     if (parsedValidation) {
-      jdlValidations.push(convertValidation(parsedValidation, constantValueGetter));
+      jdlValidations = [...jdlValidations, convertValidation(parsedValidation, constantValueGetter)];
     }
     return jdlValidations;
   }, []);
@@ -50,10 +54,13 @@ export function convertValidations(validations, constantValueGetter): JDLValidat
  * @param {Function} constantValueGetter - the function to get a constant's value.
  * @return the converted JDLValidation.
  */
-function convertValidation(validation, constantValueGetter): JDLValidation {
+function convertValidation(
+  validation: ParsedJDLValidation,
+  constantValueGetter: (constant: string) => string | number | boolean | RegExp,
+): JDLValidation {
   let { value } = validation;
   if (validation.constant) {
-    value = constantValueGetter.call(undefined, value);
+    value = constantValueGetter.call(undefined, value as string);
   }
   if (validation.key === PATTERN) {
     value = formatThePatternValidationValue(value);

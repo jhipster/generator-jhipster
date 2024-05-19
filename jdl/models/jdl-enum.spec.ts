@@ -35,7 +35,7 @@ describe('jdl - JDLEnum', () => {
     describe('when not passing a name', () => {
       it('should fail', () => {
         expect(() => {
-          new JDLEnum({ values: ['ABC'], comment: 'My enumeration.' });
+          new JDLEnum({ values: [{ key: 'ABC' }], comment: 'My enumeration.' });
         }).to.throw("The enum's name must be passed to create an enum.");
       });
     });

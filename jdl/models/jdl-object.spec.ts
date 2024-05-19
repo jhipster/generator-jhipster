@@ -42,6 +42,7 @@ describe('jdl - JDLObject', () => {
       describe('such as a nil application', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-ignore
             object.addApplication(null);
           }).to.throw(/^Can't add nil application\.$/);
         });

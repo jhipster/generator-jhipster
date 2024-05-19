@@ -21,6 +21,7 @@ import JDLRelationship from '../../models/jdl-relationship.js';
 import { lowerFirst } from '../../utils/string-utils.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { asJdlRelationshipType } from '../../jhipster/relationship-types.js';
+import { ParsedJDLRelationship } from './types.js';
 
 export default { convertRelationships };
 
@@ -30,7 +31,7 @@ export default { convertRelationships };
  * @param {Function} annotationToOptionConverter - the function that can convert annotations to options.
  * @return the converted JDL relationships.
  */
-export function convertRelationships(parsedRelationships, annotationToOptionConverter): JDLRelationship[] {
+export function convertRelationships(parsedRelationships: ParsedJDLRelationship[], annotationToOptionConverter): JDLRelationship[] {
   if (!parsedRelationships) {
     throw new Error('Relationships have to be passed so as to be converted.');
   }

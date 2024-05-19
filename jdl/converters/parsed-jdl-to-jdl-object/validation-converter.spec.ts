@@ -33,6 +33,7 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
+          // @ts-ignore
           convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], () => {});
         });
 
@@ -72,6 +73,7 @@ describe('jdl - ValidationConverter', () => {
                   value: '/d+/',
                 },
               ],
+              // @ts-ignore
               () => {},
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
@@ -92,6 +94,7 @@ describe('jdl - ValidationConverter', () => {
                   value: "/[A-Z']/",
                 },
               ],
+              // @ts-ignore
               () => {},
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
@@ -106,6 +109,7 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
+          // @ts-ignore
           convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], () => {});
         });
 

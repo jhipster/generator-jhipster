@@ -42,7 +42,7 @@ export default function createApplicationConfigurationFromObject(configurationOb
 }
 
 export function createApplicationNamespaceConfigurationFromObject(
-  parsedNamespaceConfigs: Record<string, Record<string, any>> = {},
+  parsedNamespaceConfigs: Record<string, Record<string, boolean | number | string[] | string>> = {},
 ): Array<JDLApplicationConfiguration> {
   return Object.entries(parsedNamespaceConfigs).map(([namespace, parsedConfig]) => {
     const configuration = new JDLApplicationConfiguration(namespace);
@@ -53,12 +53,15 @@ export function createApplicationNamespaceConfigurationFromObject(
   });
 }
 
-function createUnknownJDLConfigurationOption(name: string, value: any): JDLApplicationConfigurationOption<any> {
+function createUnknownJDLConfigurationOption(
+  name: string,
+  value: boolean | number | string[] | string,
+): JDLApplicationConfigurationOption<any> {
   let type;
   if (typeof value === 'boolean') {
     type = 'boolean';
-  } else if (/^\d+$/.test(value)) {
-    value = parseInt(value, 10);
+  } else if (/^\d+$/.test(value as string)) {
+    value = parseInt(value as string, 10);
     type = 'integer';
   } else if (Array.isArray(value)) {
     type = 'list';
@@ -70,7 +73,10 @@ function createUnknownJDLConfigurationOption(name: string, value: any): JDLAppli
   return createJDLConfigurationOption(type, name, value);
 }
 
-function createApplicationJDLConfigurationOption(name: string, value: any): JDLApplicationConfigurationOption<any> {
+function createApplicationJDLConfigurationOption(
+  name: string,
+  value: boolean | number | string[] | string,
+): JDLApplicationConfigurationOption<any> {
   const type = applicationDefinition.getTypeForOption(name);
   return createJDLConfigurationOption(type, name, value);
 }
@@ -78,19 +84,19 @@ function createApplicationJDLConfigurationOption(name: string, value: any): JDLA
 function createJDLConfigurationOption(
   type: JDLApplicationOptionTypeValue,
   name: string,
-  value: any,
+  value: boolean | number | string[] | string,
 ): JDLApplicationConfigurationOption<any> {
   switch (type) {
     case 'string':
-      return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));
+      return new StringJDLApplicationConfigurationOption(name, value as string, applicationDefinition.shouldTheValueBeQuoted(name));
     case 'integer':
-      return new IntegerJDLApplicationConfigurationOption(name, value);
+      return new IntegerJDLApplicationConfigurationOption(name, value as number);
     case 'boolean':
-      return new BooleanJDLApplicationConfigurationOption(name, value);
+      return new BooleanJDLApplicationConfigurationOption(name, value as boolean);
     case 'list':
-      return new ListJDLApplicationConfigurationOption(name, value);
+      return new ListJDLApplicationConfigurationOption(name, value as string[]);
     case 'quotedList':
-      return new ListJDLApplicationConfigurationOption(name, value, true);
+      return new ListJDLApplicationConfigurationOption(name, value as string[], true);
     /* istanbul ignore next */
     default:
       // It should not happen! This is a developer error.

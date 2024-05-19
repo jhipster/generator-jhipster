@@ -19,21 +19,22 @@
 
 import { merge } from '../utils/object-utils.js';
 import JDLEnumValue from './jdl-enum-value.js';
+import { ParsedJDLEnumValue } from '../converters/parsed-jdl-to-jdl-object/types.js';
 
 export default class JDLEnum {
   comment?: string;
   name: string;
   values: Map<string, JDLEnumValue>;
 
-  constructor(args: Partial<Omit<JDLEnum, 'values'> & { values: any[] }>) {
-    const merged: Partial<Omit<JDLEnum, 'values'> & { values: any[] }> = merge(defaults(), args);
+  constructor(args: Partial<Omit<JDLEnum, 'values'> & { values: ParsedJDLEnumValue[] }>) {
+    const merged: Partial<Omit<JDLEnum, 'values'> & { values: ParsedJDLEnumValue[] }> = merge(defaults(), args);
     if (!merged.name) {
       throw new Error("The enum's name must be passed to create an enum.");
     }
     this.comment = merged.comment;
     this.name = merged.name;
     this.values = new Map(
-      merged.values!.map(entry => {
+      merged.values!.map((entry: ParsedJDLEnumValue) => {
         return [entry.key, new JDLEnumValue(entry.key, entry.value, entry.comment)];
       }),
     );
