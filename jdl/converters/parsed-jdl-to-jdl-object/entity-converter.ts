@@ -20,6 +20,8 @@
 import { lowerFirst } from 'lodash-es';
 import { JDLEntity } from '../../models/index.js';
 import { formatComment } from '../../utils/format-utils.js';
+import { ParsedJDLEntity } from './types.js';
+import JDLField from '../../models/jdl-field.js';
 
 export default { convertEntities };
 
@@ -29,7 +31,10 @@ export default { convertEntities };
  * @param {Function} jdlFieldGetterFunction - the function called to retrieve JDL fields for an entity.
  * @returns converted JDLEntity objects.
  */
-export function convertEntities(parsedEntities, jdlFieldGetterFunction): JDLEntity[] {
+export function convertEntities(
+  parsedEntities: ParsedJDLEntity[],
+  jdlFieldGetterFunction: (entity: ParsedJDLEntity) => JDLField[],
+): JDLEntity[] {
   if (!parsedEntities) {
     throw new Error('Entities have to be passed so as to be converted.');
   }

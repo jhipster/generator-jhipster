@@ -64,6 +64,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
       describe('because there is no parsedContent', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({});
           }).to.throw(/^The parsed JDL content must be passed\.$/);
         });

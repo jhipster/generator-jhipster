@@ -20,6 +20,10 @@ import chalk from 'chalk';
 import { JHipsterCommandDefinition } from '../base/api.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
 import { createBase64Secret, createSecret } from '../base/support/secret.js';
+import { authenticationTypes, applicationTypes } from '../../jdl/index.js';
+
+const { OAUTH2, SESSION, JWT } = authenticationTypes;
+const { GATEWAY, MICROSERVICE } = applicationTypes;
 
 const command: JHipsterCommandDefinition = {
   options: {
@@ -97,13 +101,13 @@ const command: JHipsterCommandDefinition = {
       ],
       configure: gen => {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
-        if (authenticationType === 'session' && !rememberMeKey) {
+        if (authenticationType === SESSION && !rememberMeKey) {
           gen.jhipsterConfig.rememberMeKey = createSecret();
-        } else if (authenticationType === 'oauth2' && gen.jhipsterConfig.skipUserManagement === undefined) {
+        } else if (authenticationType === OAUTH2 && gen.jhipsterConfig.skipUserManagement === undefined) {
           gen.jhipsterConfig.skipUserManagement = true;
         } else if (
           jwtSecretKey === undefined &&
-          (authenticationType === 'jwt' || applicationType === 'microservice' || applicationType === 'gateway')
+          (authenticationType === JWT || applicationType === MICROSERVICE || applicationType === GATEWAY)
         ) {
           gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
         }
@@ -118,7 +122,7 @@ const command: JHipsterCommandDefinition = {
         type: 'confirm',
         message: 'Do you want to generate a feign client?',
         when: ({ reactive }) =>
-          ['microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
+          [MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
           (reactive ?? gen.jhipsterConfigWithDefaults.reactive) === false,
       }),
       default: false,
@@ -138,7 +142,7 @@ const command: JHipsterCommandDefinition = {
           if (gen.isJhipsterVersionLessThan('8.1.1')) {
             gen.jhipsterConfig.syncUserWithIdp = true;
           }
-        } else if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== 'oauth2') {
+        } else if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.authenticationType !== OAUTH2) {
           throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
         }
       },

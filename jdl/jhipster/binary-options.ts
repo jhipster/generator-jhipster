@@ -58,7 +58,7 @@ const DefaultValues = {
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
-function getOptionName(optionValue) {
+function getOptionName(optionValue): string | undefined {
   return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
 }
 

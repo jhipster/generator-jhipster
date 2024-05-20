@@ -19,6 +19,7 @@
 
 import { JDLEnum } from '../../models/index.js';
 import { formatComment } from '../../utils/format-utils.js';
+import { ParsedJDLEnum } from './types.js';
 
 export default { convertEnums };
 
@@ -39,7 +40,7 @@ export function convertEnums(enumerations): JDLEnum[] {
  * @param {Object} enumeration - a parsed JDL enumeration.
  * @return the converted JDLEnum.
  */
-function convertEnum(enumeration): JDLEnum {
+function convertEnum(enumeration: ParsedJDLEnum): JDLEnum {
   return new JDLEnum({
     name: enumeration.name,
     values: enumeration.values,

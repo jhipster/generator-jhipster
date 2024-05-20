@@ -22,6 +22,9 @@ import { convertOptions } from './option-converter.js';
 import ApplicationOptions from '../../jhipster/application-options.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
+import { ParsedJDLApplication } from './types.js';
+import AbstractJDLOption from '../../models/abstract-jdl-option.js';
+import JDLApplication from '../../models/jdl-application.js';
 
 const {
   OptionNames: { BASE_NAME },
@@ -34,7 +37,7 @@ export default { convertApplications };
  * @param {Array<Object>} parsedApplications - the parsed applications.
  * @return {Array} the converted JDL applications.
  */
-export function convertApplications(parsedApplications) {
+export function convertApplications(parsedApplications: ParsedJDLApplication[]): JDLApplication[] {
   if (!parsedApplications) {
     throw new Error('Applications have to be passed so as to be converted.');
   }
@@ -48,8 +51,8 @@ export function convertApplications(parsedApplications) {
   });
 }
 
-function getEntityOptionsInApplication(parsedApplication) {
-  return convertOptions(parsedApplication.options, parsedApplication.useOptions);
+function getEntityOptionsInApplication(parsedApplication: ParsedJDLApplication): AbstractJDLOption[] {
+  return convertOptions(parsedApplication.options, parsedApplication.useOptions || []);
 }
 
 /**
@@ -61,7 +64,7 @@ function getEntityOptionsInApplication(parsedApplication) {
 function checkEntityNamesInOptions(
   applicationName: string,
   entityOptions: (JDLUnaryOption | JDLBinaryOption)[],
-  entityNamesInApplication: string[],
+  entityNamesInApplication: string[] | undefined,
 ) {
   const entityNamesInApplicationSet = new Set<string>(entityNamesInApplication);
   entityOptions.forEach(option => {

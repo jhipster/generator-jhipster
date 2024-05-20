@@ -20,6 +20,8 @@
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { unaryOptions, binaryOptions } from '../../jhipster/index.js';
+import { ParsedJDLOption, ParsedJDLUseOption } from './types.js';
+import AbstractJDLOption from '../../models/abstract-jdl-option.js';
 
 const { OptionValues, getOptionName } = binaryOptions;
 export default { convertOptions };
@@ -30,19 +32,22 @@ export default { convertOptions };
  * @param {Array<Object>} useOptions - the parsed option object, using the use form.
  * @returns {Array<JDLUnaryOption|JDLBinaryOption>} the converted JDLUnaryOption & JDLBinaryOption objects.
  */
-export function convertOptions(parsedOptions, useOptions) {
+export function convertOptions(
+  parsedOptions: Record<string, ParsedJDLOption | Record<string, ParsedJDLOption>> | undefined,
+  useOptions: ParsedJDLUseOption[],
+): AbstractJDLOption[] {
   if (!parsedOptions) {
     throw new Error('Options have to be passed so as to be converted.');
   }
-  const convertedUnaryOptions = convertUnaryOptions(parsedOptions);
-  const convertedBinaryOptions = convertBinaryOptions(parsedOptions);
+  const convertedUnaryOptions = convertUnaryOptions(parsedOptions as Record<string, ParsedJDLOption>);
+  const convertedBinaryOptions = convertBinaryOptions(parsedOptions as Record<string, Record<string, ParsedJDLOption>>);
   const convertedUseOptions = convertUseOptions(useOptions);
   return [...convertedUnaryOptions, ...convertedBinaryOptions, ...convertedUseOptions];
 }
 
-function convertUnaryOptions(parsedOptions) {
+function convertUnaryOptions(parsedOptions: Record<string, ParsedJDLOption>): JDLUnaryOption[] {
   const convertedUnaryOptions: JDLUnaryOption[] = [];
-  unaryOptions.forEach(unaryOptionName => {
+  unaryOptions.forEach((unaryOptionName: string) => {
     const parsedUnaryOption = parsedOptions[unaryOptionName];
     if (!parsedUnaryOption || !parsedUnaryOption.list || parsedUnaryOption.list.length === 0) {
       return;
@@ -58,9 +63,9 @@ function convertUnaryOptions(parsedOptions) {
   return convertedUnaryOptions;
 }
 
-function convertBinaryOptions(parsedOptions) {
+function convertBinaryOptions(parsedOptions: Record<string, Record<string, ParsedJDLOption>>): JDLBinaryOption[] {
   const convertedBinaryOptions: JDLBinaryOption[] = [];
-  binaryOptions.forEach(binaryOptionName => {
+  binaryOptions.forEach((binaryOptionName: string) => {
     if (!parsedOptions[binaryOptionName]) {
       return;
     }
@@ -80,7 +85,7 @@ function convertBinaryOptions(parsedOptions) {
   return convertedBinaryOptions;
 }
 
-function convertUseOptions(useOptions) {
+function convertUseOptions(useOptions: ParsedJDLUseOption[]): JDLBinaryOption[] {
   const convertedUseOptions: JDLBinaryOption[] = [];
 
   useOptions.forEach(useValue => {

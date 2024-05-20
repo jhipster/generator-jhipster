@@ -36,7 +36,6 @@ describe('jdl - JDLEnumValue', () => {
       let enumValue;
 
       before(() => {
-        // @ts-expect-error
         enumValue = new JDLEnumValue('FRENCH');
       });
 
@@ -48,7 +47,6 @@ describe('jdl - JDLEnumValue', () => {
       let enumValue;
 
       before(() => {
-        // @ts-expect-error
         enumValue = new JDLEnumValue('FRENCH', 'frenchy');
       });
 

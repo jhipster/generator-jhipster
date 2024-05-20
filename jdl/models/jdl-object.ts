@@ -56,7 +56,7 @@ export default class JDLObject {
    * Adds or replaces an application.
    * @param application the application.
    */
-  addApplication(application: any): void {
+  addApplication(application: JDLApplication): void {
     if (!application) {
       throw new Error("Can't add nil application.");
     }
@@ -108,7 +108,7 @@ export default class JDLObject {
     if (!passedFunction) {
       return;
     }
-    Object.keys(this.deployments).forEach((deploymentName, index, array) => {
+    Object.keys(this.deployments).forEach((deploymentName: string, index: number, array: string[]): void => {
       const deployment = this.deployments[deploymentName];
       passedFunction(deployment, index, array);
     });
