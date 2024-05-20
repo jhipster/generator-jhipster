@@ -93,8 +93,7 @@ describe('jdl - ValidationConverter', () => {
                   value: "/[A-Z']/",
                 },
               ],
-              // @ts-ignore
-              () => {},
+              name => name,
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
