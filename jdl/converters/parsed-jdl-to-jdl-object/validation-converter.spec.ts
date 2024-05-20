@@ -33,8 +33,7 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
-          // @ts-ignore
-          convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], () => {});
+          convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], name => name);
         });
 
         it('should convert it', () => {
