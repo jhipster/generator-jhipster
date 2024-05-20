@@ -20,9 +20,6 @@ import CoreGenerator from '../generators/base-core/generator.js';
 type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
-type Question = {
-  name: string;
-};
 
 type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = RunResult<GeneratorType> & {
   /**
@@ -34,8 +31,6 @@ type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Ru
    * Composed generators that were mocked.
    */
   composedMockedGenerators: string[];
-
-  askedQuestions: Question[];
 };
 
 const runResult = result as JHipsterRunResult;
