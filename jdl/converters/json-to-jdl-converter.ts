@@ -26,9 +26,10 @@ import { readJSONFile } from '../readers/json-file-reader.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
-import { Entity } from './types.js';
+import { JSONEntity, JSONRootObject, PostProcessedJSONGeneratorJhipsterContent, PostProcessedJSONRootObject } from './types.js';
 import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
+import JDLApplication from '../models/jdl-application.js';
 
 export default {
   convertToJDL,
@@ -40,11 +41,11 @@ export default {
  * @param directory the directory to find JHipster files.
  * @param output the file where the JDL will be written
  */
-export function convertToJDL(directory = '.', output: string | false = 'app.jdl') {
+export function convertToJDL(directory = '.', output: string | false = 'app.jdl'): JDLObject | undefined {
   let jdlObject: JDLObject;
   if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
-    const yoRcFileContent = readJSONFile(path.join(directory, '.yo-rc.json'));
-    let entities;
+    const yoRcFileContent: JSONRootObject = readJSONFile(path.join(directory, '.yo-rc.json'));
+    let entities: Map<string, JSONEntity> | undefined;
     if (doesDirectoryExist(path.join(directory, '.jhipster'))) {
       entities = getJSONEntityFiles(directory);
     }
@@ -63,11 +64,11 @@ export function convertToJDL(directory = '.', output: string | false = 'app.jdl'
   return jdlObject;
 }
 
-export function convertSingleContentToJDL(yoRcFileContent, entities?: Map<string, Entity>) {
+export function convertSingleContentToJDL(yoRcFileContent: JSONRootObject, entities?: Map<string, JSONEntity>): string {
   return getJDLObjectFromSingleApplication(yoRcFileContent, entities).toString();
 }
 
-function getJDLObjectFromMultipleApplications(directory) {
+function getJDLObjectFromMultipleApplications(directory: string): JDLObject {
   const subDirectories = getSubdirectories(directory);
   if (subDirectories.length === 0) {
     throw new Error('There are no subdirectories.');
@@ -75,8 +76,8 @@ function getJDLObjectFromMultipleApplications(directory) {
   let jdlObject = new JDLObject();
   subDirectories.forEach(subDirectory => {
     const applicationDirectory = path.join(directory, subDirectory);
-    const yoRcFileContent = readJSONFile(path.join(applicationDirectory, '.yo-rc.json'));
-    let entities: Map<string, Entity> = new Map();
+    const yoRcFileContent: JSONRootObject = readJSONFile(path.join(applicationDirectory, '.yo-rc.json'));
+    let entities: Map<string, JSONEntity> = new Map();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
       entities = getJSONEntityFiles(applicationDirectory);
     }
@@ -86,48 +87,49 @@ function getJDLObjectFromMultipleApplications(directory) {
 }
 
 export function getJDLObjectFromSingleApplication(
-  yoRcFileContent,
-  entities?: Map<string, Entity>,
+  yoRcFileContent: JSONRootObject,
+  entities?: Map<string, JSONEntity>,
   existingJDLObject = new JDLObject(),
 ): JDLObject {
-  const cleanedYoRcFileContent = cleanYoRcFileContent(yoRcFileContent);
-  const jdlApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });
+  const cleanedYoRcFileContent: PostProcessedJSONGeneratorJhipsterContent = cleanYoRcFileContent(yoRcFileContent);
+  const jdlApplication: JDLApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });
   if (!entities) {
     existingJDLObject.addApplication(jdlApplication);
     return existingJDLObject;
   }
-  const jdlObject = convertEntitiesToJDL({ entities });
-  entities.forEach((entity, entityName) => jdlApplication.addEntityName(entityName));
+  const jdlObject: JDLObject = convertEntitiesToJDL(entities);
+  entities.forEach((entity: JSONEntity, entityName: string) => jdlApplication.addEntityName(entityName));
   jdlObject.addApplication(jdlApplication);
   return mergeJDLObjects(existingJDLObject, jdlObject);
 }
 
-function cleanYoRcFileContent(yoRcFileContent) {
+function cleanYoRcFileContent(yoRcFileContent: JSONRootObject): PostProcessedJSONRootObject {
   for (const key of Object.keys(yoRcFileContent)) {
     yoRcFileContent[key] = removeFieldsWithNullishValues(yoRcFileContent[key]);
   }
   delete yoRcFileContent[GENERATOR_JHIPSTER].promptValues;
+  const result: PostProcessedJSONRootObject = structuredClone(yoRcFileContent) as PostProcessedJSONRootObject;
   if (yoRcFileContent[GENERATOR_JHIPSTER].blueprints) {
-    yoRcFileContent[GENERATOR_JHIPSTER].blueprints = yoRcFileContent[GENERATOR_JHIPSTER].blueprints.map(blueprint => blueprint.name);
+    result[GENERATOR_JHIPSTER].blueprints = yoRcFileContent[GENERATOR_JHIPSTER].blueprints.map(blueprint => blueprint.name);
   }
   if (yoRcFileContent[GENERATOR_JHIPSTER].microfrontends) {
-    yoRcFileContent[GENERATOR_JHIPSTER].microfrontends = yoRcFileContent[GENERATOR_JHIPSTER].microfrontends.map(({ baseName }) => baseName);
+    result[GENERATOR_JHIPSTER].microfrontends = yoRcFileContent[GENERATOR_JHIPSTER].microfrontends.map(({ baseName }) => baseName);
   }
-  return yoRcFileContent;
+  return result;
 }
 
-function getJSONEntityFiles(applicationDirectory: string) {
-  const entities: Map<string, Entity> = new Map();
+function getJSONEntityFiles(applicationDirectory: string): Map<string, JSONEntity> {
+  const entities: Map<string, JSONEntity> = new Map();
   fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
+    const entityName = file.slice(0, file.indexOf('.json'));
     const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
     if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
-      const entityName = file.slice(0, file.indexOf('.json'));
       entities.set(entityName, readJSONFile(jsonFilePath));
     }
   });
   return entities;
 }
 
-function getSubdirectories(rootDirectory: string) {
+function getSubdirectories(rootDirectory: string): string[] {
   return fs.readdirSync(path.join(rootDirectory)).filter(file => doesDirectoryExist(path.join(rootDirectory, file)));
 }

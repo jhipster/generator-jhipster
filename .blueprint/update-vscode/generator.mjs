@@ -1,15 +1,13 @@
 import { join } from 'path';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot } from '../../lib/index.js';
-import command from './command.mjs';
 import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.js';
 
 export default class extends BaseGenerator {
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
-      async initializeOptions() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

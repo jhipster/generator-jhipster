@@ -18,7 +18,6 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import {
   JAVA_VERSION,
   MAIN_DIR,
@@ -44,7 +43,7 @@ import { getPomVersionProperties } from '../maven/support/index.js';
 import { prepareField as prepareFieldForLiquibaseTemplates } from '../liquibase/support/index.js';
 import { getDockerfileContainers } from '../docker/utils.js';
 import { normalizePathEnd } from '../base/support/path.js';
-import { getFrontendAppName, mutateData } from '../base/support/index.js';
+import { getFrontendAppName } from '../base/support/index.js';
 import { getMainClassName } from '../java/support/index.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
 import serverCommand from '../server/command.js';
@@ -56,24 +55,21 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.composeWithBlueprints();
     }
 
     if (this.delegateToBlueprint) {
       throw new Error('Only sbs blueprint is supported');
     }
 
-    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
+    await this.dependsOnBootstrapApplicationBase();
   }
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadApplication({ application }) {
+      async loadApplication({ application, applicationDefaults }) {
         loadConfig(serverCommand.configs, { config: this.jhipsterConfigWithDefaults, application });
         loadServerConfig({ config: this.jhipsterConfigWithDefaults, application });
-
-        application.javaVersion = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
-        application.backendType = this.jhipsterConfig.backendType ?? 'Java';
 
         const pomFile = this.readTemplate(this.jhipsterTemplatePath('../../server/resources/pom.xml'))?.toString();
         const gradleLibsVersions = this.readTemplate(
@@ -96,7 +92,8 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           'docker',
         );
 
-        mutateData(application, {
+        applicationDefaults({
+          javaVersion: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
           packageInfoJavadocs: [],
           javaProperties: {},
           javaManagedProperties: {},
@@ -108,6 +105,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
             ...applicationDockerContainers,
             ...currentDockerContainers,
           }),
+          gatewayRoutes: undefined,
         });
       },
     });
@@ -139,9 +137,6 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
         application.testResourceDir = SERVER_TEST_RES_DIR;
         application.srcMainDir = MAIN_DIR;
         application.srcTestDir = TEST_DIR;
-
-        application.backendTypeSpringBoot = application.backendType === 'Java';
-        application.backendTypeJavaAny = application.backendTypeJavaAny ?? application.backendTypeSpringBoot;
       },
     });
   }

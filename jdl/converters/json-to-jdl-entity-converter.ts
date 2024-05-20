@@ -21,14 +21,14 @@ import JDLObject from '../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions } from '../models/jdl-relationship.js';
+import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 
 import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 import { fieldTypes, unaryOptions, binaryOptions, relationshipOptions } from '../jhipster/index.js';
-import { Entity, Field, Relationship } from './types.js';
+import { JSONEntity, JSONField, JSONRelationship } from './types.js';
 import { asJdlRelationshipType } from '../jhipster/relationship-types.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -43,7 +43,7 @@ export default {
   convertEntitiesToJDL,
 };
 
-let entities: Map<string, Entity>;
+let entities: Map<string, JSONEntity>;
 let jdlObject: JDLObject;
 
 /**
@@ -52,34 +52,34 @@ let jdlObject: JDLObject;
  * @param params.entities - a Map having for keys the entity names and values the JSON entity files.
  * @return the parsed entities in the JDL form.
  */
-export function convertEntitiesToJDL(params: { entities: Map<string, Entity> }): JDLObject {
-  if (!params.entities) {
+export function convertEntitiesToJDL(entities: Map<string, JSONEntity>): JDLObject {
+  if (!entities) {
     throw new Error('Entities have to be passed to be converted.');
   }
-  init(params);
+  init(entities);
   addEntities();
   addRelationshipsToJDL();
   return jdlObject;
 }
 
-function init(params) {
-  entities = params.entities;
+function init(ents: Map<string, JSONEntity>): void {
+  entities = ents;
   jdlObject = new JDLObject();
 }
 
-function addEntities() {
+function addEntities(): void {
   entities.forEach((entity, entityName) => {
     addEntity(entity, entityName);
   });
 }
 
-function addEntity(entity: Entity, entityName: string) {
+function addEntity(entity: JSONEntity, entityName: string): void {
   jdlObject.addEntity(convertJSONToJDLEntity(entity, entityName));
   addEnumsToJDL(entity);
   addEntityOptionsToJDL(entity, entityName);
 }
 
-function convertJSONToJDLEntity(entity: Entity, entityName: string): JDLEntity {
+function convertJSONToJDLEntity(entity: JSONEntity, entityName: string): JDLEntity {
   const jdlEntity = new JDLEntity({
     name: entityName,
     tableName: entity.entityTableName,
@@ -90,13 +90,13 @@ function convertJSONToJDLEntity(entity: Entity, entityName: string): JDLEntity {
   return jdlEntity;
 }
 
-function addFields(jdlEntity: JDLEntity, entity: Entity) {
+function addFields(jdlEntity: JDLEntity, entity: JSONEntity): void {
   entity?.fields?.forEach(field => {
     jdlEntity.addField(convertJSONToJDLField(field));
   });
 }
 
-function convertJSONToJDLField(field: Field) {
+function convertJSONToJDLField(field: JSONField): JDLField {
   const jdlField = new JDLField({
     name: lowerFirst(field.fieldName),
     type: field.fieldType,
@@ -105,33 +105,33 @@ function convertJSONToJDLField(field: Field) {
   if (jdlField.type === BYTES) {
     jdlField.type = getTypeForBlob(field.fieldTypeBlobContent);
   }
-  if (field.fieldValidateRules) {
-    addValidations(jdlField, field);
-  }
+  addValidations(jdlField, field);
   return jdlField;
 }
 
-function getTypeForBlob(blobContentType) {
+function getTypeForBlob(blobContentType: string): string {
   if ([ANY, IMAGE, TEXT].includes(blobContentType)) {
     return CommonDBTypes[`${blobContentType.toUpperCase()}_BLOB`];
   }
   throw new Error(`Unrecognised blob type: '${blobContentType}'`);
 }
 
-function addValidations(jdlField, field) {
-  field.fieldValidateRules.forEach(rule => {
-    jdlField.addValidation(convertJSONToJDLValidation(rule, field));
-  });
+function addValidations(jdlField: JDLField, field: JSONField): void {
+  if (field.fieldValidateRules) {
+    field.fieldValidateRules!.forEach((rule: string) => {
+      jdlField.addValidation(convertJSONToJDLValidation(rule, field));
+    });
+  }
 }
 
-function convertJSONToJDLValidation(rule, field: Field) {
+function convertJSONToJDLValidation(rule: string, field: JSONField): JDLValidation {
   return new JDLValidation({
     name: rule,
     value: field[`fieldValidateRules${upperFirst(rule)}`],
   });
 }
 
-function addEnumsToJDL(entity: Entity) {
+function addEnumsToJDL(entity: JSONEntity): void {
   entity?.fields?.forEach(field => {
     if (field.fieldValues !== undefined) {
       jdlObject.addEnum(
@@ -145,7 +145,7 @@ function addEnumsToJDL(entity: Entity) {
   });
 }
 
-function getEnumValuesFromString(valuesAsString) {
+function getEnumValuesFromString(valuesAsString: string): any {
   return valuesAsString.split(',').map(fieldValue => {
     // if fieldValue looks like ENUM_VALUE (something)
     if (fieldValue.includes('(')) {
@@ -165,13 +165,13 @@ function getEnumValuesFromString(valuesAsString) {
  * Adds relationships for entities to JDL.
  * The jdl passed must contain the jdl entities concerned by the relationships
  */
-function addRelationshipsToJDL() {
-  entities.forEach((entity, entityName) => {
+function addRelationshipsToJDL(): void {
+  entities.forEach((entity: JSONEntity, entityName: string) => {
     dealWithRelationships(entity.relationships, entityName);
   });
 }
 
-function dealWithRelationships(relationships: Relationship[] | undefined, entityName: string) {
+function dealWithRelationships(relationships: JSONRelationship[] | undefined, entityName: string) {
   if (!relationships) {
     return;
   }
@@ -187,7 +187,7 @@ function dealWithRelationships(relationships: Relationship[] | undefined, entity
   });
 }
 
-function getRelationship(relationship: Relationship, entityName: string) {
+function getRelationship(relationship: JSONRelationship, entityName: string) {
   const type = asJdlRelationshipType(relationship.relationshipType);
   const options = getRelationshipOptions(relationship);
 
@@ -221,7 +221,7 @@ function getRelationship(relationship: Relationship, entityName: string) {
     }
     return undefined;
   }
-  const isEntityTheDestinationSideEntity = (otherEntityName, otherEntityRelationshipName) =>
+  const isEntityTheDestinationSideEntity = (otherEntityName: string, otherEntityRelationshipName: string) =>
     otherEntityName === entityName && otherEntityRelationshipName === relationship.relationshipName;
   const destinationSideAttributes = getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, destinationEntity.relationships);
   relationshipConfiguration = {
@@ -233,7 +233,7 @@ function getRelationship(relationship: Relationship, entityName: string) {
   return new JDLRelationship(relationshipConfiguration);
 }
 
-function getSourceEntitySideAttributes(entityName: string, relationship: Relationship) {
+function getSourceEntitySideAttributes(entityName: string, relationship: JSONRelationship): JDLSourceEntitySide {
   return {
     sourceEntity: entityName,
     injectedFieldInSourceEntity: getInjectedFieldInSourceEntity(relationship),
@@ -242,7 +242,10 @@ function getSourceEntitySideAttributes(entityName: string, relationship: Relatio
   };
 }
 
-function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, destinationEntityRelationships?) {
+function getDestinationEntitySideAttributes(
+  isEntityTheDestinationSideEntity: (otherEntityName: string, otherEntityRelationshipName: string) => boolean,
+  destinationEntityRelationships?: JSONRelationship[],
+) {
   const foundDestinationSideEntity = destinationEntityRelationships?.find(destinationEntityFromRelationship => {
     return isEntityTheDestinationSideEntity(
       upperFirst(destinationEntityFromRelationship.otherEntityName),
@@ -266,7 +269,7 @@ function getDestinationEntitySideAttributes(isEntityTheDestinationSideEntity, de
   };
 }
 
-function getRelationshipOptions(relationship: Relationship): JDLRelationshipOptions {
+function getRelationshipOptions(relationship: JSONRelationship): JDLRelationshipOptions {
   const options = {
     global: {},
     source: relationship.options ?? {},
@@ -278,14 +281,14 @@ function getRelationshipOptions(relationship: Relationship): JDLRelationshipOpti
   return options;
 }
 
-function getInjectedFieldInSourceEntity(relationship: Relationship) {
+function getInjectedFieldInSourceEntity(relationship: JSONRelationship): string {
   return (
     relationship.relationshipName +
     (relationship.otherEntityField && relationship.otherEntityField !== 'id' ? `(${relationship.otherEntityField})` : '')
   );
 }
 
-function addEntityOptionsToJDL(entity: Entity, entityName: string) {
+function addEntityOptionsToJDL(entity: JSONEntity, entityName: string): void {
   if (entity.fluentMethods === false) {
     addUnaryOptionToJDL(NO_FLUENT_METHOD, entityName);
   }
@@ -319,21 +322,21 @@ function addEntityOptionsToJDL(entity: Entity, entityName: string) {
   }
 }
 
-function addUnaryOptionToJDL(unaryOption, entityName: string) {
+function addUnaryOptionToJDL(unaryOption: string, entityName: string): void {
   jdlObject.addOption(
     new JDLUnaryOption({
       name: unaryOption,
-      entityNames: [entityName],
+      entityNames: new Set([entityName]),
     }),
   );
 }
 
-function addBinaryOptionToJDL(binaryOption, value, entityName: string) {
+function addBinaryOptionToJDL(binaryOption: string, value: string, entityName: string): void {
   jdlObject.addOption(
     new JDLBinaryOption({
       name: binaryOption,
       value,
-      entityNames: [entityName],
+      entityNames: new Set([entityName]),
     }),
   );
 }

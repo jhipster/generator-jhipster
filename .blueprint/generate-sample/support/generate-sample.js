@@ -7,22 +7,14 @@ import { execa } from 'execa';
 import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.js';
 import copyEntitySamples from './copy-entity-samples.js';
 import copyJdlEntitySamples from './copy-jdl-entity-samples.js';
-import {
-  dailyBuildsFolder,
-  defaultSamplesFolder,
-  jdlEntitiesSamplesFolder,
-  jdlSamplesFolder,
-  jhipsterBin,
-  samplesFolder,
-} from '../../constants.js';
+import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, jhipsterBin, samplesFolder } from '../../constants.js';
 
 const commonCliOptions = ['--skip-jhipster-dependencies', '--skip-checks', '--skip-install', '--no-insight'];
 
 export const generateSample = async (
   sampleName = process.argv.length > 2 ? process.argv[2] : process.env.JHI_APP,
   {
-    destSamplesFolder = defaultSamplesFolder,
-    destProjectFolder = process.env.JHI_FOLDER_APP ? resolve(process.env.JHI_FOLDER_APP) : join(destSamplesFolder, sampleName),
+    destProjectFolder,
     environment: passedEnvironment,
     war: passedWar,
     entity: passedEntity,

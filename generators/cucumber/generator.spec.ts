@@ -1,15 +1,13 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from './index.js';
 import { defaultHelpers as helpers, result } from '../../testing/index.js';
 
 import { GENERATOR_CUCUMBER } from '../generator-list.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,22 +20,6 @@ describe(`generator - ${generator}`, () => {
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-
-  describe('with unknown buildTool', () => {
-    before(async () => {
-      await helpers
-        .runJHipster(GENERATOR_CUCUMBER)
-        .onEnvironment(async env => {
-          await env.composeWith('jhipster:bootstrap-application');
-        })
-        .withMockedGenerators(['jhipster:java'])
-        .withJHipsterConfig({ buildTool: 'unknown', testFrameworks: ['cucumber'] });
-    });
-
-    it('should match files snapshot', () => {
-      expect(result.getSnapshot()).toMatchSnapshot();
-    });
-  });
 
   describe('with default config', () => {
     before(async () => {

@@ -16,11 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 import { type BaseApplication } from '../base-application/types.js';
 import { type Control } from './types.js';
-
-const { defaults } = _;
 
 export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
   _storage: any;
@@ -57,7 +55,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
     return this._storage.sharedApplication;
   }
 
-  setEntity(entityName, entity) {
+  setEntity(entityName: string, entity) {
     this._storage.sharedEntities[entityName] = entity;
   }
 

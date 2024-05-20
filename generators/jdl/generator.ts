@@ -18,26 +18,22 @@
  */
 import { extname } from 'path';
 import { QueuedAdapter } from '@yeoman/adapter';
-import * as _ from 'lodash-es';
+import { upperFirst } from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
 import { readFile } from 'fs/promises';
 import BaseGenerator from '../base/index.js';
-import command from './command.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { CLI_NAME } from '../../cli/utils.mjs';
 import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.js';
 import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jdl-importer.js';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import statistics from '../statistics.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 import { mergeYoRcContent } from '../../jdl/index.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
-
-const { upperFirst } = _;
 
 /**
  * Add jdl extension to the file
@@ -76,26 +72,25 @@ export default class JdlGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints('jdl');
+      await this.composeWithBlueprints();
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       loadArguments() {
-        this.parseJHipsterArguments(command.arguments);
         if (this.jdlFiles) {
           this.log.verboseInfo('Generating jdls', ...this.jdlFiles);
         }
-      },
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
       },
       existingProject() {
         this.existingProject = this.jhipsterConfig.baseName !== undefined && (this.config as any).existed;
       },
       checkOptions() {
-        if (!this.inline && !this.jdlFiles?.length) {
+        if (!this.skipChecks && !this.inline && !this.jdlFiles?.length) {
           throw new Error('At least one jdl file is required.');
         }
       },
@@ -108,9 +103,6 @@ export default class JdlGenerator extends BaseGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      insight() {
-        statistics.sendSubGenEvent('generator', 'import-jdl');
-      },
       async downloadJdlFiles() {
         if (this.jdlFiles) {
           this.jdlFiles = await Promise.all(
@@ -182,8 +174,8 @@ export default class JdlGenerator extends BaseGenerator {
               app.sharedFs = createMemFs();
             }
           }
+          addApplicationIndex(this.applications);
         }
-        addApplicationIndex(this.applications);
         customizeForMicroservices(this.exportedApplicationsWithEntities);
       },
       async generateJson() {

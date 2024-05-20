@@ -30,7 +30,7 @@
       <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
     @if (settingsForm.value.login) {
-      <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
+      <form name="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
         <div class="mb-3">
           <label class="form-label" for="firstName">__jhiTranslateTag__('settings.form.firstname')</label>
           <input

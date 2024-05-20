@@ -20,9 +20,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -36,12 +33,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -84,9 +75,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -168,12 +156,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/UserNotActivatedException.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/package-info.java": {
@@ -517,9 +499,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -553,6 +532,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/Constants.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -560,9 +542,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -834,9 +813,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -882,6 +858,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/Constants.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -892,9 +871,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -1175,9 +1151,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -1233,9 +1206,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -1501,15 +1471,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -1553,9 +1514,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -1998,9 +1956,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -2014,12 +1969,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2052,6 +2001,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/Constants.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -2059,9 +2011,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -2354,15 +2303,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2406,9 +2346,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -2710,9 +2647,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -2726,12 +2660,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2777,9 +2705,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {
@@ -3078,15 +3003,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -3130,9 +3046,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/LoggingAspectConfiguration.java": {
@@ -3542,9 +3455,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
-  "checkstyle.xml": {
-    "stateCleared": "modified",
-  },
   "gradle.properties": {
     "stateCleared": "modified",
   },
@@ -3558,12 +3468,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "gradle/zipkin.gradle": {
-    "stateCleared": "modified",
-  },
-  "npmw": {
-    "stateCleared": "modified",
-  },
-  "npmw.cmd": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3596,6 +3500,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/CRLFLogConverter.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/Constants.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -3603,9 +3510,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/JacksonConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/LocaleConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/LoggingAspectConfiguration.java": {

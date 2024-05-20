@@ -69,7 +69,7 @@ eureka:
       git-branch: ${git.branch:}
       context-path: ${server.servlet.context-path:}
 <%_ } _%>
-<%_ if (applicationTypeGateway || (applicationTypeMicroservice && reactive)) { _%>
+<%_ if ((applicationTypeGateway || applicationTypeMicroservice) && reactive) { _%>
 reactive:
   feign:
     circuit:
@@ -99,7 +99,7 @@ management:
         include:
           - configprops
           - env
-<% if (applicationTypeGateway && reactive) { -%>
+<% if (applicationTypeGateway) { -%>
           - gateway
 <% } -%>
           - health
@@ -175,7 +175,7 @@ spring:
 <%_ } _%>
   application:
     name: <%= baseName %>
-<%_ if (serviceDiscoveryConsul || (applicationTypeGateway && reactive) || messageBrokerKafka) { _%>
+<%_ if (serviceDiscoveryConsul || applicationTypeGateway || messageBrokerKafka) { _%>
   cloud:
   <%_ if (serviceDiscoveryConsul) { _%>
     consul:
@@ -187,8 +187,25 @@ spring:
         watch:
           enabled: false
   <%_ } _%>
-  <%_ if (applicationTypeGateway && reactive) { _%>
+  <%_ if (applicationTypeGateway) { _%>
+    <%_ if (!serviceDiscoveryAny) { _%>
+    discovery:
+      client:
+        simple:
+          instances:
+            <%= lowercaseBaseName %>:
+              - instanceId: <%= lowercaseBaseName %>1
+                host: localhost
+                port: <%= serverPort %>
+      <%_ for (const ms of gatewayRoutes ?? []) { _%>
+            <%= ms.route %>:
+              - instanceId: <%= ms.route %>1
+                host: <%= ms.host %>
+                port: <%= ms.serverPort %>
+      <%_ } _%>
+    <%_ } _%>
     gateway:
+    <%_ if (reactive) { _%>
       default-filters:
         - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
       discovery:
@@ -207,6 +224,27 @@ spring:
       httpclient:
         pool:
           max-connections: 1000
+    <%_ } else { _%>
+      mvc:
+        routes:
+          - id: <%= lowercaseBaseName %>_route
+            uri: lb://<%= lowercaseBaseName %>
+            predicates:
+              - Path=/services/<%= lowercaseBaseName %>/**
+            filters:
+              - StripPrefix=2
+      <%_ for (const ms of gatewayRoutes ?? []) { _%>
+          - id: <%= ms.route %>_route
+            uri: lb://<%= ms.route %>
+            predicates:
+              - Path=/services/<%= ms.route %>/**
+            filters:
+              - StripPrefix=2
+        <%_ if (authenticationTypeOauth2) { _%>
+              - TokenRelay
+        <%_ } _%>
+      <%_ } _%>
+    <%_ } _%>
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>
     function:
@@ -234,7 +272,7 @@ spring:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
     # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
-    active: #spring.profiles.active#
+    active: '@spring.profiles.active@'
     group:
       dev:
         - dev

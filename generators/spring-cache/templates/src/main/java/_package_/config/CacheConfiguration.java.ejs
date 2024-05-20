@@ -736,6 +736,10 @@ public class CacheConfiguration {
         URI redisUri = URI.create(jHipsterProperties.getCache().getRedis().getServer()[0]);
 
         Config config = new Config();
+  <%_ if (databaseTypeSql) { _%>
+        // Fix Hibernate lazy initialization https://github.com/jhipster/generator-jhipster/issues/22889
+        config.setCodec(new org.redisson.codec.SerializationCodec());
+  <%_ } _%>
         if (jHipsterProperties.getCache().getRedis().isCluster()) {
             ClusterServersConfig clusterServersConfig = config
                 .useClusterServers()

@@ -20,15 +20,14 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { upperFirst } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import prompts from './prompts.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_ENTITIES, GENERATOR_ENTITY } from '../generator-list.js';
+import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
-import command from './command.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { isReservedClassName } = reservedKeywords;
@@ -43,20 +42,22 @@ export default class EntityGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ENTITY);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       parseOptions() {
-        this.parseJHipsterArguments(command.arguments);
-        const name = _.upperFirst(this.name).replace('.json', '');
+        const name = upperFirst(this.name).replace('.json', '');
         this.entityStorage = this.getEntityConfig(name, true);
         this.entityConfig = this.entityStorage.createProxy();
 
@@ -209,16 +210,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
       askForFiltering: prompts.askForFiltering,
       askForReadOnly: prompts.askForReadOnly,
       askForPagination: prompts.askForPagination,
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get default() {
-    return this.asDefaultTaskGroup({
       async composeEntities() {
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster(GENERATOR_ENTITIES, {
@@ -232,8 +223,8 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -331,7 +322,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
    * @return {boolean} true if the entity is User.
    */
   isUserEntity(entityName) {
-    return _.upperFirst(entityName) === 'User';
+    return upperFirst(entityName) === 'User';
   }
 
   /**
@@ -341,7 +332,7 @@ export default class EntityGenerator extends BaseApplicationGenerator {
    * @return {boolean} true if the entity is Authority.
    */
   isAuthorityEntity(entityName) {
-    return _.upperFirst(entityName) === 'Authority';
+    return upperFirst(entityName) === 'Authority';
   }
 
   /**

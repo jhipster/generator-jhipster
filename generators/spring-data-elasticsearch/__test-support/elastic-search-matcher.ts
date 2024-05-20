@@ -1,6 +1,4 @@
 import type { RunResult } from 'yeoman-test';
-import type BaseApplicationGenerator from '../../base-application/index.js';
-import type { SpringBootApplication } from '../../server/types.js';
 
 import { SERVER_MAIN_SRC_DIR, JAVA_DOCKER_DIR } from '../../generator-constants.js';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../testing/index.js';
@@ -10,7 +8,7 @@ const expectedElasticsearchFiles = () => {
 };
 
 const expectedElasticsearchUserFiles = (resultGetter: () => RunResult) => {
-  const application = ((resultGetter() as any).generator as BaseApplicationGenerator<SpringBootApplication>).sharedData.getApplication();
+  const application = (resultGetter() as any).generator.sharedData.getApplication();
   return application.generateBuiltInUserEntity
     ? [`${SERVER_MAIN_SRC_DIR}${application.packageFolder}/repository/search/UserSearchRepository.java`]
     : [];

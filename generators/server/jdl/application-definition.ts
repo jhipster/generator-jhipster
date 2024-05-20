@@ -16,19 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { upperCase, snakeCase } from 'lodash-es';
 import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.js';
 import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';
 import { feignClientDefinition, syncUserWithIdpDefinition } from '../options/index.js';
-
-const { upperCase, snakeCase } = _;
+import { jdlRoutesOptions } from '../../spring-cloud/generators/gateway/jdl/jdl-routes-option.js';
 
 const jdlOptions: JHipsterOptionDefinition[] = [
   databaseMigrationOption,
   messageBrokerOption,
   feignClientDefinition,
   syncUserWithIdpDefinition,
+  jdlRoutesOptions,
 ];
 
 const applicationConfig: JDLApplicationConfig = {
@@ -55,7 +55,7 @@ const applicationConfig: JDLApplicationConfig = {
     jdlOptions.map(option => [
       option.name,
       {
-        type: messageBrokerOption.type,
+        type: option.type,
       },
     ]),
   ),

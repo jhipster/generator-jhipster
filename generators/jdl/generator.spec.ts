@@ -19,7 +19,7 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 import { SinonSpy } from 'sinon';
 
 import { RunResult } from 'yeoman-test';
@@ -28,8 +28,6 @@ import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } fro
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 import * as GENERATORS from '../generator-list.js';
 import { GENERATOR_JDL } from '../generator-list.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -176,7 +174,6 @@ describe(`generator - ${generator}`, () => {
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "baseName": "jhipster",
     "blueprints": [
       {

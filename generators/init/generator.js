@@ -21,7 +21,6 @@ import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../genera
 import { defaultConfig } from './config.js';
 import { SKIP_COMMIT_HOOK } from './constants.js';
 import { files, commitHooksFiles, readme } from './files.js';
-import command from './command.js';
 import { packageJson } from '../../lib/index.js';
 
 /**
@@ -33,7 +32,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_INIT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
@@ -43,8 +42,8 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
@@ -116,8 +115,8 @@ export default class InitGenerator extends BaseApplicationGenerator {
       addPrettierDependencies({ application }) {
         this.packageJson.merge({
           scripts: {
-            'prettier-check': 'prettier --check "{,**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
-            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}"',
+            'prettier-check': 'prettier --check "{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}"',
+            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}"',
           },
           devDependencies: {
             prettier: application.nodeDependencies.prettier,

@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../jhipster/index.js';

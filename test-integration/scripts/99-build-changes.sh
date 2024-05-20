@@ -114,6 +114,7 @@ echo "::endgroup::"
 
 echo "::group::Check Common"
 git -c color.ui=always diff --exit-code @~1 -- \
+  '.blueprint' \
   '.github/actions' \
   '.github/workflows' \
   'generators/app' \

@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 import fs from 'fs';
-import * as _ from 'lodash-es';
+import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { GENERATOR_LIQUIBASE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import { liquibaseFiles } from './files.js';
 import {
   prepareField as prepareFieldForLiquibase,
@@ -45,7 +44,6 @@ import {
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
 import { fieldTypes } from '../../jdl/jhipster/index.js';
-import command from './command.js';
 import type { MavenProperty } from '../maven/types.js';
 
 const {
@@ -74,18 +72,18 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_LIQUIBASE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadConfig() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
@@ -132,6 +130,13 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       prepareEntityField({ entity, field }) {
         if (!field.transient) {
           prepareFieldForLiquibase(entity, field);
+        }
+      },
+      validateConsistencyOfField({ entity, field }) {
+        if (field.columnRequired && field.liquibaseDefaultValueAttributeValue) {
+          this.handleCheckFailure(
+            `The field ${field.fieldName} in entity ${entity.name} has both columnRequired and a defaultValue, this can lead to unexpected behaviors.`,
+          );
         }
       },
     });
@@ -230,6 +235,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
                   fieldChangelog: true,
                   addedRelationships: [],
                   removedRelationships: [],
+                  removedDefaultValueFields: [],
+                  addedDefaultValueFields: [],
                   relationshipsToRecreateForeignKeysOnly: [],
                 },
                 application,
@@ -241,7 +248,10 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
         for (const databaseChangelog of changes) {
           if (
             databaseChangelog.incremental &&
-            (databaseChangelog.addedRelationships.length > 0 || databaseChangelog.removedRelationships.length > 0)
+            (databaseChangelog.addedRelationships.length > 0 ||
+              databaseChangelog.removedRelationships.length > 0 ||
+              databaseChangelog.removedDefaultValueFields.length > 0 ||
+              databaseChangelog.addedDefaultValueFields.length > 0)
           ) {
             this.databaseChangelogs.push(
               this.prepareChangelog({
@@ -589,6 +599,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       hasRelationshipConstraint,
       shouldWriteAnyRelationship,
       relationshipsToRecreateForeignKeysOnly,
+      hasDefaultValueChange,
+      removedDefaultValueFields,
+      addedDefaultValueFields,
     } = changelogData;
 
     const context = {
@@ -605,35 +618,54 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       hasRelationshipConstraint,
       shouldWriteAnyRelationship,
       relationshipsToRecreateForeignKeysOnly,
+      hasDefaultValueChange,
+      removedDefaultValueFields,
+      addedDefaultValueFields,
     };
 
     const promises: Promise<any>[] = [];
-    promises.push(this.writeFiles({ sections: updateEntityFiles, context }));
+    if (this._isBasicEntityUpdate(changelogData)) {
+      promises.push(this.writeFiles({ sections: updateEntityFiles, context }));
+    }
 
-    if (!changelogData.skipFakeData && (changelogData.addedFields.length > 0 || shouldWriteAnyRelationship)) {
+    if (this._requiresWritingFakeData(changelogData)) {
       promises.push(this.writeFiles({ sections: fakeFiles, context }));
       promises.push(this.writeFiles({ sections: updateMigrateFiles, context }));
     }
 
-    if (hasFieldConstraint || shouldWriteAnyRelationship) {
+    if (this._requiresConstraintUpdates(changelogData)) {
       promises.push(this.writeFiles({ sections: updateConstraintsFiles, context }));
     }
     return Promise.all(promises);
+  }
+
+  private _requiresConstraintUpdates(changelogData: any) {
+    return changelogData.hasFieldConstraint || changelogData.addedRelationships.length > 0 || changelogData.hasDefaultValueChange;
+  }
+
+  private _isBasicEntityUpdate(changelogData: any) {
+    return changelogData.addedFields.length > 0 || changelogData.removedFields.length > 0 || changelogData.shouldWriteAnyRelationship;
+  }
+
+  private _requiresWritingFakeData(changelogData: any) {
+    return !changelogData.skipFakeData && (changelogData.addedFields.length || changelogData.addedRelationships.length);
   }
 
   /**
    * Write files for updated entities.
    */
   _addUpdateFilesReferences({ entity, databaseChangelog, changelogData, source }) {
-    source.addLiquibaseIncrementalChangelog({ changelogName: `${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}` });
+    if (this._isBasicEntityUpdate(changelogData)) {
+      source.addLiquibaseIncrementalChangelog({ changelogName: `${databaseChangelog.changelogDate}_updated_entity_${entity.entityClass}` });
+    }
 
-    if (!changelogData.skipFakeData && (changelogData.addedFields.length > 0 || changelogData.shouldWriteAnyRelationship)) {
+    if (this._requiresWritingFakeData(changelogData)) {
       source.addLiquibaseIncrementalChangelog({
         changelogName: `${databaseChangelog.changelogDate}_updated_entity_migrate_${entity.entityClass}`,
       });
     }
 
-    if (changelogData.hasFieldConstraint || changelogData.shouldWriteAnyRelationship) {
+    if (this._requiresConstraintUpdates(changelogData)) {
       source.addLiquibaseIncrementalChangelog({
         changelogName: `${databaseChangelog.changelogDate}_updated_entity_constraints_${entity.entityClass}`,
       });
@@ -650,6 +682,21 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
    */
   formatAsLiquibaseRemarks(text, addRemarksTag = false) {
     return liquibaseComment(text, addRemarksTag);
+  }
+
+  /**
+   * @private
+   * Create the fitting liquibase default value attribute for a field.
+   * @param field
+   * @param leadingWhitespace
+   * @returns
+   */
+  createDefaultValueLiquibaseAttribute(field, leadingWhitespace = false) {
+    if (field.liquibaseDefaultValueAttributeValue === undefined) {
+      return '';
+    }
+
+    return `${leadingWhitespace ? ' ' : ''}${field.liquibaseDefaultValueAttributeName}="${escape(field.liquibaseDefaultValueAttributeValue)}"`;
   }
 
   prepareChangelog({ databaseChangelog, application }) {
@@ -684,7 +731,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     Object.defineProperty(entity, 'fakeDataCount', {
       get: () => {
         const uniqueRelationships = entity.relationships.filter(rel => rel.unique && (rel.columnRequired || rel.id));
-        return _.min([entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
+        return min([entity.liquibaseFakeData.length, ...uniqueRelationships.map(rel => rel.otherEntity.fakeDataCount)]);
       },
       configurable: true,
     });
@@ -725,6 +772,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       entityChanges.addedRelationships = databaseChangelog.addedRelationships;
       entityChanges.removedRelationships = databaseChangelog.removedRelationships;
       entityChanges.relationshipsToRecreateForeignKeysOnly = databaseChangelog.relationshipsToRecreateForeignKeysOnly;
+      entityChanges.removedDefaultValueFields = databaseChangelog.removedDefaultValueFields;
+      entityChanges.addedDefaultValueFields = databaseChangelog.addedDefaultValueFields;
     }
 
     /* Required by the templates */
@@ -749,17 +798,23 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       entityChanges.addedFields.length > 0 ||
       entityChanges.removedFields.length > 0 ||
       entityChanges.addedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
-      entityChanges.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable);
+      entityChanges.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
+      entityChanges.addedDefaultValueFields.length > 0 ||
+      entityChanges.removedDefaultValueFields.length > 0;
 
     if (entityChanges.requiresUpdateChangelogs) {
-      entityChanges.hasFieldConstraint = entityChanges.addedFields.some(field => field.unique || !field.nullable);
+      entityChanges.hasFieldConstraint = entityChanges.addedFields.some(
+        field => field.unique || (field.columnRequired && !field.liquibaseDefaultValueAttributeValue) || field.shouldCreateContentType,
+      );
+      entityChanges.hasDefaultValueChange =
+        entityChanges.addedDefaultValueFields.length > 0 || entityChanges.removedDefaultValueFields.length > 0;
       entityChanges.hasRelationshipConstraint = entityChanges.addedRelationships.some(
         relationship =>
           (relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) && (relationship.unique || !relationship.nullable),
       );
-      entityChanges.shouldWriteAnyRelationship = entityChanges.addedRelationships.some(
-        relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable,
-      );
+      entityChanges.shouldWriteAnyRelationship =
+        entityChanges.addedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable) ||
+        entityChanges.removedRelationships.some(relationship => relationship.shouldWriteRelationship || relationship.shouldWriteJoinTable);
     }
 
     return databaseChangelog;

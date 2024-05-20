@@ -327,15 +327,15 @@ describe('jdl - JDLWithApplicationValidator', () => {
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
-            value: binaryOptions.Values.dto.MAPSTRUCT,
-            entityNames: ['A', 'B', 'C'],
+            value: binaryOptions.Values.dto.MAPSTRUCT!,
+            entityNames: new Set(['A', 'B', 'C']),
           }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
-            value: binaryOptions.Values.service.SERVICE_CLASS,
-            entityNames: ['B'],
+            value: binaryOptions.Values.service.SERVICE_CLASS!,
+            entityNames: new Set(['B']),
           }),
         );
         validator = createValidator(jdlObject);
@@ -378,15 +378,15 @@ describe('jdl - JDLWithApplicationValidator', () => {
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
-            value: binaryOptions.Values.dto.MAPSTRUCT,
-            entityNames: ['A', 'B'],
+            value: binaryOptions.Values.dto.MAPSTRUCT!,
+            entityNames: new Set(['A', 'B']),
           }),
         );
         jdlObject.addOption(
           new JDLBinaryOption({
             name: binaryOptions.Options.SERVICE,
-            value: binaryOptions.Values.service.SERVICE_CLASS,
-            excludedNames: ['C'],
+            value: binaryOptions.Values.service.SERVICE_CLASS!,
+            excludedNames: new Set(['C']),
           }),
         );
         validator = createValidator(jdlObject);
@@ -421,8 +421,8 @@ describe('jdl - JDLWithApplicationValidator', () => {
         jdlObject.addEntity(sourceEntity);
         jdlObject.addEntity(destinationEntity);
         jdlObject.addRelationship(relationship);
-        application.addEntityName(sourceEntity);
-        application.addEntityName(destinationEntity);
+        application.addEntityName(sourceEntity.name);
+        application.addEntityName(destinationEntity.name);
         jdlObject.addApplication(application);
         validator = createValidator(jdlObject);
       });
@@ -455,8 +455,8 @@ describe('jdl - JDLWithApplicationValidator', () => {
         jdlObject.addEntity(sourceEntity);
         jdlObject.addEntity(destinationEntity);
         jdlObject.addRelationship(relationship);
-        application.addEntityName(sourceEntity);
-        application.addEntityName(destinationEntity);
+        application.addEntityName(sourceEntity.name);
+        application.addEntityName(destinationEntity.name);
         jdlObject.addApplication(application);
         validator = createValidator(jdlObject);
       });

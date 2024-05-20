@@ -20,21 +20,17 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import semver from 'semver';
-import * as _ from 'lodash-es';
 
 import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.js';
-import { packageNameToNamespace, removeFieldsWithNullishValues } from './support/index.js';
+import { packageNameToNamespace } from './support/index.js';
 import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
-import { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import CoreGenerator from '../base-core/index.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
-import { getConfigWithDefaults } from '../../jdl/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
-
-const { defaults } = _;
 
 /**
  * Base class that contains blueprints support.
@@ -197,6 +193,24 @@ export default class JHipsterBaseBlueprintGenerator<
    * Utility method to get typed objects for autocomplete.
    */
   asComposingTaskGroup(
+    taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>,
+  ): GenericTaskGroup<this, Definition['composingTaskParam']> {
+    return taskGroup;
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
+   * ComposingComponent priority should be used to handle component configuration order.
+   */
+  get composingComponent(): GenericTaskGroup<this, Definition['composingTaskParam']> {
+    return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asComposingComponentTaskGroup(
     taskGroup: GenericTaskGroup<this, Definition['composingTaskParam']>,
   ): GenericTaskGroup<this, Definition['composingTaskParam']> {
     return taskGroup;
@@ -428,20 +442,6 @@ export default class JHipsterBaseBlueprintGenerator<
   }
 
   /**
-   * JHipster config with default values fallback
-   */
-  get jhipsterConfigWithDefaults() {
-    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
-    defaults(configWithDefaults, {
-      skipFakeData: false,
-      skipCheckLengthOfIdentifier: false,
-      enableGradleEnterprise: false,
-      pages: [],
-    });
-    return configWithDefaults;
-  }
-
-  /**
    * @protected
    * Composes with blueprint generators, if any.
    */
@@ -472,6 +472,7 @@ export default class JHipsterBaseBlueprintGenerator<
     const composedBlueprints: any[] = [];
     for (const blueprint of blueprints) {
       const blueprintGenerator = await this._composeBlueprint(blueprint.name, subGen, options);
+      let blueprintCommand;
       if (blueprintGenerator) {
         composedBlueprints.push(blueprintGenerator);
         if ((blueprintGenerator as any).sbsBlueprint) {
@@ -482,6 +483,24 @@ export default class JHipsterBaseBlueprintGenerator<
           this.delegateToBlueprint = true;
           this.checkBlueprintImplementsPriorities(blueprintGenerator);
         }
+        const blueprintModule = (await blueprintGenerator._meta?.importModule?.()) as any;
+        blueprintCommand = blueprintModule?.command;
+      } else {
+        const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprint.name));
+        const generatorNamespace = `${generatorName}:${subGen}`;
+        const blueprintMeta = await this.env.findMeta(generatorNamespace);
+        const blueprintModule = (await blueprintMeta?.importModule?.()) as any;
+        blueprintCommand = blueprintModule?.command;
+        if (blueprintCommand?.compose) {
+          this.generatorsToCompose.push(...blueprintCommand.compose);
+        }
+      }
+      if (blueprintCommand?.override) {
+        if (this.generatorCommand) {
+          this.log.warn('Command already set, multiple blueprints may be overriding the command. Unexpected behavior may occur.');
+        }
+        // Use the blueprint command if it is set to override.
+        this.generatorCommand = blueprintCommand;
       }
     }
     return composedBlueprints;

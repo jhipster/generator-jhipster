@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { deploymentOptions, applicationOptions, serviceDiscoveryTypes } from '../jhipster/index.js';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 
 const { Options } = deploymentOptions;
-const { isEqual } = _;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
-  constructor(args) {
+  deploymentType!: string;
+
+  constructor(args: { deploymentType: string; appsFolders?: string[]; dockerRepositoryName?: string }) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }
@@ -58,7 +59,7 @@ function stringifyConfig(applicationConfig) {
   return `${config}\n  }`;
 }
 
-function stringifyOptionValue(name, value) {
+function stringifyOptionValue(name: string, value: any): string {
   if (arrayTypes.includes(name)) {
     if (value.size === 0) {
       return ' []';

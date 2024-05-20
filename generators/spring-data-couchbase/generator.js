@@ -18,18 +18,17 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_SPRING_DATA_COUCHBASE, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.js';
 import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.js';
 
 export default class CouchbaseGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_SPRING_DATA_COUCHBASE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
   }
 

@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
-import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLRelationship from '../../models/jdl-relationship.js';
 import { convert } from './jdl-to-json-relationship-converter.js';

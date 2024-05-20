@@ -1,6 +1,4 @@
-import { dirname } from 'path';
 import { existsSync } from 'fs';
-import { fileURLToPath } from 'url';
 import sinon from 'sinon';
 import { before, it, describe, after, expect } from 'esmocha';
 import { buildJHipster } from '../../cli/index.mjs';
@@ -22,9 +20,6 @@ const {
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
 } = PRIORITY_NAMES;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export const getCommandHelpOutput = async command => {
   const program = await buildJHipster();
@@ -314,9 +309,9 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .run(generatorPath)
         .withMockedGenerators([
           `jhipster-foo-sbs:${generatorName}`,
-          // Mock every generator except the generator been tested
+          // Mock every generator except the generator been tested and bootstrap- generators
           ...Object.values(GeneratorList)
-            .filter(gen => gen !== generatorName)
+            .filter(gen => gen !== generatorName && !gen.startsWith('bootstrap-'))
             .map(gen => `jhipster:${gen}`),
         ])
         .withJHipsterConfig(

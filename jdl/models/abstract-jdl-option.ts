@@ -20,12 +20,18 @@
 import { merge } from '../utils/object-utils.js';
 import { addAll } from '../utils/set-utils.js';
 
-export default class AbstractJDLOption {
-  name: any;
-  entityNames: Set<string>;
-  excludedNames: any;
+export type JDLOptionParams = {
+  name: string;
+  entityNames?: Set<string> | string[];
+  excludedNames?: Set<string> | string[];
+};
 
-  constructor(args) {
+export default class AbstractJDLOption {
+  name: string;
+  entityNames: Set<string>;
+  excludedNames: Set<string>;
+
+  constructor(args: JDLOptionParams) {
     const merged = merge(defaults(), args);
     if (!merged.name) {
       throw new Error("The option's name must be passed to create an option.");
@@ -38,7 +44,7 @@ export default class AbstractJDLOption {
     this.excludedNames = new Set(merged.excludedNames);
   }
 
-  addEntityName(entityName) {
+  addEntityName(entityName: string) {
     if (!entityName) {
       throw new Error('An entity name has to be passed so as to be added to the option.');
     }
@@ -51,16 +57,16 @@ export default class AbstractJDLOption {
     return this.entityNames.add(entityName);
   }
 
-  addEntitiesFromAnotherOption(option) {
+  addEntitiesFromAnotherOption(option?: AbstractJDLOption): boolean {
     if (!option) {
       return false;
     }
-    addAll(this.entityNames, option.entityNames);
-    addAll(this.excludedNames, option.excludedNames);
+    addAll(this.entityNames, Array.from(option.entityNames.values()));
+    addAll(this.excludedNames, Array.from(option.excludedNames.values()));
     return true;
   }
 
-  excludeEntityName(entityName) {
+  excludeEntityName(entityName: string): void {
     if (!entityName) {
       throw new Error('An entity name has to be passed so as to be excluded from the option.');
     }
@@ -70,11 +76,11 @@ export default class AbstractJDLOption {
     this.excludedNames.add(entityName);
   }
 
-  getType() {
+  getType(): string {
     throw new Error('Unsupported operation');
   }
 
-  setEntityNames(newEntityNames) {
+  setEntityNames(newEntityNames: Iterable<string>): void {
     this.entityNames = new Set(newEntityNames);
   }
 
@@ -83,7 +89,7 @@ export default class AbstractJDLOption {
    * @param entityNames all the entity names declared in a JDL Object.
    * @returns the resolved list.
    */
-  resolveEntityNames(entityNames: string[]) {
+  resolveEntityNames(entityNames: string[]): Set<string> {
     if (!entityNames) {
       throw new Error("Entity names have to be passed to resolve the option's entities.");
     }
@@ -97,7 +103,7 @@ export default class AbstractJDLOption {
   }
 }
 
-function defaults() {
+function defaults(): Partial<AbstractJDLOption> {
   return {
     entityNames: new Set(['*']),
     excludedNames: new Set(),

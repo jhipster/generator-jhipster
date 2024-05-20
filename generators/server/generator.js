@@ -23,7 +23,6 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 
 import {
-  getDBTypeFromDBValue,
   buildJavaGet as javaGetCall,
   javaBeanCase as javaBeanClassNameFormat,
   buildJavaGetter as javaGetter,
@@ -32,22 +31,8 @@ import {
   getPrimaryKeyValue as getPKValue,
   hibernateSnakeCase,
 } from './support/index.js';
-import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
-import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_COMMON,
-  GENERATOR_CUCUMBER,
-  GENERATOR_DOCKER,
-  GENERATOR_GATLING,
-  GENERATOR_GRADLE,
-  GENERATOR_JAVA,
-  GENERATOR_LANGUAGES,
-  GENERATOR_MAVEN,
-  GENERATOR_SERVER,
-  GENERATOR_SPRING_BOOT,
-  GENERATOR_FEIGN_CLIENT,
-} from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { packageJson } from '../../lib/index.js';
 import {
@@ -63,11 +48,9 @@ import {
   JAVA_COMPATIBLE_VERSIONS,
   JHIPSTER_DEPENDENCIES_VERSION,
 } from '../generator-constants.js';
-import statistics from '../statistics.js';
 
 import {
   applicationTypes,
-  authenticationTypes,
   buildToolTypes,
   databaseTypes,
   fieldTypes,
@@ -76,13 +59,12 @@ import {
   reservedKeywords,
   searchEngineTypes,
   clientFrameworkTypes,
-  testFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
-import { createBase64Secret, createSecret, createNeedleCallback, mutateData } from '../base/support/index.js';
-import command from './command.js';
+import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
+import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -97,15 +79,13 @@ const {
   INSTANT: TYPE_INSTANT,
   DURATION: TYPE_DURATION,
 } = dbTypes.CommonDBTypes;
-const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
-const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
-const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL, NO: NO_DATABASE } = databaseTypes;
-const { MICROSERVICE, GATEWAY } = applicationTypes;
+const { CASSANDRA, SQL, NO: NO_DATABASE } = databaseTypes;
+const { GATEWAY } = applicationTypes;
 
 const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -125,25 +105,23 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   jhipsterDependenciesVersion;
   /** @type {string} */
   projectVersion;
-  command = command;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
       loadStoredAppOptions.call(this);
-      await this.composeWithBlueprints(GENERATOR_SERVER);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_COMMON);
-      await this.dependsOnJHipster(GENERATOR_JAVA);
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadConfig() {
-        this.parseJHipsterCommand(this.command);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
@@ -156,11 +134,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(this.command.configs));
+        await this.promptCurrentJHipsterCommand();
       },
-      askForServerTestOpts,
-      askForServerSideOpts,
-      askForOptionalItems,
     });
   }
 
@@ -168,73 +143,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      configServerPort() {
-        if (!this.jhipsterConfig.serverPort && this.jhipsterConfig.applicationIndex) {
-          this.jhipsterConfig.serverPort = 8080 + this.jhipsterConfig.applicationIndex;
-        }
-      },
-      configure() {
-        this._configureServer();
-      },
-      syncUserWithIdp() {
-        if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfig.authenticationType === OAUTH2) {
-          if (this.jhipsterConfig.databaseType === NO_DATABASE) {
-            this.jhipsterConfig.syncUserWithIdp = false;
-          } else if (this.isJhipsterVersionLessThan('8.1.1')) {
-            this.jhipsterConfig.syncUserWithIdp = true;
-          } else if (this.jhipsterConfig.applicationType === GATEWAY) {
-            // For compatibility with v8 microservices allow syncUserWithIdp by default.
-            // Switch to false at v9.
-            this.jhipsterConfig.syncUserWithIdp = true;
-          } else {
-            this.jhipsterConfig.syncUserWithIdp = this.getExistingEntities().some(entity =>
-              (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
-            );
-          }
-        } else if (this.jhipsterConfig.syncUserWithIdp && this.jhipsterConfig.authenticationType !== OAUTH2) {
-          throw new Error(`syncUserWithIdp is only supported with authenticationType ${OAUTH2}`);
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
+      async composeCommand() {
+        await this.composeCurrentJHipsterCommand();
+      },
       async composeBackendType() {
         if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
           await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
-        }
-      },
-      async composing() {
-        const { buildTool, enableTranslation, testFrameworks, feignClient } = this.jhipsterConfigWithDefaults;
-
-        if (buildTool === GRADLE) {
-          await this.composeWithJHipster(GENERATOR_GRADLE);
-        } else if (buildTool === MAVEN) {
-          await this.composeWithJHipster(GENERATOR_MAVEN);
-        } else {
-          throw new Error(`Build tool ${buildTool} is not supported`);
-        }
-
-        await this.composeWithJHipster(GENERATOR_DOCKER);
-
-        if (enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
-        }
-        if (testFrameworks?.includes(CUCUMBER)) {
-          await this.composeWithJHipster(GENERATOR_CUCUMBER);
-        }
-        if (testFrameworks?.includes(GATLING)) {
-          await this.composeWithJHipster(GENERATOR_GATLING);
-        }
-        if (feignClient) {
-          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
         }
       },
     });
@@ -246,6 +162,9 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
+      async loadCommand({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       loadEnvironmentVariables({ application }) {
         application.packageInfoJavadocs?.push(
           { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },
@@ -258,18 +177,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           { packageName: `${application.packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
           { packageName: `${application.packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
         );
-        application.defaultPackaging = process.env.JHI_WAR === '1' ? 'war' : 'jar';
+
         if (application.defaultPackaging === 'war') {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
-
-        const JHI_PROFILE = process.env.JHI_PROFILE;
-        application.defaultEnvironment = (JHI_PROFILE || '').includes('dev') ? 'dev' : 'prod';
-        if (JHI_PROFILE) {
-          this.log.info(`Using ${application.defaultEnvironment} as default profile`);
-        }
       },
-
       setupServerconsts({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
@@ -390,11 +302,13 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           // Don't touch the configuration for microservice entities published at gateways
           !(applicationTypeGateway && entityConfig.microserviceName) &&
           !application.searchEngineAny &&
-          !entityConfig.searchEngine
+          entityConfig.searchEngine !== NO_SEARCH_ENGINE
         ) {
+          if (entityConfig.searchEngine) {
+            this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
+          }
           // Search engine can only be enabled at entity level and disabled at application level for gateways publishing a microservice entity
           entityConfig.searchEngine = NO_SEARCH_ENGINE;
-          this.log.warn('Search engine is enabled at entity level, but disabled at application level. Search engine will be disabled');
         }
       },
       configureModelFiltering({ application, entityConfig }) {
@@ -425,10 +339,16 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       configureEntityTable({ application, entityName, entityConfig }) {
         if ((application.applicationTypeGateway && entityConfig.microserviceName) || entityConfig.skipServer) return;
 
+        const { jhiTablePrefix, devDatabaseTypeH2Any } = application;
+
         const databaseType =
           entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
         const entityTableName = entityConfig.entityTableName ?? hibernateSnakeCase(entityName);
-        const fixedEntityTableName = this._fixEntityTableName(entityTableName, databaseType, application.jhiTablePrefix);
+        const fixedEntityTableName =
+          (isReservedTableName(entityTableName, databaseType) || (devDatabaseTypeH2Any && isReservedH2Keyword(entityTableName))) &&
+          jhiTablePrefix
+            ? `${jhiTablePrefix}_${entityTableName}`
+            : entityTableName;
         if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
@@ -561,26 +481,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           );
         }
       },
-
-      insight({ application }) {
-        statistics.sendSubGenEvent('generator', GENERATOR_SERVER, {
-          app: {
-            authenticationType: application.authenticationType,
-            cacheProvider: application.cacheProvider,
-            enableHibernateCache: application.enableHibernateCache,
-            websocket: application.websocket,
-            databaseType: application.databaseType,
-            devDatabaseType: application.devDatabaseType,
-            prodDatabaseType: application.prodDatabaseType,
-            searchEngine: application.searchEngine,
-            messageBroker: application.messageBroker,
-            serviceDiscoveryType: application.serviceDiscoveryType,
-            buildTool: application.buildTool,
-            enableSwaggerCodegen: application.enableSwaggerCodegen,
-            enableGradleEnterprise: application.enableGradleEnterprise,
-          },
-        });
-      },
     });
   }
 
@@ -594,7 +494,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
         packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
         packageJsonConfigStorage.packaging = application.defaultPackaging;
-        packageJsonConfigStorage.default_environment = application.defaultEnvironment;
       },
       packageJsonBackendScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
@@ -608,7 +507,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';
           scriptsStorage.set({
             'app:start': './mvnw',
-            'backend:info': './mvnw -ntp enforcer:display-info --batch-mode',
+            'backend:info': './mvnw --version',
             'backend:doc:test': './mvnw -ntp javadoc:javadoc --batch-mode',
             'backend:nohttp:test': './mvnw -ntp checkstyle:check --batch-mode',
             'backend:start': `./mvnw${excludeWebapp}`,
@@ -679,74 +578,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  get postWritingEntities() {
-    return this.asPostWritingEntitiesTaskGroup({
-      packageJsonE2eScripts({ application, entities }) {
-        if (application.applicationTypeGateway) {
-          const { serverPort, lowercaseBaseName } = application;
-          const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms.toLowerCase());
-          const scriptsStorage = this.packageJson.createStorage('scripts');
-          const waitServices = microservices
-            .concat(lowercaseBaseName)
-            .map(ms => `npm run ci:server:await:${ms}`)
-            .join(' && ');
-
-          scriptsStorage.set({
-            [`ci:server:await:${lowercaseBaseName}`]: `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:$npm_package_config_backend_port/management/health`,
-            ...Object.fromEntries(
-              microservices.map(ms => [
-                `ci:server:await:${ms}`,
-                `wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${serverPort}/services/${ms}/management/health/readiness`,
-              ]),
-            ),
-            'ci:server:await': `echo "Waiting for services to start" && ${waitServices} && echo "Services started"`,
-          });
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
-  }
-
-  _configureServer(config = this.jhipsterConfigWithDefaults, dest = this.jhipsterConfig) {
-    // Generate JWT secret key if key does not already exist in config
-    if (
-      (config.authenticationType === JWT || config.applicationType === MICROSERVICE || config.applicationType === GATEWAY) &&
-      config.jwtSecretKey === undefined
-    ) {
-      dest.jwtSecretKey = createBase64Secret(64, this.options.reproducibleTests);
-    }
-    // Generate remember me key if key does not already exist in config
-    if (config.authenticationType === SESSION && !dest.rememberMeKey) {
-      dest.rememberMeKey = createSecret();
-    }
-
-    if (config.authenticationType === OAUTH2) {
-      dest.skipUserManagement = true;
-    }
-
-    if (!config.databaseType && config.prodDatabaseType) {
-      dest.databaseType = getDBTypeFromDBValue(config.prodDatabaseType);
-    }
-    if (!config.devDatabaseType && config.prodDatabaseType) {
-      dest.devDatabaseType = config.prodDatabaseType;
-    }
-
-    const databaseType = config.databaseType;
-    if (databaseType === NO_DATABASE) {
-      dest.devDatabaseType = NO_DATABASE;
-      dest.prodDatabaseType = NO_DATABASE;
-      dest.enableHibernateCache = false;
-      dest.skipUserManagement = true;
-    } else if ([MONGODB, NEO4J, COUCHBASE, CASSANDRA].includes(databaseType)) {
-      dest.devDatabaseType = databaseType;
-      dest.prodDatabaseType = databaseType;
-      dest.enableHibernateCache = false;
-    }
   }
 
   /**
@@ -873,13 +704,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         `relationshipSide is missing in .jhipster/${entityName}.json for relationship ${stringifyApplicationData(relationship)}`,
       );
     }
-  }
-
-  _fixEntityTableName(entityTableName, prodDatabaseType, jhiTablePrefix) {
-    if (isReservedTableName(entityTableName, prodDatabaseType) && jhiTablePrefix) {
-      entityTableName = `${jhiTablePrefix}_${entityTableName}`;
-    }
-    return entityTableName;
   }
 
   /**

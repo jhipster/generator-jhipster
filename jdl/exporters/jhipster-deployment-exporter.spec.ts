@@ -21,7 +21,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { it, describe, expect, expect as jestExpect, beforeEach } from 'esmocha';
+import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../models/jdl-deployment.js';

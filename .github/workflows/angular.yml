@@ -89,74 +89,47 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
-        with:
-          application-sample: ${{ matrix.setup-application-sample }}
-          entities-sample: ${{ matrix.setup-entities-sample }}
-          jdl-entities-sample: ${{ matrix.setup-jdl-entities-sample }}
-          jdl-sample: ${{ matrix.setup-jdl-sample }}
-          application-environment: ${{ matrix.setup-application-environment }}
-          application-packaging: ${{ matrix.setup-application-packaging }}
-      - uses: actions/setup-node@v4
+      - uses: jhipster/actions/setup-runner@v0
         with:
           node-version: ${{ matrix.node }}
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
           java-version: ${{ matrix.java }}
-      - uses: jhipster/actions/restore-cache@v0
-        with:
-          npm: true
-          maven: true
-          gradle: ${{ matrix.workspaces == 'true' || matrix.gradle == 1 || contains(matrix.name, 'gradle') }}
-      - name: 'TOOLS: configure tools installed by the system'
-        run: $JHI_SCRIPTS/03-system.sh
-      - name: 'TOOLS: configure git'
-        run: $JHI_SCRIPTS/04-git-config.sh
-      # Update global NPM for workspaces support
-      - name: 'Install required NPM version'
-        if: matrix.workspaces == 'true'
-        run: npm install -g npm@${{ steps.setup.outputs.npm-version }} || true
+          npm-version: ${{ matrix.npm-version }}
+          maven-cache: true
+          gradle-cache: ${{ matrix.gradle-cache }}
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
-      - name: 'GENERATION: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
-        run: jhipster generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
-      - name: 'GENERATION: workspace git'
-        if: matrix.workspaces == 'true'
-        run: |
-          git add .
-          git commit --allow-empty -m "Commit workspaces"
-      - name: 'GENERATION: jhipster info'
-        run: $JHI_SCRIPTS/14-jhipster-info.sh
+        run: jhipster.cjs generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+        env:
+          JHI_FOLDER_APP: ${{ github.workspace }}/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+      - run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
-      - name: 'MERGE: generate base'
-        continue-on-error: true
-        id: base-app
+      - uses: jhipster/actions/compare-sample@v0
+        id: compare
         if: >-
           github.event.pull_request &&
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
-        uses: ./generator-jhipster/.github/actions/compare-base
         with:
-          extra-args: --skip-jhipster-dependencies ${{ matrix.extra-args }}
-      - name: 'MERGE: compare changes'
-        continue-on-error: true
-        id: compare
-        if: steps.base-app.outcome == 'success'
-        uses: ./generator-jhipster/.github/actions/compare
-        with:
-          application-path: ${{ steps.base-app.outputs.application-path }}
+          generator-path: generator-jhipster
+          cmd: jhipster.cjs generate-sample ${{ matrix.name }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+        env:
+          # generate-sample uses JHI_FOLDER_APP to generate the application.
+          JHI_FOLDER_APP: ${{ github.workspace }}/base/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
+        with:
+          jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
       - name: 'TESTS: backend'
         id: backend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-backend-tests != 'true' && needs.build-matrix.outputs.server != 'false'
@@ -189,13 +162,13 @@ jobs:
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.name }}
-          path: ${{ steps.setup.outputs.application-path }}/**/test-results/**/*.xml
+          path: ${{ github.workspace }}/app/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.name }}
-          path: ${{ steps.setup.outputs.application-path }}/**/cypress/screenshots
+          path: ${{ github.workspace }}/app/**/cypress/screenshots
       - name: Dump docker logs
         if: always()
         uses: jwalton/gh-docker-logs@v2

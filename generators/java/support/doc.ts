@@ -45,7 +45,7 @@ export const formatDocAsJavaDoc = (text: string, indentSize = 0): string => {
   return rows.join('\n');
 };
 
-export const formatDocAsApiDescription = (text: string): string => {
+export const formatDocAsApiDescription = (text?: string): string | undefined => {
   if (!text) {
     return text;
   }

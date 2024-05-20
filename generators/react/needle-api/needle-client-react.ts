@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { startCase } from 'lodash-es';
 
 import needleClientBase from '../../client/needle-api/needle-client.js';
 import { stripMargin } from '../../base/support/index.js';
@@ -32,7 +32,7 @@ export default class extends needleClientBase {
     routerName: string,
     enableTranslation: boolean,
     entityTranslationKeyMenu: string,
-    entityTranslationValue: string = _.startCase(routerName),
+    entityTranslationValue: string = startCase(routerName),
   ) {
     const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
     const entityMenuPath = `${this.clientSrcDir}app/entities/menu.tsx`;

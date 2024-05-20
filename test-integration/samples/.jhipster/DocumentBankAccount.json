@@ -20,8 +20,8 @@
   "relationships": [
     {
       "otherEntityName": "embeddedOperation",
-      "otherEntityRelationshipName": "documentBankAccount",
-      "relationshipName": "embeddedOperation",
+      "otherEntityRelationshipName": "documentBankAccountToOne",
+      "relationshipName": "manyEmbeddedOperation",
       "relationshipType": "one-to-many"
     }
   ],

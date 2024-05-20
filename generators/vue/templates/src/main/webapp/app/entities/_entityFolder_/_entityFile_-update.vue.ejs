@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-8">
-            <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
+            <form name="editForm" novalidate v-on:submit.prevent="save()" >
                 <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading" v-text="t$('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
                 <div>
                     <div class="form-group" v-if="<%= entityInstance %>.<%= primaryKey.name %>">
@@ -120,7 +120,7 @@ _%>
   <%_ } _%>
                     </div>
 <%_ } _%>
-<%_ for (relationship of relationships) {
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
   const otherEntityName = relationship.otherEntityName;
   const otherEntityNamePlural = relationship.otherEntityNamePlural;
   const relationshipName = relationship.relationshipName;

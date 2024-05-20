@@ -23,11 +23,12 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
-import JDLApplicationDefinition from './jdl-application-definition.js';
+import JDLApplicationDefinition, { JDLApplicationOptionTypeValue } from './jdl-application-definition.js';
+import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const applicationDefinition = new JDLApplicationDefinition();
 
-export default function createApplicationConfigurationFromObject(configurationObject = {}) {
+export default function createApplicationConfigurationFromObject(configurationObject = {}): JDLApplicationConfiguration {
   const configuration = new JDLApplicationConfiguration();
   Object.keys(configurationObject).forEach(optionName => {
     const optionValue = configurationObject[optionName];
@@ -52,7 +53,7 @@ export function createApplicationNamespaceConfigurationFromObject(
   });
 }
 
-function createUnknownJDLConfigurationOption(name, value) {
+function createUnknownJDLConfigurationOption(name: string, value: any): JDLApplicationConfigurationOption<any> {
   let type;
   if (typeof value === 'boolean') {
     type = 'boolean';
@@ -69,12 +70,16 @@ function createUnknownJDLConfigurationOption(name, value) {
   return createJDLConfigurationOption(type, name, value);
 }
 
-function createApplicationJDLConfigurationOption(name: string, value: any) {
+function createApplicationJDLConfigurationOption(name: string, value: any): JDLApplicationConfigurationOption<any> {
   const type = applicationDefinition.getTypeForOption(name);
   return createJDLConfigurationOption(type, name, value);
 }
 
-function createJDLConfigurationOption(type: string, name: string, value: any) {
+function createJDLConfigurationOption(
+  type: JDLApplicationOptionTypeValue,
+  name: string,
+  value: any,
+): JDLApplicationConfigurationOption<any> {
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value, applicationDefinition.shouldTheValueBeQuoted(name));
@@ -84,6 +89,8 @@ function createJDLConfigurationOption(type: string, name: string, value: any) {
       return new BooleanJDLApplicationConfigurationOption(name, value);
     case 'list':
       return new ListJDLApplicationConfigurationOption(name, value);
+    case 'quotedList':
+      return new ListJDLApplicationConfigurationOption(name, value, true);
     /* istanbul ignore next */
     default:
       // It should not happen! This is a developer error.

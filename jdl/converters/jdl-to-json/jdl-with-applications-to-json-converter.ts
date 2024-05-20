@@ -21,10 +21,14 @@ import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';
 import RelationshipConverter from './jdl-to-json-relationship-converter.js';
 import OptionConverter from './jdl-to-json-option-converter.js';
+import JDLObject from '../../models/jdl-object.js';
+import JDLApplication from '../../models/jdl-application.js';
+import JSONEntity from '../../jhipster/json-entity.js';
+import { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
 
-let entities;
-let jdlObject;
-let entitiesPerApplication;
+let entities: Record<string, JSONEntity> | null | undefined;
+let jdlObject: JDLObject;
+let entitiesPerApplication: Map<string, string[]>;
 
 export default { convert };
 
@@ -34,13 +38,13 @@ export default { convert };
  * @param {JDLObject} args.jdlObject - the JDLObject to convert to JSON
  * @returns {Map} entities that can be exported to JSON
  */
-export function convert(args: any = {}) {
-  if (!args.jdlObject) {
+export function convert(args: JdlObjectWrapper) {
+  if (!args?.jdlObject) {
     throw new Error('The JDL object is mandatory.');
   }
   init(args);
   setEntitiesPerApplication();
-  if (entitiesPerApplication.size === 0) {
+  if (entitiesPerApplication.size === 0 && jdlObject) {
     const applicationNames = jdlObject.getApplications().map(jdlApplication => jdlApplication.getConfigurationOptionValue('baseName'));
     return new Map(applicationNames.map(applicationName => [applicationName, []]));
   }
@@ -55,7 +59,7 @@ export function convert(args: any = {}) {
   return entitiesForEachApplication;
 }
 
-function init(args) {
+function init(args: JdlObjectWrapper): void {
   if (jdlObject) {
     resetState();
   }
@@ -64,13 +68,13 @@ function init(args) {
   entitiesPerApplication = new Map();
 }
 
-function resetState() {
-  jdlObject = null;
+function resetState(): void {
+  jdlObject = null as any;
   entities = null;
 }
 
-function setEntitiesPerApplication() {
-  jdlObject.forEachApplication(jdlApplication => {
+function setEntitiesPerApplication(): void {
+  jdlObject?.forEachApplication((jdlApplication: JDLApplication) => {
     const entityNames = jdlApplication.getEntityNames();
     if (entityNames.length === 0) {
       return;
@@ -80,35 +84,35 @@ function setEntitiesPerApplication() {
   });
 }
 
-function setBasicEntityInformation() {
+function setBasicEntityInformation(): void {
   const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
   convertedEntities.forEach((jsonEntity, entityName) => {
-    entities[entityName] = jsonEntity;
+    entities![entityName] = jsonEntity;
   });
 }
 
-function setFields() {
+function setFields(): void {
   const convertedFields = FieldConverter.convert(jdlObject);
   convertedFields.forEach((entityFields, entityName) => {
-    entities[entityName].addFields(entityFields);
+    entities![entityName].addFields(entityFields);
   });
 }
 
-function setRelationships() {
-  const convertedRelationships = RelationshipConverter.convert(jdlObject.getRelationships(), jdlObject.getEntityNames());
+function setRelationships(): void {
+  const convertedRelationships = RelationshipConverter.convert(jdlObject?.getRelationships(), jdlObject?.getEntityNames());
   convertedRelationships.forEach((entityRelationships, entityName) => {
-    entities[entityName].addRelationships(entityRelationships);
+    entities![entityName].addRelationships(entityRelationships);
   });
 }
 
-function setApplicationToEntities() {
-  jdlObject.forEachApplication(jdlApplication => {
+function setApplicationToEntities(): void {
+  jdlObject?.forEachApplication((jdlApplication: JDLApplication) => {
     const baseName = jdlApplication.getConfigurationOptionValue('baseName');
-    jdlApplication.forEachEntityName(entityName => {
-      if (!entities[entityName]) {
+    jdlApplication.forEachEntityName((entityName: string) => {
+      if (!entities![entityName]) {
         return;
       }
-      entities[entityName].applications.push(baseName);
+      entities![entityName].applications.push(baseName);
     });
   });
 }
@@ -116,9 +120,9 @@ function setApplicationToEntities() {
 function setOptions(entitiesForEachApplication) {
   const convertedOptionContents = OptionConverter.convert(jdlObject);
   convertedOptionContents.forEach((optionContent, entityName) => {
-    entities[entityName].setOptions(optionContent);
+    entities![entityName].setOptions(optionContent);
   });
-  jdlObject.forEachApplication(jdlApplication => {
+  jdlObject?.forEachApplication(jdlApplication => {
     const convertedOptionContentsForApplication = OptionConverter.convert(jdlApplication);
     const applicationName = jdlApplication.getConfigurationOptionValue('baseName');
     const applicationEntities = entitiesForEachApplication.get(applicationName);
@@ -135,8 +139,8 @@ function getEntitiesForEachApplicationMap() {
   const entitiesForEachApplication = new Map();
   entitiesPerApplication.forEach((entityNames, applicationName) => {
     const entitiesInObject = entityNames
-      .filter(entityName => !!entities[entityName])
-      .map(entityName => entities[entityName])
+      .filter(entityName => !!entities![entityName])
+      .map(entityName => entities![entityName])
       .reduce((accumulator, currentEntity) => {
         return {
           ...accumulator,
@@ -156,7 +160,7 @@ function formatEntitiesForEachApplication(entitiesForEachApplication) {
 }
 
 function addApplicationsWithoutEntities(entitiesForEachApplication) {
-  jdlObject.forEachApplication(jdlApplication => {
+  jdlObject?.forEachApplication(jdlApplication => {
     if (jdlApplication.getEntityNames().length === 0) {
       entitiesForEachApplication.set(jdlApplication.getConfigurationOptionValue('baseName'), []);
     }

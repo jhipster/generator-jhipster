@@ -90,10 +90,10 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
     // let ownerSide true when type is 'many-to-one' for convenience.
     // means that this side should control the reference.
-    ownerSide: relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
+    ownerSide: relationship.otherEntity.embedded || relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
     persistableRelationship: ({ ownerSide }) => ownerSide,
-    relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide }) =>
-      entityWithConfig.databaseType === 'neo4j' ? relationshipRightSide : !ownerSide,
+    relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide, otherEntity }) =>
+      !otherEntity.embedded && (entityWithConfig.databaseType === NEO4J ? relationshipRightSide : !ownerSide),
 
     // DB properties
     columnName: hibernateSnakeCase(relationshipName),
@@ -119,6 +119,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherSideReferenceExists = true;
   } else if (
     !ignoreMissingRequiredRelationship &&
+    !relationship.otherEntity.embedded &&
     !relationship.relationshipIgnoreBackReference &&
     entityWithConfig.databaseType !== NEO4J &&
     entityWithConfig.databaseType !== DATABASE_NO &&

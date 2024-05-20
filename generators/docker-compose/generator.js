@@ -21,24 +21,22 @@ import pathjs from 'path';
 import chalk from 'chalk';
 import jsyaml from 'js-yaml';
 import normalize from 'normalize-path';
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
 import { writeFiles } from './files.js';
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret } from '../base/support/index.js';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import statistics from '../statistics.js';
 import command from './command.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.js';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
-const { defaults } = _;
 
 /* eslint-disable consistent-return */
 /**
@@ -56,7 +54,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DOCKER_COMPOSE);
+      await this.composeWithBlueprints();
     }
   }
 
@@ -67,8 +65,8 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
 
-      parseOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       checkDocker,
       async checkDockerCompose() {
@@ -170,9 +168,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
   get default() {
     return {
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_DOCKER_COMPOSE);
-      },
       async setAppsYaml({ workspaces, deployment, applications }) {
         const faker = await createFaker();
 

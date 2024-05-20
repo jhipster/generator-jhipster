@@ -13,7 +13,7 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       mavenStep({ source }) {
-        const inProfile = this.options.profile;
+        const inProfile = (this.options as any).profile;
         function asItemOrArray<T>(item: T): T | T[] {
           return inProfile ? [item] : item;
         }

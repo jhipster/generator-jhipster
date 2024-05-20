@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
+import { kebabCase } from 'lodash-es';
 import { relationshipOptions, validations } from '../../jhipster/index.js';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
+import { JSONRelationship } from '../types.js';
+import { RelationshipType } from '../../basic-types/relationships.js';
 
 const {
   Validations: { REQUIRED },
@@ -50,13 +52,15 @@ export function convert(jdlRelationships: JDLRelationship[] = [], entityNames: s
   return convertedRelationships;
 }
 
-function getRelatedRelationships(relationships, entityNames) {
+type RelationshipsRelatedToEntity = {
+  from: JDLRelationship[];
+  to: JDLRelationship[];
+};
+
+function getRelatedRelationships(relationships: JDLRelationship[], entityNames: string[]) {
   const relatedRelationships = new Map();
   entityNames.forEach(entityName => {
-    const relationshipsRelatedToEntity: {
-      from: any[];
-      to: any[];
-    } = {
+    const relationshipsRelatedToEntity: RelationshipsRelatedToEntity = {
       from: [],
       to: [],
     };
@@ -76,12 +80,12 @@ function getRelatedRelationships(relationships, entityNames) {
   return relatedRelationships;
 }
 
-function setRelationshipsFromEntity(relatedRelationships, entityName) {
+function setRelationshipsFromEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string) {
   relatedRelationships.from.forEach(relationshipToConvert => {
     const otherSplitField: any = extractField(relationshipToConvert.injectedFieldInTo);
-    const convertedRelationship: any = {
+    const convertedRelationship: Partial<JSONRelationship> = {
       relationshipSide: 'left',
-      relationshipType: _.kebabCase(relationshipToConvert.type),
+      relationshipType: kebabCase(relationshipToConvert.type) as RelationshipType,
       otherEntityName: camelCase(relationshipToConvert.to),
     };
     if (otherSplitField.relationshipName) {
@@ -106,12 +110,12 @@ function setRelationshipsFromEntity(relatedRelationships, entityName) {
 
 export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
 
-function setRelationshipsToEntity(relatedRelationships, entityName) {
+function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string) {
   relatedRelationships.to.forEach(relationshipToConvert => {
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
     const convertedRelationship: any = {
       relationshipSide: 'right',
-      relationshipType: otherRelationshipType(_.kebabCase(relationshipToConvert.type)),
+      relationshipType: otherRelationshipType(kebabCase(relationshipToConvert.type)),
       otherEntityName: camelCase(relationshipToConvert.from),
     };
     if (otherSplitField.relationshipName) {
@@ -137,30 +141,30 @@ function setRelationshipsToEntity(relatedRelationships, entityName) {
   });
 }
 
-function setOptionsForRelationshipSourceSide(relationshipToConvert, convertedRelationship) {
+function setOptionsForRelationshipSourceSide(relationshipToConvert: JDLRelationship, convertedRelationship: Partial<JSONRelationship>) {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     if (optionName === BUILT_IN_ENTITY) {
       convertedRelationship.relationshipWithBuiltInEntity = optionValue;
     } else {
-      convertedRelationship.options[optionName] = optionValue;
+      convertedRelationship.options![optionName] = optionValue;
     }
   });
   relationshipToConvert.forEachDestinationOption((optionName, optionValue) => {
-    convertedRelationship.options[optionName] = optionValue;
+    convertedRelationship.options![optionName] = optionValue;
   });
   if (Object.keys(convertedRelationship.options).length === 0) {
     delete convertedRelationship.options;
   }
 }
 
-function setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship) {
+function setOptionsForRelationshipDestinationSide(relationshipToConvert: JDLRelationship, convertedRelationship: JSONRelationship) {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
-    convertedRelationship.options[optionName] = optionValue;
+    convertedRelationship.options![optionName] = optionValue;
   });
   relationshipToConvert.forEachSourceOption((optionName, optionValue) => {
-    convertedRelationship.options[optionName] = optionValue;
+    convertedRelationship.options![optionName] = optionValue;
   });
   if (Object.keys(convertedRelationship.options).length === 0) {
     delete convertedRelationship.options;
@@ -173,7 +177,7 @@ function setOptionsForRelationshipDestinationSide(relationshipToConvert, convert
  * @return{Object} where 'relationshipName' is the relationship name and
  *                'otherEntityField' is the other entity field name
  */
-function extractField(field) {
+function extractField(field?: string | null) {
   const splitField: any = {
     relationshipName: '',
   };

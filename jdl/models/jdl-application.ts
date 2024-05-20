@@ -24,12 +24,13 @@ import JDLApplicationConfigurationOption from './jdl-application-configuration-o
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import JDLApplicationEntities from './jdl-application-entities.js';
 import JDLOptions from './jdl-options.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLApplication {
   config: JDLApplicationConfiguration;
   namespaceConfigs: Array<JDLApplicationConfiguration>;
-  entityNames: any;
-  options: any;
+  entityNames: JDLApplicationEntities;
+  options: JDLOptions;
 
   constructor({ config = {}, entityNames = [], namespaceConfigs = {} }: any = {}) {
     this.config = createApplicationConfigurationFromObject(config);
@@ -38,18 +39,18 @@ export default class JDLApplication {
     this.options = new JDLOptions();
   }
 
-  setConfigurationOption(option) {
+  setConfigurationOption(option: JDLApplicationConfigurationOption<any>): void {
     if (!option) {
       throw new Error('An option has to be passed to set an option.');
     }
     this.config.setOption(option);
   }
 
-  hasConfigurationOption(optionName) {
+  hasConfigurationOption(optionName: string): boolean {
     return this.config.hasOption(optionName);
   }
 
-  getConfigurationOptionValue(optionName) {
+  getConfigurationOptionValue(optionName: string) {
     if (!optionName) {
       throw new Error('An option name has to be passed to get a value.');
     }
@@ -60,7 +61,7 @@ export default class JDLApplication {
     return option!.getValue();
   }
 
-  forEachConfigurationOption(passedFunction: (option: JDLApplicationConfigurationOption) => void) {
+  forEachConfigurationOption(passedFunction: (option: JDLApplicationConfigurationOption<any>) => void) {
     this.config.forEachOption(passedFunction);
   }
 
@@ -70,22 +71,22 @@ export default class JDLApplication {
     }
   }
 
-  addEntityName(entityName) {
+  addEntityName(entityName: string) {
     if (!entityName) {
       throw new Error('An entity name has to be passed so as to be added to the application.');
     }
     this.entityNames.add(entityName);
   }
 
-  addEntityNames(entityNames: any = []) {
+  addEntityNames(entityNames: string[] = []) {
     this.entityNames.addEntityNames(entityNames);
   }
 
-  getEntityNames() {
+  getEntityNames(): string[] {
     return this.entityNames.toArray();
   }
 
-  hasEntityName(entityName) {
+  hasEntityName(entityName: string) {
     if (!entityName) {
       return false;
     }
@@ -96,26 +97,26 @@ export default class JDLApplication {
     this.entityNames.forEach(passedFunction);
   }
 
-  addOption(jdlOption) {
+  addOption(jdlOption: AbstractJDLOption | undefined) {
     if (!jdlOption) {
       throw new Error("Can't add a nil option.");
     }
     this.options.addOption(jdlOption);
   }
 
-  forEachOption(passedFunction) {
+  forEachOption(passedFunction: (option: AbstractJDLOption) => void): void {
     if (!passedFunction) {
       return;
     }
     this.options.forEach(passedFunction);
   }
 
-  getOptionQuantity() {
+  getOptionQuantity(): number {
     return this.options.size();
   }
 
-  toString() {
-    let stringifiedApplication = `application {
+  toString(): string {
+    let stringifiedApplication: string = `application {
 ${this.config.toString(2)}
 ${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
     if (this.entityNames.size() !== 0) {

@@ -64,6 +64,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
       describe('such as no JDL object', () => {
         it('should throw an error', () => {
           expect(() => {
+            // @ts-expect-error
             convert();
           }).to.throw(/^The JDL object is mandatory\.$/);
         });
@@ -210,62 +211,62 @@ JSONEntity {
           const options = [
             new JDLUnaryOption({
               name: unaryOptions.EMBEDDED,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.NO_FLUENT_METHOD,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.FILTER,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.READ_ONLY,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.SKIP_CLIENT,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.SKIP_SERVER,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.ANGULAR_SUFFIX,
               value: 'suffix',
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
               value: '../client_root_folder',
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.DTO,
               value: binaryOptions.Values.dto.MAPSTRUCT,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.MICROSERVICE,
               value: 'myMs',
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.PAGINATION,
               value: binaryOptions.Values.pagination.PAGINATION,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.SEARCH,
               value: binaryOptions.Values.search.COUCHBASE,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.SERVICE,
               value: binaryOptions.Values.service.SERVICE_IMPL,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           ];
           jdlObject.addEntity(entityA);
@@ -329,7 +330,7 @@ JSONEntity {
             new JDLBinaryOption({
               name: binaryOptions.Options.DTO,
               value: binaryOptions.Values.dto.MAPSTRUCT,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           );
           const returnedMap: any = convert({
@@ -390,7 +391,7 @@ JSONEntity {
           jdlObject.addOption(
             new JDLUnaryOption({
               name: unaryOptions.FILTER,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           );
           const returnedMap: any = convert({
@@ -450,11 +451,11 @@ JSONEntity {
           application.addEntityName('A');
           jdlObject.addApplication(application);
           jdlObject.addOption(
-            new JDLUnaryOption({
+            new JDLBinaryOption({
               name: binaryOptions.Options.SEARCH,
-              values: binaryOptions.Values.search.COUCHBASE,
-              entityNames: ['*'],
-              excludedNames: ['A'],
+              value: binaryOptions.Values.search.COUCHBASE,
+              entityNames: new Set(['*']),
+              excludedNames: new Set(['A']),
             }),
           );
           const returnedMap: any = convert({
@@ -1107,6 +1108,8 @@ JSONEntity {
                 injectedFieldInTo: 'a',
                 injectedFieldInFrom: 'b',
                 options: {
+                  source: {},
+                  destination: {},
                   global: {
                     custom: 42,
                   },
@@ -1160,6 +1163,8 @@ JSONEntity {
                   global: {
                     [BUILT_IN_ENTITY]: true,
                   },
+                  source: {},
+                  destination: {},
                 },
               });
               jdlObject.addEntity(entityA);
@@ -1767,17 +1772,17 @@ JSONEntity {
           const paginationWithInfiniteScrollOption = new JDLBinaryOption({
             name: binaryOptions.Options.PAGINATION,
             value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
-            entityNames: ['A', 'B', 'C', 'D', 'E', 'F'],
+            entityNames: new Set(['A', 'B', 'C', 'D', 'E', 'F']),
           });
           const paginationWithPaginationOption = new JDLBinaryOption({
             name: binaryOptions.Options.PAGINATION,
             value: binaryOptions.Values.pagination.PAGINATION,
-            entityNames: ['A', 'C'],
+            entityNames: new Set(['A', 'C']),
           });
           const dtoWithMapstructOption = new JDLBinaryOption({
             name: binaryOptions.Options.DTO,
-            value: binaryOptions.Values.dto.MAPSTRUCT,
-            entityNames: ['D', 'F'],
+            value: binaryOptions.Values.dto.MAPSTRUCT!,
+            entityNames: new Set(['D', 'F']),
           });
           jdlObject.addOption(paginationWithInfiniteScrollOption);
           tataApplication.addOption(paginationWithPaginationOption);

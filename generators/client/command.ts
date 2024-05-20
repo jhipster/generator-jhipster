@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { intersection } from 'lodash-es';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { JHipsterCommandDefinition } from '../base/api.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, clientFrameworkTypes } from '../../jdl/index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
 
 const { CYPRESS } = testFrameworkTypes;
-const { intersection } = _;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 
 const microfrontendsToPromptValue = answer => (Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer);
@@ -49,8 +48,8 @@ const command: JHipsterCommandDefinition = {
         type: 'list',
         message: () =>
           generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE
-            ? `Which ${chalk.yellow('*Framework*')} would you like to use as microfrontend?`
-            : `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
+            ? `Which ${chalk.yellow('*framework*')} would you like to use as microfrontend?`
+            : `Which ${chalk.yellow('*framework*')} would you like to use for the client?`,
       }),
       choices: [
         { value: ANGULAR, name: 'Angular' },

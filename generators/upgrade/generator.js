@@ -25,11 +25,9 @@ import { ResetMode } from 'simple-git';
 
 import BaseGenerator from '../base/index.js';
 import { packageJson } from '../../lib/index.js';
-import statistics from '../statistics.js';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import command from './command.js';
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -73,8 +71,10 @@ export default class UpgradeGenerator extends BaseGenerator {
         this.log.log('');
       },
 
-      parseCommand() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
+      initializeOptions() {
         if (this.silent) {
           this.spawnStdio = 'ignore';
         }
@@ -158,10 +158,6 @@ export default class UpgradeGenerator extends BaseGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
-      insight() {
-        statistics.sendSubGenEvent('generator', 'upgrade');
-      },
-
       async prepareUpgradeBranch() {
         const git = this.createGit();
 

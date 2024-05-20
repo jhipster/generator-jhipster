@@ -76,6 +76,7 @@ export default class JDLParser extends CstParser {
     this.applicationNamespaceConfigDeclaration();
     this.namespaceConfigValue();
     this.qualifiedName();
+    this.quotedList();
     this.list();
 
     // very important to call this after all the rules have been defined.
@@ -587,6 +588,7 @@ export default class JDLParser extends CstParser {
       this.OR([
         { ALT: () => this.CONSUME(LexerTokens.BOOLEAN) },
         { ALT: () => this.SUBRULE(this.qualifiedName) },
+        { ALT: () => this.SUBRULE(this.quotedList) },
         { ALT: () => this.SUBRULE(this.list) },
         { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
         { ALT: () => this.CONSUME(LexerTokens.STRING) },
@@ -612,6 +614,19 @@ export default class JDLParser extends CstParser {
         SEP: LexerTokens.COMMA,
         DEF: () => {
           this.CONSUME(LexerTokens.NAME);
+        },
+      });
+      this.CONSUME(LexerTokens.RSQUARE);
+    });
+  }
+
+  quotedList(): any {
+    this.RULE('quotedList', () => {
+      this.CONSUME(LexerTokens.LSQUARE);
+      this.AT_LEAST_ONE_SEP({
+        SEP: LexerTokens.COMMA,
+        DEF: () => {
+          this.CONSUME(LexerTokens.STRING);
         },
       });
       this.CONSUME(LexerTokens.RSQUARE);

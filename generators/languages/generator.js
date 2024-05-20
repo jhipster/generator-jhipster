@@ -18,12 +18,10 @@
  */
 /* eslint-disable consistent-return */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { padEnd, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { askForLanguages, askI18n } from './prompts.js';
-import statistics from '../statistics.js';
-import { GENERATOR_LANGUAGES, GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { clientI18nFiles } from './files.js';
 import { writeEntityFiles } from './entity-files.js';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
@@ -33,12 +31,11 @@ import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
 import { updateLanguagesTask as updateLanguagesInJava } from '../server/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants.js';
-import command from './command.js';
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
+import { clientFrameworkTypes } from '../../jdl/index.js';
 
-const { startCase } = _;
-
+const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 /**
  * This is the base class for a generator that generates entities.
  *
@@ -68,17 +65,17 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     this.supportedLanguages = supportedLanguages;
     if (!this.fromBlueprint) {
-      this.composedBlueprints = await this.composeWithBlueprints('languages');
+      this.composedBlueprints = await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
     }
 
     if (
       !this.jhipsterConfigWithDefaults.skipClient &&
-      this.jhipsterConfigWithDefaults.clientFramework !== 'no' &&
-      (!this.jhipsterConfig.enableTranslation || this.jhipsterConfigWithDefaults.clientFramework === 'angular')
+      this.jhipsterConfigWithDefaults.clientFramework !== NO_CLIENT_FRAMEWORK &&
+      (!this.jhipsterConfig.enableTranslation || this.jhipsterConfigWithDefaults.clientFramework === ANGULAR)
     ) {
       // We must write languages files for translation process for entities only generation.
       // Angular frontend uses translation files even if enableTranslation is enabled.
@@ -90,9 +87,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
-      parseCli() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       languagesToApply() {
         // Validate languages passed as argument.
@@ -111,7 +107,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
             throw new Error(
               `Unsupported language "${unsupportedLanguage}" passed as argument to language generator.` +
                 `\nSupported languages: ${this.supportedLanguages
-                  .map(language => `\n  ${_.padEnd(language.languageTag, 5)} (${language.name})`)
+                  .map(language => `\n  ${padEnd(language.languageTag, 5)} (${language.name})`)
                   .join('')}`,
             );
           }
@@ -245,10 +241,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
         control.getWebappTranslation = (...args) => this.translationData.getClientTranslation(...args);
       },
-
-      insight() {
-        statistics.sendSubGenEvent('generator', GENERATOR_LANGUAGES);
-      },
     });
   }
 
@@ -310,7 +302,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
                 },
               });
             }
-            statistics.sendSubGenEvent('languages/language', language);
           }),
         );
       },

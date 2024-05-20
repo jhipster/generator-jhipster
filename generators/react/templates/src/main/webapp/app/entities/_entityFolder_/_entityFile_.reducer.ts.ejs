@@ -63,18 +63,23 @@ export const searchEntities = createAsyncThunk(
     const requestUrl = `${apiSearchUrl}?query=${query}`;
   <%_ } _%>
     return axios.get<I<%= entityReactName %>[]>(requestUrl);
-  }
+  },
+  { serializeError: serializeAxiosError },
 );
 
 <%_ } _%>
-export const getEntities = createAsyncThunk('<%= entityInstance %>/fetch_entity_list', async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
+export const getEntities = createAsyncThunk(
+  '<%= entityInstance %>/fetch_entity_list',
+  async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
 <%_ if (!paginationNo) { _%>
-  const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
 <%_ } else { _%>
-  const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
 <%_ } _%>
-  return axios.get<I<%= entityReactName %>[]>(requestUrl);
-});
+    return axios.get<I<%= entityReactName %>[]>(requestUrl);
+  },
+  { serializeError: serializeAxiosError },
+);
 
 export const getEntity = createAsyncThunk(
   '<%= entityInstance %>/fetch_entity',
@@ -82,7 +87,7 @@ export const getEntity = createAsyncThunk(
     const requestUrl = `${apiUrl}/${id}`;
     return axios.get<I<%= entityReactName %>>(requestUrl);
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 <%_ if (!readOnly) { _%>

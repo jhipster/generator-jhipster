@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-unused-expressions */
 
-import { before, it, describe, expect, expect as jestExpect } from 'esmocha';
+import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { applicationOptions, binaryOptions } from '../jhipster/index.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
@@ -335,8 +335,8 @@ describe('jdl - JDLApplication', () => {
         const option = new JDLBinaryOption({
           name: binaryOptions.Options.PAGINATION,
           value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
-          entityNames: ['*'],
-          excludedNames: ['D'],
+          entityNames: new Set(['*']),
+          excludedNames: new Set(['D']),
         });
         application.addOption(option);
         result = application.toString();
@@ -367,15 +367,15 @@ describe('jdl - JDLApplication', () => {
         const option1 = new JDLBinaryOption({
           name: binaryOptions.Options.PAGINATION,
           value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
-          entityNames: ['*'],
-          excludedNames: ['D'],
+          entityNames: new Set(['*']),
+          excludedNames: new Set(['D']),
         });
         application.addOption(option1);
         const option2 = new JDLBinaryOption({
           name: binaryOptions.Options.DTO,
           value: binaryOptions.Values.dto.MAPSTRUCT,
-          entityNames: ['*'],
-          excludedNames: ['D'],
+          entityNames: new Set(['*']),
+          excludedNames: new Set(['D']),
         });
         application.addOption(option2);
       });
@@ -596,13 +596,13 @@ describe('jdl - JDLApplication', () => {
         const option1 = new JDLBinaryOption({
           name: binaryOptions.Options.PAGINATION,
           value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
-          entityNames: ['*'],
-          excludedNames: ['D'],
+          entityNames: new Set(['*']),
+          excludedNames: new Set(['D']),
         });
         const option2 = new JDLBinaryOption({
           name: binaryOptions.Options.SERVICE,
           value: binaryOptions.Values.service.SERVICE_CLASS,
-          entityNames: ['A', 'B', 'C'],
+          entityNames: new Set(['A', 'B', 'C']),
         });
         application.addOption(option1);
         application.addOption(option2);

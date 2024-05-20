@@ -19,13 +19,11 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import Generator from './index.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -164,6 +162,112 @@ describe(`generator - ${generator}`, () => {
 
       it('should match snapshot', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
+      });
+    });
+  });
+  describe('questions', () => {
+    describe('without answers', () => {
+      before(async () => {
+        await helpers.run(generatorPath).withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "baseName",
+  "applicationType",
+  "packageName",
+  "buildTool",
+  "reactive",
+  "authenticationType",
+  "serverTestFrameworks",
+  "databaseType",
+  "prodDatabaseType",
+  "devDatabaseType",
+  "cacheProvider",
+  "enableHibernateCache",
+  "serverSideOptions",
+  "clientFramework",
+  "clientTestFrameworks",
+  "withAdminUi",
+  "clientTheme",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
+]
+`);
+      });
+    });
+
+    describe('with gateway, gradle and no cacheProvider', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withAnswers({ applicationType: 'gateway', buildTool: 'gradle', cacheProvider: 'no' })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "baseName",
+  "applicationType",
+  "packageName",
+  "buildTool",
+  "serverPort",
+  "serviceDiscoveryType",
+  "authenticationType",
+  "serverTestFrameworks",
+  "databaseType",
+  "prodDatabaseType",
+  "devDatabaseType",
+  "cacheProvider",
+  "enableHibernateCache",
+  "serverSideOptions",
+  "enableGradleEnterprise",
+  "clientFramework",
+  "microfrontend",
+  "clientTestFrameworks",
+  "withAdminUi",
+  "clientTheme",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
+]
+`);
+      });
+    });
+
+    describe('with microservice', () => {
+      before(async () => {
+        await helpers
+          .run(generatorPath)
+          .withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "baseName",
+  "applicationType",
+  "packageName",
+  "buildTool",
+  "reactive",
+  "serverPort",
+  "serviceDiscoveryType",
+  "authenticationType",
+  "feignClient",
+  "serverTestFrameworks",
+  "databaseType",
+  "cacheProvider",
+  "serverSideOptions",
+  "clientFramework",
+  "enableTranslation",
+  "nativeLanguage",
+  "languages",
+]
+`);
       });
     });
   });

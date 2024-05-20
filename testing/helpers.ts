@@ -2,8 +2,10 @@
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { merge, set } from 'lodash-es';
+import { globSync } from 'glob';
 
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
@@ -12,16 +14,23 @@ import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '
 import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
+import type { JSONEntity } from '../jdl/converters/types.js';
+import CoreGenerator from '../generators/base-core/generator.js';
 
-type BaseEntity = any;
+type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
 
-type JHipsterRunResult<GeneratorType extends YeomanGenerator = YeomanGenerator> = RunResult<GeneratorType> & {
+type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = RunResult<GeneratorType> & {
   /**
    * First argument of mocked source calls.
    */
   sourceCallsArg: Record<string, unknown[]>;
+
+  /**
+   * Composed generators that were mocked.
+   */
+  composedMockedGenerators: string[];
 };
 
 const runResult = result as JHipsterRunResult;
@@ -31,6 +40,17 @@ export { runResult, runResult as result };
 const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
+
+const generatorsDir = join(fileURLToPath(import.meta.url), '../../generators');
+const mockedGenerators = [
+  ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
+  ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
+]
+  .filter(gen => !gen.startsWith('bootstrap-'))
+  .map(gen => `jhipster:${gen}`)
+  .sort();
+
+const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(key => [key, undefined]));
 
 let defaultMockFactory;
 
@@ -61,6 +81,9 @@ const createFiles = (workspaceFolder: string, configuration: Record<string, unkn
     ...entityFiles,
   };
 };
+
+export const createJHipsterConfigFiles = (configuration: Record<string, unknown>, entities?: BaseEntity[]) =>
+  createFiles('', configuration, entities);
 
 export type FakeBlueprintOptions = {
   packageJson?: any;
@@ -107,6 +130,10 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private workspaceApplications: string[] = [];
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
+
+  withOptions(options: Partial<Omit<JHipsterGeneratorOptions, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
+    return super.withOptions(options as any);
+  }
 
   withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
     return this.withFiles(
@@ -214,9 +241,13 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   }
 
   withSharedApplication(sharedApplication: Record<string, any>): this {
-    this.sharedApplication = this.sharedApplication ?? {};
+    this.sharedApplication = this.sharedApplication ?? { ...defaultSharedApplication };
     merge(this.sharedApplication, sharedApplication);
     return this.withSharedData({ sharedApplication: this.sharedApplication });
+  }
+
+  withMockedJHipsterGenerators(exceptList: string[] = []): this {
+    return this.withMockedGenerators(mockedGenerators.filter(gen => !exceptList.includes(gen) && (this as any).Generator !== gen));
   }
 
   withGradleBuildTool(): this {
@@ -246,7 +277,7 @@ plugins {
   }
 
   async run(): Promise<RunResult<GeneratorTestType>> {
-    const runResult = await super.run();
+    const runResult = (await super.run()) as unknown as JHipsterRunResult;
     if (this.sharedSource) {
       const sourceCallsArg = Object.fromEntries(
         Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => args[0])]),
@@ -263,10 +294,14 @@ plugins {
           relationships: relationships.map(rel => `Relationship[${rel.relationshipName}]`),
         }));
       }
-      const jhipsterRunResult = runResult as unknown as JHipsterRunResult;
-      jhipsterRunResult.sourceCallsArg = sourceCallsArg;
+      runResult.sourceCallsArg = sourceCallsArg;
     }
-    return runResult;
+
+    runResult.composedMockedGenerators = mockedGenerators.filter(
+      gen => runResult.mockedGenerators[gen]?.called && !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen),
+    );
+
+    return runResult as any;
   }
 }
 
@@ -299,7 +334,7 @@ class JHipsterTest extends YeomanTest {
     class BlueprintedGenerator extends BaseGenerator {
       async beforeQueue() {
         if (!this.fromBlueprint) {
-          await this.composeWithBlueprints('test-blueprint');
+          await this.composeWithBlueprints();
         }
       }
 

@@ -19,7 +19,7 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, after, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../testing/index.js';
@@ -28,8 +28,6 @@ import Generator from './index.js';
 import { messageBrokerTypes } from '../../jdl/jhipster/index.js';
 
 const { PULSAR } = messageBrokerTypes;
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -72,9 +72,9 @@
 </head>
 <body>
 <div class="container">
-  <h1>Welcome, Java Hipster!</h1>
+  <h1>Welcome, <%- hipsterName %>!</h1>
 
-  <p>This application is a microservice, which has been generated using <a href="https://www.jhipster.tech/" rel="noopener noreferrer">JHipster</a>.</p>
+  <p>This application is a microservice, which has been generated using <a href="<%- hipsterDocumentationLink %>" rel="noopener noreferrer">JHipster</a>.</p>
 
   <ul>
 <%_ if (microfrontend) { %>
@@ -107,15 +107,15 @@
   </h2>
 
   <ul>
-    <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
-    <li><a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">JHipster on Stack Overflow</a></li>
-    <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer">JHipster bug tracker</a></li>
-    <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">JHipster public chat room</a></li>
-    <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">follow @jhipster on Twitter</a></li>
+    <li><a href="<%- hipsterDocumentationLink %>" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
+    <li><a href="<%- hipsterStackoverflowLink %>" target="_blank" rel="noopener noreferrer">JHipster on Stack Overflow</a></li>
+    <li><a href="<%- hipsterBugTrackerLink %>" target="_blank" rel="noopener noreferrer">JHipster bug tracker</a></li>
+    <li><a href="<%- hipsterChatLink %>" target="_blank" rel="noopener noreferrer">JHipster public chat room</a></li>
+    <li><a href="<%- hipsterTwitterLink %>" target="_blank" rel="noopener noreferrer">follow @jhipster on Twitter</a></li>
   </ul>
 
   <p>
-    <span>If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
+    <span>If you like JHipster, don't forget to give us a star on</span> <a href="<%- hipsterProjectLink %>" target="_blank" rel="noopener noreferrer">GitHub</a>!
   </p>
 
 </div>

@@ -62,7 +62,6 @@ exports[`generator - jdl for application jdl with valid jdl should write expecte
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "baseName": "jhipster",
     "entities": []
   }
@@ -109,7 +108,6 @@ exports[`generator - jdl for one application and entity jdl with valid jdl shoul
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "baseName": "jhipster",
     "entities": [
       "Foo"
@@ -194,16 +192,13 @@ Options:
   --jdl-store <value>                      JDL store
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
-  --auth <value>                           Provide authentication type for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
-  --build <value>                          Provide build tool for the application when skipping server side generation
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --enable-hibernate-cache                 Enable hibernate cache
   --message-broker <value>                 message broker
-  --reactive                               Generate a reactive backend
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-db-changelog                      Skip the generation of database migrations
@@ -212,9 +207,16 @@ Options:
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
+  --reactive                               Generate a reactive backend
+  --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
+  --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --feign-client                           Generate a feign client
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
+  --package-name <value>                   The package name for the generated application
+  --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
+  --enable-gradle-enterprise               Enable Gradle Enterprise integration
+  --gradle-enterprise-host <value>         Gradle Enterprise Host
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
@@ -250,7 +252,6 @@ exports[`generator - jdl with a gateway generating json should generate expected
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
-    "applicationIndex": 0,
     "applicationType": "gateway",
     "applications": {
       "ms": {}

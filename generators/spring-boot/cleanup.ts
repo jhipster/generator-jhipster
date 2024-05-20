@@ -204,4 +204,8 @@ export default asWritingTask(function cleanupTask(this, taskParam) {
       this.removeFile('gradle/sonar.gradle');
     }
   }
+
+  if (this.isJhipsterVersionLessThan('8.4.0')) {
+    this.removeFile(`${application.javaPackageSrcDir}config/LocaleConfiguration.java`);
+  }
 });

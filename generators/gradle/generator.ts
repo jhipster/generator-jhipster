@@ -21,7 +21,6 @@ import assert from 'assert/strict';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { GENERATOR_GRADLE, GENERATOR_BOOTSTRAP_APPLICATION_SERVER } from '../generator-list.js';
 import files from './files.js';
 import { GRADLE } from './constants.js';
 import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
@@ -48,12 +47,37 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_GRADLE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      async promptCommand({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.promptCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {
@@ -74,6 +98,9 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
+      async loadConfig({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       loadGradleVersion({ application }) {
         const propFile = this.readTemplate(this.jhipsterTemplatePath('gradle/wrapper/gradle-wrapper.properties'));
         this.gradleVersionFromWrapper = propFile?.toString().match(/gradle-(\d+\.\d+(?:\.\d+)?)-/)?.[1];

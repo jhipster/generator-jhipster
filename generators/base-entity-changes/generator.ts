@@ -36,6 +36,8 @@ const baseChangelog: () => Omit<BaseChangelog, 'changelogDate' | 'entityName' | 
   addedRelationships: [],
   removedRelationships: [],
   relationshipsToRecreateForeignKeysOnly: [],
+  removedDefaultValueFields: [],
+  addedDefaultValueFields: [],
   changelogData: {},
 });
 
@@ -164,6 +166,33 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
           ),
         );
 
+      const oldFieldsWithDefaultValues = oldFields.filter(field => this.hasAnyDefaultValue(field));
+      const newFieldsWithDefaultValues = newFields.filter(field => this.hasAnyDefaultValue(field));
+
+      // find the old fields that have not been deleted anyway or otherwise where the default value is different on the same new field
+      const removedDefaultValueFields = oldFieldsWithDefaultValues
+        .filter(oldField => !removedFieldNames.includes(oldField.fieldName))
+        .filter(
+          // field was not removed, so check its default value
+          oldField =>
+            this.doDefaultValuesDiffer(
+              oldField,
+              newFields.find(newField => newField.fieldName === oldField.fieldName),
+            ),
+        );
+
+      // find the new fields that have not been added newly anyway or otherwise where the old field had a different default value
+      const addedDefaultValueFields = newFieldsWithDefaultValues
+        .filter(newField => !addedFieldNames.includes(newField.fieldName))
+        .filter(
+          // field was not added newly, so check its default value
+          newField =>
+            this.doDefaultValuesDiffer(
+              oldFields.find(oldField => oldField.fieldName === newField.fieldName),
+              newField,
+            ),
+        );
+
       return {
         ...baseChangelog(),
         previousEntity: oldConfig,
@@ -176,7 +205,17 @@ export default abstract class GeneratorBaseEntityChanges extends GeneratorBaseAp
         addedRelationships,
         removedRelationships,
         relationshipsToRecreateForeignKeysOnly,
+        removedDefaultValueFields,
+        addedDefaultValueFields,
       };
     });
+  }
+
+  private hasAnyDefaultValue(field) {
+    return field.defaultValue !== undefined || field.defaultValueComputed;
+  }
+
+  private doDefaultValuesDiffer(field1, field2) {
+    return field1.defaultValue !== field2.defaultValue || field1.defaultValueComputed !== field2.defaultValueComputed;
   }
 }

@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
-import { JHipsterCommandDefinition } from '../base/api.js';
-
-const { kebabCase, intersection } = _;
+import { kebabCase, intersection } from 'lodash-es';
+import type { JHipsterCommandDefinition } from '../base/api.js';
 
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 

@@ -25,32 +25,39 @@ const { REQUIRED } = Validations;
 
 export type JDLRelationshipOptions = Record<'global' | 'source' | 'destination', Record<string, any>>;
 
+export type JDLSourceEntitySide = {
+  sourceEntity: string;
+  injectedFieldInSourceEntity?: string;
+  injectedFieldInSourceIsRequired: boolean;
+  commentForSourceEntity?: string;
+};
+
 export type JDLRelationshipModel = {
-  side: RelationshipSide | undefined;
+  side?: RelationshipSide;
   from: string;
   to: string;
   type: JDLRelationshipType;
   options: JDLRelationshipOptions;
-  injectedFieldInFrom: null | string;
-  injectedFieldInTo: null | string;
+  injectedFieldInFrom?: string | null;
+  injectedFieldInTo?: string | null;
   isInjectedFieldInFromRequired: boolean;
   isInjectedFieldInToRequired: boolean;
-  commentInFrom: null | string;
-  commentInTo: null | string;
+  commentInFrom?: string | null;
+  commentInTo?: string | null;
 };
 
 export default class JDLRelationship implements JDLRelationshipModel {
-  side: RelationshipSide | undefined;
+  side?: RelationshipSide;
   from: string;
   to: string;
   type: JDLRelationshipType;
   options: { global: Record<string, any>; source: Record<string, any>; destination: Record<string, any> };
-  injectedFieldInFrom: null | string;
-  injectedFieldInTo: null | string;
+  injectedFieldInFrom?: string | null;
+  injectedFieldInTo?: string | null;
   isInjectedFieldInFromRequired: boolean;
   isInjectedFieldInToRequired: boolean;
-  commentInFrom: null | string;
-  commentInTo: null | string;
+  commentInFrom?: string | null;
+  commentInTo?: string | null;
 
   constructor(args: Partial<JDLRelationshipModel> & Pick<JDLRelationshipModel, 'from' | 'to' | 'type'>) {
     const merged = mergeDefaultsWithOverrides(args);

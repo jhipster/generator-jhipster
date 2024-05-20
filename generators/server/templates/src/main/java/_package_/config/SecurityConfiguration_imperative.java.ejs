@@ -54,6 +54,10 @@ import tech.jhipster.web.filter.CookieCsrfFilter;
 <%_ if (!skipClient) { _%>
 import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+<%_ } _%>
 <%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
@@ -84,6 +88,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
   <%_ } _%>
 import java.util.*;
 <%_ } _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+import java.util.function.Supplier;
+<%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -94,8 +101,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
   <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.*;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
@@ -104,13 +110,16 @@ import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && applicationTypeMonolith) { _%>
+<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
 <%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+<%_ } _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+import org.springframework.util.StringUtils;
 <%_ } _%>
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
@@ -126,7 +135,7 @@ public class SecurityConfiguration {
 
     private final Environment env;
 <%_ } _%>
-    
+
     private final JHipsterProperties jHipsterProperties;
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
 
@@ -141,7 +150,7 @@ public class SecurityConfiguration {
     public SecurityConfiguration(<% if (devDatabaseTypeH2Any) { %>Environment env, <% } %><% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (devDatabaseTypeH2Any) { _%>
         this.env = env;
-<%_ } _%>       
+<%_ } _%>
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
         this.rememberMeServices = rememberMeServices;
 <%_ } _%>
@@ -164,8 +173,7 @@ public class SecurityConfiguration {
             .csrf(csrf -> csrf
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                // See https://stackoverflow.com/q/74447118/65681
-                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
+                .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
 <%_ } else { _%>
                 .disable())
 <%_ } _%>
@@ -221,6 +229,18 @@ public class SecurityConfiguration {
 <%_ } _%>
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/**")).authenticated()
+<%_ if (applicationTypeGateway) { _%>
+  <%_ if (microfrontend) { _%>
+                    // microfrontend resources are loaded by webpack without authentication, they need to be public
+                    .requestMatchers(mvc.pattern("/services/*/*.js")).permitAll()
+                    .requestMatchers(mvc.pattern("/services/*/*.txt")).permitAll()
+                    .requestMatchers(mvc.pattern("/services/*/*.json")).permitAll()
+                    .requestMatchers(mvc.pattern("/services/*/*.js.map")).permitAll()
+  <%_ } _%>
+                    .requestMatchers(mvc.pattern("/services/*/management/health/readiness")).permitAll()
+                    .requestMatchers(mvc.pattern("/services/*/v3/api-docs")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/services/**")).authenticated()
+<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
                     .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
 <%_ } _%>
@@ -267,9 +287,9 @@ public class SecurityConfiguration {
 				.accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 <%_ } else if (authenticationTypeOauth2) { _%>
-  <%_ if (applicationTypeMonolith) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
-  <%_ } else if (applicationTypeMicroservice) { _%>
+  <%_ } else { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } _%>
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -350,6 +370,48 @@ public class SecurityConfiguration {
   <%_ } _%>
 
         return jwtDecoder;
+    }
+<%_ } _%>
+<%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
+
+    /**
+     * Custom CSRF handler to provide BREACH protection.
+     *
+     * @see <a href="https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#csrf-integration-javascript-spa">Spring Security Documentation - Integrating with CSRF Protection</a>
+     * @see <a href="https://github.com/jhipster/generator-jhipster/pull/25907">JHipster - use customized SpaCsrfTokenRequestHandler to handle CSRF token</a>
+     * @see <a href="https://stackoverflow.com/q/74447118/65681">CSRF protection not working with Spring Security 6</a>
+     */
+    static final class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
+        private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
+
+        @Override
+        public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
+            /*
+             * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection of
+             * the CsrfToken when it is rendered in the response body.
+             */
+            this.delegate.handle(request, response, csrfToken);
+        }
+
+        @Override
+        public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
+            /*
+             * If the request contains a request header, use CsrfTokenRequestAttributeHandler
+             * to resolve the CsrfToken. This applies when a single-page application includes
+             * the header value automatically, which was obtained via a cookie containing the
+             * raw CsrfToken.
+             */
+            if (StringUtils.hasText(request.getHeader(csrfToken.getHeaderName()))) {
+                return super.resolveCsrfTokenValue(request, csrfToken);
+            }
+            /*
+             * In all other cases (e.g. if the request contains a request parameter), use
+             * XorCsrfTokenRequestAttributeHandler to resolve the CsrfToken. This applies
+             * when a server-side rendered form includes the _csrf request parameter as a
+             * hidden input.
+             */
+            return this.delegate.resolveCsrfTokenValue(request, csrfToken);
+        }
     }
 <%_ } _%>
 }

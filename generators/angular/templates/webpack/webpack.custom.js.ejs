@@ -62,7 +62,7 @@ module.exports = async (config, options, targetOptions) => {
   }
 
   // configuring proxy for back end service
-  const tls = Boolean(config.devServer && config.devServer.https);
+  const tls = config.devServer?.server?.type === 'https';
   if (config.devServer) {
     config.devServer.proxy = proxyConfig({ tls });
   }

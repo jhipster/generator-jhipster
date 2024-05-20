@@ -16,15 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { capitalize } from 'lodash-es';
 
-import * as _ from 'lodash-es';
 import { validations } from '../../jhipster/index.js';
 import formatComment from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';
 import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
-import { Field } from '../types.js';
+import { JSONField } from '../types.js';
 import { JDLEntity } from '../../models/index.js';
+import JDLField from '../../models/jdl-field.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },
@@ -41,11 +42,11 @@ export default { convert };
  * @param jdlObject - the JDL object containing entities, fields and enums.
  * @return a map having for keys an entity's name and for values its JSON fields.
  */
-export function convert(jdlObject: JDLObject): Map<string, Field[]> {
+export function convert(jdlObject: JDLObject): Map<string, JSONField[]> {
   if (!jdlObject) {
     throw new Error('A JDL Object must be passed to convert JDL fields to JSON.');
   }
-  const convertedFields = new Map<string, Field[]>();
+  const convertedFields = new Map<string, JSONField[]>();
   jdlObject.forEachEntity(jdlEntity => {
     const convertedEntityFields = getConvertedFieldsForEntity(jdlEntity, jdlObject);
     convertedFields.set(jdlEntity.name, convertedEntityFields);
@@ -53,10 +54,10 @@ export function convert(jdlObject: JDLObject): Map<string, Field[]> {
   return convertedFields;
 }
 
-function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject): Field[] {
-  const convertedEntityFields: Field[] = [];
+function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject): JSONField[] {
+  const convertedEntityFields: JSONField[] = [];
   jdlEntity.forEachField(jdlField => {
-    let fieldData: Field = {
+    let fieldData: JSONField = {
       fieldName: camelCase(jdlField.name),
       fieldType: jdlField.type,
     };
@@ -65,12 +66,12 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
       fieldData.documentation = comment;
     }
     if (jdlObject.hasEnum(jdlField.type)) {
-      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType).getValuesAsString();
-      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType).comment;
+      fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType)?.getValuesAsString();
+      const fieldTypeComment = jdlObject.getEnum(fieldData.fieldType)?.comment;
       if (fieldTypeComment) {
         fieldData.fieldTypeDocumentation = fieldTypeComment;
       }
-      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType).getValueJavadocs();
+      const fieldValuesJavadocs = jdlObject.getEnum(fieldData.fieldType)?.getValueJavadocs();
       if (fieldValuesJavadocs && Object.keys(fieldValuesJavadocs).length > 0) {
         fieldData.fieldValuesJavadocs = fieldValuesJavadocs;
       }
@@ -101,7 +102,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   return convertedEntityFields;
 }
 
-function getBlobFieldData(fieldType) {
+function getBlobFieldData(fieldType: string): { fieldType: 'bytes'; fieldTypeBlobContent: 'image' | 'any' | 'text' } {
   const blobFieldData: any = {
     fieldType: BYTES,
   };
@@ -122,20 +123,20 @@ function getBlobFieldData(fieldType) {
   return blobFieldData;
 }
 
-function getFieldValidations(jdlField) {
+function getFieldValidations(jdlField: JDLField) {
   const fieldValidations: any = {
     fieldValidateRules: [],
   };
   jdlField.forEachValidation(validation => {
     fieldValidations.fieldValidateRules.push(validation.name);
     if (validation.name !== REQUIRED && validation.name !== UNIQUE) {
-      fieldValidations[`fieldValidateRules${_.capitalize(validation.name)}`] = validation.value;
+      fieldValidations[`fieldValidateRules${capitalize(validation.name)}`] = validation.value;
     }
   });
   return fieldValidations;
 }
 
-function getOptionsForField(jdlField) {
+function getOptionsForField(jdlField: JDLField) {
   const fieldOptions = {
     options: {},
   };

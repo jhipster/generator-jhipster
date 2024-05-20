@@ -19,8 +19,10 @@
 
 const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:(?!\}\))[\s\S])*\}))?\)/gs.source;
 
-export const escapeTranslationValue = (translation: string) =>
+export const escapeHtmlTranslationValue = (translation: string) =>
   translation.replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/@/g, '&#64;');
+
+export const escapeTsTranslationValue = (translation: string) => translation.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
 
 function getTranslationValue(getWebappTranslation, key, data) {
   return getWebappTranslation(key, data) || undefined;
@@ -84,7 +86,7 @@ export const replaceTranslationKeysWithText = (
       replacement = `${wrapTranslation[0]}${translation}${wrapTranslation[1]}`;
     } else if (escapeHtml) {
       // Escape specific chars
-      replacement = escapeTranslationValue(replacement);
+      replacement = escapeHtmlTranslationValue(replacement);
     } else if (stringify) {
       replacement = JSON.stringify(replacement);
     }
@@ -102,7 +104,8 @@ export const createJhiTransformTranslateStringifyReplacer = getWebappTranslation
   });
 
 export type JHITranslateConverterOptions = {
-  /** Translation tyoe */
+  filePath: string;
+  /** Translation type */
   type: string;
   /** Translation key */
   key: string;
@@ -118,7 +121,7 @@ export type JHITranslateConverterOptions = {
 
 export type JHITranslateConverter = (opts: JHITranslateConverterOptions) => string;
 
-export const replaceTranslateContents = (body: string, regexp: string, converter: JHITranslateConverter) => {
+export const replaceTranslateContents = (body: string, filePath: string, regexp: string, converter: JHITranslateConverter) => {
   const matches = [...body.matchAll(new RegExp(regexp, 'g'))].reverse();
   for (const match of matches) {
     const target = match[0];
@@ -141,7 +144,7 @@ export const replaceTranslateContents = (body: string, regexp: string, converter
       }
     }
 
-    body = `${body.slice(0, match.index!)}${converter({ key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index! + target.length)}`;
+    body = `${body.slice(0, match.index!)}${converter({ filePath, key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index! + target.length)}`;
   }
   return body;
 };
@@ -155,9 +158,10 @@ export type JHITranslateReplacerOptions = {
 
 export const createJhiTranslateReplacer =
   (converter: JHITranslateConverter, { prefixPattern = '', suffixPattern = '' }: JHITranslateReplacerOptions = {}) =>
-  (body: string) =>
+  (body: string, filePath: string) =>
     replaceTranslateContents(
       body,
+      filePath,
       `${prefixPattern ? `(?<prefix>(${prefixPattern}))?` : ''}__jhiTranslate(?<type>(\\w+))__${TRANSLATE_FUNCTION_ARGS}${suffixPattern ? `(?<suffix>(${suffixPattern}))?` : ''}`,
       converter,
     );

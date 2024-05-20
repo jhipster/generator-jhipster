@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { defaults } from 'lodash-es';
 import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
 import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
@@ -302,7 +302,7 @@ function addOrExtendFields(fields, fieldsToAdd) {
         fields.push(field);
       }
     } else {
-      _.defaults(field, fieldToAdd);
+      defaults(field, fieldToAdd);
     }
   }
 }
@@ -316,7 +316,7 @@ function addOrExtendRelationships(relationships, relationshipsToAdd) {
       relationship = { ...relationshipToAdd };
       relationships.push(relationship);
     } else {
-      _.defaults(relationship, relationshipToAdd);
+      defaults(relationship, relationshipToAdd);
     }
   }
 }

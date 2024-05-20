@@ -21,6 +21,11 @@ import chalk from 'chalk';
 import { sortedUniqBy } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import {
+  GENERATOR_CUCUMBER,
+  GENERATOR_DOCKER,
+  GENERATOR_FEIGN_CLIENT,
+  GENERATOR_GATLING,
+  GENERATOR_LANGUAGES,
   GENERATOR_SERVER,
   GENERATOR_SPRING_CACHE,
   GENERATOR_SPRING_CLOUD_STREAM,
@@ -53,10 +58,12 @@ import {
   fieldTypes,
   messageBrokerTypes,
   searchEngineTypes,
+  testFrameworkTypes,
   websocketTypes,
 } from '../../jdl/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
+import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -66,7 +73,7 @@ const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
-
+const { CUCUMBER, GATLING } = testFrameworkTypes;
 export default class SpringBootGenerator extends BaseApplicationGenerator {
   fakeKeytool;
 
@@ -77,6 +84,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_SERVER);
+      await this.dependsOnJHipster('jhipster:java:domain');
+      await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
 
@@ -92,30 +101,32 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
+  get prompting() {
+    return this.asPromptingTaskGroup({
+      async promptCommand({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.promptCurrentJHipsterCommand();
+      },
+      askForServerTestOpts,
+      askForServerSideOpts,
+      askForOptionalItems,
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.delegateTasksToBlueprint(() => this.prompting);
+  }
+
   get configuring() {
     return this.asConfiguringTaskGroup({
-      forceReactiveGateway() {
-        if (this.jhipsterConfig.applicationType === GATEWAY) {
-          if (this.jhipsterConfig.reactive !== undefined && !this.jhipsterConfig.reactive) {
-            this.log.warn('Non reactive gateway is not supported. Switching to reactive.');
-          }
-          this.jhipsterConfig.reactive = true;
-        }
+      async configureCommand() {
+        await this.configureCurrentJHipsterCommandConfig();
       },
       checks() {
         const config = this.jhipsterConfigWithDefaults;
         if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
           this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
           this.jhipsterConfig.enableHibernateCache = false;
-        }
-
-        if (config.websocket && config.websocket !== NO_WEBSOCKET) {
-          if (config.reactive) {
-            throw new Error('Spring Websocket is not supported with reactive applications.');
-          }
-          if (config.applicationType === MICROSERVICE) {
-            throw new Error('Spring Websocket is not supported with microservice applications.');
-          }
         }
       },
       feignMigration() {
@@ -147,15 +158,39 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        const { databaseType, messageBroker, searchEngine, websocket, cacheProvider, buildTool, skipClient, clientFramework } =
-          this.jhipsterConfigWithDefaults;
+        const {
+          applicationType,
+          databaseType,
+          messageBroker,
+          searchEngine,
+          websocket,
+          cacheProvider,
+          skipClient,
+          clientFramework,
+          testFrameworks,
+          feignClient,
+        } = this.jhipsterConfigWithDefaults;
 
-        if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:code-quality');
-          await this.composeWithJHipster('jhipster:gradle:jib');
-          if (!skipClient && clientFramework !== 'no') {
-            await this.composeWithJHipster('jhipster:gradle:node-gradle');
-          }
+        await this.composeWithJHipster(GENERATOR_DOCKER);
+        await this.composeWithJHipster('jhipster:java:jib');
+        await this.composeWithJHipster('jhipster:java:code-quality');
+
+        if (!skipClient && clientFramework !== 'no') {
+          await this.composeWithJHipster('jhipster:java:node');
+        }
+
+        if (applicationType === GATEWAY) {
+          await this.composeWithJHipster('jhipster:spring-cloud:gateway');
+        }
+
+        if (testFrameworks?.includes(CUCUMBER)) {
+          await this.composeWithJHipster(GENERATOR_CUCUMBER);
+        }
+        if (testFrameworks?.includes(GATLING)) {
+          await this.composeWithJHipster(GENERATOR_GATLING);
+        }
+        if (feignClient) {
+          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
         }
 
         if (databaseType === SQL) {
@@ -189,8 +224,45 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
+  get composingComponent() {
+    return this.asComposingComponentTaskGroup({
+      async composeLanguages() {
+        if (this.jhipsterConfigWithDefaults.enableTranslation) {
+          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
+    return this.delegateTasksToBlueprint(() => this.composingComponent);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      async loadCommand({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
+      checksWebsocket({ application }) {
+        const { websocket } = application as any;
+        if (websocket && websocket !== NO_WEBSOCKET) {
+          if (application.reactive) {
+            throw new Error('Spring Websocket is not supported with reactive applications.');
+          }
+          if (application.applicationType === MICROSERVICE) {
+            throw new Error('Spring Websocket is not supported with microservice applications.');
+          }
+        }
+      },
       loadSpringBootBom({ application }) {
         if (this.useVersionPlaceholders) {
           application.springBootDependencies = {
@@ -321,6 +393,20 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
 
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
+      checkUserRelationships({ entity, entityName, relationship }) {
+        if (!entity.dtoMapstruct && relationship.otherEntity.builtInUser) {
+          this.log.warn(
+            `Entity ${entityName} doesn't use DTO. You should check for User data leakage through ${relationship.relationshipName} relationship.`,
+          );
+        }
+      },
+      checkDtoRelationships({ entity, entityName, relationship }) {
+        if (entity.dto !== relationship.otherEntity.dto && !relationship.otherEntity.builtIn) {
+          this.log.warn(
+            `Relationship between entities with different DTO configurations can cause unexpected results. Check ${relationship.relationshipName} in the ${entityName} entity.`,
+          );
+        }
+      },
       prepareEntity({ relationship }) {
         if (relationship.otherEntity.embedded) return;
 
@@ -378,7 +464,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       async writeFiles({ application }) {
         return this.writeFiles({
           sections: serverFiles,
-          rootTemplatesPath: ['', '../../server/templates/', '../../java/templates/'],
+          rootTemplatesPath: ['', '../../server/templates/', '../../java/generators/domain/templates/'],
           context: application,
         });
       },

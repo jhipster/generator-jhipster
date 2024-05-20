@@ -19,13 +19,26 @@
 
 name: Setup default Node and Java
 description: Setup default Node and Java
+inputs:
+  generator-path:
+    description: 'path to the generator-jhipster repository relative to workspace'
+    default: generator-jhipster
 runs:
   using: composite
   steps:
+    - run: |
+        source "${{ github.workspace }}/${{ inputs.generator-path }}/test-integration/scripts/00-init-env.sh"
+        echo "java-version=$JHI_JDK" >> $GITHUB_OUTPUT
+        echo "node-version=$JHI_NODE_VERSION" >> $GITHUB_OUTPUT
+        echo "npm-version=$JHI_NPM_VERSION" >> $GITHUB_OUTPUT
+      shell: bash
+      id: setup
     - uses: actions/setup-node@v4
       with:
-        node-version: 18.19.0
+        node-version: ${{ steps.setup.outputs.node-version }}
+    - run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
+      shell: bash
     - uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: 17
+        java-version: ${{ steps.setup.outputs.java-version }}

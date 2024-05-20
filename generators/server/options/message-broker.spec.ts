@@ -4,7 +4,7 @@ import { MESSAGE_BROKER } from './index.js';
 import optionDefinition from './message-broker.js';
 
 describe('generators - server - jdl - messageBroker', () => {
-  optionDefinition.knownChoices.forEach(optionValue => {
+  optionDefinition.knownChoices!.forEach(optionValue => {
     describe(`with ${optionValue} value`, () => {
       let state: ImportState;
 

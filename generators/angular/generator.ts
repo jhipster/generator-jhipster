@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
+import { camelCase } from 'lodash-es';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -55,7 +55,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_ANGULAR);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
@@ -160,6 +160,42 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareField({ field }) {
+        mutateData(field, {
+          fieldTsDefaultValue: ({ fieldTsDefaultValue, defaultValue, fieldTypeCharSequence, fieldTypeTimed }) => {
+            let returnValue: string | undefined;
+            if (fieldTsDefaultValue !== undefined || defaultValue !== undefined) {
+              let fieldDefaultValue;
+              if (fieldTsDefaultValue !== undefined) {
+                fieldDefaultValue = fieldTsDefaultValue;
+              } else {
+                fieldDefaultValue = defaultValue;
+              }
+
+              fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, "\\'");
+
+              if (fieldTypeCharSequence) {
+                returnValue = `'${fieldDefaultValue}'`;
+              } else if (fieldTypeTimed) {
+                returnValue = `dayjs('${fieldDefaultValue}')`;
+              } else {
+                returnValue = fieldDefaultValue;
+              }
+            }
+
+            return returnValue;
+          },
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       loadEntities() {
@@ -204,6 +240,34 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addWebsocketDependencies({ application }) {
+        const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
+        const dependencies = {};
+        if (communicationSpringWebsocket) {
+          if (authenticationTypeSession) {
+            dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];
+          }
+          this.packageJson.merge({
+            dependencies: {
+              'sockjs-client': nodeDependencies['sockjs-client'],
+              '@stomp/rx-stomp': nodeDependencies['@stomp/rx-stomp'],
+              ...dependencies,
+            },
+            devDependencies: {
+              '@types/sockjs-client': nodeDependencies['@types/sockjs-client'],
+            },
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   get postWritingEntities() {
@@ -306,7 +370,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {boolean} enableTranslation - If translations are enabled or not
    * @param {string} translationKeyMenu - i18n key for entry in the admin menu
    */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = _.camelCase(routerName), jhiPrefix?) {
+  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = camelCase(routerName), jhiPrefix?) {
     this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
   }
 
@@ -422,7 +486,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} clientFramework - The name of the client framework
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = camelCase(routerName)) {
     this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }

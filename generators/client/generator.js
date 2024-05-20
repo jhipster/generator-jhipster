@@ -25,8 +25,7 @@ import { writeFiles as writeCommonFiles } from './files-common.js';
 import { addEnumerationFiles } from './entity-files.js';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.js';
-import statistics from '../statistics.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
+import { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
@@ -44,12 +43,12 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     loadStoredAppOptions.call(this);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_CLIENT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_COMMON);
     }
   }
@@ -212,25 +211,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
-  get default() {
-    return this.asDefaultTaskGroup({
-      insight({ application }) {
-        statistics.sendSubGenEvent('generator', GENERATOR_CLIENT, {
-          app: {
-            clientFramework: application.clientFramework,
-            enableTranslation: application.enableTranslation,
-            nativeLanguage: application.nativeLanguage,
-            languages: application.languages,
-          },
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
-  }
-
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
@@ -270,11 +250,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
         }
         const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
-
-        const packageJsonConfigStorage = packageJsonStorage.createStorage('config').createProxy();
-        if (process.env.JHI_PROFILE) {
-          packageJsonConfigStorage.default_environment = process.env.JHI_PROFILE.includes('dev') ? 'dev' : 'prod';
-        }
 
         const devDependencies = packageJsonStorage.createStorage('devDependencies');
         devDependencies.set('wait-on', application.nodeDependencies['wait-on']);

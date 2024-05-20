@@ -81,6 +81,7 @@ entity Task {
   title String
   description String
 }
+
 enum Language {
   FRENCH,
   ENGLISH,
@@ -199,6 +200,7 @@ entity Task {
   title String
   description String
 }
+
 enum Language {
   FRENCH,
   ENGLISH,

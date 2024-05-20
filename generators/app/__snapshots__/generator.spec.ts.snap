@@ -29,17 +29,14 @@ Options:
   --jdl-store <value>                      JDL store
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
-  --auth <value>                           Provide authentication type for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
   --skip-user-management                   Skip the user management module during app generation
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
-  --build <value>                          Provide build tool for the application when skipping server side generation
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
   --enable-hibernate-cache                 Enable hibernate cache
   --message-broker <value>                 message broker
-  --reactive                               Generate a reactive backend
   --search-engine <value>                  Provide search engine for the application when skipping server side generation
   --skip-check-length-of-identifier        Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata
   --skip-db-changelog                      Skip the generation of database migrations
@@ -48,9 +45,16 @@ Options:
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
   --jhipster-dependencies-version <value>  jhipster-dependencies version to use, this option is not persisted (env: JHIPSTER_DEPENDENCIES_VERSION)
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
+  --reactive                               Generate a reactive backend
+  --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
+  --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --feign-client                           Generate a feign client
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
+  --package-name <value>                   The package name for the generated application
+  --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
+  --enable-gradle-enterprise               Enable Gradle Enterprise integration
+  --gradle-enterprise-host <value>         Gradle Enterprise Host
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
@@ -122,7 +126,6 @@ exports[`generator - app jdlStore with application should match snapshot 1`] = `
     skipServer true
   }
 }
-
 ",
     "stateCleared": "modified",
   },
@@ -441,10 +444,14 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "",
+  "entityPackages": [
+    "com.mycompany.myapp",
+  ],
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": undefined,
   "frontendAppName": "jhipsterApp",
+  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "gatlingTests": false,
   "generateAuthenticationApi": true,
@@ -455,6 +462,19 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "generateUserManagement": true,
   "gradleEnterpriseHost": undefined,
   "hipster": "jhipster_family_member_3",
+  "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
+  "hipsterBugTrackerProductName": "JHipster",
+  "hipsterChatLink": "https://gitter.im/jhipster/generator-jhipster",
+  "hipsterChatProductName": "JHipster",
+  "hipsterDocumentationLink": "https://www.jhipster.tech/",
+  "hipsterHomePageProductName": "JHipster",
+  "hipsterName": "Java Hipster",
+  "hipsterProductName": "JHipster",
+  "hipsterProjectLink": "https://github.com/jhipster/generator-jhipster",
+  "hipsterStackOverflowProductName": "JHipster",
+  "hipsterStackoverflowLink": "https://stackoverflow.com/tags/jhipster/info",
+  "hipsterTwitterLink": "https://twitter.com/jhipster",
+  "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
@@ -594,8 +614,10 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "@ngx-translate/core": "NGX_TRANSLATE_CORE_VERSION",
     "@ngx-translate/http-loader": "NGX_TRANSLATE_HTTP_LOADER_VERSION",
     "@popperjs/core": "POPPERJS_CORE_VERSION",
+    "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
     "@types/jest": "TYPES_JEST_VERSION",
     "@types/node": "TYPES_NODE_VERSION",
+    "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
     "@typescript-eslint/eslint-plugin": "TYPESCRIPT_ESLINT_ESLINT_PLUGIN_VERSION",
     "babel-loader": "BABEL_LOADER_VERSION",
     "babel-plugin-istanbul": "BABEL_PLUGIN_ISTANBUL_VERSION",
@@ -633,6 +655,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
     "rimraf": "RIMRAF_VERSION",
     "rxjs": "RXJS_VERSION",
+    "sockjs-client": "SOCKJS_CLIENT_VERSION",
     "swagger-ui-dist": "SWAGGER_UI_DIST_VERSION",
     "ts-jest": "TS_JEST_VERSION",
     "tslib": "TSLIB_VERSION",
@@ -1018,10 +1041,14 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "",
+  "entityPackages": [
+    "com.mycompany.myapp",
+  ],
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": undefined,
   "frontendAppName": "jhipsterApp",
+  "gatewayRoutes": [],
   "gatewayServerPort": undefined,
   "gatlingTests": false,
   "generateAuthenticationApi": true,
@@ -1032,6 +1059,19 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "generateUserManagement": true,
   "gradleEnterpriseHost": undefined,
   "hipster": "jhipster_family_member_3",
+  "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
+  "hipsterBugTrackerProductName": "JHipster",
+  "hipsterChatLink": "https://gitter.im/jhipster/generator-jhipster",
+  "hipsterChatProductName": "JHipster",
+  "hipsterDocumentationLink": "https://www.jhipster.tech/",
+  "hipsterHomePageProductName": "JHipster",
+  "hipsterName": "Java Hipster",
+  "hipsterProductName": "JHipster",
+  "hipsterProjectLink": "https://github.com/jhipster/generator-jhipster",
+  "hipsterStackOverflowProductName": "JHipster",
+  "hipsterStackoverflowLink": "https://stackoverflow.com/tags/jhipster/info",
+  "hipsterTwitterLink": "https://twitter.com/jhipster",
+  "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "reactive",
   "incrementalChangelog": undefined,
@@ -1165,8 +1205,10 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "@ngx-translate/core": "NGX_TRANSLATE_CORE_VERSION",
     "@ngx-translate/http-loader": "NGX_TRANSLATE_HTTP_LOADER_VERSION",
     "@popperjs/core": "POPPERJS_CORE_VERSION",
+    "@stomp/rx-stomp": "STOMP_RX_STOMP_VERSION",
     "@types/jest": "TYPES_JEST_VERSION",
     "@types/node": "TYPES_NODE_VERSION",
+    "@types/sockjs-client": "TYPES_SOCKJS_CLIENT_VERSION",
     "@typescript-eslint/eslint-plugin": "TYPESCRIPT_ESLINT_ESLINT_PLUGIN_VERSION",
     "babel-loader": "BABEL_LOADER_VERSION",
     "babel-plugin-istanbul": "BABEL_PLUGIN_ISTANBUL_VERSION",
@@ -1204,6 +1246,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
     "rimraf": "RIMRAF_VERSION",
     "rxjs": "RXJS_VERSION",
+    "sockjs-client": "SOCKJS_CLIENT_VERSION",
     "swagger-ui-dist": "SWAGGER_UI_DIST_VERSION",
     "ts-jest": "TS_JEST_VERSION",
     "tslib": "TSLIB_VERSION",
@@ -1290,6 +1333,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": true,
   "rememberMeKey": undefined,
+  "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -1589,10 +1633,14 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "enableSwaggerCodegen": false,
   "enableTranslation": true,
   "endpointPrefix": "services/jhipster",
+  "entityPackages": [
+    "com.mycompany.myapp",
+  ],
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": undefined,
   "frontendAppName": "jhipsterApp",
+  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "gatlingTests": false,
   "generateAuthenticationApi": false,
@@ -1603,6 +1651,19 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "generateUserManagement": false,
   "gradleEnterpriseHost": undefined,
   "hipster": "jhipster_family_member_3",
+  "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
+  "hipsterBugTrackerProductName": "JHipster",
+  "hipsterChatLink": "https://gitter.im/jhipster/generator-jhipster",
+  "hipsterChatProductName": "JHipster",
+  "hipsterDocumentationLink": "https://www.jhipster.tech/",
+  "hipsterHomePageProductName": "JHipster",
+  "hipsterName": "Java Hipster",
+  "hipsterProductName": "JHipster",
+  "hipsterProjectLink": "https://github.com/jhipster/generator-jhipster",
+  "hipsterStackOverflowProductName": "JHipster",
+  "hipsterStackoverflowLink": "https://stackoverflow.com/tags/jhipster/info",
+  "hipsterTwitterLink": "https://twitter.com/jhipster",
+  "hipsterTwitterUsername": "@jhipster",
   "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,

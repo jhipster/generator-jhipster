@@ -18,22 +18,19 @@
  */
 /* eslint-disable consistent-return, import/no-named-as-default-member */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { camelCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { checkNode, loadStoredAppOptions } from './support/index.js';
 import cleanupOldFilesTask from './cleanup.js';
-import { askForInsightOptIn } from './prompts.js';
-import statistics from '../statistics.js';
 import { GENERATOR_COMMON, GENERATOR_CLIENT, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 import { packageJson } from '../../lib/index.js';
 
-import { applicationTypes, applicationOptions } from '../../jdl/jhipster/index.js';
+import { applicationTypes } from '../../jdl/jhipster/index.js';
 import command from './command.js';
 
 const { MICROSERVICE } = applicationTypes;
-const { JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY } = applicationOptions.OptionNames;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
   command = command;
@@ -82,7 +79,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get prompting() {
     return this.asPromptingTaskGroup({
-      askForInsightOptIn,
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
         await this.prompt(this.prepareQuestions(this.command.configs));
@@ -107,7 +103,7 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
       },
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
-          this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+          this.jhipsterConfig.jhiPrefix = camelCase(this.jhipsterConfig.jhiPrefix);
         }
       },
       defaults() {
@@ -134,8 +130,8 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  get composing() {
-    return this.asComposingTaskGroup({
+  get composingComponent() {
+    return this.asComposingComponentTaskGroup({
       /**
        * Composing with others generators, must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
@@ -158,36 +154,11 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           await this.composeWithJHipster(GENERATOR_CLIENT);
         }
       },
-      /**
-       * At this point every other generator should already be configured, so, enforce defaults fallback.
-       */
-      saveConfigWithDefaults() {
-        const config = this.jhipsterConfigWithDefaults;
-        if (config.entitySuffix === config.dtoSuffix) {
-          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-        }
-      },
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get default() {
-    return this.asDefaultTaskGroup({
-      insight({ control }) {
-        const yorc = {
-          ..._.omit(this.jhipsterConfig, [JHI_PREFIX, BASE_NAME, JWT_SECRET_KEY, PACKAGE_NAME, PACKAGE_FOLDER, REMEMBER_ME_KEY]),
-        };
-        yorc.applicationType = this.jhipsterConfig.applicationType;
-        statistics.sendYoRc(yorc, control.existingProject, this.jhipsterConfig.jhipsterVersion);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.delegateTasksToBlueprint(() => this.default);
+  get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
+    return this.delegateTasksToBlueprint(() => this.composingComponent);
   }
 
   get writing() {

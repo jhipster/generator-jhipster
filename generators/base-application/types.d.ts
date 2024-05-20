@@ -117,11 +117,26 @@ export type CommonClientServerApplication = BaseApplication &
     backendTypeSpringBoot?: boolean;
     temporaryDir?: string;
 
+    hipsterName?: string;
+    hipsterProductName?: string;
+    hipsterHomePageProductName?: string;
+    hipsterStackOverflowProductName?: string;
+    hipsterBugTrackerProductName?: string;
+    hipsterChatProductName?: string;
+    hipsterTwitterUsername?: string;
+    hipsterDocumentationLink?: string;
+    hipsterTwitterLink?: string;
+    hipsterProjectLink?: string;
+    hipsterStackoverflowLink?: string;
+    hipsterBugTrackerLink?: string;
+    hipsterChatLink?: string;
+
     dockerServicesDir?: string;
     dockerServices?: string[];
     prettierExtensions?: string;
 
     skipUserManagement?: boolean;
+    syncUserWithIdp?: boolean;
     generateUserManagement?: boolean;
   };
 

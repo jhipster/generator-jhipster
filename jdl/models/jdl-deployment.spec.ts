@@ -34,6 +34,7 @@ describe('jdl - JDLDeployment', () => {
     describe('when not passing the deploymentType', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error
           new JDLDeployment({ deploymentType: null });
         }).toThrow(/^The deploymentType is mandatory to create a deployment\.$/);
       });
@@ -77,9 +78,9 @@ describe('jdl - JDLDeployment', () => {
       it('should stringify its content without default values', () => {
         expect(deployment.toString()).toMatchInlineSnapshot(`
 "deployment {
+    deploymentType docker-compose
     appsFolders [foo, bar]
     clusteredDbApps []
-    deploymentType docker-compose
     dockerRepositoryName test
   }"
 `);
@@ -103,10 +104,10 @@ describe('jdl - JDLDeployment', () => {
       it('should stringify it', () => {
         expect(deployment.toString()).toMatchInlineSnapshot(`
 "deployment {
+    deploymentType docker-compose
     appsFolders [foo, bar]
     directoryPath ../parent
     clusteredDbApps []
-    deploymentType docker-compose
     dockerRepositoryName test
   }"
 `);

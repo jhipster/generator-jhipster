@@ -16,11 +16,29 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (!sbs && !customGenerator) { _%>
+import { command as jhipsterCommand } from 'generator-jhipster/generators/<%- subGenerator %>';
+
+<%_ } _%>
 /**
  * @type {import('generator-jhipster').JHipsterCommandDefinition}
  */
 const command = {
-  options: {},
+  options: {
+<%_ if (!sbs && !customGenerator) { _%>
+    ...jhipsterCommand.options,
+<%_ } _%>
+  },
+  configs: {
+<%_ if (!sbs && !customGenerator) { _%>
+    ...jhipsterCommand.configs,
+<%_ } _%>
+  },
+  arguments: {
+<%_ if (!sbs && !customGenerator) { _%>
+    ...jhipsterCommand.arguments,
+<%_ } _%>
+  },
 };
 
 export default command;

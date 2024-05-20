@@ -1,20 +1,16 @@
 import { join } from 'path';
-import * as _ from 'lodash-es';
+import { merge } from 'lodash-es';
 import BaseGenerator from '../../generators/base/index.js';
 import { getPackageRoot } from '../../lib/index.js';
-import command from './command.mjs';
 import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '../support.mjs';
-
-const { merge } = _;
 
 export default class extends BaseGenerator {
   samplePath;
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
-      async initializeOptions() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }

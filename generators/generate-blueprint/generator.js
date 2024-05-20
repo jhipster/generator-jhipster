@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import lodash from 'lodash';
+import { camelCase, upperFirst, snakeCase } from 'lodash-es';
 
 import BaseGenerator from '../base/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
@@ -46,16 +46,14 @@ import * as GENERATOR_LIST from '../generator-list.js';
 import { files, generatorFiles } from './files.js';
 import { packageJson } from '../../lib/index.js';
 import { SKIP_COMMIT_HOOK } from '../init/constants.js';
-import command from './command.js';
 import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 
-const { camelCase, upperFirst, snakeCase } = lodash;
-const { GENERATOR_PROJECT_NAME, GENERATOR_INIT, GENERATOR_GENERATE_BLUEPRINT } = GENERATOR_LIST;
+const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;
 
 export default class extends BaseGenerator {
   async _beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_GENERATE_BLUEPRINT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
@@ -64,9 +62,10 @@ export default class extends BaseGenerator {
   }
 
   get initializing() {
-    return {
-      loadOptions() {
-        this.parseJHipsterOptions(command.options);
+    return this.asInitializingTaskGroup({
+      async loadOptions() {
+        await this.parseCurrentJHipsterCommand();
+
         if (this[ALL_GENERATORS]) {
           this.config.set(allGeneratorsConfig());
         }
@@ -74,7 +73,7 @@ export default class extends BaseGenerator {
           this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.INITIALIZING]() {
@@ -156,14 +155,15 @@ export default class extends BaseGenerator {
   }
 
   get loading() {
-    return {
-      createContext() {
+    return this.asLoadingTaskGroup({
+      async createContext() {
         this.application = { ...defaultConfig(), ...this.config.getAll() };
+        await this.loadCurrentJHipsterCommandConfig(this.application);
       },
       async load() {
         this.application.packagejs = packageJson;
       },
-    };
+    });
   }
 
   get [BaseGenerator.LOADING]() {
@@ -185,6 +185,13 @@ export default class extends BaseGenerator {
       },
       preparePath() {
         this.application.blueprintsPath = this.application[LOCAL_BLUEPRINT_OPTION] ? '.blueprint/' : 'generators/';
+      },
+      prepare() {
+        const { cli, cliName, baseName } = this.application;
+        this.application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
+        if (cli) {
+          this.application.cliName = cliName ?? `jhipster-${baseName}`;
+        }
       },
     };
   }
@@ -280,7 +287,7 @@ export default class extends BaseGenerator {
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
              */
-            'yeoman-test': '>=8.0.0-rc.1',
+            'yeoman-test': '>=8.2.0',
           },
           engines: {
             node: packagejs.engines.node,
@@ -289,7 +296,7 @@ export default class extends BaseGenerator {
       },
       addCliToPackageJson() {
         if (!this.jhipsterConfig.cli || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const { baseName, cliName = `jhipster-${baseName}` } = this.application;
+        const { cliName } = this.application;
         this.packageJson.merge({
           bin: {
             [cliName]: 'cli/cli.cjs',

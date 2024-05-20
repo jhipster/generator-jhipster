@@ -63,6 +63,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       describe('such as no parameter', () => {
         it('should throw an error', () => {
           expect(() => {
+            // @ts-expect-error
             convert();
           }).to.throw(/^The JDL object, the application's name, and its the database type are mandatory\.$/);
         });
@@ -191,62 +192,62 @@ JSONEntity {
           const options = [
             new JDLUnaryOption({
               name: unaryOptions.EMBEDDED,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.NO_FLUENT_METHOD,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.FILTER,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.READ_ONLY,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.SKIP_CLIENT,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLUnaryOption({
               name: unaryOptions.SKIP_SERVER,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.ANGULAR_SUFFIX,
               value: 'suffix',
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
               value: '../client_root_folder',
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.DTO,
               value: binaryOptions.Values.dto.MAPSTRUCT,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.MICROSERVICE,
               value: 'myMs',
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.PAGINATION,
               value: binaryOptions.Values.pagination.PAGINATION,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.SEARCH,
               value: binaryOptions.Values.search.COUCHBASE,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
             new JDLBinaryOption({
               name: binaryOptions.Options.SERVICE,
               value: binaryOptions.Values.service.SERVICE_IMPL,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           ];
           jdlObject.addEntity(entityA);
@@ -304,7 +305,7 @@ JSONEntity {
             new JDLBinaryOption({
               name: binaryOptions.Options.DTO,
               value: binaryOptions.Values.dto.MAPSTRUCT,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           );
           const returnedMap: any = convert({
@@ -363,7 +364,7 @@ JSONEntity {
           jdlObject.addOption(
             new JDLUnaryOption({
               name: unaryOptions.FILTER,
-              entityNames: ['A'],
+              entityNames: new Set(['A']),
             }),
           );
           const returnedMap: any = convert({
@@ -418,11 +419,11 @@ JSONEntity {
           });
           jdlObject.addEntity(entityA);
           jdlObject.addOption(
-            new JDLUnaryOption({
+            new JDLBinaryOption({
               name: binaryOptions.Options.SEARCH,
-              values: binaryOptions.Values.search.COUCHBASE,
-              entityNames: ['*'],
-              excludedNames: ['A'],
+              value: binaryOptions.Values.search.COUCHBASE,
+              entityNames: new Set(['*']),
+              excludedNames: new Set(['A']),
             }),
           );
           const returnedMap: any = convert({
@@ -1041,6 +1042,8 @@ JSONEntity {
                   global: {
                     custom: 42,
                   },
+                  source: {},
+                  destination: {},
                 },
               });
               jdlObject.addEntity(entityA);
@@ -1087,6 +1090,8 @@ JSONEntity {
                   global: {
                     [BUILT_IN_ENTITY]: true,
                   },
+                  source: {},
+                  destination: {},
                 },
               });
               jdlObject.addEntity(entityA);

@@ -139,6 +139,7 @@ describe('jdl - JDLObject', () => {
       describe('such as a nil deployment', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             object.addDeployment(null);
           }).to.throw(/^Can't add nil deployment\.$/);
         });
@@ -152,7 +153,7 @@ describe('jdl - JDLObject', () => {
         object = new JDLObject();
         application = new JDLDeployment({
           deploymentType: 'docker-compose',
-          appFolders: ['tata'],
+          appsFolders: ['tata'],
           dockerRepositoryName: 'test',
         });
         object.addDeployment(application);
@@ -181,7 +182,7 @@ describe('jdl - JDLObject', () => {
         jdlObject.addDeployment(
           new JDLDeployment({
             deploymentType: 'docker-compose',
-            appFolders: ['tata'],
+            appsFolders: ['tata'],
             dockerRepositoryName: 'test',
           }),
         );
@@ -232,6 +233,7 @@ describe('jdl - JDLObject', () => {
       describe('such as a nil object', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             object.addEntity(null);
           }).to.throw(/^Can't add nil entity\.$/);
         });
@@ -246,7 +248,7 @@ describe('jdl - JDLObject', () => {
         entity = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid',
-          fields: [],
+          fields: {},
         });
         object.addEntity(entity);
       });
@@ -265,13 +267,13 @@ describe('jdl - JDLObject', () => {
         entity = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid',
-          fields: [],
+          fields: {},
         });
         object.addEntity(entity);
         entity2 = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid2',
-          fields: [],
+          fields: {},
         });
         object.addEntity(entity2);
       });
@@ -438,6 +440,7 @@ describe('jdl - JDLObject', () => {
       describe('such as a nil enum', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             object.addEnum(null);
           }).to.throw(/^Can't add nil enum\.$/);
         });
@@ -592,6 +595,7 @@ describe('jdl - JDLObject', () => {
       describe('such as a nil relationship', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             object.addRelationship(null);
           }).to.throw(/^Can't add nil relationship\.$/);
         });
@@ -600,6 +604,7 @@ describe('jdl - JDLObject', () => {
         it('should fail', () => {
           expect(() => {
             object.addRelationship(
+              // @ts-expect-error
               new JDLRelationship({
                 to: 'Valid',
                 type: relationshipTypes.MANY_TO_MANY,
@@ -735,6 +740,7 @@ describe('jdl - JDLObject', () => {
       describe('such as a nil option', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             object.addOption(null);
           }).to.throw(/^Can't add nil option\.$/);
         });
@@ -742,6 +748,7 @@ describe('jdl - JDLObject', () => {
       describe('such as an empty object', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error
             object.addOption({});
           }).to.throw(/^Can't add nil option\.$/);
         });
@@ -975,7 +982,7 @@ describe('jdl - JDLObject', () => {
       object.addApplication(application);
       deployment = new JDLDeployment({
         deploymentType: 'docker-compose',
-        appFolders: ['tata'],
+        appsFolders: ['tata'],
         dockerRepositoryName: 'test',
       });
       object.addDeployment(deployment);
@@ -1016,6 +1023,7 @@ ${deployment.toString()}
 
 ${entityA.toString()}
 ${entityB.toString()}
+
 ${enumObject.toString()}
 
 ${relationship.toString()}

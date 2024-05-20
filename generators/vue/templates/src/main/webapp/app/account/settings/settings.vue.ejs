@@ -21,7 +21,7 @@
           <strong>Email is already in use!</strong> Please choose another one.
         </div>
 
-        <form name="form" id="settings-form" role="form" v-on:submit.prevent="save()" v-if="settingsAccount" novalidate>
+        <form name="form" id="settings-form" v-on:submit.prevent="save()" v-if="settingsAccount" novalidate>
           <div class="form-group">
             <label class="form-control-label" for="firstName" v-text="t$('settings.form.firstname')">First Name</label>
             <input type="text" class="form-control" id="firstName" name="firstName"

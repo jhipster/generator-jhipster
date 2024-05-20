@@ -17,28 +17,25 @@
  * limitations under the License.
  */
 /* eslint-disable camelcase */
-import * as _ from 'lodash-es';
+import { intersection } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_SERVER, GENERATOR_DOCKER } from '../generator-list.js';
 import { dockerFiles } from './files.js';
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.js';
 import { stringHashCode, createFaker } from '../base/support/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-
-const { intersection } = _;
 
 export default class DockerGenerator extends BaseApplicationGenerator {
   hasServicesFile = false;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_DOCKER);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_SERVER.
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER);
+      await this.dependsOnBootstrapApplicationServer();
     }
   }
 

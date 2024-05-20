@@ -18,6 +18,11 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import <%= packageName %>.security.SecurityUtils;
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+import <%= packageName %>.domain.Authority;
+
+<%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
@@ -47,7 +52,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
   <%_ } _%>
 <%_ } _%>
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -55,6 +60,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -157,12 +163,21 @@ public class AccountResource {
 
     private static class UserVM {
         private String login;
+<%_ if (generateBuiltInAuthorityEntity) { _%>
+        private Set<Authority> authorities;
+<%_ } else { _%>
         private Set<String> authorities;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+        private Map<String, Object> details;
+<%_ } _%>
 
-        @JsonCreator
-        UserVM(String login, Set<String> authorities) {
+        UserVM(String login, Set<String> authorities<% if (authenticationTypeOauth2 || authenticationTypeJwt) { %>, Map<String, Object> details<% } %>) {
             this.login = login;
             this.authorities = authorities;
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+            this.details = details;
+<%_ } _%>
         }
 
         public boolean isActivated() {
@@ -176,22 +191,41 @@ public class AccountResource {
         public String getLogin() {
             return login;
         }
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+
+        @JsonAnyGetter
+        public Map<String, Object> getDetails() {
+            return details;
+        }
+<%_ } _%>
     }
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
 
-    private UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
-        if (
+    private static UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+        Map<String, Object> attributes;
+        if (authToken instanceof JwtAuthenticationToken) {
+            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
   <%_ if (authenticationTypeOauth2) { _%>
-            !(authToken instanceof OAuth2AuthenticationToken) &&
+        } else if (authToken instanceof OAuth2AuthenticationToken) {
+            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
   <%_ } _%>
-            !(authToken instanceof JwtAuthenticationToken)
-        ) {
+        } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
 
         return new UserVM(
             authToken.getName(),
-            authToken.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet())
+            authToken.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
+                .map(authority -> {
+                    Authority auth = new Authority();
+                    auth.setName(authority);
+                    return auth;
+                })
+  <%_ } _%>
+                .collect(Collectors.toSet()),
+            SecurityUtils.extractDetailsFromTokenAttributes(attributes)
         );
     }
 <%_ } _%>

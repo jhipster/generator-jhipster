@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as addJavaAnnotation } from './add-java-annotation.js';
+export * from './add-java-annotation.js';
 export * from './artifacts.js';
 export * from './checks/index.js';
 export * from './doc.js';
@@ -25,5 +25,6 @@ export { default as generatedAnnotationTransform } from './generated-annotation-
 export * from './java-formatting.js';
 export * from './key-store.js';
 export { default as packageInfoTransform } from './package-info-transform.js';
+export * from './package-info-transform.js';
 export * from './reserved-keywords.js';
 export * from './util.js';

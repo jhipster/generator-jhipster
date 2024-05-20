@@ -18,8 +18,8 @@
  */
 import { relative } from 'path';
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
 import { isFileStateModified } from 'mem-fs-editor/state';
+import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
@@ -44,7 +44,7 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 export default class VueGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_VUE);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
@@ -227,8 +227,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
   addEntityToMenu(
     routerName,
     enableTranslation,
-    entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
+    entityTranslationKeyMenu = camelCase(routerName),
+    entityTranslationValue = startCase(routerName),
   ) {
     this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }

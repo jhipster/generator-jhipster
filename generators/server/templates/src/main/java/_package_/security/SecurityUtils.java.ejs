@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 package <%= packageName %>.security;
+<%_ if (generateAuthenticationApi && (authenticationTypeOauth2 || authenticationTypeJwt)) { _%>
+
+import <%= packageName %>.config.Constants;
+<%_ } _%>
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,22 +39,31 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
   <%_ } else { _%>
 import java.util.stream.Stream;
   <%_ } _%>
 <%_ } else { _%>
+import java.util.Arrays;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
-import java.util.Arrays;
   <%_ } else { _%>
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.stream.Stream;
   <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt || !reactive) { _%>
+import java.util.Optional;
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 <%_ } _%>
 
 /**
@@ -228,6 +241,53 @@ public final class SecurityUtils {
             .filter(role -> role.startsWith("ROLE_"))
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
+    }
+<%_ } _%>
+<%_ if (generateAuthenticationApi && ((authenticationTypeOauth2 && !syncUserWithIdp) || (authenticationTypeJwt && skipUserManagement))) { _%>
+
+    public static Map<String, Object> extractDetailsFromTokenAttributes(Map<String, Object> attributes) {
+        Map<String, Object> details = new HashMap<>();
+
+        details.put("activated", Optional.ofNullable(attributes.get(StandardClaimNames.EMAIL_VERIFIED)).orElse(true));
+        Optional.ofNullable(attributes.get("uid")).ifPresent(id -> details.put("id", id));
+        Optional.ofNullable(attributes.get(StandardClaimNames.FAMILY_NAME)).ifPresent(lastName -> details.put("lastName", lastName));
+        Optional.ofNullable(attributes.get(StandardClaimNames.PICTURE)).ifPresent(imageUrl -> details.put("imageUrl", imageUrl));
+
+        Optional.ofNullable(attributes.get(StandardClaimNames.GIVEN_NAME)).ifPresentOrElse(
+            firstName -> details.put("firstName", firstName),
+            () -> Optional.ofNullable(attributes.get(StandardClaimNames.NAME)).ifPresent(firstName -> details.put("firstName", firstName))
+        );
+
+        if (attributes.get(StandardClaimNames.EMAIL) != null) {
+            details.put("email", attributes.get(StandardClaimNames.EMAIL));
+        } else {
+            String sub = String.valueOf(attributes.get(StandardClaimNames.SUB));
+            String preferredUsername = (String) attributes.get(StandardClaimNames.PREFERRED_USERNAME);
+            if (sub.contains("|") && (preferredUsername != null && preferredUsername.contains("@"))) {
+                // special handling for Auth0
+                details.put("email", preferredUsername);
+            } else {
+                details.put("email", sub);
+            }
+        }
+
+        if (attributes.get("langKey") != null) {
+            details.put("langKey", attributes.get("langKey"));
+        } else if (attributes.get(StandardClaimNames.LOCALE) != null) {
+            // trim off country code if it exists
+            String locale = (String) attributes.get(StandardClaimNames.LOCALE);
+            if (locale.contains("_")) {
+                locale = locale.substring(0, locale.indexOf('_'));
+            } else if (locale.contains("-")) {
+                locale = locale.substring(0, locale.indexOf('-'));
+            }
+            details.put("langKey", locale.toLowerCase());
+        } else {
+            // set langKey to default if not specified by IdP
+            details.put("langKey", Constants.DEFAULT_LANGUAGE);
+        }
+
+        return details;
     }
 <%_ } _%>
 }

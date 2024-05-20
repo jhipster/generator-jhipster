@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import * as _ from 'lodash-es';
+import { snakeCase, upperFirst } from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.js';
 import { getUXConstraintName } from './database.js';
 import { getJavaValueGeneratorForType } from './templates/field-values.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
+import { mutateData } from '../../base/support/config.js';
 
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
@@ -31,8 +32,6 @@ const { MapperTypes } = entityOptions;
 
 const { MAPSTRUCT } = MapperTypes;
 const { INTEGER, LONG, UUID } = CommonDBTypes;
-
-const { snakeCase, upperFirst } = _;
 
 export default function prepareField(entityWithConfig, field, generator) {
   if (field.mapstructExpression) {
@@ -48,8 +47,12 @@ export default function prepareField(entityWithConfig, field, generator) {
   }
 
   if (field.documentation) {
-    field.fieldJavadoc = formatDocAsJavaDoc(field.documentation, 4);
-    field.fieldApiDescription = formatDocAsApiDescription(field.documentation);
+    mutateData(field, {
+      __override__: false,
+      fieldJavadoc: formatDocAsJavaDoc(field.documentation, 4),
+      fieldApiDescription: formatDocAsApiDescription(field.documentation),
+      propertyApiDescription: ({ fieldApiDescription }) => fieldApiDescription,
+    });
   }
 
   if (field.id && entityWithConfig.primaryKey) {

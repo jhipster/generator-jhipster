@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { Lexer } from 'chevrotain';
+import { Lexer, TokenType } from 'chevrotain';
 
 import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens.js';
 import { relationshipOptions } from '../../jhipster/index.js';
@@ -30,13 +30,13 @@ import OptionTokens from './option-tokens.js';
 
 import createTokenFromConfigCreator from './token-creator.js';
 
-export const tokens: any = {};
+const _tokens: Record<string, TokenType> = {};
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 
 function createTokenFromConfig(config) {
   const newToken = createTokenFromConfigCreator(config);
-  tokens[config.name] = newToken;
+  _tokens[config.name] = newToken;
   return newToken;
 }
 
@@ -78,7 +78,7 @@ createTokenFromConfig({ name: 'CONFIG', pattern: 'config' });
 createTokenFromConfig({ name: 'ENTITIES', pattern: 'entities' });
 
 ApplicationTokens.tokens.forEach(token => {
-  tokens[token.name] = token;
+  _tokens[token.name] = token;
 });
 
 // application must appear AFTER "applicationType" due to shorter common prefix.
@@ -92,7 +92,7 @@ createTokenFromConfig({
 });
 
 DeploymentTokens.tokens.forEach(token => {
-  tokens[token.name] = token;
+  _tokens[token.name] = token;
 });
 
 createTokenFromConfig({ name: 'DEPLOYMENT', pattern: 'deployment' });
@@ -109,19 +109,19 @@ createTokenFromConfig({ name: 'BUILT_IN_ENTITY', pattern: BUILT_IN_ENTITY });
 
 // Category For the relationship type key names
 RelationshipTypeTokens.tokens.forEach(token => {
-  tokens[token.name] = token;
+  _tokens[token.name] = token;
 });
 
 createTokenFromConfig({ name: 'STAR', pattern: '*' });
 
 // Options
 OptionTokens.tokens.forEach(token => {
-  tokens[token.name] = token;
+  _tokens[token.name] = token;
 });
 
 // validations
 ValidationTokens.tokens.forEach(token => {
-  tokens[token.name] = token;
+  _tokens[token.name] = token;
 });
 
 createTokenFromConfig({ name: 'REGEX', pattern: /\/[^\n\r]*\// });
@@ -147,10 +147,17 @@ createTokenFromConfig({ name: 'TO', pattern: 'to' });
 // annotations
 createTokenFromConfig({ name: 'AT', pattern: '@' });
 
-tokens.UNARY_OPTION = UNARY_OPTION;
-tokens.BINARY_OPTION = BINARY_OPTION;
-// Imperative the "NAME" token will be added after all the keywords to resolve keywords vs identifier conflict.
-tokens.NAME = NAME;
+const typedTokens = {
+  UNARY_OPTION,
+  BINARY_OPTION,
+  // Imperative the "NAME" token will be added after all the keywords to resolve keywords vs identifier conflict.
+  NAME,
+};
+
+export const tokens = {
+  ..._tokens,
+  ...typedTokens,
+} as Record<string, TokenType> & typeof typedTokens;
 
 // with 'ensureOptimizations' the lexer initialization will throw a descriptive error
 // instead of silently reverting to an unoptimized algorithm.

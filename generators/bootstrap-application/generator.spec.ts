@@ -19,7 +19,7 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import Generator from './index.js';
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
@@ -29,8 +29,6 @@ import { shouldSupportFeatures } from '../../test/support/tests.js';
 const {
   CommonDBTypes: { UUID },
 } = fieldTypes;
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -333,6 +331,9 @@ describe(`generator - ${generator}`, () => {
       "jpaGeneratedValue": true,
       "jpaGeneratedValueIdentity": false,
       "jpaGeneratedValueSequence": false,
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -420,6 +421,9 @@ describe(`generator - ${generator}`, () => {
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""login1"",
       "javaValueSample2": ""login2"",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "string",
       "maxlength": 50,
       "nullable": false,
@@ -503,6 +507,9 @@ describe(`generator - ${generator}`, () => {
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""firstName1"",
       "javaValueSample2": ""firstName2"",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "string",
       "maxlength": 50,
       "nullable": true,
@@ -585,6 +592,9 @@ describe(`generator - ${generator}`, () => {
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""lastName1"",
       "javaValueSample2": ""lastName2"",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "string",
       "maxlength": 50,
       "nullable": true,
@@ -671,6 +681,9 @@ describe(`generator - ${generator}`, () => {
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""email1"",
       "javaValueSample2": ""email2"",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "string",
       "maxlength": 191,
       "nullable": false,
@@ -754,6 +767,9 @@ describe(`generator - ${generator}`, () => {
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""imageUrl1"",
       "javaValueSample2": ""imageUrl2"",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "string",
       "maxlength": 256,
       "nullable": true,
@@ -830,6 +846,9 @@ describe(`generator - ${generator}`, () => {
       "fieldWithContentType": false,
       "generateFakeData": Any<Function>,
       "javaFieldType": "Boolean",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "boolean",
       "nullable": true,
       "path": [
@@ -911,6 +930,9 @@ describe(`generator - ${generator}`, () => {
       "javaValueGenerator": "UUID.randomUUID().toString()",
       "javaValueSample1": ""langKey1"",
       "javaValueSample2": ""langKey2"",
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "string",
       "maxlength": 10,
       "nullable": true,
@@ -1197,6 +1219,9 @@ describe(`generator - ${generator}`, () => {
       "jpaGeneratedValue": true,
       "jpaGeneratedValueIdentity": false,
       "jpaGeneratedValueSequence": false,
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [
@@ -1536,6 +1561,9 @@ describe(`generator - ${generator}`, () => {
       "jpaGeneratedValue": true,
       "jpaGeneratedValueIdentity": false,
       "jpaGeneratedValueSequence": false,
+      "liquibaseDefaultValueAttributeName": undefined,
+      "liquibaseDefaultValueAttributeValue": undefined,
+      "liquibaseGenerateFakeData": true,
       "loadColumnType": "\${uuidType}",
       "nullable": true,
       "path": [

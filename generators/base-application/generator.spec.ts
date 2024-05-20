@@ -20,15 +20,12 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect, esmocha } from 'esmocha';
-import lodash from 'lodash';
+import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
 import Generator from './index.js';
-import type { BaseApplication } from '../base-application/types.js';
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-
-const { snakeCase } = lodash;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -78,7 +75,7 @@ describe(`generator - ${generator}`, () => {
     const writingEntities = esmocha.fn();
     const postWritingEntities = esmocha.fn();
 
-    class CustomGenerator extends Generator<BaseApplication> {
+    class CustomGenerator extends Generator {
       async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
@@ -261,7 +258,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(4, { ...fieldArg, description: 'User#lastName' });
-      // Ommit UserManagement fields
+      // Omit UserManagement fields
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 4, { ...fieldArg, description: 'Authority#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 3, { ...fieldArg, description: 'One#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 2, { ...fieldArg, description: 'Two#id' });
@@ -269,7 +266,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
       expect(preparingEachEntityRelationship).toBeCalledTimes(4);
-      // Ommit UserManagement relationships
+      // Omit UserManagement relationships
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
@@ -320,7 +317,7 @@ describe(`generator - ${generator}`, () => {
     const writingEntities = esmocha.fn();
     const postWritingEntities = esmocha.fn();
 
-    class CustomGenerator extends Generator<BaseApplication> {
+    class CustomGenerator extends Generator {
       async beforeQueue() {
         await this.dependsOnJHipster('bootstrap-application');
       }
@@ -512,7 +509,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(4, { ...fieldArg, description: 'User#lastName' });
-      // Ommit UserManagement fields
+      // Omit UserManagement fields
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 4, { ...fieldArg, description: 'Authority#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 3, { ...fieldArg, description: 'One#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 2, { ...fieldArg, description: 'Two#id' });
@@ -520,7 +517,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
       expect(preparingEachEntityRelationship).toBeCalledTimes(4);
-      // Ommit UserManagement relationships
+      // Omit UserManagement relationships
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });

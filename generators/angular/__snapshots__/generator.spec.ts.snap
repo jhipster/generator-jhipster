@@ -1006,6 +1006,69 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/main/webapp/app/core/util/parse-links.service.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/authority.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/authority.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/authority.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/list/authority.component.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/list/authority.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/list/authority.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/route/authority-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/route/authority-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/service/authority.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/service/authority.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-update.component.html": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-update.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/admin/authority/update/authority-update.component.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
@@ -1199,6 +1262,18 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/entities/simple/update/simple-update.component.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/user/service/user.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/user/service/user.service.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/user/user.model.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/main/webapp/app/entities/user/user.test-samples.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/main/webapp/app/home/home.component.html": {

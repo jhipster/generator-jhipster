@@ -21,9 +21,7 @@ import chalk from 'chalk';
 import type { QueuedAdapter } from '@yeoman/types';
 
 import BaseGenerator from '../base/index.js';
-import { GENERATOR_GIT } from '../generator-list.js';
 import { files } from './files.js';
-import command from './command.js';
 
 /**
  * @class
@@ -36,14 +34,14 @@ export default class InitGenerator extends BaseGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_GIT);
+      await this.composeWithBlueprints();
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      parseOptions() {
-        this.parseJHipsterOptions(command.options);
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
       },
       async checkGit() {
         if (!this.skipGit) {

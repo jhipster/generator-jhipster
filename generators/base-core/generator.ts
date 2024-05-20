@@ -26,8 +26,7 @@ import { requireNamespace } from '@yeoman/namespace';
 import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import * as _ from 'lodash-es';
-import { kebabCase, snakeCase } from 'lodash-es';
+import { kebabCase, snakeCase, merge, get, set, defaults } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -37,7 +36,13 @@ import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.js';
-import { createJHipster7Context, formatDateForChangelog, joinCallbacks, Logger } from '../base/support/index.js';
+import {
+  createJHipster7Context,
+  formatDateForChangelog,
+  joinCallbacks,
+  Logger,
+  removeFieldsWithNullishValues,
+} from '../base/support/index.js';
 
 import type {
   JHipsterGeneratorOptions,
@@ -61,13 +66,14 @@ import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { convertConfigToOption } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
+import { getConfigWithDefaults } from '../../jdl/index.js';
 
-const { merge, get, set } = _;
 const {
   INITIALIZING,
   PROMPTING,
   CONFIGURING,
   COMPOSING,
+  COMPOSING_COMPONENT,
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -102,6 +108,8 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   static CONFIGURING = asPriority(CONFIGURING);
 
   static COMPOSING = asPriority(COMPOSING);
+
+  static COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
   static LOADING = asPriority(LOADING);
 
@@ -138,6 +146,13 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   jhipsterTemplatesFolders!: string[];
 
   blueprintStorage?: Storage;
+  /** Allow to use a specific definition at current command operations */
+  generatorCommand?: JHipsterCommandDefinition;
+  /**
+   * @experimental
+   * Additional commands to be considered
+   */
+  generatorsToCompose: string[] = [];
 
   private _jhipsterGenerator?: string;
   private _needleApi?: NeedleApi;
@@ -221,6 +236,20 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   }
 
   /**
+   * JHipster config with default values fallback
+   */
+  get jhipsterConfigWithDefaults() {
+    const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
+    defaults(configWithDefaults, {
+      skipFakeData: false,
+      skipCheckLengthOfIdentifier: false,
+      enableGradleEnterprise: false,
+      pages: [],
+    });
+    return configWithDefaults;
+  }
+
+  /**
    * Warn or throws check failure based on current skipChecks option.
    * @param message
    */
@@ -240,11 +269,15 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   isJhipsterVersionLessThan(version) {
     const jhipsterOldVersion = this.sharedData.getControl().jhipsterOldVersion;
-    if (!jhipsterOldVersion) {
-      // if old version is unknown then can't compare (the project may be null) and return false
-      return false;
-    }
-    return semverLessThan(jhipsterOldVersion, version);
+    return this.isVersionLessThan(jhipsterOldVersion, version);
+  }
+
+  /**
+   * Wrapper for `semver.lt` to check if the oldVersion exists and is less than the newVersion.
+   * Can be used by blueprints.
+   */
+  isVersionLessThan(oldVersion: string | null, newVersion: string) {
+    return oldVersion ? semverLessThan(oldVersion, newVersion) : false;
   }
 
   /**
@@ -294,22 +327,96 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return priorities;
   }
 
-  async parseCurrentJHipsterCommand() {
-    const module: any = await this._meta?.importModule?.();
-    if (!module?.command) {
-      throw new Error(`Command not found for generator ${this.options.namespace}`);
+  /**
+   * Get the current Command Definition for the generator.
+   * `generatorCommand` takes precedence.
+   */
+  async getCurrentJHipsterCommand(): Promise<JHipsterCommandDefinition> {
+    if (!this.generatorCommand) {
+      const { command } = ((await this._meta?.importModule?.()) ?? {}) as any;
+      if (!command) {
+        throw new Error(`Command not found for generator ${this.options.namespace}`);
+      }
+      this.generatorCommand = command;
+      return command;
     }
-
-    this.parseJHipsterCommand(module?.command);
+    return this.generatorCommand;
   }
 
+  /**
+   * Parse command definition arguments, options and configs.
+   * Blueprints with command override takes precedence.
+   */
+  async parseCurrentJHipsterCommand() {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    this.parseJHipsterCommand(generatorCommand!);
+  }
+
+  /**
+   * Prompts for command definition configs.
+   * Blueprints with command override takes precedence.
+   */
   async promptCurrentJHipsterCommand() {
-    const module: any = await this._meta?.importModule?.();
-    if (!module?.command?.configs) {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    if (!generatorCommand.configs) {
+      throw new Error(`Configs not found for generator ${this.options.namespace}`);
+    }
+    return this.prompt(this.prepareQuestions(generatorCommand.configs));
+  }
+
+  /**
+   * Configure the current JHipster command.
+   * Blueprints with command override takes precedence.
+   */
+  async configureCurrentJHipsterCommandConfig() {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
 
-    return this.prompt(this.prepareQuestions(module?.command?.configs));
+    for (const def of Object.values(generatorCommand.configs)) {
+      def.configure?.(this);
+    }
+  }
+
+  /**
+   * Load the current JHipster command storage configuration into the context.
+   * Blueprints with command override takes precedence.
+   */
+  async loadCurrentJHipsterCommandConfig(context: any) {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    if (!generatorCommand.configs) {
+      throw new Error(`Configs not found for generator ${this.options.namespace}`);
+    }
+
+    const config = (this as any).jhipsterConfigWithDefaults;
+    Object.entries(generatorCommand.configs).forEach(([name, def]) => {
+      if (def.scope === 'storage') {
+        context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
+      }
+      if (def.scope === 'generator') {
+        context[name] = context[name] ?? this[name] ?? def.default;
+      }
+      if (def.scope === 'blueprint') {
+        context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
+      }
+    });
+  }
+
+  /**
+   * @experimental
+   * Compose the current JHipster command compose.
+   * Blueprints commands compose without generators will be composed.
+   */
+  async composeCurrentJHipsterCommand() {
+    const generatorCommand = await this.getCurrentJHipsterCommand();
+    for (const compose of generatorCommand.compose ?? []) {
+      await this.composeWithJHipster(compose);
+    }
+
+    for (const compose of this.generatorsToCompose) {
+      await this.composeWithJHipster(compose);
+    }
   }
 
   parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
@@ -418,7 +525,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return Object.entries(configs)
       .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {
-        const promptSpec = typeof def.prompt === 'function' ? def.prompt(this) : { ...def.prompt };
+        const promptSpec = typeof def.prompt === 'function' ? def.prompt(this as any, def) : { ...def.prompt };
         let storage: any;
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;

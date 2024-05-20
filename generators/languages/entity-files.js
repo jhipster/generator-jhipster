@@ -63,7 +63,8 @@ export const enumClientI18nFiles = {
 export function writeEntityFiles() {
   return {
     async writeEnumFiles({ entities, application }) {
-      if (!application.enableTranslation || application.skipClient) return;
+      if (application.skipClient) return;
+      const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
       const { clientSrcDir, packageName, frontendAppName } = application;
       await Promise.all(
@@ -72,7 +73,7 @@ export function writeEntityFiles() {
             entity.fields
               .map(field => {
                 if (!field.fieldIsEnum) return undefined;
-                return this.languagesToApply.map(lang =>
+                return languagesToApply.map(lang =>
                   this.writeFiles({
                     sections: enumClientI18nFiles,
                     context: {

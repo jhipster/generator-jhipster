@@ -18,7 +18,7 @@
  */
 import assert from 'assert';
 import os from 'os';
-import * as _ from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import chalk from 'chalk';
 import { passthrough } from '@yeoman/transform';
 
@@ -35,7 +35,7 @@ import {
 } from '../base-application/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
-import { GENERATOR_BOOTSTRAP, GENERATOR_BOOTSTRAP_APPLICATION_BASE, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
@@ -43,8 +43,6 @@ import { exportJDLTransform, importJDLTransform } from './support/index.js';
 import command from './command.js';
 
 const isWin32 = os.platform() === 'win32';
-
-const { lowerFirst } = _;
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
@@ -57,7 +55,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_BOOTSTRAP_APPLICATION_BASE);
+      await this.composeWithBlueprints();
     }
 
     if (this.delegateToBlueprint) {
@@ -112,13 +110,18 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadApplication({ application, control }) {
+      loadApplication({ application, control, applicationDefaults }) {
         loadAppConfig({
           config: this.jhipsterConfigWithDefaults,
           application,
           useVersionPlaceholders: (this as any).useVersionPlaceholders,
         });
         loadLanguagesConfig({ application, config: this.jhipsterConfigWithDefaults, control });
+
+        applicationDefaults({
+          backendType: this.jhipsterConfig.backendType ?? 'Java',
+          syncUserWithIdp: this.jhipsterConfig.syncUserWithIdp,
+        });
       },
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
@@ -145,10 +148,51 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         loadDerivedAppConfig({ application });
 
         applicationDefaults({
+          __override__: false,
           nodePackageManager: 'npm',
           dockerServicesDir: JAVA_DOCKER_DIR,
           // TODO drop clientPackageManager
           clientPackageManager: ({ nodePackageManager }) => nodePackageManager,
+          hipsterName: 'Java Hipster',
+          hipsterProductName: 'JHipster',
+          hipsterHomePageProductName: 'JHipster',
+          hipsterStackOverflowProductName: 'JHipster',
+          hipsterBugTrackerProductName: 'JHipster',
+          hipsterChatProductName: 'JHipster',
+          hipsterTwitterUsername: '@jhipster',
+          hipsterDocumentationLink: 'https://www.jhipster.tech/',
+          hipsterTwitterLink: 'https://twitter.com/jhipster',
+          hipsterProjectLink: 'https://github.com/jhipster/generator-jhipster',
+          hipsterStackoverflowLink: 'https://stackoverflow.com/tags/jhipster/info',
+          hipsterBugTrackerLink: 'https://github.com/jhipster/generator-jhipster/issues?state=open',
+          hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
+
+          backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
+          backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
+        });
+      },
+      syncUserWithIdp({ application, applicationDefaults }) {
+        if (!application.backendTypeSpringBoot) return;
+
+        if (application.syncUserWithIdp === undefined && application.authenticationType === 'oauth2') {
+          applicationDefaults({
+            __override__: false,
+            syncUserWithIdp: data =>
+              data.databaseType !== 'no' &&
+              (data.applicationType === 'gateway' ||
+                this.getExistingEntities().some(entity =>
+                  (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
+                )),
+          });
+        } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
+          throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
+        }
+      },
+      userManagement({ applicationDefaults }) {
+        applicationDefaults({
+          generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
+          generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
+            generateBuiltInUserEntity && databaseType !== 'cassandra',
         });
       },
     });

@@ -61,9 +61,11 @@ describe('jdl - FieldTypes', () => {
     describe('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error
           fieldTypes.getIsType(null);
         }).to.throw(/^The passed type must not be nil\.$/);
         expect(() => {
+          // @ts-expect-error
           fieldTypes.getIsType(null, () => {
             // do nothing
           });

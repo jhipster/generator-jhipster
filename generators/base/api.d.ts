@@ -196,6 +196,7 @@ export type PromptSpec = {
   default?: any | ((any) => any);
   filter?: any | ((any) => any);
   transformer?: any | ((any) => any);
+  validate?: any | ((any) => any);
 };
 
 export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: 'storage' | 'blueprint' | 'generator' };
@@ -204,9 +205,9 @@ export type ConfigSpec = {
   description?: string;
   choices?: JHispterChoices;
 
-  cli?: SetOptional<CliOptionSpec, 'name'>;
+  cli?: SetOptional<CliOptionSpec, 'name'> & { env?: string };
   argument?: JHipsterArgumentConfig;
-  prompt?: PromptSpec | ((CoreGenerator) => PromptSpec);
+  prompt?: PromptSpec | ((gen: CoreGenerator & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec) => PromptSpec);
   scope?: 'storage' | 'blueprint' | 'generator';
   /**
    * The callback receives the generator as input for 'generator' scope.
@@ -214,6 +215,10 @@ export type ConfigSpec = {
    * The callback receives blueprintStorage contents as input for 'blueprint' scope.
    */
   default?: string | boolean | string[] | ((any) => string | boolean | string[]);
+  /**
+   * Configure the generator according to the selected configuration.
+   */
+  configure?: (gen: CoreGenerator) => void;
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
@@ -231,6 +236,12 @@ export type JHipsterCommandDefinition = {
    * @example ['server', 'jhipster-blueprint:server']
    */
   import?: string[];
+  /**
+   * @experimental
+   * Compose with generator.
+   * @example ['server', 'jhipster-blueprint:server']
+   */
+  compose?: string[];
   /**
    * Override options from the generator been blueprinted.
    */

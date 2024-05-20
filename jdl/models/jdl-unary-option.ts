@@ -24,11 +24,11 @@ import { join } from '../utils/set-utils.js';
  * For flags such as skipServer, skipClient, etc.
  */
 export default class JDLUnaryOption extends AbstractJDLOption {
-  getType() {
+  getType(): string {
     return 'UNARY';
   }
 
-  toString() {
+  toString(): string {
     const entityNames = join(this.entityNames, ', ');
     entityNames.slice(1, entityNames.length - 1);
     const firstPart = `${this.name} ${entityNames}`;
@@ -36,7 +36,7 @@ export default class JDLUnaryOption extends AbstractJDLOption {
       return firstPart;
     }
     const excludedNames = join(this.excludedNames, ', ');
-    excludedNames.slice(1, this.excludedNames.length - 1);
+    excludedNames.slice(1, this.excludedNames.size - 1);
     return `${firstPart} except ${excludedNames}`;
   }
 }

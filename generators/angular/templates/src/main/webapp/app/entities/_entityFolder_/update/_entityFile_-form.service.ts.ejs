@@ -200,12 +200,16 @@ _%>
   <%_ for (field of fields) {
         const { fieldName, fieldTypeBoolean, fieldTypeTimed, fieldTypeLocalDate } = field;
   _%>
-    <%_ if (field.id) { _%>
-      <%= fieldName %>: null,
-    <%_ } else if (fieldTypeBoolean) { _%>
-      <%= fieldName %>: false,
-    <%_ } else if (fieldTypeTimed) { _%>
-      <%= fieldName %>: currentTime,
+    <%_ if (field.fieldTsDefaultValue) { _%>
+        <%= fieldName %>: <%- field.fieldTsDefaultValue %>,
+    <%_ } else { _%>
+      <%_ if (field.id) { _%>
+        <%= fieldName %>: null,
+      <%_ } else if (fieldTypeBoolean) { _%>
+        <%= fieldName %>: false,
+      <%_ } else if (fieldTypeTimed) { _%>
+        <%= fieldName %>: currentTime,
+      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {

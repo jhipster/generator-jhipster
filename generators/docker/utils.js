@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 import { DockerfileParser } from 'dockerfile-ast';
-import * as _ from 'lodash-es';
-
-const { camelCase } = _;
+import { camelCase, kebabCase } from 'lodash-es';
 
 /**
  * Extract version properties from pom content
@@ -65,4 +63,4 @@ export function getDockerfileContainers(dockerfileContent) {
  * @param {string}
  * @returns {string}
  */
-export const dockerPlaceholderGenerator = value => `${_.kebabCase(value)}-placeholder`;
+export const dockerPlaceholderGenerator = value => `${kebabCase(value)}-placeholder`;

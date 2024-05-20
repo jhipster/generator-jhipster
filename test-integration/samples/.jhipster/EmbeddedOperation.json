@@ -14,7 +14,6 @@
     {
       "otherEntityField": "name",
       "otherEntityName": "documentBankAccount",
-      "otherEntityRelationshipName": "embeddedOperation",
       "relationshipName": "documentBankAccount",
       "relationshipType": "many-to-one"
     }

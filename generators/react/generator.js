@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as _ from 'lodash-es';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
+import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
@@ -47,13 +47,25 @@ const { REACT } = clientFrameworkTypes;
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_REACT);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeClientCommon() {
+        await this.composeWithJHipster('jhipster:client:common');
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -157,6 +169,27 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     };
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addWebsocketDependencies({ application }) {
+        const { communicationSpringWebsocket, nodeDependencies } = application;
+        if (communicationSpringWebsocket) {
+          this.packageJson.merge({
+            dependencies: {
+              rxjs: nodeDependencies.rxjs,
+              'sockjs-client': nodeDependencies['sockjs-client'],
+              'webstomp-client': nodeDependencies['webstomp-client'],
+            },
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
@@ -190,8 +223,8 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   addEntityToMenu(
     routerName,
     enableTranslation,
-    entityTranslationKeyMenu = _.camelCase(routerName),
-    entityTranslationValue = _.startCase(routerName),
+    entityTranslationKeyMenu = camelCase(routerName),
+    entityTranslationValue = startCase(routerName),
   ) {
     this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
   }

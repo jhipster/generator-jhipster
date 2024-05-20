@@ -18,7 +18,7 @@
  */
 /* eslint-disable no-useless-escape */
 
-import * as _ from 'lodash-es';
+import { first, flatten, includes, values } from 'lodash-es';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import JDLParser from './jdl-parser.js';
@@ -52,7 +52,7 @@ const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
 
-export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING';
+export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
 
 export type JDLValidatorOption = {
   type: JDLValidatorOptionType;
@@ -374,7 +374,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
           actual.name !== 'qualifiedName' &&
           // a Boolean (true/false) is also a valid name.
           actual.tokenType &&
-          !_.includes(actual.tokenType.CATEGORIES, LexerTokens.BOOLEAN)
+          !includes(actual.tokenType.CATEGORIES, LexerTokens.BOOLEAN)
         ) {
           this.errors.push({
             message: `A name is expected, but found: "${getFirstToken(actual).image}"`,
@@ -396,6 +396,16 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
 
       case 'list':
         if (actual.name !== 'list') {
+          this.errors.push({
+            message: `An array of names is expected, but found: "${getFirstToken(actual).image}"`,
+            token: getFirstToken(actual),
+          });
+          return false;
+        }
+        return true;
+
+      case 'quotedList':
+        if (actual.name !== 'quotedList') {
           this.errors.push({
             message: `An array of names is expected, but found: "${getFirstToken(actual).image}"`,
             token: getFirstToken(actual),
@@ -446,8 +456,13 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
       throw Error(`Got an invalid application config property: '${propertyName}'.`);
     }
 
-    if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children && value.children.NAME) {
-      value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
+    if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children) {
+      if (value.children.NAME) {
+        value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
+      }
+      if (value.children.STRING) {
+        value.children.STRING.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
+      }
     }
   }
 
@@ -565,7 +580,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
   }
 
   configValue(context, configKey) {
-    const configValue = _.first(_.first(Object.values(context)));
+    const configValue = first(first(Object.values(context)));
     this.checkConfigPropSyntax(configKey, configValue);
   }
 
@@ -574,7 +589,7 @@ class JDLSyntaxValidatorVisitor extends BaseJDLCSTVisitorWithDefaults {
   }
 
   deploymentConfigValue(context, configKey) {
-    const configValue = _.first(_.first(_.values(context)));
+    const configValue = first(first(values(context)));
     this.checkDeploymentConfigPropSyntax(configKey, configValue);
   }
 }
@@ -598,7 +613,7 @@ function getFirstToken(tokOrCstNode) {
   }
 
   // CST Node - - assumes no nested CST Nodes, only terminals
-  return _.flatten(Object.values(tokOrCstNode.children)).reduce<any>(
+  return flatten(Object.values(tokOrCstNode.children)).reduce<any>(
     (firstTok: any, nextTok: any) => (firstTok.startOffset > nextTok.startOffset ? nextTok : firstTok),
     { startOffset: Infinity },
   );

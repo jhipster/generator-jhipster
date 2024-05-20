@@ -11,27 +11,31 @@
       "entity": "none",
       "app-sample": "ng-default",
       "jdl-entity": "*",
-      "node": "20",
-      "java": "21"
+      "node-version": "20",
+      "java-version": "21"
     },
     {
       "name": "ng-mysql-es-noi18n-mapsid",
       "app-sample": "ng-mysql-es-noi18n-mapsid",
       "entity": "sql",
-      "node": "20"
+      "node-version": "20"
     },
     {
       "name": "ng-mongodb-kafka-cucumber",
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
-      "environment": "dev",
-      "java": "22"
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "java-version": "21"
     },
     {
       "name": "ng-h2mem-ws-nol2",
       "app-sample": "ng-h2mem-ws-nol2",
       "entity": "sql",
-      "environment": "dev"
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      }
     },
     {
       "name": "ng-couchbase",
@@ -49,24 +53,27 @@
       "name": "ng-gradle-fr",
       "app-sample": "ng-gradle-fr",
       "entity": "sql",
-      "node": "20",
-      "java": "21"
+      "node-version": "20",
+      "java-version": "21"
     },
     {
       "name": "ng-gradle-mariadb-oauth2-infinispan",
       "app-sample": "ng-gradle-mariadb-oauth2-infinispan",
       "entity": "sql",
-      "environment": "dev",
-      "node": "20"
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "node-version": "20"
     },
     {
       "name": "ng-gradle-h2disk-ws-nocache",
       "app-sample": "ng-gradle-h2disk-ws-nocache",
       "entity": "sql",
-      "environment": "dev",
-      "packaging": "war",
-      "testcontainers": "false",
-      "java": "22"
+      "generatorOptions": {
+        "defaultEnvironment": "dev",
+        "defaultPackaging": "war"
+      },
+      "java-version": "21"
     },
     {
       "name": "ng-webflux-mongodb",
@@ -77,8 +84,8 @@
       "name": "ng-webflux-gradle-mongodb-oauth2",
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb",
-      "node": "20",
-      "java": "21"
+      "node-version": "20",
+      "java-version": "21"
     },
     {
       "name": "ng-webflux-psql-default",
@@ -88,43 +95,52 @@
     {
       "name": "ng-webflux-psql-additional",
       "jdl-samples": "webflux-psql,custom-domain",
-      "node": "20",
-      "java": "21"
+      "node-version": "20",
+      "java-version": "21"
     },
     {
       "name": "ng-webflux-gradle-session-h2mem-es",
       "app-sample": "webflux-gradle-session-h2mem-es",
-      "environment": "dev",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
       "entity": "sqllight",
-      "node": "20"
+      "node-version": "20"
     },
     {
       "name": "ng-webflux-couchbase",
       "disabled": "needs adjusts for sb3",
       "app-sample": "webflux-couchbase",
       "entity": "couchbase",
-      "java": "21"
+      "java-version": "21"
     },
     {
-      "name": "ms-ng-consul-oauth2-mongodb-caffeine",
-      "jdl-samples": "ms-ng-consul-oauth2-mongodb-caffeine",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true"
+      "name": "ms-ng-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ng-oauth2-mongodb-caffeine",
+      "generatorOptions": {
+        "workspaces": true,
+        "experimental": true,
+        "monorepository": true
+      }
     },
     {
       "name": "mf-ng-eureka-jwt-psql-ehcache",
       "jdl-samples": "mf-ng-eureka-jwt-psql-ehcache",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true",
-      "node": "20",
-      "java": "22"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "node-version": "20",
+      "java": "21"
     },
     {
       "name": "ms-mf-ng-consul-oauth2-neo4j",
       "jdl-samples": "ms-mf-ng-consul-oauth2-neo4j",
-      "extra-args": "--workspaces --monorepository",
-      "workspaces": "true",
-      "node": "20"
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "node-version": "20"
     }
   ]
 }

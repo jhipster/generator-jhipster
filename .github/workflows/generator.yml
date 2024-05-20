@@ -44,24 +44,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup-default-node-java
         with:
-          node-version: 20.12.0
-      - name: 'SETUP: load npm cache'
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress/
-          key: ${{ runner.os }}-node-
-      - name: 'install required npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/common/resources/package.json').devDependencies.npm);")
+          generator-path: '.'
+      - uses: jhipster/actions/setup-runner@v0
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
-        shell: bash
-      - name: Config git variables
-        env:
-          JHI_SCRIPTS: ./test-integration/scripts
-        run: $JHI_SCRIPTS/04-git-config.sh
         shell: bash
       - run: npm ci
       - run: npm run prettier:check

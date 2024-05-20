@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-import * as _ from 'lodash-es';
-import { Entity } from '../../../jdl/converters/types.js';
-
-const { upperFirst } = _;
+import { upperFirst } from 'lodash-es';
+import { JSONEntity } from '../../../jdl/converters/types.js';
 
 // eslint-disable-next-line import/prefer-default-export
-export const findEntityInEntities = (entityName: string, entities: Entity[]) =>
+export const findEntityInEntities = (entityName: string, entities: JSONEntity[]) =>
   entities.find(entity => upperFirst(entity.name) === upperFirst(entityName));

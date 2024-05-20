@@ -44,14 +44,14 @@ class JSONEntity {
    *        - fluentMethods, defaults to true,
    *        - clientRootFolder
    */
-  constructor(args) {
+  constructor(args: Partial<JSONEntity>) {
     if (!args || !args.entityName) {
       throw new Error('At least an entity name must be passed.');
     }
-    const merged = merge(getDefaults(args.entityName), args);
+    const merged: Partial<JSONEntity> = merge(getDefaults(args.entityName), args);
     this.name = merged.name;
     this.fields = merged.fields;
-    this.annotations = merged.annotations;
+    this.annotations = merged.annotations ?? {};
     this.relationships = merged.relationships;
     this.documentation = merged.documentation;
     this.entityTableName = merged.entityTableName;
@@ -119,7 +119,7 @@ class JSONEntity {
 
 export default JSONEntity;
 
-function getDefaults(entityName) {
+function getDefaults(entityName: string): Pick<JSONEntity, 'name' | 'fields' | 'relationships' | 'applications' | 'annotations'> {
   return {
     name: upperFirst(entityName),
     fields: [],

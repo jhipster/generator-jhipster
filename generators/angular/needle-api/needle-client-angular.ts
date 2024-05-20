@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import * as _ from 'lodash-es';
+import { startCase } from 'lodash-es';
 
 import needleClientBase from '../../client/needle-api/needle-client.js';
 import { LINE_LENGTH } from '../../generator-constants.js';
@@ -124,7 +124,7 @@ export default class extends needleClientBase {
     const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" ${routerLink} (click)="collapseNavbar()">
                                     <fa-icon icon="${iconName}" [fixedWidth]="true"></fa-icon>
-                                    <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
+                                    <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.${translationKeyMenu}"` : ''}>${startCase(routerName)}</span>
                                 </a>
                             </li>`;
     const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-element-to-menu', entityEntry);
@@ -142,7 +142,7 @@ export default class extends needleClientBase {
     const entityEntry = `<li>
                         <a class="dropdown-item" ${routerLink} routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="${iconName}" [fixedWidth]="true"></fa-icon>
-                            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.admin.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
+                            <span${enableTranslation ? ` ${jhiPrefix}Translate="global.menu.admin.${translationKeyMenu}"` : ''}>${startCase(routerName)}</span>
                         </a>
                     </li>`;
     const rewriteFileModel = this.generateFileModel(navbarAdminPath, 'jhipster-needle-add-element-to-admin-menu', entityEntry);

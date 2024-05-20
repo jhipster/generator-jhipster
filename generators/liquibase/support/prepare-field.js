@@ -142,11 +142,23 @@ export default function prepareField(entity, field) {
   mutateData(field, {
     __override__: false,
     columnType: data => parseLiquibaseColumnType(entity, data),
-    shouldDropDefaultValue: data => data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT,
+    liquibaseDefaultValueAttributeValue: ({ defaultValue, defaultValueComputed }) => defaultValueComputed ?? defaultValue?.toString(),
+    liquibaseDefaultValueAttributeName: ({ defaultValueComputed, liquibaseDefaultValueAttributeValue }) => {
+      if (liquibaseDefaultValueAttributeValue === undefined) return undefined;
+      if (defaultValueComputed) return 'defaultValueComputed';
+      if (field.fieldTypeNumeric) return 'defaultValueNumeric';
+      if (field.fieldTypeDateTime) return 'defaultValueDate';
+      if (field.fieldTypeBoolean) return 'defaultValueBoolean';
+      return 'defaultValue';
+    },
+    shouldDropDefaultValue: data =>
+      !data.liquibaseDefaultValueAttributeValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
     columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules.includes('required')),
     nullable: data => !data.columnRequired,
     loadColumnType: data => parseLiquibaseLoadColumnType(entity, data),
+    liquibaseGenerateFakeData: true,
   });
+
   return field;
 }

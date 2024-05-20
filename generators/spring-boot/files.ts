@@ -235,29 +235,6 @@ const jwtFiles = {
   ],
 };
 
-const gatewayFiles = {
-  gatewayFiles: [
-    {
-      condition: generator => generator.authenticationTypeJwt,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['security/jwt/JWTRelayGatewayFilterFactory.java'],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['web/rest/vm/RouteVM.java', 'web/rest/GatewayResource.java', 'web/filter/ModifyServersOpenApiFilter.java'],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryAny,
-      path: `${SERVER_TEST_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageTestDir,
-      templates: ['web/filter/ModifyServersOpenApiFilterTest.java'],
-    },
-  ],
-};
-
 const swaggerFiles = {
   swagger: [
     {
@@ -281,12 +258,6 @@ const swaggerFiles = {
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 export const baseServerFiles = {
-  jib: [
-    {
-      path: 'src/main/docker/jib/',
-      templates: ['entrypoint.sh'],
-    },
-  ],
   readme: [
     {
       templates: ['README.md.jhi.spring-boot'],
@@ -300,7 +271,7 @@ export const baseServerFiles = {
   ],
   serverBuild: [
     {
-      templates: ['checkstyle.xml', '.devcontainer/devcontainer.json', '.devcontainer/Dockerfile'],
+      templates: ['.devcontainer/devcontainer.json', '.devcontainer/Dockerfile'],
     },
     {
       condition: generator => generator.buildToolGradle,
@@ -317,11 +288,6 @@ export const baseServerFiles = {
     {
       condition: generator => generator.buildToolMaven,
       templates: ['pom.xml'],
-    },
-    {
-      condition: generator => generator.useNpmWrapper,
-      transform: false,
-      templates: ['npmw', 'npmw.cmd'],
     },
   ],
   serverResource: [
@@ -447,20 +413,9 @@ export const baseServerFiles = {
       ],
     },
     {
-      condition: generator =>
-        generator.generateUserManagement ||
-        generator.authenticationTypeOauth2 ||
-        generator.databaseTypeSql ||
-        generator.databaseTypeMongodb ||
-        generator.databaseTypeCouchbase,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/Constants.java'],
-    },
-    {
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [data => `config/LocaleConfiguration_${data.imperativeOrReactive}.java`],
     },
   ],
   serverJavaDomain: [
@@ -555,7 +510,6 @@ export const serverFiles = mergeSections(
   baseServerFiles,
   addSectionsCondition(jwtFiles, context => context.authenticationTypeJwt),
   addSectionsCondition(oauth2Files, context => context.authenticationTypeOauth2),
-  addSectionsCondition(gatewayFiles, context => context.applicationTypeGateway),
   addSectionsCondition(accountFiles, context => context.generateAuthenticationApi),
   addSectionsCondition(userManagementFiles, context => context.generateUserManagement),
   addSectionsCondition(imperativeConfigFiles, context => !context.reactive),

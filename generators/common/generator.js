@@ -29,7 +29,7 @@ import {
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
 } from '../generator-constants.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_COMMON, GENERATOR_BOOTSTRAP_APPLICATION, GENERATOR_GIT } from '../generator-list.js';
+import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import command from './command.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
@@ -43,19 +43,19 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     loadStoredAppOptions.call(this);
 
     if (!this.fromBlueprint) {
-      await this.composeWithBlueprints(GENERATOR_COMMON);
+      await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
+      await this.dependsOnBootstrapApplication();
       await this.dependsOnJHipster(GENERATOR_GIT);
     }
   }
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterCommand(this.command);
+      async loadOptions() {
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
@@ -68,7 +68,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return this.asPromptingTaskGroup({
       async prompting({ control }) {
         if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(this.command.configs));
+        await this.promptCurrentJHipsterCommand();
       },
     });
   }
@@ -136,6 +136,9 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
+      async loadCommand({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
+      },
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
@@ -158,6 +161,11 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
+      checkSuffix({ application }) {
+        if (application.entitySuffix === application.dtoSuffix) {
+          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
+        }
+      },
       setupConstants({ application }) {
         // Make constants available in templates
         application.MAIN_DIR = MAIN_DIR;
@@ -234,6 +242,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      setConfig({ application }) {
+        const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
+        if (application.defaultEnvironment) {
+          packageJsonConfigStorage.default_environment = application.defaultEnvironment;
+        }
+      },
       addJHipsterDependencies({ application }) {
         if (application.skipJhipsterDependencies) return;
 
