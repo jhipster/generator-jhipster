@@ -107,8 +107,7 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
-          // @ts-ignore
-          convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], () => {});
+          convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], name => name);
         });
 
         it('should ignore it', () => {
