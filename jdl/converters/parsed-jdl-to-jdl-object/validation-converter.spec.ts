@@ -106,6 +106,7 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
+          // @ts-expect-error
           convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], name => name);
         });
 
