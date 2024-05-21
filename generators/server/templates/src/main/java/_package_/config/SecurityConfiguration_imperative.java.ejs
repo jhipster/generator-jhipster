@@ -27,9 +27,6 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-<%_ if (authenticationTypeOauth2) { _%>
-import org.springframework.core.convert.converter.Converter;
-<%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
@@ -70,7 +67,6 @@ import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.P
 
 import <%= packageName %>.security.oauth2.AudienceValidator;
 import <%= packageName %>.security.SecurityUtils;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -79,7 +75,6 @@ import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.*;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
   <%_ if (!applicationTypeMicroservice) { _%>
@@ -102,9 +97,6 @@ import org.springframework.security.web.authentication.RememberMeServices;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import org.springframework.security.web.csrf.*;
-<%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
-import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
@@ -292,9 +284,7 @@ public class SecurityConfiguration {
   <%_ } else { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } _%>
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(authenticationConverter())))
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
             .oauth2Client(withDefaults());
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -314,13 +304,6 @@ public class SecurityConfiguration {
         return new MvcRequestMatcher.Builder(introspector);
     }
 <%_ if (authenticationTypeOauth2) { _%>
-
-    Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
-        jwtAuthenticationConverter.setPrincipalClaimName(PREFERRED_USERNAME);
-        return jwtAuthenticationConverter;
-    }
 
     OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();
