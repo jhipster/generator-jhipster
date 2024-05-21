@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "17.3.9",
+    "@angular/common": "18.0.0-rc.3",
     "@fortawesome/angular-fontawesome": "0.14.1",
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-solid-svg-icons": "6.5.2",
@@ -15,7 +15,7 @@
     "ngx-infinite-scroll": "17.0.0",
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
-    "tslib": "2.6.2",
+    "tslib": "2.3.0",
     "zone.js": "0.14.6"
   },
   "devDependencies": {
