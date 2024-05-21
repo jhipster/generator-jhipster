@@ -39,7 +39,7 @@ const command: JHipsterCommandDefinition = {
           gen.entitiesSample = 'document';
         }
       },
-      choices: ['sql', 'sqllight', 'micro', 'sqlfull', 'mongodb', 'document', 'cassandra', 'couchbase'],
+      choices: ['sql', 'sqllight', 'micro', 'sqlfull', 'none', 'neo4j', 'mongodb', 'document', 'cassandra', 'couchbase'],
       scope: 'generator',
     },
     global: {

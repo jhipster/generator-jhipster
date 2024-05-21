@@ -4,7 +4,7 @@ import BaseGenerator from '../../generators/base/index.js';
 import { packageJson } from '../../lib/index.js';
 import { generateSample, entitiesByType } from './support/index.js';
 import { promptSamplesFolder } from '../support.mjs';
-import { GENERATOR_APP, GENERATOR_JDL } from '../../generators/generator-list.js';
+import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
 
 export default class extends BaseGenerator {
   sampleName;
@@ -121,6 +121,9 @@ export default class extends BaseGenerator {
             },
           });
         }
+      },
+      async info() {
+        await this.composeWithJHipster(GENERATOR_INFO, { generatorOptions: { destinationPath: this.projectFolder } });
       },
     });
   }
