@@ -15,7 +15,7 @@
     "ngx-infinite-scroll": "17.0.0",
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
-    "tslib": "2.3.0",
+    "tslib": "2.6.2",
     "zone.js": "0.14.6"
   },
   "devDependencies": {
