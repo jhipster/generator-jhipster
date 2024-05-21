@@ -24,7 +24,7 @@
     "@angular-builders/custom-webpack": "17.0.2",
     "@angular-builders/jest": "17.0.3",
     "@angular-eslint/eslint-plugin": "17.4.1",
-    "@angular/cli": "17.3.7",
+    "@angular/cli": "18.0.0-rc.3",
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
