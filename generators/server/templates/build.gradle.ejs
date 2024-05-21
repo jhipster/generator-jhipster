@@ -172,7 +172,6 @@ dependencies {
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-    implementation "io.dropwizard.metrics:metrics-core"
     implementation "io.micrometer:micrometer-registry-prometheus"
 <%_ if (reactive) { _%>
     runtimeOnly "io.netty:netty-tcnative-boringssl-static"
