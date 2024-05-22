@@ -223,26 +223,26 @@ class UserResourceIT {
      * if they test an entity which has a required relationship to the User entity.
      */
     public static <%= user.persistClass %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        <%= user.persistClass %> persistUser = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
-        user.setId(UUID.randomUUID().toString());
+        persistUser.setId(UUID.randomUUID().toString());
 <%_ } _%>
-        user.setLogin(DEFAULT_LOGIN<% if (databaseTypeSql) { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
+        persistUser.setLogin(DEFAULT_LOGIN<% if (databaseTypeSql) { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
 <%_ if (!authenticationTypeOauth2) { _%>
-        user.setPassword(RandomStringUtils.randomAlphanumeric(60));
+        persistUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
 <%_ } _%>
-        user.setActivated(true);
-        user.setEmail(<% if (databaseTypeSql) { %>RandomStringUtils.randomAlphabetic(5) + <% } %>DEFAULT_EMAIL);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
+        persistUser.setActivated(true);
+        persistUser.setEmail(<% if (databaseTypeSql) { %>RandomStringUtils.randomAlphabetic(5) + <% } %>DEFAULT_EMAIL);
+        persistUser.setFirstName(DEFAULT_FIRSTNAME);
+        persistUser.setLastName(DEFAULT_LASTNAME);
 <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(DEFAULT_IMAGEURL);
+        persistUser.setImageUrl(DEFAULT_IMAGEURL);
 <%_ } _%>
-        user.setLangKey(DEFAULT_LANGKEY);
+        persistUser.setLangKey(DEFAULT_LANGKEY);
 <%_ if (databaseTypeSql && reactive) { _%>
-        user.setCreatedBy(Constants.SYSTEM);
+        persistUser.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        return user;
+        return persistUser;
     }
 <%_ if (databaseTypeSql && reactive) { _%>
 
@@ -290,28 +290,28 @@ class UserResourceIT {
             .collectList().block()<% } %>.size();
 
         // Create the User
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setLogin(DEFAULT_LOGIN);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setEmail(DEFAULT_EMAIL);
-        user.setActivated(true);
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setLogin(DEFAULT_LOGIN);
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail(DEFAULT_EMAIL);
+        userDTO.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(DEFAULT_IMAGEURL);
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isCreated();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isCreated());
   <%_ } _%>
@@ -344,36 +344,36 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
   <%_ if (databaseTypeCassandra) { _%>
-        user.setId(UUID.randomUUID().toString());
+        userDTO.setId(UUID.randomUUID().toString());
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-        user.setId("1L");
+        userDTO.setId("1L");
   <%_ } else { _%>
-        user.setId(DEFAULT_ID);
+        userDTO.setId(DEFAULT_ID);
   <%_ } _%>
-        user.setLogin(DEFAULT_LOGIN);
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setEmail(DEFAULT_EMAIL);
-        user.setActivated(true);
+        userDTO.setLogin(DEFAULT_LOGIN);
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail(DEFAULT_EMAIL);
+        userDTO.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(DEFAULT_IMAGEURL);
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -400,29 +400,29 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setLogin(DEFAULT_LOGIN);// this login should already be used
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setEmail("anothermail@localhost");
-        user.setActivated(true);
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setLogin(DEFAULT_LOGIN);// this login should already be used
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail("anothermail@localhost");
+        userDTO.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(DEFAULT_IMAGEURL);
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
   <%_ if (reactive) { _%>
         webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -449,17 +449,17 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setLogin("anotherlogin");
-        user.setFirstName(DEFAULT_FIRSTNAME);
-        user.setLastName(DEFAULT_LASTNAME);
-        user.setEmail(DEFAULT_EMAIL);// this email should already be used
-        user.setActivated(true);
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setLogin("anotherlogin");
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail(DEFAULT_EMAIL);// this email should already be used
+        userDTO.setActivated(true);
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(DEFAULT_IMAGEURL);
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
-        user.setLangKey(DEFAULT_LANGKEY);
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         // Create the User
   <%_ if (reactive) { _%>
@@ -471,7 +471,7 @@ class UserResourceIT {
   <%_ } else { _%>
         restUserMockMvc.perform(post("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -638,35 +638,35 @@ class UserResourceIT {
         // Update the user
         <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setId(updatedUser.getId());
-        user.setLogin(updatedUser.getLogin());
-        user.setFirstName(UPDATED_FIRSTNAME);
-        user.setLastName(UPDATED_LASTNAME);
-        user.setEmail(UPDATED_EMAIL);
-        user.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setId(updatedUser.getId());
+        userDTO.setLogin(updatedUser.getLogin());
+        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        userDTO.setLastName(UPDATED_LASTNAME);
+        userDTO.setEmail(UPDATED_EMAIL);
+        userDTO.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(UPDATED_IMAGEURL);
+        userDTO.setImageUrl(UPDATED_IMAGEURL);
   <%_ } _%>
-        user.setLangKey(UPDATED_LANGKEY);
+        userDTO.setLangKey(UPDATED_LANGKEY);
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setCreatedBy(updatedUser.getCreatedBy());
-        user.setCreatedDate(updatedUser.getCreatedDate());
-        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        userDTO.setCreatedBy(updatedUser.getCreatedBy());
+        userDTO.setCreatedDate(updatedUser.getCreatedDate());
+        userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -703,35 +703,35 @@ class UserResourceIT {
         // Update the user
         <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setId(updatedUser.getId());
-        user.setLogin(UPDATED_LOGIN);
-        user.setFirstName(UPDATED_FIRSTNAME);
-        user.setLastName(UPDATED_LASTNAME);
-        user.setEmail(UPDATED_EMAIL);
-        user.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setId(updatedUser.getId());
+        userDTO.setLogin(UPDATED_LOGIN);
+        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        userDTO.setLastName(UPDATED_LASTNAME);
+        userDTO.setEmail(UPDATED_EMAIL);
+        userDTO.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(UPDATED_IMAGEURL);
+        userDTO.setImageUrl(UPDATED_IMAGEURL);
   <%_ } _%>
-        user.setLangKey(UPDATED_LANGKEY);
+        userDTO.setLangKey(UPDATED_LANGKEY);
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setCreatedBy(updatedUser.getCreatedBy());
-        user.setCreatedDate(updatedUser.getCreatedDate());
-        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        userDTO.setCreatedBy(updatedUser.getCreatedBy());
+        userDTO.setCreatedDate(updatedUser.getCreatedDate());
+        userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
   <%_ } _%>
@@ -792,35 +792,35 @@ class UserResourceIT {
         // Update the user
         <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setId(updatedUser.getId());
-        user.setLogin(updatedUser.getLogin());
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
-        user.setEmail("jhipster@localhost");// this email should already be used by anotherUser
-        user.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setId(updatedUser.getId());
+        userDTO.setLogin(updatedUser.getLogin());
+        userDTO.setFirstName(updatedUser.getFirstName());
+        userDTO.setLastName(updatedUser.getLastName());
+        userDTO.setEmail("jhipster@localhost");// this email should already be used by anotherUser
+        userDTO.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(updatedUser.getImageUrl());
+        userDTO.setImageUrl(updatedUser.getImageUrl());
   <%_ } _%>
-        user.setLangKey(updatedUser.getLangKey());
+        userDTO.setLangKey(updatedUser.getLangKey());
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setCreatedBy(updatedUser.getCreatedBy());
-        user.setCreatedDate(updatedUser.getCreatedDate());
-        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        userDTO.setCreatedBy(updatedUser.getCreatedBy());
+        userDTO.setCreatedDate(updatedUser.getCreatedDate());
+        userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
@@ -867,35 +867,35 @@ class UserResourceIT {
         // Update the user
         <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> user = new <%= user.adminUserDto %>();
-        user.setId(updatedUser.getId());
-        user.setLogin("jhipster");// this login should already be used by anotherUser
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
-        user.setEmail(updatedUser.getEmail());
-        user.setActivated(updatedUser.isActivated());
+        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        userDTO.setId(updatedUser.getId());
+        userDTO.setLogin("jhipster");// this login should already be used by anotherUser
+        userDTO.setFirstName(updatedUser.getFirstName());
+        userDTO.setLastName(updatedUser.getLastName());
+        userDTO.setEmail(updatedUser.getEmail());
+        userDTO.setActivated(updatedUser.isActivated());
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setImageUrl(updatedUser.getImageUrl());
+        userDTO.setImageUrl(updatedUser.getImageUrl());
   <%_ } _%>
-        user.setLangKey(updatedUser.getLangKey());
+        userDTO.setLangKey(updatedUser.getLangKey());
   <%_ if (!databaseTypeCassandra) { _%>
-        user.setCreatedBy(updatedUser.getCreatedBy());
-        user.setCreatedDate(updatedUser.getCreatedDate());
-        user.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        user.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        userDTO.setCreatedBy(updatedUser.getCreatedBy());
+        userDTO.setCreatedDate(updatedUser.getCreatedDate());
+        userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        user.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(user))
+            .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
         restUserMockMvc.perform(put("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(user))<% if (authenticationUsesCsrf) { %>
+            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
