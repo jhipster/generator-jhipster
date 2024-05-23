@@ -132,13 +132,32 @@ spring:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-<%_ if (generateInMemoryUserCredentials) { _%>
+<%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
   security:
+  <%_ if (generateInMemoryUserCredentials) { _%>
     user:
       name: test
       password: test
       roles:
-        - USER
+        - ROLE_USER
+  <%_ } _%>
+  <%_ if (authenticationTypeOauth2) { _%>
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://DO_NOT_CALL:9080/realms/jhipster
+      resourceserver:
+        jwt:
+          principal-claim-name: preferred_username
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt) { _%>
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
+  <%_ } _%>
 <%_ } _%>
   task:
     execution:
@@ -153,15 +172,6 @@ spring:
         size: 20
   thymeleaf:
     mode: HTML
-<%_ if (authenticationTypeOauth2) { _%>
-  # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: http://DO_NOT_CALL:9080/realms/jhipster
-<%_ } _%>
 
 server:
   port: 10344
