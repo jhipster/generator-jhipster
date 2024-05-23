@@ -113,10 +113,10 @@ class UserMapperTest {
         assertThat(convertedUserDto.getImageUrl()).isEqualTo(user.getImageUrl());
 <%_ } _%>
 <%_ if (generateSpringAuditor) { _%>
-        assertThat(user.getCreatedBy()).isEqualTo(user.getCreatedBy());
-        assertThat(user.getCreatedDate()).isEqualTo(user.getCreatedDate());
-        assertThat(user.getLastModifiedBy()).isEqualTo(user.getLastModifiedBy());
-        assertThat(user.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
+        assertThat(convertedUser.getCreatedBy()).isEqualTo(user.getCreatedBy());
+        assertThat(convertedUser.getCreatedDate()).isEqualTo(user.getCreatedDate());
+        assertThat(convertedUser.getLastModifiedBy()).isEqualTo(user.getLastModifiedBy());
+        assertThat(convertedUser.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
 <%_ } _%>
         assertThat(convertedUserDto.getLangKey()).isEqualTo(user.getLangKey());
         assertThat(convertedUserDto.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
