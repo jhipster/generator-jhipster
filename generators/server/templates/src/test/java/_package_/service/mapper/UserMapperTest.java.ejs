@@ -19,14 +19,24 @@
 package <%= packageName %>.service.mapper;
 
 import <%= user.entityAbsoluteClass %>;
+import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+import <%= packageName %>.domain.Authority;
+<%_ } else { _%>
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+<%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+<%_ if (generateSpringAuditor) { _%>
+import java.time.Instant;
+<%_ } _%>
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,9 +78,71 @@ class UserMapperTest {
 <%_ if (!databaseTypeCassandra) { _%>
         user.setImageUrl("image_url");
 <%_ } _%>
+<%_ if (generateSpringAuditor) { _%>
+        user.setCreatedBy(DEFAULT_LOGIN);
+        user.setCreatedDate(Instant.now());
+        user.setLastModifiedBy(DEFAULT_LOGIN);
+        user.setLastModifiedDate(Instant.now());
+<%_ } _%>
         user.setLangKey("en");
 
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        Set<Authority> authorities = new HashSet<>();
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.USER);
+        authorities.add(authority);
+        user.setAuthorities(authorities);
+<%_ } else { _%>
+        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+<%_ } _%>
+
         userDto = new <%= user.adminUserDto %>(user);
+    }
+
+    @Test
+    void testUserToUserDTO() {
+        <%= user.adminUserDto %> convertedUserDto = userMapper.userToAdminUserDTO(user);
+
+        assertThat(convertedUserDto.getId()).isEqualTo(user.getId());
+        assertThat(convertedUserDto.getLogin()).isEqualTo(user.getLogin());
+        assertThat(convertedUserDto.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(convertedUserDto.getLastName()).isEqualTo(user.getLastName());
+        assertThat(convertedUserDto.getEmail()).isEqualTo(user.getEmail());
+        assertThat(convertedUserDto.isActivated()).isEqualTo(user.isActivated());
+<%_ if (!databaseTypeCassandra) { _%>
+        assertThat(convertedUserDto.getImageUrl()).isEqualTo(user.getImageUrl());
+<%_ } _%>
+<%_ if (generateSpringAuditor) { _%>
+        assertThat(user.getCreatedBy()).isEqualTo(user.getCreatedBy());
+        assertThat(user.getCreatedDate()).isEqualTo(user.getCreatedDate());
+        assertThat(user.getLastModifiedBy()).isEqualTo(user.getLastModifiedBy());
+        assertThat(user.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
+<%_ } _%>
+        assertThat(convertedUserDto.getLangKey()).isEqualTo(user.getLangKey());
+        assertThat(convertedUserDto.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
+    }
+
+    @Test
+    void testUserDTOtoUser() {
+        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
+
+        assertThat(convertedUser.getId()).isEqualTo(userDto.getId());
+        assertThat(convertedUser.getLogin()).isEqualTo(userDto.getLogin());
+        assertThat(convertedUser.getFirstName()).isEqualTo(userDto.getFirstName());
+        assertThat(convertedUser.getLastName()).isEqualTo(userDto.getLastName());
+        assertThat(convertedUser.getEmail()).isEqualTo(userDto.getEmail());
+        assertThat(convertedUser.isActivated()).isEqualTo(userDto.isActivated());
+<%_ if (!databaseTypeCassandra) { _%>
+        assertThat(convertedUser.getImageUrl()).isEqualTo(userDto.getImageUrl());
+<%_ } _%>
+        assertThat(convertedUser.getLangKey()).isEqualTo(userDto.getLangKey());
+<%_ if (generateSpringAuditor) { _%>
+        assertThat(convertedUser.getCreatedBy()).isEqualTo(userDto.getCreatedBy());
+        assertThat(convertedUser.getCreatedDate()).isEqualTo(userDto.getCreatedDate());
+        assertThat(convertedUser.getLastModifiedBy()).isEqualTo(userDto.getLastModifiedBy());
+        assertThat(convertedUser.getLastModifiedDate()).isEqualTo(userDto.getLastModifiedDate());
+<%_ } _%>
+        assertThat(convertedUser.getAuthorities())<% if (!databaseTypeCassandra && !databaseTypeCouchbase) { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test
@@ -141,20 +213,15 @@ class UserMapperTest {
 
     @Test
     void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
-        Set<String> authoritiesAsString = new HashSet<>();
-        authoritiesAsString.add("ADMIN");
-        userDto.setAuthorities(authoritiesAsString);
+        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
 
-        <%= user.persistClass %> user = userMapper.userDTOToUser(userDto);
-
-        assertThat(user).isNotNull();
-        assertThat(user.getAuthorities()).isNotNull();
-        assertThat(user.getAuthorities()).isNotEmpty();
-<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
-        assertThat(user.getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
-<%_ } _%>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        assertThat(user.getAuthorities().iterator().next()).isEqualTo("ADMIN");
+        assertThat(convertedUser).isNotNull();
+        assertThat(convertedUser.getAuthorities()).isNotNull();
+        assertThat(convertedUser.getAuthorities()).isNotEmpty();
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+        assertThat(convertedUser.getAuthorities().iterator().next().getName()).isEqualTo(AuthoritiesConstants.USER);
+<%_ } else { _%>
+        assertThat(convertedUser.getAuthorities().iterator().next()).isEqualTo(AuthoritiesConstants.USER);
 <%_ } _%>
     }
 
