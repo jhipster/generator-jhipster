@@ -138,11 +138,11 @@ export const getCacheProviderMavenDefinition: (
           },
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-commons-jakarta',
+            artifactId: 'infinispan-commons',
           },
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-core-jakarta',
+            artifactId: 'infinispan-core',
           },
           {
             groupId: 'org.infinispan',

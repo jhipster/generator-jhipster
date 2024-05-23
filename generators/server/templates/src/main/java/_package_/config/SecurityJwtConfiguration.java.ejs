@@ -35,11 +35,6 @@ import org.springframework.security.oauth2.jwt.<%= reactive ? 'Reactive' : '' %>
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.<%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-<%_ if (reactive) { _%>
-import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtGrantedAuthoritiesConverterAdapter;
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { %>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
@@ -111,21 +106,6 @@ public class SecurityJwtConfiguration {
     @Bean
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
-    }
-
-    @Bean
-    public <%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName(AUTHORITIES_KEY);
-
-        <%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter jwtAuthenticationConverter = new <%= reactive ? 'Reactive' : '' %>JwtAuthenticationConverter();
-<%_ if (reactive) { %>
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new ReactiveJwtGrantedAuthoritiesConverterAdapter(grantedAuthoritiesConverter));
-<%_ } else { _%>
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-<%_ } _%>
-        return jwtAuthenticationConverter;
     }
 
 <%_ if (communicationSpringWebsocket) { %>
