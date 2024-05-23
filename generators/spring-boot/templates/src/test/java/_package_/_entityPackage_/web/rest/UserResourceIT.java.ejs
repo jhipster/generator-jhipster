@@ -264,12 +264,12 @@ class UserResourceIT {
         userRepository.deleteAllUserAuthorities().block();
 <%_ } _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-        <%= user.persistClass %> user = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
+        <%= user.persistClass %> persistUser = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
 <%_ if (databaseTypeSql) { _%>
-        user.setLogin(DEFAULT_LOGIN);
-        user.setEmail(DEFAULT_EMAIL);
+        persistUser.setLogin(DEFAULT_LOGIN);
+        persistUser.setEmail(DEFAULT_EMAIL);
 <%_ } _%>
-        return user;
+        return persistUser;
     }
 
     @BeforeEach
