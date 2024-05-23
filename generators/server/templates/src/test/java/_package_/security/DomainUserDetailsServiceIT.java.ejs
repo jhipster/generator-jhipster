@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const callBlock = reactive ? '.block()' : '';
+const callBlockOptional = reactive ? '.blockOptional()' : '';
+_%>
 package <%= packageName %>.security;
 
 import <%= packageName %>.IntegrationTest;
@@ -24,8 +28,10 @@ import <%= packageName %>.config.Constants;
 <%_ } _%>
 import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.service.UserService;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,18 +81,13 @@ class DomainUserDetailsServiceIT {
     private UserRepository userRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     @Qualifier("userDetailsService")
     private <% if (reactive) { %>Reactive<% } %>UserDetailsService domainUserDetailsService;
 
-    @BeforeEach
-    public void init() {
-<%_ if (databaseTypeSql && reactive) { _%>
-        userRepository.deleteAllUserAuthorities().block();
-<%_ } _%>
-<%_ if (!databaseTypeSql || reactive) { _%>
-        userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
-
-<%_ } _%>
+    public <%= user.persistClass %> getUserOne() {
         <%= user.persistClass %> userOne = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         userOne.setId(UUID.randomUUID().toString());
@@ -101,8 +102,10 @@ class DomainUserDetailsServiceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         userOne.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save(userOne)<% if (reactive) { %>.block()<% } %>;
+        return userOne;
+    }
 
+    public <%= user.persistClass %> getUserTwo() {
         <%= user.persistClass %> userTwo = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         userTwo.setId(UUID.randomUUID().toString());
@@ -117,8 +120,10 @@ class DomainUserDetailsServiceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         userTwo.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save(userTwo)<% if (reactive) { %>.block()<% } %>;
+        return userTwo;
+    }
 
+    public <%= user.persistClass %> getUserThree() {
         <%= user.persistClass %> userThree = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         userThree.setId(UUID.randomUUID().toString());
@@ -133,7 +138,21 @@ class DomainUserDetailsServiceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         userThree.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save(userThree)<% if (reactive) { %>.block()<% } %>;
+        return userThree;
+    }
+
+    @BeforeEach
+    public void init() {
+        userRepository.save(getUserOne())<%- callBlock %>;
+        userRepository.save(getUserTwo())<%- callBlock %>;
+        userRepository.save(getUserThree())<%- callBlock %>;
+    }
+
+    @AfterEach
+    public void cleanup () {
+        userService.deleteUser(USER_ONE_LOGIN)<%- callBlock %>;
+        userService.deleteUser(USER_TWO_LOGIN)<%- callBlock %>;
+        userService.deleteUser(USER_THREE_LOGIN)<%- callBlock %>;
     }
 
     @Test
@@ -176,5 +195,4 @@ class DomainUserDetailsServiceIT {
         assertThatExceptionOfType(UserNotActivatedException.class).isThrownBy(
             () -> domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_THREE_LOGIN)<% if (reactive) { %>.block()<% } %>);
     }
-
 }
