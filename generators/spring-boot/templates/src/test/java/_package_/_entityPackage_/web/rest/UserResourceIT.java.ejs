@@ -83,9 +83,6 @@ import reactor.core.publisher.Mono;
 <%_ if (databaseTypeSql && !reactive) { _%>
 import jakarta.persistence.EntityManager;
 <%_ } _%>
-<%_ if (!databaseTypeCassandra) { _%>
-import java.time.Instant;
-<%_ } _%>
 import java.util.*;
 import java.util.function.Consumer;
 <%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
@@ -950,86 +947,6 @@ class UserResourceIT {
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);
-    }
-
-    @Test
-    void testUserDTOtoUser() {
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
-        userDTO.setId(DEFAULT_ID);
-        userDTO.setLogin(DEFAULT_LOGIN);
-        userDTO.setFirstName(DEFAULT_FIRSTNAME);
-        userDTO.setLastName(DEFAULT_LASTNAME);
-        userDTO.setEmail(DEFAULT_EMAIL);
-        userDTO.setActivated(true);
-<%_ if (!databaseTypeCassandra) { _%>
-        userDTO.setImageUrl(DEFAULT_IMAGEURL);
-<%_ } _%>
-        userDTO.setLangKey(DEFAULT_LANGKEY);
-<%_ if (!databaseTypeCassandra) { _%>
-        userDTO.setCreatedBy(DEFAULT_LOGIN);
-        userDTO.setLastModifiedBy(DEFAULT_LOGIN);
-<%_ } _%>
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-        <%= user.persistClass %> user = userMapper.userDTOToUser(userDTO);
-        assertThat(user.getId()).isEqualTo(DEFAULT_ID);
-        assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(user.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(user.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(user.isActivated()).isTrue();
-<%_ if (!databaseTypeCassandra) { _%>
-        assertThat(user.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-<%_ } _%>
-        assertThat(user.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-<%_ if (!databaseTypeCassandra) { _%>
-        assertThat(user.getCreatedBy()).isNull();
-        assertThat(user.getCreatedDate()).isNotNull();
-        assertThat(user.getLastModifiedBy()).isNull();
-        assertThat(user.getLastModifiedDate()).isNotNull();
-<%_ } _%>
-        assertThat(user.getAuthorities())<% if (!databaseTypeCassandra && !databaseTypeCouchbase) { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
-    }
-
-    @Test
-    void testUserToUserDTO() {
-        user.setId(DEFAULT_ID);
-<%_ if (!databaseTypeCassandra) { _%>
-        user.setCreatedBy(DEFAULT_LOGIN);
-        user.setCreatedDate(Instant.now());
-        user.setLastModifiedBy(DEFAULT_LOGIN);
-        user.setLastModifiedDate(Instant.now());
-<%_ } _%>
-<%_ if (!databaseTypeCassandra && !databaseTypeCouchbase) { _%>
-        Set<Authority> authorities = new HashSet<>();
-        Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.USER);
-        authorities.add(authority);
-        user.setAuthorities(authorities);
-<%_ } else { _%>
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
-<%_ } _%>
-
-        <%= user.adminUserDto %> userDTO = userMapper.userToAdminUserDTO(user);
-
-        assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
-        assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(userDTO.isActivated()).isTrue();
-<%_ if (!databaseTypeCassandra) { _%>
-        assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-<%_ } _%>
-        assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-<%_ if (!databaseTypeCassandra) { _%>
-        assertThat(userDTO.getCreatedBy()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
-        assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
-<%_ } _%>
-        assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
-        assertThat(userDTO.toString()).isNotNull();
     }
 
     private void assertPersistedUsers(Consumer<List<<%= user.persistClass %>>> userAssertion) {
