@@ -229,11 +229,11 @@ class UserMapperTest {
     void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        <%= user.persistClass %> user = userMapper.userDTOToUser(userDto);
+        <%= user.persistClass %> persistUser = userMapper.userDTOToUser(userDto);
 
-        assertThat(user).isNotNull();
-        assertThat(user.getAuthorities()).isNotNull();
-        assertThat(user.getAuthorities()).isEmpty();
+        assertThat(persistUser).isNotNull();
+        assertThat(persistUser.getAuthorities()).isNotNull();
+        assertThat(persistUser.getAuthorities()).isEmpty();
     }
 
     @Test
