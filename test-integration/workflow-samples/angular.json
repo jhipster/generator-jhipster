@@ -10,15 +10,12 @@
       "name": "ng-default-additional",
       "entity": "none",
       "app-sample": "ng-default",
-      "jdl-entity": "*",
-      "node-version": "20",
-      "java-version": "21"
+      "jdl-entity": "*"
     },
     {
       "name": "ng-mysql-es-noi18n-mapsid",
       "app-sample": "ng-mysql-es-noi18n-mapsid",
-      "entity": "sql",
-      "node-version": "20"
+      "entity": "sql"
     },
     {
       "name": "ng-mongodb-kafka-cucumber",
@@ -26,8 +23,7 @@
       "entity": "mongodb",
       "generatorOptions": {
         "defaultEnvironment": "dev"
-      },
-      "java-version": "21"
+      }
     },
     {
       "name": "ng-h2mem-ws-nol2",
@@ -52,9 +48,7 @@
     {
       "name": "ng-gradle-fr",
       "app-sample": "ng-gradle-fr",
-      "entity": "sql",
-      "node-version": "20",
-      "java-version": "21"
+      "entity": "sql"
     },
     {
       "name": "ng-gradle-mariadb-oauth2-infinispan",
@@ -62,8 +56,7 @@
       "entity": "sql",
       "generatorOptions": {
         "defaultEnvironment": "dev"
-      },
-      "node-version": "20"
+      }
     },
     {
       "name": "ng-gradle-h2disk-ws-nocache",
@@ -72,8 +65,7 @@
       "generatorOptions": {
         "defaultEnvironment": "dev",
         "defaultPackaging": "war"
-      },
-      "java-version": "21"
+      }
     },
     {
       "name": "ng-webflux-mongodb",
@@ -83,9 +75,7 @@
     {
       "name": "ng-webflux-gradle-mongodb-oauth2",
       "app-sample": "webflux-mongodb-oauth2",
-      "entity": "mongodb",
-      "node-version": "20",
-      "java-version": "21"
+      "entity": "mongodb"
     },
     {
       "name": "ng-webflux-psql-default",
@@ -94,9 +84,7 @@
     },
     {
       "name": "ng-webflux-psql-additional",
-      "jdl-samples": "webflux-psql,custom-domain",
-      "node-version": "20",
-      "java-version": "21"
+      "jdl-samples": "webflux-psql,custom-domain"
     },
     {
       "name": "ng-webflux-gradle-session-h2mem-es",
@@ -104,15 +92,13 @@
       "generatorOptions": {
         "defaultEnvironment": "dev"
       },
-      "entity": "sqllight",
-      "node-version": "20"
+      "entity": "sqllight"
     },
     {
       "name": "ng-webflux-couchbase",
       "disabled": "needs adjusts for sb3",
       "app-sample": "webflux-couchbase",
-      "entity": "couchbase",
-      "java-version": "21"
+      "entity": "couchbase"
     },
     {
       "name": "ms-ng-oauth2-mongodb-caffeine",
@@ -129,9 +115,7 @@
       "generatorOptions": {
         "workspaces": true,
         "monorepository": true
-      },
-      "node-version": "20",
-      "java-version": "21"
+      }
     },
     {
       "name": "ms-mf-ng-consul-oauth2-neo4j",
@@ -139,8 +123,7 @@
       "generatorOptions": {
         "workspaces": true,
         "monorepository": true
-      },
-      "node-version": "20"
+      }
     }
   ]
 }

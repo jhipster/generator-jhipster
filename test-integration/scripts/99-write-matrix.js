@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { writeFileSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { createHash } from 'node:crypto';
+import { writeFileSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   packageRoot,
   JAVA_VERSION,
@@ -21,6 +22,10 @@ try {
   existing = { include: [] };
 }
 
+const randomReproducibleValue = (str, choices) => {
+  return choices[createHash('shake256', { outputLength: 1 }).update(str, 'utf8').digest('binary').charCodeAt(0) % choices.length];
+};
+
 writeFileSync(
   MATRIX_FILE,
   JSON.stringify(
@@ -34,28 +39,33 @@ writeFileSync(
             try {
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
-                .map(({ generatorOptions, ...sample }) => ({
-                  workspaces: generatorOptions?.workspaces ? 'true' : undefined,
-                  'extra-args': `${generatorOptions?.workspaces ? ' --workspaces' : ''}${generatorOptions?.monorepository ? ' --monorepository' : ''}`,
-                  'setup-application-sample': sample['jhi-app-sample'] || sample['app-sample'] || 'jdl',
-                  'setup-application-environment': generatorOptions?.defaultEnvironment ?? 'prod',
-                  'setup-application-packaging': generatorOptions?.defaultPackaging ?? 'jar',
-                  'setup-entities-sample': sample.entity ?? 'none',
-                  'setup-jdl-entities-sample': sample['jdl-entity'] ?? '',
-                  'setup-jdl-sample': sample['jdl-samples'] ?? '',
-                  java: sample['java-version'] ?? JAVA_VERSION,
-                  node: sample['node-version'] ?? NODE_VERSION,
-                  'java-version': JAVA_VERSION,
-                  'node-version': NODE_VERSION,
-                  'npm-version': generatorOptions?.workspaces ? NPM_VERSION : undefined,
-                  'build-jhipster-bom': BUILD_JHIPSTER_BOM,
-                  'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
-                  'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
-                  'gradle-cache': generatorOptions?.workspaces || sample.name.includes('gradle') ? true : undefined,
-                  ...sample,
-                  'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
-                  'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
-                }));
+                .map(({ generatorOptions, name, ...sample }) => {
+                  const javaVersion = randomReproducibleValue(name, [JAVA_VERSION, '17', '21']);
+                  const nodeVersion = randomReproducibleValue(name, [NODE_VERSION, '18', '20']);
+                  return {
+                    name,
+                    workspaces: generatorOptions?.workspaces ? 'true' : undefined,
+                    'extra-args': `${generatorOptions?.workspaces ? ' --workspaces' : ''}${generatorOptions?.monorepository ? ' --monorepository' : ''}`,
+                    'setup-application-sample': sample['jhi-app-sample'] || sample['app-sample'] || 'jdl',
+                    'setup-application-environment': generatorOptions?.defaultEnvironment ?? 'prod',
+                    'setup-application-packaging': generatorOptions?.defaultPackaging ?? 'jar',
+                    'setup-entities-sample': sample.entity ?? 'none',
+                    'setup-jdl-entities-sample': sample['jdl-entity'] ?? '',
+                    'setup-jdl-sample': sample['jdl-samples'] ?? '',
+                    java: javaVersion,
+                    node: nodeVersion,
+                    'java-version': javaVersion,
+                    'node-version': nodeVersion,
+                    'npm-version': generatorOptions?.workspaces ? NPM_VERSION : undefined,
+                    'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+                    'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+                    'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
+                    'gradle-cache': generatorOptions?.workspaces || name.includes('gradle') ? true : undefined,
+                    ...sample,
+                    'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
+                    'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
+                  };
+                });
             } catch (error) {
               console.log(`File ${file} not found`, error);
               return [];
