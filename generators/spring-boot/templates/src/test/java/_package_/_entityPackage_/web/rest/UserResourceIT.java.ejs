@@ -310,9 +310,6 @@ class UserResourceIT {
     @Transactional
   <%_ } _%>
     void createUser() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
-
         // Create the User
         <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setLogin(DEFAULT_LOGIN);
