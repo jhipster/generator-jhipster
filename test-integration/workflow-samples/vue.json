@@ -9,22 +9,17 @@
       "name": "vue-default-additional",
       "app-sample": "vue-default",
       "entity": "none",
-      "jdl-entity": "custom-id",
-      "node-version": "20",
-      "java-version": "21"
+      "jdl-entity": "custom-id"
     },
     {
       "name": "vue-noi18n-mysql-ws-oauth2",
       "app-sample": "vue-noi18n-ws-oauth2",
-      "entity": "sqlfull",
-      "node-version": "20",
-      "java-version": "21"
+      "entity": "sqlfull"
     },
     {
       "name": "vue-fulli18n-mysql-es",
       "app-sample": "vue-fulli18n-es",
-      "entity": "sql",
-      "node-version": "20"
+      "entity": "sql"
     },
     {
       "name": "vue-gradle-h2mem-ws-session",
@@ -32,8 +27,7 @@
       "entity": "sql",
       "generatorOptions": {
         "defaultEnvironment": "dev"
-      },
-      "java-version": "21"
+      }
     },
     {
       "name": "vue-h2disk-ws-theme",

@@ -11,21 +11,17 @@
       "entity": "sql",
       "generatorOptions": {
         "defaultEnvironment": "dev"
-      },
-      "node-version": "20",
-      "java-version": "21"
+      }
     },
     {
       "name": "react-gradle-mysql-es-noi18n-mapsid",
       "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
-      "entity": "sql",
-      "node-version": "20"
+      "entity": "sql"
     },
     {
       "name": "react-gradle-cassandra-session-redis",
       "app-sample": "react-gradle-cassandra-session-redis",
-      "entity": "cassandra",
-      "java-version": "21"
+      "entity": "cassandra"
     },
     {
       "name": "ms-react-consul-jwt-cassandra-redis",
@@ -33,8 +29,7 @@
       "generatorOptions": {
         "workspaces": true,
         "monorepository": true
-      },
-      "java-version": "21"
+      }
     },
     {
       "name": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
