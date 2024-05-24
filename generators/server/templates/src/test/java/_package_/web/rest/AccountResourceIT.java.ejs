@@ -44,9 +44,8 @@ import <%= packageName %>.web.rest.vm.ManagedUserVM;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
-<%_ if (reactive && authenticationUsesCsrf || databaseTypeMongodb || databaseTypeNeo4j) { _%>
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-<%_ } _%>
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -144,10 +143,12 @@ class AccountResourceIT {
     private MockMvc restAccountMockMvc;
 <%_ } _%>
 
-<%_ if (databaseTypeMongodb || databaseTypeNeo4j) { _%>
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+    private Long numberOfUsers;
+
     @BeforeEach
-    public void setup() {
-        userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
+    public void countUsers() {
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
     }
 
 <%_ } _%>
@@ -158,6 +159,16 @@ class AccountResourceIT {
     }
 
 <%_ } _%>
+    @AfterEach
+    public void cleanupAndCheck() {
+<%_ if (requiresDeleteAllUsers) { _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
+<%_ } else if (!databaseTypeCassandra) { _%>
+        assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
+<%_ } _%>
+    }
+
     @Test
     @WithUnauthenticatedMockUser
 <%_ if (reactive) { _%>
@@ -246,6 +257,8 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
 
 <%_ } _%>
+
+        userService.deleteUser(TEST_USER_LOGIN)<%- reactorBlock %>;
     }
 
     @Test
@@ -301,6 +314,8 @@ class AccountResourceIT {
 <%_ } _%>
 
         assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>).isPresent();
+
+        userService.deleteUser("test-register-valid")<%- reactorBlock %>;
     }
 
     @Test
@@ -484,6 +499,8 @@ class AccountResourceIT {
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
 <%_ } _%>
+
+        userService.deleteUser("alice")<%- reactorBlock %>;
     }
 
     @Test
@@ -610,6 +627,8 @@ class AccountResourceIT {
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
 <%_ } _%>
+
+        userService.deleteUser("test-register-duplicate-email-3")<%- reactorBlock %>;
     }
 
     @Test
@@ -649,6 +668,8 @@ class AccountResourceIT {
         assertThat(userDup).isPresent();
         assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1)
             .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>()<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>AuthoritiesConstants.USER<% } %>);
+
+        userService.deleteUser("badguy")<%- reactorBlock %>;
     }
 
     @Test
@@ -683,6 +704,8 @@ class AccountResourceIT {
 
         user = userRepository.findOneByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(user.isActivated()).isTrue();
+
+        userService.deleteUser("activate-account")<%- reactorBlock %>;
     }
 
     @Test
@@ -757,6 +780,8 @@ class AccountResourceIT {
 <%_ } _%>
         assertThat(updatedUser.isActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
+
+        userService.deleteUser("save-account")<%- reactorBlock %>;
     }
 
     @Test
@@ -810,6 +835,8 @@ class AccountResourceIT {
 <%_ } _%>
 
         assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")<% if (reactive) { %>.blockOptional()<% } %>).isNotPresent();
+
+        userService.deleteUser("save-invalid-email")<%- reactorBlock %>;
     }
 
     @Test
@@ -872,8 +899,11 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%_ if (reactive) { _%>.block()<% } else { %>.orElseThrow()<% } %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
+
+        userService.deleteUser("save-existing-email")<%- reactorBlock %>;
+        userService.deleteUser("save-existing-email2")<%- reactorBlock %>;
     }
 
     @Test
@@ -924,6 +954,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
+
+        userService.deleteUser("save-existing-email-and-login")<%- reactorBlock %>;
     }
 
     @Test
@@ -963,6 +995,8 @@ class AccountResourceIT {
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("change-password-wrong-existing-password")<%- reactorBlock %>;
     }
 
     @Test
@@ -1001,6 +1035,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("change-password")<%- reactorBlock %>;
     }
 
     @Test
@@ -1041,6 +1077,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-too-small")<%- reactorBlock %>;
     }
 
     @Test
@@ -1081,6 +1119,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-too-long")<%- reactorBlock %>;
     }
 
     @Test
@@ -1119,6 +1159,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-empty")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
+
+        userService.deleteUser("change-password-empty")<%- reactorBlock %>;
     }
 <%_ if (authenticationTypeSession && !reactive) { _%>
 
@@ -1165,6 +1207,9 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))
             .andExpect(jsonPath("$.[*].userAgent").value(hasItem(token.getUserAgent())))
             .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(containsString(<% if (databaseTypeCassandra) { %>"2017-03-28T15:25:57.123Z"<% } else { %>token.getTokenDate().toString()<% } %>))));
+
+        persistentTokenRepository.delete(token);
+        userService.deleteUser("current-sessions")<%- reactorBlock %>;
     }
 
     @Test
@@ -1210,6 +1255,9 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 
         assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
+
+        persistentTokenRepository.delete(token);
+        userService.deleteUser("invalidate-session")<%- reactorBlock %>;
     }
     <%_ } _%>
 
@@ -1244,6 +1292,8 @@ class AccountResourceIT {
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
 <%_ } _%>
+
+        userService.deleteUser("password-reset")<%- reactorBlock %>;
     }
 
     @Test
@@ -1277,6 +1327,8 @@ class AccountResourceIT {
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
 <%_ } _%>
+
+        userService.deleteUser("password-reset-upper-case")<%- reactorBlock %>;
     }
 
     @Test
@@ -1336,6 +1388,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
+
+        userService.deleteUser("finish-password-reset")<%- reactorBlock %>;
     }
 
     @Test
@@ -1378,6 +1432,8 @@ class AccountResourceIT {
 
         <%= user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
+
+        userService.deleteUser("finish-password-reset-too-small")<%- reactorBlock %>;
     }
 
     @Test

@@ -34,11 +34,17 @@ import static org.mockito.Mockito.*;
 
 import <%= packageName %>.IntegrationTest;
 import <%= packageName %>.security.AuthoritiesConstants;
+<%_ if (syncUserWithIdp) { _%>
+import <%= packageName %>.repository.UserRepository;
+<%_ } _%>
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+<%_ if (authenticationTypeOauth2) { _%>
+import org.junit.jupiter.api.AfterEach;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -74,6 +80,11 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 @IntegrationTest
 class AccountResourceIT {
+<%_ if (syncUserWithIdp) { _%>
+
+    @Autowired
+    private UserRepository userRepository;
+<%_ } _%>
 
 <%_ if (reactive) { _%>
     private Map<String, Object> claims;
@@ -104,6 +115,17 @@ class AccountResourceIT {
         claims.put("groups", Collections.singletonList(AuthoritiesConstants.ADMIN));
         claims.put("sub", "jane");
         claims.put("email", "jane.doe@jhipster.com");
+    }
+
+<%_ } _%>
+<%_ if (syncUserWithIdp) { _%>
+    @AfterEach
+    public void cleanup() {
+        // Remove syncUserWithIdp users
+    <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+    <%_ } _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
     }
 
 <%_ } _%>

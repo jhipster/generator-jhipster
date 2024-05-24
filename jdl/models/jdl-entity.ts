@@ -27,7 +27,7 @@ export default class JDLEntity {
   tableName: string | undefined;
   fields: Record<string, JDLField>;
   comment: string | undefined;
-  annotations: Record<string, boolean | string | number>;
+  annotations: Record<string, boolean | string | number | undefined>;
 
   constructor(args: Partial<JDLEntity>) {
     const merged: Partial<JDLEntity> = merge(defaults(), args);

@@ -29,12 +29,22 @@ import { convertValidations } from './validation-converter.js';
 import { convertOptions } from './option-converter.js';
 import { convertRelationships } from './relationship-converter.js';
 import { convertDeployments } from './deployment-converter.js';
+import {
+  ParsedJDLAnnotation,
+  ParsedJDLApplication,
+  ParsedJDLApplications,
+  ParsedJDLEntity,
+  ParsedJDLEntityField,
+  ParsedJDLRoot,
+} from './types.js';
+import JDLApplication from '../../models/jdl-application.js';
+import JDLField from '../../models/jdl-field.js';
 
-let parsedContent;
-let configuration;
+let parsedContent: ParsedJDLApplications;
+let configuration: ParsedJDLRoot;
 let jdlObject: JDLObject;
-let entityNames;
-let applicationsPerEntityName;
+let entityNames: string[];
+let applicationsPerEntityName: Map<string, ParsedJDLApplication>;
 
 /**
  * Converts the intermediate parsedContent to a JDLObject from a configuration object.
@@ -46,7 +56,7 @@ let applicationsPerEntityName;
  * @param {String} configurationObject.databaseType - The application's database type
  * @return the built JDL object.
  */
-export function parseFromConfigurationObject(configurationObject): JDLObject {
+export function parseFromConfigurationObject(configurationObject: ParsedJDLRoot): JDLObject {
   parsedContent = configurationObject.parsedContent || configurationObject.document;
   if (!parsedContent) {
     throw new Error('The parsed JDL content must be passed.');
@@ -61,32 +71,32 @@ export function parseFromConfigurationObject(configurationObject): JDLObject {
   return jdlObject;
 }
 
-function init(passedConfiguration) {
+function init(passedConfiguration: ParsedJDLRoot) {
   configuration = passedConfiguration;
   jdlObject = new JDLObject();
   entityNames = parsedContent.entities.map(entity => entity.name);
-  applicationsPerEntityName = {};
+  applicationsPerEntityName = new Map();
 }
 
-function fillApplications() {
+function fillApplications(): void {
   // TODO: Function which expects two arguments is called with three.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  const jdlApplications = convertApplications(parsedContent.applications, configuration, entityNames);
-  jdlApplications.forEach(jdlApplication => {
+  const jdlApplications: JDLApplication[] = convertApplications(parsedContent.applications, configuration, entityNames);
+  jdlApplications.forEach((jdlApplication: JDLApplication) => {
     jdlObject.addApplication(jdlApplication);
     fillApplicationsPerEntityName(jdlApplication);
   });
 }
 
-function fillApplicationsPerEntityName(application) {
-  application.forEachEntityName(entityName => {
+function fillApplicationsPerEntityName(application: JDLApplication): void {
+  application.forEachEntityName((entityName: string) => {
     applicationsPerEntityName[entityName] = applicationsPerEntityName[entityName] || [];
     applicationsPerEntityName[entityName].push(application);
   });
 }
 
-function fillDeployments() {
+function fillDeployments(): void {
   const jdlDeployments = convertDeployments(parsedContent.deployments);
   jdlDeployments.forEach(jdlDeployment => {
     jdlObject.addDeployment(jdlDeployment);
@@ -107,10 +117,11 @@ function fillClassesAndFields() {
   });
 }
 
-function getJDLFieldsFromParsedEntity(entity) {
+function getJDLFieldsFromParsedEntity(entity: ParsedJDLEntity): JDLField[] {
   const fields: any[] = [];
-  for (let i = 0; i < entity.body.length; i++) {
-    const field = entity.body[i];
+  const arr = entity.body || [];
+  for (let i = 0; i < arr.length; i++) {
+    const field = arr[i];
     const jdlField = convertField(field);
     jdlField.validations = getValidations(field);
     jdlField.options = convertAnnotationsToOptions(field.annotations);
@@ -119,14 +130,14 @@ function getJDLFieldsFromParsedEntity(entity) {
   return fields;
 }
 
-function getValidations(field) {
+function getValidations(field: ParsedJDLEntityField) {
   return convertValidations(field.validations, getConstantValueFromConstantName).reduce((jdlValidations, jdlValidation) => {
     jdlValidations[jdlValidation.name] = jdlValidation;
     return jdlValidations;
   }, {});
 }
 
-function getConstantValueFromConstantName(constantName) {
+function getConstantValueFromConstantName(constantName: string) {
   return parsedContent.constants[constantName];
 }
 
@@ -139,7 +150,9 @@ function fillAssociations() {
   });
 }
 
-function convertAnnotationsToOptions(annotations) {
+function convertAnnotationsToOptions(
+  annotations: ParsedJDLAnnotation[],
+): Record<string, boolean | string | number | string[] | boolean[] | number[]> {
   const result = {};
   annotations.forEach(annotation => {
     const annotationName = lowerFirst(annotation.optionName);
@@ -184,7 +197,7 @@ function fillUnaryAndBinaryOptions() {
     jdlObject.addOption(
       new JDLBinaryOption({
         name: binaryOptions.Options.CLIENT_ROOT_FOLDER,
-        value: configuration.applicationName,
+        value: configuration.applicationName!,
         entityNames,
       }),
     );

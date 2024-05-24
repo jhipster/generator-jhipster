@@ -89,7 +89,7 @@ export default class AbstractJDLOption {
    * @param entityNames all the entity names declared in a JDL Object.
    * @returns the resolved list.
    */
-  resolveEntityNames(entityNames: string[]): Set<string> {
+  resolveEntityNames(entityNames: string[] | undefined): Set<string> {
     if (!entityNames) {
       throw new Error("Entity names have to be passed to resolve the option's entities.");
     }

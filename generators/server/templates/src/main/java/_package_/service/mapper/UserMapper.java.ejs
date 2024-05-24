@@ -85,13 +85,18 @@ public class UserMapper {
 <%_ if (!databaseTypeCassandra) { _%>
             user.setImageUrl(userDTO.getImageUrl());
 <%_ } _%>
+<%_ if (generateSpringAuditor) { _%>
+            user.setCreatedBy(userDTO.getCreatedBy());
+            user.setCreatedDate(userDTO.getCreatedDate());
+            user.setLastModifiedBy(userDTO.getLastModifiedBy());
+            user.setLastModifiedDate(userDTO.getLastModifiedDate());
+<%_ } _%>
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
-<%_ } _%>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ } else { _%>
             Set<String> authorities = this.cleanNullStringAuthorities(userDTO.getAuthorities());
             user.setAuthorities(authorities);
 <%_ } _%>
@@ -114,8 +119,7 @@ public class UserMapper {
 
         return authorities;
     }
-<%_ } _%>
-<%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
+<%_ } else { _%>
 
     private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
         Set<String> authorities = new HashSet<>();

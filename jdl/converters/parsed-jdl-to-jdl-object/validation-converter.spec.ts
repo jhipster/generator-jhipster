@@ -33,7 +33,7 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
-          convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], () => {});
+          convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], name => name);
         });
 
         it('should convert it', () => {
@@ -72,7 +72,7 @@ describe('jdl - ValidationConverter', () => {
                   value: '/d+/',
                 },
               ],
-              () => {},
+              name => name,
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
@@ -92,7 +92,7 @@ describe('jdl - ValidationConverter', () => {
                   value: "/[A-Z']/",
                 },
               ],
-              () => {},
+              name => name,
             );
             valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
@@ -106,7 +106,8 @@ describe('jdl - ValidationConverter', () => {
         let convertedJDLValidations;
 
         before(() => {
-          convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], () => {});
+          // @ts-expect-error
+          convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], name => name);
         });
 
         it('should ignore it', () => {

@@ -27,7 +27,7 @@ export default class JDLField {
   type: any;
   comment: string | undefined;
   validations: Record<string, JDLValidation>;
-  options: Record<string, AbstractJDLOption | boolean | number>;
+  options: Record<string, AbstractJDLOption | boolean | string | number | string[] | boolean[] | number[]>;
 
   constructor(args: Partial<JDLField>) {
     const merged: Partial<JDLField> = merge(defaults(), args);
@@ -59,7 +59,9 @@ export default class JDLField {
     return Object.keys(this.validations).length;
   }
 
-  forEachOption(functionToApply: (value: [string, AbstractJDLOption | boolean | number]) => void) {
+  forEachOption(
+    functionToApply: (value: [string, AbstractJDLOption | boolean | number | string | string[] | boolean[] | number[]]) => void,
+  ) {
     if (!functionToApply) {
       throw new Error('A function must be passed to iterate over options');
     }

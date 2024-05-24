@@ -31,14 +31,14 @@ FROM cassandra:5.0
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.19.0
+FROM neo4j:5.20.0
 
 FROM hazelcast/management-center:5.4.1
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.27-alpine
 
-FROM redis:7.2.4
+FROM redis:7.2.5
 
 FROM confluentinc/cp-kafka:7.6.1
 LABEL ALIAS=kafka

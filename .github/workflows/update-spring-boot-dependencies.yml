@@ -21,10 +21,20 @@ name: update spring-boot-dependencies bom
 on:
   workflow_dispatch:
     inputs:
+      repository:
+        type: choice
+        description: Maven repository
+        options:
+          - https://repo1.maven.org/maven2
+          - https://repo.spring.io/milestone
       springBootVersion:
-        description: 'Spring Boot version'
+        description: Spring Boot version
         required: true
         type: string
+      destBranch:
+        description: Branch to create the PR against
+        type: string
+        default: main
 
 permissions:
   contents: read
@@ -35,27 +45,23 @@ jobs:
       contents: write # for peter-evans/create-pull-request to create branch
       pull-requests: write # for peter-evans/create-pull-request to create a PR
     name: update spring-boot-dependencies bom
-    if: github.repository == 'jhipster/generator-jhipster'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
       - uses: actions/checkout@v4
-      - uses: jhipster/actions/setup-git@v0
-      - uses: jhipster/actions/restore-cache@v0
         with:
-          npm: true
-      - name: Create commit
+          ref: ${{ inputs.destBranch }}
+          fetch-depth: 0
+      - uses: jhipster/actions/setup-git@v0
+      - name: Download spring-boot-dependencies bom
         run: |
-          wget -O spring-boot-dependencies.pom https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-dependencies/${{ inputs.springBootVersion }}/spring-boot-dependencies-${{ inputs.springBootVersion }}.pom
+          wget -O spring-boot-dependencies.pom ${{ inputs.repository }}/org/springframework/boot/spring-boot-dependencies/${{ inputs.springBootVersion }}/spring-boot-dependencies-${{ inputs.springBootVersion }}.pom
           git add .
-          git commit -a -m "update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}"
         working-directory: generators/spring-boot/resources
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          branch: spring-boot/v${{ inputs.springBootVersion }}
           commit-message: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
           title: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
           body: update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}
