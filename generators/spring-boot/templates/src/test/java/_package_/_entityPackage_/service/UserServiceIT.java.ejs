@@ -47,6 +47,7 @@ import tech.jhipster.security.RandomUtil;
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,9 +138,9 @@ import static org.mockito.Mockito.when;
 <%_ } _%>
 class UserServiceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe";
+    private static final String DEFAULT_LOGIN = "johndoe_service";
 
-    private static final String DEFAULT_EMAIL = "johndoe@localhost";
+    private static final String DEFAULT_EMAIL = "johndoe_service@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
 
@@ -190,19 +191,19 @@ class UserServiceIT {
     private Map<String, Object> userDetails;
 
 <%_ } _%>
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+    private Long numberOfUsers;
+
+    @BeforeEach
+    public void countUsers() {
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+    }
+
+<%_ } _%>
     @BeforeEach
     public void init() {
 <%_ if (databaseTypeCouchbase) { _%>
         mockAuthentication();
-<%_ } _%>
-<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
-        persistentTokenRepository.deleteAll();
-<%_ } _%>
-<%_ if (databaseTypeSql && reactive) { _%>
-        userRepository.deleteAllUserAuthorities().block();
-<%_ } _%>
-<%_ if ((reactive && !databaseTypeNo) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
         user = new <%= user.persistClass %>();
@@ -240,6 +241,25 @@ class UserServiceIT {
 
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
         auditingHandler.setDateTimeProvider(dateTimeProvider);
+<%_ } _%>
+    }
+
+    @AfterEach
+    public void cleanupAndCheck() {
+<%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
+        persistentTokenRepository.deleteAll();
+<%_ } _%>
+<%_ if (requiresDeleteAllUsers) { _%>
+    <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+    <%_ } _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
+<%_ } else { _%>
+        userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
+<%_ } _%>
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
 <%_ } _%>
     }
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>

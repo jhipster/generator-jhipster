@@ -36,6 +36,9 @@ import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
+<%_ if (!requiresDeleteAllUsers) { _%>
+import <%= packageName %>.service.UserService;
+<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -48,6 +51,7 @@ import <%= packageName %>.service.mapper.UserMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,6 +169,11 @@ class UserResourceIT {
 
     @Autowired
     private UserRepository userRepository;
+<%_ if (!requiresDeleteAllUsers) { _%>
+
+    @Autowired
+    private UserService userService;
+<%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
 
     @Autowired
@@ -198,6 +207,15 @@ class UserResourceIT {
 
     private <%= user.persistClass %> user;
 
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+    private Long numberOfUsers;
+
+    @BeforeEach
+    public void countUsers() {
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+    }
+
+<%_ } _%>
 <%_ if (cacheProviderAny) { _%>
     @BeforeEach
     public void setup() {
@@ -247,23 +265,13 @@ class UserResourceIT {
      * Delete all the users from the database.
      */
     public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
-            em.deleteAll(<%= user.persistClass %>.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
     }
 <%_ } _%>
 
     /**
      * Setups the database with one user.
      */
-    public static <%= user.persistClass %> initTestUser(UserRepository userRepository<% if (databaseTypeSql) { %>, EntityManager em<% } _%>) {
-<%_ if (databaseTypeSql && reactive) { _%>
-        userRepository.deleteAllUserAuthorities().block();
-<%_ } _%>
-        userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
+    public static <%= user.persistClass %> initTestUser(<% if (databaseTypeSql) { %>EntityManager em<% } _%>) {
         <%= user.persistClass %> persistUser = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
 <%_ if (databaseTypeSql) { _%>
         persistUser.setLogin(DEFAULT_LOGIN);
@@ -274,7 +282,26 @@ class UserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = initTestUser(userRepository<% if (databaseTypeSql) { %>, em<% } _%>);
+        user = initTestUser(<% if (databaseTypeSql) { %>em<% } _%>);
+    }
+
+    @AfterEach
+    public void cleanupAndCheck() {
+<%_ if (requiresDeleteAllUsers) { _%>
+    <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+    <%_ } _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
+<%_ } else { _%>
+        userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
+        userService.deleteUser(UPDATED_LOGIN)<%- reactorBlock %>;
+        userService.deleteUser(user.getLogin())<%- reactorBlock %>;
+        userService.deleteUser("anotherlogin")<%- reactorBlock %>;
+<%_ } _%>
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
+<%_ } _%>
     }
 <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -300,37 +327,38 @@ class UserResourceIT {
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
-        webTestClient.post().uri("/api/admin/users")
+        var returned<%- restClass %> = webTestClient.post().uri("/api/admin/users")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
-            .expectStatus().isCreated();
+            .expectStatus().isCreated()
+            .expectBody(<%= user.adminUserDto %>.class)
+            .returnResult()
+            .getResponseBody();
   <%_ } else { _%>
-        restUserMockMvc.perform(post("/api/admin/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
-            .with(csrf())<% } %>)
-            .andExpect(status().isCreated());
+        var returned<%- restClass %> = om.readValue(
+            restUserMockMvc.perform(post("/api/admin/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
+                .with(csrf())<% } %>)
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(),
+            <%= user.adminUserDto %>.class
+        );
   <%_ } _%>
 
-        // Validate the User in the database
-        assertPersistedUsers(users -> {
-            assertThat(users).hasSize(databaseSizeBeforeCreate + 1);
-            <%= user.persistClass %> testUser = users.get(users.size() - 1);
-            assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-            assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-            assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-            assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(returned<%- restClass %>);
+        // Validate the returned User
+        assertThat(convertedUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(convertedUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(convertedUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(convertedUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
   <%_ if (!databaseTypeCassandra) { _%>
-            assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        assertThat(convertedUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
   <%_ } _%>
-            assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-        });
-  <%_ if (!databaseTypeSql) {_%>
-            userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-            userSearchRepository.deleteAll();
-  <%_ } _%>
+        assertThat(convertedUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
     @Test
@@ -377,11 +405,6 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
-  <%_ } _%>
     }
 
     @Test
@@ -426,11 +449,6 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
-  <%_ } _%>
     }
 
     @Test
@@ -475,11 +493,6 @@ class UserResourceIT {
 
         // Validate the User in the database
         assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
-  <%_ } _%>
     }
 
     @Test
@@ -529,11 +542,6 @@ class UserResourceIT {
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
     <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
-  <%_ } _%>
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
   <%_ } _%>
     }
 
@@ -599,11 +607,6 @@ class UserResourceIT {
         }
   <%_ } else if (cacheProviderAny) { _%>
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
-  <%_ } _%>
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
   <%_ } _%>
     }
 
@@ -680,11 +683,6 @@ class UserResourceIT {
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
-  <%_ } _%>
     }
 
     @Test
@@ -746,11 +744,6 @@ class UserResourceIT {
   <%_ } _%>
             assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
         });
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
-  <%_ } _%>
     }
 
     @Test
@@ -821,11 +814,6 @@ class UserResourceIT {
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
   <%_ } _%>
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
-  <%_ } _%>
     }
 
     @Test
@@ -895,11 +883,6 @@ class UserResourceIT {
             .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
-  <%_ } _%>
-  <%_ if (!databaseTypeSql) {_%>
-        userRepository.deleteAll();
-  <% } else if (searchEngineElasticsearch) { %>
-        userSearchRepository.deleteAll();
   <%_ } _%>
     }
 
