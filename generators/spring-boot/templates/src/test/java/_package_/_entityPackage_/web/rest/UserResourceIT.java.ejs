@@ -502,12 +502,6 @@ class UserResourceIT {
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%= saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
-  <%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
-        authorityRepository
-            .findById(AuthoritiesConstants.USER)
-            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
-            .block();
-  <%_ } _%>
 
         // Get all the users
   <%_ if (reactive) { _%>
@@ -526,9 +520,6 @@ class UserResourceIT {
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
     <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-    <%_ if (databaseTypeSql && !applicationTypeMicroservice) { _%>
-        assertThat(foundUser.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
-    <%_ } _%>
   <%_ } else { _%>
         restUserMockMvc.perform(get("/api/admin/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
@@ -552,12 +543,6 @@ class UserResourceIT {
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%= saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
-  <%_ if (databaseTypeSql && reactive && !applicationTypeMicroservice) { _%>
-        authorityRepository
-            .findById(AuthoritiesConstants.USER)
-            .flatMap(authority -> userRepository.saveUserAuthority(user.getId(), authority.getName()))
-            .block();
-  <%_ } _%>
 
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
@@ -581,12 +566,7 @@ class UserResourceIT {
     <%_ if (!databaseTypeCassandra) { _%>
             .jsonPath("$.imageUrl").isEqualTo(DEFAULT_IMAGEURL)
     <%_ } _%>
-            .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY)<%
-                if (!databaseTypeSql || applicationTypeMicroservice) { %>;
-            <%_ } else { _%>
-            .jsonPath("$.authorities")
-            .isEqualTo(AuthoritiesConstants.USER);
-            <% } %>
+            .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
         restUserMockMvc.perform(get("/api/admin/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
