@@ -22,8 +22,8 @@ try {
   existing = { include: [] };
 }
 
-const randomReproducibleValue = (str, choices) => {
-  return choices[createHash('shake256', { outputLength: 1 }).update(str, 'utf8').digest('binary').charCodeAt(0) % choices.length];
+const randomReproducibleValue = (seed, choices) => {
+  return choices[createHash('shake256', { outputLength: 1 }).update(seed, 'utf8').digest('binary').charCodeAt(0) % choices.length];
 };
 
 writeFileSync(
@@ -40,8 +40,8 @@ writeFileSync(
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
                 .map(({ generatorOptions, name, ...sample }) => {
-                  const javaVersion = randomReproducibleValue(name, [JAVA_VERSION, '17', '21']);
-                  const nodeVersion = randomReproducibleValue(name, [NODE_VERSION, '18', '20']);
+                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, '17', '21']);
+                  const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '18', '20']);
                   return {
                     name,
                     workspaces: generatorOptions?.workspaces ? 'true' : undefined,
