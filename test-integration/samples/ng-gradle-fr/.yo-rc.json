@@ -15,6 +15,7 @@
     "dtoSuffix": "DTO",
     "embeddableLaunchScript": false,
     "enableHibernateCache": true,
+    "enableSwaggerCodegen": true,
     "enableTranslation": true,
     "entitySuffix": "",
     "incrementalChangelog": true,
