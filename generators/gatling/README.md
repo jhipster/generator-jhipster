@@ -1,3 +1,7 @@
+# Gatling sub-generator
+
+Generates load testing tool for entities using [Gatling](https://gatling.io/).
+
 ## Logging tips
 
 ```
