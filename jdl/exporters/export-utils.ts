@@ -20,7 +20,7 @@
 import fs from 'fs';
 import { doesFileExist } from '../utils/file-utils.js';
 import { mergeYoRcContent } from './config.js';
-import { YoRCJSONObject } from '../converters/types.js';
+import { JHipsterYoRcContent } from '../converters/types.js';
 
 export const GENERATOR_NAME = 'generator-jhipster';
 
@@ -29,8 +29,8 @@ export const GENERATOR_NAME = 'generator-jhipster';
  * @param config the configuration.
  * @param yoRcPath the yeoman conf file path
  */
-export function writeConfigFile(config: YoRCJSONObject, yoRcPath = '.yo-rc.json') {
-  let newYoRc: YoRCJSONObject = { ...config };
+export function writeConfigFile(config: JHipsterYoRcContent, yoRcPath = '.yo-rc.json') {
+  let newYoRc: JHipsterYoRcContent = { ...config };
   if (doesFileExist(yoRcPath)) {
     const yoRc = JSON.parse(fs.readFileSync(yoRcPath, { encoding: 'utf-8' }));
     newYoRc = mergeYoRcContent(yoRc, config);

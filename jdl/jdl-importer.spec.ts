@@ -37,7 +37,6 @@ describe('jdl - JDLImporter', () => {
   describe('createImporterFromFiles', () => {
     describe('when not passing files', () => {
       it('should fail', () => {
-        // @ts-expect-error
         expect(() => createImporterFromFiles()).to.throw(/^Files must be passed to create a new JDL importer\.$/);
       });
     });

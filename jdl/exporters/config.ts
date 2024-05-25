@@ -1,14 +1,14 @@
 import { GENERATOR_NAME } from './export-utils.js';
-import { YoRCJSONObject } from '../converters/types.js';
+import { JHipsterYoRcContent } from '../converters/types.js';
 
-export const mergeYoRcContent = (oldConfig: YoRCJSONObject, newConfig: YoRCJSONObject): YoRCJSONObject => {
+export const mergeYoRcContent = (oldConfig: JHipsterYoRcContent, newConfig: JHipsterYoRcContent): JHipsterYoRcContent => {
   // @ts-expect-error partial assignment
-  const merged: Partial<YoRCJSONObject> = { [GENERATOR_NAME]: {} };
+  const merged: Partial<JHipsterYoRcContent> = { [GENERATOR_NAME]: {} };
   for (const ns of new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])) {
     merged[ns] = { ...oldConfig[ns], ...newConfig[ns] };
   }
   if (oldConfig[GENERATOR_NAME]?.creationTimestamp) {
     merged[GENERATOR_NAME]!.creationTimestamp = oldConfig[GENERATOR_NAME].creationTimestamp;
   }
-  return merged as YoRCJSONObject;
+  return merged as JHipsterYoRcContent;
 };

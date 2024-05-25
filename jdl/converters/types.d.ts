@@ -92,6 +92,6 @@ export type PostProcessedJSONRootObject = {
   [GENERATOR_JHIPSTER]: PostProcessedJSONGeneratorJhipsterContent;
 };
 
-export type YoRCJSONObject = {
+export type JHipsterYoRcContent = {
   [GENERATOR_JHIPSTER]: JSONGeneratorJhipsterContent;
 };

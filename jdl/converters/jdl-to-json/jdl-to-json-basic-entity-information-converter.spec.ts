@@ -31,7 +31,6 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {
     describe('when not passing JDL entities', () => {
       it('should fail', () => {
-        // @ts-expect-error
         expect(() => convert()).to.throw(/^JDL entities must be passed to get the basic entity information\.$/);
       });
     });
