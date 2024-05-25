@@ -40,6 +40,7 @@ import {
 import JDLApplication from '../../models/jdl-application.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
+import { JDLEntity } from '../../models/index.js';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;
@@ -104,28 +105,28 @@ function fillDeployments(): void {
   });
 }
 
-function fillEnums() {
+function fillEnums(): void {
   const jdlEnums = convertEnums(parsedContent.enums);
   jdlEnums.forEach(jdlEnum => {
     jdlObject.addEnum(jdlEnum);
   });
 }
 
-function fillClassesAndFields() {
-  const jdlEntities = convertEntities(parsedContent.entities, getJDLFieldsFromParsedEntity);
+function fillClassesAndFields(): void {
+  const jdlEntities: JDLEntity[] = convertEntities(parsedContent.entities, getJDLFieldsFromParsedEntity);
   jdlEntities.forEach(jdlEntity => {
     jdlObject.addEntity(jdlEntity);
   });
 }
 
 function getJDLFieldsFromParsedEntity(entity: ParsedJDLEntity): JDLField[] {
-  const fields: any[] = [];
+  const fields: JDLField[] = [];
   const arr = entity.body || [];
   for (let i = 0; i < arr.length; i++) {
     const field = arr[i];
     const jdlField = convertField(field);
     jdlField.validations = getValidations(field);
-    jdlField.options = convertAnnotationsToOptions(field.annotations);
+    jdlField.options = convertAnnotationsToOptions(field.annotations || []);
     fields.push(jdlField);
   }
   return fields;
@@ -176,7 +177,7 @@ function convertAnnotationsToOptions(
 
 function fillOptions(): void {
   if (configuration.applicationType === applicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
-    globallyAddMicroserviceOption(configuration.applicationName);
+    globallyAddMicroserviceOption(configuration.applicationName!);
   }
   fillUnaryAndBinaryOptions();
 }

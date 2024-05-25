@@ -26,7 +26,6 @@ describe('jdl - JDLDeployment', () => {
     describe('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
-          // @ts-expect-error
           new JDLDeployment();
         }).toThrow(/^The deploymentType is mandatory to create a deployment\.$/);
       });

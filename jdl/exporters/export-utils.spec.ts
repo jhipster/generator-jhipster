@@ -42,6 +42,7 @@ describe('jdl - ExportUtils', () => {
             jhipsterVersion: '7.0.0',
           },
         };
+        // @ts-expect-error
         writeConfigFile(config);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
@@ -77,6 +78,7 @@ describe('jdl - ExportUtils', () => {
             question: 'No comment',
           },
         };
+        // @ts-expect-error
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
@@ -121,6 +123,7 @@ describe('jdl - ExportUtils', () => {
             question: 'No comment',
           },
         };
+        // @ts-expect-error
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });
@@ -165,6 +168,7 @@ describe('jdl - ExportUtils', () => {
             question: 'No comment',
           },
         };
+        // @ts-expect-error
         writeConfigFile(newConfig);
         exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
       });

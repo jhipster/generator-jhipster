@@ -42,7 +42,6 @@ describe('jdl - JHipsterDeploymentExporter', () => {
       describe('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
-            // @ts-expect-error
             exportDeployments();
           }).to.throw(/^Deployments have to be passed to be exported\.$/);
         });

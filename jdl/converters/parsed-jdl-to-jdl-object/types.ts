@@ -31,8 +31,8 @@ export type ParsedJDLValidation = {
 };
 
 export type ParsedJDLEntityField = {
-  annotations: ParsedJDLAnnotation[];
-  validations: ParsedJDLValidation[];
+  annotations?: ParsedJDLAnnotation[];
+  validations?: ParsedJDLValidation[];
   name: string;
   type: string;
   documentation?: string;
@@ -119,6 +119,6 @@ export type ParsedJDLRoot = {
   document?: ParsedJDLApplications; // deprecated
   entities?: ParsedJDLEntity[];
   applicationType?: string;
-  applicationName: string;
+  applicationName?: string;
   databaseType?: string;
 };

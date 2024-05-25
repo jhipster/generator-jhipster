@@ -34,15 +34,15 @@ export default { convertValidations };
  * @return the converted JDLValidations.
  */
 export function convertValidations(
-  validations: ParsedJDLValidation[],
-  constantValueGetter: (constant: string) => string | number | boolean | RegExp,
+  validations?: ParsedJDLValidation[],
+  constantValueGetter?: (constant: string) => string | number | boolean | RegExp,
 ): JDLValidation[] {
   if (!validations) {
     throw new Error('Validations have to be passed so as to be converted.');
   }
   return validations.reduce((jdlValidations: JDLValidation[], parsedValidation: ParsedJDLValidation) => {
     if (parsedValidation) {
-      jdlValidations = [...jdlValidations, convertValidation(parsedValidation, constantValueGetter)];
+      jdlValidations = [...jdlValidations, convertValidation(parsedValidation, constantValueGetter!)];
     }
     return jdlValidations;
   }, []);
@@ -63,7 +63,7 @@ function convertValidation(
     value = constantValueGetter.call(undefined, value as string);
   }
   if (validation.key === PATTERN) {
-    value = formatThePatternValidationValue(value);
+    value = formatThePatternValidationValue(value as string);
   }
   return new JDLValidation({
     name: validation.key,
@@ -71,7 +71,7 @@ function convertValidation(
   });
 }
 
-function formatThePatternValidationValue(value) {
+function formatThePatternValidationValue(value: string): string {
   if (!value.includes("'")) {
     return value;
   }

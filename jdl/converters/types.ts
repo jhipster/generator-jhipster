@@ -41,7 +41,10 @@ export type JSONBlueprint = {
 export type JSONMicrofrontend = {
   baseName: string;
 };
-
+export type JSONGeneratorJhipsterContentDeployment = {
+  appsFolders?: string[];
+  clusteredDbApps?: string[];
+};
 export type JSONGeneratorJhipsterContent = {
   baseName: string;
   applicationType?: string;
@@ -74,7 +77,8 @@ export type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
   microfrontends?: JSONMicrofrontend[] | null;
-} & Record<string, any>;
+} & JSONGeneratorJhipsterContentDeployment &
+  Record<string, any>;
 
 export type PostProcessedJSONGeneratorJhipsterContent = Omit<
   JSONGeneratorJhipsterContent,
@@ -88,6 +92,6 @@ export type PostProcessedJSONRootObject = {
   [GENERATOR_JHIPSTER]: PostProcessedJSONGeneratorJhipsterContent;
 };
 
-export type JSONRootObject = {
+export type YoRCJSONObject = {
   [GENERATOR_JHIPSTER]: JSONGeneratorJhipsterContent;
 };

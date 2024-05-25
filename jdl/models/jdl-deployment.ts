@@ -28,8 +28,18 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
   deploymentType!: string;
+  appsFolders?: string[];
+  directoryPath?: string;
+  gatewayType?: string;
+  kubernetesServiceType?: string;
+  istio?: boolean;
+  ingressDomain?: string;
+  ingressType?: string;
+  storageType?: string;
+  monitoring?: string;
+  clusteredDbApps?: string[];
 
-  constructor(args: ParsedJDLDeployment) {
+  constructor(args?: ParsedJDLDeployment) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }
@@ -73,6 +83,6 @@ function stringifyOptionValue(name: string, value: any): string {
   return ` ${value}`;
 }
 
-function defaults(deploymentType) {
+function defaults(deploymentType: string) {
   return (deploymentOptions.Options as any).defaults(deploymentType);
 }

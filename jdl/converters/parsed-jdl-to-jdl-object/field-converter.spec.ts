@@ -19,6 +19,7 @@
 
 import { before, it, describe, expect } from 'esmocha';
 import { convertField } from './field-converter.js';
+import JDLField from '../../models/jdl-field.js';
 
 describe('jdl - FieldConverter', () => {
   describe('convertField', () => {
@@ -36,7 +37,6 @@ describe('jdl - FieldConverter', () => {
           convertedField = convertField({
             name: 'anAwesomeField',
             type: 'String',
-            comment: 'An awesome comment!',
           });
         });
 
@@ -56,7 +56,7 @@ JDLField {
         let nameFromConvertedField;
 
         before(() => {
-          const convertedField = convertField({
+          const convertedField: JDLField = convertField({
             name: 'AnAwesomeField',
             type: 'String',
           });
