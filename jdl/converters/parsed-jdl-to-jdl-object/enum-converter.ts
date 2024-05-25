@@ -28,7 +28,7 @@ export default { convertEnums };
  * @param {Array} enumerations - parsed JDL enumerations.
  * @return the converted JDLEnums.
  */
-export function convertEnums(enumerations): JDLEnum[] {
+export function convertEnums(enumerations?: ParsedJDLEnum[]): JDLEnum[] {
   if (!enumerations) {
     throw new Error('Enumerations have to be passed so as to be converted.');
   }
