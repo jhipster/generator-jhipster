@@ -29,7 +29,7 @@ import { JHipsterYoRcContent } from '../converters/types.js';
  * @param deployments the deployments to exporters (key: deployment type, value: JDLDeployment- deployment config).
  * @return object[] exported deployments in their final form.
  */
-export default function exportDeployments(deployments?: Record<string, JDLDeployment>): Partial<JHipsterYoRcContent>[] {
+export default function exportDeployments(deployments: Record<string, JDLDeployment>): Partial<JHipsterYoRcContent>[] {
   if (!deployments) {
     throw new Error('Deployments have to be passed to be exported.');
   }

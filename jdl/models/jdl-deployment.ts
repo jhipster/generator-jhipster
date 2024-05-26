@@ -39,7 +39,7 @@ export default class JDLDeployment {
   monitoring?: string;
   clusteredDbApps?: string[];
 
-  constructor(args?: ParsedJDLDeployment) {
+  constructor(args: ParsedJDLDeployment) {
     if (!args || !args.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }

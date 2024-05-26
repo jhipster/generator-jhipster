@@ -42,6 +42,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
       describe('such as undefined', () => {
         it('should fail', () => {
           expect(() => {
+            // @ts-expect-error empty parameter not authorized
             exportDeployments();
           }).to.throw(/^Deployments have to be passed to be exported\.$/);
         });

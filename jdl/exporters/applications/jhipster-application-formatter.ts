@@ -26,7 +26,7 @@ import { GENERATOR_NAME } from '../export-utils.js';
  * @param {Object} [configuration]
  * @return object[] exported applications in their final form.
  */
-export function formatApplicationsToExport(applications, configuration) {
+export function formatApplicationsToExport(applications: Record<string, JDLApplication>, configuration) {
   if (!applications) {
     throw new Error('Applications have to be passed to be exported.');
   }

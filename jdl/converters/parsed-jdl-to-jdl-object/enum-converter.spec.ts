@@ -24,6 +24,7 @@ describe('jdl - EnumConverter', () => {
   describe('convertEnums', () => {
     describe('when not passing enumerations', () => {
       it('should fail', () => {
+        // @ts-expect-error empty parameter not authorized
         expect(() => convertEnums()).toThrow(/^Enumerations have to be passed so as to be converted.$/);
       });
     });
