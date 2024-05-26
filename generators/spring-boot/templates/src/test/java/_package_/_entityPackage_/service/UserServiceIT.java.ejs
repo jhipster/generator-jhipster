@@ -128,6 +128,11 @@ import static org.mockito.Mockito.any;
 <%_ if (databaseTypeSql && !reactive && !authenticationTypeOauth2) { _%>
 import static org.mockito.Mockito.when;
 <%_ } _%>
+<%_ if (cacheProviderAny) { _%>
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache;
+import java.util.Objects;
+<%_ } _%>
 
 /**
  * Integration tests for {@link UserService}.
@@ -146,6 +151,11 @@ class UserServiceIT {
 
     private static final String DEFAULT_LASTNAME = "doe";
 
+<%_ if (cacheProviderAny) { _%>
+    @Autowired
+    private CacheManager cacheManager;
+
+<%_ } _%>
 <%_ if (!databaseTypeCassandra) { _%>
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
 
@@ -246,6 +256,12 @@ class UserServiceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
+<%_ if (cacheProviderAny) { _%>
+        cacheManager.getCacheNames().stream()
+            .map(cacheName -> this.cacheManager.getCache(cacheName))
+            .filter(Objects::nonNull)
+            .forEach(Cache::clear);
+<%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
         persistentTokenRepository.deleteAll();
 <%_ } _%>
