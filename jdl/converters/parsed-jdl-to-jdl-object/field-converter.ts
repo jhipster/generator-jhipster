@@ -20,6 +20,7 @@
 import JDLField from '../../models/jdl-field.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { lowerFirst } from '../../utils/string-utils.js';
+import { ParsedJDLEntityField } from './types.js';
 
 export default { convertField };
 
@@ -28,7 +29,7 @@ export default { convertField };
  * @param {Object} field - a parsed JDL field.
  * @return the converted JDLField.
  */
-export function convertField(field): JDLField {
+export function convertField(field: ParsedJDLEntityField): JDLField {
   if (!field) {
     throw new Error('A field has to be passed so as to be converted.');
   }

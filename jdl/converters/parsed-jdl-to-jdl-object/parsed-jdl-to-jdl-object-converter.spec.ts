@@ -581,8 +581,13 @@ JDLDeployment {
   "directoryPath": "../",
   "dockerRepositoryName": "test",
   "gatewayType": "SpringCloudGateway",
+  "ingressDomain": undefined,
+  "ingressType": undefined,
+  "istio": undefined,
+  "kubernetesServiceType": undefined,
   "monitoring": "no",
   "serviceDiscoveryType": "consul",
+  "storageType": undefined,
 }
 `);
         });

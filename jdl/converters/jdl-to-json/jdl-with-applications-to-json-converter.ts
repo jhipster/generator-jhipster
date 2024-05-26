@@ -135,7 +135,7 @@ function setOptions(entitiesForEachApplication) {
   });
 }
 
-function getEntitiesForEachApplicationMap() {
+function getEntitiesForEachApplicationMap(): Map<string, any> {
   const entitiesForEachApplication = new Map();
   entitiesPerApplication.forEach((entityNames, applicationName) => {
     const entitiesInObject = entityNames
@@ -159,7 +159,7 @@ function formatEntitiesForEachApplication(entitiesForEachApplication) {
   });
 }
 
-function addApplicationsWithoutEntities(entitiesForEachApplication) {
+function addApplicationsWithoutEntities(entitiesForEachApplication: Map<string, string[]>) {
   jdlObject?.forEachApplication(jdlApplication => {
     if (jdlApplication.getEntityNames().length === 0) {
       entitiesForEachApplication.set(jdlApplication.getConfigurationOptionValue('baseName'), []);

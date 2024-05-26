@@ -56,7 +56,7 @@ export function convert(jdlObject: JDLObject): Map<string, JSONField[]> {
 
 function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject): JSONField[] {
   const convertedEntityFields: JSONField[] = [];
-  jdlEntity.forEachField(jdlField => {
+  jdlEntity.forEachField((jdlField: JDLField) => {
     let fieldData: JSONField = {
       fieldName: camelCase(jdlField.name),
       fieldType: jdlField.type,

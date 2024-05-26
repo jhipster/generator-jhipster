@@ -57,7 +57,7 @@ type RelationshipsRelatedToEntity = {
   to: JDLRelationship[];
 };
 
-function getRelatedRelationships(relationships: JDLRelationship[], entityNames: string[]) {
+function getRelatedRelationships(relationships: JDLRelationship[], entityNames: string[]): Map<string, RelationshipsRelatedToEntity> {
   const relatedRelationships = new Map();
   entityNames.forEach(entityName => {
     const relationshipsRelatedToEntity: RelationshipsRelatedToEntity = {
@@ -80,7 +80,7 @@ function getRelatedRelationships(relationships: JDLRelationship[], entityNames: 
   return relatedRelationships;
 }
 
-function setRelationshipsFromEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string) {
+function setRelationshipsFromEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string): void {
   relatedRelationships.from.forEach(relationshipToConvert => {
     const otherSplitField: any = extractField(relationshipToConvert.injectedFieldInTo);
     const convertedRelationship: Partial<JSONRelationship> = {
@@ -110,7 +110,7 @@ function setRelationshipsFromEntity(relatedRelationships: RelationshipsRelatedTo
 
 export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
 
-function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string) {
+function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEntity, entityName: string): void {
   relatedRelationships.to.forEach(relationshipToConvert => {
     const otherSplitField = extractField(relationshipToConvert.injectedFieldInFrom);
     const convertedRelationship: any = {
@@ -141,7 +141,10 @@ function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEn
   });
 }
 
-function setOptionsForRelationshipSourceSide(relationshipToConvert: JDLRelationship, convertedRelationship: Partial<JSONRelationship>) {
+function setOptionsForRelationshipSourceSide(
+  relationshipToConvert: JDLRelationship,
+  convertedRelationship: Partial<JSONRelationship>,
+): void {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     if (optionName === BUILT_IN_ENTITY) {
@@ -158,7 +161,7 @@ function setOptionsForRelationshipSourceSide(relationshipToConvert: JDLRelations
   }
 }
 
-function setOptionsForRelationshipDestinationSide(relationshipToConvert: JDLRelationship, convertedRelationship: JSONRelationship) {
+function setOptionsForRelationshipDestinationSide(relationshipToConvert: JDLRelationship, convertedRelationship: JSONRelationship): void {
   convertedRelationship.options = convertedRelationship.options || {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     convertedRelationship.options![optionName] = optionValue;

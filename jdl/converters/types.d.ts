@@ -9,6 +9,10 @@ export type JSONField = {
   fieldValidateRules?: string[];
 } & Record<string, any>;
 
+export type JSONBlobField = {
+  fieldTypeBlobContent: 'image' | 'any' | 'text';
+} & JSONField;
+
 export type JSONFieldEnum = JSONField & {
   fieldValues: string;
   fieldTypeDocumentation?: string;
@@ -41,8 +45,12 @@ export type JSONBlueprint = {
 export type JSONMicrofrontend = {
   baseName: string;
 };
+export type JSONGeneratorJhipsterContentDeployment = {
+  appsFolders?: string[];
+  clusteredDbApps?: string[];
+};
 
-export type JSONGeneratorJhipsterContent = {
+export type AbstractJSONGeneratorJhipsterContent = {
   baseName: string;
   applicationType?: string;
   entities?: string[];
@@ -71,23 +79,28 @@ export type JSONGeneratorJhipsterContent = {
   skipUserManagement?: boolean;
   testFrameworks?: string[];
   websocket?: string;
+} & JSONGeneratorJhipsterContentDeployment &
+  Record<string, any>;
+
+export type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
   microfrontends?: JSONMicrofrontend[] | null;
-} & Record<string, any>;
+} & AbstractJSONGeneratorJhipsterContent;
 
-export type PostProcessedJSONGeneratorJhipsterContent = Omit<
-  JSONGeneratorJhipsterContent,
-  'promptValues' | 'blueprints' | 'microfrontends'
-> & {
+export type PostProcessedJSONGeneratorJhipsterContent = {
   blueprints?: string[];
   microfrontends?: string[];
-};
+} & AbstractJSONGeneratorJhipsterContent;
 
 export type PostProcessedJSONRootObject = {
   [GENERATOR_JHIPSTER]: PostProcessedJSONGeneratorJhipsterContent;
 };
 
-export type JSONRootObject = {
+export type JHipsterYoRcContent = {
   [GENERATOR_JHIPSTER]: JSONGeneratorJhipsterContent;
+};
+
+export type JHipsterYoRcContentWrapper = {
+  application?: PostProcessedJSONRootObject | JHipsterYoRcContent;
 };

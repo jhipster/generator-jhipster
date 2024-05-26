@@ -21,41 +21,43 @@ import path from 'path';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
 import DeploymentValidator from '../validators/deployment-validator.js';
 import { GENERATOR_NAME, writeConfigFile } from './export-utils.js';
+import JDLDeployment from '../models/jdl-deployment.js';
+import { JHipsterYoRcContent } from '../converters/types.js';
 
 /**
  * Exports JDL deployments to .yo-rc.json files in separate folders (based on deployment type).
  * @param deployments the deployments to exporters (key: deployment type, value: JDLDeployment- deployment config).
  * @return object[] exported deployments in their final form.
  */
-export default function exportDeployments(deployments) {
+export default function exportDeployments(deployments: Record<string, JDLDeployment>): Partial<JHipsterYoRcContent>[] {
   if (!deployments) {
     throw new Error('Deployments have to be passed to be exported.');
   }
   return Object.values(deployments).map(deployment => {
     checkForErrors(deployment);
-    deployment = setUpDeploymentStructure(deployment);
-    writeDeploymentConfigs(deployment);
-    return deployment;
+    const yoRcDeployment: Partial<JHipsterYoRcContent> = setUpDeploymentStructure(deployment);
+    writeDeploymentConfigs(yoRcDeployment);
+    return yoRcDeployment;
   });
 }
 
-function checkForErrors(deployment) {
+function checkForErrors(deployment: JDLDeployment) {
   const validator = new DeploymentValidator();
   validator.validate(deployment);
 }
 
-function setUpDeploymentStructure(deployment) {
-  let deploymentToExport = {};
+function setUpDeploymentStructure(deployment: JDLDeployment) {
+  let deploymentToExport: Partial<JHipsterYoRcContent> = {};
   deploymentToExport[GENERATOR_NAME] = JSON.parse(JSON.stringify(deployment, null, 2).concat('\n'));
-  deploymentToExport[GENERATOR_NAME].appsFolders = deployment.appsFolders;
-  deploymentToExport[GENERATOR_NAME].clusteredDbApps = deployment.clusteredDbApps;
+  deploymentToExport[GENERATOR_NAME]!.appsFolders = deployment.appsFolders;
+  deploymentToExport[GENERATOR_NAME]!.clusteredDbApps = deployment.clusteredDbApps;
   deploymentToExport = setUpArrayOptions(deploymentToExport);
   return deploymentToExport;
 }
 
-function setUpArrayOptions(deployment) {
-  deployment[GENERATOR_NAME].appsFolders = Array.from(deployment[GENERATOR_NAME].appsFolders);
-  deployment[GENERATOR_NAME].clusteredDbApps = Array.from(deployment[GENERATOR_NAME].clusteredDbApps);
+function setUpArrayOptions(deployment: Partial<JHipsterYoRcContent>) {
+  deployment[GENERATOR_NAME]!.appsFolders = Array.from(deployment[GENERATOR_NAME]?.appsFolders || []);
+  deployment[GENERATOR_NAME]!.clusteredDbApps = Array.from(deployment[GENERATOR_NAME]?.clusteredDbApps || []);
   return deployment;
 }
 
@@ -63,11 +65,11 @@ function setUpArrayOptions(deployment) {
  * This function writes a Yeoman config file in a folder.
  * @param deployment the deployment.
  */
-function writeDeploymentConfigs(deployment) {
-  const folderName = deployment[GENERATOR_NAME].deploymentType;
+function writeDeploymentConfigs(deployment: Partial<JHipsterYoRcContent>) {
+  const folderName = deployment[GENERATOR_NAME]!.deploymentType;
   if (doesFileExist(folderName)) {
     throw new Error(`A file named '${folderName}' already exists, so a folder of the same name can't be created for the application.`);
   }
   createFolderIfItDoesNotExist(folderName);
-  writeConfigFile(deployment, path.join(folderName, '.yo-rc.json'));
+  writeConfigFile(deployment as JHipsterYoRcContent, path.join(folderName, '.yo-rc.json'));
 }

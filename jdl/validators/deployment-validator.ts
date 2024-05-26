@@ -19,6 +19,7 @@
 
 import Validator from './validator.js';
 import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions, applicationOptions } from '../jhipster/index.js';
+import JDLDeployment from '../models/jdl-deployment.js';
 
 const { Options } = deploymentOptions;
 const { MICROSERVICE } = applicationTypes;
@@ -32,7 +33,7 @@ export default class DeploymentValidator extends Validator {
     super('deployment', ['deploymentType', 'appsFolders', 'directoryPath']);
   }
 
-  validate(jdlDeployment, options = {}) {
+  validate(jdlDeployment: JDLDeployment, options = {}) {
     super.validate(jdlDeployment);
 
     switch (jdlDeployment.deploymentType) {
@@ -51,13 +52,13 @@ export default class DeploymentValidator extends Validator {
   }
 }
 
-function validateDockerComposeRelatedDeployment(jdlDeployment, options: any = {}) {
+function validateDockerComposeRelatedDeployment(jdlDeployment: JDLDeployment, options: any = {}) {
   if (jdlDeployment.gatewayType !== Options.gatewayType.springCloudGateway && options.applicationType === MICROSERVICE) {
     throw new Error('A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.');
   }
 }
 
-function validateKubernetesRelatedDeployment(jdlDeployment) {
+function validateKubernetesRelatedDeployment(jdlDeployment: JDLDeployment) {
   if (!jdlDeployment.kubernetesServiceType) {
     throw new Error('A kubernetes service type must be provided when dealing with kubernetes-related deployments.');
   }
@@ -71,7 +72,7 @@ function validateKubernetesRelatedDeployment(jdlDeployment) {
   }
 }
 
-function validateOpenshiftRelatedDeployment(jdlDeployment, options) {
+function validateOpenshiftRelatedDeployment(jdlDeployment: JDLDeployment, options) {
   if (jdlDeployment.storageType) {
     if (options.prodDatabaseType === NO) {
       throw new Error(`Can't have the storageType option set when there is no ${PROD_DATABASE_TYPE}.`);

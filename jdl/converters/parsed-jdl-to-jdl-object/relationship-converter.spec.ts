@@ -56,6 +56,7 @@ describe('jdl - RelationshipConverter', () => {
                 },
               },
             ],
+            // @ts-expect-error
             options => {
               if (options.length !== 0) {
                 return { builtInEntity: true };
@@ -116,6 +117,7 @@ describe('jdl - RelationshipConverter', () => {
                 },
               },
             ],
+            // @ts-expect-error
             options => {
               if (options.length !== 0) {
                 return { builtInEntity: true };
