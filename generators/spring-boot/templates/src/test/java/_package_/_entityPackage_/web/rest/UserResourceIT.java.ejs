@@ -216,16 +216,6 @@ class UserResourceIT {
     }
 
 <%_ } _%>
-<%_ if (cacheProviderAny) { _%>
-    @BeforeEach
-    public void setup() {
-        cacheManager.getCacheNames().stream()
-            .map(cacheName -> this.cacheManager.getCache(cacheName))
-            .filter(Objects::nonNull)
-            .forEach(Cache::clear);
-    }
-
-<%_ } _%>
 <%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
@@ -289,6 +279,12 @@ class UserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
+<%_ if (cacheProviderAny) { _%>
+    cacheManager.getCacheNames().stream()
+        .map(cacheName -> this.cacheManager.getCache(cacheName))
+        .filter(Objects::nonNull)
+        .forEach(Cache::clear);
+<%_ } _%>
 <%_ if (requiresDeleteAllUsers) { _%>
     <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
