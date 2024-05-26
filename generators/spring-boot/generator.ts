@@ -286,7 +286,11 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         const { reactive } = application;
         applicationDefaults({
           __override__: false,
-          requiresDeleteAllUsers: data => data.authenticationTypeOauth2 || (reactive && data.databaseTypeSql),
+          requiresDeleteAllUsers: data =>
+            data.authenticationTypeOauth2 ||
+            (reactive && data.databaseTypeSql) ||
+            (!reactive && data.databaseTypeMongodb) ||
+            (!reactive && data.databaseTypeCassandra),
           reactorBlock: reactive ? '.block()' : '',
           reactorBlockOptional: reactive ? '.blockOptional()' : '',
         });
