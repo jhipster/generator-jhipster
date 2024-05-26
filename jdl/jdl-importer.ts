@@ -31,6 +31,8 @@ import createWithoutApplicationValidator from './validators/jdl-without-applicat
 import { applicationOptions } from './jhipster/index.js';
 import JDLObject from './models/jdl-object.js';
 import { ParsedJDLApplications } from './converters/parsed-jdl-to-jdl-object/types.js';
+import { PostProcessedJDLJSONApplication } from './exporters/types.js';
+import { GENERATOR_NAME } from './exporters/export-utils.js';
 
 const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
@@ -51,7 +53,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the gen
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
-export function createImporterFromFiles(files?, configuration?: any) {
+export function createImporterFromFiles(files, configuration?: any) {
   if (!files) {
     throw new Error('Files must be passed to create a new JDL importer.');
   }
@@ -115,9 +117,9 @@ function makeJDLImporter(content, configuration) {
       if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
         importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
       } else if (jdlObject.getApplicationQuantity() === 1) {
-        importState = importOneApplicationAndEntities(jdlObject, configuration);
+        importState = importOneApplicationAndEntities(jdlObject);
       } else {
-        importState = importApplicationsAndEntities(jdlObject, configuration);
+        importState = importApplicationsAndEntities(jdlObject);
       }
       if (jdlObject.getDeploymentQuantity()) {
         importState.exportedDeployments = importDeployments(jdlObject.deployments);
@@ -215,14 +217,14 @@ function importOnlyEntities(jdlObject: JDLObject, configuration) {
   return exportJSONEntities(jsonEntities, configuration);
 }
 
-function importOneApplicationAndEntities(jdlObject: JDLObject, configuration) {
+function importOneApplicationAndEntities(jdlObject: JDLObject) {
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
     exportedEntities: [],
     exportedDeployments: [],
   };
-  const formattedApplication = formatApplicationToExport(jdlObject.getApplications()[0], configuration);
+  const formattedApplication: PostProcessedJDLJSONApplication = formatApplicationToExport(jdlObject.getApplications()[0]);
   importState.exportedApplications.push(formattedApplication);
   const jdlApplication = jdlObject.getApplications()[0];
   const applicationName = jdlApplication.getConfigurationOptionValue(BASE_NAME);
@@ -230,7 +232,7 @@ function importOneApplicationAndEntities(jdlObject: JDLObject, configuration) {
     jdlObject,
   });
   const jsonEntities: any = entitiesPerApplicationMap.get(applicationName);
-  const { 'generator-jhipster': config, ...remaining } = formattedApplication;
+  const { [GENERATOR_NAME]: config, ...remaining } = formattedApplication;
   importState.exportedApplicationsWithEntities[applicationName] = {
     config,
     ...remaining,
@@ -248,7 +250,7 @@ function importOneApplicationAndEntities(jdlObject: JDLObject, configuration) {
   return importState;
 }
 
-function importApplicationsAndEntities(jdlObject, configuration) {
+function importApplicationsAndEntities(jdlObject) {
   const importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
@@ -256,7 +258,7 @@ function importApplicationsAndEntities(jdlObject, configuration) {
     exportedDeployments: [],
   };
 
-  const formattedApplications = formatApplicationsToExport(jdlObject.applications, configuration);
+  const formattedApplications = formatApplicationsToExport(jdlObject.applications);
   importState.exportedApplications = formattedApplications;
   const entitiesPerApplicationMap: Map<any, any> = convert({
     jdlObject,

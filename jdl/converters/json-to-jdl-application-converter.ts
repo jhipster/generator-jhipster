@@ -19,19 +19,25 @@
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
+import { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from './types.js';
 
 const GENERATOR_NAME = 'generator-jhipster';
 
-export function convertApplicationsToJDL({ applications, jdl }: any = {}) {
-  const jsonApplications = applications || [];
-  const jdlObject = jdl || new JDLObject();
-  jsonApplications.forEach(application => {
+type JHipsterYoRcContentAndJDLWrapper = {
+  applications?: JHipsterYoRcContent[];
+  jdl?: JDLObject;
+};
+
+export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcContentAndJDLWrapper = {}) {
+  const jsonApplications: JHipsterYoRcContent[] = applications || [];
+  const jdlObject: JDLObject = jdl || new JDLObject();
+  jsonApplications.forEach((application: JHipsterYoRcContent) => {
     const convertedApplication = convertApplicationToJDL({ application });
     jdlObject.addApplication(convertedApplication);
   });
   return jdlObject;
 }
 
-export function convertApplicationToJDL({ application }: any = {}) {
-  return createJDLApplication(application[GENERATOR_NAME]);
+export function convertApplicationToJDL({ application }: JHipsterYoRcContentWrapper = {}) {
+  return createJDLApplication(application![GENERATOR_NAME]);
 }

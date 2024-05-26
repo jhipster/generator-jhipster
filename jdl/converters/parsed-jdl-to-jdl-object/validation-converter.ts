@@ -34,7 +34,7 @@ export default { convertValidations };
  * @return the converted JDLValidations.
  */
 export function convertValidations(
-  validations?: ParsedJDLValidation[],
+  validations: ParsedJDLValidation[],
   constantValueGetter?: (constant: string) => string | number | boolean | RegExp,
 ): JDLValidation[] {
   if (!validations) {

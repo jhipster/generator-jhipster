@@ -50,7 +50,7 @@ type JDLOptionHolder = JDLObject | JDLApplication;
  * @param jdlOptionHolder - a JDL object (a JDLObject or a JDLApplication) containing the options.
  * @return {Map<String, Object>} a map having for keys entity names and for values the JSON option contents.
  */
-export function convert(jdlOptionHolder?: JDLOptionHolder): Map<string, any> {
+export function convert(jdlOptionHolder: JDLOptionHolder): Map<string, any> {
   if (!jdlOptionHolder) {
     throw new Error('A JDL object or application must be passed to convert JDL options to JSON.');
   }

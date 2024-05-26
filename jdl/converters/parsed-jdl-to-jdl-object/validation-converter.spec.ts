@@ -24,6 +24,7 @@ describe('jdl - ValidationConverter', () => {
   describe('convertValidations', () => {
     describe('when not passing validations', () => {
       it('should fail', () => {
+        // @ts-expect-error should not be empty
         expect(() => convertValidations()).toThrow(/^Validations have to be passed so as to be converted.$/);
       });
     });

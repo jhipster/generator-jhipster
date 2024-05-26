@@ -32,7 +32,7 @@ export type ParsedJDLValidation = {
 
 export type ParsedJDLEntityField = {
   annotations?: ParsedJDLAnnotation[];
-  validations?: ParsedJDLValidation[];
+  validations: ParsedJDLValidation[];
   name: string;
   type: string;
   documentation?: string;

@@ -19,40 +19,35 @@
 
 import JDLApplication from '../../models/jdl-application.js';
 import { GENERATOR_NAME } from '../export-utils.js';
+import { JDLJSONApplication, JDLJSONApplicationContent, PostProcessedJDLJSONApplication, RawJDLJSONApplication } from '../types.js';
+import JDLApplicationConfigurationOption from '../../models/jdl-application-configuration-option.js';
+import JDLApplicationConfiguration from '../../models/jdl-application-configuration.js';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).
  * @param applications the applications to exporters (key: application name, value: a JDLApplication).
- * @param {Object} [configuration]
  * @return object[] exported applications in their final form.
  */
-export function formatApplicationsToExport(applications: Record<string, JDLApplication>, configuration) {
+export function formatApplicationsToExport(applications: Record<string, JDLApplication>): PostProcessedJDLJSONApplication[] {
   if (!applications) {
     throw new Error('Applications have to be passed to be exported.');
   }
   return Object.values(applications).map(application => {
-    // TODO: This is probably a bug, too many arguments given.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return setUpApplicationStructure(application, configuration);
+    return setUpApplicationStructure(application);
   });
 }
 
 /**
  * Exports JDL a application to a JDL file in the current directory.
  * @param {Object} application - the JDL application to export.
- * @param {Object} [configuration]
  * @return {Object} the exported application in its final form.
  */
-export function formatApplicationToExport(application, configuration = {}) {
-  // TODO: This is probably a bug, too many arguments given.
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  return setUpApplicationStructure(application, configuration);
+export function formatApplicationToExport(application: JDLApplication): PostProcessedJDLJSONApplication {
+  return setUpApplicationStructure(application);
 }
 
-function setUpApplicationStructure(application: JDLApplication) {
-  let applicationToExport: any = {
+function setUpApplicationStructure(application: JDLApplication): PostProcessedJDLJSONApplication {
+  const applicationToExport: Partial<JDLJSONApplication> = {
     [GENERATOR_NAME]: {},
   };
   applicationToExport[GENERATOR_NAME] = getApplicationConfig(application);
@@ -63,13 +58,13 @@ function setUpApplicationStructure(application: JDLApplication) {
   if (application.hasConfigurationOption('creationTimestamp')) {
     applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);
   }
-  applicationToExport = cleanUpOptions(applicationToExport);
-  return applicationToExport;
+  const postProcessedApplicationToExport: PostProcessedJDLJSONApplication = cleanUpOptions(applicationToExport as JDLJSONApplication);
+  return postProcessedApplicationToExport;
 }
 
-function getApplicationConfig(application) {
+function getApplicationConfig(application: JDLApplication): Partial<JDLJSONApplicationContent> {
   const result = {};
-  application.forEachConfigurationOption(option => {
+  application.forEachConfigurationOption((option: JDLApplicationConfigurationOption<any>) => {
     result[option.name] = option.getValue();
   });
   return result;
@@ -80,7 +75,7 @@ function getApplicationNamespaceConfig(application: JDLApplication) {
     return undefined;
   }
   const result = {};
-  application.forEachNamespaceConfiguration(configurationOption => {
+  application.forEachNamespaceConfiguration((configurationOption: JDLApplicationConfiguration) => {
     result[configurationOption.namespace!] = result[configurationOption.namespace!] ?? {};
     configurationOption.forEachOption(option => {
       result[configurationOption.namespace!][option.name] = option.getValue();
@@ -89,20 +84,21 @@ function getApplicationNamespaceConfig(application: JDLApplication) {
   return result;
 }
 
-function cleanUpOptions(application) {
-  if (!application[GENERATOR_NAME].frontEndBuilder) {
-    delete application[GENERATOR_NAME].frontEndBuilder;
+function cleanUpOptions(application: RawJDLJSONApplication): PostProcessedJDLJSONApplication {
+  const res: RawJDLJSONApplication = structuredClone(application);
+  if (res[GENERATOR_NAME].frontEndBuilder) {
+    delete res[GENERATOR_NAME].frontEndBuilder;
   }
-  delete application.entityNames;
+  delete res.entityNames;
   if (application[GENERATOR_NAME].blueprints) {
-    application[GENERATOR_NAME].blueprints = application[GENERATOR_NAME].blueprints.map(blueprintName => ({
+    res[GENERATOR_NAME].blueprints = application[GENERATOR_NAME].blueprints.map(blueprintName => ({
       name: blueprintName,
     }));
   }
   if (application[GENERATOR_NAME].microfrontends) {
-    application[GENERATOR_NAME].microfrontends = application[GENERATOR_NAME].microfrontends.map(baseName => ({
+    res[GENERATOR_NAME].microfrontends = application[GENERATOR_NAME].microfrontends.map(baseName => ({
       baseName,
     }));
   }
-  return application;
+  return res as unknown as PostProcessedJDLJSONApplication;
 }

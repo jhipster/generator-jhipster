@@ -35,6 +35,7 @@ describe('jdl - FieldConverter', () => {
 
         before(() => {
           convertedField = convertField({
+            validations: [],
             name: 'anAwesomeField',
             type: 'String',
           });
@@ -57,6 +58,7 @@ JDLField {
 
         before(() => {
           const convertedField: JDLField = convertField({
+            validations: [],
             name: 'AnAwesomeField',
             type: 'String',
           });
@@ -73,6 +75,7 @@ JDLField {
         before(() => {
           const convertedField = convertField({
             name: 'AnAwesomeField',
+            validations: [],
             type: 'String',
             documentation: 'An awesome comment!',
           });
