@@ -285,8 +285,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
       prepare({ application }) {
         application.requiresDeleteAllUsers =
           application.authenticationTypeOauth2 ||
-          (application.reactive && application.databaseTypeSql) ||
-          (!application.reactive && application.databaseTypeMongodb);
+          (application.reactive && application.databaseTypeSql);
 
         application.reactorBlock = application.reactive ? '.block()' : '';
         application.reactorBlockOptional = application.reactive ? '.blockOptional()' : '';
