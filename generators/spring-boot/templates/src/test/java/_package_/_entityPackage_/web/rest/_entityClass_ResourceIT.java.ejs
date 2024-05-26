@@ -826,14 +826,18 @@ _%>
     <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
     <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+        /**
+         * List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
+         */
         assertSameRepositoryCount(databaseSizeBeforeCreate);
-        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
 
-        // Validate the id for MapsId, the ids must be same
-        // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
-        // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-        // assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+        /**
+         * <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
+         * Validate the id for MapsId, the ids must be same
+         * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
+         * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
+         * assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+         */
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
