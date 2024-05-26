@@ -63,7 +63,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.Cache;
-import org.util.Objects;
+import java.util.Objects;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
 import org.springframework.cache.support.NoOpCacheManager;
