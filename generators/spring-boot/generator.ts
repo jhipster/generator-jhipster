@@ -288,6 +288,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           __override__: false,
           requiresDeleteAllUsers: data =>
             data.authenticationTypeOauth2 ||
+            data.databaseTypeNeo4j ||
             (reactive && data.databaseTypeSql) ||
             (!reactive && data.databaseTypeMongodb) ||
             (!reactive && data.databaseTypeCassandra),
