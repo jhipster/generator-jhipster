@@ -85,7 +85,7 @@ if(jpaMetamodelFiltering && reactive) {
 import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntityNameCapitalized %>Repository;
 <%_ });
  } _%>
-<%_ if (saveUserSnapshot) { _%>
+<%_ if (authenticationTypeOauth2 && hasRelationshipWithBuiltInUser) { _%>
 import <%= entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
@@ -457,11 +457,11 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
-<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
+<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && filterTestableRelationships.every(rel => !rel.otherEntity.builtInUser) && !(authenticationTypeOauth2 && hasRelationshipWithBuiltInUser)) { _%>
     @Autowired
     private <%= mapsIdEntity %>Repository <%= mapsIdRepoInstance %>;
 <%_ } _%>
-<%_ if (saveUserSnapshot) { _%>
+<%_ if (authenticationTypeOauth2 && hasRelationshipWithBuiltInUser && filterTestableRelationships.every(rel => !rel.otherEntity.builtInUser)) { _%>
 
     @Autowired
     private UserRepository userRepository;
@@ -644,6 +644,9 @@ _%>
         }
 <%_ if (databaseTypeSql && reactive) {  _%>
         deleteEntities(em);
+<%_ } _%>
+<%_ if (authenticationTypeOauth2 && hasRelationshipWithBuiltInUser) { _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } _%>
     }
 <%_ if (!readOnly) { _%>
