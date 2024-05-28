@@ -22,10 +22,6 @@ import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>Asserts.*;
 import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
-const hasUserRepository =
-  (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
-  filterTestableRelationships.some(rel => rel.otherEntity.builtInUser) ||
-  (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity === 'User');
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
 let mapsIdEntityInstance;
@@ -35,6 +31,10 @@ if (isUsingMapsId) {
   mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
   mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
 }
+const hasUserRepository =
+  (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
+  filterTestableRelationships.some(rel => rel.otherEntity.builtInUser) ||
+  (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity === 'User');
 
 let callBlock = '';
 let callListBlock = '';
