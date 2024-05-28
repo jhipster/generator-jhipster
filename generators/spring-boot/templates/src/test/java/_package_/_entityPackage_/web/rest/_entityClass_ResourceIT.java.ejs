@@ -22,6 +22,10 @@ import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>Asserts.*;
 import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+const hasUserRepository =
+  (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
+  filterTestableRelationships.some(rel => rel.otherEntity.builtInUser) ||
+  (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity === 'User');
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 let mapsIdEntity;
 let mapsIdEntityInstance;
@@ -85,7 +89,7 @@ if(jpaMetamodelFiltering && reactive) {
 import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntityNameCapitalized %>Repository;
 <%_ });
  } _%>
-<%_ if (requiresDeleteAllUsers) { _%>
+<%_ if (hasUserRepository) { _%>
 import <%= entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
@@ -457,11 +461,11 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
-<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && filterTestableRelationships.every(rel => !rel.otherEntity.builtInUser) && !requiresDeleteAllUsers) { _%>
+<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity !== 'User') { _%>
     @Autowired
     private <%= mapsIdEntity %>Repository <%= mapsIdRepoInstance %>;
 <%_ } _%>
-<%_ if (requiresDeleteAllUsers && filterTestableRelationships.every(rel => !rel.otherEntity.builtInUser)) { _%>
+<%_ if (hasUserRepository) { _%>
 
     @Autowired
     private UserRepository userRepository;
@@ -504,7 +508,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     private <%= persistClass %> inserted<%= persistClass %>;
 
 <%_ if(jpaMetamodelFiltering && reactive) {
-filterTestableRelationships.forEach((relationship) => { _%>
+filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => { _%>
     @Autowired
     private <%= relationship.otherEntity.persistClass %>Repository <%= relationship.otherEntity.persistInstance %>Repository;
 <%_ });
@@ -645,7 +649,7 @@ _%>
 <%_ if (databaseTypeSql && reactive) {  _%>
         deleteEntities(em);
 <%_ } _%>
-<%_ if (requiresDeleteAllUsers) { _%>
+<%_ if (requiresDeleteAllUsers && hasUserRepository) { _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } _%>
     }
