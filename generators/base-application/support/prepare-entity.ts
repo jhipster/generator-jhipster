@@ -33,7 +33,6 @@ import { fieldToReference } from './prepare-field.js';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.js';
 import {
   applicationTypes,
-  authenticationTypes,
   binaryOptions,
   databaseTypes,
   entityOptions,
@@ -48,7 +47,6 @@ import type CoreGenerator from '../../base-core/generator.js';
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { OAUTH2 } = authenticationTypes;
 const { CommonDBTypes } = fieldTypes;
 
 const { BOOLEAN, LONG, STRING, UUID, INTEGER } = CommonDBTypes;
@@ -239,11 +237,18 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   );
 
   mutateData(entityWithConfig, {
+    __override__: false,
     i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${data.frontendAppName}.${data.entityTranslationKey}`,
     i18nAlertHeaderPrefix: data =>
       data.i18nAlertHeaderPrefix ?? data.microserviceAppName
         ? `${data.microserviceAppName}.${data.entityTranslationKey}`
         : data.i18nKeyPrefix,
+    hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
+    saveUserSnapshot: ({ hasRelationshipWithBuiltInUser, dto }) =>
+      application.applicationTypeMicroservice &&
+      application.authenticationTypeOauth2 &&
+      hasRelationshipWithBuiltInUser &&
+      dto === NO_MAPPER,
   });
 
   const { microserviceName, entityFileName, microfrontend } = entityWithConfig;
@@ -253,13 +258,6 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     (microfrontend && microserviceName && entityWithConfig.applicationType === MICROSERVICE
       ? `${microserviceName.toLowerCase()}/${entityFileName}`
       : `${entityFileName}`);
-
-  const hasBuiltInUserField = entityWithConfig.relationships.some(relationship => relationship.otherEntity.builtInUser);
-  entityWithConfig.saveUserSnapshot =
-    application.applicationType === MICROSERVICE &&
-    application.authenticationType === OAUTH2 &&
-    hasBuiltInUserField &&
-    entityWithConfig.dto === NO_MAPPER;
 
   entityWithConfig.generateFakeData = type => {
     const fieldsToGenerate =
