@@ -90,7 +90,7 @@ import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntityNameC
 <%_ });
  } _%>
 <%_ if (hasUserRepository) { _%>
-import <%= entityAbsolutePackage %>.repository.UserRepository;
+import <%= user.entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
