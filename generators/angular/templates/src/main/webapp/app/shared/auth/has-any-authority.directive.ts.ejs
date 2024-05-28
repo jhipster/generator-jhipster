@@ -52,7 +52,7 @@ export default class HasAnyAuthorityDirective {
       } else {
         this.viewContainerRef.clear();
       }
-    });
+    }, { allowSignalWrites: true });
   }
 
   @Input()
