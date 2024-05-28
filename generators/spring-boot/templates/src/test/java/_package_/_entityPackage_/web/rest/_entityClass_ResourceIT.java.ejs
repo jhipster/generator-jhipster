@@ -650,6 +650,9 @@ _%>
         deleteEntities(em);
 <%_ } _%>
 <%_ if (requiresDeleteAllUsers && hasUserRepository) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } _%>
     }
