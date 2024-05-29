@@ -233,12 +233,12 @@ describe(`generator - ${generator}`, () => {
         entities: [expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object), expect.any(Object)],
       };
 
-      expect(initializing).toBeCalledWith(controlArg);
-      expect(prompting).toBeCalledWith(controlArg);
-      expect(configuring).toBeCalledWith(controlArg);
-      expect(composing).toBeCalledWith(controlArg);
-      expect(loading).toBeCalledWith(applicationDefaultsArg);
-      expect(postPreparing).toBeCalledWith(applicationSourceArg);
+      expect(initializing).toHaveBeenCalledWith(controlArg);
+      expect(prompting).toHaveBeenCalledWith(controlArg);
+      expect(configuring).toHaveBeenCalledWith(controlArg);
+      expect(composing).toHaveBeenCalledWith(controlArg);
+      expect(loading).toHaveBeenCalledWith(applicationDefaultsArg);
+      expect(postPreparing).toHaveBeenCalledWith(applicationSourceArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
@@ -279,16 +279,16 @@ describe(`generator - ${generator}`, () => {
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
-      expect(defaultTask).toBeCalledWith(entitiesArg);
-      expect(writingEntities).toBeCalledWith(entitiesArg);
-      expect(postWritingEntities).toBeCalledWith({ ...entitiesArg, source: expect.any(Object) });
+      expect(defaultTask).toHaveBeenCalledWith(entitiesArg);
+      expect(writingEntities).toHaveBeenCalledWith(entitiesArg);
+      expect(postWritingEntities).toHaveBeenCalledWith({ ...entitiesArg, source: expect.any(Object) });
 
-      expect(writing).toBeCalledWith(applicationArg);
-      expect(install).toBeCalledWith(applicationArg);
-      expect(end).toBeCalledWith(applicationArg);
+      expect(writing).toHaveBeenCalledWith(applicationArg);
+      expect(install).toHaveBeenCalledWith(applicationArg);
+      expect(end).toHaveBeenCalledWith(applicationArg);
 
-      expect(preparing).toBeCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
-      expect(postWriting).toBeCalledWith(applicationSourceArg);
+      expect(preparing).toHaveBeenCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
+      expect(postWriting).toHaveBeenCalledWith(applicationSourceArg);
     });
   });
 
@@ -485,11 +485,11 @@ describe(`generator - ${generator}`, () => {
         source: expect.any(Object),
       };
 
-      expect(initializing).toBeCalledWith(controlArg);
-      expect(prompting).toBeCalledWith(controlArg);
-      expect(configuring).toBeCalledWith(controlArg);
-      expect(composing).toBeCalledWith(controlArg);
-      expect(loading).toBeCalledWith(applicationDefaultsArg);
+      expect(initializing).toHaveBeenCalledWith(controlArg);
+      expect(prompting).toHaveBeenCalledWith(controlArg);
+      expect(configuring).toHaveBeenCalledWith(controlArg);
+      expect(composing).toHaveBeenCalledWith(controlArg);
+      expect(loading).toHaveBeenCalledWith(applicationDefaultsArg);
 
       expect(configuringEachEntity).toBeCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
@@ -530,17 +530,17 @@ describe(`generator - ${generator}`, () => {
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
-      expect(defaultTask).toBeCalledWith(entitiesArg);
+      expect(defaultTask).toHaveBeenCalledWith(entitiesArg);
 
-      expect(writingEntities).toBeCalledWith(writingEntitiesArg);
-      expect(postWritingEntities).toBeCalledWith(postWritingEntitiesArg);
+      expect(writingEntities).toHaveBeenCalledWith(writingEntitiesArg);
+      expect(postWritingEntities).toHaveBeenCalledWith(postWritingEntitiesArg);
 
-      expect(writing).toBeCalledWith(applicationArg);
-      expect(install).toBeCalledWith(applicationArg);
-      expect(end).toBeCalledWith(applicationArg);
+      expect(writing).toHaveBeenCalledWith(applicationArg);
+      expect(install).toHaveBeenCalledWith(applicationArg);
+      expect(end).toHaveBeenCalledWith(applicationArg);
 
-      expect(preparing).toBeCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
-      expect(postWriting).toBeCalledWith(applicationSourceArg);
+      expect(preparing).toHaveBeenCalledWith({ ...applicationSourceArg, ...applicationDefaultsArg });
+      expect(postWriting).toHaveBeenCalledWith(applicationSourceArg);
     });
   });
 });
