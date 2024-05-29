@@ -73,7 +73,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(<%- tsKeyId %>);
+      expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
       expect(result<%= entityAngularName %>).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
     });
 
@@ -111,7 +111,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(<%- tsKeyId %>);
+      expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
       expect(result<%= entityAngularName %>).toEqual(undefined);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });
