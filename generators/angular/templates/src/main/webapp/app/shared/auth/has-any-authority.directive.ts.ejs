@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, inject, Input, TemplateRef, ViewContainerRef, effect, signal, computed } from '@angular/core';
+import { Directive, inject, input, TemplateRef, ViewContainerRef, effect, computed } from '@angular/core';
 
 import { AccountService } from 'app/core/auth/account.service';
 
@@ -36,7 +36,7 @@ import { AccountService } from 'app/core/auth/account.service';
   selector: '[<%= jhiPrefix %>HasAnyAuthority]',
 })
 export default class HasAnyAuthorityDirective {
-  private authorities = signal<string | string[]>([]);
+  public authorities = input<string | string[]>([], { alias: '<%= jhiPrefix %>HasAnyAuthority' });
 
   private templateRef = inject(TemplateRef<any>);
   private viewContainerRef = inject(ViewContainerRef);
@@ -53,10 +53,5 @@ export default class HasAnyAuthorityDirective {
         this.viewContainerRef.clear();
       }
     }, { allowSignalWrites: true });
-  }
-
-  @Input()
-  set <%= jhiPrefix %>HasAnyAuthority(value: string | string[]) {
-    this.authorities.set(value);
   }
 }
