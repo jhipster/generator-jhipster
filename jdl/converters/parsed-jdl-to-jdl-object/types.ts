@@ -31,8 +31,11 @@ export type ParsedJDLValidation = {
 };
 
 export type ParsedJDLEntityField = {
-  annotations: ParsedJDLAnnotation[];
+  annotations?: ParsedJDLAnnotation[];
   validations: ParsedJDLValidation[];
+  name: string;
+  type: string;
+  documentation?: string;
 };
 
 export type ParsedJDLEntity = {

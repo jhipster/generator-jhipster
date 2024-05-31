@@ -43,7 +43,7 @@ describe('Formatter i18n', () => {
 
     dataUtilsService.openFile('text', 'data');
 
-    expect(window.open).toBeCalledWith(objectURL);
+    expect(window.open).toHaveBeenCalledWith(objectURL);
   });
 
   it('should check text ends with suffix', () => {

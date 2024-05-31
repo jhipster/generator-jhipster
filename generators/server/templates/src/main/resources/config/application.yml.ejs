@@ -335,14 +335,43 @@ spring:
   <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
     problemdetails:
       enabled: true
-<%_ if (generateInMemoryUserCredentials) { _%>
+<%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
   security:
+  <%_ if (generateInMemoryUserCredentials) { _%>
     user:
       name: admin
       password: admin
       roles:
         - ADMIN
         - USER
+  <%_ } _%>
+  <%_ if (authenticationTypeOauth2) { _%>
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: http://localhost:9080/realms/jhipster
+        registration:
+          oidc:
+    <%_ if (applicationTypeMicroservice) { _%>
+            client-id: internal
+            client-secret: internal
+    <%_ } else { _%>
+            client-id: web_app
+            client-secret: web_app
+    <%_ } _%>
+            scope: openid, profile, email, offline_access # last one for refresh tokens
+      resourceserver:
+        jwt:
+          principal-claim-name: preferred_username
+  <%_ } _%>
+  <%_ if (authenticationTypeJwt) { _%>
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
+  <%_ } _%>
 <%_ } _%>
   task:
     execution:
@@ -360,24 +389,6 @@ spring:
   output:
     ansi:
       console-available: true
-<%_ if (authenticationTypeOauth2) { _%>
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: http://localhost:9080/realms/jhipster
-        registration:
-          oidc:
-  <%_ if (applicationTypeMicroservice) { _%>
-            client-id: internal
-            client-secret: internal
-  <%_ } else { _%>
-            client-id: web_app
-            client-secret: web_app
-  <%_ } _%>
-            scope: openid, profile, email, offline_access # last one for refresh tokens
-<%_ } _%>
 
 server:
   servlet:

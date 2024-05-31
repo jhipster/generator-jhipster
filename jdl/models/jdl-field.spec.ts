@@ -51,6 +51,7 @@ describe('jdl - JDLField', () => {
     describe('when not passing the type', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error
           new JDLField({ name: 'abc', type: null });
         }).to.throw('The field name and type are mandatory to create a field.');
       });

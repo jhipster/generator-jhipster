@@ -91,7 +91,7 @@ describe('Tracker Service', () => {
 
     // THEN
     expect(mockStomp.publish).toBeCalledTimes(1);
-    expect(mockStomp.publish).toBeCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
+    expect(mockStomp.publish).toHaveBeenCalledWith({ destination: '/topic/activity', body: JSON.stringify({ page: '/admin' }) });
   });
 
   it('Should disconnect on logout', async () => {

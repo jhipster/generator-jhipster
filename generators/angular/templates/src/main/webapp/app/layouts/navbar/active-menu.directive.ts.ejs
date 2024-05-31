@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, OnInit, ElementRef, Renderer2, inject, Input } from '@angular/core';
+import { Directive, OnInit, ElementRef, Renderer2, inject, input } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Directive({
@@ -24,7 +24,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
   selector: '[<%= jhiPrefix %>ActiveMenu]',
 })
 export default class ActiveMenuDirective implements OnInit {
-  @Input() <%= jhiPrefix %>ActiveMenu?: string;
+  <%= jhiPrefix %>ActiveMenu = input();
 
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
@@ -39,7 +39,7 @@ export default class ActiveMenuDirective implements OnInit {
   }
 
   updateActiveFlag(selectedLanguage: string): void {
-    if (this.<%= jhiPrefix %>ActiveMenu === selectedLanguage) {
+    if (this.<%= jhiPrefix %>ActiveMenu() === selectedLanguage) {
       this.renderer.addClass(this.el.nativeElement, 'active');
     } else {
       this.renderer.removeClass(this.el.nativeElement, 'active');

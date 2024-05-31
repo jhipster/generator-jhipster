@@ -18,6 +18,7 @@
  */
 
 import fs from 'fs';
+import JDLObject from '../models/jdl-object.js';
 
 /**
  * Writes down the given JDL to a file.
@@ -25,7 +26,7 @@ import fs from 'fs';
  * @param path the path where the file will be written.
  * @returns file contents
  */
-export default function exportToJDL(jdl, path = 'app.jdl'): string {
+export default function exportToJDL(jdl: JDLObject, path = 'app.jdl'): string {
   if (!jdl) {
     throw new Error('A JDLObject has to be passed to be exported.');
   }

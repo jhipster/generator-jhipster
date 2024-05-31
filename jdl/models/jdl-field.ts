@@ -24,8 +24,8 @@ import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLField {
   name: string;
-  type: any;
-  comment: string | undefined;
+  type: string;
+  comment?: string | undefined;
   validations: Record<string, JDLValidation>;
   options: Record<string, AbstractJDLOption | boolean | string | number | string[] | boolean[] | number[]>;
 

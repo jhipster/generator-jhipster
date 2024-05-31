@@ -124,6 +124,7 @@ test {
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.required = false
+    testLogging.exceptionFormat "full"
 <%_ if (reactive) { _%>
 
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
@@ -133,7 +134,6 @@ test {
     }
 <%_ } _%>
 }
-
 
 check.dependsOn integrationTest
 task testReport(type: TestReport) {
@@ -172,8 +172,7 @@ dependencies {
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-    implementation "io.dropwizard.metrics:metrics-core"
-    implementation "io.micrometer:micrometer-registry-prometheus"
+    implementation "io.micrometer:micrometer-registry-prometheus-simpleclient"
 <%_ if (reactive) { _%>
     runtimeOnly "io.netty:netty-tcnative-boringssl-static"
 <%_ } _%>

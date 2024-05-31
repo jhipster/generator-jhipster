@@ -400,11 +400,11 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
           "groupId": "org.infinispan",
         },
         {
-          "artifactId": "infinispan-commons-jakarta",
+          "artifactId": "infinispan-commons",
           "groupId": "org.infinispan",
         },
         {
-          "artifactId": "infinispan-core-jakarta",
+          "artifactId": "infinispan-core",
           "groupId": "org.infinispan",
         },
         {
@@ -461,11 +461,11 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
           "groupId": "org.infinispan",
         },
         {
-          "artifactId": "infinispan-commons-jakarta",
+          "artifactId": "infinispan-commons",
           "groupId": "org.infinispan",
         },
         {
-          "artifactId": "infinispan-core-jakarta",
+          "artifactId": "infinispan-core",
           "groupId": "org.infinispan",
         },
         {

@@ -31,6 +31,10 @@ if (isUsingMapsId) {
   mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
   mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
 }
+const hasUserRepository =
+  (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
+  filterTestableRelationships.some(rel => rel.otherEntity.builtInUser) ||
+  (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity === 'User');
 
 let callBlock = '';
 let callListBlock = '';
@@ -85,8 +89,8 @@ if(jpaMetamodelFiltering && reactive) {
 import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntityNameCapitalized %>Repository;
 <%_ });
  } _%>
-<%_ if (saveUserSnapshot) { _%>
-import <%= entityAbsolutePackage %>.repository.UserRepository;
+<%_ if (hasUserRepository) { _%>
+import <%= user.entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
@@ -114,9 +118,7 @@ import org.assertj.core.util.IterableUtil;
 import org.springframework.data.util.Streamable;
 import java.util.concurrent.TimeUnit;
 <%_ } _%>
-<%_ if ((databaseTypeSql && reactive) || searchEngineElasticsearch) { _%>
 import org.junit.jupiter.api.AfterEach;
-<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 <%_ if (skipJunitTests) { _%>
 import org.junit.jupiter.api.Disabled;
@@ -459,11 +461,11 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
-<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
+<%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdEntity !== 'User') { _%>
     @Autowired
     private <%= mapsIdEntity %>Repository <%= mapsIdRepoInstance %>;
 <%_ } _%>
-<%_ if (saveUserSnapshot) { _%>
+<%_ if (hasUserRepository) { _%>
 
     @Autowired
     private UserRepository userRepository;
@@ -503,8 +505,10 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     private <%= persistClass %> <%= persistInstance %>;
 
+    private <%= persistClass %> inserted<%= persistClass %>;
+
 <%_ if(jpaMetamodelFiltering && reactive) {
-filterTestableRelationships.forEach((relationship) => { _%>
+filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => { _%>
     @Autowired
     private <%= relationship.otherEntity.persistClass %>Repository <%= relationship.otherEntity.persistInstance %>Repository;
 <%_ });
@@ -620,19 +624,6 @@ _%>
   }); _%>
     }
 
-    @AfterEach
-    public void cleanup() {
-        deleteEntities(em);
-    }
-
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-    @AfterEach
-    public void cleanupElasticSearchRepository() {
-        <%= entityInstance %>SearchRepository.deleteAll()<%= callBlock %>;
-        assertThat(<%= entityInstance %>SearchRepository.count()<%= callBlock %>).isEqualTo(0);
-    }
-
 <%_ } _%>
 <%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
@@ -643,12 +634,27 @@ _%>
 <%_ } _%>
     @BeforeEach
     public void initTest() {
-<%_ if (databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra || databaseTypeNeo4j) { _%>
-        <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
-<%_ } else if (databaseTypeSql && reactive) {  _%>
+        <%= persistInstance %> = createEntity(<% if (databaseTypeSql) { %>em<% } %>);
+    }
+
+    @AfterEach
+    public void cleanup() {
+        if (inserted<%= persistClass %> != null) {
+            <%= entityInstance %>Repository.delete(inserted<%= persistClass %>)<%= reactorBlock %>;
+<%_ if (searchEngineElasticsearch) { _%>
+            <%= entityInstance %>SearchRepository.delete(inserted<%= persistClass %>)<%= reactorBlock %>;
+<%_ } _%>
+            inserted<%= persistClass %> = null;
+        }
+<%_ if (databaseTypeSql && reactive) {  _%>
         deleteEntities(em);
 <%_ } _%>
-        <%= persistInstance %> = createEntity(<% if (databaseTypeSql) { %>em<% } %>);
+<%_ if (requiresDeleteAllUsers && hasUserRepository) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
+        userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
+  <%_ } _%>
+        userRepository.deleteAll()<%- reactorBlock %>;
+<%_ } _%>
     }
 <%_ if (!readOnly) { _%>
 
@@ -718,13 +724,15 @@ _%>
 
         assert<%- persistClass %>MapsIdRelationshipPersistedValue(<%= persistInstance %>, returned<%- persistClass %>);
   <%_ } _%>
+
+        inserted<%= persistClass %> = returned<%- persistClass %>;
     }
 
     @Test<%= transactionalAnnotation %>
     void create<%= entityClass %>WithExistingId() throws Exception {
         // Create the <%= entityClass %> with an existing ID
   <%_ if ((primaryKey.typeUUID && databaseTypeSql) || !primaryKey.autoGenerate) { _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else { _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
   <%_ } _%>
@@ -772,7 +780,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
     <%_ const alreadyGeneratedEntities = []; _%>
         long databaseSizeBeforeCreate = getRepositoryCount();
     <%_ if (searchEngineElasticsearch) { _%>
@@ -828,14 +836,14 @@ _%>
     <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
     <%_ } _%>
-        List<<%= persistClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertSameRepositoryCount(databaseSizeBeforeCreate);
-        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
 
-        // Validate the id for MapsId, the ids must be same
-        // Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
-        // Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-        // assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+        /**
+         * Validate the id for MapsId, the ids must be same
+         * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
+         * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
+         * assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().get<%= primaryKey.nameCapitalized %>());
+         */
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
@@ -886,7 +894,6 @@ _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
         <%_ } _%>
-
     }
       <%_ } _%>
     <%_ } _%>
@@ -940,7 +947,7 @@ _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
 <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List
 <%_ if (reactive) { _%>
@@ -1027,7 +1034,7 @@ _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
 <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get the <%= entityInstance %>
 <%_ if (reactive) { _%>
@@ -1066,7 +1073,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         <%= primaryKey.type %> id = <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>();
 
@@ -1085,7 +1092,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to
         default<%= entityClass %>Filtering(
@@ -1097,7 +1104,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in
         default<%= entityClass %>Filtering(
@@ -1109,7 +1116,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is not null
         default<%= entityClass %>Filtering(
@@ -1122,7 +1129,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains
         default<%= entityClass %>Filtering(
@@ -1134,7 +1141,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain
         default<%= entityClass %>Filtering(
@@ -1164,7 +1171,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to
         default<%= entityClass %>Filtering(
@@ -1176,7 +1183,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to
         default<%= entityClass %>Filtering(
@@ -1188,7 +1195,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than
         default<%= entityClass %>Filtering(
@@ -1200,7 +1207,7 @@ _%>
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than
         default<%= entityClass %>Filtering(
@@ -1246,7 +1253,7 @@ _%>
       <%_ } else { _%>
         <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
         <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>Id(<%= relationship.relationshipFieldName %>Id);
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
       <%_ } _%>
     <%_ } _%>
     <%_ if(!reactive) { _%>
@@ -1420,7 +1427,7 @@ _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
@@ -1620,7 +1627,7 @@ _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
   <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock}); -%>
@@ -1640,7 +1647,7 @@ _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
   <% const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); %>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock}); -%>
@@ -1777,7 +1784,7 @@ _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
@@ -1826,7 +1833,7 @@ _%>
         <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%= persistInstance %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else if (searchEngineCouchbase) { _%>
