@@ -34,6 +34,7 @@ import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
 import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
+import { extractArgumentsFromConfigs } from '../generators/base/internal/command.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -118,7 +119,7 @@ const addCommandGeneratorOptions = async (command, generatorMeta, { root, bluepr
 const addCommandRootGeneratorOptions = async (command, generatorMeta, { usage = true } = {}) => {
   const generatorModule = await generatorMeta.importModule();
   if (generatorModule.command) {
-    command.addJHipsterArguments(generatorModule.command.arguments);
+    command.addJHipsterArguments(generatorModule.command.arguments ?? extractArgumentsFromConfigs(generatorModule.command.configs));
   } else {
     const generator = await generatorMeta.instantiateHelp();
     command.addGeneratorArguments(generator._arguments);
