@@ -129,7 +129,7 @@
     "chevrotain": "11.0.3",
     "commander": "12.1.0",
     "conf": "12.0.0",
-    "debug": "4.3.4",
+    "debug": "4.3.5",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.6.1",
     "dot-properties": "1.0.1",
