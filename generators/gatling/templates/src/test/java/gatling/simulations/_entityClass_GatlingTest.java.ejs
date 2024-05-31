@@ -28,7 +28,6 @@ import static io.gatling.javaapi.http.HttpDsl.headerRegex;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-import ch.qos.logback.classic.LoggerContext;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
@@ -36,20 +35,13 @@ import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
-import org.slf4j.LoggerFactory;
 
 /**
  * Performance test for the <%= entityClass %> entity.
+ *
+ * @see <a href="https://github.com/jhipster/generator-jhipster/tree/v<%- jhipsterVersion %>/generators/gatling#logging-tips">Logging tips</a>
  */
 public class <%= entityClass %>GatlingTest extends Simulation {
-
-    LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-    {
-        // Log all HTTP requests
-        //context.getLogger("io.gatling.http").setLevel(Level.valueOf("TRACE"));
-        // Log failed HTTP requests
-        //context.getLogger("io.gatling.http").setLevel(Level.valueOf("DEBUG"));
-    }
 
     String baseURL = Optional.ofNullable(System.getProperty("baseURL")).orElse("http://localhost:<%= serverPort %>");
 

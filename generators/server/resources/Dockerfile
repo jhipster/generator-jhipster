@@ -64,7 +64,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:10.4.3
+FROM grafana/grafana:11.0.0
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
@@ -79,5 +79,5 @@ LABEL ALIAS=java-jre
 FROM swaggerapi/swagger-editor:latest
 LABEL ALIAS=swagger-editor
 
-FROM openzipkin/zipkin:3.3
+FROM openzipkin/zipkin:3.4
 LABEL ALIAS=zipkin

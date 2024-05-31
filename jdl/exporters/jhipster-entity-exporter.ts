@@ -22,6 +22,8 @@ import path from 'path';
 import { applicationTypes } from '../jhipster/index.js';
 import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
 import { doesFileExist } from '../utils/file-utils.js';
+import { JSONEntity } from '../converters/types.js';
+import { JhipsterJSONJDLExporterWrapper } from './types.js';
 
 let configuration: any = {};
 
@@ -36,7 +38,7 @@ let configuration: any = {};
  * @param {String} passedConfiguration.application.type - the application's type.
  * @returns {Array<JSONEntity>} the exported entities.
  */
-export default function exportEntities(passedConfiguration) {
+export default function exportEntities(passedConfiguration: JhipsterJSONJDLExporterWrapper): JSONEntity[] {
   init(passedConfiguration);
   if (configuration.entities.length === 0) {
     return configuration.entities;
@@ -49,7 +51,7 @@ export default function exportEntities(passedConfiguration) {
   return configuration.entities;
 }
 
-function init(passedConfiguration) {
+function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
   if (!passedConfiguration || !passedConfiguration.entities) {
     throw new Error('Entities have to be passed to be exported.');
   }
@@ -60,14 +62,14 @@ function init(passedConfiguration) {
  * Writes entities in a sub folder.
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
-function updateEntities(subFolder) {
-  return configuration.entities.map(entity => {
+function updateEntities(subFolder: string): JSONEntity[] {
+  return configuration.entities.map((entity: JSONEntity) => {
     const filePath = path.join(subFolder, toFilePath(entity.name));
     return updateEntityToGenerateWithExistingOne(filePath, entity);
   });
 }
 
-function updateEntityToGenerateWithExistingOne(filePath, entity) {
+function updateEntityToGenerateWithExistingOne(filePath: string, entity: JSONEntity): JSONEntity {
   if (doesFileExist(filePath)) {
     const fileOnDisk = readJSONFile(filePath);
     if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
@@ -79,13 +81,13 @@ function updateEntityToGenerateWithExistingOne(filePath, entity) {
   return entity;
 }
 
-function shouldFilterOutEntitiesBasedOnMicroservice() {
+function shouldFilterOutEntitiesBasedOnMicroservice(): string {
   return (
     configuration.application.type && configuration.application.type === applicationTypes.MICROSERVICE && configuration.application.name
   );
 }
 
-function filterOutEntitiesByMicroservice() {
+function filterOutEntitiesByMicroservice(): JSONEntity[] {
   return configuration.entities.filter(entity => {
     return !(entity.microserviceName && entity.microserviceName.toLowerCase() !== configuration.application.name.toLowerCase());
   });

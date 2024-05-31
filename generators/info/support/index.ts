@@ -17,3 +17,4 @@
  * limitations under the License.
  */
 export * from './utils.js';
+export * from './extract-info.js';

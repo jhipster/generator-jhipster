@@ -132,7 +132,7 @@ function convertJSONToJDLValidation(rule: string, field: JSONField): JDLValidati
 }
 
 function addEnumsToJDL(entity: JSONEntity): void {
-  entity?.fields?.forEach(field => {
+  entity?.fields?.forEach((field: JSONField) => {
     if (field.fieldValues !== undefined) {
       jdlObject.addEnum(
         new JDLEnum({
@@ -145,7 +145,7 @@ function addEnumsToJDL(entity: JSONEntity): void {
   });
 }
 
-function getEnumValuesFromString(valuesAsString: string): any {
+function getEnumValuesFromString(valuesAsString: string): any[] {
   return valuesAsString.split(',').map(fieldValue => {
     // if fieldValue looks like ENUM_VALUE (something)
     if (fieldValue.includes('(')) {

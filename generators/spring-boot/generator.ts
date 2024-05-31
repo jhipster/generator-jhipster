@@ -282,14 +282,20 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           (application.backendType ?? 'Java') === 'Java' &&
           (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
       },
-      prepare({ application }) {
-        application.requiresDeleteAllUsers =
-          application.authenticationTypeOauth2 ||
-          (application.reactive && application.databaseTypeSql) ||
-          (!application.reactive && application.databaseTypeMongodb);
-
-        application.reactorBlock = application.reactive ? '.block()' : '';
-        application.reactorBlockOptional = application.reactive ? '.blockOptional()' : '';
+      prepare({ application, applicationDefaults }) {
+        const { reactive } = application;
+        applicationDefaults({
+          __override__: false,
+          requiresDeleteAllUsers: data =>
+            (data.anyEntityHasRelationshipWithUser && data.authenticationTypeOauth2) ||
+            data.authenticationTypeOauth2 ||
+            data.databaseTypeNeo4j ||
+            (reactive && data.databaseTypeSql) ||
+            (!reactive && data.databaseTypeMongodb) ||
+            (!reactive && data.databaseTypeCassandra),
+          reactorBlock: reactive ? '.block()' : '',
+          reactorBlockOptional: reactive ? '.blockOptional()' : '',
+        });
       },
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {

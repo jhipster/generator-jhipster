@@ -171,6 +171,14 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
         });
       },
+      userRelationship({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: false,
+          anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
+            (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
+          ),
+        });
+      },
       syncUserWithIdp({ application, applicationDefaults }) {
         if (!application.backendTypeSpringBoot) return;
 
@@ -178,11 +186,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           applicationDefaults({
             __override__: false,
             syncUserWithIdp: data =>
-              data.databaseType !== 'no' &&
-              (data.applicationType === 'gateway' ||
-                this.getExistingEntities().some(entity =>
-                  (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
-                )),
+              data.databaseType !== 'no' && (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
           });
         } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
           throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');

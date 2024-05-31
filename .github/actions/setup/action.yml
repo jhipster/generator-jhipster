@@ -153,7 +153,7 @@ runs:
 
         if [[ "${{inputs.jhipster-bom-branch}}" != "" ]]; then
           echo "JHI_GEN_BRANCH=${{inputs.generator-jhipster-branch}}" >> $GITHUB_ENV
-        else 
+        else
           echo "JHI_GEN_BRANCH=${JHI_GEN_BRANCH}" >> $GITHUB_ENV
         fi
 

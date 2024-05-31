@@ -62,6 +62,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache;
+import java.util.Objects;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
 import org.springframework.cache.support.NoOpCacheManager;
@@ -216,14 +218,6 @@ class UserResourceIT {
     }
 
 <%_ } _%>
-<%_ if (cacheProviderAny) { _%>
-    @BeforeEach
-    public void setup() {
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-    }
-
-<%_ } _%>
 <%_ if (reactive && authenticationUsesCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
@@ -287,6 +281,12 @@ class UserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
+<%_ if (cacheProviderAny) { _%>
+    cacheManager.getCacheNames().stream()
+        .map(cacheName -> this.cacheManager.getCache(cacheName))
+        .filter(Objects::nonNull)
+        .forEach(Cache::clear);
+<%_ } _%>
 <%_ if (requiresDeleteAllUsers) { _%>
     <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
@@ -310,9 +310,6 @@ class UserResourceIT {
     @Transactional
   <%_ } _%>
     void createUser() throws Exception {
-        int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
-
         // Create the User
         <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
         userDTO.setLogin(DEFAULT_LOGIN);

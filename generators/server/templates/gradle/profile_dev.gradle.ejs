@@ -191,6 +191,7 @@ task integrationTest(type: Test) {
 <%_ } _%>
     testLogging {
         events 'FAILED', 'SKIPPED'
+        exceptionFormat "full"
     }
     systemProperty('spring.profiles.active', 'testdev')
     systemProperty('java.security.egd', 'file:/dev/./urandom')

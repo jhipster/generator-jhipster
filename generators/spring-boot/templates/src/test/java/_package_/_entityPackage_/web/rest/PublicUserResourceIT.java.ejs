@@ -50,6 +50,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache;
+import java.util.Objects;
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
 import org.springframework.cache.support.NoOpCacheManager;
@@ -82,6 +84,7 @@ import java.util.stream.Stream;
 <%_ if (databaseTypeCassandra) { _%>
 import java.util.UUID;
 <%_ } _%>
+import java.util.Set;
 
 <%_ if (reactive && searchEngineElasticsearch) { _%>
 import static org.mockito.Mockito.*;
@@ -89,10 +92,6 @@ import static org.mockito.Mockito.*;
 <%_ if (reactive && authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } else if (!reactive) { _%>
-  <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-import static org.hamcrest.Matchers.hasItems;
-  <%_ } _%>
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
@@ -147,26 +146,18 @@ class PublicUserResourceIT {
     @Autowired
 <%_ if (reactive) { _%>
     private WebTestClient webTestClient;
+
 <%_ } else { _%>
     private MockMvc restUserMockMvc;
+
 <%_ } _%>
-
     private <%= user.persistClass %> user;
-
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
     @BeforeEach
     public void countUsers() {
         numberOfUsers = userRepository.count()<%- reactorBlock %>;
-    }
-
-<%_ } _%>
-<%_ if (cacheProviderAny) { _%>
-    @BeforeEach
-    public void setup() {
-        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
-        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
     }
 
 <%_ } _%>
@@ -184,13 +175,19 @@ class PublicUserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
+<%_ if (cacheProviderAny) { _%>
+        cacheManager.getCacheNames().stream()
+            .map(cacheName -> this.cacheManager.getCache(cacheName))
+            .filter(Objects::nonNull)
+            .forEach(Cache::clear);
+<%_ } _%>
 <%_ if (requiresDeleteAllUsers) { _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else { _%>
-        userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
+        userService.deleteUser(user.getLogin())<%- reactorBlock %>;
 <%_ } _%>
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
         assertThat(userRepository.count()<%- reactorBlock %>).isEqualTo(numberOfUsers);
@@ -208,32 +205,38 @@ class PublicUserResourceIT {
 
         // Get all the users
 <%_ if (reactive) { _%>
-        <%= user.dtoClass %> foundUser = webTestClient.get().uri("/api/users?sort=id,desc")
+        webTestClient.get().uri("/api/users?sort=id,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.dtoClass %>.class).getResponseBody().blockFirst();
-
-        assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+            .expectBody()
+            .jsonPath("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].login", user.getId()).isEqualTo(user.getLogin())
+            .jsonPath("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].keys()", user.getId()).isEqualTo(Set.of("id", "login"))
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        assertThat(foundUser.get<%= field.propertyJavaBeanName %>()).isEqualTo(DEFAULT_<%= field.fieldName.toUpperCase() %>);
+            .jsonPath("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId()).isEqualTo(user.get<%= field.propertyJavaBeanName %>())
   <%_ } _%>
+            .jsonPath("$.[*].email").doesNotHaveJsonPath()
+  <%_ if (!databaseTypeCassandra) { _%>
+            .jsonPath("$.[*].imageUrl").doesNotHaveJsonPath()
+  <%_ } _%>
+            .jsonPath("$.[*].langKey").doesNotHaveJsonPath();
 <%_ } else { _%>
         restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
+            .andExpect(jsonPath("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].login", user.getId()).value(user.getLogin()))
+            .andExpect(jsonPath("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].keys()", user.getId()).value(Set.of("id", "login")))
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(DEFAULT_<%= field.fieldName.toUpperCase() %>)))
+            .andExpect(jsonPath("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId()).value(user.get<%= field.propertyJavaBeanName %>()))
   <%_ } _%>
-            .andExpect(jsonPath("$.[*].email").doesNotExist())
+            .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
   <%_ if (!databaseTypeCassandra) { _%>
-            .andExpect(jsonPath("$.[*].imageUrl").doesNotExist())
+            .andExpect(jsonPath("$.[*].imageUrl").doesNotHaveJsonPath())
   <%_ } _%>
-            .andExpect(jsonPath("$.[*].langKey").doesNotExist());
-<% } _%>
+            .andExpect(jsonPath("$.[*].langKey").doesNotHaveJsonPath());
+<%_ } _%>
     }
 
 <%_ if (databaseTypeSql && !authenticationTypeOauth2) { _%>

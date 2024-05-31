@@ -96,6 +96,12 @@ export default class EnvironmentBuilder {
     return EnvironmentBuilder.create(...args).prepare();
   }
 
+  static async run(args, generatorOptions = {}, envOptions = {}) {
+    const envBuilder = await EnvironmentBuilder.createDefaultBuilder(envOptions);
+    const env = envBuilder.getEnvironment();
+    await env.run(args, generatorOptions);
+  }
+
   /**
    * Class to manipulate yeoman environment for jhipster needs.
    * - Registers jhipster generators.

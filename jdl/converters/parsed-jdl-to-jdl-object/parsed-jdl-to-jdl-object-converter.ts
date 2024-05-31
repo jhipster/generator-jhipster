@@ -39,6 +39,8 @@ import {
 } from './types.js';
 import JDLApplication from '../../models/jdl-application.js';
 import JDLField from '../../models/jdl-field.js';
+import JDLValidation from '../../models/jdl-validation.js';
+import { JDLEntity } from '../../models/index.js';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;
@@ -103,45 +105,45 @@ function fillDeployments(): void {
   });
 }
 
-function fillEnums() {
+function fillEnums(): void {
   const jdlEnums = convertEnums(parsedContent.enums);
   jdlEnums.forEach(jdlEnum => {
     jdlObject.addEnum(jdlEnum);
   });
 }
 
-function fillClassesAndFields() {
-  const jdlEntities = convertEntities(parsedContent.entities, getJDLFieldsFromParsedEntity);
+function fillClassesAndFields(): void {
+  const jdlEntities: JDLEntity[] = convertEntities(parsedContent.entities, getJDLFieldsFromParsedEntity);
   jdlEntities.forEach(jdlEntity => {
     jdlObject.addEntity(jdlEntity);
   });
 }
 
 function getJDLFieldsFromParsedEntity(entity: ParsedJDLEntity): JDLField[] {
-  const fields: any[] = [];
+  const fields: JDLField[] = [];
   const arr = entity.body || [];
   for (let i = 0; i < arr.length; i++) {
     const field = arr[i];
     const jdlField = convertField(field);
     jdlField.validations = getValidations(field);
-    jdlField.options = convertAnnotationsToOptions(field.annotations);
+    jdlField.options = convertAnnotationsToOptions(field.annotations || []);
     fields.push(jdlField);
   }
   return fields;
 }
 
-function getValidations(field: ParsedJDLEntityField) {
+function getValidations(field: ParsedJDLEntityField): Record<string, JDLValidation> {
   return convertValidations(field.validations, getConstantValueFromConstantName).reduce((jdlValidations, jdlValidation) => {
     jdlValidations[jdlValidation.name] = jdlValidation;
     return jdlValidations;
   }, {});
 }
 
-function getConstantValueFromConstantName(constantName: string) {
+function getConstantValueFromConstantName(constantName: string): string {
   return parsedContent.constants[constantName];
 }
 
-function fillAssociations() {
+function fillAssociations(): void {
   const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions);
   jdlRelationships.forEach(jdlRelationship => {
     // TODO: addRelationship only expects one argument.
@@ -173,15 +175,15 @@ function convertAnnotationsToOptions(
   return result;
 }
 
-function fillOptions() {
+function fillOptions(): void {
   if (configuration.applicationType === applicationTypes.MICROSERVICE && !parsedContent.options.microservice) {
-    globallyAddMicroserviceOption(configuration.applicationName);
+    globallyAddMicroserviceOption(configuration.applicationName!);
   }
   fillUnaryAndBinaryOptions();
 }
 
 // TODO: move it to another file? it may not be the parser's responsibility to do it
-function globallyAddMicroserviceOption(applicationName) {
+function globallyAddMicroserviceOption(applicationName: string): void {
   jdlObject.addOption(
     new JDLBinaryOption({
       name: binaryOptions.Options.MICROSERVICE,
@@ -191,7 +193,7 @@ function globallyAddMicroserviceOption(applicationName) {
   );
 }
 
-function fillUnaryAndBinaryOptions() {
+function fillUnaryAndBinaryOptions(): void {
   // TODO: move it to another file? it may not be the parser's responsibility to do it
   if (configuration.applicationType === applicationTypes.MICROSERVICE) {
     jdlObject.addOption(
