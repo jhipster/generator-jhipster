@@ -108,8 +108,8 @@ public class <%= user.dtoClass %> implements Serializable {
     public int hashCode() {
         return Objects.hash(
             getId(),
-<%_ for (const { propertyJavaFilterName } of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-          <%- propertyJavaFilterName %>,
+<%_ for (const { propertyJavaBeanName } of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+          get<%= field.propertyJavaBeanName %>(),
 <%_ } _%>
             getLogin()
         );
