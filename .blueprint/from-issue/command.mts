@@ -25,7 +25,7 @@ const command: JHipsterCommandDefinition = {
     issue: {
       argument: {
         type: String,
-        description: 'Github issue to generate',
+        description: 'GitHub issue to generate',
       },
       configure(gen: any) {
         // Gets the owner, repo and issue_number from a string such as, "jhipster/generator-jhipster#12345"
