@@ -315,10 +315,16 @@ export default class extends BaseGenerator {
             peerDependencies: {
               'generator-jhipster': `^${packagejs.version}`,
             },
+            engines: {
+              'generator-jhipster': `^${packagejs.version}`,
+            },
           });
         } else {
           this.packageJson.merge({
             dependencies: {
+              'generator-jhipster': `${packagejs.version}`,
+            },
+            engines: {
               'generator-jhipster': `${packagejs.version}`,
             },
           });

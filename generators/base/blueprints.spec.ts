@@ -126,7 +126,65 @@ describe('generator - base - with blueprint', () => {
             skipChecks: false,
             blueprint: 'myblueprint',
           }),
-      ).rejects.toThrow(/targets JHipster 1.1.1 and is not compatible with this JHipster version/));
+      ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
+  });
+
+  describe('generate application with a engines compatible blueprint', () => {
+    let runResult: RunResult;
+    before(async () => {
+      runResult = await helpers
+        .runTestBlueprintGenerator()
+        .withFakeTestBlueprint('generator-jhipster-myblueprint', {
+          packageJson: {
+            dependencies: {
+              'generator-jhipster': '1.1.1',
+            },
+            peerDependencies: {
+              'generator-jhipster': '1.1.1',
+            },
+            engines: {
+              'generator-jhipster': '>=8.0.0',
+            },
+          },
+        })
+        .withOptions({
+          skipChecks: false,
+          blueprint: 'myblueprint',
+        });
+    });
+
+    it('blueprint version is saved in .yo-rc.json', () => {
+      runResult.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-myblueprint', version: '9.9.9' }] },
+      });
+    });
+  });
+
+  describe('generate application with a engines conflicting version blueprint', () => {
+    it('throws an error', () =>
+      expect(() =>
+        helpers
+          .runTestBlueprintGenerator()
+          .withFakeTestBlueprint('generator-jhipster-myblueprint', {
+            packageJson: {
+              dependencies: {
+                'generator-jhipster': '1.1.1',
+              },
+              peerDependencies: {
+                'generator-jhipster': '1.1.1',
+              },
+              engines: {
+                'generator-jhipster': '1.1.1',
+              },
+            },
+          })
+          .withMockedGenerators(['jhipster-myblueprint:test-blueprint'])
+          .withJHipsterConfig()
+          .withOptions({
+            skipChecks: false,
+            blueprint: 'myblueprint',
+          }),
+      ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
 });
 
