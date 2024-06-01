@@ -1,13 +1,11 @@
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base/index.js';
-import { getGithubIssue, setGithubTaskOutput, prepareSample, parseIssue } from '../../testing/index.js';
+import { getGithubIssue, setGithubTaskOutput, prepareSample } from '../../testing/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_JDL, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { extractDataFromInfo, type InfoData } from '../../generators/info/support/index.js';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { mutateData } from '../../generators/base/support/config.js';
 
 const YO_RC_OUTPUT = 'yo-rc';
 const ENTITIES_JDL_OUTPUT = 'entities-jdl';
