@@ -214,7 +214,7 @@ describe('save', () => {
       it('should not navigate to the previous stored url when authentication fails', () => {
         // WHEN
         service.identity().subscribe();
-        httpMock.expectOne({ method: 'GET' }).error(new ErrorEvent(''));
+        httpMock.expectOne({ method: 'GET' }).error(new ProgressEvent(''));
 
         // THEN
         expect(mockStorageService.getUrl).not.toHaveBeenCalled();
