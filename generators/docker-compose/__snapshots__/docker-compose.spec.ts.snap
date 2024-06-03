@@ -737,7 +737,7 @@ jhipster:
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
-    command: mariadbd --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
         - CMD
@@ -1143,7 +1143,7 @@ jhipster:
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
-    command: mariadbd --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
         - CMD
@@ -1884,7 +1884,7 @@ jhipster:
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
-    command: mariadbd --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
         - CMD
