@@ -1,6 +1,8 @@
 import { RequireOneOrNone } from 'type-fest';
 import { BaseApplication } from '../base-application/types.js';
 import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
+import { JavaAnnotation } from './support/add-java-annotation.ts';
+import { EditFileCallback } from '../base/api.js';
 
 export type JavaDependencyVersion = {
   name: string;
@@ -73,4 +75,14 @@ export type JavaSourceType = {
   addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
   hasJavaProperty?(propertyName: string): boolean;
   hasJavaManagedProperty?(propertyName: string): boolean;
+
+  /**
+   * Edit a Java file by adding static imports, imports and annotations.
+   * Callbacks are passed to the editFile method.
+   */
+  editJavaFile?: (
+    file: string,
+    { staticImports, imports, annotations }: { staticImports?: string[]; imports?: string[]; annotations?: JavaAnnotation[] },
+    ...editFileCallback: EditFileCallback[]
+  ) => void;
 };

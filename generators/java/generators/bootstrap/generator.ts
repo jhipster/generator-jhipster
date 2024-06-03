@@ -26,6 +26,8 @@ import {
   isReservedJavaKeyword,
   matchMainJavaFiles,
   javaMainPackageTemplatesBlock,
+  addJavaImport,
+  addJavaAnnotation,
 } from '../../support/index.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
@@ -104,6 +106,16 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
+      },
+      needles({ source }) {
+        source.editJavaFile = (file, { staticImports = [], imports = [], annotations = [] }, ...editFileCallback) =>
+          this.editFile(
+            file,
+            ...staticImports.map(classPath => addJavaImport(classPath, { staticImport: true })),
+            ...imports.map(classPath => addJavaImport(classPath)),
+            ...annotations.map(annotation => addJavaAnnotation(annotation)),
+            ...editFileCallback,
+          );
       },
     });
   }
