@@ -166,7 +166,7 @@
     "typescript": "5.4.5",
     "winston": "3.13.0",
     "yaml": "2.4.2",
-    "yeoman-environment": "4.4.0",
+    "yeoman-environment": "4.4.1",
     "yeoman-generator": "7.2.0"
   },
   "devDependencies": {
