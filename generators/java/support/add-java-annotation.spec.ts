@@ -102,6 +102,28 @@ import com.mycompany.myapp.Foo;
 @Foo(bar="baz")
 public class MyTest {}`);
       });
+
+      it('should not add the annotation to inner class', () => {
+        expect(
+          addJavaAnnotation(
+            `package com.mycompany.myapp;
+
+public class MyTest {
+    public static class Inner {
+
+    }
+}`,
+            { annotation: 'Foo' },
+          ),
+        ).toBe(`package com.mycompany.myapp;
+
+@Foo
+public class MyTest {
+    public static class Inner {
+
+    }
+}`);
+      });
     });
   });
 });
