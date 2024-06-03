@@ -48,7 +48,7 @@ import {
   insertContentIntoApplicationProperties,
   javaBeanCase,
 } from '../server/support/index.js';
-import { addJavaAnnotation, generateKeyStore } from '../java/support/index.js';
+import { generateKeyStore } from '../java/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import {
   APPLICATION_TYPE_MICROSERVICE,
@@ -304,10 +304,10 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         };
       },
       addSpringIntegrationTest({ application, source }) {
-        source.addIntegrationTestAnnotation = ({ package: packageName, annotation }) =>
-          this.editFile(this.destinationPath(`${application.javaPackageTestDir}IntegrationTest.java`), content =>
-            addJavaAnnotation(content, { package: packageName, annotation }),
-          );
+        source.addIntegrationTestAnnotation = annotation =>
+          source.editJavaFile!(this.destinationPath(`${application.javaPackageTestDir}IntegrationTest.java`), {
+            annotations: [annotation],
+          });
       },
       addLogNeedles({ source }) {
         source.addLogbackLogEntry = ({ file, name, level }) =>
