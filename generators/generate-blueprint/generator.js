@@ -50,6 +50,8 @@ import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;
 
+const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
+
 export default class extends BaseGenerator {
   async _beforeQueue() {
     if (!this.fromBlueprint) {
@@ -265,7 +267,7 @@ export default class extends BaseGenerator {
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
           keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
           type: 'module',
-          files: ['generators'],
+          files: defaultPublishedFiles,
           scripts: {
             ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint .',
@@ -301,7 +303,7 @@ export default class extends BaseGenerator {
           bin: {
             [cliName]: 'cli/cli.cjs',
           },
-          files: ['cli', 'generators'],
+          files: ['cli', ...defaultPublishedFiles],
         });
       },
       addGeneratorJHipsterDependency() {
