@@ -35,7 +35,7 @@ let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 <&_ if (fragment.developmentSection) { -&>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
-1. [Node.js](https://nodejs.org/): We use Node to run a development web server and build the project.
+1. [Node.js](https://nodejs.org/): Node is used to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
 
 After installing Node, you should be able to run the following command to install development tools.
@@ -46,6 +46,8 @@ You will only need to run this command when dependencies change in [package.json
 ```
 
 We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[Webpack][] as our build system.
+
+2. [Java](https://dev.java/): Java is used to compile and run the backend Spring Boot server.
 
   <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
@@ -58,14 +60,16 @@ docker compose -f src/main/docker/<%= cacheProviderHazelcast?'hazelcast-manageme
     <%_ if (cacheProviderRedis) { _%>
 
 The cache can also be turned off by adding to the application yaml:
-```
+
+```yaml
 spring:
     cache:
         type: none
 ```
+
 See [here](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-caching.html#boot-features-caching-provider-none) for details.
 
-**WARNING**: If you using second level hibernate cache and disabling the spring cache, you have to disable the second level hibernate cache as well since they are using
+**WARNING**: If you're using the second level Hibernate cache and disabling the Spring cache, you have to disable the second level Hibernate cache as well since they are using
 the same CacheManager.
     <%_ } _%>
   <%_ } _%>
@@ -87,7 +91,7 @@ auto-refreshes when files change on your hard drive.
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
-The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
+The `<%= clientPackageManager %> run` command will list all the scripts available to run for this project.
 
 ### PWA Support
 
@@ -199,7 +203,7 @@ and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) 
 
 #### Lighthouse audits
 
-You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `<%= clientPackageManager %> run e2e:cypress:audits`.
+You can execute automated [Lighthouse audits](https://developers.google.com/web/tools/lighthouse/) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= clientPackageManager %> run e2e:cypress:audits`.
 You should only run the audits when your application is packaged with the production profile.
 The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
   <%_ } _%>
