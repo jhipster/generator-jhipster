@@ -227,11 +227,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
-      async writeEnumerationFiles({ application, entities }) {
+      async writeEnumerationFiles({ control, application, entities }) {
         if (!application.webappEnumerationsDir || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
           return;
         }
-        for (const entity of filterEntitiesAndPropertiesForClient(entities)) {
+        for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities)) {
           await addEnumerationFiles.call(this, { application, entity });
         }
       },
