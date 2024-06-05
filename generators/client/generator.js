@@ -31,7 +31,6 @@ import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/ind
 import { createNeedleCallback } from '../base/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import command from './command.js';
-import { filterEntitiesAndPropertiesForClient } from './support/index.js';
 
 const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
