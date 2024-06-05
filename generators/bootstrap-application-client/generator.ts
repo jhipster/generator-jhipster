@@ -16,12 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { loadClientConfig, loadDerivedClientConfig, preparePostEntityClientDerivedProperties } from '../client/support/index.js';
+import {
+  loadClientConfig,
+  loadDerivedClientConfig,
+  preparePostEntityClientDerivedProperties,
+  filterEntitiesAndPropertiesForClient,
+  filterEntitiesForClient,
+} from '../client/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import clientCommand from '../client/command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/index.js';
-import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/index.js';
 
 export default class BootStrapApplicationClient extends BaseApplicationGenerator {
   constructor(args: any, options: any, features: any) {
