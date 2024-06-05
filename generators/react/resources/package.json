@@ -24,7 +24,7 @@
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
     "sonar-scanner": "3.1.0",
-    "tslib": "2.6.2",
+    "tslib": "2.6.3",
     "uuid": "9.0.1",
     "webstomp-client": "1.2.6"
   },
