@@ -396,7 +396,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
       }
       if (def.scope === 'generator') {
-        context[name] = context[name] ?? this[name] ?? def.default;
+        this[name] = this[name] ?? this.options[name] ?? def.default;
       }
       if (def.scope === 'blueprint') {
         context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
