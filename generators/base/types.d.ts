@@ -1,3 +1,5 @@
+import type { Entity } from '../base-application/index.ts';
+
 export type Control = {
   existingProject: boolean;
   ignoreNeedlesError: boolean;
@@ -9,4 +11,6 @@ export type Control = {
    */
   blueprintConfigured?: boolean;
   reproducibleLiquibaseTimestamp?: Date;
+  filterEntitiesForClient?: (entity: Entity[]) => Entity[];
+  filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
 };
