@@ -23,7 +23,11 @@ import React, { useEffect } from 'react';
 <%_ } else { _%>
 import React from 'react';
 <%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+import { useLocation, useNavigate } from 'react-router-dom';
+<%_ } else { _%>
 import { Link } from 'react-router-dom';
+<%_ } _%>
 import { Translate } from 'react-jhipster';
 import { Row, Col, Alert } from 'reactstrap';
 
@@ -35,6 +39,9 @@ import { useAppSelector } from 'app/config/store';
 export const Home = () => {
   const account = useAppSelector(state => state.authentication.account);
 <%_ if (authenticationTypeOauth2) { _%>
+  const pageLocation = useLocation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const redirectURL = localStorage.getItem(REDIRECT_URL);
     if (redirectURL) {
@@ -65,7 +72,14 @@ export const Home = () => {
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
                 <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
 <%_ if (authenticationTypeOauth2) { _%>
-                <a href={getLoginUrl()} className="alert-link">
+                <a
+                  className="alert-link"
+                  onClick={() =>
+                    navigate(getLoginUrl(), {
+                      state: { from: pageLocation },
+                    })
+                  }
+                >
                   <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
                 </a>
 <%_ } else { _%>

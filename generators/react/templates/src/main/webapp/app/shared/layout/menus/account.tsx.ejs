@@ -27,6 +27,9 @@ import { Translate, translate } from 'react-jhipster';
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
 import { NavDropdown } from './menu-components';
+<%_ if (authenticationTypeOauth2) { _%>
+import { useLocation, useNavigate } from 'react-router';
+<%_ } _%>
 
 
 const accountMenuItemsAuthenticated = () => (
@@ -42,18 +45,38 @@ const accountMenuItemsAuthenticated = () => (
   </>
   );
 
+<%_ if (authenticationTypeOauth2) { _%>
+const accountMenuItems = () => {
+  const navigate = useNavigate();
+  const pageLocation = useLocation();
+
+  return (
+    <>
+      <DropdownItem
+        id="login-item"
+        tag="a"
+        data-cy="login"
+        onClick={() =>
+          navigate(getLoginUrl(), {
+            state: { from: pageLocation },
+          })
+        }
+      >
+        <FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate>
+      </DropdownItem>
+    </>
+  );
+};
+<%_ } else { _%>
 const accountMenuItems = () => (
   <>
-<%_ if (!authenticationTypeOauth2) { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login" data-cy="login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
-<%_ } else { _%>
-    <DropdownItem id="login-item" tag="a" href={getLoginUrl()} data-cy="login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
+  <%_ if (generateUserManagement) { _%>
     <MenuItem icon="user-plus" to="/account/register" data-cy="register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
-<%_ } _%>
+  <%_ } _%>
   </>
 );
+<%_ } _%>
 
 export const AccountMenu = ({ isAuthenticated = false }) => (
   <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu" data-cy="accountMenu">
