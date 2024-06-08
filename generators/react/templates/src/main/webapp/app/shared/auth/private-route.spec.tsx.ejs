@@ -92,7 +92,7 @@ describe('private-route component', () => {
             </PrivateRoute>
           }
         />
-        <Route path="<% if(authenticationTypeOauth2) { %>/oauth2/authorization/oidc<% } else { %>/login<% } %>" element={<div>Login</div>} />
+        <Route path="<% if(authenticationTypeOauth2) { %>/sign-in<% } else { %>/login<% } %>" element={<div>Login</div>} />
       </Routes>,
       {
         isAuthenticated: false,
