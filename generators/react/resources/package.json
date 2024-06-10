@@ -25,7 +25,7 @@
     "sockjs-client": "1.6.1",
     "sonar-scanner": "3.1.0",
     "tslib": "2.6.3",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "webstomp-client": "1.2.6"
   },
   "devDependencies": {
