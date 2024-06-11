@@ -69,7 +69,7 @@ export default class extends BaseGenerator {
         }
 
         setGithubTaskOutput(ENTITIES_JDL_OUTPUT, this.data.jdlEntitiesDefinitions ? VALID : BLANK);
-        setGithubTaskOutput(CONTAINS_SAMPLE, Boolean(this.data.yoRcContent && this.data.jdlEntitiesDefinitions));
+        setGithubTaskOutput(CONTAINS_SAMPLE, Boolean(this.data.jdlDefinitions || this.data.yoRcContent));
         setGithubTaskOutput(VALID_OUTPUT, this.data.yoRcValid);
 
         for (const file of await prepareSample(this.projectFolder, this.data.files)) {
