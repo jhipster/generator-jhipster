@@ -53,14 +53,6 @@ export interface IHeaderProps {
 const Header = (props: IHeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-<%_ if (enableI18nRTL) { _%>
-  const currentLocale = useAppSelector(state => state.locale.currentLocale);
-
-  useEffect(() => {
-    document.querySelector('html').setAttribute('dir', isRTL(currentLocale) ? 'rtl' : 'ltr');
-  }, [currentLocale]);
-<%_ } _%>
-
 <%_ if (enableTranslation) { _%>
   const dispatch = useAppDispatch();
 
