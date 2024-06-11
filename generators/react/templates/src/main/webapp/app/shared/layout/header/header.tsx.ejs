@@ -34,7 +34,7 @@ import { isRTL } from 'app/config/translation';
 import { Home, Brand } from './header-components';
 import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
 <%_ if (enableTranslation) { _%>
-import { useAppDispatch } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
 
@@ -52,8 +52,13 @@ export interface IHeaderProps {
 
 const Header = (props: IHeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
+
 <%_ if (enableI18nRTL) { _%>
-  useEffect(() => document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr'));
+  const currentLocale = useAppSelector(state => state.locale.currentLocale);
+
+  useEffect(() => {
+    document.querySelector('html').setAttribute('dir', isRTL(currentLocale) ? 'rtl' : 'ltr');
+  }, [currentLocale]);
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
