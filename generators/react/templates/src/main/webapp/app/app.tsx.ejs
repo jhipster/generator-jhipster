@@ -58,7 +58,7 @@ export const App = () => {
 <%_ if (enableTranslation) { _%>
   useEffect(() => {
     document.querySelector('html').setAttribute('dir', isRTL(currentLocale) ? 'rtl' : 'ltr');
-  }, [currentLocale]);
+  }, []);
 <%_ } _%>
 
   const paddingTop = '60px';
