@@ -53,6 +53,7 @@ eureka:
 mongock:
   migration-scan-package:
     - <%= packageName %>.config.dbmigrations
+  transactionEnabled: false
   mongo-db:
     read-concern: local
     write-concern:
