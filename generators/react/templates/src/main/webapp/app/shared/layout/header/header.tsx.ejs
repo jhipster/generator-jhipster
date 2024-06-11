@@ -53,7 +53,7 @@ export interface IHeaderProps {
 const Header = (props: IHeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
 <%_ if (enableI18nRTL) { _%>
-  useEffect(() => document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr'));
+  useEffect(() => document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale', '<%= nativeLanguage %>')) ? 'rtl' : 'ltr'));
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
