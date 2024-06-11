@@ -34,7 +34,7 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
-<%_ if (enableI18nRTL) { _%>
+<%_ if (enableTranslation &&  enableI18nRTL) { _%>
 import { setTextDirection } from './config/translation';
 <%_ } _%>
 
