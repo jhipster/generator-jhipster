@@ -34,7 +34,7 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
-import { isRTL } from './config/translation';
+import { setTextDirection } from './config/translation';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
@@ -55,9 +55,9 @@ export const App = () => {
   const isInProduction = useAppSelector(state => state.applicationProfile.inProduction);
   const isOpenAPIEnabled = useAppSelector(state => state.applicationProfile.isOpenAPIEnabled);
 
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && enableI18nRTL) { _%>
   useEffect(() => {
-    document.querySelector('html').setAttribute('dir', isRTL(currentLocale) ? 'rtl' : 'ltr');
+    setTextDirection(currentLocale);
   }, []);
 <%_ } _%>
 
