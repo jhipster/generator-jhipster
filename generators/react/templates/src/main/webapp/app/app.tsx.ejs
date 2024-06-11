@@ -60,7 +60,7 @@ export const App = () => {
 <%_ if (enableTranslation && enableI18nRTL) { _%>
   useEffect(() => {
     setTextDirection(currentLocale);
-  }, []);
+  }, [currentLocale]);
 <%_ } _%>
 
   const paddingTop = '60px';
