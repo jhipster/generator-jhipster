@@ -23,7 +23,7 @@
     "@angular-architects/module-federation-runtime": "18.0.2",
     "@angular-builders/custom-webpack": "18.0.0-beta.3",
     "@angular-builders/jest": "18.0.0-beta.3",
-    "@angular-eslint/eslint-plugin": "17.5.2",
+    "@angular-eslint/eslint-plugin": "18.0.1",
     "@angular/cli": "18.0.3",
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
