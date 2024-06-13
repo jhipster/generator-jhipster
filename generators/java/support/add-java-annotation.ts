@@ -53,7 +53,7 @@ const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotati
       throw new Error(`Annotation already exists: ${annotation} replace is not implemented yet.`);
     }
     // add the annotation before class or interface
-    content = content.replace(/\n([a-w ]*(class|@?interface|enum) )/g, `\n@${annotationToAdd}\n$1`);
+    content = content.replace(/\n([a-w ]*(class|@?interface|enum) )/, `\n@${annotationToAdd}\n$1`);
   }
   return content;
 };

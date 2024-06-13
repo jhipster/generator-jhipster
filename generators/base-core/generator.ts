@@ -67,6 +67,7 @@ import { convertConfigToOption } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
+import { extractArgumentsFromConfigs } from '../base/internal/command.js';
 
 const {
   INITIALIZING,
@@ -395,7 +396,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
       }
       if (def.scope === 'generator') {
-        context[name] = context[name] ?? this[name] ?? def.default;
+        this[name] = this[name] ?? this.options[name] ?? def.default;
       }
       if (def.scope === 'blueprint') {
         context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
@@ -423,19 +424,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     if (commandDef.arguments) {
       this.parseJHipsterArguments(commandDef.arguments);
     } else if (commandDef.configs) {
-      this.parseJHipsterArguments(
-        Object.fromEntries(
-          Object.entries(commandDef.configs as Record<string, any>)
-            .filter(([_name, def]) => def.argument)
-            .map(([name, def]) => [
-              name,
-              {
-                description: def.description,
-                ...def.argument,
-              },
-            ]),
-        ) as any,
-      );
+      this.parseJHipsterArguments(extractArgumentsFromConfigs(commandDef.configs));
     }
     if (commandDef.options || commandDef.configs) {
       this.parseJHipsterOptions(commandDef.options, commandDef.configs);

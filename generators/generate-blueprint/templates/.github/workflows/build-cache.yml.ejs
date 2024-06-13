@@ -1,0 +1,39 @@
+name: build-cache
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'
+jobs:
+  build-cache:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: generator-jhipster-<%= baseName %>
+      - uses: jhipster/actions/setup-runner@v0
+        with:
+          node-version: 20
+          binary-dir: ${{ github.workspace }}/generator-jhipster-<%= baseName %>/cli/
+      - uses: jhipster/actions/cache-npm-dependencies@v0
+        with:
+          generator-path: generator-jhipster-<%= baseName %>
+        if: always()
+      - run: cli.cjs generate-sample --all
+        continue-on-error: true
+      - run: npm run backend:build-cache --workspaces
+        continue-on-error: true
+      - uses: jhipster/actions/save-cache@v0
+        if: always()
+        with:
+          key: ${{ github.run_id }}
+          npm: true
+          maven: true
+          gradle: true
+      - uses: jhipster/actions/restore-cache@v0
+        with:
+          npm: true
+          maven: true
+          gradle: true

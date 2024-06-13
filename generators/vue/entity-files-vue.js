@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationTemplatesBlock, filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/index.js';
+import { clientApplicationTemplatesBlock } from '../client/support/index.js';
 
 export const entityFiles = {
   client: [
@@ -50,8 +50,10 @@ export const entityFiles = {
   ],
 };
 
-export async function writeEntityFiles({ application, entities }) {
-  for (const entity of filterEntitiesAndPropertiesForClient(entities).filter(entity => !entity.skipClient && !entity.builtInUser)) {
+export async function writeEntityFiles({ control, application, entities }) {
+  for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities).filter(
+    entity => !entity.skipClient && !entity.builtInUser,
+  )) {
     await this.writeFiles({
       sections: entityFiles,
       context: { ...application, ...entity },
@@ -59,8 +61,8 @@ export async function writeEntityFiles({ application, entities }) {
   }
 }
 
-export async function postWriteEntityFiles({ application, entities }) {
-  for (const entity of filterEntitiesForClient(entities).filter(entity => !entity.builtInUser)) {
+export async function postWriteEntityFiles({ control, application, entities }) {
+  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
     if (!entity.embedded) {
       const { enableTranslation } = application;
       const {
@@ -93,8 +95,8 @@ export async function postWriteEntityFiles({ application, entities }) {
   }
 }
 
-export function cleanupEntitiesFiles({ application, entities }) {
-  for (const entity of filterEntitiesForClient(entities).filter(entity => !entity.builtInUser)) {
+export function cleanupEntitiesFiles({ control, application, entities }) {
+  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
     const { entityFolderName, entityFileName } = entity;
     if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);

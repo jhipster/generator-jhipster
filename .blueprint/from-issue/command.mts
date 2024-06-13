@@ -18,11 +18,25 @@
  */
 import { JHipsterCommandDefinition } from '../../generators/base/api.js';
 import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
+import { parseIssue } from '../../testing/github.js';
 
 const command: JHipsterCommandDefinition = {
-  arguments: {
+  configs: {
     issue: {
-      type: String,
+      argument: {
+        type: String,
+        description: 'GitHub issue to generate',
+      },
+      configure(gen: any) {
+        // Gets the owner, repo and issue_number from a string such as, "jhipster/generator-jhipster#12345"
+        const parsedIssue = parseIssue(gen.issue);
+        if (parsedIssue) {
+          gen.owner = parsedIssue.owner;
+          gen.repository = parsedIssue.repository;
+          gen.issue = parsedIssue.issue;
+        }
+      },
+      scope: 'generator',
     },
   },
   options: {

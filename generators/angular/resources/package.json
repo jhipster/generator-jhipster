@@ -15,7 +15,7 @@
     "ngx-infinite-scroll": "18.0.0",
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
-    "tslib": "2.6.2",
+    "tslib": "2.6.3",
     "zone.js": "0.14.6"
   },
   "devDependencies": {
@@ -28,7 +28,7 @@
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
-    "@typescript-eslint/eslint-plugin": "7.11.0",
+    "@typescript-eslint/eslint-plugin": "7.13.0",
     "browser-sync": "3.0.2",
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
@@ -47,7 +47,7 @@
     "rimraf": "5.0.7",
     "ts-jest": "29.1.4",
     "typescript": "5.4.5",
-    "webpack": "5.91.0",
+    "webpack": "5.92.0",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-merge": "5.10.0",
     "webpack-notifier": "1.15.0"

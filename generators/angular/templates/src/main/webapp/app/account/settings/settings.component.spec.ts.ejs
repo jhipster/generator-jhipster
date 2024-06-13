@@ -108,7 +108,7 @@ describe('SettingsComponent', () => {
 
   it('should notify of error upon failed save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => throwError('ERROR'));
+    mockAccountService.save = jest.fn(() => throwError(() => {}));
 
     // WHEN
     comp.ngOnInit();

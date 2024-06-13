@@ -104,6 +104,17 @@ public class <%= user.dtoClass %> implements Serializable {
             Objects.equals(getLogin(), userDTO.getLogin());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            getId(),
+<%_ for (const { propertyJavaBeanName } of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+          get<%= field.propertyJavaBeanName %>(),
+<%_ } _%>
+            getLogin()
+        );
+    }
+
     // prettier-ignore
     @Override
     public String toString() {

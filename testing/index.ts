@@ -1,5 +1,7 @@
 export { default as getGenerator } from './get-generator.js';
 export * from './helpers.js';
+export * from './github.js';
+export * from './sample-config.js';
 
 // test matrix
 export * from './support/application-samples.js';

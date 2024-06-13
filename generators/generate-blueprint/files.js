@@ -42,6 +42,8 @@ export const files = {
         '.blueprint/github-build-matrix/build-matrix.mjs',
         '.blueprint/github-build-matrix/generator.mjs',
         '.blueprint/github-build-matrix/index.mjs',
+        '.github/workflows/build-cache.yml',
+        '.github/workflows/samples.yml',
       ],
     },
     {

@@ -40,7 +40,7 @@ writeFileSync(
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
                 .map(({ generatorOptions, name, ...sample }) => {
-                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, '17', '21']);
+                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, '17', '21', '22']);
                   const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '18', '20']);
                   return {
                     name,

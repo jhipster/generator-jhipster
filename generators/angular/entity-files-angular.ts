@@ -21,7 +21,6 @@ import { clientApplicationTemplatesBlock } from '../client/support/files.js';
 import CoreGenerator from '../base-core/index.js';
 import { WriteFileSection } from '../base/api.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/index.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -98,9 +97,9 @@ export const userManagementFiles: WriteFileSection = {
 
 export const writeEntitiesFiles = asWritingEntitiesTask(async function (
   this: CoreGenerator,
-  { application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
+  { control, application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
 ) {
-  for (const entity of filterEntitiesAndPropertiesForClient(entities)) {
+  for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
         sections: builtInFiles,
@@ -134,15 +133,18 @@ export const writeEntitiesFiles = asWritingEntitiesTask(async function (
 });
 
 export async function postWriteEntitiesFiles(this: CoreGenerator, taskParam: GeneratorDefinition['postWritingEntitiesTaskParam']) {
-  const { source, application } = taskParam;
-  const entities = filterEntitiesForClient(taskParam.entities).filter(
+  const { control, source, application } = taskParam;
+  const entities = (control.filterEntitiesForClient ?? (entities => entities))(taskParam.entities).filter(
     entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
   );
   source.addEntitiesToClient({ application, entities });
 }
 
-export function cleanupEntitiesFiles(this: CoreGenerator, { application, entities }: GeneratorDefinition['writingEntitiesTaskParam']) {
-  for (const entity of filterEntitiesForClient(entities).filter(entity => !entity.builtIn)) {
+export function cleanupEntitiesFiles(
+  this: CoreGenerator,
+  { control, application, entities }: GeneratorDefinition['writingEntitiesTaskParam'],
+) {
+  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (this.isJhipsterVersionLessThan('5.0.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityName}/${entityName}.model.ts`);

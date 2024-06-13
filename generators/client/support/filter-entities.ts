@@ -25,7 +25,9 @@ import { type Entity } from '../../base-application/index.js';
 export const filterEntityPropertiesForClient = (entity: Entity): Entity => ({
   ...entity,
   fields: entity.fields.filter(field => !field.skipClient),
-  relationships: entity.relationships.filter(rel => !rel.skipClient && (rel.persistableRelationship || rel.relationshipEagerLoad)),
+  relationships: entity.relationships.filter(
+    rel => !(rel.skipClient ?? !(rel.persistableRelationship || rel.relationshipEagerLoad || rel.otherEntity?.jpaMetamodelFiltering)),
+  ),
 });
 
 /**

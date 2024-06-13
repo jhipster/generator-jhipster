@@ -34,6 +34,10 @@ export const locales = Object.keys(languages).sort();
 
 <%_ if (enableI18nRTL) { _%>
 export const isRTL = (lang: string): boolean => languages[lang] && languages[lang].rtl;
+
+export const setTextDirection = (lang: string) => {
+  document.querySelector('html').setAttribute('dir', isRTL(lang) ? 'rtl' : 'ltr');
+};
 <%_ } _%>
 
 export const registerLocale = store => {

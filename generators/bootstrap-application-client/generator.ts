@@ -16,7 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { loadClientConfig, loadDerivedClientConfig, preparePostEntityClientDerivedProperties } from '../client/support/index.js';
+import {
+  loadClientConfig,
+  loadDerivedClientConfig,
+  preparePostEntityClientDerivedProperties,
+  filterEntitiesAndPropertiesForClient,
+  filterEntitiesForClient,
+} from '../client/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import clientCommand from '../client/command.js';
@@ -71,6 +77,10 @@ export default class BootStrapApplicationClient extends BaseApplicationGenerator
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      control({ control }) {
+        control.filterEntitiesAndPropertiesForClient = filterEntitiesAndPropertiesForClient;
+        control.filterEntitiesForClient = filterEntitiesForClient;
+      },
       postPreparingEntity({ entity }) {
         preparePostEntityClientDerivedProperties(entity);
       },

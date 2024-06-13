@@ -678,31 +678,22 @@ export default class JHipsterBaseBlueprintGenerator<
       return;
     }
     const mainGeneratorJhipsterVersion = packageJson.version;
-    const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
-    if (blueprintJhipsterVersion) {
-      if (!semver.valid(blueprintJhipsterVersion) && !semver.validRange(blueprintJhipsterVersion)) {
+    const compatibleJhipsterRange =
+      blueprintPackageJson.engines?.['generator-jhipster'] ??
+      blueprintPackageJson.dependencies?.['generator-jhipster'] ??
+      blueprintPackageJson.peerDependencies?.['generator-jhipster'];
+    if (compatibleJhipsterRange) {
+      if (!semver.valid(compatibleJhipsterRange) && !semver.validRange(compatibleJhipsterRange)) {
         this.log.verboseInfo(`Blueprint ${blueprintPkgName} contains generator-jhipster dependency with non comparable version`);
         return;
       }
-      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintJhipsterVersion, { includePrerelease: true })) {
+      if (semver.satisfies(mainGeneratorJhipsterVersion, compatibleJhipsterRange, { includePrerelease: true })) {
         return;
       }
       throw new Error(
         `The installed ${chalk.yellow(
           blueprintPkgName,
-        )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
-      );
-    }
-    const blueprintPeerJhipsterVersion =
-      blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
-    if (blueprintPeerJhipsterVersion) {
-      if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion, { includePrerelease: true })) {
-        return;
-      }
-      throw new Error(
-        `The installed ${chalk.yellow(
-          blueprintPkgName,
-        )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
+        )} blueprint targets JHipster v${compatibleJhipsterRange} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`,
       );
     }
     this.log.warn(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);

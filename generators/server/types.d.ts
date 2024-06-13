@@ -7,6 +7,7 @@ import { MessageBrokerApplicationType } from './options/message-broker.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
 import { ApplicationPropertiesNeedles } from './support/needles.ts';
 import { GatewayApplication } from '../spring-cloud/generators/gateway/types.ts';
+import { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 
 export type SpringEntity = {
   /* Generate entity's Entity */
@@ -29,7 +30,7 @@ export type SpringBootSourceType = JavaSourceType &
     addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
     addLogbackMainLog?({ name, level }: { name: string; level: string }): void;
     addLogbackTestLog?({ name, level }: { name: string; level: string }): void;
-    addIntegrationTestAnnotation?({ package, annotation }: { package?: string; annotation: string }): void;
+    addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
