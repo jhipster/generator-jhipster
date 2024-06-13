@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "@angular/common": "18.0.1",
+    "@angular/common": "18.0.3",
     "@fortawesome/angular-fontawesome": "0.15.0",
     "@fortawesome/fontawesome-svg-core": "6.5.2",
     "@fortawesome/free-solid-svg-icons": "6.5.2",
-    "@ng-bootstrap/ng-bootstrap": "16.0.0",
+    "@ng-bootstrap/ng-bootstrap": "17.0.0",
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@popperjs/core": "2.11.8",
@@ -16,15 +16,15 @@
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
     "tslib": "2.6.3",
-    "zone.js": "0.14.6"
+    "zone.js": "0.14.7"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "17.0.8",
-    "@angular-architects/module-federation-runtime": "17.0.8",
+    "@angular-architects/module-federation": "18.0.2",
+    "@angular-architects/module-federation-runtime": "18.0.2",
     "@angular-builders/custom-webpack": "18.0.0-beta.3",
     "@angular-builders/jest": "18.0.0-beta.3",
-    "@angular-eslint/eslint-plugin": "18.0.1",
-    "@angular/cli": "18.0.2",
+    "@angular-eslint/eslint-plugin": "17.5.2",
+    "@angular/cli": "18.0.3",
     "@types/jest": "29.5.12",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
