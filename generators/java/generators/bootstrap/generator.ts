@@ -134,7 +134,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         (application as any).domains = entityPackages;
       },
       generatedAnnotation({ application }) {
-        if (this.jhipsterConfig.withGeneratedFlag) {
+        if (this.jhipsterConfig.withGeneratedFlag && application.backendTypeJavaAny) {
           this.queueTransformStream(
             {
               name: 'adding @GeneratedByJHipster annotations',
@@ -146,6 +146,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         }
       },
       generatedPackageInfo({ application }) {
+        if (!application.backendTypeJavaAny) return;
+
         const { srcMainJava } = application;
         if (this.packageInfoFile && srcMainJava) {
           const mainPackageMatch = matchMainJavaFiles(srcMainJava!);
@@ -188,6 +190,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
+        if (!application.backendTypeJavaAny) return;
+
         await this.writeFiles({
           blocks: [
             javaMainPackageTemplatesBlock({
