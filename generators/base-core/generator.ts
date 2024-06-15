@@ -836,8 +836,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           cache: false,
         };
         const copyOptions = { noGlob: true };
-        // TODO drop for v8 final release
-        const data = (this as any).jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
+        const { jhipster7Migration } = this as any;
+        const data = jhipster7Migration
+          ? createJHipster7Context(this, context, { log: jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
+          : context;
         if (useAsync) {
           await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
         } else {
