@@ -171,7 +171,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
       postWriting({ application }) {
         if (application.ciCdIntegrations.includes('deploy')) {
           if (application.buildToolMaven) {
-            createPomStorage(this).addDistributionManagement({
+            createPomStorage(this, { sortFile: false }).addDistributionManagement({
               releasesId: application.artifactoryReleasesId,
               releasesUrl: application.artifactoryReleasesUrl,
               snapshotsId: application.artifactorySnapshotsId,
