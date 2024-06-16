@@ -1118,7 +1118,6 @@ jobs:
   },
   "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: "2"
 services:
   registry:
     image: registry:2
@@ -1354,7 +1353,6 @@ jobs:
   },
   "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: "2"
 services:
   registry:
     image: registry:2
@@ -2294,8 +2292,7 @@ node {
     "stateCleared": "modified",
   },
   "src/main/docker/jenkins.yml": {
-    "contents": "version: "2"
-services:
+    "contents": "services:
   jenkins:
     image: jenkins-placeholder
     ports:
@@ -2527,7 +2524,6 @@ node {
   },
   "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: "2"
 services:
   registry:
     image: registry:2
@@ -2569,8 +2565,7 @@ services:
     "stateCleared": "modified",
   },
   "src/main/docker/jenkins.yml": {
-    "contents": "version: "2"
-services:
+    "contents": "services:
   jenkins:
     image: jenkins-placeholder
     ports:
@@ -2755,8 +2750,7 @@ node {
     "stateCleared": "modified",
   },
   "src/main/docker/jenkins.yml": {
-    "contents": "version: "2"
-services:
+    "contents": "services:
   jenkins:
     image: jenkins-placeholder
     ports:
@@ -2985,7 +2979,6 @@ node {
   },
   "src/main/docker/docker-registry.yml": {
     "contents": "# Documentation at https://docs.docker.com/registry/deploying
-version: "2"
 services:
   registry:
     image: registry:2
@@ -3027,8 +3020,7 @@ services:
     "stateCleared": "modified",
   },
   "src/main/docker/jenkins.yml": {
-    "contents": "version: "2"
-services:
+    "contents": "services:
   jenkins:
     image: jenkins-placeholder
     ports:
