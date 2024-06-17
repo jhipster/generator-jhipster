@@ -17,12 +17,16 @@
  limitations under the License.
 -%>
 node_modules/
-src/main/docker/
-<%= !clientFrameworkVue ? '' : clientTestDir %>jest.conf.js
+<%- dockerServicesDir %>
+<%_ if (!clientFrameworkVue) { _%>
+jest.conf.js
+<%_ } _%>
+<%_ if (!clientFrameworkVue || microfrontend) { _%>
 webpack/
-target/
-build/
-node/
+<%_ } _%>
+<%- temporaryDir %>
 coverage/
+<%_ if (clientFrameworkReact) { _%>
 postcss.config.js
+<%_ } _%>
 <%- this.relativeDir(clientRootDir, clientDistDir) %>
