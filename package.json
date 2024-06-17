@@ -162,7 +162,7 @@
     "semver": "7.6.2",
     "simple-git": "3.25.0",
     "sort-keys": "5.0.0",
-    "type-fest": "4.20.0",
+    "type-fest": "4.20.1",
     "typescript": "5.4.5",
     "winston": "3.13.0",
     "yaml": "2.4.5",
