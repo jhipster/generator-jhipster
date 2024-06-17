@@ -18,10 +18,13 @@
 -%>
 node_modules/
 <%- dockerServicesDir %>
-<%- temporaryDir %>
+<%_ if (!clientFrameworkVue) { _%>
+jest.conf.js
+<%_ } _%>
 <%_ if (!clientFrameworkVue || microfrontend) { _%>
 webpack/
 <%_ } _%>
+<%- temporaryDir %>
 coverage/
 postcss.config.js
 <%- this.relativeDir(clientRootDir, clientDistDir) %>
