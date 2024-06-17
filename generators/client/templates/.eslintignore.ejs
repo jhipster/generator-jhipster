@@ -26,5 +26,7 @@ webpack/
 <%_ } _%>
 <%- temporaryDir %>
 coverage/
+<%_ if (clientFrameworkReact) { _%>
 postcss.config.js
+<%_ } _%>
 <%- this.relativeDir(clientRootDir, clientDistDir) %>
