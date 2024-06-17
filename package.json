@@ -167,7 +167,7 @@
     "winston": "3.13.0",
     "yaml": "2.4.5",
     "yeoman-environment": "4.4.1",
-    "yeoman-generator": "7.3.0"
+    "yeoman-generator": "7.3.1"
   },
   "devDependencies": {
     "@actions/core": "1.10.1",
