@@ -97,7 +97,10 @@ const generateEntityClientFields = (
     if (nullable) {
       tsType += ' | null';
     }
-    variablesWithTypes.push(`${fieldName}?: ${tsType}`);
+
+    const required = clientFramework === ANGULAR && field.id;
+
+    variablesWithTypes.push(`${fieldName}${required ? '' : '?'}: ${tsType}`);
   });
 
   const relevantRelationships = filterRelevantRelationships(relationships);
