@@ -726,10 +726,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options as any;
+    const { sections, blocks, context = this, templates } = options as any;
+    const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const { _: commonSpec = {} } = sections || {};
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
 
     const templateData = this.jhipster7Migration
       ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
@@ -752,7 +754,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
       rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders
-        .map(templateFolder => [].concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
+        .map(templateFolder => ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
         .flat();
     }
 
@@ -783,6 +785,22 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         targetFile = resolveCallback(destinationFile);
       } else {
         targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
+      }
+
+      const files = customizeTemplatePath({ sourceFile, destinationFile: targetFile });
+      if (!files) {
+        return undefined;
+      }
+      sourceFile = files.sourceFile;
+      targetFile = files.destinationFile;
+
+      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
+        const files = contextCustomizeTemplatePath({ namespace: this.options.namespace, sourceFile, destinationFile: targetFile });
+        if (!files) {
+          return undefined;
+        }
+        sourceFile = files.sourceFile;
+        targetFile = files.destinationFile;
       }
 
       let sourceFileFrom;
@@ -847,7 +865,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
       }
       if (!isBinary && transform && transform.length) {
-        (this as any).editFile(targetFile, ...transform);
+        this.editFile(targetFile, ...transform);
       }
       return targetFile;
     };
