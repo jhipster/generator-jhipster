@@ -779,7 +779,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
-      const ejsFile = appendEjs || extension === '.ejs';
       let targetFile;
       if (typeof destinationFile === 'function') {
         targetFile = resolveCallback(destinationFile);
@@ -804,7 +803,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       }
 
       let sourceFileFrom;
-      if (Array.isArray(rootTemplatesAbsolutePath)) {
+      if (isAbsolute(sourceFile)) {
+        sourceFileFrom = sourceFile;
+      } else if (Array.isArray(rootTemplatesAbsolutePath)) {
         // Look for existing templates
         const existingTemplates = rootTemplatesAbsolutePath
           .map(rootPath => this.templatePath(rootPath, sourceFile))
@@ -829,11 +830,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } else {
         sourceFileFrom = this.templatePath(sourceFile);
       }
-      if (appendEjs) {
-        sourceFileFrom = `${sourceFileFrom}.ejs`;
-      }
 
-      if (!ejsFile) {
+      if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
         await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
       } else {
         let useAsync = true;
@@ -858,6 +856,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           cache: false,
         };
         const copyOptions = { noGlob: true };
+        if (appendEjs) {
+          sourceFileFrom = `${sourceFileFrom}.ejs`;
+        }
         if (useAsync) {
           await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
         } else {
