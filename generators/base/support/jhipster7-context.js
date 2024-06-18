@@ -209,7 +209,10 @@ const deprecatedProperties = {
   },
   getJoinTableName: {
     replacement: 'joinTable property',
-    get: () => getJoinTableName,
+    get:
+      () =>
+      (...args) =>
+        getJoinTableName(...args).value,
   },
   getJavaValueGeneratorForType: {
     replacement: 'javaValueGenerator property',
