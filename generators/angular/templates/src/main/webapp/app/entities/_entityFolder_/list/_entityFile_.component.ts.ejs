@@ -81,7 +81,7 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
 import { FilterComponent, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
 
 @Component({
@@ -106,7 +106,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
       ItemCountComponent,
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
-      InfiniteScrollModule,
+      InfiniteScrollDirective,
 <%_ } _%>
     ],
 })
