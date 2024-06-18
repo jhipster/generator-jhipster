@@ -263,6 +263,28 @@ const deprecatedProperties = {
     replacement: 'entityTableName || relationship.columnName',
     get: () => hibernateSnakeCase,
   },
+  isUsingBuiltInUser: {
+    replacement: 'generateBuiltInUserEntity',
+    get:
+      ({ data }) =>
+      () =>
+        data.generateBuiltInUserEntity,
+  },
+  isUsingBuiltInAuthority: {
+    replacement: 'generateBuiltInAuthorityEntity',
+    get:
+      ({ data }) =>
+      () =>
+        data.generateBuiltInAuthorityEntity,
+  },
+  jhipsterConfig: {
+    replacement: 'none',
+    get: ({ generator }) => generator.config?.getAll?.(),
+  },
+  configOptions: {
+    replacement: 'none',
+    get: () => ({}),
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
