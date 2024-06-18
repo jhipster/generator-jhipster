@@ -70,7 +70,7 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   /**
    * Wraps write context and shows removed fields and replacements if exists.
    */
-  jhipster7Migration?: boolean;
+  jhipster7Migration?: boolean | 'verbose' | 'silent';
   sbsBlueprint?: boolean;
   checkBlueprint?: boolean;
   /**

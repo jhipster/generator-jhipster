@@ -134,7 +134,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   skipChecks?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
-  jhipster7Migration?: boolean;
+  jhipster7Migration?: boolean | 'verbose' | 'silent';
   relativeDir = relativeDir;
   relative = posixRelative;
 
@@ -731,6 +731,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
 
+    const templateData = this.jhipster7Migration
+      ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
+      : context;
+
     /* Build lookup order first has preference.
      * Example
      * rootTemplatesPath = ['reactive', 'common']
@@ -764,7 +768,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context) || false;
+        return val.call(this, templateData) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };
@@ -817,7 +821,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         let useAsync = true;
         if (context.entityClass) {
           if (!context.baseName) {
-            throw new Error('baseName is require at templates context');
+            throw new Error('baseName is required at templates context');
           }
           const sourceBasename = basename(sourceFileFrom);
           const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
@@ -836,14 +840,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           cache: false,
         };
         const copyOptions = { noGlob: true };
-        const { jhipster7Migration } = this as any;
-        const data = jhipster7Migration
-          ? createJHipster7Context(this, context, { log: jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
-          : context;
         if (useAsync) {
-          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
         } else {
-          (this as any).renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          (this as any).renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
         }
       }
       if (!isBinary && transform && transform.length) {
