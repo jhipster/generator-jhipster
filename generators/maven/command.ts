@@ -16,5 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as command } from './command.js';
-export { default } from './generator.js';
+import { JHipsterCommandDefinition } from '../base/api.js';
+
+const command: JHipsterCommandDefinition = {
+  options: {},
+  configs: {
+    sortMavenPom: {
+      description: 'Sort the pom.xml file',
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'generator',
+    },
+  },
+  import: [],
+};
+
+export default command;

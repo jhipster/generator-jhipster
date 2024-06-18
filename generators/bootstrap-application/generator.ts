@@ -66,7 +66,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         }
 
         applicationDefaults({
-          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeSpringBoot,
+          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
           documentationArchiveUrl: ({ jhipsterVersion }) =>
             `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
         });

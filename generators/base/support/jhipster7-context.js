@@ -1,5 +1,21 @@
 /* eslint-disable no-console */
 import chalk from 'chalk';
+import { camelCase } from 'lodash-es';
+
+import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js';
+import { upperFirstCamelCase } from './string.js';
+import {
+  getJavaValueGeneratorForType,
+  getJoinTableName,
+  getPrimaryKeyValue,
+  getSpecificationBuildForType,
+  hibernateSnakeCase,
+} from '../../server/support/index.js';
+import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.js';
+import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
+import { fieldTypes } from '../../../jdl/index.js';
+
+const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
 const deprecatedProperties = {
   GRADLE_VERSION: {
@@ -17,6 +33,18 @@ const deprecatedProperties = {
   JHIPSTER_DEPENDENCIES_VERSION: {
     replacement: 'jhipsterDependenciesVersion',
     get: ({ data }) => data.jhipsterDependenciesVersion,
+  },
+  JAVA_VERSION: {
+    replacement: 'javaVersion',
+    get: ({ data }) => data.javaVersion,
+  },
+  JAVA_COMPATIBLE_VERSIONS: {
+    replacement: 'javaCompatibleVersions',
+    get: ({ data }) => data.javaCompatibleVersions,
+  },
+  SPRING_BOOT_VERSION: {
+    replacement: "javaDependencies['spring-boot']",
+    get: ({ data }) => data.javaDependencies['spring-boot'],
   },
   DOCKER_DIR: {
     replacement: 'dockerServicesDir',
@@ -124,7 +152,7 @@ const deprecatedProperties = {
   },
   dependabotPackageJson: {
     replacement: 'nodeDependencies',
-    get: ({ data }) => data.nodeDependencies,
+    get: ({ data }) => ({ dependencies: data.nodeDependencies, devDependencies: data.nodeDependencies }),
   },
   cacheManagerIsAvailable: {
     replacement: 'cacheProviderAny',
@@ -158,91 +186,175 @@ const deprecatedProperties = {
     replacement: 'prodDatabaseTypeMssql',
     get: ({ data }) => data.prodDatabaseTypeMssql,
   },
+  cacheProviderEhCache: {
+    replacement: 'cacheProviderEhcache',
+    get: ({ data }) => data.cacheProviderEhcache,
+  },
+
+  getJDBCUrl: {
+    replacement: '(prod/dev)(Jdbc/Liquibase)Url or this.getJDBCUrl',
+    get: () => getJdbcUrl,
+  },
+  getR2DBCUrl: {
+    replacement: '(prod/dev)R2dbcUrl of this.getR2DBCUrl',
+    get: () => getR2dbcUrl,
+  },
+  getDBCExtraOption: {
+    replacement: '???',
+    get: () => getDBCExtraOption,
+  },
+  getPrimaryKeyValue: {
+    replacement: 'current generator this.getPrimaryKeyValue',
+    get: () => getPrimaryKeyValue,
+  },
+  getJoinTableName: {
+    replacement: 'joinTable property',
+    get:
+      () =>
+      (...args) =>
+        getJoinTableName(...args).value,
+  },
+  getJavaValueGeneratorForType: {
+    replacement: 'javaValueGenerator property',
+    get: () => type => getJavaValueGeneratorForType(type).replace('longCount', 'count'),
+  },
+  asEntity: {
+    replacement: 'persistClass property',
+    get:
+      ({ data }) =>
+      name =>
+        `${name}${data.entitySuffix}`,
+  },
+  asDto: {
+    replacement: 'restClass property',
+    get:
+      ({ data }) =>
+      name =>
+        `${name}${data.dtoSuffix}`,
+  },
+  upperFirstCamelCase: {
+    replacement: 'upperFirstCamelCase* property alternative',
+    get: () => upperFirstCamelCase,
+  },
+  hasOauthUser: {
+    replacement: 'authenticationTypeOauth2 && generateBuiltInUserEntity',
+    get: ({ data }) => data.authenticationTypeOauth2 && data.generateBuiltInUserEntity,
+  },
+  getPrettierExtensions: {
+    replacement: 'prettierExtensions',
+    get:
+      ({ data }) =>
+      () =>
+        data.prettierExtensions,
+  },
+  _generateSqlSafeName: {
+    replacement: 'relationshipSqlSafeName',
+    get: () => name => (isReservedTableName(name, 'sql') ? `e_${name}` : name),
+  },
+  isFilterableType: {
+    replacement: 'filterableField property',
+    get: () => fieldType => ![BYTES, BYTE_BUFFER].includes(fieldType),
+  },
+  getSpecificationBuilder: {
+    replacement: 'field.fieldJavaBuildSpecification || primaryKey.javaBuildSpecification',
+    get: () => getSpecificationBuildForType,
+  },
+  getColumnName: {
+    replacement: 'entityTableName || relationship.columnName',
+    get: () => hibernateSnakeCase,
+  },
 };
 
 const ejsBuiltInProperties = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
 const javascriptBuiltInProperties = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
 
-const getProperty = (context, prop) => {
-  if (typeof prop === 'symbol') {
-    return undefined;
-  }
-  if (prop in deprecatedProperties) {
-    const { replacement, get } = deprecatedProperties[prop];
-    const value = get(context);
-    console.log(
-      `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. Value: ${value}`,
-    );
-    return value;
-  }
-  if (prop?.startsWith?.('DOCKER_')) {
-    console.log(
-      `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(
-        // eslint-disable-next-line no-template-curly-in-string
-        'dockerContainers.${dockerImage}',
-      )}.`,
-    );
-  }
-  const { generator, data } = context;
-  if (prop in data) {
-    return data[prop];
-  }
-  if (prop in generator) {
-    console.log(`Template data ${chalk.yellow(String(prop))} is a generator property.`);
-    console.log(`Change the template to '${chalk.yellow(`this.${String(prop)}`)}'`);
-    return generator[prop];
-  }
-  // console.log(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
-  // throw new Error(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
-  if (prop === 'undefined') {
-    throw new Error('Check your data');
-  }
-  return undefined;
-};
+const getPropertBuilder =
+  ({ log = msg => console.log(msg) } = {}) =>
+  (context, prop) => {
+    if (typeof prop === 'symbol') {
+      return undefined;
+    }
 
-const createHandler = ({ ignoreWarnings = false } = {}) => ({
-  ...Object.fromEntries(
-    [
-      'apply',
-      'construct',
-      'defineProperty',
-      'deleteProperty',
-      'getOwnPropertyDescriptor',
-      'getPrototypeOf',
-      'isExtensible',
-      'ownKeys',
-      'preventExtensions',
-      'setPrototypeOf',
-      'set',
-    ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)]),
-  ),
-  ownKeys: ({ data }) => {
-    return Reflect.ownKeys(data);
-  },
-  getPrototypeOf: ({ data }) => {
-    return Object.getPrototypeOf(data);
-  },
-  getOwnPropertyDescriptor: ({ data }, prop) => {
-    return Object.getOwnPropertyDescriptor(data, prop);
-  },
-  has: (context, prop) => {
-    if (ejsBuiltInProperties.includes(prop)) {
-      return false;
+    const { generator, data } = context;
+    const value = prop in data ? data[prop] : undefined;
+    if (prop in deprecatedProperties) {
+      const { replacement, get } = deprecatedProperties[prop];
+      const fallBackValue = get(context);
+      const valueDesc = prop in data ? `Value: ${value}, ` : '';
+      log(
+        `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. ${valueDesc}FallbackValue: ${fallBackValue}`,
+      );
+      return value ?? fallBackValue;
     }
-    if (javascriptBuiltInProperties.includes(prop)) {
-      if (!ignoreWarnings) {
-        console.log(`${chalk.yellow(prop)} is a javascript built in symbol, its use is discouraged inside templates`);
+    if (prop?.startsWith?.('DOCKER_')) {
+      const container = camelCase(prop.replace('DOCKER_', '').replace('_CONTAINER', ''));
+      log(
+        `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(
+          `dockerContainers.${container}`,
+        )}.`,
+      );
+      return value ?? data.dockerContainers[container];
+    }
+    if (prop in data) {
+      return value;
+    }
+    if (prop in generator) {
+      log(`Template data ${chalk.yellow(String(prop))} is a generator property.`);
+      log(`Change the template to '${chalk.yellow(`this.${String(prop)}`)}'`);
+      return generator[prop];
+    }
+    // console.log(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
+    // throw new Error(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);
+    if (prop === 'undefined') {
+      throw new Error('Check your data');
+    }
+    return undefined;
+  };
+
+const createHandler = ({ log } = {}) => {
+  const getProperty = getPropertBuilder({ log });
+  return {
+    ...Object.fromEntries(
+      [
+        'apply',
+        'construct',
+        'defineProperty',
+        'deleteProperty',
+        'getOwnPropertyDescriptor',
+        'getPrototypeOf',
+        'isExtensible',
+        'ownKeys',
+        'preventExtensions',
+        'setPrototypeOf',
+        'set',
+      ].map(method => [method, (...args) => console.log(`Fixme: template data called ${method}(${args?.pop() ?? ''})`)]),
+    ),
+    ownKeys: ({ data }) => {
+      return Reflect.ownKeys(data);
+    },
+    getPrototypeOf: ({ data }) => {
+      return Object.getPrototypeOf(data);
+    },
+    getOwnPropertyDescriptor: ({ data }, prop) => {
+      return Object.getOwnPropertyDescriptor(data, prop);
+    },
+    has: (context, prop) => {
+      if (ejsBuiltInProperties.includes(prop)) {
+        return false;
       }
-      return false;
-    }
-    const propValue = getProperty(context, prop);
-    if (propValue === undefined) {
-      return prop in context.data;
-    }
-    return propValue !== undefined;
-  },
-  get: getProperty,
-});
+      if (javascriptBuiltInProperties.includes(prop)) {
+        log(`${chalk.yellow(prop)} is a javascript built in symbol, its use is discouraged inside templates`);
+        return false;
+      }
+      const propValue = getProperty(context, prop);
+      if (propValue === undefined) {
+        return prop in context.data;
+      }
+      return propValue !== undefined;
+    },
+    get: getProperty,
+  };
+};
 
 export default function createJHipster7Context(generator, data, options) {
   return new Proxy({ generator, data }, createHandler(options));

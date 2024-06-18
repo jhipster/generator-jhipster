@@ -29,6 +29,7 @@ import { createPomStorage, type PomStorage } from './support/index.js';
 
 export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   pomStorage!: PomStorage;
+  sortMavenPom!: boolean;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -42,8 +43,11 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
 
   get initializing() {
     return this.asInitializingTaskGroup({
+      async parseCommand() {
+        await this.parseCurrentJHipsterCommand();
+      },
       pomStorage() {
-        this.pomStorage = createPomStorage(this);
+        this.pomStorage = createPomStorage(this, { sortFile: this.sortMavenPom });
       },
     });
   }

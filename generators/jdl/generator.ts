@@ -196,7 +196,7 @@ export default class JdlGenerator extends BaseGenerator {
 
         const generatorOptions: any = { defaults: true, reproducible: this.options.reproducible ?? this.reproducible, force: this.force };
 
-        if (this.ignoreApplication || this.applications.length === 0) {
+        if (this.ignoreApplication !== false && (this.ignoreApplication || this.applications.length === 0)) {
           if (this.applications.length === 0) {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(this.entitiesGenerator, {
@@ -214,10 +214,7 @@ export default class JdlGenerator extends BaseGenerator {
               });
             }
           }
-        } else if (this.applications.length === 1) {
-          this.log.info('Generating 1 application');
-          await this.composeWithJHipster(this.entrypointGenerator, { generatorOptions });
-        } else {
+        } else if (this.applications.length > 1) {
           this.log.info(`Generating ${this.applications.length} applications`);
           await this.composeWithJHipster(this.workspacesGenerator, {
             generatorOptions: {
@@ -225,6 +222,9 @@ export default class JdlGenerator extends BaseGenerator {
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
             } as any,
           });
+        } else {
+          this.log.info('Generating 1 application');
+          await this.composeWithJHipster(this.entrypointGenerator, { generatorOptions });
         }
       },
     });

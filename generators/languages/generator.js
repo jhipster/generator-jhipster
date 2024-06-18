@@ -342,6 +342,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           application.enableTranslation &&
           application.generateUserManagement &&
           !application.skipServer &&
+          application.backendTypeJavaAny &&
           application.backendTypeSpringBoot
         ) {
           updateLanguagesInJava.call(this, { application, control });

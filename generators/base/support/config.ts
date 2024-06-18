@@ -90,7 +90,7 @@ export const mutateData = (
         if (override !== false || context[key] === undefined) {
           context[key] = value(context);
         }
-      } else if (context[key] === undefined) {
+      } else if (context[key] === undefined || override === true) {
         context[key] = value;
       }
     }

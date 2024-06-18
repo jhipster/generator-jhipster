@@ -391,7 +391,7 @@ export default class BaseApplicationGenerator<
     if ([PREPARING, LOADING].includes(priorityName)) {
       return {
         application,
-        applicationDefaults: data => mutateData(application, data),
+        applicationDefaults: data => mutateData(application, { __override__: false, ...data }),
       };
     }
     if (LOADING_ENTITIES === priorityName) {

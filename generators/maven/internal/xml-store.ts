@@ -41,7 +41,7 @@ const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
 };
 
 export default class XmlStorage {
-  sortFile: boolean = true;
+  sortFile: boolean;
   protected readonly saveFile: (string) => void;
   protected readonly loadFile: () => string;
 
@@ -54,11 +54,13 @@ export default class XmlStorage {
     loadFile,
     xmlParserOptions,
     xmlBuildOptions,
+    sortFile,
   }: {
     saveFile: (string) => void;
     loadFile: () => string;
     xmlParserOptions?: Partial<X2jOptions>;
     xmlBuildOptions?: Partial<XmlBuilderOptions>;
+    sortFile?: boolean;
   }) {
     assert(saveFile, 'saveFile callback is required to create a storage');
     assert(loadFile, 'loadFile callback is required to create a storage');
@@ -68,6 +70,7 @@ export default class XmlStorage {
 
     this.saveFile = saveFile;
     this.loadFile = loadFile;
+    this.sortFile = sortFile ?? true;
   }
 
   public clearCache() {
