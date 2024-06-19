@@ -24,19 +24,13 @@ Options:
   -h, --help                  display help for command
 
 Commands:
-  add                         Add a feature to current project
   app                         [Default] Create a new JHipster application based on the selected options
-  aws                         Deploy the current application to Amazon Web Services
-  azure-app-service           Deploy the current application to Azure App Service
-  azure-spring-cloud          Deploy the current application to Azure Spring Cloud
   ci-cd                       Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools
-  cloudfoundry                Generate a \`deploy/cloudfoundry\` folder with a specific manifest.yml to deploy to Cloud Foundry
   docker-compose              Create all required Docker deployment configuration for the selected applications
   download <jdlFiles...>      Download jdl file from template repository
   entity                      Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components
   entities                    Regenerate entities
   export-jdl                  Create a JDL file from the existing entities
-  gae                         Deploy the current application to Google App Engine
   generate-blueprint          Generate a blueprint
   gradle                      Create Gradle project (alpha)
   heroku                      Deploy the current application to Heroku
@@ -50,13 +44,8 @@ Commands:
   kubernetes-knative|knative  Deploy the current application to Kubernetes using knative constructs
   languages                   Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder
   maven                       Create Maven project (alpha)
-  openshift                   Deploy the current application to OpenShift
-  page                        Create a new page. (Supports vue clients)
   project-name                Configure project name (alpha)
   run [generator]             Run a module or custom generator
-  spring-service|service      Create a new Spring service bean
-  spring-controller           Create a new Spring controller
-  openapi-client              Generates java client code from an OpenAPI/Swagger definition
   upgrade                     Upgrade the JHipster version, and upgrade the generated application
   workspaces                  Add workspaces configuration
   help [command]              display help for command
