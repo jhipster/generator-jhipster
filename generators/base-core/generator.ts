@@ -786,26 +786,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
 
-      const files = customizeTemplatePath({ sourceFile, destinationFile: targetFile });
-      if (!files) {
-        return undefined;
-      }
-      sourceFile = files.sourceFile;
-      targetFile = files.destinationFile;
-
-      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
-        const files = contextCustomizeTemplatePath({ namespace: this.options.namespace, sourceFile, destinationFile: targetFile });
-        if (!files) {
-          return undefined;
-        }
-        sourceFile = files.sourceFile;
-        targetFile = files.destinationFile;
-      }
-
       let sourceFileFrom;
-      if (isAbsolute(sourceFile)) {
-        sourceFileFrom = sourceFile;
-      } else if (Array.isArray(rootTemplatesAbsolutePath)) {
+      if (Array.isArray(rootTemplatesAbsolutePath)) {
         // Look for existing templates
         const existingTemplates = rootTemplatesAbsolutePath
           .map(rootPath => this.templatePath(rootPath, sourceFile))
@@ -831,6 +813,30 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         sourceFileFrom = this.templatePath(sourceFile);
       }
 
+      const file = customizeTemplatePath({ sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
+      if (!file) {
+        return undefined;
+      }
+      sourceFileFrom = file.resolvedSourceFile;
+      targetFile = file.destinationFile;
+
+      let templatesRoots: string[] = [].concat(rootTemplatesAbsolutePath);
+      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
+        const file = contextCustomizeTemplatePath({
+          namespace: this.options.namespace,
+          sourceFile,
+          resolvedSourceFile: sourceFileFrom,
+          destinationFile: targetFile,
+          templatesRoots,
+        });
+        if (!file) {
+          return undefined;
+        }
+        sourceFileFrom = file.resolvedSourceFile;
+        targetFile = file.destinationFile;
+        templatesRoots = file.templatesRoots;
+      }
+
       if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
         await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
       } else {
@@ -851,7 +857,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         const renderOptions = {
           ...(options?.renderOptions ?? {}),
           // Set root for ejs to lookup for partials.
-          root: rootTemplatesAbsolutePath,
+          root: templatesRoots,
           // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
           cache: false,
         };
