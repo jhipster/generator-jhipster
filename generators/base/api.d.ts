@@ -70,7 +70,7 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   /**
    * Wraps write context and shows removed fields and replacements if exists.
    */
-  jhipster7Migration?: boolean;
+  jhipster7Migration?: boolean | 'verbose' | 'silent';
   sbsBlueprint?: boolean;
   checkBlueprint?: boolean;
   /**
@@ -159,6 +159,12 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
    * Single absolute path or relative path(s) between the templates folder and template path.
    */
   rootTemplatesPath?: string | string[];
+
+  /** @experimental Customize templates sourceFile and destinationFile */
+  customizeTemplatePath?: (file: {
+    sourceFile: string;
+    destinationFile: string;
+  }) => undefined | { sourceFile: string; destinationFile: string };
 } & (
   | {
       sections: WriteFileSection<Generator, DataType>;

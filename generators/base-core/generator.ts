@@ -134,7 +134,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   skipChecks?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
-  jhipster7Migration?: boolean;
+  jhipster7Migration?: boolean | 'verbose' | 'silent';
   relativeDir = relativeDir;
   relative = posixRelative;
 
@@ -726,10 +726,16 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options as any;
+    const { sections, blocks, context = this, templates } = options as any;
+    const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const { _: commonSpec = {} } = sections || {};
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
+
+    const templateData = this.jhipster7Migration
+      ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
+      : context;
 
     /* Build lookup order first has preference.
      * Example
@@ -748,7 +754,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
       rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders
-        .map(templateFolder => [].concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
+        .map(templateFolder => ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
         .flat();
     }
 
@@ -764,7 +770,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context) || false;
+        return val.call(this, templateData) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };
@@ -773,7 +779,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
-      const ejsFile = appendEjs || extension === '.ejs';
       let targetFile;
       if (typeof destinationFile === 'function') {
         targetFile = resolveCallback(destinationFile);
@@ -781,8 +786,26 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
 
+      const files = customizeTemplatePath({ sourceFile, destinationFile: targetFile });
+      if (!files) {
+        return undefined;
+      }
+      sourceFile = files.sourceFile;
+      targetFile = files.destinationFile;
+
+      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
+        const files = contextCustomizeTemplatePath({ namespace: this.options.namespace, sourceFile, destinationFile: targetFile });
+        if (!files) {
+          return undefined;
+        }
+        sourceFile = files.sourceFile;
+        targetFile = files.destinationFile;
+      }
+
       let sourceFileFrom;
-      if (Array.isArray(rootTemplatesAbsolutePath)) {
+      if (isAbsolute(sourceFile)) {
+        sourceFileFrom = sourceFile;
+      } else if (Array.isArray(rootTemplatesAbsolutePath)) {
         // Look for existing templates
         const existingTemplates = rootTemplatesAbsolutePath
           .map(rootPath => this.templatePath(rootPath, sourceFile))
@@ -807,17 +830,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } else {
         sourceFileFrom = this.templatePath(sourceFile);
       }
-      if (appendEjs) {
-        sourceFileFrom = `${sourceFileFrom}.ejs`;
-      }
 
-      if (!ejsFile) {
+      if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
         await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
       } else {
         let useAsync = true;
         if (context.entityClass) {
           if (!context.baseName) {
-            throw new Error('baseName is require at templates context');
+            throw new Error('baseName is required at templates context');
           }
           const sourceBasename = basename(sourceFileFrom);
           const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
@@ -836,18 +856,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           cache: false,
         };
         const copyOptions = { noGlob: true };
-        const { jhipster7Migration } = this as any;
-        const data = jhipster7Migration
-          ? createJHipster7Context(this, context, { log: jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
-          : context;
+        if (appendEjs) {
+          sourceFileFrom = `${sourceFileFrom}.ejs`;
+        }
         if (useAsync) {
-          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
         } else {
-          (this as any).renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          (this as any).renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
         }
       }
       if (!isBinary && transform && transform.length) {
-        (this as any).editFile(targetFile, ...transform);
+        this.editFile(targetFile, ...transform);
       }
       return targetFile;
     };

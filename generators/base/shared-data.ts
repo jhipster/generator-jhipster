@@ -39,7 +39,11 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       control: initialControl,
       props: {},
     });
-    this._storage.sharedApplication.nodeDependencies = this._storage.sharedApplication.nodeDependencies ?? {};
+
+    defaults(this._storage.sharedApplication, {
+      nodeDependencies: {},
+      customizeTemplatePaths: [],
+    });
   }
 
   getSource() {
