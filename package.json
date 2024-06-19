@@ -45,6 +45,10 @@
       "default": "./dist/cli/index.mjs"
     },
     "./package.json": "./package.json",
+    "./eslint/recommended": {
+      "types": "./dist/types/lib/eslint/recommended.d.ts",
+      "default": "./dist/lib/eslint/recommended.js"
+    },
     "./generators": {
       "types": "./dist/types/generators/generator-list.d.ts",
       "default": "./dist/generators/generator-list.js"
@@ -113,6 +117,7 @@
     "update-snapshots": "esmocha jdl generators cli --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
+    "@eslint/js": "8.57.0",
     "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",

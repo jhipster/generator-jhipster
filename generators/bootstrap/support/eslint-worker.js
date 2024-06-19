@@ -1,10 +1,19 @@
-import ESLint from 'eslint';
+import eslint from 'eslint';
 
-let eslint;
+import { baseRules } from '../../../lib/eslint/base.js';
+
+let eslintInstance;
+
+/* Flat config based eslint
+Blocked by https://github.com/import-js/eslint-plugin-import/issues/2556
+import eslint from 'eslint/use-at-your-own-risk';
+const { languageOptions, plugins: tseslintPlugins } = tseslint.configs.base;
+new eslint.FlatESLint({ fix: true, overrideConfigFile: true, cwd, plugins, baseConfig: { languageOptions, rules } });
+*/
 
 export default async ({ resolvePluginsRelativeTo, filePath, fileContents }) => {
-  if (!eslint) {
-    eslint = new ESLint.ESLint({
+  if (!eslintInstance) {
+    eslintInstance = new eslint.ESLint({
       fix: true,
       // Disable destination configs. We should apply plugins and rules which jhipster depends on.
       useEslintrc: false,
@@ -16,21 +25,16 @@ export default async ({ resolvePluginsRelativeTo, filePath, fileContents }) => {
           sourceType: 'module',
           ecmaVersion: 'latest',
         },
-        rules: {
-          'import/order': 'error',
-          'import/no-duplicates': 'error',
-          'unused-imports/no-unused-imports': 'error',
-          'unused-imports/no-unused-vars': ['warn', { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }],
-        },
+        rules: baseRules,
       },
     });
   }
 
-  if (await eslint.isPathIgnored(filePath)) {
+  if (await eslintInstance.isPathIgnored(filePath)) {
     return { result: fileContents };
   }
   try {
-    const [result] = await eslint.lintText(fileContents, { filePath });
+    const [result] = await eslintInstance.lintText(fileContents, { filePath });
     return { result: result.output ?? fileContents };
   } catch (error) {
     return { error: `${error}` };
