@@ -27,6 +27,7 @@ If you are interested in maintaining this sub-generator fill a feature request o
 const defaultCommands = {
   add: {
     desc: 'Add a feature to current project',
+    removed: removedV8,
   },
   app: {
     desc: '[Default] Create a new JHipster application based on the selected options',
@@ -136,6 +137,7 @@ const defaultCommands = {
   },
   page: {
     desc: 'Create a new page. (Supports vue clients)',
+    removed: removedV8,
   },
   'project-name': {
     desc: 'Configure project name (alpha)',
