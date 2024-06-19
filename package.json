@@ -45,6 +45,10 @@
       "default": "./dist/cli/index.mjs"
     },
     "./package.json": "./package.json",
+    "./eslint/recommended": {
+      "types": "./dist/types/lib/eslint/recommended.d.ts",
+      "default": "./dist/lib/eslint/recommended.js"
+    },
     "./generators": {
       "types": "./dist/types/generators/generator-list.d.ts",
       "default": "./dist/generators/generator-list.js"
