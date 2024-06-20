@@ -13,4 +13,7 @@ export type Control = {
   reproducibleLiquibaseTimestamp?: Date;
   filterEntitiesForClient?: (entity: Entity[]) => Entity[];
   filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
+  customizeRemoveFiles: Array<(file: string) => string | undefined>;
+  removeFiles: (options: { removedInVersion: string } | string, ...files: string[]) => Promise<void>;
+  cleanupFiles: (cleanup: Record<string, string[]>) => Promise<void>;
 };

@@ -173,7 +173,7 @@ export default class extends BaseGenerator {
   }
 
   get preparing() {
-    return {
+    return this.asPreparingTaskGroup({
       prepareCommands() {
         this.application.commands = [];
         this.application.nodeVersion = NODE_VERSION;
@@ -195,7 +195,7 @@ export default class extends BaseGenerator {
           this.application.cliName = cliName ?? `jhipster-${baseName}`;
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.PREPARING]() {
@@ -203,7 +203,10 @@ export default class extends BaseGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
+      async cleanup({ control }) {
+        await control.cleanupFiles({ '8.5.1': ['.eslintrc.json'] });
+      },
       async writing() {
         this.application.sampleWritten = this.jhipsterConfig.sampleWritten;
         await this.writeFiles({
@@ -243,7 +246,7 @@ export default class extends BaseGenerator {
           subGeneratorStorage.set(WRITTEN, true);
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.WRITING]() {

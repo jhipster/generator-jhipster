@@ -172,7 +172,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       ...features,
     });
 
-    let jhipsterOldVersion = null;
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster');
@@ -180,8 +179,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
-      this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help }) as any;
+      this.sharedData = this.createSharedData({ help: this.options.help }) as any;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(command.options);
@@ -1255,13 +1253,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
   }
 
-  private createSharedData({
-    jhipsterOldVersion,
-    help,
-  }: {
-    jhipsterOldVersion: string | null;
-    help?: boolean;
-  }): SharedData<BaseApplication> {
+  private createSharedData({ help }: { help?: boolean }): SharedData<BaseApplication> {
     const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
@@ -1272,6 +1264,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     const { ignoreNeedlesError } = this.options;
 
-    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion, ignoreNeedlesError });
+    return new SharedData<BaseApplication>(
+      sharedApplications[applicationId],
+      { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
+      { ignoreNeedlesError },
+    );
   }
 }
