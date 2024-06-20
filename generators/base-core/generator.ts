@@ -132,6 +132,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
+  ignoreNeedlesError?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
   jhipster7Migration?: boolean | 'verbose' | 'silent';
@@ -1059,7 +1060,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (!originalContent) {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
-      if (ignoreNonExisting) {
+      if (ignoreNonExisting || this.ignoreNeedlesError) {
         this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
         // return a noop.
         const noop = () => noop;
@@ -1077,7 +1078,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       try {
         newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
         if (actualOptions.assertModified && originalContent === newContent) {
-          throw new Error(`Fail to edit file '${file}'.`);
+          const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
+          if (!this.ignoreNeedlesError) {
+            throw new Error(errorMessage);
+          }
+          this.log(errorMessage);
         }
         this.writeDestination(filePath, newContent);
       } catch (error: unknown) {

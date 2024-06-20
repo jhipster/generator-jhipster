@@ -62,6 +62,7 @@ const command: JHipsterCommandDefinition = {
       description: 'Ignore needles failures',
       type: Boolean,
       hide: true,
+      scope: 'generator',
     },
   },
 };
