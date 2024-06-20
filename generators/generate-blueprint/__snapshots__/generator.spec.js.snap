@@ -17,9 +17,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   ".blueprint/generate-sample/templates/samples/sample.jdl": {
     "stateCleared": "modified",
   },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".github/workflows/generator.yml": {
     "stateCleared": "modified",
   },
@@ -30,6 +27,9 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "cli/cli.cjs": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "generators/angular/command.js": {
@@ -886,9 +886,6 @@ exports[`generator - generate-blueprint with default config should write files a
   ".blueprint/generate-sample/templates/samples/sample.jdl": {
     "stateCleared": "modified",
   },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".github/workflows/generator.yml": {
     "stateCleared": "modified",
   },
@@ -899,6 +896,9 @@ exports[`generator - generate-blueprint with default config should write files a
     "stateCleared": "modified",
   },
   "cli/cli.cjs": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "package.json": {

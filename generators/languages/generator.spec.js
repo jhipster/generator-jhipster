@@ -49,7 +49,8 @@ describe(`generator - ${generator}`, () => {
             nativeLanguage: 'in',
             languages: ['in'],
             baseName: 'jhipster',
-          }),
+          })
+          .commitFiles(),
       );
       it('should migrate in language to id', () => {
         runResult.assertJsonFileContent('.yo-rc.json', {

@@ -16,17 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { existsSync, readFileSync, statSync } from 'fs';
+import { rm } from 'fs/promises';
+import { isAbsolute, join, relative } from 'path';
+import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
+import { MemFsEditor, create } from 'mem-fs-editor';
 import { type BaseApplication } from '../base-application/types.js';
 import { type Control } from './types.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 
 export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
   _storage: any;
+  _editor: MemFsEditor;
+  _log: any;
+  _logCwd: string;
 
-  constructor(storage, initialControl: Partial<Control> = {}) {
+  constructor(storage, { memFs, destinationPath, log, logCwd }, initialControl: Partial<Control> = {}) {
     if (!storage) {
       throw new Error('Storage is required for SharedData');
     }
+
+    this._editor = create(memFs);
+    this._log = log;
+    this._logCwd = logCwd;
+
+    let jhipsterOldVersion;
+    if (existsSync(join(destinationPath, '.yo-rc.json'))) {
+      jhipsterOldVersion = JSON.parse(readFileSync(join(destinationPath, '.yo-rc.json'), 'utf-8').toString())[GENERATOR_JHIPSTER]
+        ?.jhipsterVersion;
+    }
+
     // Backward compatibility sharedData
     this._storage = storage;
 
@@ -44,6 +64,55 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       nodeDependencies: {},
       customizeTemplatePaths: [],
     });
+
+    let customizeRemoveFiles: Array<(file: string) => string | undefined> = [];
+    const removeFiles = async (assertions: { removedInVersion?: string } | string, ...files: string[]) => {
+      if (typeof assertions === 'string') {
+        files = [assertions, ...files];
+        assertions = {};
+      }
+
+      for (const customize of customizeRemoveFiles) {
+        files = files.map(customize).filter(file => file) as string[];
+      }
+
+      const { removedInVersion } = assertions;
+      if (removedInVersion && jhipsterOldVersion && !semverLessThan(jhipsterOldVersion, removedInVersion)) {
+        return;
+      }
+
+      const absolutePaths = files.map(file => (isAbsolute(file) ? file : join(destinationPath, file)));
+      // Delete from memory fs to keep updated.
+      this._editor.delete(absolutePaths);
+      await Promise.all(
+        absolutePaths.map(async file => {
+          const relativePath = relative(logCwd, file);
+          try {
+            if (statSync(file).isFile()) {
+              this._log.info(`Removing legacy file ${relativePath}`);
+              await rm(file, { force: true });
+            }
+          } catch {
+            this._log.info(`Could not remove legacy file ${relativePath}`);
+          }
+        }),
+      );
+    };
+
+    defaults(this._storage.control, {
+      jhipsterOldVersion,
+      removeFiles,
+      customizeRemoveFiles: [],
+      cleanupFiles: async (cleanup: Record<string, string[]>) => {
+        await Promise.all(
+          Object.entries(cleanup).map(async ([version, files]) => {
+            await removeFiles({ removedInVersion: version }, ...files);
+          }),
+        );
+      },
+    });
+
+    customizeRemoveFiles = this._storage.control.customizeRemoveFiles;
   }
 
   getSource() {
