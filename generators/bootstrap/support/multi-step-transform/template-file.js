@@ -42,7 +42,11 @@ export default class TemplateFile {
       this._debug(contents);
     }
 
-    this._compiled = ejs.compile(contents, options);
+    try {
+      this._compiled = ejs.compile(contents, options);
+    } catch (error) {
+      throw new Error(`Error compiling ${this._filename}, with contents:\n${contents}`, { cause: error });
+    }
   }
 
   addFragment(templateFile) {
