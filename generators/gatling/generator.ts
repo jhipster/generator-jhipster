@@ -78,7 +78,6 @@ export default class GatlingGenerator extends BaseApplicationGenerator {
                 additionalContent: `
 <configuration>
     <runMultipleSimulations>true</runMultipleSimulations>
-    <resourcesFolder>\${project.basedir}/src/test/gatling/conf</resourcesFolder>
 </configuration>
 `,
               },
