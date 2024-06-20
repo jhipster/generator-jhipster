@@ -38,8 +38,10 @@ export type BaseApplication = {
     (file: {
       namespace: string;
       sourceFile: string;
+      resolvedSourceFile: string;
       destinationFile: string;
-    }) => undefined | { sourceFile: string; destinationFile: string }
+      templatesRoots: string[];
+    }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] }
   >;
 } & I18nApplication;
 

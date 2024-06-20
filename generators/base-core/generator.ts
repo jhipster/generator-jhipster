@@ -132,6 +132,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
+  ignoreNeedlesError?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
   jhipster7Migration?: boolean | 'verbose' | 'silent';
@@ -715,7 +716,11 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
-    return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+    try {
+      return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+    } catch (error) {
+      throw new Error(`Error writing file ${source} to ${destination}: ${error}`, { cause: error });
+    }
   }
 
   /**
@@ -786,26 +791,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         targetFile = appendEjs ? normalizeEjs(destinationFile) : destinationFile;
       }
 
-      const files = customizeTemplatePath({ sourceFile, destinationFile: targetFile });
-      if (!files) {
-        return undefined;
-      }
-      sourceFile = files.sourceFile;
-      targetFile = files.destinationFile;
-
-      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
-        const files = contextCustomizeTemplatePath({ namespace: this.options.namespace, sourceFile, destinationFile: targetFile });
-        if (!files) {
-          return undefined;
-        }
-        sourceFile = files.sourceFile;
-        targetFile = files.destinationFile;
-      }
-
       let sourceFileFrom;
-      if (isAbsolute(sourceFile)) {
-        sourceFileFrom = sourceFile;
-      } else if (Array.isArray(rootTemplatesAbsolutePath)) {
+      if (Array.isArray(rootTemplatesAbsolutePath)) {
         // Look for existing templates
         const existingTemplates = rootTemplatesAbsolutePath
           .map(rootPath => this.templatePath(rootPath, sourceFile))
@@ -831,39 +818,67 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         sourceFileFrom = this.templatePath(sourceFile);
       }
 
-      if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
-        await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
-      } else {
-        let useAsync = true;
-        if (context.entityClass) {
-          if (!context.baseName) {
-            throw new Error('baseName is required at templates context');
-          }
-          const sourceBasename = basename(sourceFileFrom);
-          const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
-          Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
-            entity.resetFakerSeed(seed);
-          });
-          // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
-          useAsync = false;
-        }
+      const file = customizeTemplatePath({ sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
+      if (!file) {
+        return undefined;
+      }
+      sourceFileFrom = file.resolvedSourceFile;
+      targetFile = file.destinationFile;
 
-        const renderOptions = {
-          ...(options?.renderOptions ?? {}),
-          // Set root for ejs to lookup for partials.
-          root: rootTemplatesAbsolutePath,
-          // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
-          cache: false,
-        };
-        const copyOptions = { noGlob: true };
-        if (appendEjs) {
-          sourceFileFrom = `${sourceFileFrom}.ejs`;
+      let templatesRoots: string[] = [].concat(rootTemplatesAbsolutePath);
+      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
+        const file = contextCustomizeTemplatePath({
+          namespace: this.options.namespace,
+          sourceFile,
+          resolvedSourceFile: sourceFileFrom,
+          destinationFile: targetFile,
+          templatesRoots,
+        });
+        if (!file) {
+          return undefined;
         }
-        if (useAsync) {
-          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+        sourceFileFrom = file.resolvedSourceFile;
+        targetFile = file.destinationFile;
+        templatesRoots = file.templatesRoots;
+      }
+
+      try {
+        if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
+          await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
-          (this as any).renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+          let useAsync = true;
+          if (context.entityClass) {
+            if (!context.baseName) {
+              throw new Error('baseName is required at templates context');
+            }
+            const sourceBasename = basename(sourceFileFrom);
+            const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
+            Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
+              entity.resetFakerSeed(seed);
+            });
+            // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
+            useAsync = false;
+          }
+
+          const renderOptions = {
+            ...(options?.renderOptions ?? {}),
+            // Set root for ejs to lookup for partials.
+            root: templatesRoots,
+            // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
+            cache: false,
+          };
+          const copyOptions = { noGlob: true };
+          if (appendEjs) {
+            sourceFileFrom = `${sourceFileFrom}.ejs`;
+          }
+          if (useAsync) {
+            await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+          } else {
+            (this as any).renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+          }
         }
+      } catch (error) {
+        throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
       }
       if (!isBinary && transform && transform.length) {
         this.editFile(targetFile, ...transform);
@@ -1045,7 +1060,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (!originalContent) {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
-      if (ignoreNonExisting) {
+      if (ignoreNonExisting || (!create && this.ignoreNeedlesError)) {
         this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
         // return a noop.
         const noop = () => noop;
@@ -1063,7 +1078,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       try {
         newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
         if (actualOptions.assertModified && originalContent === newContent) {
-          throw new Error(`Fail to edit file '${file}'.`);
+          const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
+          if (!this.ignoreNeedlesError) {
+            throw new Error(errorMessage);
+          }
+          this.log(errorMessage);
         }
         this.writeDestination(filePath, newContent);
       } catch (error: unknown) {

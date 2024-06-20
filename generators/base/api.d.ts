@@ -163,8 +163,9 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
   /** @experimental Customize templates sourceFile and destinationFile */
   customizeTemplatePath?: (file: {
     sourceFile: string;
+    resolvedSourceFile: string;
     destinationFile: string;
-  }) => undefined | { sourceFile: string; destinationFile: string };
+  }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string };
 } & (
   | {
       sections: WriteFileSection<Generator, DataType>;
