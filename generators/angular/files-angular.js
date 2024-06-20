@@ -28,8 +28,8 @@ export const files = {
   common: [
     clientRootTemplatesBlock({
       templates: [
-        '.eslintrc.json',
         'angular.json',
+        'eslint.config.mjs',
         'ngsw-config.json',
         'package.json',
         'tsconfig.json',
