@@ -24,10 +24,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
-import org.springframework.data.neo4j.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
 
 import org.springframework.data.neo4j.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+<%_ if (reactive) { _%>
+
+import org.neo4j.driver.Driver;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.neo4j.core.<% if (reactive) { %>Reactive<% } %>DatabaseSelectionProvider;
+import org.springframework.data.neo4j.core.transaction.<% if (reactive) { %>Reactive<% } %>Neo4jTransactionManager;
+import org.springframework.data.neo4j.repository.config.<% if (reactive) { %>Reactive<% } %>Neo4jRepositoryConfigurationExtension;
+import org.springframework.transaction.<% if (reactive) { %>Reactive<% } %>TransactionManager;
+<%_ } _%>
 
 @Configuration
 <%_ if (searchEngineElasticsearch) { _%>
@@ -38,4 +46,12 @@ import org.springframework.data.neo4j.repository.config.Enable<% if (reactive) {
 <%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
-public class DatabaseConfiguration {}
+public class DatabaseConfiguration {
+<%_ if (reactive) { _%>
+
+     @Bean(<% if (reactive) { %>Reactive<% } %>Neo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+     public <% if (reactive) { %>Reactive<% } %>TransactionManager transactionManager(Driver driver, <% if (reactive) { %>Reactive<% } %>DatabaseSelectionProvider databaseNameProvider) {
+         return new <% if (reactive) { %>Reactive<% } %>Neo4jTransactionManager(driver, databaseNameProvider);
+     }
+<%_ } _%>
+}
