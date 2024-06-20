@@ -29,3 +29,11 @@ test-integration/**/*.png
 
 # allow customizations without having a dirty tree
 .devcontainer
+
+# NetBeans 
+nbproject/
+build/
+nbbuild/
+nbdist/
+.nb-gradle/
+
