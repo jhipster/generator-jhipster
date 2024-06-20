@@ -1060,7 +1060,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (!originalContent) {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
-      if (ignoreNonExisting || this.ignoreNeedlesError) {
+      if (ignoreNonExisting || (!create && this.ignoreNeedlesError)) {
         this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
         // return a noop.
         const noop = () => noop;
