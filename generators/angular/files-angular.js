@@ -28,8 +28,8 @@ export const files = {
   common: [
     clientRootTemplatesBlock({
       templates: [
-        '.eslintrc.json',
         'angular.json',
+        { sourceFile: 'eslint.config.js.jhi.angular', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.angular` },
         'ngsw-config.json',
         'package.json',
         'tsconfig.json',

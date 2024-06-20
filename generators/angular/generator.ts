@@ -33,6 +33,7 @@ import {
 } from '../client/support/index.js';
 import type { CommonClientServerApplication } from '../base-application/types.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -72,6 +73,12 @@ export default class AngularGenerator extends BaseApplicationGenerator {
           this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'),
         );
       },
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          typescriptEslint: true,
+        });
+      },
     });
   }
 
@@ -81,9 +88,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
-        application.webappEnumerationsDir = `${application.clientSrcDir}app/entities/enumerations/`;
-        application.angularLocaleId = application.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!;
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
+          angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale,
+        });
       },
       addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
@@ -222,7 +233,13 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanup({ control }) {
+        control.cleanupFiles({
+          '8.6.1': ['.eslintrc.json', '.eslintignore'],
+        });
+      },
       cleanupOldFilesTask,
+      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }
