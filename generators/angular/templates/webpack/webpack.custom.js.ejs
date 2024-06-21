@@ -50,7 +50,7 @@ module.exports = async (config, options, targetOptions) => {
       new ESLintPlugin({
         configType: 'flat',
         eslintPath: 'eslint/use-at-your-own-risk',
-        // extensions: ['ts', 'js', 'html'],
+        extensions: ['ts', 'js'],
       }),
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
