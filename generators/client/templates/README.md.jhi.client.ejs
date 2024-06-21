@@ -54,8 +54,6 @@ You will only need to run this command when dependencies change in [package.json
 
 We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[Webpack][] as our build system.
 
-2. [Java](https://dev.java/): Java is used to compile and run the backend Spring Boot server.
-
   <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
