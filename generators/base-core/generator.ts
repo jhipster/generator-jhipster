@@ -792,9 +792,15 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       let sourceFileFrom;
       if (Array.isArray(rootTemplatesAbsolutePath)) {
         // Look for existing templates
-        const existingTemplates = rootTemplatesAbsolutePath
+        let existingTemplates = rootTemplatesAbsolutePath
           .map(rootPath => this.templatePath(rootPath, sourceFile))
           .filter(templateFile => existsSync(appendEjs ? `${templateFile}.ejs` : templateFile));
+
+        if (existingTemplates.length === 0 && this.getFeatures().jhipster7Migration) {
+          existingTemplates = rootTemplatesAbsolutePath
+            .map(rootPath => this.templatePath(rootPath, appendEjs ? sourceFile : `${sourceFile}.ejs`))
+            .filter(templateFile => existsSync(templateFile));
+        }
 
         if (existingTemplates.length > 1) {
           const moreThanOneMessage = `Multiples templates were found for file ${sourceFile}, using the first
