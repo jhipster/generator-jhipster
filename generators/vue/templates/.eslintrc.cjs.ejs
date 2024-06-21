@@ -53,6 +53,10 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/consistent-type-imports': 'error',
+    'vue/no-v-text-v-html-on-component': [
+      'error',
+      { 'allow': ['router-link', 'b-badge', 'b-button', 'b-link'] },
+    ],
   },
   ignorePatterns: ['<%= this.relativeDir(clientRootDir, temporaryDir) %>'],
 };
