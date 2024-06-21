@@ -84,6 +84,11 @@ export default class XmlStorage {
     this.persist(false);
   }
 
+  public merge(source) {
+    assert(typeof source === 'object', 'Storage `merge` method only accept objects');
+    this._cachedStore = merge({}, this.store, source);
+  }
+
   protected sort() {}
 
   protected persist(sort = this.sortFile) {
@@ -105,11 +110,6 @@ export default class XmlStorage {
     if (!this._cachedStore) {
       this._cachedStore = this.parser.parse(this.loadFile());
     }
-  }
-
-  protected merge(source) {
-    assert(typeof source === 'object', 'Storage `merge` method only accept objects');
-    this._cachedStore = merge({}, this.store, source);
   }
 
   protected mergeContent<T>(existing: T, newContent?: string): T {
