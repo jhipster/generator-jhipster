@@ -23,9 +23,9 @@ export const files = {
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
       templates: [
-        '.eslintrc.json',
         '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
+        'eslint.config.js',
         'README.md',
         'tsconfig.json',
         'vitest.config.ts',
@@ -42,6 +42,8 @@ export const files = {
         '.blueprint/github-build-matrix/build-matrix.mjs',
         '.blueprint/github-build-matrix/generator.mjs',
         '.blueprint/github-build-matrix/index.mjs',
+        '.github/workflows/build-cache.yml',
+        '.github/workflows/samples.yml',
       ],
     },
     {

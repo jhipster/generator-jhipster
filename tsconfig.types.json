@@ -3,6 +3,7 @@
     "./cli",
     "./jdl",
     "./testing",
+    "./lib/eslint/recommended.ts",
     "./generators/index.ts",
     "./generators/base",
     "./generators/base-application",

@@ -9,9 +9,9 @@ feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', v
 testng = { module = 'org.testng:testng', version = '7.10.2' }
 cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.18.0' }
 
-mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.4.2' }
+mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.4.4' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.10.1' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.10.3' }
 
 # Cassandra
 lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
@@ -29,9 +29,9 @@ spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '6.25.0' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.9.2' }
 
-gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.17.4' }
+gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.17.5' }
 
-common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.0.1' }
+common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.0.2' }
 
 gatling-gradle = { id = 'io.gatling.gradle', version = '3.11.3' }
 

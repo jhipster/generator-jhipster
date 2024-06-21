@@ -163,7 +163,7 @@ processResources {
     inputs.property('springProfiles', springProfiles)
     filesMatching("**/application.yml") {
         filter {
-            it.replace("#project.version#", version)
+            it.replace("@project.version@", version)
         }
 <%_ if (!serviceDiscoveryAny) { _%>
         filter {

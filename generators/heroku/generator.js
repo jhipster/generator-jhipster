@@ -530,7 +530,7 @@ export default class HerokuGenerator extends BaseGenerator {
    * @param {string} other - explicit other thing: build, dependencies...
    */
   addMavenProfile(profileId, other) {
-    createPomStorage(this).addProfile({ id: profileId, content: other });
+    createPomStorage(this, { sortFile: false }).addProfile({ id: profileId, content: other });
   }
 
   /**

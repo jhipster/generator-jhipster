@@ -160,7 +160,7 @@ const sortArtifacts = (artifacts: MavenArtifact[]) =>
     return a.artifactId.localeCompare(b.artifactId);
   });
 
-const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id.localeCompare(b.id));
+const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id?.localeCompare(b.id) ?? 1);
 
 const ensureChildPath = (node: any, childPath) => {
   let child = get(node, childPath);
@@ -206,8 +206,8 @@ const reorderDependency = <Dependency extends MavenDependency = MavenDependency>
 }: Dependency): Dependency => ({ inProfile, groupId, artifactId, version, type, scope, classifier, ...rest }) as Dependency;
 
 export default class PomStorage extends XmlStorage {
-  constructor({ saveFile, loadFile }: { saveFile: (string) => void; loadFile: () => string }) {
-    super({ saveFile, loadFile });
+  constructor({ saveFile, loadFile, sortFile }: { saveFile: (string) => void; loadFile: () => string; sortFile?: boolean }) {
+    super({ saveFile, loadFile, sortFile });
   }
 
   public addProperty({ inProfile, property, value = null }: MavenProperty) {
@@ -354,11 +354,12 @@ const emptyPomFile = `<?xml version="1.0" encoding="UTF-8"?>
 </project>
 `;
 
-export const createPomStorage = (generator: CoreGenerator) => {
+export const createPomStorage = (generator: CoreGenerator, { sortFile }: { sortFile?: boolean } = {}) => {
   const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
     loadFile,
     saveFile: content => generator.writeDestination('pom.xml', formatFirstXmlLevel(content)),
+    sortFile,
   });
   generator.fs.store.on('change', filename => {
     if (filename === generator.destinationPath('pom.xml')) {

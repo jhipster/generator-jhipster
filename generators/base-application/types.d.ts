@@ -32,6 +32,17 @@ export type BaseApplication = {
 
   skipClient?: boolean;
   skipServer?: boolean;
+
+  /** Customize templates sourceFile and destinationFile */
+  customizeTemplatePaths: Array<
+    (file: {
+      namespace: string;
+      sourceFile: string;
+      resolvedSourceFile: string;
+      destinationFile: string;
+      templatesRoots: string[];
+    }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] }
+  >;
 } & I18nApplication;
 
 /* ApplicationType Start */

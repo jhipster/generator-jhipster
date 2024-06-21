@@ -196,7 +196,7 @@ export const buildCommands = async ({
   Object.entries(commands).forEach(([cmdName, opts]) => {
     const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, removed, useOptions = {} } = opts;
     program
-      .command(cmdName, '', { isDefault: cmdName === defaultCommand })
+      .command(cmdName, '', { isDefault: cmdName === defaultCommand, hidden: Boolean(removed) })
       .description(desc + (blueprint ? chalk.yellow(` (blueprint: ${blueprint})`) : ''))
       .addCommandArguments(argument)
       .addCommandOptions(commandOptions)

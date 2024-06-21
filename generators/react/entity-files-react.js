@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationTemplatesBlock, filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/index.js';
+import { clientApplicationTemplatesBlock } from '../client/support/index.js';
 
 export const reactFiles = {
   client: [
@@ -50,8 +50,10 @@ export const reactFiles = {
   ],
 };
 
-export async function writeEntitiesFiles({ application, entities }) {
-  for (const entity of filterEntitiesAndPropertiesForClient(entities).filter(entity => !entity.builtInUser)) {
+export async function writeEntitiesFiles({ control, application, entities }) {
+  for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities).filter(
+    entity => !entity.builtInUser,
+  )) {
     await this.writeFiles({
       sections: reactFiles,
       context: { ...application, ...entity },
@@ -59,8 +61,8 @@ export async function writeEntitiesFiles({ application, entities }) {
   }
 }
 
-export async function postWriteEntitiesFiles({ application, entities }) {
-  for (const entity of filterEntitiesForClient(entities).filter(entity => !entity.builtInUser)) {
+export async function postWriteEntitiesFiles({ control, application, entities }) {
+  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
     if (!entity.embedded) {
       const { entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName } = entity;
 
@@ -74,8 +76,8 @@ export async function postWriteEntitiesFiles({ application, entities }) {
   }
 }
 
-export function cleanupEntitiesFiles({ application, entities }) {
-  for (const entity of filterEntitiesForClient(entities).filter(entity => !entity.builtInUser)) {
+export function cleanupEntitiesFiles({ control, application, entities }) {
+  for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
     const { entityFolderName, entityFileName } = entity;
 
     if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {

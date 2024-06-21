@@ -28,9 +28,6 @@ import {
 } from 'reactstrap';
 import LoadingBar from 'react-redux-loading-bar';
 
-<%_ if (enableTranslation && enableI18nRTL) { _%>
-import { isRTL } from 'app/config/translation';
-<%_ } _%>
 import { Home, Brand } from './header-components';
 import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
 <%_ if (enableTranslation) { _%>
@@ -52,9 +49,6 @@ export interface IHeaderProps {
 
 const Header = (props: IHeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-<%_ if (enableI18nRTL) { _%>
-  useEffect(() => document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr'));
-<%_ } _%>
 
 <%_ if (enableTranslation) { _%>
   const dispatch = useAppDispatch();
@@ -63,9 +57,6 @@ const Header = (props: IHeaderProps) => {
     const langKey = event.target.value;
     Storage.session.set('locale', langKey);
     dispatch(setLocale(langKey));
-  <%_ if (enableI18nRTL) { _%>
-    document.querySelector('html').setAttribute('dir', isRTL(langKey) ? 'rtl' : 'ltr');
-  <%_ } _%>
   }
 <%_ } _%>
 

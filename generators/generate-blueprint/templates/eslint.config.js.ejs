@@ -16,7 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<&_ if (!fragment.section) { -&>
-# blueprint rules:
-generators/**/templates/**/
-<&_ } -&>
+import globals from 'globals';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import jhipsterRecommended from 'generator-jhipster/eslint/recommended';
+
+export default [
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  jhipsterRecommended,
+  prettierRecommended,
+];

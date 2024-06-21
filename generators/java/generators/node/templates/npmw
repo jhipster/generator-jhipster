@@ -1,15 +1,11 @@
 #!/bin/sh
 
-basedir=`dirname "$0"`
+basedir=$(dirname "$0")
 
 if [ -f "$basedir/mvnw" ]; then
   bindir="$basedir/target/node"
   repodir="$basedir/target/node/node_modules"
   installCommand="$basedir/mvnw --batch-mode -ntp -Pwebapp frontend:install-node-and-npm@install-node-and-npm"
-
-  PATH="$basedir/$builddir/:$PATH"
-  NPM_EXE="$basedir/$builddir/node_modules/npm/bin/npm-cli.js"
-  NODE_EXE="$basedir/$builddir/node"
 elif [ -f "$basedir/gradlew" ]; then
   bindir="$basedir/build/node/bin"
   repodir="$basedir/build/node/lib/node_modules"

@@ -20,7 +20,7 @@ import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angu
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
@@ -62,7 +62,7 @@ export const appConfig: ApplicationConfig = {
 <%_ if (enableTranslation) { _%>
     importProvidersFrom(TranslationModule),
 <%_ } _%>
-    importProvidersFrom(HttpClientModule),
+    provideHttpClient(withInterceptorsFromDi()),
     Title,
     { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },

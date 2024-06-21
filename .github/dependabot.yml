@@ -177,6 +177,10 @@ updates:
       typescript-eslint:
         patterns:
           - '@typescript-eslint/*'
+      vue-eslint:
+        patterns:
+          - '@vue/eslint-config-typescript'
+          - 'eslint-plugin-vue'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'

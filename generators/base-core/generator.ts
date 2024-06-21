@@ -132,9 +132,10 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
+  ignoreNeedlesError?: boolean;
   experimental?: boolean;
   debugEnabled?: boolean;
-  jhipster7Migration?: boolean;
+  jhipster7Migration?: boolean | 'verbose' | 'silent';
   relativeDir = relativeDir;
   relative = posixRelative;
 
@@ -172,7 +173,6 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       ...features,
     });
 
-    let jhipsterOldVersion = null;
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster');
@@ -180,8 +180,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy();
 
-      jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion ?? null;
-      this.sharedData = this.createSharedData({ jhipsterOldVersion, help: this.options.help }) as any;
+      this.sharedData = this.createSharedData({ help: this.options.help }) as any;
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.parseJHipsterOptions(command.options);
@@ -396,7 +395,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
       }
       if (def.scope === 'generator') {
-        context[name] = context[name] ?? this[name] ?? def.default;
+        this[name] = this[name] ?? this.options[name] ?? def.default;
       }
       if (def.scope === 'blueprint') {
         context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
@@ -715,7 +714,11 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
-    return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+    try {
+      return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+    } catch (error) {
+      throw new Error(`Error writing file ${source} to ${destination}: ${error}`, { cause: error });
+    }
   }
 
   /**
@@ -726,10 +729,16 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { sections, blocks, templates, rootTemplatesPath, context = this, transform: methodTransform = [] } = options as any;
+    const { sections, blocks, context = this, templates } = options as any;
+    const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const { _: commonSpec = {} } = sections || {};
     const { transform: sectionTransform = [] } = commonSpec;
     const startTime = new Date().getMilliseconds();
+    const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = context as BaseApplication;
+
+    const templateData = this.jhipster7Migration
+      ? createJHipster7Context(this, context, { log: this.jhipster7Migration === 'verbose' ? msg => this.log.info(msg) : () => {} })
+      : context;
 
     /* Build lookup order first has preference.
      * Example
@@ -748,7 +757,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
       rootTemplatesAbsolutePath = (this as any).jhipsterTemplatesFolders
-        .map(templateFolder => [].concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
+        .map(templateFolder => ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
         .flat();
     }
 
@@ -764,7 +773,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         return val;
       }
       if (typeof val === 'function') {
-        return val.call(this, context) || false;
+        return val.call(this, templateData) || false;
       }
       throw new Error(`Type not supported ${val}`);
     };
@@ -773,7 +782,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
-      const ejsFile = appendEjs || extension === '.ejs';
       let targetFile;
       if (typeof destinationFile === 'function') {
         targetFile = resolveCallback(destinationFile);
@@ -807,45 +815,71 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } else {
         sourceFileFrom = this.templatePath(sourceFile);
       }
-      if (appendEjs) {
-        sourceFileFrom = `${sourceFileFrom}.ejs`;
+
+      const file = customizeTemplatePath({ sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
+      if (!file) {
+        return undefined;
+      }
+      sourceFileFrom = file.resolvedSourceFile;
+      targetFile = file.destinationFile;
+
+      let templatesRoots: string[] = [].concat(rootTemplatesAbsolutePath);
+      for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
+        const file = contextCustomizeTemplatePath({
+          namespace: this.options.namespace,
+          sourceFile,
+          resolvedSourceFile: sourceFileFrom,
+          destinationFile: targetFile,
+          templatesRoots,
+        });
+        if (!file) {
+          return undefined;
+        }
+        sourceFileFrom = file.resolvedSourceFile;
+        targetFile = file.destinationFile;
+        templatesRoots = file.templatesRoots;
       }
 
-      if (!ejsFile) {
-        await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
-      } else {
-        let useAsync = true;
-        if (context.entityClass) {
-          if (!context.baseName) {
-            throw new Error('baseName is require at templates context');
-          }
-          const sourceBasename = basename(sourceFileFrom);
-          const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
-          Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
-            entity.resetFakerSeed(seed);
-          });
-          // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
-          useAsync = false;
-        }
-
-        const renderOptions = {
-          ...(options?.renderOptions ?? {}),
-          // Set root for ejs to lookup for partials.
-          root: rootTemplatesAbsolutePath,
-          // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
-          cache: false,
-        };
-        const copyOptions = { noGlob: true };
-        // TODO drop for v8 final release
-        const data = (this as any).jhipster7Migration ? createJHipster7Context(this, context, { ignoreWarnings: true }) : context;
-        if (useAsync) {
-          await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+      try {
+        if (!appendEjs && extname(sourceFileFrom) !== '.ejs') {
+          await (this as any).copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
-          (this as any).renderTemplate(sourceFileFrom, targetFile, data, renderOptions, copyOptions);
+          let useAsync = true;
+          if (context.entityClass) {
+            if (!context.baseName) {
+              throw new Error('baseName is required at templates context');
+            }
+            const sourceBasename = basename(sourceFileFrom);
+            const seed = `${context.entityClass}-${sourceBasename}${context.fakerSeed ?? ''}`;
+            Object.values((this.sharedData as any).getApplication()?.sharedEntities ?? {}).forEach((entity: any) => {
+              entity.resetFakerSeed(seed);
+            });
+            // Async calls will make the render method to be scheduled, allowing the faker key to change in the meantime.
+            useAsync = false;
+          }
+
+          const renderOptions = {
+            ...(options?.renderOptions ?? {}),
+            // Set root for ejs to lookup for partials.
+            root: templatesRoots,
+            // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
+            cache: false,
+          };
+          const copyOptions = { noGlob: true };
+          if (appendEjs) {
+            sourceFileFrom = `${sourceFileFrom}.ejs`;
+          }
+          if (useAsync) {
+            await (this as any).renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+          } else {
+            (this as any).renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+          }
         }
+      } catch (error) {
+        throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
       }
       if (!isBinary && transform && transform.length) {
-        (this as any).editFile(targetFile, ...transform);
+        this.editFile(targetFile, ...transform);
       }
       return targetFile;
     };
@@ -1024,7 +1058,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (!originalContent) {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
-      if (ignoreNonExisting) {
+      if (ignoreNonExisting || (!create && this.ignoreNeedlesError)) {
         this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
         // return a noop.
         const noop = () => noop;
@@ -1042,7 +1076,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       try {
         newContent = joinCallbacks(...callbacks).call(this, newContent, filePath);
         if (actualOptions.assertModified && originalContent === newContent) {
-          throw new Error(`Fail to edit file '${file}'.`);
+          const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
+          if (!this.ignoreNeedlesError) {
+            throw new Error(errorMessage);
+          }
+          this.log(errorMessage);
         }
         this.writeDestination(filePath, newContent);
       } catch (error: unknown) {
@@ -1234,13 +1272,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     return this.options.sharedData.applications?.[this.calculateApplicationId(applicationFolder)];
   }
 
-  private createSharedData({
-    jhipsterOldVersion,
-    help,
-  }: {
-    jhipsterOldVersion: string | null;
-    help?: boolean;
-  }): SharedData<BaseApplication> {
+  private createSharedData({ help }: { help?: boolean }): SharedData<BaseApplication> {
     const applicationId = this.options.applicationId ?? this.calculateApplicationId(this.destinationPath());
     if (this.options.sharedData.applications === undefined) {
       this.options.sharedData.applications = {};
@@ -1251,6 +1283,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
     const { ignoreNeedlesError } = this.options;
 
-    return new SharedData<BaseApplication>(sharedApplications[applicationId], { jhipsterOldVersion, ignoreNeedlesError });
+    return new SharedData<BaseApplication>(
+      sharedApplications[applicationId],
+      { destinationPath: this.destinationPath(), memFs: this.env.sharedFs, log: this.log, logCwd: this.env.logCwd },
+      { ignoreNeedlesError },
+    );
   }
 }
