@@ -122,9 +122,11 @@ Generic styles
   word-break: break-all;
 }
 
+<%_ if (clientThemeNone || clientTheme !== 'quartz') { _%>
 .form-control {
   background-color: #fff;
 }
+<%_ } _%>
 
 .readonly {
   background-color: #eee;
