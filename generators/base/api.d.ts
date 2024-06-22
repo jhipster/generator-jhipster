@@ -114,13 +114,13 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
   | ((this: Generator, data: DataType, filePath: string) => string)
   | {
       /** source file */
-      sourceFile?: ((this: Generator, data: DataType) => string) | string;
+      sourceFile?: string | ((this: Generator, data: DataType) => string);
       /** destination file */
-      destinationFile?: (this: Generator, destinationFile: DataType) => string | string;
+      destinationFile?: string | ((this: Generator, destinationFile: DataType) => string);
       /** @deprecated, use sourceFile instead */
-      file?: ((this: Generator, data: DataType) => string) | string;
+      file?: string | ((this: Generator, data: DataType) => string);
       /** @deprecated, use destinationFile instead */
-      renameTo?: ((this: Generator, data: DataType, filePath: string) => string) | string;
+      renameTo?: string | ((this: Generator, data: DataType, filePath: string) => string);
       /** transforms (files processing) to be applied */
       transform?: boolean | (() => string)[];
       /** binary files skips ejs render, ejs extension and file transform */
