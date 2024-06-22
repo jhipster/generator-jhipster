@@ -246,7 +246,16 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     return this.withSharedData({ sharedApplication: this.sharedApplication });
   }
 
+  /**
+   * Mock every built-in generators except the ones in the exceptList and bootstrap-* generators.
+   * Note: Boostrap generator is mocked by default.
+   * @example
+   * withMockedJHipsterGenerators(['jhipster:bootstrap'])
+   * @example
+   * withMockedJHipsterGenerators(['bootstrap', 'server'])
+   */
   withMockedJHipsterGenerators(exceptList: string[] = []): this {
+    exceptList = exceptList.map(gen => (gen.startsWith('jhipster:') ? gen : `jhipster:${gen}`));
     return this.withMockedGenerators(mockedGenerators.filter(gen => !exceptList.includes(gen) && (this as any).Generator !== gen));
   }
 
