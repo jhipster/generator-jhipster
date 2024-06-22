@@ -1,5 +1,5 @@
 import type { BaseOptions, BaseFeatures, ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
-import type { SetOptional } from 'type-fest';
+import type { RequireAtLeastOne, SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.js';
 
 export type ApplicationWithConfig = {
@@ -232,7 +232,7 @@ export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
-export type JHipsterConfigs = Record<string, ConfigSpec>;
+export type JHipsterConfigs = Record<string, RequireAtLeastOne<ConfigSpec, 'argument' | 'cli' | 'prompt'>>;
 
 export type JHipsterCommandDefinition = {
   arguments?: JHipsterArguments;
