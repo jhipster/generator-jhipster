@@ -29,8 +29,7 @@ import {
   fakeAsync, inject, tick,
 <%_ } _%>
 } from '@angular/core/testing';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import {
   of,
@@ -59,10 +58,10 @@ describe('<%= entityAngularName %> Management Component', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-              HttpClientTestingModule,
               <%= entityAngularName %>Component,
             ],
             providers: [
+                provideHttpClient(),
                 {
                     provide: ActivatedRoute,
                     useValue: {

@@ -19,7 +19,8 @@
 jest.mock('app/core/auth/state-storage.service');
 
 import { Router } from '@angular/router';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -62,13 +63,14 @@ describe('Account Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      <%_ if (enableTranslation) { _%>
       imports: [
-        HttpClientTestingModule,
-<%_ if (enableTranslation) { _%>
         TranslateModule.forRoot(),
-<%_ } _%>
       ],
+      <%_ } _%>
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         StateStorageService,
       ],
     });

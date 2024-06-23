@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpErrorResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient, HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
 import HealthComponent from './health.component';
@@ -33,7 +32,8 @@ describe('HealthComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, HealthComponent],
+        imports: [HealthComponent],
+        providers: [provideHttpClient()],
       })
         .overrideTemplate(HealthComponent, '')
         .compileComponents();

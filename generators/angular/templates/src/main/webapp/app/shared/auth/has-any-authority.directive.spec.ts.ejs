@@ -19,7 +19,7 @@
 jest.mock('app/core/auth/account.service');
 
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -43,9 +43,9 @@ describe('HasAnyAuthorityDirective tests', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HasAnyAuthorityDirective, HttpClientTestingModule<%_ if (enableTranslation) { _%>, TranslateModule.forRoot()<%_ } _%>],
+      imports: [HasAnyAuthorityDirective<%_ if (enableTranslation) { _%>, TranslateModule.forRoot()<%_ } _%>],
       declarations: [TestHasAnyAuthorityDirectiveComponent],
-      providers: [AccountService],
+      providers: [provideHttpClient(), AccountService],
     });
   }));
 

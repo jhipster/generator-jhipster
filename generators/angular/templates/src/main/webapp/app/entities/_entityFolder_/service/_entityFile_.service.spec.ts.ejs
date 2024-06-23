@@ -21,7 +21,8 @@ const tsKeyId = this.generateTestEntityId(primaryKey.type);
 const enumImports = this.generateEntityClientEnumImports(fields);
 _%>
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 <%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
@@ -49,8 +50,9 @@ describe('<%= entityAngularName %> Service', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [
-                HttpClientTestingModule
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting()
             ]
         });
         expectedResult = null;
