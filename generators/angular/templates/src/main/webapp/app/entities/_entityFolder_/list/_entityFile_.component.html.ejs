@@ -70,7 +70,7 @@
     </div>
 }
 
-@if (<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0) {
+@if (<%= entityInstancePlural %>?.length > 0) {
     <div class="table-responsive table-entities" id="entities">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
@@ -220,7 +220,7 @@ _%>
     </div>
 }
 <%_ if (paginationPagination) { _%>
-@if (<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0) {
+@if (<%= entityInstancePlural %>?.length > 0) {
     <div>
         <div class="d-flex justify-content-center">
             <<%= jhiPrefixDashed %>-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></<%= jhiPrefixDashed %>-item-count>
