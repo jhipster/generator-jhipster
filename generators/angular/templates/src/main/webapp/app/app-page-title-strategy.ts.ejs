@@ -25,7 +25,7 @@ import { TranslateService } from "@ngx-translate/core";
 @Injectable()
 export class AppPageTitleStrategy extends TitleStrategy {
 <%_ if (enableTranslation) { _%>
-  private translateService = inject(TranslateService);
+  private readonly translateService = inject(TranslateService);
 <%_ } _%>
 
   override updateTitle(routerState: RouterStateSnapshot): void {

@@ -27,9 +27,9 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @Injectable()
 export class AuthExpiredInterceptor implements HttpInterceptor {
-  private loginService = inject(LoginService);
-  private stateStorageService = inject(StateStorageService);
-  private router = inject(Router);
+  private readonly loginService = inject(LoginService);
+  private readonly stateStorageService = inject(StateStorageService);
+  private readonly router = inject(Router);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
