@@ -38,9 +38,9 @@ export default class ErrorComponent implements OnInit<% if (enableTranslation) {
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
-  private translateService = inject(TranslateService);
+  private readonly translateService = inject(TranslateService);
 <%_ } _%>
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {

@@ -25,7 +25,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
-  private eventManager = inject(EventManager);
+  private readonly eventManager = inject(EventManager);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
