@@ -35,7 +35,7 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import {
   createJHipster7Context,
   formatDateForChangelog,
@@ -218,6 +218,12 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
     this.jhipster7Migration = this.features.jhipster7Migration ?? false;
+
+    if (this.features.queueCommandTasks === true) {
+      this.on('before:queueOwnTasks', () => {
+        this.queueCurrentJHipsterCommandTasks();
+      });
+    }
   }
 
   /**
@@ -317,6 +323,13 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
+   * Check if the generator should ask for prompts.
+   */
+  shouldAskForPrompts({ control }): boolean {
+    return !control.existingProject || this.options.askAnswered === true;
+  }
+
+  /**
    * Override yeoman-generator method that gets methods to be queued, filtering the result.
    */
   getTaskNames(): string[] {
@@ -327,6 +340,87 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;
+  }
+
+  queueCurrentJHipsterCommandTasks() {
+    this.queueTask({
+      queueName: QUEUES.INITIALIZING_QUEUE,
+      taskName: 'parseCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          await this.getCurrentJHipsterCommand();
+        } catch {
+          return;
+        }
+        await this.parseCurrentJHipsterCommand();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.PROMPTING_QUEUE,
+      taskName: 'promptCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.getCurrentJHipsterCommand();
+          if (!command.configs) return;
+        } catch {
+          return;
+        }
+        const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.INITIALIZING);
+        const [{ control }] = taskArgs;
+        if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
+        if (!this.shouldAskForPrompts({ control })) return;
+        await this.promptCurrentJHipsterCommand();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.CONFIGURING_QUEUE,
+      taskName: 'configureCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.getCurrentJHipsterCommand();
+          if (!command.configs) return;
+        } catch {
+          return;
+        }
+        await this.configureCurrentJHipsterCommandConfig();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.COMPOSING_QUEUE,
+      taskName: 'composeCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          await this.getCurrentJHipsterCommand();
+        } catch {
+          return;
+        }
+        await this.composeCurrentJHipsterCommand();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.LOADING_QUEUE,
+      taskName: 'loadCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.getCurrentJHipsterCommand();
+          if (!command.configs) return;
+        } catch {
+          return;
+        }
+        const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.LOADING);
+        const [{ application }] = taskArgs as any;
+        await this.loadCurrentJHipsterCommandConfig(application ?? this);
+      },
+    });
   }
 
   /**

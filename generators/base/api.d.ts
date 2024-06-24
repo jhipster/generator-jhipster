@@ -98,6 +98,18 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
    * Create transforms for commit.
    */
   commitTransformFactory?: () => any;
+
+  /**
+   * Queue tasks to handle command definitions.
+   *  - parse options and configurations from cli.
+   *  - prompt configurations.
+   *  - configure configurations.
+   *  - compose with generators defined in command.
+   *  - load configurations.
+   *
+   * Defaults to true for built-in generator-jhipster generators and false for blueprints.
+   */
+  queueCommandTasks?: boolean;
 };
 
 // eslint-disable-next-line no-use-before-define
