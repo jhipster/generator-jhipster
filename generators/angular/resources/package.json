@@ -19,8 +19,8 @@
     "zone.js": "0.14.7"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "18.0.2",
-    "@angular-architects/module-federation-runtime": "18.0.2",
+    "@angular-architects/module-federation": "18.0.4",
+    "@angular-architects/module-federation-runtime": "18.0.4",
     "@angular-builders/custom-webpack": "18.0.0",
     "@angular-builders/jest": "18.0.0",
     "@angular-eslint/eslint-plugin": "18.0.1",
