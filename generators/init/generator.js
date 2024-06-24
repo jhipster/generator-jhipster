@@ -38,18 +38,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {

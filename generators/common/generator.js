@@ -52,31 +52,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async loadOptions() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async prompting({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.promptCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   // Public API method used by the getter and also by Blueprints
   get configuring() {
     return {
@@ -136,9 +111,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadCommand({ application }) {
-        await this.loadCurrentJHipsterCommandConfig(application);
-      },
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,

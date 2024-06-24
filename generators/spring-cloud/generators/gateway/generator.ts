@@ -33,31 +33,6 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async promptCommand({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.promptCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get configuring() {
     return this.asConfiguringTaskGroup({
       reactiveByDefault() {
@@ -75,18 +50,6 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      async loadConfig({ application }) {
-        await this.loadCurrentJHipsterCommandConfig(application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {

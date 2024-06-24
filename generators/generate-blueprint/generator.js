@@ -64,8 +64,6 @@ export default class extends BaseGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       async loadOptions() {
-        await this.parseCurrentJHipsterCommand();
-
         if (this[ALL_GENERATORS]) {
           this.config.set(allGeneratorsConfig());
         }

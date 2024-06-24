@@ -43,9 +43,6 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       pomStorage() {
         this.pomStorage = createPomStorage(this, { sortFile: this.sortMavenPom });
       },

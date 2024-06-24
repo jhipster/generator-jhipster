@@ -29,16 +29,4 @@ export default class JavaGenerator extends BaseApplicationGenerator {
       await this.dependsOnJHipster('jhipster:java:domain');
     }
   }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
 }

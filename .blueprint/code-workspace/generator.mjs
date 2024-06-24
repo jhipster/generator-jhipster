@@ -7,12 +7,8 @@ import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '
 export default class extends BaseGenerator {
   samplePath;
 
-  get [BaseGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
+  constructor(args, options, features) {
+    super(args, options, { queueCommandTasks: true, ...features });
   }
 
   get [BaseGenerator.PROMPTING]() {

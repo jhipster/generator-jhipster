@@ -30,31 +30,6 @@ export default class JibGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async promptCommand({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.promptCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
@@ -70,18 +45,6 @@ export default class JibGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      async loadConfig({ application }) {
-        await this.loadCurrentJHipsterCommandConfig(application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {

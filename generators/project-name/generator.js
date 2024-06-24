@@ -44,9 +44,6 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       parseOptions() {
         if (this.options.defaults) {
           if (!this.jhipsterConfig.baseName) {

@@ -117,36 +117,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async prompting({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.promptCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
-      async composeCommand() {
-        await this.composeCurrentJHipsterCommand();
-      },
       async composeBackendType() {
         if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
           await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
@@ -161,9 +133,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadCommand({ application }) {
-        await this.loadCurrentJHipsterCommandConfig(application);
-      },
       loadEnvironmentVariables({ application }) {
         application.packageInfoJavadocs?.push(
           { packageName: `${application.packageName}.aop.logging`, documentation: 'Logging aspect.' },

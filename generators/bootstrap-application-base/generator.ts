@@ -40,7 +40,6 @@ import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
-import command from './command.js';
 
 const isWin32 = os.platform() === 'win32';
 
@@ -71,9 +70,6 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       displayLogo() {
         this.printDestinationInfo();
-      },
-      parseOptions() {
-        this.parseJHipsterCommand(command);
       },
       async jdlStore() {
         if (this.jhipsterConfig.jdlStore) {

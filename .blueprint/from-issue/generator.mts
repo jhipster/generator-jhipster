@@ -26,12 +26,8 @@ export default class extends BaseGenerator {
   repository!: string;
   data!: InfoData;
 
-  get [BaseGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
+  constructor(args, options, features) {
+    super(args, options, { queueCommandTasks: true, ...features });
   }
 
   get [BaseGenerator.PROMPTING]() {
@@ -40,14 +36,6 @@ export default class extends BaseGenerator {
         if (this.codeWorkspace) {
           await promptSamplesFolder.call(this);
         }
-      },
-    });
-  }
-
-  get [BaseGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup({
-      async configure() {
-        await this.configureCurrentJHipsterCommandConfig();
       },
     });
   }

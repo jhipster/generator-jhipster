@@ -28,14 +28,11 @@ import { loadStoredAppOptions } from '../app/support/index.js';
 import { addEnumerationFiles } from './entity-files.js';
 import { writeFiles as writeCommonFiles } from './files-common.js';
 import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
-import command from './command.js';
 
 const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const { CYPRESS } = testFrameworkTypes;
 
 export default class JHipsterClientGenerator extends BaseApplicationGenerator {
-  command = command;
-
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
@@ -50,24 +47,8 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      loadOptions() {
-        this.parseJHipsterCommand(this.command);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get prompting() {
     return this.asPromptingTaskGroup({
-      async prompting({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(this.command.configs));
-      },
       askForClientTheme,
       askForClientThemeVariant,
     });

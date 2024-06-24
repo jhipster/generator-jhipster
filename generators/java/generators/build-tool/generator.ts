@@ -36,31 +36,6 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async initializing() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async promptCommand({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.promptCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {

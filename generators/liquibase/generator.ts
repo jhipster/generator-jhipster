@@ -80,18 +80,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseEntityChangesGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {

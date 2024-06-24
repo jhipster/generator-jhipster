@@ -53,9 +53,6 @@ export default class EntityGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       parseOptions() {
         const name = upperFirst(this.name).replace('.json', '');
         this.entityStorage = this.getEntityConfig(name, true);

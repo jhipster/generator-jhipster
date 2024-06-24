@@ -40,9 +40,6 @@ export default class InitGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       async checkGit() {
         if (!this.skipGit) {
           this.gitInstalled = (await this.createGit().version()).installed;
