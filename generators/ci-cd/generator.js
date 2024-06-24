@@ -173,4 +173,8 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
+
+  shouldAskForPrompts() {
+    return true;
+  }
 }
