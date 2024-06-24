@@ -84,7 +84,7 @@ public class PublicUserResource {
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
 <%_ } _%>
 
-    private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
+    private static final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
 <%_ if (searchEngineElasticsearch) { _%>

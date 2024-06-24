@@ -29,7 +29,7 @@ import reactor.core.publisher.Sinks;
 @Component
 public class KafkaConsumer implements Consumer<String> {
 
-    private final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
     private Sinks.Many<String> sink = Sinks.many().unicast().onBackpressureBuffer();
 

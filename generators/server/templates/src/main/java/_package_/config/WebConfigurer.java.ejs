@@ -94,7 +94,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<% if (!skipClient) { %>, WebServerFactoryCustomizer<WebServerFactory><% } %><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
 
-    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
+    private static final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
 <%_ if (!reactive) { _%>
     private final Environment env;

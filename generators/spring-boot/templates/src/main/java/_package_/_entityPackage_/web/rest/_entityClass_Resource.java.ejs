@@ -139,7 +139,7 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 public class <%= entityClass %>Resource {
 
-    private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
+    private static final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
   <%_ let entityName = entityInstance;

@@ -82,7 +82,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     private static final String CHANGELOG_COLLECTION = "changelog";
     private static final String TYPE_KEY = "type";
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private final JHipsterProperties jHipsterProperties;
     private final CouchbaseProperties couchbaseProperties;

@@ -250,7 +250,7 @@ public class CacheConfiguration {
 <%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
     private final Environment env;
   <%_ if (serviceDiscoveryAny) { _%>
@@ -389,7 +389,7 @@ public class CacheConfiguration {
 <%_ } _%>
 <%_ if (cacheProviderInfinispan) { _%>
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
   <%_ if (serviceDiscoveryAny) { _%>
 
@@ -648,7 +648,7 @@ public class CacheConfiguration {
 <%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
     @Bean
     public CacheManager memcachedCacheManager(JHipsterProperties jHipsterProperties, List<CacheFactory> caches)

@@ -34,7 +34,7 @@ public class <%= upperFirstCamelCaseBaseName %>KafkaResource {
 
     private static final String PRODUCER_BINDING_NAME = "binding-out-0";
 
-    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCaseBaseName %>KafkaResource.class);
+    private static final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCaseBaseName %>KafkaResource.class);
     private final KafkaConsumer kafkaConsumer;
     private final StreamBridge streamBridge;
 

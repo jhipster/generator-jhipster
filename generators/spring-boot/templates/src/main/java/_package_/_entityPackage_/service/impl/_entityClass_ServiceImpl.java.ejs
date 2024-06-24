@@ -95,7 +95,7 @@ import java.util.stream.StreamSupport;
 @Transactional<% } %>
 public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= entityClass %>Service<% } %> {
 
-    private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
+    private static final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
 <%- include('../../_partials_entity_/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
 <%_ if (!serviceImpl) { _%>
