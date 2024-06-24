@@ -56,7 +56,7 @@ public class AuthorizationHeaderUtil {
 
     private final OAuth2AuthorizedClientService clientService;
     private final RestTemplateBuilder restTemplateBuilder;
-    private final Logger log = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
 
     public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestTemplateBuilder restTemplateBuilder) {
         this.clientService = clientService;

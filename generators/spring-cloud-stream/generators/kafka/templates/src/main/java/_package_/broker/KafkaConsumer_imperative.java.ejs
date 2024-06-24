@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Component
 public class KafkaConsumer implements Consumer<String> {
 
-    private final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
     private Map<String, SseEmitter> emitters = new HashMap<>();
 
