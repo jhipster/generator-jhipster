@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "husky": "7.0.2",
-    "lint-staged": "11.0.0"
+    "husky": "9.0.11",
+    "lint-staged": "15.2.7"
   }
 }
