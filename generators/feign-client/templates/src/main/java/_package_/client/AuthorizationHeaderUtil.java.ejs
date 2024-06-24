@@ -56,7 +56,7 @@ public class AuthorizationHeaderUtil {
 
     private final OAuth2AuthorizedClientService clientService;
     private final RestTemplateBuilder restTemplateBuilder;
-    private static final Logger log = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
 
     public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestTemplateBuilder restTemplateBuilder) {
         this.clientService = clientService;
@@ -82,7 +82,7 @@ public class AuthorizationHeaderUtil {
                 String tokenType = accessToken.getTokenType().getValue();
                 String accessTokenValue = accessToken.getTokenValue();
                 if (isExpired(accessToken)) {
-                    log.info("AccessToken expired, refreshing automatically");
+                    LOG.info("AccessToken expired, refreshing automatically");
                     accessTokenValue = refreshToken(client, oauthToken);
                     if (null == accessTokenValue) {
                         SecurityContextHolder.getContext().setAuthentication(null);
@@ -105,7 +105,7 @@ public class AuthorizationHeaderUtil {
     private String refreshToken(OAuth2AuthorizedClient client, OAuth2AuthenticationToken oauthToken) {
         OAuth2AccessTokenResponse atr = refreshTokenClient(client);
         if (atr == null || atr.getAccessToken() == null) {
-            log.info("Failed to refresh token for user");
+            LOG.info("Failed to refresh token for user");
             return null;
         }
 
@@ -136,7 +136,7 @@ public class AuthorizationHeaderUtil {
             ResponseEntity<OAuthIdpTokenResponseDTO> responseEntity = r.exchange(requestEntity, OAuthIdpTokenResponseDTO.class);
             return toOAuth2AccessTokenResponse(responseEntity.getBody());
         } catch (OAuth2AuthorizationException e) {
-            log.error("Unable to refresh token", e);
+            LOG.error("Unable to refresh token", e);
             throw new OAuth2AuthenticationException(e.getError(), e);
         }
     }

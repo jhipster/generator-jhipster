@@ -28,7 +28,7 @@
 _%>
 <%_ if (jpaMetamodelFiltering) { _%>
     public <% if (reactiveNoPagination) { %>Flux<<%= instanceType %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
-        log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
+        LOG.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
   <% if(!reactive) { %>
     <%_ if (paginationNo) { _%>
         List<<%= instanceType %>> entityList = <%= entityInstance %>QueryService.findByCriteria(criteria);
@@ -65,10 +65,10 @@ _%>
     @GetMapping("/count")
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Long><% if (reactive) { %>><% } %> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
     <% if (!reactive) { %>
-        log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
+        LOG.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
         return ResponseEntity.ok().body(<%= entityInstance %>QueryService.countByCriteria(criteria));
     <% } else { %>
-        log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
+        LOG.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
         return <%= entityInstance %>Service.countByCriteria(criteria)
                 .map(count -> ResponseEntity.status(HttpStatus.OK).body(count));
     <% } %>
@@ -76,7 +76,7 @@ _%>
 <%_ } else { _%>
   <%_ if (paginationNo) { _%>
     public <% if (reactive) { %>Mono<<% } %>List<<%= instanceType %>><% if (reactive) { %>><% } %> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
-        log.debug("REST request to get all <%= entityClassPlural %>");
+        LOG.debug("REST request to get all <%= entityClassPlural %>");
     <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
     <%_ } else if (dtoMapstruct) { _%>
@@ -97,7 +97,7 @@ _%>
     <%_ } _%>
   <%_ } else { _%>
     public <% if (reactive) { %>Mono<ResponseEntity<List<<%= instanceType %>>>><% } else { %>ResponseEntity<List<<%= instanceType %>>><% } %> getAll<%= entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
-        log.debug("REST request to get a page of <%= entityClassPlural %>");
+        LOG.debug("REST request to get a page of <%= entityClassPlural %>");
     <%_ if (reactive) { _%>
         return <%= entityInstance %><%= viaService ? 'Service.countAll' : 'Repository.count' %>().zipWith(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<%= reactiveEntityToDto %>.collectList())
                 .map(countWithEntities ->

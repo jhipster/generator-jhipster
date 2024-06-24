@@ -139,7 +139,7 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 public class <%= entityClass %>Resource {
 
-    private static final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
   <%_ let entityName = entityInstance;
@@ -171,7 +171,7 @@ public class <%= entityClass %>Resource {
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> create<%= entityClass %>(<% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
-        log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
+        LOG.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
   <%_ if (primaryKey.autoGenerate) { _%>
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
@@ -264,7 +264,7 @@ public class <%= entityClass %>Resource {
         @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
         <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= restClass %> <%= restInstance %>
     ) throws URISyntaxException {
-        log.debug("REST request to update <%= entityClass %> : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
+        LOG.debug("REST request to update <%= entityClass %> : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -344,7 +344,7 @@ public class <%= entityClass %>Resource {
         @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
         <% if (anyPropertyHasValidation) { %>@NotNull <% } %>@RequestBody <%= instanceType %> <%= instanceName %>
     ) throws URISyntaxException {
-        log.debug("REST request to partial update <%= entityClass %> partially : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
+        LOG.debug("REST request to partial update <%= entityClass %> partially : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
         if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -442,7 +442,7 @@ public class <%= entityClass %>Resource {
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
-        log.debug("REST request to get all <%= entityClassPlural %> as a stream");
+        LOG.debug("REST request to get all <%= entityClassPlural %> as a stream");
   <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAll();
   <%_ } else { _%>
@@ -465,7 +465,7 @@ public class <%= entityClass %>Resource {
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> get<%= entityClass %>(@PathVariable("id") <%= primaryKey.type %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', {viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
+        LOG.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', {viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 <%_ if (!readOnly) { _%>
@@ -481,7 +481,7 @@ public class <%= entityClass %>Resource {
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%= entityClass %>(@PathVariable("id") <%= primaryKey.type %> id) {
-        log.debug("REST request to delete <%= entityClass %> : {}", id);
+        LOG.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../_partials_entity_/delete_template', {viaService: viaService, fromResource: true}); -%>
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeCouchbase) { _%>

@@ -28,7 +28,7 @@ import java.util.Collections;
 
 public class MsSqlTestContainer implements SqlTestContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(MsSqlTestContainer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MsSqlTestContainer.class);
 
     private MSSQLServerContainer<?> mSSQLServerContainer;
 
@@ -46,7 +46,7 @@ public class MsSqlTestContainer implements SqlTestContainer {
                 // Refer to https://java.testcontainers.org/modules/databases/mssqlserver/
                 //.acceptLicense()
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
-                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
         if (!mSSQLServerContainer.isRunning()) {

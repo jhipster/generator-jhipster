@@ -55,7 +55,7 @@ import org.springframework.core.env.Profiles;
 @Configuration
 public class LiquibaseConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LiquibaseConfiguration.class);
 
     private final Environment env;
 
@@ -110,7 +110,7 @@ public class LiquibaseConfiguration {
             liquibase.setShouldRun(false);
         } else {
             liquibase.setShouldRun(liquibaseProperties.isEnabled());
-            log.debug("Configuring Liquibase");
+            LOG.debug("Configuring Liquibase");
         }
         return liquibase;
     }

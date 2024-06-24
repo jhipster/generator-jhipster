@@ -34,12 +34,12 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Component
 public class KafkaConsumer implements Consumer<String> {
 
-    private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KafkaConsumer.class);
 
     private Map<String, SseEmitter> emitters = new HashMap<>();
 
     public SseEmitter register(String key) {
-        log.debug("Registering sse client for {}", key);
+        LOG.debug("Registering sse client for {}", key);
         SseEmitter emitter = new SseEmitter();
         emitter.onCompletion(() -> emitters.remove(key));
         emitters.put(key, emitter);
@@ -47,13 +47,13 @@ public class KafkaConsumer implements Consumer<String> {
     }
 
     public void unregister(String key) {
-        log.debug("Unregistering sse emitter for: {}", key);
+        LOG.debug("Unregistering sse emitter for: {}", key);
         Optional.ofNullable(emitters.get(key)).ifPresent(SseEmitter::complete);
     }
 
     @Override
     public void accept(String input) {
-        log.debug("Got message from kafka stream: {}", input);
+        LOG.debug("Got message from kafka stream: {}", input);
         emitters
             .entrySet()
             .stream()
@@ -62,7 +62,7 @@ public class KafkaConsumer implements Consumer<String> {
                 try {
                     emitter.send(event().data(input, MediaType.TEXT_PLAIN));
                 } catch (IOException e) {
-                    log.debug("error sending sse message, {}", input);
+                    LOG.debug("error sending sse message, {}", input);
                 }
             });
     }

@@ -28,7 +28,7 @@ import java.util.Collections;
 
 public class MariadbTestContainer implements SqlTestContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(MariadbTestContainer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MariadbTestContainer.class);
 
     private MariaDBContainer<?> mariaDBContainer;
 
@@ -45,7 +45,7 @@ public class MariadbTestContainer implements SqlTestContainer {
             mariaDBContainer = new MariaDBContainer<>("<%- dockerContainers.mariadb %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
-                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
         if (!mariaDBContainer.isRunning()) {

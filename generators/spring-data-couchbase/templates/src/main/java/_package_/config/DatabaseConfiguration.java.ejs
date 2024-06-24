@@ -82,7 +82,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     private static final String CHANGELOG_COLLECTION = "changelog";
     private static final String TYPE_KEY = "type";
 
-    private static final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private final JHipsterProperties jHipsterProperties;
     private final CouchbaseProperties couchbaseProperties;
@@ -167,7 +167,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
     @Bean
     public Couchmove couchmove(Cluster cluster) {
-        log.debug("Configuring Couchmove");
+        LOG.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
         Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");

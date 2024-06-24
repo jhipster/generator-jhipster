@@ -34,7 +34,7 @@ public class <%= upperFirstCamelCaseBaseName %>KafkaResource {
 
     private static final String PRODUCER_BINDING_NAME = "binding-out-0";
 
-    private static final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCaseBaseName %>KafkaResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(<%= upperFirstCamelCaseBaseName %>KafkaResource.class);
     private final KafkaConsumer kafkaConsumer;
     private final StreamBridge streamBridge;
 
@@ -45,14 +45,14 @@ public class <%= upperFirstCamelCaseBaseName %>KafkaResource {
 
     @PostMapping("/publish")
     public Mono<ResponseEntity<Void>> publish(@RequestParam("message") String message) {
-        log.debug("REST request the message : {} to send to Kafka topic", message);
+        LOG.debug("REST request the message : {} to send to Kafka topic", message);
         streamBridge.send(PRODUCER_BINDING_NAME, message);
         return Mono.just(ResponseEntity.noContent().build());
     }
 
     @GetMapping("/consume")
     public Flux<String> consume() {
-        log.debug("REST request to consume records from Kafka topics");
+        LOG.debug("REST request to consume records from Kafka topics");
         return this.kafkaConsumer.getFlux();
     }
 }

@@ -29,7 +29,7 @@ import org.testcontainers.utility.DockerImageName;
 public class PulsarTestContainer implements InitializingBean, DisposableBean {
 
     private PulsarContainer pulsarContainer;
-    private static final Logger log = LoggerFactory.getLogger(PulsarTestContainer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PulsarTestContainer.class);
 
     @Override
     public void destroy() {
@@ -42,7 +42,7 @@ public class PulsarTestContainer implements InitializingBean, DisposableBean {
     public void afterPropertiesSet() {
         if (null == pulsarContainer) {
             pulsarContainer = new PulsarContainer(DockerImageName.parse("<%- dockerContainers.pulsar %>"))
-                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
         if (!pulsarContainer.isRunning()) {

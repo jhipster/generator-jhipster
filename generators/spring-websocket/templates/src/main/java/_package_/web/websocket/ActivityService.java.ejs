@@ -37,7 +37,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Controller
 public class ActivityService implements ApplicationListener<SessionDisconnectEvent> {
 
-    private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ActivityService.class);
 
     private final SimpMessageSendingOperations messagingTemplate;
 
@@ -52,7 +52,7 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
         activityDTO.setSessionId(stompHeaderAccessor.getSessionId());
         activityDTO.setIpAddress(stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString());
         activityDTO.setTime(Instant.now());
-        log.debug("Sending user tracking data {}", activityDTO);
+        LOG.debug("Sending user tracking data {}", activityDTO);
         return activityDTO;
     }
 

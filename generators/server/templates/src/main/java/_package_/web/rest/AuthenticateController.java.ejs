@@ -61,7 +61,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @RequestMapping("/api")
 public class AuthenticateController {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthenticateController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AuthenticateController.class);
 
     private final JwtEncoder jwtEncoder;
 
@@ -124,11 +124,11 @@ public class AuthenticateController {
     @GetMapping("/authenticate")
 <%_ if (reactive) { _%>
     public Mono<String> isAuthenticated(ServerWebExchange request) {
-        log.debug("REST request to check if the current user is authenticated");
+        LOG.debug("REST request to check if the current user is authenticated");
         return request.getPrincipal().map(Principal::getName);
 <%_ } else { _%>
     public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
+        LOG.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
 <%_ } _%>
     }

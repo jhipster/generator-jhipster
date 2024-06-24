@@ -114,7 +114,7 @@ import java.util.stream.Collectors;
 public class UserService {
 <%_ if (!databaseTypeNo) { _%>
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -162,7 +162,7 @@ public class UserService {
     @Transactional
     <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        LOG.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .<% if (reactive) { %>flatMap<% } else { %>map<% } %>(user -> {
                 // activate given user for the registration key.
@@ -177,7 +177,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
-            .doOnNext(user -> log.debug("Activated user: {}", user));
+            .doOnNext(user -> LOG.debug("Activated user: {}", user));
     <%_ } else { _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
                 userRepository.save(user);
@@ -188,7 +188,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
-                log.debug("Activated user: {}", user);
+                LOG.debug("Activated user: {}", user);
                 return user;
             });
     <%_ } _%>
@@ -198,7 +198,7 @@ public class UserService {
     @Transactional
     <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
+        LOG.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
             .filter(user -> user.getResetDate().isAfter(Instant.now().minus(1, ChronoUnit.DAYS)))
     <%_ if (reactive) { _%>
@@ -328,7 +328,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
                     .doOnNext(this::clearUserCaches)
       <%_ } _%>
-                    .doOnNext(user -> log.debug("Created Information for User: {}", user));
+                    .doOnNext(user -> LOG.debug("Created Information for User: {}", user));
             });
     <%_ } else { /* !reactive */ _%>
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
@@ -379,7 +379,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
         this.clearUserCaches(newUser);
       <%_ } _%>
-        log.debug("Created Information for User: {}", newUser);
+        LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     <%_ } _%>
     }
@@ -448,7 +448,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
-            .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
+            .doOnNext(user1 -> LOG.debug("Created Information for User: {}", user1));
     <%_ } else { _%>
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
@@ -474,7 +474,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
         this.clearUserCaches(user);
       <%_ } _%>
-        log.debug("Created Information for User: {}", user);
+        LOG.debug("Created Information for User: {}", user);
         return user;
     <%_ } _%>
     }
@@ -547,7 +547,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
-            .doOnNext(user -> log.debug("Changed Information for User: {}", user))
+            .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
     <%_ } else { /* reactive */ _%>
       <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
                 userDTO.getAuthorities().stream()
@@ -563,7 +563,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
-                log.debug("Changed Information for User: {}", user);
+                LOG.debug("Changed Information for User: {}", user);
                 return user;
             })
     <%_ } _%>
@@ -583,7 +583,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
-            .doOnNext(user -> log.debug("Deleted User: {}", user))
+            .doOnNext(user -> LOG.debug("Deleted User: {}", user))
             .then();
     }
     <%_ } else { _%>
@@ -596,7 +596,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             this.clearUserCaches(user);
       <%_ } _%>
-            log.debug("Deleted User: {}", user);
+            LOG.debug("Deleted User: {}", user);
         });
     }
     <%_ } _%>
@@ -641,7 +641,7 @@ public class UserService {
     <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
     <%_ } _%>
-            .doOnNext(user -> log.debug("Changed Information for User: {}", user))
+            .doOnNext(user -> LOG.debug("Changed Information for User: {}", user))
             .then();
   <%_ } else { _%>
                 userRepository.save(user);
@@ -651,7 +651,7 @@ public class UserService {
     <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
     <%_ } _%>
-                log.debug("Changed Information for User: {}", user);
+                LOG.debug("Changed Information for User: {}", user);
             });
   <%_ } _%>
     }
@@ -731,7 +731,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
-            .doOnNext(user -> log.debug("Changed password for User: {}", user))
+            .doOnNext(user -> LOG.debug("Changed password for User: {}", user))
             .then();
     <%_ } else { _%>
       <%_ if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase || databaseTypeCassandra) { _%>
@@ -740,7 +740,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
                 this.clearUserCaches(user);
       <%_ } _%>
-                log.debug("Changed password for User: {}", user);
+                LOG.debug("Changed password for User: {}", user);
             });
     <%_ } _%>
     }
@@ -816,7 +816,7 @@ public class UserService {
     public void removeOldPersistentTokens() {
         LocalDate now = LocalDate.now();
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
-            log.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
+            LOG.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
             <%= user.persistClass %> user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
@@ -838,7 +838,7 @@ public class UserService {
         userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
             .forEach(user -> {
-                log.debug("Deleting not activated user {}", user.getLogin());
+                LOG.debug("Deleting not activated user {}", user.getLogin());
                 userRepository.delete(user);
       <%_ if (searchEngineElasticsearch) { _%>
                 userSearchRepository.deleteFromIndex(user);
@@ -864,7 +864,7 @@ public class UserService {
       <%_ if (cacheProviderAny) { _%>
             .doOnNext(this::clearUserCaches)
       <%_ } _%>
-            .doOnNext(user -> log.debug("Deleted User: {}", user));
+            .doOnNext(user -> LOG.debug("Deleted User: {}", user));
     }
     <%_ } _%>
   <%_ } _%>
@@ -901,7 +901,7 @@ public class UserService {
                     .toList();
                 return Flux.fromIterable(authoritiesToSave);
             })
-            .doOnNext(authority -> log.debug("Saving authority '{}' in local database", authority))
+            .doOnNext(authority -> LOG.debug("Saving authority '{}' in local database", authority))
             .flatMap(authorityRepository::save)
             .then(userRepository.findOneByLogin(user.getLogin()))
             .switchIfEmpty(<% if (authenticationTypeOauth2 && databaseTypeSql) { %>saveUser(user, true)<% } else { %>userRepository.save(user)<% } %>)
@@ -916,13 +916,13 @@ public class UserService {
                         idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
                     }
                     if (idpModifiedDate.isAfter(dbModifiedDate)) {
-                        log.debug("Updating user '{}' in local database", user.getLogin());
+                        LOG.debug("Updating user '{}' in local database", user.getLogin());
                         return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                             user.getLangKey(), user.getImageUrl());
                     }
                     // no last updated info, blindly update
                 } else {
-                    log.debug("Updating user '{}' in local database", user.getLogin());
+                    LOG.debug("Updating user '{}' in local database", user.getLogin());
                     return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                         user.getLangKey(), user.getImageUrl());
                 }
@@ -939,7 +939,7 @@ public class UserService {
       <%_ } _%>
         for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {
-                log.debug("Saving authority '{}' in local database", authority);
+                LOG.debug("Saving authority '{}' in local database", authority);
                 Authority authorityToSave = new Authority();
                 authorityToSave.setName(authority);
                 authorityRepository.save(authorityToSave);
@@ -958,18 +958,18 @@ public class UserService {
                     idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
                 }
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
-                    log.debug("Updating user '{}' in local database", user.getLogin());
+                    LOG.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                         user.getLangKey(), user.getImageUrl());
                 }
                 // no last updated info, blindly update
             } else {
-                log.debug("Updating user '{}' in local database", user.getLogin());
+                LOG.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
                     user.getLangKey(), user.getImageUrl());
             }
         } else {
-            log.debug("Saving user '{}' in local database", user.getLogin());
+            LOG.debug("Saving user '{}' in local database", user.getLogin());
             userRepository.save(user);
       <%_ if (cacheProviderAny) { _%>
             this.clearUserCaches(user);
