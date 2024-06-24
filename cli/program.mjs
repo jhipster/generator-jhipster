@@ -99,8 +99,13 @@ const buildAllDependencies = async (generatorNames, { env, blueprintNamespaces }
 const addCommandGeneratorOptions = async (command, generatorMeta, { root, blueprintOptionDescription, info } = {}) => {
   const generatorModule = await generatorMeta.importModule();
   if (generatorModule.command) {
-    command.addJHipsterOptions(generatorModule.command.options, blueprintOptionDescription);
-    command.addJHipsterConfigs(generatorModule.command.configs, blueprintOptionDescription);
+    const { options, configs } = generatorModule.command;
+    if (options) {
+      command.addJHipsterOptions(options, blueprintOptionDescription);
+    }
+    if (configs) {
+      command.addJHipsterConfigs(configs, blueprintOptionDescription);
+    }
   }
   try {
     if (root || !generatorModule.command || generatorModule.command.loadGeneratorOptions) {

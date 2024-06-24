@@ -26,7 +26,7 @@ import { requireNamespace } from '@yeoman/namespace';
 import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { kebabCase, snakeCase, merge, get, set, defaults } from 'lodash-es';
+import { kebabCase, snakeCase, merge, get, set, defaults, mergeWith } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -95,6 +95,8 @@ const relativeDir = (from: string, to: string) => {
   const rel = posixRelative(from, to);
   return rel ? `${rel}/` : '';
 };
+
+const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2, (a, b) => (Array.isArray(a) ? a.concat(b) : undefined));
 
 /**
  * This is the base class for a generator for every generator.
@@ -1123,7 +1125,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         return true;
       });
-      return headerComments.join('\n').concat('\n', stringifyYaml(merge(parseYaml(content), value)));
+
+      const mergedContent = stringifyYaml(deepMerge(parseYaml(content), value));
+      const header = headerComments.length > 0 ? headerComments.join('\n').concat('\n') : '';
+      return `${header}${mergedContent}`;
     });
   }
 
