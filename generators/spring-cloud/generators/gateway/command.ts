@@ -21,7 +21,7 @@ import type { JHipsterCommandDefinition } from '../../../base/api.js';
 const command: JHipsterCommandDefinition = {
   configs: {
     routes: {
-      description: 'Gateway manually configured routes',
+      description: 'Manually configured gateway routes',
       cli: {
         type: String,
         hide: true,
