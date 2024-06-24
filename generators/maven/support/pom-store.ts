@@ -76,6 +76,17 @@ const formatFirstXmlLevel = content =>
     '\n$1',
   );
 
+const sortSection = section => {
+  return Object.fromEntries(
+    Object.entries(section).sort(([key1, value1], [key2, value2]) => {
+      if (typeof value1 === typeof value2) key1.localeCompare(key2);
+      if (typeof value1 === 'string') return -1;
+      if (typeof value2 === 'string') return 1;
+      return 0;
+    }),
+  );
+};
+
 const isComment = name => name.startsWith('#');
 
 const toMaxInt = nr => (nr === -1 ? Number.MAX_SAFE_INTEGER : nr);
@@ -334,11 +345,15 @@ export default class PomStorage extends XmlStorage {
       if (Array.isArray(project.dependencyManagement?.dependencies?.dependency)) {
         project.dependencyManagement.dependencies.dependency = sortArtifacts(project.dependencyManagement.dependencies.dependency);
       }
-      if (Array.isArray(project.build?.plugins?.plugin)) {
-        project.build.plugins.plugin = sortArtifacts(project.build.plugins.plugin);
-      }
-      if (Array.isArray(project.build?.pluginManagement?.plugins?.plugin)) {
-        project.build.pluginManagement.plugins.plugin = sortArtifacts(project.build.pluginManagement.plugins.plugin);
+      if (project.build) {
+        project.build = sortSection(project.build);
+
+        if (Array.isArray(project.build.plugins?.plugin)) {
+          project.build.plugins.plugin = sortArtifacts(project.build.plugins.plugin);
+        }
+        if (Array.isArray(project.build.pluginManagement?.plugins?.plugin)) {
+          project.build.pluginManagement.plugins.plugin = sortArtifacts(project.build.pluginManagement.plugins.plugin);
+        }
       }
       if (Array.isArray(project.profiles?.profile)) {
         project.profiles.profile = sortProfiles(project.profiles.profile);

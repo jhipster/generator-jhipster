@@ -76,6 +76,7 @@ export type MavenDefinition = {
 };
 
 export type MavenSourceType = {
+  mergeMavenPomContent?(content: any): void;
   addMavenAnnotationProcessor?(artifact: MavenAnnotationProcessor | MavenAnnotationProcessor[]): void;
   addMavenDependency?(dependency: MavenDependency | MavenDependency[]): void;
   addMavenDependencyManagement?(dependency: MavenDependency | MavenDependency[]): void;

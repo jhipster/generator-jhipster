@@ -87,6 +87,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
             }
           };
         }
+        source.mergeMavenPomContent = content => this.pomStorage.merge(content);
         source.addMavenAnnotationProcessor = createForEach(artifact => this.pomStorage.addAnnotationProcessor(artifact));
         source.addMavenDependency = createForEach(artifact => this.pomStorage.addDependency(artifact));
         source.addMavenDependencyManagement = createForEach(artifact => this.pomStorage.addDependencyManagement(artifact));
