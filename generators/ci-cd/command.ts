@@ -175,7 +175,7 @@ const command: JHipsterCommandDefinition = {
         message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
       },
       scope: 'generator',
-      default: config => kebabCase(config.jhipsterConfigWithDefaults.baseName),
+      default: gen => kebabCase(gen.jhipsterConfigWithDefaults.baseName),
     },
   },
 };

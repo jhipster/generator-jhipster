@@ -221,7 +221,7 @@ export type ConfigSpec = {
    * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
    * The callback receives blueprintStorage contents as input for 'blueprint' scope.
    */
-  default?: string | boolean | string[] | ((any) => string | boolean | string[]);
+  default?: string | boolean | string[] | ((this: CoreGenerator | void, ctx: any) => string | boolean | string[]);
   /**
    * Configure the generator according to the selected configuration.
    */

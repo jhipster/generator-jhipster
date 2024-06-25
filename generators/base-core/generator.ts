@@ -63,7 +63,7 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
-import { convertConfigToOption } from '../../lib/internal/index.js';
+import { convertConfigToOption, loadConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
@@ -391,18 +391,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
 
-    const config = (this as any).jhipsterConfigWithDefaults;
-    Object.entries(generatorCommand.configs).forEach(([name, def]) => {
-      if (def.scope === 'storage') {
-        context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
-      }
-      if (def.scope === 'generator') {
-        this[name] = this[name] ?? this.options[name] ?? def.default;
-      }
-      if (def.scope === 'blueprint') {
-        context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
-      }
-    });
+    loadConfig.call(this, generatorCommand.configs, { application: context });
   }
 
   /**
