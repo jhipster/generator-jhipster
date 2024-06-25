@@ -20,6 +20,8 @@
 import BaseApplicationGenerator from '../base-application/index.js';
 
 export default class JavaGenerator extends BaseApplicationGenerator {
+  customLifecycle = true;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
