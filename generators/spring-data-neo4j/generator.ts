@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_JAVA, GENERATOR_LIQUIBASE } from '../generator-list.js';
+import { GENERATOR_LIQUIBASE } from '../generator-list.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -31,8 +31,7 @@ export default class Neo4jGenerator extends BaseApplicationGenerator {
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrapApplication();
-      const javaGenerator: any = await this.dependsOnJHipster(GENERATOR_JAVA);
-      javaGenerator.useJacksonIdentityInfo = true;
+      ((await this.dependsOnJHipster('jhipster:java:domain')) as any).useJacksonIdentityInfo = true;
     }
   }
 
