@@ -106,7 +106,13 @@ export default class extends BaseGenerator {
             envOptions,
           );
         } else if (jdlDefinitions) {
-          await EnvironmentBuilder.run([`jhipster:${GENERATOR_JDL}`], { ...generatorOptions, inline: jdlDefinitions }, envOptions);
+          const applications = (jdlDefinitions.match(/application\s*\{/g) || []).length;
+          const workspaceOpts = applications > 1 ? { workspaces: true, monorepository: true } : {};
+          await EnvironmentBuilder.run(
+            [`jhipster:${GENERATOR_JDL}`],
+            { ...generatorOptions, ...workspaceOpts, inline: jdlDefinitions },
+            envOptions,
+          );
         }
         setGithubTaskOutput(RESULT_OUTPUT, SUCCESS);
 

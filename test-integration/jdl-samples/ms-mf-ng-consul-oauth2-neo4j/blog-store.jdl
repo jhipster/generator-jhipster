@@ -104,7 +104,7 @@ application {
 
 @ChangelogDate(20210408164809)
 entity UserData {
-  address String
+  address String required
 }
 
 @ChangelogDate(20210408164810)
@@ -142,7 +142,7 @@ entity Notification {
 }
 
 relationship ManyToOne {
-  Post{blog(name)} to Blog
+  Post{blog(name) required} to Blog{posts}
 }
 
 relationship ManyToMany {
@@ -154,7 +154,6 @@ paginate Product with pagination
 
 service Product with serviceClass
 service Notification with serviceImpl
-dto Blog, Post, Tag, Notification with mapstruct
 
 microservice Product with store
 

@@ -77,6 +77,7 @@ jobs:
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/app
+          JHIPSTER_DEPENDENCIES_VERSION: 0.0.0-CICD
       - run: jhipster.cjs info
         if: steps.project.outputs.contains-sample != 'false'
       #----------------------------------------------------------------------
