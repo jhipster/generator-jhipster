@@ -133,7 +133,7 @@
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "12.1.0",
-    "conf": "13.0.0",
+    "conf": "13.0.1",
     "debug": "4.3.5",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.6.1",
