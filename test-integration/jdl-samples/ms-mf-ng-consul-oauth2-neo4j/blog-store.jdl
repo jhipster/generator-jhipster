@@ -104,7 +104,7 @@ application {
 
 @ChangelogDate(20210408164809)
 entity UserData {
-  address String
+  address String required
 }
 
 @ChangelogDate(20210408164810)
