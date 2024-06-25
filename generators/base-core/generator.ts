@@ -35,7 +35,7 @@ import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-gener
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX } from '../base/priorities.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import {
   createJHipster7Context,
   formatDateForChangelog,
@@ -63,7 +63,7 @@ import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
-import { convertConfigToOption } from '../../lib/internal/index.js';
+import { convertConfigToOption, loadConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
@@ -218,6 +218,12 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
     this.jhipster7Migration = this.features.jhipster7Migration ?? false;
+
+    if (this.features.queueCommandTasks === true) {
+      this.on('before:queueOwnTasks', () => {
+        this.queueCurrentJHipsterCommandTasks();
+      });
+    }
   }
 
   /**
@@ -317,6 +323,13 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
+   * Check if the generator should ask for prompts.
+   */
+  shouldAskForPrompts({ control }): boolean {
+    return !control.existingProject || this.options.askAnswered === true;
+  }
+
+  /**
    * Override yeoman-generator method that gets methods to be queued, filtering the result.
    */
   getTaskNames(): string[] {
@@ -327,6 +340,87 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       priorities = priorities.filter(priorityName => !this.options.skipPriorities!.includes(priorityName));
     }
     return priorities;
+  }
+
+  queueCurrentJHipsterCommandTasks() {
+    this.queueTask({
+      queueName: QUEUES.INITIALIZING_QUEUE,
+      taskName: 'parseCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          await this.getCurrentJHipsterCommand();
+        } catch {
+          return;
+        }
+        await this.parseCurrentJHipsterCommand();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.PROMPTING_QUEUE,
+      taskName: 'promptCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.getCurrentJHipsterCommand();
+          if (!command.configs) return;
+        } catch {
+          return;
+        }
+        const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.INITIALIZING);
+        const [{ control }] = taskArgs;
+        if (!control) throw new Error(`Control object not found in ${this.options.namespace}`);
+        if (!this.shouldAskForPrompts({ control })) return;
+        await this.promptCurrentJHipsterCommand();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.CONFIGURING_QUEUE,
+      taskName: 'configureCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.getCurrentJHipsterCommand();
+          if (!command.configs) return;
+        } catch {
+          return;
+        }
+        await this.configureCurrentJHipsterCommandConfig();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.COMPOSING_QUEUE,
+      taskName: 'composeCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          await this.getCurrentJHipsterCommand();
+        } catch {
+          return;
+        }
+        await this.composeCurrentJHipsterCommand();
+      },
+    });
+
+    this.queueTask({
+      queueName: QUEUES.LOADING_QUEUE,
+      taskName: 'loadCurrentCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const command = await this.getCurrentJHipsterCommand();
+          if (!command.configs) return;
+        } catch {
+          return;
+        }
+        const taskArgs = this.getArgsForPriority(PRIORITY_NAMES.LOADING);
+        const [{ application }] = taskArgs as any;
+        await this.loadCurrentJHipsterCommandConfig(application ?? this);
+      },
+    });
   }
 
   /**
@@ -391,18 +485,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
 
-    const config = (this as any).jhipsterConfigWithDefaults;
-    Object.entries(generatorCommand.configs).forEach(([name, def]) => {
-      if (def.scope === 'storage') {
-        context[name] = context[name] ?? config?.[name] ?? this.config.get(name) ?? def.default;
-      }
-      if (def.scope === 'generator') {
-        this[name] = this[name] ?? this.options[name] ?? def.default;
-      }
-      if (def.scope === 'blueprint') {
-        context[name] = context[name] ?? this.blueprintStorage?.get(name) ?? def.default;
-      }
-    });
+    loadConfig.call(this, generatorCommand.configs, { application: context });
   }
 
   /**

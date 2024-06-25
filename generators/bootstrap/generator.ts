@@ -80,9 +80,6 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   get initializing() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       validateBlueprint() {
         if (this.jhipsterConfig.blueprints && !this.skipChecks) {
           this.jhipsterConfig.blueprints.forEach(blueprint => {

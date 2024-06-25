@@ -14,11 +14,12 @@ export default class extends BaseGenerator {
   entitiesSample;
   sampleYorcFolder;
 
+  constructor(args, options, features) {
+    super(args, options, { queueCommandTasks: true, ...features });
+  }
+
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       projectVersion() {
         this.projectVersion = `${packageJson.version}-git`;
       },
@@ -31,14 +32,6 @@ export default class extends BaseGenerator {
         if (this.global) {
           await promptSamplesFolder.call(this);
         }
-      },
-    });
-  }
-
-  get [BaseGenerator.CONFIGURING]() {
-    return this.asConfiguringTaskGroup({
-      async configureCommand() {
-        await this.configureCurrentJHipsterCommandConfig();
       },
     });
   }

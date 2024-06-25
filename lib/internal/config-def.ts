@@ -38,7 +38,7 @@ export function loadConfig(
 
         value = application[name] = source[name] ?? undefined;
         if (value === undefined && def.default) {
-          application[name] = typeof def.default === 'function' ? def.default(source) : def.default;
+          application[name] = typeof def.default === 'function' ? def.default.call(this, source) : def.default;
         }
       }
     }
