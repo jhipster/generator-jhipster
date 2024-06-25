@@ -74,7 +74,7 @@ public class AccountResource {
         }
     }
 
-    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
 
     private final UserRepository userRepository;
 
@@ -150,11 +150,11 @@ public class AccountResource {
     @GetMapping("/authenticate")
     <%_ if (reactive) { _%>
     public Mono<String> isAuthenticated(ServerWebExchange request) {
-        log.debug("REST request to check if the current user is authenticated");
+        LOG.debug("REST request to check if the current user is authenticated");
         return request.getPrincipal().map(Principal::getName);
     <%_ } else { _%>
     public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
+        LOG.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
     <%_ } _%>
     }
@@ -296,7 +296,7 @@ public class AccountResource {
                 } else {
                     // Pretend the request has been successful to prevent checking which emails really exist
                     // but log that an invalid attempt has been made
-                    log.warn("Password reset requested for non existing mail");
+                    LOG.warn("Password reset requested for non existing mail");
                 }
             })
             .then();
@@ -308,7 +308,7 @@ public class AccountResource {
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
-            log.warn("Password reset requested for non existing mail");
+            LOG.warn("Password reset requested for non existing mail");
         }
   <%_ } _%>
     }

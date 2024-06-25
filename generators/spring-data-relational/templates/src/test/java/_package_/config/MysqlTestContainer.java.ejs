@@ -28,7 +28,7 @@ import java.util.Collections;
 
 public class MysqlTestContainer implements SqlTestContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(MysqlTestContainer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MysqlTestContainer.class);
 
     private MySQLContainer<?> mysqlContainer;
 
@@ -44,7 +44,7 @@ public class MysqlTestContainer implements SqlTestContainer {
             mysqlContainer = new MySQLContainer<>("<%- dockerContainers.mysql %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
-                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
         if (!mysqlContainer.isRunning()) {

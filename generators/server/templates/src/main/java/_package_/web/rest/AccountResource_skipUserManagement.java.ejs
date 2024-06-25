@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class AccountResource {
 
-    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
 
     private static class AccountResourceException extends RuntimeException {
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
@@ -151,11 +151,11 @@ public class AccountResource {
     @GetMapping("/authenticate")
   <%_ if (reactive) { _%>
     public Mono<String> isAuthenticated(ServerWebExchange request) {
-        log.debug("REST request to check if the current user is authenticated");
+        LOG.debug("REST request to check if the current user is authenticated");
         return request.getPrincipal().map(Principal::getName);
   <%_ } else { _%>
     public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
+        LOG.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
   <%_ } _%>
     }

@@ -30,7 +30,7 @@ for (const relationship of relationships) { if (relationship.relationshipOneToOn
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true) <% } %>
     public <%= reactiveSql ? 'Flux' : 'List' %><<%= instanceType %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull() {
-        log.debug("Request to get all <%= entityInstancePlural %> where <%= relationship.relationshipNameCapitalized %> is null");
+        LOG.debug("Request to get all <%= entityInstancePlural %> where <%= relationship.relationshipNameCapitalized %> is null");
     <%_ if (reactiveSql) { _%>
         return <%= entityInstance %>Repository.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<%_ if (dtoMapstruct) { _%>
              .map(<%= entityToDtoReference %>)<%_ } _%>;
