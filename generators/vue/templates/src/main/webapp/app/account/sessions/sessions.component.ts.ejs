@@ -33,7 +33,7 @@ export default defineComponent({
   created(): void {
     this.retrieveSessions();
   },
-  methods: {    
+  methods: {
     retrieveSessions() {
       return axios.get('api/account/sessions').then(response => {
         this.error = null;
@@ -48,10 +48,10 @@ export default defineComponent({
           this.success = 'OK';
           this.retrieveSessions();
         })
-      .catch(() => {
-        this.success = null;
-        this.error = 'ERROR';
-      });
+        .catch(() => {
+          this.success = null;
+          this.error = 'ERROR';
+        });
     },
   },
 });

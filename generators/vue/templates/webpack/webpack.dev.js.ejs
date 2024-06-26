@@ -26,13 +26,13 @@ const config = require('./config');
 module.exports = (env, options) => {
   const devConfig = {
     module: {
-      rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+      rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }),
     },
     // cheap-module-eval-source-map is faster for development
     devtool: config.dev.devtool,
     output: {
       filename: 'app/[name].[contenthash].bundle.js',
-      chunkFilename: 'app/[id].[chunkhash].chunk.js'
+      chunkFilename: 'app/[id].[chunkhash].chunk.js',
     },
     optimization: {
       moduleIds: 'named',
@@ -51,9 +51,9 @@ module.exports = (env, options) => {
         },
         socket: {
           clients: {
-            heartbeatTimeout: 60000
-          }
-        }
+            heartbeatTimeout: 60000,
+          },
+        },
         /*
         ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
           clicks: false,
@@ -63,9 +63,9 @@ module.exports = (env, options) => {
         } */
       },
       {
-        reload: true
-      }
-    )
+        reload: true,
+      },
+    ),
   );
   return devConfig;
 };

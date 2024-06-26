@@ -1,7 +1,6 @@
 import axios, { type AxiosPromise } from 'axios';
 
 export default class MetricsService {
-
   public getMetrics(): AxiosPromise<any> {
     return axios.get('management/jhimetrics');
   }

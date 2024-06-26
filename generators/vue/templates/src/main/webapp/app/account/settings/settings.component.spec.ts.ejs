@@ -23,7 +23,7 @@ describe('Settings Component', () => {
   const account = {
     firstName: 'John',
     lastName: 'Doe',
-    email: 'john.doe@jhipster.org'
+    email: 'john.doe@jhipster.org',
   };
 
   beforeEach(() => {
@@ -31,12 +31,11 @@ describe('Settings Component', () => {
     axiosStub.post.reset();
 
     store.setAuthentication(account);
-    const wrapper = shallowMount(Settings,
-      {
-        global: {
-          plugins: [pinia],
-        },
-      });
+    const wrapper = shallowMount(Settings, {
+      global: {
+        plugins: [pinia],
+      },
+    });
     settings = wrapper.vm;
   });
 

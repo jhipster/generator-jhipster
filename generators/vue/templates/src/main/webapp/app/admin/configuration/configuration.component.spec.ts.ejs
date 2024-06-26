@@ -15,9 +15,9 @@ describe('Configuration Component', () => {
 
   beforeEach(() => {
     axiosStub.get.reset();
-    axiosStub.get.resolves({ data: { contexts: [
-      { beans: [{prefix: 'A'}, {prefix: 'B'}] }
-    ], propertySources: [{ properties: { key1: {value: 'value'} }}] } });
+    axiosStub.get.resolves({
+      data: { contexts: [{ beans: [{ prefix: 'A' }, { prefix: 'B' }] }], propertySources: [{ properties: { key1: { value: 'value' } } }] },
+    });
     const wrapper = shallowMount(Configuration);
     configuration = wrapper.vm;
   });
@@ -45,7 +45,7 @@ describe('Configuration Component', () => {
       // GIVEN
       const data = {
         key1: 'test',
-        key2: 'test2'
+        key2: 'test2',
       };
 
       // THEN

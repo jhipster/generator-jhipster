@@ -10,9 +10,7 @@ export default defineComponent({
   setup(prop) {
     const store = useStore();
     const ribbonEnv = computed(() => store.ribbonOnProfiles);
-    const ribbonEnabled = computed(
-      () => store.ribbonOnProfiles && store.activeProfiles.indexOf(store.ribbonOnProfiles) > -1
-    );
+    const ribbonEnabled = computed(() => store.ribbonOnProfiles && store.activeProfiles.indexOf(store.ribbonOnProfiles) > -1);
 
     return {
       ribbonEnv,

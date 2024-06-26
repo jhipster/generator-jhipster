@@ -206,55 +206,55 @@ entity tables helpers
 /* Remove Bootstrap padding from the element
 http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
 @mixin no-padding($side) {
-    @if $side == "all" {
-        .no-padding {
-            padding: 0 !important;
-        }
-    } @else {
-        .no-padding-#{$side} {
-            padding-#{$side}: 0 !important;
-        }
+  @if $side == 'all' {
+    .no-padding {
+      padding: 0 !important;
     }
+  } @else {
+    .no-padding-#{$side} {
+      padding-#{$side}: 0 !important;
+    }
+  }
 }
-@include no-padding("left");
-@include no-padding("right");
-@include no-padding("top");
-@include no-padding("bottom");
-@include no-padding("all");
+@include no-padding('left');
+@include no-padding('right');
+@include no-padding('top');
+@include no-padding('bottom');
+@include no-padding('all');
 
 /* bootstrap 3 input-group 100% width
 http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 .width-min {
-    width: 1% !important;
+  width: 1% !important;
 }
 
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
 .row.jh-entity-details {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 10px;
-    line-height: 1.5;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+  line-height: 1.5;
 }
 
 @media screen and (min-width: 768px) {
-    .row.jh-entity-details > {
-        dt {
-            float: left;
-            overflow: hidden;
-            clear: left;
-            text-align: right;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            padding: 0.5em 0;
-        }
-        dd {
-            border-bottom: 1px solid #eee;
-            padding: 0.5em 0;
-            margin-left: 0;
-        }
+  .row.jh-entity-details > {
+    dt {
+      float: left;
+      overflow: hidden;
+      clear: left;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0.5em 0;
     }
+    dd {
+      border-bottom: 1px solid #eee;
+      padding: 0.5em 0;
+      margin-left: 0;
+    }
+  }
 }
 
 /* ==========================================================================
@@ -264,24 +264,24 @@ ui bootstrap tweaks
 .pagination,
 .carousel,
 .card-title a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table .btn-secondary,
 .uib-datepicker-popup > li > div.uib-datepicker > table .btn-secondary {
-    border: 0;
+  border: 0;
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table:focus,
 .uib-datepicker-popup > li > div.uib-datepicker > table:focus {
-    outline: none;
+  outline: none;
 }
 
 .thread-dump-modal-lock {
-    max-width: 450px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  max-width: 450px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .svg-inline--fa {

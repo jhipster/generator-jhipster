@@ -49,7 +49,7 @@ export default defineComponent({
             .then(res => {
               this.updatingMetrics = true;
               this.threadData = res.data.threads;
-  
+
               this.threadStats = {
                 threadDumpRunnable: 0,
                 threadDumpWaiting: 0,
@@ -57,7 +57,7 @@ export default defineComponent({
                 threadDumpBlocked: 0,
                 threadDumpAll: 0,
               };
-  
+
               this.threadData.forEach(value => {
                 if (value.threadState === 'RUNNABLE') {
                   this.threadStats.threadDumpRunnable += 1;
@@ -69,13 +69,13 @@ export default defineComponent({
                   this.threadStats.threadDumpBlocked += 1;
                 }
               });
-  
+
               this.threadStats.threadDumpAll =
                 this.threadStats.threadDumpRunnable +
                 this.threadStats.threadDumpWaiting +
                 this.threadStats.threadDumpTimedWaiting +
                 this.threadStats.threadDumpBlocked;
-  
+
               this.updatingMetrics = false;
             })
             .catch(() => {
