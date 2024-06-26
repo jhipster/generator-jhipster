@@ -22,6 +22,7 @@ import { loadRequiredConfigIntoEntity } from '../base-application/support/index.
 import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
+import { MANY_TO_MANY, RelationshipTypes } from '../entity/support/index.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -227,7 +228,7 @@ export function createUserManagementEntity(customUserManagementData = {}, applic
       {
         otherEntityName: 'Authority',
         relationshipName: 'authority',
-        relationshipType: 'many-to-many',
+        relationshipType: RelationshipTypes[MANY_TO_MANY],
         relationshipIgnoreBackReference: true,
       },
     ]);

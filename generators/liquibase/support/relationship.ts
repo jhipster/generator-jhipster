@@ -18,6 +18,7 @@
  */
 import { getFKConstraintName } from '../../server/support/index.js';
 import { mutateData } from '../../base/support/index.js';
+import { RelationshipTypes, ONE_TO_ONE, MANY_TO_ONE } from '../../entity/support/index.js';
 
 function relationshipBaseDataEquals(relationshipA, relationshipB) {
   return (
@@ -61,7 +62,8 @@ export function relationshipNeedsForeignKeyRecreationOnly(relationshipA, relatio
 
 export function prepareRelationshipForLiquibase(entity, relationship) {
   relationship.shouldWriteRelationship =
-    relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true);
+    relationship.relationshipType === RelationshipTypes[MANY_TO_ONE] ||
+    (relationship.relationshipType === RelationshipTypes[ONE_TO_ONE] && relationship.ownerSide === true);
 
   if (relationship.shouldWriteJoinTable) {
     const joinTableName = relationship.joinTable.name;

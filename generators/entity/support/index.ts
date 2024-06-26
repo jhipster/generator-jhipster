@@ -22,3 +22,4 @@ export {
   isSignedNumber as inputIsSignedNumber,
   isSignedDecimalNumber as inputIsSignedDecimalNumber,
 } from './asserts.js';
+export * from './relationships.js';

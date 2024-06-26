@@ -21,6 +21,16 @@ import pluralize from 'pluralize';
 
 import { databaseTypes, entityOptions, validations, checkAndReturnRelationshipOnValue } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
+import {
+  ONE_TO_ONE,
+  ONE_TO_MANY,
+  MANY_TO_ONE,
+  MANY_TO_MANY,
+  RelationshipTypes,
+  RelationshipDirections,
+  LEFT,
+  RIGHT,
+} from '../../entity/support/index.js';
 import { stringifyApplicationData } from './debug.js';
 import { mutateData } from '../../base/support/config.js';
 import { prepareProperty } from './prepare-property.js';
@@ -54,13 +64,13 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
 
   // Prepare basic relationship data
   Object.assign(relationship, {
-    relationshipLeftSide: relationshipSide === 'left',
-    relationshipRightSide: relationshipSide === 'right',
-    collection: relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
-    relationshipOneToOne: relationshipType === 'one-to-one',
-    relationshipOneToMany: relationshipType === 'one-to-many',
-    relationshipManyToOne: relationshipType === 'many-to-one',
-    relationshipManyToMany: relationshipType === 'many-to-many',
+    relationshipLeftSide: relationshipSide === RelationshipDirections[LEFT],
+    relationshipRightSide: relationshipSide === RelationshipDirections[RIGHT],
+    collection: relationshipType === RelationshipTypes[ONE_TO_MANY] || relationshipType === RelationshipTypes[MANY_TO_MANY],
+    relationshipOneToOne: relationshipType === RelationshipTypes[ONE_TO_ONE],
+    relationshipOneToMany: relationshipType === RelationshipTypes[ONE_TO_MANY],
+    relationshipManyToOne: relationshipType === RelationshipTypes[MANY_TO_ONE],
+    relationshipManyToMany: relationshipType === RelationshipTypes[MANY_TO_MANY],
     otherEntityUser: otherEntityName === 'user',
   });
 

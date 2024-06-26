@@ -84,7 +84,7 @@ if (hasFieldConstraint) { _%>
         const relationshipData = addedRelationships[idx];
         if (relationshipData.unique) {
             const idField = relationship.otherEntity.primaryKey.ownFields[0];
-            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+            const uniqueConstraintName = relationshipData.relationshipOneToOne ? this.getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
     _%>
         <addUniqueConstraint tableName="<%= entityTableName %>"
             columnNames="<%= relationshipData.columnName %>_id"
@@ -122,7 +122,7 @@ if (hasFieldConstraint) { _%>
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"
-            <%_ if (onDelete) { _%>                                 
+            <%_ if (onDelete) { _%>
                                  onDelete="<%= onDelete %>"
             <%_ } _%>
             <%_ if (onUpdate) { _%>
@@ -139,7 +139,7 @@ if (hasFieldConstraint) { _%>
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="<%= entity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= entityTableName %>"
-            <%_ if (onDelete) { _%>                                 
+            <%_ if (onDelete) { _%>
                                  onDelete="<%= onDelete %>"
             <%_ } _%>
             <%_ if (onUpdate) { _%>
@@ -152,10 +152,10 @@ if (hasFieldConstraint) { _%>
                                  constraintName="<%= otherEntityConstraintName %>"
                                  referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%= relationship.otherEntityTableName %>"
-            <%_ if (relationship.otherRelationship) { 
+            <%_ if (relationship.otherRelationship) {
                 // User object is not supporting this right now
                 _%>
-                <%_ if (relationship.otherRelationship.onDelete) { _%>                                 
+                <%_ if (relationship.otherRelationship.onDelete) { _%>
                                  onDelete="<%= relationship.otherRelationship.onDelete %>"
                 <%_ } _%>
                 <%_ if (relationship.otherRelationship.onUpdate) { _%>

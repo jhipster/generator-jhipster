@@ -21,7 +21,8 @@
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { relationshipTypes } from '../jhipster/index.js';
-import { relationshipTypeExists } from './relationship-types.js';
+import { asJdlRelationshipType, relationshipTypeExists } from './relationship-types.js';
+import { RelationshipTypes, MANY_TO_MANY } from '../../generators/entity/support/index.js';
 
 describe('jdl - RelationshipTypes', () => {
   describe('exists', () => {
@@ -35,6 +36,11 @@ describe('jdl - RelationshipTypes', () => {
         // @ts-expect-error
         expect(relationshipTypeExists('NOTHING')).to.be.false;
       });
+    });
+  });
+  describe('asJdlRelationshipType', () => {
+    it('should convert', () => {
+      expect(asJdlRelationshipType(RelationshipTypes[MANY_TO_MANY])).to.be.eq(relationshipTypes.MANY_TO_MANY);
     });
   });
 });

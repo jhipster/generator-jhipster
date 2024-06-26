@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 import { camelCase, upperFirst } from 'lodash-es';
-import { JDLRelationshipType, RelationshipType, relationshipTypes } from '../basic-types/relationships.js';
+import { JDLRelationshipType, relationshipTypes } from '../basic-types/relationships.js';
+import { JHipsterOptionRelationshipTypeValue } from '../../generators/entity/support/index.js';
 
-export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
+export const asJdlRelationshipType = (type: JHipsterOptionRelationshipTypeValue): JDLRelationshipType =>
+  upperFirst(camelCase(type)) as JDLRelationshipType;
 
 export const relationshipTypeExists = (relationship: JDLRelationshipType) => Object.values(relationshipTypes).includes(relationship);
 

@@ -21,6 +21,7 @@ import getTypescriptKeyType from './types-utils.js';
 
 import { fieldTypes, validations, clientFrameworkTypes } from '../../../jdl/jhipster/index.js';
 import { filterRelevantRelationships } from './template-utils.js';
+import { MANY_TO_MANY, ONE_TO_MANY, RelationshipTypes } from '../../entity/support/index.js';
 
 const dbTypes = fieldTypes;
 const {
@@ -107,7 +108,7 @@ const generateEntityClientFields = (
     let fieldName;
     const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes(REQUIRED);
     const relationshipType = relationship.relationshipType;
-    if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+    if (relationshipType === RelationshipTypes[ONE_TO_MANY] || relationshipType === RelationshipTypes[MANY_TO_MANY]) {
       fieldType = `I${relationship.otherEntityAngularName}[]`;
       fieldName = relationship.relationshipFieldNamePlural;
     } else {
