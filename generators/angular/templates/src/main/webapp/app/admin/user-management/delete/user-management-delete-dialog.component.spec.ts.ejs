@@ -33,16 +33,14 @@ describe('User Management Delete Component', () => {
   let service: UserManagementService;
   let mockActiveModal: NgbActiveModal;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [UserManagementDeleteDialogComponent],
-        providers: [provideHttpClient(), NgbActiveModal],
-      })
-        .overrideTemplate(UserManagementDeleteDialogComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [UserManagementDeleteDialogComponent],
+      providers: [provideHttpClient(), NgbActiveModal],
     })
-  );
+      .overrideTemplate(UserManagementDeleteDialogComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserManagementDeleteDialogComponent);
@@ -65,7 +63,7 @@ describe('User Management Delete Component', () => {
         // THEN
         expect(service.delete).toHaveBeenCalledWith('user');
         expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
-      })
+      }),
     ));
   });
 });

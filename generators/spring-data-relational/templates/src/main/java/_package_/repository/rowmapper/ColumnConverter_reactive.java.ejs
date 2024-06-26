@@ -52,7 +52,6 @@ public class ColumnConverter implements ColumnConverterReactive {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T convert(@Nullable Object value, @Nullable Class<T> target) {
-
         if (value == null || target == null || ClassUtils.isAssignableValue(target, value)) {
             return (T) value;
         }
@@ -85,5 +84,4 @@ public class ColumnConverter implements ColumnConverterReactive {
             return convert(obj, target);
         }
     }
-
 }

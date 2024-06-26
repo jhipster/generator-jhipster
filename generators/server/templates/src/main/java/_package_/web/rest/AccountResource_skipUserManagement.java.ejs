@@ -112,7 +112,9 @@ public class AccountResource {
                 } else {
                     throw new AccountResourceException();
                 }
-                Set<String> authorities = authentication.getAuthorities().stream()
+                Set<String> authorities = authentication
+                    .getAuthorities()
+                    .stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toSet());
                 return new UserVM(login, authorities);

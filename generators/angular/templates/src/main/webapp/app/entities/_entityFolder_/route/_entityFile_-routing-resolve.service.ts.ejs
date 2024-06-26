@@ -38,7 +38,7 @@ const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable
             inject(Router).navigate(['404']);
             return EMPTY;
           }
-        })
+        }),
       );
   }
   return of(null);

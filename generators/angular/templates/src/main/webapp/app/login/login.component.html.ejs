@@ -20,11 +20,9 @@
   <div class="d-flex justify-content-center">
     <div class="col-lg-6 col-md-8 col-sm-10">
       <h1 data-cy="loginTitle">__jhiTranslateTag__('login.title')</h1>
-    @if (authenticationError()) {
-      <div class="alert alert-danger"
-        data-cy="loginError"
-      >__jhiTranslateTag__('login.messages.error.authentication')</div>
-    }
+      @if (authenticationError()) {
+        <div class="alert alert-danger" data-cy="loginError">__jhiTranslateTag__('login.messages.error.authentication')</div>
+      }
       <form class="form" (ngSubmit)="login()" [formGroup]="loginForm">
         <div class="mb-3">
           <label class="username-label" for="username">__jhiTranslateTag__('global.form.username.label')</label>

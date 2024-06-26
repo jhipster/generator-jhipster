@@ -31,16 +31,14 @@ describe('MetricsComponent', () => {
   let service: MetricsService;
   let changeDetector: ChangeDetectorRef;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [MetricsComponent],
-        providers: [provideHttpClient()],
-      })
-        .overrideTemplate(MetricsComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [MetricsComponent],
+      providers: [provideHttpClient()],
     })
-  );
+      .overrideTemplate(MetricsComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetricsComponent);
@@ -64,8 +62,8 @@ describe('MetricsComponent', () => {
           },
         },
       } as unknown as Metrics;
-      const threadDump = { threads: [ { threadName: 'thread 1' } as Thread] } as ThreadDump;
-      
+      const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] } as ThreadDump;
+
       jest.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
       jest.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
       jest.spyOn(changeDetector.constructor.prototype, 'markForCheck');

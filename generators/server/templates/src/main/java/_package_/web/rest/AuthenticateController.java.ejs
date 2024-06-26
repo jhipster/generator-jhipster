@@ -82,9 +82,11 @@ public class AuthenticateController {
     @PostMapping("/authenticate")
     public Mono<ResponseEntity<JWTToken>> authorize(@Valid @RequestBody Mono<LoginVM> loginVM) {
         return loginVM
-            .flatMap(login -> authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
-                .flatMap(auth -> Mono.fromCallable(() -> this.createToken(auth, login.isRememberMe())))
+            .flatMap(
+                login ->
+                    authenticationManager
+                        .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
+                        .flatMap(auth -> Mono.fromCallable(() -> this.createToken(auth, login.isRememberMe())))
             )
             .map(jwt -> {
                 HttpHeaders httpHeaders = new HttpHeaders();
@@ -102,9 +104,10 @@ public class AuthenticateController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+            loginVM.getUsername(),
+            loginVM.getPassword()
+        );
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

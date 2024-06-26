@@ -9,16 +9,14 @@ describe('HealthModalComponent', () => {
   let fixture: ComponentFixture<HealthModalComponent>;
   let mockActiveModal: NgbActiveModal;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [HealthModalComponent],
-        providers: [provideHttpClient(), NgbActiveModal],
-      })
-        .overrideTemplate(HealthModalComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HealthModalComponent],
+      providers: [provideHttpClient(), NgbActiveModal],
     })
-  );
+      .overrideTemplate(HealthModalComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HealthModalComponent);
@@ -32,7 +30,7 @@ describe('HealthModalComponent', () => {
       comp.health = undefined;
 
       // WHEN
-      const result = comp.readableValue({ 'name': 'jhipster' });
+      const result = comp.readableValue({ name: 'jhipster' });
 
       // THEN
       expect(result).toEqual('{"name":"jhipster"}');
@@ -54,8 +52,8 @@ describe('HealthModalComponent', () => {
       comp.health = {
         key: 'diskSpace',
         value: {
-          status: 'UP'
-        }
+          status: 'UP',
+        },
       };
 
       // WHEN
@@ -70,8 +68,8 @@ describe('HealthModalComponent', () => {
       comp.health = {
         key: 'diskSpace',
         value: {
-          status: 'UP'
-        }
+          status: 'UP',
+        },
       };
 
       // WHEN
@@ -86,8 +84,8 @@ describe('HealthModalComponent', () => {
       comp.health = {
         key: 'mail',
         value: {
-          status: 'UP'
-        }
+          status: 'UP',
+        },
       };
 
       // WHEN

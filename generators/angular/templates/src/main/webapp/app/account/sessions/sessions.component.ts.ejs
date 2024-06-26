@@ -40,9 +40,9 @@ export default class SessionsComponent implements OnInit {
   private accountService = inject(AccountService);
 
   ngOnInit(): void {
-    this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);
+    this.sessionsService.findAll().subscribe(sessions => (this.sessions = sessions));
 
-    this.accountService.identity().subscribe(account => this.account = account);
+    this.accountService.identity().subscribe(account => (this.account = account));
   }
 
   invalidate(series: string): void {
@@ -52,9 +52,9 @@ export default class SessionsComponent implements OnInit {
     this.sessionsService.delete(encodeURIComponent(series)).subscribe(
       () => {
         this.success = true;
-        this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);
+        this.sessionsService.findAll().subscribe(sessions => (this.sessions = sessions));
       },
-      () => this.error = true
+      () => (this.error = true),
     );
   }
 }

@@ -53,13 +53,10 @@ class StaticResourcesWebConfigurerTest {
 
     @Test
     void shouldAppendResourceHandlerAndInitializeIt() {
-
         staticResourcesWebConfiguration.addResourceHandlers(resourceHandlerRegistry);
 
-        verify(resourceHandlerRegistry, times(1))
-            .addResourceHandler(RESOURCE_PATHS);
-        verify(staticResourcesWebConfiguration, times(1))
-            .initializeResourceHandler(any(ResourceHandlerRegistration.class));
+        verify(resourceHandlerRegistry, times(1)).addResourceHandler(RESOURCE_PATHS);
+        verify(staticResourcesWebConfiguration, times(1)).initializeResourceHandler(any(ResourceHandlerRegistration.class));
         for (String testingPath : RESOURCE_PATHS) {
             assertThat(resourceHandlerRegistry.hasMappingForPattern(testingPath)).isTrue();
         }
@@ -77,7 +74,6 @@ class StaticResourcesWebConfigurerTest {
         verify(resourceHandlerRegistration, times(1)).setCacheControl(ccExpected);
         verify(resourceHandlerRegistration, times(1)).addResourceLocations(RESOURCE_LOCATIONS);
     }
-
 
     @Test
     void shouldCreateCacheControlBasedOnJhipsterDefaultProperties() {

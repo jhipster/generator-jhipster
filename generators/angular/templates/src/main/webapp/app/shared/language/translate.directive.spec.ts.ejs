@@ -31,14 +31,12 @@ describe('TranslateDirective Tests', () => {
   let fixture: ComponentFixture<TestTranslateDirectiveComponent>;
   let translateService: TranslateService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [TranslateModule.forRoot(), TranslateDirective],
-        declarations: [TestTranslateDirectiveComponent],
-      });
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [TranslateModule.forRoot(), TranslateDirective],
+      declarations: [TestTranslateDirectiveComponent],
+    });
+  }));
 
   beforeEach(() => {
     translateService = TestBed.inject(TranslateService);

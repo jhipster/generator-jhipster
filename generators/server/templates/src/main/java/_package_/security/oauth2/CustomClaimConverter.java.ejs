@@ -84,7 +84,12 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
 
             // Retrieve user info from OAuth provider if not already loaded
             ObjectNode user = users.get(claims.get("sub").toString(), s -> {
-                ResponseEntity<ObjectNode> userInfo = restTemplate.exchange(registration.getProviderDetails().getUserInfoEndpoint().getUri(), HttpMethod.GET, new HttpEntity<String>(headers), ObjectNode.class);
+                ResponseEntity<ObjectNode> userInfo = restTemplate.exchange(
+                    registration.getProviderDetails().getUserInfoEndpoint().getUri(),
+                    HttpMethod.GET,
+                    new HttpEntity<String>(headers),
+                    ObjectNode.class
+                );
                 return userInfo.getBody();
             });
 
@@ -105,19 +110,15 @@ public class CustomClaimConverter implements Converter<Map<String, Object>, Map<
                     String[] name = user.get("name").asText().split("\\s+");
                     if (name.length > 0) {
                         convertedClaims.put("given_name", name[0]);
-                        convertedClaims.put("family_name",
-                            String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
+                        convertedClaims.put("family_name", String.join(" ", Arrays.copyOfRange(name, 1, name.length)));
                     }
                 }
                 if (user.has("groups")) {
-                    List<String> groups = StreamSupport.stream(user.get("groups").spliterator(), false)
-                        .map(JsonNode::asText)
-                        .toList();
+                    List<String> groups = StreamSupport.stream(user.get("groups").spliterator(), false).map(JsonNode::asText).toList();
                     convertedClaims.put("groups", groups);
                 }
                 if (user.has(SecurityUtils.CLAIMS_NAMESPACE + "roles")) {
-                    List<String> roles = StreamSupport
-                        .stream(user.get(SecurityUtils.CLAIMS_NAMESPACE + "roles").spliterator(), false)
+                    List<String> roles = StreamSupport.stream(user.get(SecurityUtils.CLAIMS_NAMESPACE + "roles").spliterator(), false)
                         .map(JsonNode::asText)
                         .toList();
                     convertedClaims.put("roles", roles);

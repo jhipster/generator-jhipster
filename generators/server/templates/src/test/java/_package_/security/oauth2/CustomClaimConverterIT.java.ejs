@@ -77,8 +77,7 @@ class CustomClaimConverterIT {
                 any(HttpEntity.class),
                 ArgumentMatchers.<Class<ObjectNode>>any()
             )
-        )
-            .thenReturn(ResponseEntity.ok(userInfo));
+        ).thenReturn(ResponseEntity.ok(userInfo));
     }
 
     @Test
@@ -157,11 +156,9 @@ class CustomClaimConverterIT {
         user.put("preferred_username", USERNAME);
         mockHttpGetUserInfo(user);
 
-        assertThatCode(() ->  {
+        assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            assertThat(convertedClaims)
-                .containsEntry("preferred_username", USERNAME)
-                .doesNotContainKeys("given_name", "family_name");
+            assertThat(convertedClaims).containsEntry("preferred_username", USERNAME).doesNotContainKeys("given_name", "family_name");
         }).doesNotThrowAnyException();
     }
 
@@ -176,7 +173,7 @@ class CustomClaimConverterIT {
         user.put("name", FULL_NAME);
         mockHttpGetUserInfo(user);
 
-        assertThatCode(() ->  {
+        assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
             assertThat(convertedClaims)
                 .containsEntry("preferred_username", USERNAME)
@@ -196,7 +193,7 @@ class CustomClaimConverterIT {
         user.put("name", FULL_NAME + " " + NAME_SUFFIX);
         mockHttpGetUserInfo(user);
 
-        assertThatCode(() ->  {
+        assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
             System.out.println(convertedClaims);
             assertThat(convertedClaims)
@@ -217,11 +214,9 @@ class CustomClaimConverterIT {
         user.put("email", EMAIL);
         mockHttpGetUserInfo(user);
 
-        assertThatCode(() ->  {
+        assertThatCode(() -> {
             Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            assertThat(convertedClaims)
-                .containsEntry("preferred_username", USERNAME)
-                .containsEntry("email", EMAIL);
+            assertThat(convertedClaims).containsEntry("preferred_username", USERNAME).containsEntry("email", EMAIL);
         }).doesNotThrowAnyException();
     }
 }
