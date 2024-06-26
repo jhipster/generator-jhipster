@@ -39,15 +39,19 @@ const HealthModal = ({ handleClose, healthObject, showModal }) => {
         <Table bordered>
           <thead>
             <tr>
-              <th><Translate contentKey="health.details.name">Name</Translate></th>
-              <th><Translate contentKey="health.details.value">Value</Translate></th>
+              <th>
+                <Translate contentKey="health.details.name">Name</Translate>
+              </th>
+              <th>
+                <Translate contentKey="health.details.value">Value</Translate>
+              </th>
             </tr>
           </thead>
           <tbody>
             {Object.keys(data).map((key, index) => (
               <tr key={index}>
                 <td>{key}</td>
-                <td>{(healthObject.name === 'diskSpace') ? formatDiskSpaceOutput(data[key]) : JSON.stringify(data[key]) }</td>
+                <td>{healthObject.name === 'diskSpace' ? formatDiskSpaceOutput(data[key]) : JSON.stringify(data[key])}</td>
               </tr>
             ))}
           </tbody>
@@ -59,6 +63,7 @@ const HealthModal = ({ handleClose, healthObject, showModal }) => {
         </Button>
       </ModalFooter>
     </Modal>
-)};
+  );
+};
 
 export default HealthModal;

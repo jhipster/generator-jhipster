@@ -60,7 +60,7 @@ describe('Header', () => {
           <MemoryRouter>
             <Header {...props} />
           </MemoryRouter>
-        </Provider>
+        </Provider>,
       );
       mountedWrapper = container.innerHTML;
     }
@@ -127,5 +127,4 @@ describe('Header', () => {
     // Find AccountMenu component
     expect(html).toContain('account-menu');
   });
-
 });

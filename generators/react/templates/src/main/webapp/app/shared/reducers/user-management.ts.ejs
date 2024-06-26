@@ -50,7 +50,7 @@ export const UserManagementSlice = createSlice({
     builder
       .addCase(getUsers.pending, state => state)
       .addCase(getUsers.rejected, (state, action) => {
-          state.errorMessage = action.error.message;
+        state.errorMessage = action.error.message;
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.users = action.payload.data;

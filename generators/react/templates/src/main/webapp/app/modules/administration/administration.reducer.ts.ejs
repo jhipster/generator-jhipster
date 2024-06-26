@@ -68,9 +68,13 @@ export const getSystemMetrics = createAsyncThunk('administration/fetch_metrics',
   serializeError: serializeAxiosError,
 });
 
-export const getSystemThreadDump = createAsyncThunk('administration/fetch_thread_dump', async () => axios.get<any>('management/threaddump'), {
-  serializeError: serializeAxiosError,
-});
+export const getSystemThreadDump = createAsyncThunk(
+  'administration/fetch_thread_dump',
+  async () => axios.get<any>('management/threaddump'),
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const getLoggers = createAsyncThunk('administration/fetch_logs', async () => axios.get<any>('management/loggers'), {
   serializeError: serializeAxiosError,

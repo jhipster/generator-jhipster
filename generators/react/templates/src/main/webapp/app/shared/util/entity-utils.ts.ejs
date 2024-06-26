@@ -27,7 +27,7 @@ import { IPaginationBaseState, ISortBaseState } from 'react-jhipster';
  * @param entity Object to clean.
  */
 export const cleanEntity = entity => {
-  const keysToKeep = Object.keys(entity).filter(k => !(entity[k] instanceof Object) || (entity[k]['id'] !== '' && entity[k]['id'] !== -1));
+  const keysToKeep = Object.keys(entity).filter(k => !(entity[k] instanceof Object) || (entity[k]['id'] !== '' && entity[k]['id'] !== -1));
 
   return pick(entity, keysToKeep);
 };
@@ -52,7 +52,9 @@ export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseS
 };
 
 export const overridePaginationStateWithQueryParams = (paginationBaseState: IPaginationBaseState, locationSearch: string) => {
-  const sortedPaginationState: IPaginationBaseState = <IPaginationBaseState>overrideSortStateWithQueryParams(paginationBaseState, locationSearch);
+  const sortedPaginationState: IPaginationBaseState = <IPaginationBaseState>(
+    overrideSortStateWithQueryParams(paginationBaseState, locationSearch)
+  );
   const params = new URLSearchParams(locationSearch);
   const page = params.get('page');
   if (page) {

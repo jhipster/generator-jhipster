@@ -30,9 +30,8 @@ const initialState = {
   user: defaultValue,
   updating: false,
   updateSuccess: false,
-  totalItems: 0
+  totalItems: 0,
 };
-
 
 const apiUrl = 'api/users';
 const adminUrl = 'api/admin/users';
@@ -61,7 +60,7 @@ export const getUser = createAsyncThunk(
     const requestUrl = `${adminUrl}/${id}`;
     return axios.get<IUser>(requestUrl);
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export const createUser = createAsyncThunk(
@@ -71,7 +70,7 @@ export const createUser = createAsyncThunk(
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export const updateUser = createAsyncThunk(
@@ -81,7 +80,7 @@ export const updateUser = createAsyncThunk(
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export const deleteUser = createAsyncThunk(
@@ -92,7 +91,7 @@ export const deleteUser = createAsyncThunk(
     thunkAPI.dispatch(getUsersAsAdmin({}));
     return result;
   },
-  { serializeError: serializeAxiosError }
+  { serializeError: serializeAxiosError },
 );
 
 export type UserManagementState = Readonly<typeof initialState>;
@@ -142,23 +141,12 @@ export const UserManagementSlice = createSlice({
         state.updateSuccess = false;
         state.updating = true;
       })
-      .addMatcher(
-        isRejected(
-          getUsers,
-          getUsersAsAdmin,
-          getUser,
-          getRoles,
-          createUser,
-          updateUser,
-          deleteUser
-        ),
-        (state, action) => {
-          state.loading = false;
-          state.updating = false;
-          state.updateSuccess = false;
-          state.errorMessage = action.error.message;
-        }
-      );
+      .addMatcher(isRejected(getUsers, getUsersAsAdmin, getUser, getRoles, createUser, updateUser, deleteUser), (state, action) => {
+        state.loading = false;
+        state.updating = false;
+        state.updateSuccess = false;
+        state.errorMessage = action.error.message;
+      });
   },
 });
 

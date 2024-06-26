@@ -31,7 +31,8 @@ const successAlert = (
     </Translate>
     <Link to="/login" className="alert-link">
       <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
-    </Link>.
+    </Link>
+    .
   </Alert>
 );
 
@@ -49,7 +50,7 @@ export const ActivatePage = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const key = searchParams.get("key");
+    const key = searchParams.get('key');
 
     dispatch(activateAction(key));
     return () => {

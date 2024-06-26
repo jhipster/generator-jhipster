@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
 import axios from 'axios';
 import sinon from 'sinon';
 import { configureStore } from '@reduxjs/toolkit';
@@ -27,7 +26,7 @@ describe('Profile reducer tests', () => {
   const initialState = {
     ribbonEnv: '',
     inProduction: true,
-    isOpenAPIEnabled: false
+    isOpenAPIEnabled: false,
   };
   describe('Common tests', () => {
     it('should return the initial state', () => {
@@ -38,30 +37,30 @@ describe('Profile reducer tests', () => {
     it('should return the right payload in prod', () => {
       const payload = {
         data: {
-          'display-ribbon-on-profiles' : 'awesome ribbon stuff',
-          activeProfiles : [ 'prod' ]
-        }
+          'display-ribbon-on-profiles': 'awesome ribbon stuff',
+          activeProfiles: ['prod'],
+        },
       };
 
       expect(profile(undefined, { type: getProfile.fulfilled.type, payload })).toEqual({
         ribbonEnv: 'awesome ribbon stuff',
         inProduction: true,
-        isOpenAPIEnabled: false
+        isOpenAPIEnabled: false,
       });
     });
 
     it('should return the right payload in dev with OpenAPI enabled', () => {
       const payload = {
         data: {
-          'display-ribbon-on-profiles' : 'awesome ribbon stuff',
-          activeProfiles : [ 'api-docs', 'dev' ]
-        }
+          'display-ribbon-on-profiles': 'awesome ribbon stuff',
+          activeProfiles: ['api-docs', 'dev'],
+        },
       };
 
       expect(profile(undefined, { type: getProfile.fulfilled.type, payload })).toEqual({
         ribbonEnv: 'awesome ribbon stuff',
         inProduction: false,
-        isOpenAPIEnabled: true
+        isOpenAPIEnabled: true,
       });
     });
   });

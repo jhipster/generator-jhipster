@@ -47,43 +47,53 @@ export const SessionsPage = () => {
   const updateFailure = useAppSelector(state => state.sessions.updateFailure);
 
   return (
-      <div>
-        <h2>
-          <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
-            Active sessions for [<strong>{account.login}</strong>]
-          </Translate>
-        </h2>
+    <div>
+      <h2>
+        <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
+          Active sessions for [<strong>{account.login}</strong>]
+        </Translate>
+      </h2>
 
-        {(updateSuccess) ? (
+      {updateSuccess ? (
         <Alert color="success">
           <Translate contentKey="sessions.messages.success">
             <strong>Session invalidated!</strong>
           </Translate>
         </Alert>
-        ) : null}
+      ) : null}
 
-        {(updateFailure) ? (
+      {updateFailure ? (
         <Alert color="danger">
           <Translate contentKey="sessions.messages.error">
-            <span><strong>An error has occurred!</strong> The session could not be invalidated.</span>
+            <span>
+              <strong>An error has occurred!</strong> The session could not be invalidated.
+            </span>
           </Translate>
         </Alert>
-        ) : null}
+      ) : null}
 
-        <Button color="primary" onClick={refreshList}>Refresh</Button>
+      <Button color="primary" onClick={refreshList}>
+        Refresh
+      </Button>
 
-        <div className="table-responsive">
-          <Table className="table-striped">
-            <thead>
+      <div className="table-responsive">
+        <Table className="table-striped">
+          <thead>
             <tr>
-              <th><Translate contentKey="sessions.table.ipaddress">IP Address</Translate></th>
-              <th><Translate contentKey="sessions.table.useragent">User agent</Translate></th>
-              <th><Translate contentKey="sessions.table.date">Date</Translate></th>
+              <th>
+                <Translate contentKey="sessions.table.ipaddress">IP Address</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sessions.table.useragent">User agent</Translate>
+              </th>
+              <th>
+                <Translate contentKey="sessions.table.date">Date</Translate>
+              </th>
               <th />
             </tr>
-            </thead>
+          </thead>
 
-            <tbody>
+          <tbody>
             {sessions.map((s, index) => (
               <tr key={index}>
                 <td>{s.ipAddress}</td>
@@ -96,12 +106,11 @@ export const SessionsPage = () => {
                 </td>
               </tr>
             ))}
-            </tbody>
-          </Table>
-        </div>
+          </tbody>
+        </Table>
       </div>
+    </div>
   );
 };
 
 export default SessionsPage;
-

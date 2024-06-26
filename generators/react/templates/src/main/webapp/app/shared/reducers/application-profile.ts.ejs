@@ -24,10 +24,10 @@ import { serializeAxiosError } from './reducer.utils';
 const initialState = {
   ribbonEnv: '',
   inProduction: true,
-  isOpenAPIEnabled: false
+  isOpenAPIEnabled: false,
 };
 
-export type ApplicationProfileState =  Readonly<typeof initialState>;
+export type ApplicationProfileState = Readonly<typeof initialState>;
 
 export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get<any>('management/info'), {
   serializeError: serializeAxiosError,

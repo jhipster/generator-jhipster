@@ -86,9 +86,13 @@ interface IAuthParams {
   rememberMe?: boolean;
 }
 
-export const authenticate = createAsyncThunk('authentication/login', async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth), {
-  serializeError: serializeAxiosError,
-});
+export const authenticate = createAsyncThunk(
+  'authentication/login',
+  async (auth: IAuthParams) => axios.post<any>('api/authenticate', auth),
+  {
+    serializeError: serializeAxiosError,
+  },
+);
 
 export const login: (username: string, password: string, rememberMe?: boolean) => AppThunk =
   (username, password, rememberMe = false) =>

@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import sinon from 'sinon';
@@ -29,7 +28,7 @@ import userManagement, {
   createUser,
   updateUser,
   deleteUser,
-  reset
+  reset,
 } from './user-management.reducer';
 import { defaultValue } from 'app/shared/model/user.model';
 import { AUTHORITIES } from 'app/config/constants';
@@ -51,7 +50,7 @@ describe('User management reducer tests', () => {
       errorMessage: null,
       updating: false,
       updateSuccess: false,
-      totalItems: 0
+      totalItems: 0,
     });
     expect(isEmpty(state.users));
     expect(isEmpty(state.authorities));
@@ -76,31 +75,23 @@ describe('User management reducer tests', () => {
     });
 
     it('should set state to loading', () => {
-      testMultipleTypes(
-        [getUsers.pending.type, getUsersAsAdmin.pending.type, getUser.pending.type],
-        {},
-        state => {
-          expect(state).toMatchObject({
-            errorMessage: null,
-            updateSuccess: false,
-            loading: true,
-          });
-        }
-      );
+      testMultipleTypes([getUsers.pending.type, getUsersAsAdmin.pending.type, getUser.pending.type], {}, state => {
+        expect(state).toMatchObject({
+          errorMessage: null,
+          updateSuccess: false,
+          loading: true,
+        });
+      });
     });
 
     it('should set state to updating', () => {
-      testMultipleTypes(
-        [createUser.pending.type, updateUser.pending.type, deleteUser.pending.type],
-        {},
-        state => {
-          expect(state).toMatchObject({
-            errorMessage: null,
-            updateSuccess: false,
-            updating: true,
-          });
-        }
-      );
+      testMultipleTypes([createUser.pending.type, updateUser.pending.type, deleteUser.pending.type], {}, state => {
+        expect(state).toMatchObject({
+          errorMessage: null,
+          updateSuccess: false,
+          updating: true,
+        });
+      });
     });
   });
 
@@ -125,7 +116,7 @@ describe('User management reducer tests', () => {
             errorMessage: 'error happened',
           });
         },
-        { message: 'error happened' }
+        { message: 'error happened' },
       );
     });
   });
@@ -155,7 +146,7 @@ describe('User management reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        user: payload.data
+        user: payload.data,
       });
     });
 
@@ -165,22 +156,18 @@ describe('User management reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        authorities: payload.data
+        authorities: payload.data,
       });
     });
 
     it('should set state to successful update', () => {
-      testMultipleTypes(
-        [createUser.fulfilled.type, updateUser.fulfilled.type],
-        { data: 'some handsome user' },
-        types => {
-          expect(types).toMatchObject({
-            updating: false,
-            updateSuccess: true,
-            user: 'some handsome user',
-          });
-        }
-      );
+      testMultipleTypes([createUser.fulfilled.type, updateUser.fulfilled.type], { data: 'some handsome user' }, types => {
+        expect(types).toMatchObject({
+          updating: false,
+          updateSuccess: true,
+          user: 'some handsome user',
+        });
+      });
     });
 
     it('should set state to successful update with an empty user', () => {
@@ -188,7 +175,7 @@ describe('User management reducer tests', () => {
 
       expect(toTest).toMatchObject({
         updating: false,
-        updateSuccess: true
+        updateSuccess: true,
       });
       expect(isEmpty(toTest.user));
     });
@@ -204,7 +191,7 @@ describe('User management reducer tests', () => {
         user: defaultValue,
         updating: false,
         updateSuccess: false,
-        totalItems: 0
+        totalItems: 0,
       };
       const initialStateNew = {
         ...initialState,
@@ -317,10 +304,7 @@ describe('User management reducer tests', () => {
 
     it('dispatches RESET actions', async () => {
       await store.dispatch(reset());
-      expect(store.getState()).toEqual([
-        expect.any(Object),
-        expect.objectContaining(reset()),
-      ]);
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(reset())]);
     });
   });
 });

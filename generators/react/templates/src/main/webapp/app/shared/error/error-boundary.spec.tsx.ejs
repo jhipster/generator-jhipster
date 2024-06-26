@@ -8,9 +8,7 @@ const ErrorComp = () => {
 };
 
 describe('error component', () => {
-
   beforeEach(() => {
-
     // ignore console and jsdom errors
     jest.spyOn((window as any)._virtualConsole, 'emit').mockImplementation(() => false);
     jest.spyOn((window as any).console, 'error').mockImplementation(() => false);
@@ -25,7 +23,7 @@ describe('error component', () => {
     render(
       <ErrorBoundary>
         <ErrorComp />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
     expect(spy).toHaveBeenCalled();
   });

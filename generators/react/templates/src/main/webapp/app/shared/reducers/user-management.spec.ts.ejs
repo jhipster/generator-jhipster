@@ -45,10 +45,8 @@ describe('User management reducer tests', () => {
           type: getUsers.rejected.type,
           payload: 'something happened',
           error: { message: 'error happened' },
-        })
-      ).toEqual(
-        { ...initialState, errorMessage: 'error happened' }
-      )
+        }),
+      ).toEqual({ ...initialState, errorMessage: 'error happened' });
     });
   });
 
@@ -57,7 +55,7 @@ describe('User management reducer tests', () => {
       const payload = { data: 'some handsome users' };
       const toTest = userManagement(undefined, { type: getUsers.fulfilled.type, payload });
       expect(toTest).toMatchObject({
-        users: payload.data
+        users: payload.data,
       });
     });
   });

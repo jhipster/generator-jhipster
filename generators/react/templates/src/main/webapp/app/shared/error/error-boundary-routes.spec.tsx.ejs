@@ -25,7 +25,7 @@ describe('error-boundary-routes component', () => {
         <ErrorBoundaryRoutes>
           <Route path="*" element={<ErrorComp />} />
         </ErrorBoundaryRoutes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(container.innerHTML).toEqual('<div><h2 class="error">An unexpected error has occurred.</h2></div>');
   });
@@ -37,7 +37,7 @@ describe('error-boundary-routes component', () => {
           <Route path="/path" element={<NoErrorComp />} />
           <Route path="*" element={<ErrorComp />} />
         </ErrorBoundaryRoutes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(container.innerHTML).toEqual('<div>No error</div>');
   });
@@ -48,7 +48,7 @@ describe('error-boundary-routes component', () => {
         <ErrorBoundaryRoutes>
           <Route path="*" element={<NoErrorComp />} />
         </ErrorBoundaryRoutes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(container.innerHTML).toEqual('<div>No error</div>');
   });

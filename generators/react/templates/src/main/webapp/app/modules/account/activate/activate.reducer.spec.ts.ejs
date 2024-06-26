@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
 import axios from 'axios';
 import sinon from 'sinon';
 import { configureStore } from '@reduxjs/toolkit';
@@ -95,10 +94,7 @@ describe('Activate reducer tests', () => {
     });
     it('dispatches RESET actions', async () => {
       await store.dispatch(reset());
-      expect(store.getState()).toEqual([
-        expect.any(Object),
-        expect.objectContaining(reset()),
-      ]);
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(reset())]);
     });
   });
 });
