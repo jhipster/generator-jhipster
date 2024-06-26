@@ -78,7 +78,7 @@ describe('User Service', () => {
       let expectedResult = 0;
 
       service.find('user').subscribe({
-        error: (error: HttpErrorResponse) => expectedResult = error.status
+        error: (error: HttpErrorResponse) => (expectedResult = error.status),
       });
 
       const req = httpMock.expectOne({ method: 'GET' });

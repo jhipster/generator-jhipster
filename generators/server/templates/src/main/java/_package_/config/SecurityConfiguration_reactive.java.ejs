@@ -340,20 +340,26 @@ public class SecurityConfiguration {
     public ReactiveOAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcReactiveOAuth2UserService delegate = new OidcReactiveOAuth2UserService();
 
-        return (userRequest) -> {
+        return userRequest -> {
             // Delegate to the default implementation for loading a user
-            return delegate.loadUser(userRequest).map(user -> {
-                Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+            return delegate
+                .loadUser(userRequest)
+                .map(user -> {
+                    Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
-                user.getAuthorities().forEach(authority -> {
-                    if (authority instanceof OidcUserAuthority) {
-                        OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                        mappedAuthorities.addAll(SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims()));
-                    }
+                    user
+                        .getAuthorities()
+                        .forEach(authority -> {
+                            if (authority instanceof OidcUserAuthority) {
+                                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                                mappedAuthorities.addAll(
+                                    SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims())
+                                );
+                            }
+                        });
+
+                    return new DefaultOidcUser(mappedAuthorities, user.getIdToken(), user.getUserInfo(), PREFERRED_USERNAME);
                 });
-
-                return new DefaultOidcUser(mappedAuthorities, user.getIdToken(), user.getUserInfo(), PREFERRED_USERNAME);
-            });
         };
     }
 

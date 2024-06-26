@@ -29,16 +29,14 @@ describe('ConfigurationComponent', () => {
   let fixture: ComponentFixture<ConfigurationComponent>;
   let service: ConfigurationService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [ConfigurationComponent],
-        providers: [provideHttpClient(), ConfigurationService],
-      })
-        .overrideTemplate(ConfigurationComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [ConfigurationComponent],
+      providers: [provideHttpClient(), ConfigurationService],
     })
-  );
+      .overrideTemplate(ConfigurationComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfigurationComponent);

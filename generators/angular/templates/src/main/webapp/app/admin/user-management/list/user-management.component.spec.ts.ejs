@@ -45,19 +45,17 @@ describe('User Management Component', () => {
       page: '1',
       size: '1',
       sort: 'id,desc',
-    })
+    }),
   );
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [UserManagementComponent],
-        providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
-      })
-        .overrideTemplate(UserManagementComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [UserManagementComponent],
+      providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
     })
-  );
+      .overrideTemplate(UserManagementComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserManagementComponent);
@@ -105,8 +103,8 @@ describe('User Management Component', () => {
             new HttpResponse({
               body: [user],
               headers,
-            })
-          )
+            }),
+          ),
         );
         jest.spyOn(service, 'update').mockReturnValue(of(user));
 

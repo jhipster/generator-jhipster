@@ -55,7 +55,7 @@ export default class HealthComponent implements OnInit {
         if (error.status === 503) {
           this.health = error.error;
         }
-      }
+      },
     });
   }
 

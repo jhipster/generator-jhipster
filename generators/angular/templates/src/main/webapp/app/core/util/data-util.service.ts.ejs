@@ -60,9 +60,9 @@ export class DataUtils {
     });
     const fileURL = window.URL.createObjectURL(blob);
     const win = window.open(fileURL);
-    win!.onload = function() {
-        URL.revokeObjectURL(fileURL);
-    }
+    win!.onload = function () {
+      URL.revokeObjectURL(fileURL);
+    };
   }
 
   /**

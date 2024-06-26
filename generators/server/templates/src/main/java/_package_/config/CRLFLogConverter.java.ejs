@@ -23,6 +23,7 @@ import org.springframework.boot.ansi.AnsiStyle;
  * @see <a href="https://github.com/jhipster/generator-jhipster/issues/14949">JHipster issue</a>
  */
 public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
+
     public static final Marker CRLF_SAFE_MARKER = MarkerFactory.getMarker("CRLF_SAFE");
 
     private static final String[] SAFE_LOGS = {
@@ -32,17 +33,17 @@ public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
     };
     private static final Map<String, AnsiElement> ELEMENTS;
 
-	static {
-		Map<String, AnsiElement> ansiElements = new HashMap<>();
-		ansiElements.put("faint", AnsiStyle.FAINT);
-		ansiElements.put("red", AnsiColor.RED);
-		ansiElements.put("green", AnsiColor.GREEN);
-		ansiElements.put("yellow", AnsiColor.YELLOW);
-		ansiElements.put("blue", AnsiColor.BLUE);
-		ansiElements.put("magenta", AnsiColor.MAGENTA);
-		ansiElements.put("cyan", AnsiColor.CYAN);
-		ELEMENTS = Collections.unmodifiableMap(ansiElements);
-	}
+    static {
+        Map<String, AnsiElement> ansiElements = new HashMap<>();
+        ansiElements.put("faint", AnsiStyle.FAINT);
+        ansiElements.put("red", AnsiColor.RED);
+        ansiElements.put("green", AnsiColor.GREEN);
+        ansiElements.put("yellow", AnsiColor.YELLOW);
+        ansiElements.put("blue", AnsiColor.BLUE);
+        ansiElements.put("magenta", AnsiColor.MAGENTA);
+        ansiElements.put("cyan", AnsiColor.CYAN);
+        ELEMENTS = Collections.unmodifiableMap(ansiElements);
+    }
 
     @Override
     protected String transform(ILoggingEvent event, String in) {
@@ -64,7 +65,7 @@ public class CRLFLogConverter extends CompositeConverter<ILoggingEvent> {
         return false;
     }
 
-	protected String toAnsiString(String in, AnsiElement element) {
-		return AnsiOutput.toString(element, in);
-	}
+    protected String toAnsiString(String in, AnsiElement element) {
+        return AnsiOutput.toString(element, in);
+    }
 }

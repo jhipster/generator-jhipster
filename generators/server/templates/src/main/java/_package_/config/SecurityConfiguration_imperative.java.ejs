@@ -323,7 +323,7 @@ public class SecurityConfiguration {
      */
     @Bean
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
-        return (authorities) -> {
+        return authorities -> {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
@@ -365,6 +365,7 @@ public class SecurityConfiguration {
      * @see <a href="https://stackoverflow.com/q/74447118/65681">CSRF protection not working with Spring Security 6</a>
      */
     static final class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
+
         private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
 
         @Override

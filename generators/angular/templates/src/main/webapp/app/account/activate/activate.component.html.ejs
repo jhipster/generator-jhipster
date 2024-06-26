@@ -20,15 +20,15 @@
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
       <h1>__jhiTranslateTag__('activate.title')</h1>
-    @if (success()) {
-      <div class="alert alert-success">
-        <span>__jhiTranslateTag__('activate.messages.success')</span>
-        <a class="alert-link" routerLink="/login">__jhiTranslateTag__('global.messages.info.authenticated.link')</a>.
-      </div>
-    }
-    @if (error()) {
-      <div class="alert alert-danger">__jhiTranslateTag__('activate.messages.error')</div>
-    }
+      @if (success()) {
+        <div class="alert alert-success">
+          <span>__jhiTranslateTag__('activate.messages.success')</span>
+          <a class="alert-link" routerLink="/login">__jhiTranslateTag__('global.messages.info.authenticated.link')</a>.
+        </div>
+      }
+      @if (error()) {
+        <div class="alert alert-danger">__jhiTranslateTag__('activate.messages.error')</div>
+      }
     </div>
   </div>
 </div>

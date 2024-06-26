@@ -424,20 +424,17 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             tuples
                 .stream()
                 .filter(t -> t.getT2().isPresent())
-                .map(
-                    t -> {
-                        Authority authority = new Authority();
-                        authority.setName(t.getT2().orElseThrow());
-                        return authority;
-                    }
-                )
+                .map(t -> {
+                    Authority authority = new Authority();
+                    authority.setName(t.getT2().orElseThrow());
+                    return authority;
+                })
                 .collect(Collectors.toSet())
         );
 
         return user;
     }
 }
-
 <%_ } else if (databaseTypeCassandra) { _%>
 @Repository
 public class UserRepository {

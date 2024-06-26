@@ -72,8 +72,7 @@ public class JwtAuthenticationTestUtils {
 
         var now = Instant.now();
 
-        JwtClaimsSet claims = JwtClaimsSet
-            .builder()
+        JwtClaimsSet claims = JwtClaimsSet.builder()
             .issuedAt(now)
             .expiresAt(now.plusSeconds(60))
             .subject(user)

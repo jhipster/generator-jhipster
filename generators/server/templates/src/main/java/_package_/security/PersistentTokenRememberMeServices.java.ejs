@@ -78,8 +78,7 @@ import java.util.*;
  * couldn't be cleanly extended.
  */
 @Service
-public class PersistentTokenRememberMeServices extends
-    AbstractRememberMeServices {
+public class PersistentTokenRememberMeServices extends AbstractRememberMeServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistentTokenRememberMeServices.class);
 
@@ -96,10 +95,12 @@ public class PersistentTokenRememberMeServices extends
 
     private final UserRepository userRepository;
 
-    public PersistentTokenRememberMeServices(JHipsterProperties jHipsterProperties,
-            org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
-            PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
-
+    public PersistentTokenRememberMeServices(
+        JHipsterProperties jHipsterProperties,
+        org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
+        PersistentTokenRepository persistentTokenRepository,
+        UserRepository userRepository
+    ) {
         super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         this.persistentTokenRepository = persistentTokenRepository;
         this.userRepository = userRepository;
@@ -107,9 +108,7 @@ public class PersistentTokenRememberMeServices extends
     }
 
     @Override
-    protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request,
-        HttpServletResponse response) {
-
+    protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
         synchronized (this) { // prevent 2 authentication requests from the same user in parallel
             String login = null;
             UpgradedRememberMeToken upgradedToken = upgradedTokenCache.get(cookieTokens[0]);
@@ -272,9 +271,7 @@ public class PersistentTokenRememberMeServices extends
     }
 
     private void addCookie(PersistentToken token, HttpServletRequest request, HttpServletResponse response) {
-        setCookie(
-            new String[]{token.getSeries(), token.getTokenValue()},
-            TOKEN_VALIDITY_SECONDS, request, response);
+        setCookie(new String[] { token.getSeries(), token.getTokenValue() }, TOKEN_VALIDITY_SECONDS, request, response);
     }
 
     private static class UpgradedRememberMeToken implements Serializable {
@@ -291,8 +288,7 @@ public class PersistentTokenRememberMeServices extends
         }
 
         String getUserLoginIfValid(String[] currentToken) {
-            if (currentToken[0].equals(this.upgradedToken[0]) &&
-                    currentToken[1].equals(this.upgradedToken[1])) {
+            if (currentToken[0].equals(this.upgradedToken[0]) && currentToken[1].equals(this.upgradedToken[1])) {
                 return this.userLogin;
             }
             return null;

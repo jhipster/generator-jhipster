@@ -73,8 +73,7 @@ class SecurityUtilsUnitTest {
         claims.put("groups", AuthoritiesConstants.USER);
         claims.put("sub", 123);
         claims.put("preferred_username", "admin");
-        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
-            Instant.now().plusSeconds(60), claims);
+        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(), Instant.now().plusSeconds(60), claims);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
         OidcUser user = new DefaultOidcUser(authorities, idToken);

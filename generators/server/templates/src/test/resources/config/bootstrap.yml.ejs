@@ -13,19 +13,19 @@
  limitations under the License.
 -%>
 <%_ if (serviceDiscoveryEureka) { _%>
-  spring:
-    cloud:
-      config:
-        enabled: false
+spring:
+  cloud:
+    config:
+      enabled: false
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
-  spring:
-    cloud:
-      consul:
-        discovery:
-          enabled: false
-          instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
-        config:
-          enabled: false
+spring:
+  cloud:
+    consul:
+      discovery:
         enabled: false
+        instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+      config:
+        enabled: false
+      enabled: false
 <%_ } _%>

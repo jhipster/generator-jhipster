@@ -60,11 +60,7 @@ class SpaWebFilterIT {
 
     @Test
     void testFilterDoesNotForwardToIndexForDotFile() {
-        webTestClient
-            .get()
-            .uri("/file.js")
-            .exchange()
-            .expectStatus().isNotFound();
+        webTestClient.get().uri("/file.js").exchange().expectStatus().isNotFound();
     }
 
     @Test
@@ -73,9 +69,12 @@ class SpaWebFilterIT {
             .get()
             .uri("/test")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType("text/html;charset=UTF-8")
+            .expectBody(String.class)
+            .isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -84,9 +83,12 @@ class SpaWebFilterIT {
             .get()
             .uri("/first-level")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType("text/html;charset=UTF-8")
+            .expectBody(String.class)
+            .isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -95,9 +97,12 @@ class SpaWebFilterIT {
             .get()
             .uri("/first-level/second-level")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType("text/html;charset=UTF-8")
+            .expectBody(String.class)
+            .isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -106,9 +111,12 @@ class SpaWebFilterIT {
             .get()
             .uri("/first-level/second-level/third-level")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType("text/html;charset=UTF-8")
+            .expectBody(String.class)
+            .isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
@@ -117,19 +125,17 @@ class SpaWebFilterIT {
             .get()
             .uri("/1/2/3/4/5/6/7/8/9/10")
             .exchange()
-            .expectStatus().isOk()
-            .expectHeader().contentType("text/html;charset=UTF-8")
-            .expectBody(String.class).isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
+            .expectStatus()
+            .isOk()
+            .expectHeader()
+            .contentType("text/html;charset=UTF-8")
+            .expectBody(String.class)
+            .isEqualTo(SpaWebFilterTestController.INDEX_HTML_TEST_CONTENT);
     }
 
     @Test
     void getUnmappedFirstLevelFile() {
-        webTestClient
-            .get()
-            .uri("/foo.js")
-            .exchange()
-            .expectStatus()
-            .isNotFound();
+        webTestClient.get().uri("/foo.js").exchange().expectStatus().isNotFound();
     }
 
     /**
@@ -139,21 +145,11 @@ class SpaWebFilterIT {
      */
     @Test
     void getUnmappedSecondLevelFile() {
-        webTestClient
-            .get()
-            .uri("/foo/bar.js")
-            .exchange()
-            .expectStatus()
-            .isForbidden();
+        webTestClient.get().uri("/foo/bar.js").exchange().expectStatus().isForbidden();
     }
 
     @Test
     void getUnmappedThirdLevelFile() {
-        webTestClient
-            .get()
-            .uri("/foo/another/bar.js")
-            .exchange()
-            .expectStatus()
-            .isForbidden();
+        webTestClient.get().uri("/foo/another/bar.js").exchange().expectStatus().isForbidden();
     }
 }

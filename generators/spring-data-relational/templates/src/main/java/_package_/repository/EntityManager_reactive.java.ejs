@@ -42,7 +42,6 @@ import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.r2dbc.core.Parameter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -52,10 +51,12 @@ import reactor.core.publisher.Mono;
  */
 @Component
 public class EntityManager {
-    public final static String ENTITY_ALIAS = "e";
-    public final static String ALIAS_PREFIX = "e_";
+
+    public static final String ENTITY_ALIAS = "e";
+    public static final String ALIAS_PREFIX = "e_";
 
     public static class LinkTable {
+
         final String tableName;
         final String idColumn;
         final String referenceColumn;
@@ -125,9 +126,17 @@ public class EntityManager {
     public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable, Condition where) {
         if (pageable != null) {
             if (where != null) {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where), entityType, pageable.getSort());
+                return createSelectImpl(
+                    selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()).where(where),
+                    entityType,
+                    pageable.getSort()
+                );
             } else {
-                return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+                return createSelectImpl(
+                    selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()),
+                    entityType,
+                    pageable.getSort()
+                );
             }
         } else {
             if (where != null) {
@@ -184,30 +193,28 @@ public class EntityManager {
      * @return the number of inserted rows.
      */
     public Mono<Long> updateLinkTable(LinkTable table, Object entityId, Stream<?> referencedIds) {
-        return deleteFromLinkTable(table, entityId)
-                .then(
-                    Flux.fromStream(referencedIds)
-                        .flatMap((Object referenceId) -> {
-                            StatementMapper.InsertSpec insert = r2dbcEntityTemplate
-                                .getDataAccessStrategy()
-                                .getStatementMapper()
-                                .createInsert(table.tableName)
-                                .withColumn(table.idColumn, Parameter.from(entityId))
-                                .withColumn(table.referenceColumn, Parameter.from(referenceId));
+        return deleteFromLinkTable(table, entityId).then(
+            Flux.fromStream(referencedIds)
+                .flatMap((Object referenceId) -> {
+                    StatementMapper.InsertSpec insert = r2dbcEntityTemplate
+                        .getDataAccessStrategy()
+                        .getStatementMapper()
+                        .createInsert(table.tableName)
+                        .withColumn(table.idColumn, Parameter.from(entityId))
+                        .withColumn(table.referenceColumn, Parameter.from(referenceId));
 
-                            return r2dbcEntityTemplate
-                                .getDatabaseClient()
-                                .sql(statementMapper.getMappedObject(insert))
-                                .fetch()
-                                .rowsUpdated();
-                            })
-                        .collectList()
-                        .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0l)));
+                    return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(insert)).fetch().rowsUpdated();
+                })
+                .collectList()
+                .map((List<Long> updates) -> updates.stream().reduce(Long::sum).orElse(0l))
+        );
     }
 
     public Mono<Void> deleteFromLinkTable(LinkTable table, Object entityId) {
         Assert.notNull(entityId, "entityId is null");
-        StatementMapper.DeleteSpec deleteSpec = r2dbcEntityTemplate.getDataAccessStrategy().getStatementMapper()
+        StatementMapper.DeleteSpec deleteSpec = r2dbcEntityTemplate
+            .getDataAccessStrategy()
+            .getStatementMapper()
             .createDelete(table.tableName)
             .withCriteria(Criteria.from(Criteria.where(table.idColumn).is(entityId)));
         return r2dbcEntityTemplate.getDatabaseClient().sql(statementMapper.getMappedObject(deleteSpec)).then();
@@ -218,7 +225,9 @@ public class EntityManager {
             RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
             if (entity != null) {
                 Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-                selectFrom = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort));
+                selectFrom = selectFrom.orderBy(
+                    createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)
+                );
             }
         }
         return createSelect(selectFrom.build());
@@ -229,11 +238,9 @@ public class EntityManager {
     }
 
     private static Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
-
         List<OrderByField> fields = new ArrayList<>();
 
         for (Sort.Order order : sortToUse) {
-
             String propertyName = order.getProperty();
             OrderByField orderByField = !propertyName.contains(".")
                 ? OrderByField.from(table.column(propertyName).as(EntityManager.ALIAS_PREFIX + propertyName))

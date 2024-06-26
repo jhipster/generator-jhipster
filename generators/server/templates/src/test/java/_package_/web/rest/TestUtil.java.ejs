@@ -108,11 +108,9 @@ public final class TestUtil {
                 }
                 return true;
             } catch (DateTimeParseException e) {
-                mismatchDescription.appendText("was ").appendValue(item)
-                    .appendText(", which could not be parsed as a ZonedDateTime");
+                mismatchDescription.appendText("was ").appendValue(item).appendText(", which could not be parsed as a ZonedDateTime");
                 return false;
             }
-
         }
 
         @Override
@@ -169,9 +167,9 @@ public final class TestUtil {
             } else {
                 return BigDecimal.valueOf(item.doubleValue());
             }
-
         }
     }
+
     /**
      * Creates a matcher that matches when the examined number represents the same value as the reference BigDecimal.
      *
@@ -208,7 +206,7 @@ public final class TestUtil {
      * @return the {@link FormattingConversionService}.
      */
     public static FormattingConversionService createFormattingConversionService() {
-        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService ();
+        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
         DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
         registrar.setUseIsoFormat(true);
         registrar.registerFormatters(dfcs);

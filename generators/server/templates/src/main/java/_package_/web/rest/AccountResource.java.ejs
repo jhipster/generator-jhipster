@@ -241,9 +241,11 @@ public class AccountResource {
     @GetMapping("/account/sessions")
     public List<PersistentToken> getCurrentSessions() {
         return persistentTokenRepository.findByUser(
-            userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new AccountResourceException("Current user login not found")))
-                    .orElseThrow(() -> new AccountResourceException("User could not be found"))
+            userRepository
+                .findOneByLogin(
+                    SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+                )
+                .orElseThrow(() -> new AccountResourceException("User could not be found"))
         );
     }
 
