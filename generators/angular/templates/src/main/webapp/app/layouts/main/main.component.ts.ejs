@@ -53,12 +53,12 @@ export default class MainComponent implements OnInit {
   private translateService = inject(TranslateService);
   private rootRenderer = inject(RendererFactory2);
 <%_ } _%>
+<%_ if (enableTranslation) { _%>
 
   constructor() {
-<%_ if (enableTranslation) { _%>
     this.renderer = this.rootRenderer.createRenderer(document.querySelector('html'), null);
-<%_ } _%>
   }
+<%_ } _%>
 
   ngOnInit(): void {
     // try to log in automatically

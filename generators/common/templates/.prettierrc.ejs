@@ -11,8 +11,12 @@ arrowParens: avoid
 # jsx and tsx rules:
 bracketSameLine: false
 
+<%_ if (backendTypeJavaAny || !monorepository) { _%>
 plugins:
+  <%_ if (!monorepository) { _%>
   - prettier-plugin-packagejson
+  <%_ } _%>
+<%_ } _%>
 <%_ if (backendTypeJavaAny) { _%>
   - prettier-plugin-java
 

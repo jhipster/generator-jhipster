@@ -20,18 +20,14 @@ export interface ConfigProps {
   contexts: Contexts;
 }
 
-export interface Contexts {
-  [key: string]: Context;
-}
+export type Contexts = Record<string, Context>;
 
 export interface Context {
   beans: Beans;
   parentId?: any;
 }
 
-export interface Beans {
-  [key: string]: Bean;
-}
+export type Beans = Record<string, Bean>;
 
 export interface Bean {
   prefix: string;
@@ -48,9 +44,7 @@ export interface PropertySource {
   properties: Properties;
 }
 
-export interface Properties {
-  [key: string]: Property;
-}
+export type Properties = Record<string, Property>;
 
 export interface Property {
   value: string;

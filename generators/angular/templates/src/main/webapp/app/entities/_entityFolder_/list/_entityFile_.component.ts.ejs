@@ -132,7 +132,7 @@ export class <%= componentName %> implements OnInit {
 <%- include('pagination-template'); -%>
 <%_ } else if (paginationInfiniteScroll) { _%>
     itemsPerPage = ITEMS_PER_PAGE;
-    links: WritableSignal<{ [key: string]: undefined | { [key: string]: string | undefined } }> = signal({});
+    links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
     hasMorePage = computed(() => !!this.links().next);
     isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 <%_ } _%>
@@ -302,7 +302,7 @@ export class <%= componentName %> implements OnInit {
         if (data) {
           for (const d of data) {
   <%_ if (primaryKey) { _%>
-            if (<%= entityInstancePlural %>New.map(op => op.<%= primaryKey.name %>).indexOf(d.<%= primaryKey.name %>) === -1) {
+            if (<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
   <%_ } _%>
               <%= entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>

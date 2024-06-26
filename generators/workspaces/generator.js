@@ -177,7 +177,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         if (applications.some(app => app.clientFrameworkAngular)) {
           const {
             dependencies: { rxjs },
-            devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion },
+            devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion, 'typescript-eslint': typescriptEslintVersion },
           } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
 
           this.packageJson.merge({
@@ -185,8 +185,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
               rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
             },
             overrides: {
-              webpack: webpackVersion,
               'browser-sync': browserSyncVersion,
+              'typescript-eslint': typescriptEslintVersion,
+              webpack: webpackVersion,
             },
           });
         }
