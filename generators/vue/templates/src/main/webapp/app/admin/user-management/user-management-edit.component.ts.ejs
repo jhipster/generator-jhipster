@@ -110,7 +110,8 @@ export default defineComponent({
           .then(res => {
             this.returnToList();
             this.alertService.showSuccess(this.getToastMessageFromHeader(res));
-          }).catch(error => {
+          })
+          .catch(error => {
             this.isSaving = true;
             this.alertService.showHttpError(error.response);
           });

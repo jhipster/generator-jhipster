@@ -17,7 +17,7 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const previousState = () => router.go(-1)
+    const previousState = () => router.go(-1);
 
     const accountService = inject<AccountService>('accountService');
     const loginService = inject<LoginService>('loginService');

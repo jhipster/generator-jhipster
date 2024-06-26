@@ -34,7 +34,9 @@ describe('Account Service test suite', () => {
 
   it('should init service and do not retrieve account', async () => {
     axiosStub.get.resolves({});
-    axiosStub.get.withArgs('management/info').resolves({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
+    axiosStub.get
+      .withArgs('management/info')
+      .resolves({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
 
     accountService = new AccountService(store);
     await accountService.update();

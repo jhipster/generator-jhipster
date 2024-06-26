@@ -23,12 +23,7 @@
             <span v-text="t$('global.menu.home')">Home</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown
-          right
-          id="entity-menu"
-          v-if="authenticated"
-          active-class="active" class="pointer"
-          data-cy="entity">
+        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="th-list" />
@@ -47,10 +42,11 @@
           right
           id="admin-menu"
           v-if="hasAnyAuthority('ROLE_ADMIN') && authenticated"
-          :class="{'router-link-active': subIsActive('/admin')}"
+          :class="{ 'router-link-active': subIsActive('/admin') }"
           active-class="active"
           class="pointer"
-          data-cy="adminMenu">
+          data-cy="adminMenu"
+        >
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="users-cog" />

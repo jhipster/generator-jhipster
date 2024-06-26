@@ -31,13 +31,13 @@ const webpackConfig = {
     rules: styleLoaders({
       sourceMap: config.build.productionSourceMap,
       extract: true,
-      usePostCSS: true
-    })
+      usePostCSS: true,
+    }),
   },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     filename: 'app/[name].[contenthash].bundle.js',
-    chunkFilename: 'app/[id].[chunkhash].chunk.js'
+    chunkFilename: 'app/[id].[chunkhash].chunk.js',
   },
   optimization: {
     moduleIds: 'deterministic',
@@ -52,10 +52,10 @@ const webpackConfig = {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
+          chunks: 'all',
+        },
+      },
+    },
   },
   plugins: [
     new TerserPlugin({
@@ -83,11 +83,11 @@ const webpackConfig = {
           unused: true,
           conditionals: true,
           dead_code: true,
-          evaluate: true
+          evaluate: true,
         },
         mangle: {
-          safari10: true
-        }
+          safari10: true,
+        },
       },
       parallel: true,
       extractComments: false,
@@ -95,14 +95,14 @@ const webpackConfig = {
     // extract css into its own file
     new MiniCssExtractPlugin({
       filename: 'content/[name].[contenthash].css',
-      chunkFilename: 'content/[id].css'
+      chunkFilename: 'content/[id].css',
     }),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
-      exclude: [/swagger-ui/]
-    })
-  ]
+      exclude: [/swagger-ui/],
+    }),
+  ],
 };
 
 if (config.build.productionGzip) {
@@ -114,8 +114,8 @@ if (config.build.productionGzip) {
       algorithm: 'gzip',
       test: new RegExp('\\.(' + config.build.productionGzipExtensions.join('|') + ')$'),
       threshold: 10240,
-      minRatio: 0.8
-    })
+      minRatio: 0.8,
+    }),
   );
 }
 
