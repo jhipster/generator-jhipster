@@ -30,7 +30,7 @@ function setupProxy({ tls }) {
 <%_ } _%>
     '/health',
   ];
-  const conf = [
+  return [
     {
       context: serverResources,
       target: `http${tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
@@ -45,7 +45,6 @@ function setupProxy({ tls }) {
     },
 <%_ } _%>
   ];
-  return conf;
 }
 
 module.exports = setupProxy;
