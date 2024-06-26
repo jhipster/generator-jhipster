@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
 import axios from 'axios';
 import sinon from 'sinon';
 import { configureStore } from '@reduxjs/toolkit';
@@ -172,7 +171,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        health: payload.data
+        health: payload.data,
       });
     });
 
@@ -182,7 +181,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        metrics: payload.data
+        metrics: payload.data,
       });
     });
 
@@ -192,7 +191,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        threadDump: payload.data
+        threadDump: payload.data,
       });
     });
 
@@ -204,8 +203,8 @@ describe('Administration reducer tests', () => {
         loading: false,
         configuration: {
           configProps: payload.data,
-          env: {}
-        }
+          env: {},
+        },
       });
     });
 

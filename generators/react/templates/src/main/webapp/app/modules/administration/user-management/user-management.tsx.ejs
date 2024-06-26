@@ -42,7 +42,7 @@ export const UserManagement = () => {
   const navigate = useNavigate();
 
   const [pagination, setPagination] = useState(
-    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search)
+    overridePaginationStateWithQueryParams(getPaginationState(pageLocation, ITEMS_PER_PAGE, 'id'), pageLocation.search),
   );
 
   const getUsersFromProps = () => {
@@ -51,7 +51,7 @@ export const UserManagement = () => {
         page: pagination.activePage - 1,
         size: pagination.itemsPerPage,
         sort: `${pagination.sort},${pagination.order}`,
-      })
+      }),
     );
     const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
     if (pageLocation.search !== endURL) {
@@ -73,7 +73,7 @@ export const UserManagement = () => {
         ...pagination,
         activePage: +page,
         sort: sortSplit[0],
-        order: sortSplit[1]
+        order: sortSplit[1],
       });
     }
   }, [pageLocation.search]);
@@ -82,13 +82,13 @@ export const UserManagement = () => {
     setPagination({
       ...pagination,
       order: pagination.order === ASC ? DESC : ASC,
-      sort: p
+      sort: p,
     });
 
   const handlePagination = currentPage =>
     setPagination({
       ...pagination,
-      activePage: currentPage
+      activePage: currentPage,
     });
 
   const handleSyncList = () => {
@@ -100,7 +100,7 @@ export const UserManagement = () => {
       updateUser({
         ...user,
         activated: !user.activated,
-      })
+      }),
     );
   };
 
@@ -114,7 +114,7 @@ export const UserManagement = () => {
     if (sortFieldName !== fieldName) {
       return faSort;
     } else {
-      return (order === ASC) ? faSortUp : faSortDown;
+      return order === ASC ? faSortUp : faSortDown;
     }
   };
 
@@ -124,7 +124,8 @@ export const UserManagement = () => {
         <Translate contentKey="userManagement.home.title">Users</Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
-            <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
+            <FontAwesomeIcon icon="sync" spin={loading} />{' '}
+            <Translate contentKey="userManagement.home.refreshListLabel">Refresh List</Translate>
           </Button>
           <Link to="new" className="btn btn-primary jh-create-entity">
             <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>

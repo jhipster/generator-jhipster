@@ -49,17 +49,23 @@ export const UserManagementDeleteDialog = () => {
 
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
+      <ModalHeader toggle={handleClose}>
+        <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
+      </ModalHeader>
       <ModalBody>
-        <Translate contentKey="userManagement.delete.question" interpolate={{ login: user.login }}>Are you sure you want to delete this User?</Translate>
+        <Translate contentKey="userManagement.delete.question" interpolate={{ login: user.login }}>
+          Are you sure you want to delete this User?
+        </Translate>
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
-          <FontAwesomeIcon icon="ban"/>&nbsp;
+          <FontAwesomeIcon icon="ban" />
+          &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
         <Button color="danger" onClick={confirmDelete}>
-          <FontAwesomeIcon icon="trash" />&nbsp;
+          <FontAwesomeIcon icon="trash" />
+          &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
       </ModalFooter>

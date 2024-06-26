@@ -50,13 +50,13 @@ describe('Creating account tests', () => {
   it('should detect a request', () => {
     expect(register(undefined, { type: handleRegister.pending.type })).toEqual({
       ...initialState,
-      loading: true
+      loading: true,
     });
   });
 
   it('should handle RESET', () => {
     expect(
-      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '', successMessage: '' }, reset())
+      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '', successMessage: '' }, reset()),
     ).toEqual({
       ...initialState,
     });
@@ -85,7 +85,7 @@ describe('Creating account tests', () => {
       register(undefined, {
         type: handleRegister.rejected.type,
         error,
-      })
+      }),
     ).toEqual({
       ...initialState,
       registrationFailure: true,
@@ -119,10 +119,7 @@ describe('Creating account tests', () => {
     });
     it('dispatches RESET actions', async () => {
       await store.dispatch(reset());
-      expect(store.getState()).toEqual([
-        expect.any(Object),
-        expect.objectContaining(reset()),
-      ]);
+      expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(reset())]);
     });
   });
 });

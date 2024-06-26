@@ -98,7 +98,7 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         isAuthenticated: true,
         loading: false,
-        account: payload.data
+        account: payload.data,
       });
     });
 
@@ -108,7 +108,7 @@ describe('Authentication reducer tests', () => {
       expect(toTest).toMatchObject({
         isAuthenticated: false,
         loading: false,
-        account: payload.data
+        account: payload.data,
       });
     });
   });
@@ -276,7 +276,7 @@ describe('Authentication reducer tests', () => {
       await store.dispatch(login('test', 'test'));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
-      clearAuthToken()
+      clearAuthToken();
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
@@ -288,7 +288,7 @@ describe('Authentication reducer tests', () => {
       await store.dispatch(login('user', 'user', true));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe('TestToken');
-      clearAuthToken()
+      clearAuthToken();
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });

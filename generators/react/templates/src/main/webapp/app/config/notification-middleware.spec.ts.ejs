@@ -35,14 +35,14 @@ describe('Notification Middleware', () => {
   // Default action for use in local tests
   const DEFAULT = {
     type: SUCCESS_TYPE,
-    payload: 'foo'
+    payload: 'foo',
   };
   const HEADER_SUCCESS = {
     type: SUCCESS_TYPE,
     payload: {
-        "status": 201,
-        "statusText": "Created",
-        "headers": {"app-alert": "foo.created", "app-params": "foo"}
+      status: 201,
+      statusText: 'Created',
+      headers: { 'app-alert': 'foo.created', 'app-params': 'foo' },
     },
   };
 
@@ -120,7 +120,7 @@ describe('Notification Middleware', () => {
       response: {
         data: '',
         config: {
-          url: 'api/authenticate'
+          url: 'api/authenticate',
         },
         status: 401,
       },

@@ -15,7 +15,7 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryS
   componentDidCatch(error, errorInfo) {
     this.setState({
       error,
-      errorInfo
+      errorInfo,
     });
   }
 
@@ -23,12 +23,12 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryS
     const { error, errorInfo } = this.state;
     if (errorInfo) {
       const errorDetails = DEVELOPMENT ? (
-          <details className="preserve-space">
-            {error && error.toString()}
-            <br />
-            {errorInfo.componentStack}
-          </details>
-        ) : undefined;
+        <details className="preserve-space">
+          {error && error.toString()}
+          <br />
+          {errorInfo.componentStack}
+        </details>
+      ) : undefined;
       return (
         <div>
           <h2 className="error">An unexpected error has occurred.</h2>

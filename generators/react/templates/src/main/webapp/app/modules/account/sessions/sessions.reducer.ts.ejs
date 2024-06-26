@@ -25,10 +25,10 @@ const initialState = {
   loading: false,
   sessions: [],
   updateSuccess: false,
-  updateFailure: false
+  updateFailure: false,
 };
 
-export type SessionsState =  Readonly<typeof initialState>;
+export type SessionsState = Readonly<typeof initialState>;
 
 // Actions
 const apiUrl = '/api/account/sessions';
@@ -56,21 +56,15 @@ export const SessionsSlice = createSlice({
       })
       .addCase(findAll.fulfilled, (state, action) => {
         state.loading = false;
-        state.sessions= action.payload.data;
+        state.sessions = action.payload.data;
       })
       .addCase(invalidateSession.fulfilled, state => {
         state.loading = false;
-        state.updateSuccess= true;
+        state.updateSuccess = true;
       })
-      .addMatcher(
-        isPending(
-          findAll,
-          invalidateSession,
-        ),
-        (state) => {
-          state.loading = true;
-        }
-      );
+      .addMatcher(isPending(findAll, invalidateSession), state => {
+        state.loading = true;
+      });
   },
 });
 
