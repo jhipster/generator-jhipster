@@ -16,12 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
-import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import type { JHipsterCommandDefinition } from '../../../base/api.js';
 
 const command: JHipsterCommandDefinition = {
-  options: {},
-  import: [GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  configs: {
+    skipCommitHook: {
+      description: 'Skip adding husky commit hooks',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+  },
+  import: [],
 };
 
 export default command;

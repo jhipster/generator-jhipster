@@ -42,17 +42,3 @@ export const readme = {
     },
   ],
 };
-
-export const commitHooksFiles = {
-  commitHooks: [
-    {
-      templates: [
-        '.lintstagedrc.cjs',
-        {
-          file: '.husky/pre-commit',
-          noEjs: true,
-        },
-      ],
-    },
-  ],
-};

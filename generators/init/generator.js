@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import { GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
-import { defaultConfig } from './config.js';
-import { SKIP_COMMIT_HOOK } from './constants.js';
-import { files, commitHooksFiles, readme } from './files.js';
+import { files, readme } from './files.js';
 
 /**
  * @class
@@ -58,6 +56,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_GIT);
         const generatorOptions = { fromInit: true };
         await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript:husky', { generatorOptions });
       },
     });
   }
@@ -69,15 +68,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       loadConfig({ application }) {
-        const config = { ...defaultConfig, ...this.config.getAll() };
         application.applicationNodeEngine = packageJson.engines.node;
-        application[SKIP_COMMIT_HOOK] = config[SKIP_COMMIT_HOOK];
-      },
-      loadNodeDependencies({ application }) {
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_INIT, 'resources', 'package.json'),
-        );
       },
     });
   }
@@ -101,10 +92,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
           await this.writeFiles({ sections: readme, context: application });
         }
       },
-      async writeCommitHookFiles({ application }) {
-        if (application.skipCommitHook) return;
-        await this.writeFiles({ sections: commitHooksFiles, context: application });
-      },
     });
   }
 
@@ -118,18 +105,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
         this.packageJson.merge({
           engines: {
             node: application.applicationNodeEngine,
-          },
-        });
-      },
-      addCommitHookDependencies({ application }) {
-        if (application.skipCommitHook) return;
-        this.packageJson.merge({
-          scripts: {
-            prepare: 'husky',
-          },
-          devDependencies: {
-            husky: application.nodeDependencies.husky,
-            'lint-staged': application.nodeDependencies['lint-staged'],
           },
         });
       },

@@ -24,7 +24,6 @@ import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorit
 
 import * as GENERATOR_LIST from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
-import { SKIP_COMMIT_HOOK } from '../init/constants.js';
 import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 import { files, generatorFiles } from './files.js';
 import {
@@ -128,7 +127,6 @@ export default class extends BaseGenerator {
       conditionalConfig() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
           this.config.defaults({
-            [SKIP_COMMIT_HOOK]: true,
             [DYNAMIC]: true,
             js: false,
           });
