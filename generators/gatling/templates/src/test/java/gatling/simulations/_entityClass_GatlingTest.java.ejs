@@ -60,12 +60,12 @@ public class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } _%>
         ;
 
-    Map<String, String> headers_http = Map.of(
+    Map<String, String> headersHttp = Map.of(
         "Accept", "application/json"
     );
 <%_ if (authenticationUsesCsrf) { _%>
 
-    Map<String, String> headers_http_authenticated = Map.of(
+    Map<String, String> headersHttpAuthenticated = Map.of(
         "Accept", "application/json",
         "X-XSRF-TOKEN", "${xsrf_token}"
     );
@@ -77,12 +77,12 @@ public class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 
-    Map<String, String> headers_http_authentication = Map.of(
+    Map<String, String> headersHttpAuthentication = Map.of(
         "Content-Type", "application/json",
         "Accept", "application/json"
     );
 
-    Map<String, String> headers_http_authenticated = Map.of(
+    Map<String, String> headersHttpAuthenticated = Map.of(
         "Accept", "application/json",
         "Authorization", "${access_token}"
     );
@@ -90,7 +90,7 @@ public class <%= entityClass %>GatlingTest extends Simulation {
 
     ChainBuilder scn = exec(http("First unauthenticated request")
         .get("/api/account")
-        .headers(headers_http)
+        .headers(headersHttp)
 <%_ if ((applicationTypeMicroservice || applicationTypeGateway) && authenticationTypeOauth2) { _%>
         .check(status().is(302))
 <%_ } else { _%>
@@ -104,7 +104,7 @@ public class <%= entityClass %>GatlingTest extends Simulation {
         .exec(http("Authentication")
 <%_ if (authenticationTypeSession) { _%>
         .post("/api/authentication")
-        .headers(headers_http_authenticated)
+        .headers(headersHttpAuthenticated)
         .formParam("username", "admin")
         .formParam("password", "admin")
         .formParam("remember-me", "true")
@@ -143,25 +143,25 @@ public class <%= entityClass %>GatlingTest extends Simulation {
         .check(status().is(200))).exitHereIfFailed()
 <%_ } else if (authenticationTypeJwt) { _%>
         .post("/api/authenticate")
-        .headers(headers_http_authentication)
+        .headers(headersHttpAuthentication)
         .body(StringBody("{\"username\":\"admin\", \"password\":\"admin\"}")).asJson()
         .check(header("Authorization").saveAs("access_token"))).exitHereIfFailed()
 <%_ } _%>
         .pause(2)
         .exec(http("Authenticated request")
         .get("/api/account")
-        .headers(headers_http_authenticated)
+        .headers(headersHttpAuthenticated)
         .check(status().is(200)))
         .pause(10)
         .repeat(2).on(
             exec(http("Get all <%= entityInstancePlural %>")
             .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
-            .headers(headers_http_authenticated)
+            .headers(headersHttpAuthenticated)
             .check(status().is(200)))
             .pause(Duration.ofSeconds(10), Duration.ofSeconds(20))
             .exec(http("Create new <%= entityInstance %>")
             .post("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
-            .headers(headers_http_authenticated)
+            .headers(headersHttpAuthenticated)
             .body(StringBody("{" +
 <%_ fields.filter(f => !(f.id && f.autoGenerate)).forEach((field, idx) => { _%>
                 "<%= idx === 0 ? '' : ', ' %>\"<%= field.fieldName %>\": <% if (field.fieldTypeString) { %>\"SAMPLE_TEXT\"<% } else if (field.fieldTypeNumeric) { %>0<% } else if (field.fieldTypeTemporal) { %>\"2020-01-01T00:00:00.000Z\"<% } else if (field.fieldIsEnum) { %>\"<%= field.enumValues[0].name %>\"<% } else { %>null<% } %>" +
@@ -173,12 +173,12 @@ public class <%= entityClass %>GatlingTest extends Simulation {
             .repeat(5).on(
                 exec(http("Get created <%= entityInstance %>")
                 .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
-                .headers(headers_http_authenticated))
+                .headers(headersHttpAuthenticated))
                 .pause(10)
             )
             .exec(http("Delete created <%= entityInstance %>")
             .delete("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
-            .headers(headers_http_authenticated))
+            .headers(headersHttpAuthenticated))
             .pause(10)
         );
 
