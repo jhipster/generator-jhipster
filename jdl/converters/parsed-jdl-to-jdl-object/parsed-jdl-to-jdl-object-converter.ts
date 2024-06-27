@@ -21,6 +21,10 @@ import JDLObject from '../../models/jdl-object.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { applicationTypes, binaryOptions } from '../../jhipster/index.js';
 
+import JDLApplication from '../../models/jdl-application.js';
+import JDLField from '../../models/jdl-field.js';
+import JDLValidation from '../../models/jdl-validation.js';
+import { JDLEntity } from '../../models/index.js';
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
 import { convertEnums } from './enum-converter.js';
@@ -37,10 +41,6 @@ import {
   ParsedJDLEntityField,
   ParsedJDLRoot,
 } from './types.js';
-import JDLApplication from '../../models/jdl-application.js';
-import JDLField from '../../models/jdl-field.js';
-import JDLValidation from '../../models/jdl-validation.js';
-import { JDLEntity } from '../../models/index.js';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;

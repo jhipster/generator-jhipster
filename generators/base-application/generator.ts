@@ -20,12 +20,8 @@ import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from './tasks.js';
 import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.js';
-import type { BaseApplication, CommonClientServerApplication } from './types.js';
-import { getEntitiesFromDir } from './support/index.js';
 import { SpringBootSourceType } from '../server/types.js';
 import { ClientSourceType } from '../client/types.js';
 import { I18nApplication } from '../languages/types.js';
@@ -37,6 +33,10 @@ import {
   GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
   GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
 } from '../generator-list.js';
+import { getEntitiesFromDir } from './support/index.js';
+import type { BaseApplication, CommonClientServerApplication } from './types.js';
+import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from './tasks.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
 const {
   LOADING,

@@ -29,8 +29,8 @@ import { JDLEntity } from '../../models/index.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { unaryOptions, binaryOptions } from '../../jhipster/index.js';
-import { convert } from './jdl-to-json-option-converter.js';
 import logger from '../../utils/objects/logger.js';
+import { convert } from './jdl-to-json-option-converter.js';
 
 describe('jdl - JDLToJSONOptionConverter', () => {
   describe('convert', () => {

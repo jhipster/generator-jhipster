@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { randomUUID } from 'node:crypto';
 import { appendFileSync, existsSync } from 'node:fs';
 import { EOL } from 'node:os';
+import axios from 'axios';
 
 export const parseIssue = (issue: string): undefined | { owner: string; repository: string; issue: string } => {
   if (issue.includes('#')) {

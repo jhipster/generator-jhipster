@@ -26,8 +26,8 @@ import { ResetMode } from 'simple-git';
 import BaseGenerator from '../base/index.js';
 import { packageJson } from '../../lib/index.js';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
+import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.js';
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';

@@ -17,6 +17,12 @@
  * limitations under the License.
  */
 
+import jhipsterDefinition from '../../generators/app/jdl/application-options.js';
+import {
+  JDLApplicationOptionType,
+  JDLApplicationOptionTypeValue,
+  JDLApplicationOptionValue,
+} from '../models/jdl-application-definition.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -27,12 +33,6 @@ import buildToolTypes from './build-tool-types.js';
 import searchEngineTypes from './search-engine-types.js';
 import testFrameworkTypes from './test-framework-types.js';
 import websocketTypes from './websocket-types.js';
-import jhipsterDefinition from '../../generators/app/jdl/application-options.js';
-import {
-  JDLApplicationOptionType,
-  JDLApplicationOptionTypeValue,
-  JDLApplicationOptionValue,
-} from '../models/jdl-application-definition.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;

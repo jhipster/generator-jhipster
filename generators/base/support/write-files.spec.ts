@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { it, describe, expect, esmocha } from 'esmocha';
-import { joinCallbacks } from './write-files.js';
 import { EditFileCallback } from '../api.js';
+import { joinCallbacks } from './write-files.js';
 
 describe('generator - base - support - writeFiles', () => {
   describe('joinCallbacks', () => {

@@ -1,5 +1,5 @@
-import { GENERATOR_NAME } from './export-utils.js';
 import { JHipsterYoRcContent } from '../converters/types.js';
+import { GENERATOR_NAME } from './export-utils.js';
 
 export const mergeYoRcContent = (oldConfig: JHipsterYoRcContent, newConfig: JHipsterYoRcContent): JHipsterYoRcContent => {
   // @ts-expect-error partial assignment

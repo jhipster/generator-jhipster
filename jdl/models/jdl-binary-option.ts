@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import AbstractJDLOption, { JDLOptionParams } from './abstract-jdl-option.js';
 import BinaryOptions from '../jhipster/binary-options.js';
 import { join } from '../utils/set-utils.js';
+import AbstractJDLOption, { JDLOptionParams } from './abstract-jdl-option.js';
 
 /**
  * For options like the DTO, the service, etc.

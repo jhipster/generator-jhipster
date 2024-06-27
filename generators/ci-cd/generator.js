@@ -22,8 +22,8 @@ import chalk from 'chalk';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
-import command from './command.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/config-def.js';
+import command from './command.js';
 
 const { REACT } = clientFrameworkTypes;
 

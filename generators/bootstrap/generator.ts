@@ -25,6 +25,11 @@ import prettier from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
 
 import BaseGenerator from '../base/index.js';
+import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
+import { GENERATOR_UPGRADE } from '../generator-list.js';
+import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
+import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.js';
+import { loadStoredAppOptions } from '../app/support/index.js';
 import {
   createMultiStepTransform,
   createPrettierTransform,
@@ -35,11 +40,6 @@ import {
   createESLintTransform,
   createRemoveUnusedImportsTransform,
 } from './support/index.js';
-import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
-import { GENERATOR_UPGRADE } from '../generator-list.js';
-import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
-import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.js';
-import { loadStoredAppOptions } from '../app/support/index.js';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;
 const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;

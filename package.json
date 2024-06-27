@@ -183,7 +183,6 @@
     "chai": "4.4.1",
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.0",
-    "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-chai-friendly": "1.0.0",
     "eslint-plugin-mocha": "10.4.3",

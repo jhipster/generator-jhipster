@@ -19,7 +19,6 @@
 import crypto from 'crypto';
 import { defaults } from 'lodash-es';
 
-import { defaultKubernetesConfig } from './kubernetes-constants.js';
 import { loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
   KUBERNETES_CORE_API_VERSION,
@@ -40,6 +39,7 @@ import {
   HELM_COUCHBASE_OPERATOR,
 } from '../generator-constants.js';
 import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.js';
+import { defaultKubernetesConfig } from './kubernetes-constants.js';
 
 const { MICROSERVICE } = applicationTypes;
 const { GeneratorTypes, IngressTypes, ServiceTypes } = kubernetesPlatformTypes;

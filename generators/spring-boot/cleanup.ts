@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import cleanupOauth2 from './cleanup-oauth2.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
 import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import cleanupOauth2 from './cleanup-oauth2.js';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore

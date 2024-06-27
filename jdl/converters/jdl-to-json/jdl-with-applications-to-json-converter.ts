@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
-import FieldConverter from './jdl-to-json-field-converter.js';
-import RelationshipConverter from './jdl-to-json-relationship-converter.js';
-import OptionConverter from './jdl-to-json-option-converter.js';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 import JSONEntity from '../../jhipster/json-entity.js';
 import { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
+import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
+import FieldConverter from './jdl-to-json-field-converter.js';
+import RelationshipConverter from './jdl-to-json-relationship-converter.js';
+import OptionConverter from './jdl-to-json-option-converter.js';
 
 let entities: Record<string, JSONEntity> | null | undefined;
 let jdlObject: JDLObject;

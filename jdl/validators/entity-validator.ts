@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import Validator, { ValidatorOptions } from './validator.js';
 import { reservedKeywords } from '../jhipster/index.js';
+import Validator, { ValidatorOptions } from './validator.js';
 
 const { isReservedClassName } = reservedKeywords;
 

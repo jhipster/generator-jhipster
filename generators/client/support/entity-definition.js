@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
+import { fieldTypes, validations, clientFrameworkTypes } from '../../../jdl/jhipster/index.js';
 import getTypescriptKeyType from './types-utils.js';
 
-import { fieldTypes, validations, clientFrameworkTypes } from '../../../jdl/jhipster/index.js';
 import { filterRelevantRelationships } from './template-utils.js';
 
 const dbTypes = fieldTypes;

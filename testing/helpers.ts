@@ -1,21 +1,21 @@
 /* eslint-disable max-classes-per-file */
-import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
+import { basename, dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
 import { merge, set } from 'lodash-es';
 import { globSync } from 'glob';
 
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
-import getGenerator from './get-generator.js';
 import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../generators/base/support/index.js';
 import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
 import type { JSONEntity } from '../jdl/converters/types.js';
 import CoreGenerator from '../generators/base-core/generator.js';
+import getGenerator from './get-generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;

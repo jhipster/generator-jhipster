@@ -21,11 +21,6 @@ import chalk from 'chalk';
 import { padEnd, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { askForLanguages, askI18n } from './prompts.js';
-import { clientI18nFiles } from './files.js';
-import { writeEntityFiles } from './entity-files.js';
-import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
-import { findLanguageForTag, supportedLanguages } from './support/languages.js';
 import { updateLanguagesTask as updateLanguagesInAngularTask } from '../angular/support/index.js';
 import { updateLanguagesTask as updateLanguagesInReact } from '../react/support/index.js';
 import { updateLanguagesTask as updateLanguagesInVue } from '../vue/support/index.js';
@@ -34,6 +29,11 @@ import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../generator-constants
 import { QUEUES } from '../base-application/priorities.js';
 import { PRIORITY_NAMES } from '../base/priorities.js';
 import { clientFrameworkTypes } from '../../jdl/index.js';
+import { findLanguageForTag, supportedLanguages } from './support/languages.js';
+import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from './translation-data.js';
+import { writeEntityFiles } from './entity-files.js';
+import { clientI18nFiles } from './files.js';
+import { askForLanguages, askI18n } from './prompts.js';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
 /**

@@ -22,8 +22,6 @@ import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import prompts from './prompts.js';
-import { writeFiles } from './files.js';
 import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
   checkHelm,
@@ -39,6 +37,8 @@ import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-worksp
 import { checkDocker } from '../docker/support/index.js';
 import { loadDerivedServerConfig } from '../server/support/index.js';
 import { loadDerivedAppConfig } from '../app/support/index.js';
+import { writeFiles } from './files.js';
+import prompts from './prompts.js';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;

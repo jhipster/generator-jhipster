@@ -28,8 +28,8 @@ import JDLBinaryOption from '../models/jdl-binary-option.js';
 import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 import { fieldTypes, unaryOptions, binaryOptions, relationshipOptions } from '../jhipster/index.js';
-import { JSONEntity, JSONField, JSONRelationship } from './types.js';
 import { asJdlRelationshipType } from '../jhipster/relationship-types.js';
+import { JSONEntity, JSONField, JSONRelationship } from './types.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;

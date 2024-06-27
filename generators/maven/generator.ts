@@ -21,10 +21,10 @@ import assert from 'assert/strict';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
+import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
-import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import { createPomStorage, type PomStorage } from './support/index.js';
 
 export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {

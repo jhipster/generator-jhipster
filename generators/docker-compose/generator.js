@@ -25,14 +25,14 @@ import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import { writeFiles } from './files.js';
 import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { stringHashCode, createFaker, convertSecretToBase64, createBase64Secret } from '../base/support/index.js';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';
 import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
-import command from './command.js';
 import { loadDerivedPlatformConfig, loadPlatformConfig } from '../server/support/index.js';
+import command from './command.js';
+import { writeFiles } from './files.js';
 
 const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;

@@ -19,8 +19,8 @@
 import { before, it, describe, expect } from 'esmocha';
 import { defaultHelpers as helpers, runResult } from '../../../testing/index.js';
 import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
-import { insertContentIntoApplicationProperties } from './needles.js';
 import type { SpringBootApplication } from '../types.js';
+import { insertContentIntoApplicationProperties } from './needles.js';
 
 describe('generator - server - support - needles', () => {
   describe('generated project', () => {

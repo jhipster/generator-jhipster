@@ -22,16 +22,6 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 
-import {
-  buildJavaGet as javaGetCall,
-  javaBeanCase as javaBeanClassNameFormat,
-  buildJavaGetter as javaGetter,
-  buildJavaSetter as javaSetter,
-  getJavaValueGeneratorForType as getJavaValueForType,
-  getPrimaryKeyValue as getPKValue,
-  hibernateSnakeCase,
-} from './support/index.js';
-
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { packageJson } from '../../lib/index.js';
@@ -65,6 +55,15 @@ import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
+import {
+  buildJavaGet as javaGetCall,
+  javaBeanCase as javaBeanClassNameFormat,
+  buildJavaGetter as javaGetter,
+  buildJavaSetter as javaSetter,
+  getJavaValueGeneratorForType as getJavaValueForType,
+  getPrimaryKeyValue as getPKValue,
+  hibernateSnakeCase,
+} from './support/index.js';
 
 const dbTypes = fieldTypes;
 const {

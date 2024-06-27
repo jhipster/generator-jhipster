@@ -3,7 +3,6 @@ import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
 import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js';
-import { upperFirstCamelCase } from './string.js';
 import {
   getJavaValueGeneratorForType,
   getJoinTableName,
@@ -14,6 +13,7 @@ import {
 import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
 import { fieldTypes } from '../../../jdl/index.js';
+import { upperFirstCamelCase } from './string.js';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 

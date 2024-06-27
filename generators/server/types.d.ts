@@ -3,11 +3,11 @@ import { GradleSourceType } from '../gradle/types.js';
 import { MavenSourceType } from '../maven/types.js';
 import { LiquibaseSourceType } from '../liquibase/types.js';
 import { SpringCacheSourceType } from '../spring-cache/types.js';
-import { MessageBrokerApplicationType } from './options/message-broker.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
-import { ApplicationPropertiesNeedles } from './support/needles.ts';
 import { GatewayApplication } from '../spring-cloud/generators/gateway/types.ts';
 import { JavaAnnotation } from '../java/support/add-java-annotation.ts';
+import { ApplicationPropertiesNeedles } from './support/needles.ts';
+import { MessageBrokerApplicationType } from './options/message-broker.js';
 
 export type SpringEntity = {
   /* Generate entity's Entity */

@@ -22,11 +22,11 @@ import { existsSync } from 'fs';
 import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.js';
-import { PRIORITY_NAMES, CUSTOM_PRIORITIES } from './priorities.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import command from './command.js';
 import { normalizePathEnd } from '../base/support/path.js';
+import command from './command.js';
+import { PRIORITY_NAMES, CUSTOM_PRIORITIES } from './priorities.js';
 
 const {
   PROMPTING_WORKSPACES,

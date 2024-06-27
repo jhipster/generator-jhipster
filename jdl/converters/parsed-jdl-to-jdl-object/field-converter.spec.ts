@@ -18,8 +18,8 @@
  */
 
 import { before, it, describe, expect } from 'esmocha';
-import { convertField } from './field-converter.js';
 import JDLField from '../../models/jdl-field.js';
+import { convertField } from './field-converter.js';
 
 describe('jdl - FieldConverter', () => {
   describe('convertField', () => {

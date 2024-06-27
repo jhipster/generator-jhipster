@@ -22,10 +22,10 @@ import { it, describe, expect, before, fn } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 import git from 'simple-git';
 
-import Generator from './index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { basicHelpers as helpers, result } from '../../testing/index.js';
 import { UPGRADE_BRANCH } from './support/index.js';
+import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

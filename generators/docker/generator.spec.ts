@@ -21,7 +21,6 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import Generator from './index.js';
 import {
   buildSamplesFromMatrix,
   extendFilteredMatrix,
@@ -31,11 +30,12 @@ import {
   buildServerMatrix,
 } from '../../testing/index.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
-import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
 
 import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, cacheTypes } from '../../jdl/jhipster/index.js';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
+import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
+import Generator from './index.js';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;

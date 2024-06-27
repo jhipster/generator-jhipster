@@ -19,9 +19,9 @@
 import crypto from 'crypto';
 
 import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
-import { hibernateSnakeCase } from './string.js';
 import { databaseData } from '../../spring-data-relational/support/index.js';
 import { ValidationResult } from '../../base/api.js';
+import { hibernateSnakeCase } from './string.js';
 
 const dbTypes = fieldTypes;
 const { STRING: TYPE_STRING, LONG: TYPE_LONG, UUID: TYPE_UUID } = dbTypes.CommonDBTypes;

@@ -24,7 +24,6 @@ import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
-import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
 import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
@@ -39,6 +38,7 @@ import {
   entityOptions,
   binaryOptions,
 } from '../../jhipster/index.js';
+import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { OptionNames } = applicationOptions;

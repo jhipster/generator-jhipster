@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Generator from './generator.js';
 import { TEST_DIR } from '../generator-constants.js';
+import Generator from './generator.js';
 
 export const gatlingFiles = {
   gatlingFiles: [

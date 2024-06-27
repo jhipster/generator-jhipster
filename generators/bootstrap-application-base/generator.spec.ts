@@ -21,10 +21,10 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, expect, beforeEach } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import Generator from './index.js';
 import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { parseChangelog } from '../base/support/timestamp.ts';
+import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

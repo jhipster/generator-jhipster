@@ -23,8 +23,8 @@ import { lt as semverLessThan } from 'semver';
 import { defaults } from 'lodash-es';
 import { MemFsEditor, create } from 'mem-fs-editor';
 import { type BaseApplication } from '../base-application/types.js';
-import { type Control } from './types.js';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { type Control } from './types.js';
 
 export default class SharedData<ApplicationType extends BaseApplication = BaseApplication> {
   _storage: any;

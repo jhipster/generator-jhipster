@@ -18,8 +18,8 @@
  */
 import { platform } from 'os';
 
-import { normalizeLineEndings } from './contents.js';
 import type { EditFileCallback } from '../api.js';
+import { normalizeLineEndings } from './contents.js';
 
 const isWin32 = platform() === 'win32';
 

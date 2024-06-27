@@ -22,10 +22,6 @@ import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
-import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.js';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles } from './files-react.js';
-import { prepareEntity } from './application/entities/index.js';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
@@ -34,8 +30,12 @@ import {
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.js';
-import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
+import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.js';
+import cleanupOldFilesTask from './cleanup.js';
+import { writeFiles } from './files-react.js';
+import { prepareEntity } from './application/entities/index.js';
+import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.js';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;

@@ -21,8 +21,8 @@ import pluralize from 'pluralize';
 
 import { databaseTypes, entityOptions, validations, checkAndReturnRelationshipOnValue } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
-import { stringifyApplicationData } from './debug.js';
 import { mutateData } from '../../base/support/config.js';
+import { stringifyApplicationData } from './debug.js';
 import { prepareProperty } from './prepare-property.js';
 
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;

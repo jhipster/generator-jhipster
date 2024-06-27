@@ -25,16 +25,16 @@ import { fileURLToPath } from 'url';
 import didYouMean from 'didyoumean';
 import chalk from 'chalk';
 
-import logo from './logo.mjs';
-import EnvironmentBuilder from './environment-builder.mjs';
-import SUB_GENERATORS from './commands.mjs';
-import JHipsterCommand from './jhipster-command.mjs';
-import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
 import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
 import { extractArgumentsFromConfigs } from '../generators/base/internal/command.js';
+import logo from './logo.mjs';
+import EnvironmentBuilder from './environment-builder.mjs';
+import SUB_GENERATORS from './commands.mjs';
+import JHipsterCommand from './jhipster-command.mjs';
+import { CLI_NAME, logger, getCommand, done } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

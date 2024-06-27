@@ -19,11 +19,11 @@
 /* eslint-disable consistent-return */
 import { defaults, kebabCase, upperFirst, camelCase, startCase } from 'lodash-es';
 
-import { getDefaultAppName } from './support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
+import { getHipster } from '../base/support/index.js';
+import { getDefaultAppName } from './support/index.js';
 
 import { BASE_NAME } from './constants.js';
-import { getHipster } from '../base/support/index.js';
 import { validateProjectName } from './support/name-resolver.js';
 
 /**

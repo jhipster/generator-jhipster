@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
+import { createNeedleCallback } from '../base/support/needles.js';
+import { JavaDependency, JavaDependencyVersion } from '../java/types.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
-import { createNeedleCallback } from '../base/support/needles.js';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.js';
-import { JavaDependency, JavaDependencyVersion } from '../java/types.js';
 
 export default class SpringCacheGenerator extends BaseApplicationGenerator {
   async beforeQueue() {

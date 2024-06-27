@@ -3,8 +3,8 @@
 import { expect } from 'chai';
 import { describe, it, beforeEach } from 'esmocha';
 
-import { createProgram } from './program.mjs';
 import { defaultHelpers as helpers } from '../testing/index.js';
+import { createProgram } from './program.mjs';
 
 describe('cli - program', () => {
   beforeEach(async () => {

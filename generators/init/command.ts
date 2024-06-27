@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SKIP_COMMIT_HOOK, SKIP_COMMIT_HOOK_DESCRIPTION } from './constants.js';
 import { JHipsterCommandDefinition } from '../base/api.js';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import { SKIP_COMMIT_HOOK, SKIP_COMMIT_HOOK_DESCRIPTION } from './constants.js';
 
 const command: JHipsterCommandDefinition = {
   options: {

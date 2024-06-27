@@ -21,8 +21,8 @@ import path from 'path';
 import { inspect } from 'util';
 import axios from 'axios';
 
-import { logger } from './utils.mjs';
 import { packageJson } from '../lib/index.js';
+import { logger } from './utils.mjs';
 
 const downloadFile = async (url: string, filename: string): Promise<string> => {
   logger.verboseInfo(`Downloading file: ${url}`);
