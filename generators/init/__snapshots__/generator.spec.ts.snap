@@ -6,14 +6,16 @@ exports[`generator - init help should print expected information 1`] = `
 Init project (alpha)
 
 Options:
-  --auto-crlf          Detect line endings
-  --skip-commit-hook   Skip adding husky commit hooks
-  --skip-cache         Do not remember prompt answers (default: false)
-  --skip-install       Do not automatically install dependencies (default: false)
-  --force-install      Fail on install dependencies error (default: false)
-  --ask-answered       Show prompts for already configured options (default: false)
-  --base-name <value>  Application base name
-  -h, --help           display help for command
+  --auto-crlf                   Detect line endings
+  --skip-commit-hook            Skip adding husky commit hooks
+  --skip-cache                  Do not remember prompt answers (default: false)
+  --skip-install                Do not automatically install dependencies (default: false)
+  --force-install               Fail on install dependencies error (default: false)
+  --ask-answered                Show prompts for already configured options (default: false)
+  --base-name <value>           Application base name
+  --prettier-tab-width <value>  Default tab width for prettier (default: 2)
+  --monorepository              Use monorepository
+  -h, --help                    display help for command
 "
 `;
 

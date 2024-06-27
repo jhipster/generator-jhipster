@@ -52,6 +52,20 @@ export default class InitGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async compose() {
+        await this.composeWithJHipster(GENERATOR_GIT);
+        const generatorOptions = { fromInit: true };
+        await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadConfig({ application }) {
@@ -70,18 +84,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get composing() {
-    return this.asComposingTaskGroup({
-      async compose() {
-        await this.composeWithJHipster(GENERATOR_GIT);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get writing() {
@@ -114,14 +116,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addPrettierDependencies({ application }) {
         this.packageJson.merge({
-          scripts: {
-            'prettier-check': 'prettier --check "{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}"',
-            'prettier-format': 'prettier --write "{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}"',
-          },
-          devDependencies: {
-            prettier: application.nodeDependencies.prettier,
-            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
-          },
           engines: {
             node: application.applicationNodeEngine,
           },

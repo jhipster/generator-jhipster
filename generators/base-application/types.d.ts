@@ -32,6 +32,7 @@ export type BaseApplication = {
 
   skipClient?: boolean;
   skipServer?: boolean;
+  monorepository?: boolean;
 
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: Array<

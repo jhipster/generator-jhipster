@@ -28,7 +28,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_PROJECT_NAME],
+  import: [GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier'],
 };
 
 export default command;

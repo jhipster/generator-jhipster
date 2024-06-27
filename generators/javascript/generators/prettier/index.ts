@@ -16,43 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const files = {
-  git: [
-    {
-      templates: ['.gitignore.jhi', '.gitattributes.jhi'],
-    },
-  ],
-  global: [
-    {
-      templates: [
-        '.editorconfig.jhi',
-        {
-          override: false,
-          file: 'package.json',
-        },
-      ],
-    },
-  ],
-};
-
-export const readme = {
-  global: [
-    {
-      templates: ['README.md'],
-    },
-  ],
-};
-
-export const commitHooksFiles = {
-  commitHooks: [
-    {
-      templates: [
-        '.lintstagedrc.cjs',
-        {
-          file: '.husky/pre-commit',
-          noEjs: true,
-        },
-      ],
-    },
-  ],
-};
+export { default } from './generator.js';
+export { default as command } from './command.js';
