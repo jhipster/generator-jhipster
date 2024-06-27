@@ -42,14 +42,17 @@ public class ExceptionTranslatorTestController {
 
     @PostMapping("/method-argument")
     public void methodArgument(@Valid @RequestBody Test<%= dtoSuffix %> test<%= dtoSuffix %>) {
+        // empty method
     }
 
     @GetMapping("/missing-servlet-request-part")
     public void missingServletRequestPartException(@RequestPart("part") String part) {
+        // empty method
     }
 
     @GetMapping("/missing-servlet-request-parameter")
     public void missingServletRequestParameterException(@RequestParam("param") String param) {
+        // empty method
     }
 
     @GetMapping("/access-denied")
