@@ -84,8 +84,7 @@ export default class JHipsterBaseBlueprintGenerator<
         this.log.warn('Error adding current blueprint templates as alternative for JHipster templates.');
         this.log.log(error);
       }
-      // TODO change the condition to `this.features.queueCommandTasks === undefined` so builtin generators will default to queue command tasks
-    } else if (this.options.namespace === 'jhipster:bootstrap') {
+    } else if (this.features.queueCommandTasks === undefined) {
       this.on('before:queueOwnTasks', () => {
         if (!this.delegateToBlueprint) {
           this.queueCurrentJHipsterCommandTasks();
