@@ -25,9 +25,9 @@ import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
 import { QueuedAdapter } from '@yeoman/adapter';
 
-import { CLI_NAME, logger } from './utils.mjs';
 import { createJHipsterLogger, packageNameToNamespace } from '../generators/base/support/index.js';
 import { parseBlueprintInfo, loadBlueprintsFromConfiguration, mergeBlueprints } from '../generators/base/internal/index.js';
+import { CLI_NAME, logger } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

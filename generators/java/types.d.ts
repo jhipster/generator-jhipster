@@ -1,8 +1,8 @@
 import { RequireOneOrNone } from 'type-fest';
 import { BaseApplication } from '../base-application/types.js';
 import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
-import { JavaAnnotation } from './support/add-java-annotation.ts';
 import { EditFileCallback } from '../base/api.js';
+import { JavaAnnotation } from './support/add-java-annotation.ts';
 
 export type JavaDependencyVersion = {
   name: string;

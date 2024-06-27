@@ -21,10 +21,10 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import Generator from './index.js';
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 import { fieldTypes } from '../../jdl/jhipster/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
+import Generator from './index.js';
 
 const {
   CommonDBTypes: { UUID },

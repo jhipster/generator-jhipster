@@ -19,10 +19,10 @@
 
 /* eslint-disable no-unused-expressions */
 
-import { before, it, describe, after } from 'esmocha';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { before, it, describe, after } from 'esmocha';
 import { expect } from 'chai';
 import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
 

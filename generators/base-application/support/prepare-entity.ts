@@ -29,7 +29,6 @@ import {
   getMicroserviceAppName,
   mutateData,
 } from '../../base/support/index.js';
-import { fieldToReference } from './prepare-field.js';
 import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.js';
 import {
   applicationTypes,
@@ -39,10 +38,11 @@ import {
   fieldTypes,
   searchEngineTypes,
 } from '../../../jdl/jhipster/index.js';
-import { fieldIsEnum } from './field-utils.js';
 
 import { Entity } from '../types/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
+import { fieldIsEnum } from './field-utils.js';
+import { fieldToReference } from './prepare-field.js';
 
 const NO_SEARCH_ENGINE = searchEngineTypes.NO;
 const { PaginationTypes, ServiceTypes, MapperTypes } = entityOptions;

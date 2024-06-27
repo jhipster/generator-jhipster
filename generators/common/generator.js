@@ -20,7 +20,6 @@
 import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { writeFiles, prettierConfigFiles } from './files.js';
 import {
   MAIN_DIR,
   TEST_DIR,
@@ -30,9 +29,10 @@ import {
 } from '../generator-constants.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
-import command from './command.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
+import command from './command.js';
+import { writeFiles, prettierConfigFiles } from './files.js';
 
 const { REACT, ANGULAR } = clientFrameworkTypes;
 

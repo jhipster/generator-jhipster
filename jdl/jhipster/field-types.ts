@@ -18,8 +18,8 @@
  */
 
 import { snakeCase } from 'lodash-es';
-import validations from './validations.js';
 import JDLEnum from '../models/jdl-enum.js';
+import validations from './validations.js';
 import databaseTypes from './database-types.js';
 
 const {

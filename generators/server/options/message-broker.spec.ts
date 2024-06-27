@@ -1,7 +1,7 @@
 import { before, it, describe, expect } from 'esmocha';
 import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
-import { MESSAGE_BROKER } from './index.js';
 import optionDefinition from './message-broker.js';
+import { MESSAGE_BROKER } from './index.js';
 
 describe('generators - server - jdl - messageBroker', () => {
   optionDefinition.knownChoices!.forEach(optionValue => {

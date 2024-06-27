@@ -22,9 +22,9 @@ import { databaseTypes, searchEngineTypes } from '../../../jdl/jhipster/index.js
 
 import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js';
 import { mutateData, normalizePathEnd } from '../../base/support/index.js';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { hibernateSnakeCase } from './string.js';
 import { getDatabaseTypeData } from './database.js';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { POSTGRESQL, MYSQL, MARIADB, COUCHBASE, SQL, NEO4J } = databaseTypes;

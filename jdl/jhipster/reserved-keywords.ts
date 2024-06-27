@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import JHipsterReservedKeywords from './reserved-keywords/jhipster.js';
-import PagingReservedKeywords from './reserved-keywords/paging.js';
 import { angularReservedKeywords } from '../../generators/angular/support/reserved-keywords.js';
 import { mysqlReservedKeywords } from '../../generators/spring-data-relational/support/mysql-reserved-keywords.js';
 import { javaReservedKeywords } from '../../generators/java/support/reserved-keywords.js';
@@ -29,6 +27,8 @@ import { couchbaseReservedKeywords } from '../../generators/spring-data-couchbas
 import { oracleReservedKeywords } from '../../generators/spring-data-relational/support/oracle-reserved-keywords.js';
 import { mssqlReservedKeywords } from '../../generators/spring-data-relational/support/mssql-reserved-keywords.js';
 import { neo4jReservedKeywords } from '../../generators/spring-data-neo4j/support/reserved-keywords.js';
+import PagingReservedKeywords from './reserved-keywords/paging.js';
+import JHipsterReservedKeywords from './reserved-keywords/jhipster.js';
 import applicationOptions from './application-options.js';
 
 const clientFrameworks = applicationOptions.OptionValues[applicationOptions.OptionNames.CLIENT_FRAMEWORK] as Record<string, string>;

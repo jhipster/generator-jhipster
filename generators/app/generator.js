@@ -21,13 +21,13 @@ import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { checkNode, loadStoredAppOptions } from './support/index.js';
-import cleanupOldFilesTask from './cleanup.js';
 import { GENERATOR_COMMON, GENERATOR_CLIENT, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 import { packageJson } from '../../lib/index.js';
 
 import { applicationTypes } from '../../jdl/jhipster/index.js';
+import cleanupOldFilesTask from './cleanup.js';
+import { checkNode, loadStoredAppOptions } from './support/index.js';
 import command from './command.js';
 
 const { MICROSERVICE } = applicationTypes;

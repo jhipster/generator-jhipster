@@ -18,8 +18,8 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-import { it, describe } from 'esmocha';
 import path from 'path';
+import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 
 import * as JSONFileReader from '../readers/json-file-reader.js';

@@ -23,9 +23,8 @@ import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../testing/index.js';
-import Generator from './index.js';
-
 import { messageBrokerTypes } from '../../jdl/jhipster/index.js';
+import Generator from './index.js';
 
 const { PULSAR } = messageBrokerTypes;
 

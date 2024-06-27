@@ -23,8 +23,8 @@ import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, basicHelpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
-import Generator from './index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
+import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

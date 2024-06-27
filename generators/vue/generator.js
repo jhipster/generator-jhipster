@@ -24,9 +24,6 @@ import { camelCase, startCase } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
-import { writeEntityFiles, postWriteEntityFiles, cleanupEntitiesFiles } from './entity-files-vue.js';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles, writeEntitiesFiles } from './files-vue.js';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
@@ -34,8 +31,11 @@ import {
   generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.js';
-import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
+import { writeEntityFiles, postWriteEntityFiles, cleanupEntitiesFiles } from './entity-files-vue.js';
+import cleanupOldFilesTask from './cleanup.js';
+import { writeFiles, writeEntitiesFiles } from './files-vue.js';
+import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.js';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;

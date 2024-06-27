@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import { extname } from 'path';
+import { readFile } from 'fs/promises';
 import { QueuedAdapter } from '@yeoman/adapter';
 import { upperFirst } from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
 
-import { readFile } from 'fs/promises';
 import BaseGenerator from '../base/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
@@ -30,10 +30,10 @@ import { CLI_NAME } from '../../cli/utils.mjs';
 import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.js';
 import { ApplicationWithEntities, createImporterFromContent } from '../../jdl/jdl-importer.js';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 import { mergeYoRcContent } from '../../jdl/index.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
+import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
  * Add jdl extension to the file

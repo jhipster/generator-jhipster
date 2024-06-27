@@ -37,8 +37,6 @@ import {
   GENERATOR_SPRING_DATA_RELATIONAL,
   GENERATOR_SPRING_WEBSOCKET,
 } from '../generator-list.js';
-import { serverFiles } from './files.js';
-import cleanupTask from './cleanup.js';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
 import {
   addSpringFactory,
@@ -61,8 +59,10 @@ import {
   testFrameworkTypes,
   websocketTypes,
 } from '../../jdl/index.js';
-import { writeFiles as writeEntityFiles } from './entity-files.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
+import { writeFiles as writeEntityFiles } from './entity-files.js';
+import cleanupTask from './cleanup.js';
+import { serverFiles } from './files.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;

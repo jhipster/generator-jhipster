@@ -19,8 +19,8 @@
 
 import fs from 'fs';
 import { doesFileExist } from '../utils/file-utils.js';
-import { mergeYoRcContent } from './config.js';
 import { JHipsterYoRcContent } from '../converters/types.js';
+import { mergeYoRcContent } from './config.js';
 
 export const GENERATOR_NAME = 'generator-jhipster';
 

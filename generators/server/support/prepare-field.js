@@ -20,10 +20,10 @@ import assert from 'assert';
 import { snakeCase, upperFirst } from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../jdl/jhipster/index.js';
-import { getUXConstraintName } from './database.js';
-import { getJavaValueGeneratorForType } from './templates/field-values.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { mutateData } from '../../base/support/config.js';
+import { getUXConstraintName } from './database.js';
+import { getJavaValueGeneratorForType } from './templates/field-values.js';
 
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;

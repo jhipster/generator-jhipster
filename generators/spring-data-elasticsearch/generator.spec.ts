@@ -30,11 +30,10 @@ import {
   runResult,
 } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import Generator from './generator.js';
-import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
-
 import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.js';
 import { mockedGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
+import Generator from './generator.js';
+import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

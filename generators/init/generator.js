@@ -18,10 +18,10 @@
  */
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_INIT, GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import { packageJson } from '../../lib/index.js';
 import { defaultConfig } from './config.js';
 import { SKIP_COMMIT_HOOK } from './constants.js';
 import { files, commitHooksFiles, readme } from './files.js';
-import { packageJson } from '../../lib/index.js';
 
 /**
  * @class

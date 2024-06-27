@@ -24,9 +24,9 @@ import { glob } from 'glob';
 import BaseGenerator from '../base-application/index.js';
 
 import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { mavenProfileContent } from './templates.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
+import { mavenProfileContent } from './templates.js';
 
 export default class HerokuGenerator extends BaseGenerator {
   hasHerokuCli;

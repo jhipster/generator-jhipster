@@ -20,13 +20,6 @@ import fs from 'fs';
 import { escape, min } from 'lodash-es';
 
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { liquibaseFiles } from './files.js';
-import {
-  prepareField as prepareFieldForLiquibase,
-  postPrepareEntity,
-  prepareRelationshipForLiquibase,
-  liquibaseComment,
-} from './support/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
 import {
   prepareEntityPrimaryKeyForTemplates,
@@ -35,16 +28,23 @@ import {
   prepareEntity,
   loadRequiredConfigIntoEntity,
 } from '../base-application/support/index.js';
+import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
+import { fieldTypes } from '../../jdl/jhipster/index.js';
+import type { MavenProperty } from '../maven/types.js';
+import { liquibaseFiles } from './files.js';
+import {
+  prepareField as prepareFieldForLiquibase,
+  postPrepareEntity,
+  prepareRelationshipForLiquibase,
+  liquibaseComment,
+} from './support/index.js';
 import mavenPlugin from './support/maven-plugin.js';
 import {
   addLiquibaseChangelogCallback,
   addLiquibaseConstraintsChangelogCallback,
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.js';
-import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
-import { fieldTypes } from '../../jdl/jhipster/index.js';
-import type { MavenProperty } from '../maven/types.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },

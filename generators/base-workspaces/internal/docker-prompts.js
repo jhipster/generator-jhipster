@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { loadConfigs } from './docker-base.js';
+import chalk from 'chalk';
 import { applicationTypes, monitoringTypes, serviceDiscoveryTypes } from '../../../jdl/jhipster/index.js';
 import { convertSecretToBase64 } from '../../base/support/index.js';
+import { loadConfigs } from './docker-base.js';
 
 const { MICROSERVICE, MONOLITH, GATEWAY } = applicationTypes;
 const { PROMETHEUS } = monitoringTypes;

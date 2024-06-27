@@ -21,9 +21,10 @@ import assert from 'assert/strict';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
+import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
+import { mutateData } from '../base/support/config.js';
 import files from './files.js';
 import { GRADLE } from './constants.js';
-import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import {
   applyFromGradleCallback,
@@ -40,7 +41,6 @@ import {
   sortDependencies,
   gradleNeedleOptionsWithDefaults,
 } from './internal/needles.js';
-import { mutateData } from '../base/support/config.js';
 
 export default class GradleGenerator extends BaseApplicationGenerator {
   gradleVersionFromWrapper;

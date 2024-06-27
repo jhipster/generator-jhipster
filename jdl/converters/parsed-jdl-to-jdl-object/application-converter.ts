@@ -18,13 +18,13 @@
  */
 
 import createJDLApplication from '../../models/jdl-application-factory.js';
-import { convertOptions } from './option-converter.js';
 import ApplicationOptions from '../../jhipster/application-options.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { ParsedJDLApplication } from './types.js';
 import AbstractJDLOption from '../../models/abstract-jdl-option.js';
 import JDLApplication from '../../models/jdl-application.js';
+import { ParsedJDLApplication } from './types.js';
+import { convertOptions } from './option-converter.js';
 
 const {
   OptionNames: { BASE_NAME },

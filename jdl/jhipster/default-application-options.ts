@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -25,7 +26,6 @@ import cacheTypes from './cache-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
 import clientFrameworkTypes from './client-framework-types.js';
 import buildToolTypes from './build-tool-types.js';
-import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;

@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import JDLParser from './jdl-parser.js';
 import deduplicate from '../utils/array-utils.js';
 
 import { applicationOptions, entityOptions, validations, relationshipOptions } from '../jhipster/index.js';
+import JDLParser from './jdl-parser.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { OptionNames } = applicationOptions;

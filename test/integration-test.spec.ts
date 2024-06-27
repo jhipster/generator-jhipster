@@ -16,11 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { before, it, describe } from 'esmocha';
 import assert from 'assert';
 import fs, { existsSync, writeFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { before, it, describe } from 'esmocha';
 import sortKeys from 'sort-keys';
 
 import { applicationTypes, authenticationTypes } from '../jdl/jhipster/index.js';

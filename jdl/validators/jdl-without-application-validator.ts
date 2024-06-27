@@ -17,9 +17,14 @@
  * limitations under the License.
  */
 
+import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, relationshipOptions } from '../jhipster/index.js';
+import JDLObject from '../models/jdl-object.js';
+import JDLRelationship from '../models/jdl-relationship.js';
+import { isReservedFieldName, isReservedPaginationWords, isReservedTableName } from '../jhipster/reserved-keywords.js';
+import JDLField from '../models/jdl-field.js';
+import AbstractJDLOption from '../models/abstract-jdl-option.js';
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, relationshipOptions } from '../jhipster/index.js';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
@@ -27,12 +32,7 @@ import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 
-import JDLObject from '../models/jdl-object.js';
-import JDLRelationship from '../models/jdl-relationship.js';
 import { ValidatorOptions } from './validator.js';
-import { isReservedFieldName, isReservedPaginationWords, isReservedTableName } from '../jhipster/reserved-keywords.js';
-import JDLField from '../models/jdl-field.js';
-import AbstractJDLOption from '../models/abstract-jdl-option.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { SQL } = databaseTypes;

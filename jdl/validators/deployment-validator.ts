@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import Validator from './validator.js';
 import { applicationTypes, databaseTypes, searchEngineTypes, deploymentOptions, applicationOptions } from '../jhipster/index.js';
 import JDLDeployment from '../models/jdl-deployment.js';
+import Validator from './validator.js';
 
 const { Options } = deploymentOptions;
 const { MICROSERVICE } = applicationTypes;

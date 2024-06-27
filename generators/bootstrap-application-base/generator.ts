@@ -33,12 +33,12 @@ import {
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
 } from '../base-application/support/index.js';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
+import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 import command from './command.js';
 

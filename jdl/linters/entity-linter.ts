@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import EntityIssue from './issues/entity-issue.js';
 import { shouldWriteEntityTableName } from '../jhipster/index.js';
+import EntityIssue from './issues/entity-issue.js';
 import { rulesNames } from './rules.js';
 
 let issues: EntityIssue[];

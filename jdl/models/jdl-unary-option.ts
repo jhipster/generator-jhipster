@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import AbstractJDLOption from './abstract-jdl-option.js';
 import { join } from '../utils/set-utils.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 /**
  * For flags such as skipServer, skipClient, etc.

@@ -30,7 +30,6 @@ import {
   runResult,
 } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import Generator from './generator.js';
 
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import {
@@ -39,6 +38,7 @@ import {
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
 import { GENERATOR_SPRING_DATA_COUCHBASE } from '../generator-list.js';
+import Generator from './generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

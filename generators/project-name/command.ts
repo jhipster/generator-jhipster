@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { BASE_NAME, BASE_NAME_DESCRIPTION } from './constants.js';
 import { JHipsterCommandDefinition } from '../base/api.js';
+import { BASE_NAME, BASE_NAME_DESCRIPTION } from './constants.js';
 
 const command: JHipsterCommandDefinition = {
   options: {

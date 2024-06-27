@@ -19,9 +19,9 @@
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { mutateData } from '../../../base/support/index.js';
 import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../../server/support/index.js';
-import { entityServerFiles, enumFiles } from './entity-files.js';
 import { getEnumInfo } from '../../../base-application/support/index.js';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';
+import { entityServerFiles, enumFiles } from './entity-files.js';
 
 export default class DomainGenerator extends BaseApplicationGenerator {
   generateEntities!: boolean;

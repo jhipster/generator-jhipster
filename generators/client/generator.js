@@ -19,17 +19,15 @@
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
-import { writeFiles as writeCommonFiles } from './files-common.js';
-
-import { addEnumerationFiles } from './entity-files.js';
-
 import { LOGIN_REGEX_JS } from '../generator-constants.js';
 import { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
 
 import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
+import { addEnumerationFiles } from './entity-files.js';
+import { writeFiles as writeCommonFiles } from './files-common.js';
+import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
 import command from './command.js';
 
 const { ANGULAR, VUE, REACT, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;

@@ -22,6 +22,11 @@ import { camelCase, upperFirst, snakeCase } from 'lodash-es';
 import BaseGenerator from '../base/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
 
+import * as GENERATOR_LIST from '../generator-list.js';
+import { packageJson } from '../../lib/index.js';
+import { SKIP_COMMIT_HOOK } from '../init/constants.js';
+import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
+import { files, generatorFiles } from './files.js';
 import {
   requiredConfig,
   defaultConfig,
@@ -41,12 +46,6 @@ import {
   ALL_PRIORITIES,
   DYNAMIC,
 } from './constants.js';
-
-import * as GENERATOR_LIST from '../generator-list.js';
-import { files, generatorFiles } from './files.js';
-import { packageJson } from '../../lib/index.js';
-import { SKIP_COMMIT_HOOK } from '../init/constants.js';
-import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;
 

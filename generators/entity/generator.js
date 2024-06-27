@@ -23,11 +23,11 @@ import chalk from 'chalk';
 import { upperFirst } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import prompts from './prompts.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
+import prompts from './prompts.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { isReservedClassName } = reservedKeywords;

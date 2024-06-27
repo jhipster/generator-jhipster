@@ -17,21 +17,21 @@
  * limitations under the License.
  */
 
+import { fieldTypes, applicationOptions, relationshipOptions } from '../jhipster/index.js';
+import JDLObject from '../models/jdl-object.js';
+import JDLRelationship from '../models/jdl-relationship.js';
+import JDLApplication from '../models/jdl-application.js';
+import JDLField from '../models/jdl-field.js';
+import JDLApplicationConfigurationOption from '../models/jdl-application-configuration-option.js';
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
-import { fieldTypes, applicationOptions, relationshipOptions } from '../jhipster/index.js';
 import ValidationValidator from './validation-validator.js';
 import RelationshipValidator from './relationship-validator.js';
 import EnumValidator from './enum-validator.js';
 import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
-import JDLObject from '../models/jdl-object.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLApplication from '../models/jdl-application.js';
 import { ValidatorOptions } from './validator.js';
-import JDLField from '../models/jdl-field.js';
-import JDLApplicationConfigurationOption from '../models/jdl-application-configuration-option.js';
 
 const { OptionNames } = applicationOptions;
 

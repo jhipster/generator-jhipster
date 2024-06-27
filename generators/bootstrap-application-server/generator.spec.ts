@@ -21,9 +21,9 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import Generator from './index.js';
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
+import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

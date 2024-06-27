@@ -22,10 +22,10 @@ import assert from 'assert';
 import { snakeCase } from 'lodash-es';
 import { before, it, describe, expect } from 'esmocha';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
-import Generator from './index.js';
 import { defaultHelpers as helpers, result } from '../../testing/index.js';
 import { testFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_CLIENT } from '../generator-list.js';
+import Generator from './index.js';
 
 const { CYPRESS } = testFrameworkTypes;
 

@@ -19,9 +19,9 @@
 import chalk from 'chalk';
 import { startCase } from 'lodash-es';
 
-import needleClientBase from './needle-client.js';
 import { stripMargin } from '../../base/support/index.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
+import needleClientBase from './needle-client.js';
 
 export default class extends needleClientBase {
   addEntityToMenu(

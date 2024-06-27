@@ -19,10 +19,10 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
-import { before, it, describe } from 'esmocha';
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
 import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/index.js';

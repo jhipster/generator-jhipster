@@ -19,9 +19,9 @@
 
 import { it, describe, beforeEach } from 'esmocha';
 import { expect } from 'chai';
-import Issues from './issues.js';
 import { rulesNames } from '../rules.js';
 import { relationshipTypes } from '../../jhipster/index.js';
+import Issues from './issues.js';
 import EntityIssue from './entity-issue.js';
 import FieldIssue from './field-issue.js';
 import EnumIssue from './enum-issue.js';

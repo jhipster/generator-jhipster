@@ -23,10 +23,19 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator, { type Entity } from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import {
+  generateEntityClientEnumImports as getClientEnumImportsFormat,
+  getTypescriptKeyType as getTSKeyType,
+  generateTestEntityId as getTestEntityId,
+  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
+  generateTypescriptTestEntity as generateTestEntity,
+} from '../client/support/index.js';
+import type { CommonClientServerApplication } from '../base-application/types.js';
+import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import {
   buildAngularFormPath as angularFormPath,
   addEntitiesRoute,
@@ -38,15 +47,6 @@ import {
   addItemToAdminMenu,
   addIconImport,
 } from './support/index.js';
-import {
-  generateEntityClientEnumImports as getClientEnumImportsFormat,
-  getTypescriptKeyType as getTSKeyType,
-  generateTestEntityId as getTestEntityId,
-  generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-  generateTypescriptTestEntity as generateTestEntity,
-} from '../client/support/index.js';
-import type { CommonClientServerApplication } from '../base-application/types.js';
-import { createNeedleCallback, mutateData } from '../base/support/index.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
