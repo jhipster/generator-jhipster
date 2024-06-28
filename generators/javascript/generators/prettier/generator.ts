@@ -45,6 +45,8 @@ export default class PrettierGenerator extends BaseApplicationGenerator {
       },
       source({ source }) {
         source.mergePrettierConfig = config => this.mergeDestinationYaml(this.prettierConfigFile, config);
+        // `.prettierignore` file is only supported in the root of a project refer to https://github.com/prettier/prettier/issues/4081.
+        // TODO make it aware of the monorepository root path
         source.addPrettierIgnore = newContent => this.editFile('.prettierignore', content => `${content}\n${newContent}`);
       },
     });
