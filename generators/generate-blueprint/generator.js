@@ -279,8 +279,6 @@ export default class extends BaseGenerator {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
             eslint: `${mainDependencies.eslint}`,
             globals: `${mainDependencies.globals}`,
-            'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
-            'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
             vitest: mainDependencies.vitest,
             prettier: `${mainDependencies.prettier}`,
             /*
