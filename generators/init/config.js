@@ -16,13 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SKIP_COMMIT_HOOK, SKIP_COMMIT_HOOK_DEFAULT_VALUE } from './constants.js';
-
 /** Config required at .yo-rc.json */
 export const requiredConfig = {};
 
 /** Default config for templates */
 export const defaultConfig = {
   ...requiredConfig,
-  [SKIP_COMMIT_HOOK]: SKIP_COMMIT_HOOK_DEFAULT_VALUE,
 };

@@ -16,6 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const SKIP_COMMIT_HOOK = 'skipCommitHook';
-export const SKIP_COMMIT_HOOK_DESCRIPTION = 'Skip adding husky commit hooks';
-export const SKIP_COMMIT_HOOK_DEFAULT_VALUE = false;
+export { default } from './generator.js';
+export { default as command } from './command.js';

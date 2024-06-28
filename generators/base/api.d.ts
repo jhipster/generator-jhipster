@@ -36,6 +36,9 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   entities?: string[];
   disableBlueprints?: boolean;
 
+  /* Init based application */
+  fromInit?: boolean;
+
   /* blueprint options */
   blueprints?: string;
   blueprint?: any;
@@ -233,7 +236,7 @@ export type ConfigSpec = {
    * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
    * The callback receives blueprintStorage contents as input for 'blueprint' scope.
    */
-  default?: string | boolean | string[] | ((this: CoreGenerator | void, ctx: any) => string | boolean | string[]);
+  default?: string | boolean | number | string[] | ((this: CoreGenerator | void, ctx: any) => string | boolean | number | string[]);
   /**
    * Configure the generator according to the selected configuration.
    */

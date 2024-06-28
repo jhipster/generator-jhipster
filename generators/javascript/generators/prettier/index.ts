@@ -16,12 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
-import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
-
-const command: JHipsterCommandDefinition = {
-  options: {},
-  import: [GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
-};
-
-export default command;
+export { default } from './generator.js';
+export { default as command } from './command.js';

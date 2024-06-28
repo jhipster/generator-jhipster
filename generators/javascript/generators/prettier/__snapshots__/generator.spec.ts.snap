@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - javascript:prettier fromInit(false) should match files snapshot 1`] = `
+{
+  ".prettierignore": {
+    "contents": "node_modules
+package-lock.json
+.git
+",
+    "stateCleared": "modified",
+  },
+  ".prettierrc": {
+    "contents": "printWidth: 140
+singleQuote: true
+tabWidth: 2
+useTabs: false
+arrowParens: avoid
+bracketSameLine: false
+plugins:
+  - prettier-plugin-packagejson
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": ObjectContaining {
+    "contents": Any<String>,
+  },
+  "package.json": {
+    "contents": "{
+  "devDependencies": {
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - javascript:prettier fromInit(true) should match files snapshot 1`] = `
+{
+  ".prettierignore": {
+    "contents": "node_modules
+package-lock.json
+.git
+",
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": {
+    "contents": "printWidth: 140
+singleQuote: true
+tabWidth: 2
+useTabs: false
+arrowParens: avoid
+bracketSameLine: false
+plugins:
+  - prettier-plugin-packagejson
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": ObjectContaining {
+    "contents": Any<String>,
+  },
+  "package.json": {
+    "contents": "{
+  "devDependencies": {
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
+  },
+  "scripts": {
+    "prettier-check": "prettier --check \\"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\\"",
+    "prettier-format": "prettier --write \\"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\\""
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(false) should match files snapshot 1`] = `
+{
+  ".prettierignore": {
+    "contents": "node_modules
+package-lock.json
+.git
+",
+    "stateCleared": "modified",
+  },
+  ".prettierrc": {
+    "contents": "printWidth: 140
+singleQuote: true
+tabWidth: 2
+useTabs: false
+arrowParens: avoid
+bracketSameLine: false
+plugins:
+  - prettier-plugin-packagejson
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": ObjectContaining {
+    "contents": Any<String>,
+  },
+  "package.json": {
+    "contents": "{
+  "devDependencies": {
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(true) should match files snapshot 1`] = `
+{
+  ".prettierignore": {
+    "contents": "node_modules
+package-lock.json
+.git
+",
+    "stateCleared": "modified",
+  },
+  ".prettierrc.yml": {
+    "contents": "printWidth: 140
+singleQuote: true
+tabWidth: 2
+useTabs: false
+arrowParens: avoid
+bracketSameLine: false
+plugins:
+  - prettier-plugin-packagejson
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": ObjectContaining {
+    "contents": Any<String>,
+  },
+  "package.json": {
+    "contents": "{
+  "devDependencies": {
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;

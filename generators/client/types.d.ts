@@ -2,6 +2,7 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { AngularApplication } from '../angular/types.js';
 import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
 import type { CypressApplication } from '../cypress/types.js';
+import { JavaScriptSourceType } from '../javascript/types.js';
 
 type ClientFrameworkType = ['no', 'angular', 'react', 'vue', 'svelte'];
 
@@ -25,7 +26,7 @@ export type ClientResources = {
    */
   comment?: string;
 };
-export type ClientSourceType = {
+export type ClientSourceType = JavaScriptSourceType & {
   /**
    * Add external resources to root file(index.html).
    */

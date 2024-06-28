@@ -120,6 +120,18 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
+    directory: '/generators/javascript/resources/'
+    rebase-strategy: 'auto'
+    schedule:
+      interval: 'daily'
+      time: '00:00'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    labels:
+      - 'theme: dependencies'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'npm'
     directory: '/generators/react/resources/'
     rebase-strategy: 'auto'
     schedule:

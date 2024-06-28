@@ -17,11 +17,6 @@
  * limitations under the License.
  */
 export const files = {
-  prettier: [
-    {
-      templates: ['.prettierrc.yml.jhi', '.prettierignore.jhi'],
-    },
-  ],
   git: [
     {
       templates: ['.gitignore.jhi', '.gitattributes.jhi'],
@@ -44,20 +39,6 @@ export const readme = {
   global: [
     {
       templates: ['README.md'],
-    },
-  ],
-};
-
-export const commitHooksFiles = {
-  commitHooks: [
-    {
-      templates: [
-        '.lintstagedrc.cjs',
-        {
-          file: '.husky/pre-commit',
-          noEjs: true,
-        },
-      ],
     },
   ],
 };

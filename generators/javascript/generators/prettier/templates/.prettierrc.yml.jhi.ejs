@@ -16,14 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# Prettier configuration
-
 printWidth: 140
 singleQuote: true
-tabWidth: 2
+tabWidth: <%= prettierTabWidth %>
 useTabs: false
 
-# js and ts rules:
 arrowParens: avoid
+bracketSameLine: false
 
 <&- fragments.render({ join: '\n\n' }) &>
