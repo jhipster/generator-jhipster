@@ -1,8 +1,8 @@
 /* eslint-disable max-classes-per-file */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { merge, set, snakeCase } from 'lodash-es';
 import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
-import { merge, set } from 'lodash-es';
 import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
@@ -247,6 +247,12 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     this.sharedApplication = this.sharedApplication ?? { ...defaultSharedApplication };
     merge(this.sharedApplication, sharedApplication);
     return this.withSharedData({ sharedApplication: this.sharedApplication });
+  }
+
+  withMockedNodeDependencies() {
+    return this.withSharedApplication({
+      nodeDependencies: new Proxy({}, { get: (_target, prop) => `${snakeCase(prop.toString()).toUpperCase()}_VERSION` }),
+    });
   }
 
   /**
