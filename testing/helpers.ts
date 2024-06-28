@@ -42,13 +42,16 @@ const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
 const generatorsDir = join(fileURLToPath(import.meta.url), '../../generators');
-const mockedGenerators = [
+const allGenerators = [
   ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
   ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
 ]
-  .filter(gen => !gen.startsWith('bootstrap-'))
   .map(gen => `jhipster:${gen}`)
   .sort();
+const filterBootstrapGenerators = (gen: string): boolean => !gen.startsWith('jhipster:bootstrap-');
+const composedGeneratorsToCheck = allGenerators
+  .filter(filterBootstrapGenerators)
+  .filter(gen => !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen));
 
 const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(key => [key, undefined]));
 
@@ -247,16 +250,23 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   }
 
   /**
-   * Mock every built-in generators except the ones in the exceptList and bootstrap-* generators.
+   * Mock every built-in generators except the ones in the except and bootstrap-* generators.
    * Note: Boostrap generator is mocked by default.
    * @example
-   * withMockedJHipsterGenerators(['jhipster:bootstrap'])
+   * withMockedJHipsterGenerators({ except: ['jhipster:bootstrap'] })
    * @example
-   * withMockedJHipsterGenerators(['bootstrap', 'server'])
+   * withMockedJHipsterGenerators({ except: ['bootstrap', 'server'] })
+   * @example
+   * // Mock every generator including bootstrap-*
+   * withMockedJHipsterGenerators({ exceptFilter: () => true })
    */
-  withMockedJHipsterGenerators(exceptList: string[] = []): this {
-    exceptList = exceptList.map(gen => (gen.startsWith('jhipster:') ? gen : `jhipster:${gen}`));
-    return this.withMockedGenerators(mockedGenerators.filter(gen => !exceptList.includes(gen) && (this as any).Generator !== gen));
+  withMockedJHipsterGenerators(options: string[] | { except?: string[]; exceptFilter?: (string) => boolean } = {}): this {
+    const optionsObj = Array.isArray(options) ? { except: options } : options;
+    const { except = [], exceptFilter = filterBootstrapGenerators } = optionsObj;
+    const jhipsterExceptList = except.map(gen => (gen.startsWith('jhipster:') ? gen : `jhipster:${gen}`));
+    return this.withMockedGenerators(
+      allGenerators.filter(exceptFilter).filter(gen => !jhipsterExceptList.includes(gen) && (this as any).Generator !== gen),
+    );
   }
 
   withGradleBuildTool(): this {
@@ -306,9 +316,7 @@ plugins {
       runResult.sourceCallsArg = sourceCallsArg;
     }
 
-    runResult.composedMockedGenerators = mockedGenerators.filter(
-      gen => runResult.mockedGenerators[gen]?.called && !['jhipster:bootstrap', 'jhipster:project-name'].includes(gen),
-    );
+    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.called);
 
     return runResult as any;
   }

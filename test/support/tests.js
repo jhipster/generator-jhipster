@@ -4,7 +4,6 @@ import { before, it, describe, after, expect } from 'esmocha';
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { getGenerator, skipPrettierHelpers as helpers } from '../../testing/index.js';
-import * as GeneratorList from '../../generators/generator-list.js';
 import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 
@@ -275,13 +274,8 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     before(async () => {
       result = await helpers
         .run(generatorPath)
-        .withMockedGenerators([
-          `jhipster-foo:${generatorName}`,
-          // Mock every generator except the generator been tested
-          ...Object.values(GeneratorList)
-            .filter(gen => gen !== generatorName)
-            .map(gen => `jhipster:${gen}`),
-        ])
+        .withMockedJHipsterGenerators({ exceptFilter: () => true })
+        .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withJHipsterConfig()
         .withOptions({ blueprint: 'foo' })
         .onGenerator(generator => {
@@ -307,13 +301,8 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       }
       const context = helpers
         .run(generatorPath)
-        .withMockedGenerators([
-          `jhipster-foo-sbs:${generatorName}`,
-          // Mock every generator except the generator been tested and bootstrap- generators
-          ...Object.values(GeneratorList)
-            .filter(gen => gen !== generatorName && !gen.startsWith('bootstrap-'))
-            .map(gen => `jhipster:${gen}`),
-        ])
+        .withMockedJHipsterGenerators({ exceptFilter: () => true })
+        .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withJHipsterConfig(
           {},
           entity
