@@ -133,11 +133,6 @@ class UserResourceIT {
 <%_ } else { _%>
     private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- this.getPrimaryKeyValue(user.primaryKey.type) %>;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
-
-    private static final String DEFAULT_PASSWORD = "passjohndoe";
-    private static final String UPDATED_PASSWORD = "passjhipster";
-<%_ } _%>
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
 <%_ if (!authenticationTypeOauth2) { _%>
