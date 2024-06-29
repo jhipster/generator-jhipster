@@ -210,7 +210,7 @@ import java.util.UUID;
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 import java.util.Random;
-  <%_ if (primaryKey.hasLong) { _%>
+  <%_ if (primaryKey.hasLong && !readOnly && updatableEntity) { _%>
 import java.util.concurrent.atomic.AtomicLong;
   <%_ } else if (primaryKey.hasInteger) { _%>
 import java.util.concurrent.atomic.AtomicInteger;
@@ -449,7 +449,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 
     private static Random random = new Random();
-  <%_ if (primaryKey.hasLong) { _%>
+  <%_ if (primaryKey.hasLong && !readOnly && updatableEntity) { _%>
     private static AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
   <%_ } else if (primaryKey.hasInteger) { _%>
     private static AtomicInteger intCount = new AtomicInteger(random.nextInt() + ( 2 * Short.MAX_VALUE ));
