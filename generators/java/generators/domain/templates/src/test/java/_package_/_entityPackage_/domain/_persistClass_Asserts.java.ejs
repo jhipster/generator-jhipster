@@ -82,6 +82,8 @@ public class <%= persistClass %>Asserts {
             .satisfies(e -> assertThat(e.get<%- relationship.propertyJavaBeanName %>()).as("check <%- relationship.propertyName %>").isEqualTo(actual.get<%- relationship.propertyJavaBeanName %>()))
   <%_ } _%>
         ;
+<%_ } else { _%>
+        // empty method
 <%_ } _%>
     }
 
