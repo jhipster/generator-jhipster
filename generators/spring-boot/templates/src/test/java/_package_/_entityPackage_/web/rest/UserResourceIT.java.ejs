@@ -226,7 +226,7 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= user.persistClass %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+    public static <%= user.persistClass %> createEntity() {
         <%= user.persistClass %> persistUser = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         persistUser.setId(UUID.randomUUID().toString());
