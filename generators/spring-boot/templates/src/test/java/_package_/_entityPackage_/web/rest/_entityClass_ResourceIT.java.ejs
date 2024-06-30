@@ -448,7 +448,9 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 
+  <%_ if (primaryKey.hasLong && !readOnly && updatableEntity || primaryKey.hasInteger) { _%>
     private static Random random = new Random();
+  <%_ } _%>
   <%_ if (primaryKey.hasLong && !readOnly && updatableEntity) { _%>
     private static AtomicLong longCount = new AtomicLong(random.nextInt() + ( 2 * Integer.MAX_VALUE ));
   <%_ } else if (primaryKey.hasInteger) { _%>
