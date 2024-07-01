@@ -33,6 +33,6 @@ gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.17.5' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.0.2' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.11.4' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.11.5' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.5.0' }
