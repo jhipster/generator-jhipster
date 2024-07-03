@@ -264,14 +264,14 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
    * withMockedJHipsterGenerators({ except: ['bootstrap', 'server'] })
    * @example
    * // Mock every generator including bootstrap-*
-   * withMockedJHipsterGenerators({ exceptFilter: () => true })
+   * withMockedJHipsterGenerators({ filter: () => true })
    */
-  withMockedJHipsterGenerators(options: string[] | { except?: string[]; exceptFilter?: (string) => boolean } = {}): this {
+  withMockedJHipsterGenerators(options: string[] | { except?: string[]; filter?: (string) => boolean } = {}): this {
     const optionsObj = Array.isArray(options) ? { except: options } : options;
-    const { except = [], exceptFilter = filterBootstrapGenerators } = optionsObj;
+    const { except = [], filter = filterBootstrapGenerators } = optionsObj;
     const jhipsterExceptList = except.map(gen => (gen.startsWith('jhipster:') ? gen : `jhipster:${gen}`));
     return this.withMockedGenerators(
-      allGenerators.filter(exceptFilter).filter(gen => !jhipsterExceptList.includes(gen) && (this as any).Generator !== gen),
+      allGenerators.filter(filter).filter(gen => !jhipsterExceptList.includes(gen) && (this as any).Generator !== gen),
     );
   }
 

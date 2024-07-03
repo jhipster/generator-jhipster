@@ -274,7 +274,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     before(async () => {
       result = await helpers
         .run(generatorPath)
-        .withMockedJHipsterGenerators({ exceptFilter: () => true })
+        .withMockedJHipsterGenerators({ filter: () => true })
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withJHipsterConfig()
         .withOptions({ blueprint: 'foo' })
@@ -301,7 +301,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       }
       const context = helpers
         .run(generatorPath)
-        .withMockedJHipsterGenerators({ exceptFilter: () => true })
+        .withMockedJHipsterGenerators({ filter: () => true })
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withJHipsterConfig(
           {},
