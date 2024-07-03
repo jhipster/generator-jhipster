@@ -142,7 +142,7 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
       options?: Record<string, object>;
-      override?: (this: Generator, data: DataType) => boolean;
+      override?: boolean | ((this: Generator, data: DataType) => boolean);
     };
 
 export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
