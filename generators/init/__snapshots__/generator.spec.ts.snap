@@ -30,54 +30,10 @@ exports[`generator - init with default config should write files and match snaps
   ".gitignore": {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.cjs": {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": {
-    "stateCleared": "modified",
-  },
-  ".prettierrc.yml": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
   "README.md": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-}
-`;
-
-exports[`generator - init with skipCommitHook option should not create husky files and match snapshot 1`] = `
-{
-  ".editorconfig": {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": {
-    "stateCleared": "modified",
-  },
-  ".gitignore": {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": {
-    "stateCleared": "modified",
-  },
-  ".prettierrc.yml": {
-    "stateCleared": "modified",
-  },
-  ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "README.md": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
     "stateCleared": "modified",
   },
 }

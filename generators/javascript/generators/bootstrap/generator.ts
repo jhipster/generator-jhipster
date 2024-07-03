@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { packageJson } from '../../../../lib/index.js';
 import BaseApplicationGenerator from '../../../base-application/index.js';
+import { GENERATOR_PROJECT_NAME } from '../../../generator-list.js';
 
-export default class HuskyGenerator extends BaseApplicationGenerator {
+export default class BootstrapGenerator extends BaseApplicationGenerator {
   constructor(args, options, features) {
     super(args, options, { queueCommandTasks: true, ...features });
   }
@@ -29,29 +31,30 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
+      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
     }
   }
 
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      configureNodeOptions() {
-        if (this.jhipsterConfig.skipCommitHook) {
-          this.cancelCancellableTasks();
-        }
+  get loading() {
+    return this.asLoadingTaskGroup({
+      loadNodeDependencies({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('javascript', 'resources', 'package.json'),
+        );
       },
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
         await this.writeFiles({
-          blocks: [{ templates: ['.lintstagedrc.cjs', '.husky/pre-commit'] }],
+          blocks: [{ templates: [{ override: false, file: 'package.json' }] }],
           context: application,
         });
       },
@@ -64,16 +67,18 @@ export default class HuskyGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addCommitHookDependencies({ application }) {
-        this.packageJson.merge({
-          scripts: {
-            prepare: 'husky',
-          },
-          devDependencies: {
-            husky: application.nodeDependencies.husky,
-            'lint-staged': application.nodeDependencies['lint-staged'],
-          },
-        });
+      addPrettierDependencies({ application }) {
+        const { packageJsonNodeEngine, packageJsonType } = application;
+        if (packageJsonType) {
+          this.packageJson.merge({ type: packageJsonType });
+        }
+        if (packageJsonNodeEngine) {
+          this.packageJson.merge({
+            engines: {
+              node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
+            },
+          });
+        }
       },
     });
   }

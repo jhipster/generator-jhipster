@@ -2,13 +2,14 @@ import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/
 import type { AngularApplication } from '../angular/types.js';
 import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
 import type { CypressApplication } from '../cypress/types.js';
-import { JavaScriptSourceType } from '../javascript/types.js';
+import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
 
 type ClientFrameworkType = ['no', 'angular', 'react', 'vue', 'svelte'];
 
 type ClientFrameworkApplication = OptionWithDerivedProperties<'clientFramework', ClientFrameworkType>;
 
 export type ClientApplication = ClientFrameworkApplication &
+  JavaScriptApplication &
   AngularApplication &
   CypressApplication & {
     withAdminUi: boolean;

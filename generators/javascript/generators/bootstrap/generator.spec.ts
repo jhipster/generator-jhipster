@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { before, it, describe, expect } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { fromMatrix, defaultHelpers as helpers, result } from '../../../../testing/index.js';
+import { extendMatrix, fromMatrix, defaultHelpers as helpers, result } from '../../../../testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,15 +33,18 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  for (const [name, config] of Object.entries(fromMatrix({ skipCommitHook: [true, false] }))) {
+  for (const [name, config] of Object.entries(
+    extendMatrix(fromMatrix({ packageJsonNodeEngine: [true, false, 'customVersion'] }), {
+      packageJsonType: [undefined, 'commonjs', 'module'],
+    }),
+  )) {
     describe(name, () => {
       before(async () => {
         await helpers
           .runJHipster(generator)
           .withMockedJHipsterGenerators()
           .withMockedSource()
-          .withMockedNodeDependencies()
-          .withSharedApplication({})
+          .withSharedApplication({ dasherizedBaseName: 'dasherizedBaseName', projectDescription: 'projectDescription' })
           .withJHipsterConfig(config);
       });
 
@@ -54,7 +57,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toMatchObject(expect.arrayContaining(['jhipster:javascript:bootstrap']));
+        expect(result.composedMockedGenerators).toHaveLength(0);
       });
     });
   }
