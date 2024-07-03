@@ -33,11 +33,10 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import {
-  mockedGenerators as serverGenerators,
+  filterBasicServerGenerators,
   shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
-import { GENERATOR_SPRING_DATA_COUCHBASE } from '../generator-list.js';
 import Generator from './generator.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -53,8 +52,6 @@ const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en',
 const couchbaseSamples = extendMatrix(buildServerMatrix(), {
   searchEngine: ['no', 'couchbase'],
 });
-
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_COUCHBASE}`);
 
 const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
 
@@ -85,7 +82,13 @@ describe(`generator - ${databaseType}`, () => {
       }
 
       before(async () => {
-        await helpers.run(generatorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedJHipsterGenerators({
+            except: ['jhipster:spring-data-couchbase'],
+            filter: filterBasicServerGenerators,
+          });
       });
 
       it('should match generated files snapshot', () => {

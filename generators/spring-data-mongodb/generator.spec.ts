@@ -33,11 +33,10 @@ import Generator from '../server/index.js';
 
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import {
-  mockedGenerators as serverGenerators,
+  filterBasicServerGenerators,
   shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
-import { GENERATOR_SPRING_DATA_MONGODB } from '../generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -48,8 +47,6 @@ const generatorFile = join(__dirname, '../server/index.js');
 
 const { MONGODB: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`);
 
 const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
@@ -80,7 +77,13 @@ describe(`generator - ${databaseType}`, () => {
       }
 
       before(async () => {
-        await helpers.run(generatorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedJHipsterGenerators({
+            except: ['jhipster:spring-data-mongodb'],
+            filter: filterBasicServerGenerators,
+          });
       });
 
       it('should match generated files snapshot', () => {

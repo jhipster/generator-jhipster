@@ -12,7 +12,11 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 import Generator from '../server/index.js';
 
 import { databaseTypes } from '../../jdl/jhipster/index.js';
-import { mockedGenerators, shouldComposeWithSpringCloudStream, shouldComposeWithLiquibase } from '../server/__test-support/index.js';
+import {
+  filterBasicServerGenerators,
+  shouldComposeWithSpringCloudStream,
+  shouldComposeWithLiquibase,
+} from '../server/__test-support/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +56,13 @@ describe(`generator - ${databaseType}`, () => {
       }
 
       before(async () => {
-        await helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedJHipsterGenerators({
+            except: ['jhipster:spring-data-neo4j'],
+            filter: filterBasicServerGenerators,
+          });
       });
 
       it('should match generated files snapshot', () => {

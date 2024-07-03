@@ -19,6 +19,10 @@ import {
   GENERATOR_DOCKER,
   GENERATOR_COMMON,
   GENERATOR_JAVA,
+  GENERATOR_PROJECT_NAME,
+  GENERATOR_SERVER,
+  GENERATOR_SPRING_BOOT,
+  GENERATOR_BOOTSTRAP,
 } from '../../generator-list.js';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
@@ -97,3 +101,14 @@ const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: bool
 
 export const shouldComposeWithCouchbase = (shouldCompose: boolean, runResultSupplier) =>
   shouldComposeWithDatabasetype(COUCHBASE, shouldCompose, runResultSupplier);
+
+export const filterBasicServerGenerators = (ns: string) =>
+  !ns.startsWith(`jhipster:${GENERATOR_BOOTSTRAP}`) &&
+  ![
+    `jhipster:${GENERATOR_PROJECT_NAME}`,
+    `jhipster:${GENERATOR_JAVA}`,
+    `jhipster:${GENERATOR_JAVA}:bootstrap`,
+    `jhipster:${GENERATOR_JAVA}:domain`,
+    `jhipster:${GENERATOR_SERVER}`,
+    `jhipster:${GENERATOR_SPRING_BOOT}`,
+  ].includes(ns);

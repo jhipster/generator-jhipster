@@ -16,13 +16,11 @@ import Generator from '../server/index.js';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.js';
 import {
-  mockedGenerators as serverGenerators,
+  filterBasicServerGenerators,
   shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
-import { GENERATOR_SERVER, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`);
+import { GENERATOR_SERVER } from '../generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -92,7 +90,13 @@ describe(`generator - ${databaseType}`, () => {
         return;
       }
       before(async () => {
-        await helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig(sampleConfig).withMockedGenerators(mockedGenerators);
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig(sampleConfig)
+          .withMockedJHipsterGenerators({
+            except: ['jhipster:spring-data-relational'],
+            filter: filterBasicServerGenerators,
+          });
       });
 
       it('should compose with jhipster:common', () => {
