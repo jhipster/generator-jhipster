@@ -3,21 +3,7 @@ import assert from 'assert';
 
 import { messageBrokerTypes, databaseTypes } from '../../../jdl/jhipster/index.js';
 import {
-  GENERATOR_CUCUMBER,
-  GENERATOR_GATLING,
-  GENERATOR_SPRING_CACHE,
-  GENERATOR_SPRING_WEBSOCKET,
-  GENERATOR_SPRING_DATA_RELATIONAL,
-  GENERATOR_SPRING_DATA_CASSANDRA,
-  GENERATOR_SPRING_DATA_COUCHBASE,
-  GENERATOR_SPRING_DATA_MONGODB,
-  GENERATOR_MAVEN,
-  GENERATOR_LIQUIBASE,
-  GENERATOR_LANGUAGES,
   GENERATOR_SPRING_CLOUD_STREAM,
-  GENERATOR_GRADLE,
-  GENERATOR_DOCKER,
-  GENERATOR_COMMON,
   GENERATOR_JAVA,
   GENERATOR_PROJECT_NAME,
   GENERATOR_SERVER,
@@ -27,37 +13,6 @@ import {
 
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
-
-export const mockedGenerators = [
-  `jhipster:${GENERATOR_COMMON}`,
-  `jhipster:${GENERATOR_SPRING_DATA_COUCHBASE}`,
-  `jhipster:${GENERATOR_CUCUMBER}`,
-  `jhipster:${GENERATOR_DOCKER}`,
-  `jhipster:${GENERATOR_GATLING}`,
-  `jhipster:${GENERATOR_GRADLE}`,
-  `jhipster:${GENERATOR_GRADLE}:code-quality`,
-  `jhipster:${GENERATOR_GRADLE}:jib`,
-  `jhipster:${GENERATOR_GRADLE}:node-gradle`,
-  `jhipster:${GENERATOR_SPRING_CLOUD_STREAM}`,
-  // `jhipster:${GENERATOR_JAVA}`,
-  // `jhipster:${GENERATOR_JAVA}:domain`,
-  // `jhipster:${GENERATOR_JAVA}:bootstrap`,
-  `jhipster:${GENERATOR_JAVA}:build-tool`,
-  `jhipster:${GENERATOR_JAVA}:code-quality`,
-  `jhipster:${GENERATOR_JAVA}:node`,
-  `jhipster:${GENERATOR_LANGUAGES}`,
-  `jhipster:${GENERATOR_LIQUIBASE}`,
-  `jhipster:${GENERATOR_MAVEN}`,
-  `jhipster:${GENERATOR_MAVEN}:code-quality`,
-  `jhipster:${GENERATOR_MAVEN}:jib`,
-  `jhipster:${GENERATOR_MAVEN}:node`,
-  'jhipster:spring-cloud:gateway',
-  `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`,
-  `jhipster:${GENERATOR_SPRING_DATA_MONGODB}`,
-  `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`,
-  `jhipster:${GENERATOR_SPRING_CACHE}`,
-  `jhipster:${GENERATOR_SPRING_WEBSOCKET}`,
-];
 
 export const shouldComposeWithLiquibase = (testSample, runResultSupplier) => {
   const liquibaseEnabled = typeof testSample === 'boolean' ? testSample : testSample?.databaseType === SQL;

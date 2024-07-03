@@ -24,7 +24,7 @@ import { snakeCase } from 'lodash-es';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 import { GENERATOR_SERVER, GENERATOR_SPRING_BOOT } from '../generator-list.js';
-import { mockedGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.js';
+import { filterBasicServerGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +52,7 @@ describe(`generator - ${generator}`, () => {
               messageBroker: 'no',
             })
             .withSkipWritingPriorities()
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
         shouldComposeWithSpringCloudStream(false, () => runResult);
@@ -66,7 +66,7 @@ describe(`generator - ${generator}`, () => {
               messageBroker: 'kafka',
             })
             .withSkipWritingPriorities()
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
         shouldComposeWithSpringCloudStream(true, () => runResult);
       });
@@ -79,7 +79,7 @@ describe(`generator - ${generator}`, () => {
               messageBroker: 'pulsar',
             })
             .withSkipWritingPriorities()
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
         shouldComposeWithSpringCloudStream(true, () => runResult);
       });
@@ -94,7 +94,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'no',
               authenticationType: 'jwt',
             })
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
         it('should match generated files', () => {
@@ -111,7 +111,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'no',
               authenticationType: 'session',
             })
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
         it('should match generated files', () => {
@@ -128,7 +128,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'no',
               authenticationType: 'oauth2',
             })
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
         it('should match generated files', () => {
@@ -146,7 +146,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'couchbase',
             })
             .withSkipWritingPriorities()
-            .withMockedGenerators(mockedGenerators);
+            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
         shouldComposeWithCouchbase(true, () => runResult);
       });

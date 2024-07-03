@@ -17,9 +17,6 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "pom.xml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -253,9 +250,6 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "pom.xml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -487,9 +481,6 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {

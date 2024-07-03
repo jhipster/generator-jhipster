@@ -8,12 +8,10 @@ import {
   defaultHelpers as helpers,
   runResult,
 } from '../../testing/index.js';
-import { mockedGenerators as serverGenerators } from '../server/__test-support/index.js';
+import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 
 import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_SERVER, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_RELATIONAL}`);
+import { GENERATOR_SERVER } from '../generator-list.js';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
@@ -78,7 +76,7 @@ describe(`generator - ${databaseType} - entities`, () => {
           .runJHipster(GENERATOR_SERVER)
           .withJHipsterConfig(sampleConfig, entities)
           .withOptions({ skipPriorities })
-          .withMockedGenerators(mockedGenerators);
+          .withMockedJHipsterGenerators({ except: ['jhipster:spring-data-relational'], filter: filterBasicServerGenerators });
       });
 
       it('should compose with jhipster:common', () => {

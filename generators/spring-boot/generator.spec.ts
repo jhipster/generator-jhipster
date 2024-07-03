@@ -6,7 +6,7 @@ import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import Generator from '../server/index.js';
 
-import { mockedGenerators } from '../server/__test-support/index.js';
+import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,7 +23,10 @@ describe(`generator - ${generator}`, () => {
 
   describe('with jwt', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ authenticationType: 'jwt' }).withMockedGenerators(mockedGenerators);
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ authenticationType: 'jwt' })
+        .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
     });
 
     it('should match generated files snapshot', () => {
@@ -33,7 +36,10 @@ describe(`generator - ${generator}`, () => {
 
   describe('with oauth2', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig({ authenticationType: 'oauth2' }).withMockedGenerators(mockedGenerators);
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ authenticationType: 'oauth2' })
+        .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
     });
 
     it('should match generated files snapshot', () => {
