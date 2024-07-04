@@ -20,6 +20,9 @@ exports[`generator - java:jib with defaults options should match files snapshot 
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
   "pom.xml": {
     "stateCleared": "modified",
   },
@@ -107,6 +110,21 @@ exports[`generator - java:jib with defaults options should match source snapshot
       ],
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
 }
 `;
 
@@ -139,6 +157,9 @@ exports[`generator - java:jib with gradle buildTool should match files snapshot 
   "gradlew.bat": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
@@ -166,6 +187,21 @@ exports[`generator - java:jib with gradle buildTool should match source snapshot
   "addGradlePlugin": [
     {
       "id": "jhipster.docker-conventions",
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
     },
   ],
 }
