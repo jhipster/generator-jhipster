@@ -154,14 +154,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
     return this.configuringEachEntity;
   }
 
-  get preparingEachEntityRelationship() {
-    return this.asPreparingEachEntityRelationshipTaskGroup({});
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
-    return this.preparingEachEntityRelationship;
-  }
-
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       processEntityPrimaryKeysDerivedProperties({ entity }) {

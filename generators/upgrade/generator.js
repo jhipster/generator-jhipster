@@ -70,10 +70,6 @@ export default class UpgradeGenerator extends BaseGenerator {
         );
         this.log.log('');
       },
-
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       initializeOptions() {
         if (this.silent) {
           this.spawnStdio = 'ignore';

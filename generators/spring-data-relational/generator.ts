@@ -41,18 +41,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {

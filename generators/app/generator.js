@@ -28,13 +28,10 @@ import { packageJson } from '../../lib/index.js';
 import { applicationTypes } from '../../jdl/jhipster/index.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { checkNode, loadStoredAppOptions } from './support/index.js';
-import command from './command.js';
 
 const { MICROSERVICE } = applicationTypes;
 
 export default class JHipsterAppGenerator extends BaseApplicationGenerator {
-  command = command;
-
   async beforeQueue() {
     loadStoredAppOptions.call(this);
 
@@ -61,9 +58,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
           await this.checkForNewVersion();
         }
       },
-      loadOptions() {
-        this.parseJHipsterCommand(this.command);
-      },
 
       validate() {
         if (!this.skipChecks && this.jhipsterConfig.skipServer && this.jhipsterConfig.skipClient) {
@@ -75,19 +69,6 @@ export default class JHipsterAppGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
-  get prompting() {
-    return this.asPromptingTaskGroup({
-      async prompting({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(this.command.configs));
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
   get configuring() {

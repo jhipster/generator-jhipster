@@ -64,10 +64,6 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
         this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
       },
-
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       checkDocker,
       async checkDockerCompose() {
         if (this.skipChecks) return;

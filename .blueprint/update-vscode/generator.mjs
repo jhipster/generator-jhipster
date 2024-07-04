@@ -4,12 +4,8 @@ import { getPackageRoot } from '../../lib/index.js';
 import { getWorkflowSamples } from '../generate-sample/support/get-workflow-samples.js';
 
 export default class extends BaseGenerator {
-  get [BaseGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
+  constructor(args, options, features) {
+    super(args, options, { queueCommandTasks: true, ...features });
   }
 
   get [BaseGenerator.WRITING]() {

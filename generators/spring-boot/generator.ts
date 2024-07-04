@@ -89,24 +89,8 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get prompting() {
     return this.asPromptingTaskGroup({
-      async promptCommand({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.promptCurrentJHipsterCommand();
-      },
       askForServerTestOpts,
       askForServerSideOpts,
       askForOptionalItems,
@@ -119,9 +103,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      async configureCommand() {
-        await this.configureCurrentJHipsterCommandConfig();
-      },
       checks() {
         const config = this.jhipsterConfigWithDefaults;
         if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
@@ -236,18 +217,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING_COMPONENT]() {
     return this.delegateTasksToBlueprint(() => this.composingComponent);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      async loadCommand({ application }) {
-        await this.loadCurrentJHipsterCommandConfig(application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {

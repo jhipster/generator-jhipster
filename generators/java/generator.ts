@@ -20,6 +20,8 @@
 import BaseApplicationGenerator from '../base-application/index.js';
 
 export default class JavaGenerator extends BaseApplicationGenerator {
+  customLifecycle = true;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -28,17 +30,5 @@ export default class JavaGenerator extends BaseApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster('jhipster:java:domain');
     }
-  }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 }

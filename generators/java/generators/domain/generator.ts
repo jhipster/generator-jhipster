@@ -40,18 +40,6 @@ export default class DomainGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
-  }
-
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       checkForReservedKeyword({ entityName }) {

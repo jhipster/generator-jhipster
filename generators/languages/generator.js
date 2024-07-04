@@ -87,9 +87,6 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get initializing() {
     return this.asInitializingTaskGroup({
-      async parseCommand() {
-        await this.parseCurrentJHipsterCommand();
-      },
       languagesToApply() {
         // Validate languages passed as argument.
         // Additional languages, will not replace current ones.
