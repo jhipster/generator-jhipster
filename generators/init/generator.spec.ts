@@ -20,8 +20,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers } from '../../testing/index.js';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { defaultHelpers as helpers, result } from '../../testing/index.js';
 import { GENERATOR_INIT } from '../generator-list.js';
 import { defaultConfig, requiredConfig } from './config.js';
 
@@ -51,28 +50,26 @@ describe(`generator - ${generator}`, () => {
   });
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath);
+        await helpers
+          .runJHipster('init')
+          .withMockedJHipsterGenerators(['bootstrap'])
+          .withSharedApplication({ projectDescription: 'projectDescription' })
+          .withJHipsterConfig();
       });
       it('should write files and match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        expect(result.getStateSnapshot()).toMatchSnapshot();
       });
-    });
-    describe('skipCommitHook option', () => {
-      let runResult;
-      const options = { skipCommitHook: true, baseName: 'jhipster' };
-      before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
-          .withMockedGenerators(['jhipster:git'])
-          .withOptions({ ...options });
-      });
-      it('should write options to .yo-rc.json', () => {
-        runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: options });
-      });
-      it('should not create husky files and match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+
+      it('should compose with generators', () => {
+        expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
+[
+  "jhipster:git",
+  "jhipster:javascript:bootstrap",
+  "jhipster:javascript:husky",
+  "jhipster:javascript:prettier",
+]
+`);
       });
     });
   });

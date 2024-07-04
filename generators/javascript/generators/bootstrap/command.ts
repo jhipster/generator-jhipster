@@ -16,11 +16,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const files = {
-  git: [{ templates: ['.gitignore.jhi', '.gitattributes.jhi'] }],
-  global: [{ templates: ['.editorconfig.jhi'] }],
+import type { JHipsterCommandDefinition } from '../../../base/api.js';
+
+const command: JHipsterCommandDefinition = {
+  configs: {
+    packageJsonNodeEngine: {
+      cli: {
+        // Accepts a boolean or a string
+        type: val => val,
+        hide: true,
+      },
+      scope: 'storage',
+    },
+    packageJsonType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['commonjs', 'module'],
+      scope: 'storage',
+    },
+  },
+  import: [],
 };
 
-export const readme = {
-  global: [{ templates: ['README.md'] }],
-};
+export default command;

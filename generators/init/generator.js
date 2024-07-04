@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_GIT, GENERATOR_PROJECT_NAME } from '../generator-list.js';
-import { packageJson } from '../../lib/index.js';
+import { GENERATOR_GIT } from '../generator-list.js';
 import { files, readme } from './files.js';
 
 /**
@@ -34,7 +33,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_PROJECT_NAME);
+      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
     }
   }
 
@@ -51,18 +50,6 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadConfig({ application }) {
-        application.applicationNodeEngine = packageJson.engines.node;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get writing() {
@@ -85,21 +72,5 @@ export default class InitGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      addPrettierDependencies({ application }) {
-        this.packageJson.merge({
-          engines: {
-            node: application.applicationNodeEngine,
-          },
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
