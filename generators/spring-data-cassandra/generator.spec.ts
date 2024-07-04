@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -27,23 +27,18 @@ import Generator from '../server/index.js';
 
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import {
-  mockedGenerators as serverGenerators,
+  filterBasicServerGenerators,
   shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
 } from '../server/__test-support/index.js';
-import { GENERATOR_SPRING_DATA_CASSANDRA } from '../generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-// compose with server generator, many conditionals at server generator
-const generatorFile = join(__dirname, '../server/index.js');
 
 const { CASSANDRA: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
-
-const mockedGenerators = serverGenerators.filter(generator => generator !== `jhipster:${GENERATOR_SPRING_DATA_CASSANDRA}`);
 
 const testSamples = buildServerSamples(commonConfig);
 
@@ -67,14 +62,20 @@ describe(`generator - ${databaseType}`, () => {
         (sampleConfig.reactive || sampleConfig.applicationType === 'microservice' || sampleConfig.applicationType === 'gateway')
       ) {
         it('should throw an error', async () => {
-          await expect(helpers.runJHipster(generatorFile).withJHipsterConfig(sampleConfig)).rejects.toThrow();
+          await expect(helpers.runJHipster('server').withJHipsterConfig(sampleConfig)).rejects.toThrow();
         });
 
         return;
       }
 
       before(async () => {
-        await helpers.run(generatorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedJHipsterGenerators({
+            except: ['jhipster:spring-data-cassandra'],
+            filter: filterBasicServerGenerators,
+          });
       });
 
       it('should match generated files snapshot', () => {

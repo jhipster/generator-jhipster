@@ -41,9 +41,6 @@ exports[`generator - neo4j gateway-jwt-gradle-enableTranslation(true)-com.mycomp
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -505,9 +502,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "pom.xml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -832,9 +826,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
@@ -1172,9 +1163,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -1475,9 +1463,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
@@ -1977,9 +1962,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -2307,9 +2289,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
@@ -2668,9 +2647,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -3007,9 +2983,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
@@ -3474,9 +3447,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {

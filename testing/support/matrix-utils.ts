@@ -7,6 +7,17 @@ const appendTitle = (title: string, config: string, value: boolean | string | nu
   return `${title}${title.length === 0 ? '' : '-'}${newTitle}`;
 };
 
+/**
+ * Create a matrix from a options
+ * @example
+ * const matrix = fromMatrix({ a: [true, false], b: [true, false] });
+ * // {
+ * //  'a(true)-b(true)': { a: true, b: true },
+ * //  'a(true)-b(false)': { a: true, b: false },
+ * //  'a(false)-b(true)': { a: false, b: true },
+ * //  'a(false)-b(false)': { a: false, b: false },
+ * // }
+ */
 export const fromMatrix = (configMatrix: Record<string, any[]>) => {
   const configEntries = Object.entries(configMatrix);
   const samples = configEntries.reduce(
@@ -67,6 +78,15 @@ const applyExtendedMatrix = (matrixEntries, configMatrix) => {
   return matrixEntries;
 };
 
+/**
+ * Apply new matrix value to existing matrix
+ * @example
+ * const matrix = extendMatrix(fromMatrix({ initialMatrix: [true, false] }), { toBeMerged: [true, false] });
+ * // {
+ * //  'initialMatrix(true)-toBeMerged(true)': { initialMatrix: true, toBeMerged: true },
+ * //  'initialMatrix(false)-toBeMerged(false)': { initialMatrix: false, toBeMerged: false },
+ * // }
+ */
 export const extendMatrix = (matrix, configMatrix) => {
   return Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
 };

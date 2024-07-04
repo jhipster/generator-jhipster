@@ -17,9 +17,6 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "pom.xml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -386,9 +383,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/ApplicationWebXml.java": {

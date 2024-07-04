@@ -47,9 +47,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -550,9 +547,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "pom.xml": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
     "stateCleared": "modified",
   },
@@ -945,9 +939,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -970,9 +961,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
@@ -1014,12 +1002,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/custom/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/web/rest/EntityWithCustomIdResource.java": {
     "stateCleared": "modified",
   },
@@ -1048,18 +1030,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/AuthoritiesConstants.java": {
@@ -1185,16 +1155,7 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/test/java/com/mycompany/config/EmbeddedElasticsearch.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -1362,9 +1323,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "settings.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
@@ -1718,9 +1676,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
@@ -2253,9 +2208,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -2649,9 +2601,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
@@ -3091,9 +3040,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -3116,9 +3062,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
@@ -3160,12 +3103,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/custom/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/repository/search/EntityWithCustomIdSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -3194,18 +3131,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
@@ -3364,16 +3289,7 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/config/EmbeddedElasticsearch.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -3526,9 +3442,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
     "stateCleared": "modified",
   },
   "pom.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/ApplicationWebXml.java": {
@@ -4067,9 +3980,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "settings.gradle": {
     "stateCleared": "modified",
   },
-  "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
@@ -4092,9 +4002,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/Constants.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/DateTimeFormatConfiguration.java": {
@@ -4130,12 +4037,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/custom/domain/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/custom/repository/EntityWithCustomIdRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/custom/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/custom/repository/search/EntityWithCustomIdSearchRepository.java": {
     "stateCleared": "modified",
   },
@@ -4164,18 +4065,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/AnotherSimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/MicroserviceRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/SimpleRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/repository/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/repository/search/AnotherSimpleSearchRepository.java": {
@@ -4316,16 +4205,7 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "src/test/java/com/mycompany/config/EmbeddedElasticsearch.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {

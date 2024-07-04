@@ -31,7 +31,7 @@ import {
 } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.js';
-import { mockedGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
+import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
 
@@ -84,7 +84,13 @@ describe('generator - elasticsearch', () => {
       }
 
       before(async () => {
-        await helpers.run(serverGeneratorFile).withJHipsterConfig(sampleConfig, entities).withMockedGenerators(mockedGenerators);
+        await helpers
+          .runJHipster('server')
+          .withJHipsterConfig(sampleConfig, entities)
+          .withMockedJHipsterGenerators({
+            except: ['jhipster:spring-data-elasticsearch'],
+            filter: filterBasicServerGenerators,
+          });
       });
 
       it('should compose with jhipster:common', () => {
