@@ -523,12 +523,6 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
      * if they test an entity which requires the current entity.
      */
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
-<%_ if (!(reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId 
-        || primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate
-        || fieldsToTest && fieldsToTest.length > 0
-        || persistableRelationships && persistableRelationships.length > 0)) { _%>
-      return new <%= persistClass %>();
-<%_ } else { _%>
   <%_ if (fluentMethods) { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
@@ -607,7 +601,6 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     <%_ } _%>
   <%_ } _%>
         return <%= persistInstance %>;
-<%_ } _%>
     }
 <%_ }); _%>
 
