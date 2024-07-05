@@ -71,7 +71,6 @@ public class AccountResource {
      * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
-    @SuppressWarnings("unchecked")
     public <% if (reactive) { %>Mono<<%= user.adminUserDto %>><% } else { %><%= user.adminUserDto %><% } %> getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
             return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal);
