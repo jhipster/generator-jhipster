@@ -10,7 +10,6 @@ export const convertConfigToOption = (name: string, config?: ConfigSpec): JHipst
     description: config.description,
     choices,
     scope: config.scope ?? 'storage',
-    ...(config.prompt && typeof config.default !== 'function' ? {} : { default: config.default }),
     ...config.cli,
   };
 };

@@ -12,7 +12,7 @@ Options:
   --force-install               Fail on install dependencies error (default: false)
   --ask-answered                Show prompts for already configured options (default: false)
   --base-name <value>           Application base name
-  --prettier-tab-width <value>  Default tab width for prettier (default: 2)
+  --prettier-tab-width <value>  Default tab width for prettier
   --monorepository              Use monorepository
   --skip-commit-hook            Skip adding husky commit hooks
   -h, --help                    display help for command
