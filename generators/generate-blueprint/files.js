@@ -16,16 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.js';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
 
-export const files = {
+export const files = asWriteFilesSection({
   baseFiles: [
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
       templates: [
         '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
-        'eslint.config.js',
+        { sourceFile: 'eslint.config.js.jhi.blueprint', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.blueprint` },
         'README.md',
         'tsconfig.json',
         'vitest.config.ts',
@@ -59,7 +60,7 @@ export const files = {
       templates: ['cli/commands.cjs'],
     },
   ],
-};
+});
 
 export const generatorFiles = {
   generator: [

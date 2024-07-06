@@ -66,6 +66,7 @@ describe(`generator - ${generator}`, () => {
 [
   "jhipster:git",
   "jhipster:javascript:bootstrap",
+  "jhipster:javascript:eslint",
   "jhipster:javascript:husky",
   "jhipster:javascript:prettier",
 ]

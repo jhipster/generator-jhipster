@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import { camelCase, upperFirst, snakeCase } from 'lodash-es';
 
-import BaseGenerator from '../base/index.js';
+import BaseGenerator from '../base-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
 
 import * as GENERATOR_LIST from '../generator-list.js';
@@ -141,7 +141,7 @@ export default class extends BaseGenerator {
     return {
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT);
+        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } });
         initGenerator.generateReadme = false;
       },
     };
@@ -264,7 +264,6 @@ export default class extends BaseGenerator {
         this.packageJson.merge({
           name: `generator-jhipster-${this.jhipsterConfig.baseName}`,
           keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
-          type: 'module',
           files: defaultPublishedFiles,
           scripts: {
             ejslint: 'ejslint generators/**/*.ejs',
@@ -279,8 +278,6 @@ export default class extends BaseGenerator {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
             eslint: `${mainDependencies.eslint}`,
             globals: `${mainDependencies.globals}`,
-            'eslint-config-prettier': `${mainDependencies['eslint-config-prettier']}`,
-            'eslint-plugin-prettier': `${mainDependencies['eslint-plugin-prettier']}`,
             vitest: mainDependencies.vitest,
             prettier: `${mainDependencies.prettier}`,
             /*

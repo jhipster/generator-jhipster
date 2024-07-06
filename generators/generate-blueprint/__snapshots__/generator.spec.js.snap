@@ -29,9 +29,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "cli/cli.cjs": {
     "stateCleared": "modified",
   },
-  "eslint.config.js": {
-    "stateCleared": "modified",
-  },
   "generators/angular/command.js": {
     "stateCleared": "modified",
   },
@@ -896,9 +893,6 @@ exports[`generator - generate-blueprint with default config should write files a
     "stateCleared": "modified",
   },
   "cli/cli.cjs": {
-    "stateCleared": "modified",
-  },
-  "eslint.config.js": {
     "stateCleared": "modified",
   },
   "package.json": {

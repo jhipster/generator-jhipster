@@ -44,6 +44,7 @@ export default class InitGenerator extends BaseApplicationGenerator {
         const generatorOptions = { fromInit: true };
         await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions });
         await this.composeWithJHipster('jhipster:javascript:husky', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript:eslint', { generatorOptions });
       },
     });
   }
