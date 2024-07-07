@@ -170,7 +170,7 @@ describe('<%= entityAngularName %> Service', () => {
                 expect(expectedResult).toHaveLength(2);
             });
 
-            it("should add a <%= entityAngularName %> to an array that doesn't contain it", () => {
+            it('should add a <%= entityAngularName %> to an array that doesn\'t contain it', () => {
                 const <%= entityInstance %>: I<%= entityAngularName %> = sampleWithRequiredData;
                 const <%= entityInstance %>Collection: I<%= entityAngularName %>[] = [sampleWithPartialData];
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing(<%= entityInstance %>Collection, <%= entityInstance %>);
