@@ -42,10 +42,6 @@ a {
   font-weight: bold;
 }
 
-a:hover {
-  color: #533f03;
-}
-
 /* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
 a:not([href]):not([tabindex]):hover.dropdown-item {
   color: $dropdown-link-hover-color;
@@ -58,6 +54,9 @@ a:not([href]):not([tabindex]):hover.dropdown-item {
 <%_ } _%>
 
 a:hover {
+  <%_ if (clientThemeNone) { _%>
+  color: #533f03;
+  <%_ } _%>
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
 }
