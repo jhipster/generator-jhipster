@@ -26,7 +26,7 @@ import UserManagementComponent from './list/user-management.component';
 import UserManagementDetailComponent from './detail/user-management-detail.component';
 import UserManagementUpdateComponent from './update/user-management-update.component';
 
-export const UserManagementResolve: ResolveFn<IUser | null> = (route: ActivatedRouteSnapshot) => {
+export const userManagementResolve: ResolveFn<IUser | null> = (route: ActivatedRouteSnapshot) => {
   const login = route.paramMap.get('login');
   if (login) {
     return inject(UserManagementService).find(login);
@@ -46,21 +46,21 @@ const userManagementRoute: Routes = [
     path: ':login/view',
     component: UserManagementDetailComponent,
     resolve: {
-      user: UserManagementResolve,
+      user: userManagementResolve,
     },
   },
   {
     path: 'new',
     component: UserManagementUpdateComponent,
     resolve: {
-      user: UserManagementResolve,
+      user: userManagementResolve,
     },
   },
   {
     path: ':login/edit',
     component: UserManagementUpdateComponent,
     resolve: {
-      user: UserManagementResolve,
+      user: userManagementResolve,
     },
   },
 ];
