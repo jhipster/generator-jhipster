@@ -17,10 +17,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.eslintrc.json": {
+  "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -419,6 +416,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -439,10 +439,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.eslintrc.json": {
+  "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -874,6 +871,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -894,10 +894,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.eslintrc.json": {
+  "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -1302,17 +1299,14 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/webpack/webpack.prod.js": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
 exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -1326,6 +1320,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -1753,12 +1750,6 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
 
 exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -1772,6 +1763,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -2268,12 +2262,6 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
 
 exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -2287,6 +2275,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -2693,12 +2684,6 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
 
 exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -2712,6 +2697,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {

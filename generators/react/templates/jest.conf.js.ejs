@@ -47,7 +47,7 @@ function mapTypescriptAliasToJestAlias(alias = {}) {
       return jestAliases;
     }
     Object.entries(tsconfig.compilerOptions.paths)
-      .filter(([key, value]) => {
+      .filter(([_key, value]) => {
         // use Typescript alias in Jest only if this has value
         if (value.length) {
           return true;

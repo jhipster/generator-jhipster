@@ -150,9 +150,10 @@ updates:
       - dependency-name: '@module-federation/utilities'
         versions: ['*']
     groups:
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
+          - '@eslint/*'
+          - 'eslint'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'

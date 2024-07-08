@@ -29,6 +29,7 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
+  clientRootTemplatesBlock,
 } from '../client/support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.js';
@@ -40,10 +41,7 @@ import { isTranslatedReactFile, translateReactFilesTransform } from './support/i
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../client/types.js').ClientApplication>}
- */
+
 export default class ReactGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -51,6 +49,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
@@ -76,6 +75,12 @@ export default class ReactGenerator extends BaseApplicationGenerator {
           this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'),
         );
       },
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          typescriptEslint: true,
+        });
+      },
     });
   }
 
@@ -85,9 +90,14 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
+        });
+      },
       prepareForTemplates({ application, source }) {
-        application.webappEnumerationsDir = `${application.clientSrcDir}app/shared/model/enumerations/`;
-
         source.addWebpackConfig = args => {
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
@@ -142,10 +152,26 @@ export default class ReactGenerator extends BaseApplicationGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
+      cleanup({ control }) {
+        control.cleanupFiles({
+          '8.6.1': ['.eslintrc.json', '.eslintignore'],
+        });
+      },
       cleanupOldFilesTask,
+      async writingEslintFile({ application }) {
+        await this.writeFiles({
+          blocks: [
+            clientRootTemplatesBlock({
+              templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
+            }),
+          ],
+          context: application,
+          rootTemplatesPath: this.fetchFromInstalledJHipster('javascript/generators/eslint/templates'),
+        });
+      },
       writeFiles,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {

@@ -16,14 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWriteFilesSection } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 
-export const files = {
+export const files = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
+        { sourceFile: 'eslint.config.js.jhi.react', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.react` },
         'package.json',
-        '.eslintrc.json',
         'tsconfig.json',
         'tsconfig.test.json',
         'jest.conf.js',
@@ -304,7 +305,7 @@ export const files = {
       templates: ['shared/reducers/user-management.spec.ts'],
     },
   ],
-};
+});
 
 export async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
