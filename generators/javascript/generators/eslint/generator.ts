@@ -69,7 +69,11 @@ export default class EslintGenerator extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       async writing({ application }) {
         await this.writeFiles({
-          blocks: [{ templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }] }],
+          blocks: [
+            {
+              templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
+            },
+          ],
           context: application,
         });
       },

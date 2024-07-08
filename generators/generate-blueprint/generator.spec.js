@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from './index.js';
 
@@ -43,9 +43,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withMockedGenerators(mockedGenerators);
+        await helpers.run(generatorPath).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
         expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(true);
@@ -55,9 +54,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('all option', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
+        await helpers.run(generatorPath).withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
         expect(runResult.mockedGenerators['jhipster:init'].calledOnce).toBe(true);
