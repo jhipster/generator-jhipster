@@ -169,7 +169,7 @@
     "sort-keys": "5.0.0",
     "type-fest": "4.21.0",
     "typescript": "5.4.5",
-    "winston": "3.13.0",
+    "winston": "3.13.1",
     "yaml": "2.4.5",
     "yeoman-environment": "4.4.1",
     "yeoman-generator": "7.3.2"
