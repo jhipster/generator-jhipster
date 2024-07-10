@@ -193,7 +193,7 @@
     "open-cli": "8.0.0",
     "prettier2": "npm:prettier@2.8.8",
     "quibble": "0.9.2",
-    "rimraf": "5.0.7",
+    "rimraf": "6.0.1",
     "sinon": "18.0.0",
     "sinon-chai": "3.7.0",
     "yeoman-test": "8.3.0"
