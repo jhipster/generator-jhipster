@@ -16,6 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (enableSwaggerCodegen) { _%>
+buildscript {
+    dependencies {
+        classpath("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml") {
+            version { strictly("2.15.4") }
+        }
+    }
+}
+
+<%_ } _%>
 plugins {
     id "java"
     id "maven-publish"
