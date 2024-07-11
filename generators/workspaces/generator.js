@@ -22,6 +22,7 @@ import { existsSync } from 'fs';
 import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT } from '../generator-list.js';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import { packageJson } from '../../lib/index.js';
 
 /**
  * Base class for a generator that can be extended through a blueprint.
@@ -88,7 +89,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return this.asComposingTaskGroup({
       async composeGit() {
         if (this.options.monorepository || this.jhipsterConfig.monorepository) {
-          await this.composeWithJHipster(GENERATOR_GIT);
+          const generatorOptions = { monorepositoryRoot: true };
+          await this.composeWithJHipster(GENERATOR_GIT, { generatorOptions });
+          await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions });
         }
       },
       async generateApplications() {
@@ -184,6 +187,14 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
             overrides: {
               webpack: webpackVersion,
               'browser-sync': browserSyncVersion,
+            },
+          });
+        }
+
+        if (applications.some(app => app.backendTypeJavaAny)) {
+          this.packageJson.merge({
+            devDependencies: {
+              'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
             },
           });
         }
