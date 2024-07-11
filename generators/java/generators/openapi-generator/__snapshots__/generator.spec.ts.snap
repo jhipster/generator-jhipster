@@ -1,6 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`generator - java:openapi-generator gradle should call source snapshot 1`] = `
+exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should call source snapshot 1`] = `
+{
+  "addJavaDependencies": [
+    [
+      {
+        "artifactId": "jackson-databind-nullable",
+        "groupId": "org.openapitools",
+        "version": "'JACKSON-DATABIND-NULLABLE-VERSION'",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
+[
+  "jhipster:java:build-tool",
+]
+`;
+
+exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md.jhi.openapi-generator": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/swagger/api.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should call source snapshot 1`] = `
 {
   "addGradleBuildSrcDependencyCatalogLibraries": [
     [
@@ -29,13 +63,13 @@ exports[`generator - java:openapi-generator gradle should call source snapshot 1
 }
 `;
 
-exports[`generator - java:openapi-generator gradle should compose with generators 1`] = `
+exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
   "jhipster:java:build-tool",
 ]
 `;
 
-exports[`generator - java:openapi-generator gradle should match files snapshot 1`] = `
+exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -52,7 +86,41 @@ exports[`generator - java:openapi-generator gradle should match files snapshot 1
 }
 `;
 
-exports[`generator - java:openapi-generator maven should call source snapshot 1`] = `
+exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should call source snapshot 1`] = `
+{
+  "addJavaDependencies": [
+    [
+      {
+        "artifactId": "jackson-databind-nullable",
+        "groupId": "org.openapitools",
+        "version": "'JACKSON-DATABIND-NULLABLE-VERSION'",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
+[
+  "jhipster:java:build-tool",
+]
+`;
+
+exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md.jhi.openapi-generator": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/swagger/api.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should call source snapshot 1`] = `
 {
   "addJavaDependencies": [
     [
@@ -110,13 +178,13 @@ exports[`generator - java:openapi-generator maven should call source snapshot 1`
 }
 `;
 
-exports[`generator - java:openapi-generator maven should compose with generators 1`] = `
+exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
   "jhipster:java:build-tool",
 ]
 `;
 
-exports[`generator - java:openapi-generator maven should match files snapshot 1`] = `
+exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
