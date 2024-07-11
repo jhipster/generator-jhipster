@@ -22,18 +22,12 @@ profile=dev
 # Dependency versions
 mapstructVersion=<%- javaDependencies.mapstruct %>
 archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
-<%_ if (enableSwaggerCodegen) { _%>
-jacksonDatabindNullableVersion=<%- javaDependencies['jackson-databind-nullable'] %>
-<%_ } _%>
 <%_ if (reactive) { _%>
 blockhoundJunitPlatformVersion=<%- javaDependencies['blockhound-junit-platform'] %>
 <%_ } _%>
 
 # gradle plugin version
 gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
-<%_ if (enableSwaggerCodegen) { _%>
-openapiPluginVersion=<%- javaDependencies['gradle-openapi-generator'] %>
-<%_ } _%>
 <%_ if (enableGradleEnterprise) { _%>
 gradleEnterprisePluginVersion=<%- javaDependencies['gradle-enterprise'] %>
 gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user-data-gradle-plugin'] %>

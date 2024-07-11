@@ -216,28 +216,6 @@ See Cypress' documentation for setting OS [environment variables](https://docs.c
 **Auth0 requires a user to provide authorization consent on the first login.** Consent flow is currently not handled in the Cypress test suite. To mitigate the issue, you can use a user account that has already granted consent to authorize application access via interactive login.
   <%_ } _%>
 <%_ } _%>
-
-<%_ if (enableSwaggerCodegen) { _%>
-### Doing API-First development using openapi-generator-cli
-
-[OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
-    <%_ if (buildToolMaven) { _%>
-```bash
-./mvnw generate-sources
-```
-    <%_ } _%>
-    <%_ if (buildToolGradle) { _%>
-```bash
-./gradlew openApiGenerate
-```
-    <%_ } _%>
-Then implements the generated delegate classes with `@Service` classes.
-
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
-
-Refer to [Doing API-First development][] for more details.
-<%_ } _%>
-
 <&_ } -&>
 
 <&_ if (fragment.testingSection) { -&>
@@ -396,12 +374,4 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-<&_ } -&>
-
-<&_ if (fragment.referenceSection) { -&>
-  <%_ if (enableSwaggerCodegen) { _%>
-[OpenAPI-Generator]: https://openapi-generator.tech
-[Swagger-Editor]: https://editor.swagger.io
-[Doing API-First development]: <%= documentationArchiveUrl %>/doing-api-first-development/
-  <%_ } _%>
 <&_ } -&>

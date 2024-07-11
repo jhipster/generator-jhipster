@@ -242,14 +242,6 @@ const swaggerFiles = {
       renameTo: moveToJavaPackageSrcDir,
       templates: ['config/OpenApiConfiguration.java'],
     },
-    {
-      condition: generator => generator.buildToolGradle,
-      templates: ['gradle/swagger.gradle'],
-    },
-    {
-      path: SERVER_MAIN_RES_DIR,
-      templates: ['swagger/api.yml'],
-    },
   ],
 };
 
