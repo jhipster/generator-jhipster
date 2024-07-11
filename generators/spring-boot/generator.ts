@@ -150,6 +150,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           clientFramework,
           testFrameworks,
           feignClient,
+          enableSwaggerCodegen,
         } = this.jhipsterConfigWithDefaults;
 
         await this.composeWithJHipster(GENERATOR_DOCKER);
@@ -158,6 +159,10 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
         if (!skipClient && clientFramework !== 'no') {
           await this.composeWithJHipster('jhipster:java:node');
+        }
+
+        if (enableSwaggerCodegen) {
+          await this.composeWithJHipster('jhipster:java:openapi-generator');
         }
 
         if (applicationType === GATEWAY) {

@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - java:openapi-generator gradle should call source snapshot 1`] = `
+{
+  "addGradleBuildSrcDependencyCatalogLibraries": [
+    [
+      {
+        "libraryName": "openapi-generator",
+        "module": "org.openapitools:openapi-generator-gradle-plugin",
+        "scope": "implementation",
+        "version": "'GRADLE-OPENAPI-GENERATOR-VERSION'",
+      },
+    ],
+  ],
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.openapi-generator-conventions",
+    },
+  ],
+  "addJavaDependencies": [
+    [
+      {
+        "artifactId": "jackson-databind-nullable",
+        "groupId": "org.openapitools",
+        "version": "'JACKSON-DATABIND-NULLABLE-VERSION'",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`generator - java:openapi-generator gradle should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md.jhi.openapi-generator": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.openapi-generator-conventions.gradle": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/swagger/api.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java:openapi-generator maven should call source snapshot 1`] = `
+{
+  "addJavaDependencies": [
+    [
+      {
+        "artifactId": "jackson-databind-nullable",
+        "groupId": "org.openapitools",
+        "version": "'JACKSON-DATABIND-NULLABLE-VERSION'",
+      },
+    ],
+  ],
+  "addMavenDefinition": [
+    {
+      "pluginManagement": [
+        {
+          "additionalContent": "                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>\${project.basedir}/src/main/resources/swagger/api.yml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>com.mycompany.myapp.web.api</apiPackage>
+                            <modelPackage>com.mycompany.myapp.service.api.dto</modelPackage>
+                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                            <skipValidateSpec>false</skipValidateSpec>
+                            <configOptions>
+                                <delegatePattern>true</delegatePattern>
+                                <title>jhipster</title>
+                                <useSpringBoot3>true</useSpringBoot3>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+",
+          "artifactId": "openapi-generator-maven-plugin",
+          "groupId": "org.openapitools",
+          "version": "\${openapi-generator-maven-plugin.version}",
+        },
+      ],
+      "plugins": [
+        {
+          "artifactId": "openapi-generator-maven-plugin",
+          "groupId": "org.openapitools",
+        },
+      ],
+      "properties": [
+        {
+          "property": "openapi-generator-maven-plugin.version",
+          "value": "'OPENAPI-GENERATOR-MAVEN-PLUGIN-VERSION'",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - java:openapi-generator maven should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "README.md.jhi.openapi-generator": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/swagger/api.yml": {
+    "stateCleared": "modified",
+  },
+}
+`;

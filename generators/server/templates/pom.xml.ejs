@@ -64,9 +64,6 @@
 <%_ } _%>
         <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
         <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
-<%_ if (enableSwaggerCodegen) { _%>
-        <jackson-databind-nullable.version><%- javaDependencies['jackson-databind-nullable'] %></jackson-databind-nullable.version>
-<%_ } _%>
         <git-commit-id-maven-plugin.version><%- javaDependencies['git-commit-id-maven-plugin'] %></git-commit-id-maven-plugin.version>
         <lifecycle-mapping.version><%- javaDependencies['lifecycle-mapping'] %></lifecycle-mapping.version>
         <maven-clean-plugin.version><%- javaDependencies['maven-clean-plugin'] %></maven-clean-plugin.version>
@@ -79,9 +76,6 @@
         <maven-site-plugin.version><%- javaDependencies['maven-site-plugin'] %></maven-site-plugin.version>
         <maven-surefire-plugin.version><%- javaDependencies['maven-surefire-plugin'] %></maven-surefire-plugin.version>
         <maven-war-plugin.version><%- javaDependencies['maven-war-plugin'] %></maven-war-plugin.version>
-<%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version><%- javaDependencies['openapi-generator-maven-plugin'] %></openapi-generator-maven-plugin.version>
-<%_ } _%>
     </properties>
 
     <dependencies>
@@ -161,13 +155,6 @@
             <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
-<%_ if (enableSwaggerCodegen) { _%>
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>${jackson-databind-nullable.version}</version>
-        </dependency>
-<%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -350,16 +337,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<%_ if (enableSwaggerCodegen) { _%>
-            <plugin>
-                <!--
-                    Plugin that provides API-first development using openapi-generator-cli to
-                    generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
-                -->
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-            </plugin>
-<%_ } _%>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -515,40 +492,6 @@
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven-jar-plugin.version}</version>
                </plugin>
-<%_ if (enableSwaggerCodegen) { _%>
-                <plugin>
-                    <!--
-                        Plugin that provides API-first development using openapi-generator-cli to
-                        generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
-                    -->
-                    <groupId>org.openapitools</groupId>
-                    <artifactId>openapi-generator-maven-plugin</artifactId>
-                    <version>${openapi-generator-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                            <configuration>
-                                <inputSpec>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
-                                <generatorName>spring</generatorName>
-                                <apiPackage><%= packageName %>.web.api</apiPackage>
-                                <modelPackage><%= packageName %>.service.api.dto</modelPackage>
-                                <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
-                                <skipValidateSpec>false</skipValidateSpec>
-                                <configOptions>
-  <%_ if (reactive) { _%>
-                                    <reactive>true</reactive>
-  <%_ } _%>
-                                    <delegatePattern>true</delegatePattern>
-                                    <title><%= dasherizedBaseName %></title>
-                                    <useSpringBoot3>true</useSpringBoot3>
-                                </configOptions>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-<%_ } _%>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
