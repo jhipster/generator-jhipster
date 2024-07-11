@@ -103,14 +103,15 @@
         <tbody>
           <tr>
             <td>jvm.gc.pause</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause'].count }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause'].mean | number: '1.0-3' }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause']['0.0'] | number: '1.0-3' }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause']['0.5'] | number: '1.0-3' }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause']['0.75'] | number: '1.0-3' }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause']['0.95'] | number: '1.0-3' }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause']['0.99'] | number: '1.0-3' }}</td>
-            <td class="text-end">{{ garbageCollectorMetrics()!['jvm.gc.pause'].max | number: '1.0-3' }}</td>
+            @let pause = garbageCollectorMetrics()!['jvm.gc.pause'];
+            <td class="text-end">{{ pause.count }}</td>
+            <td class="text-end">{{ pause.mean | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.0'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.5'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.75'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.95'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause['0.99'] | number: '1.0-3' }}</td>
+            <td class="text-end">{{ pause.max | number: '1.0-3' }}</td>
           </tr>
         </tbody>
       </table>
