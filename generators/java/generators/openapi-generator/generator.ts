@@ -28,11 +28,17 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrapApplication();
+      await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanup({ application, control }) {
+        control.cleanupFiles({
+          '8.6.1': [[application.buildToolGradle!, 'gradle/swagger.gradle']],
+        });
+      },
       async writing({ application }) {
         await this.writeFiles({
           blocks: [

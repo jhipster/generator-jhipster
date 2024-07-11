@@ -29,6 +29,12 @@ exports[`generator - java:openapi-generator gradle should call source snapshot 1
 }
 `;
 
+exports[`generator - java:openapi-generator gradle should compose with generators 1`] = `
+[
+  "jhipster:java:build-tool",
+]
+`;
+
 exports[`generator - java:openapi-generator gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
@@ -102,6 +108,12 @@ exports[`generator - java:openapi-generator maven should call source snapshot 1`
     },
   ],
 }
+`;
+
+exports[`generator - java:openapi-generator maven should compose with generators 1`] = `
+[
+  "jhipster:java:build-tool",
+]
 `;
 
 exports[`generator - java:openapi-generator maven should match files snapshot 1`] = `
