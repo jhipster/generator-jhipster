@@ -19,7 +19,16 @@
 import type { JHipsterCommandDefinition } from '../../../base/api.js';
 
 const command: JHipsterCommandDefinition = {
-  configs: {},
+  configs: {
+    addOpenapiGeneratorPlugin: {
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      default: true,
+      scope: 'storage',
+    },
+  },
   import: [],
 };
 

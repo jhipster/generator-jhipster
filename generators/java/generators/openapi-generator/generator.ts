@@ -45,7 +45,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
             { templates: ['README.md.jhi.openapi-generator'] },
             javaMainResourceTemplatesBlock({ templates: ['swagger/api.yml'] }),
             {
-              condition: ctx => ctx.buildToolGradle,
+              condition: ctx => ctx.buildToolGradle && ctx.addOpenapiGeneratorPlugin,
               templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.openapi-generator-conventions.gradle`],
             },
           ],
@@ -62,7 +62,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ source, application }) {
-        const { buildToolGradle, buildToolMaven, javaDependencies } = application;
+        const { addOpenapiGeneratorPlugin, buildToolGradle, buildToolMaven, javaDependencies } = application;
         source.addJavaDependencies!([
           {
             groupId: 'org.openapitools',
@@ -71,18 +71,19 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
           },
         ]);
 
-        if (buildToolMaven) {
-          source.addMavenDefinition!({
-            properties: [
-              { property: 'openapi-generator-maven-plugin.version', value: javaDependencies!['openapi-generator-maven-plugin'] },
-            ],
-            plugins: [{ groupId: 'org.openapitools', artifactId: 'openapi-generator-maven-plugin' }],
-            pluginManagement: [
-              {
-                groupId: 'org.openapitools',
-                artifactId: 'openapi-generator-maven-plugin',
-                version: '${openapi-generator-maven-plugin.version}',
-                additionalContent: `                <executions>
+        if (addOpenapiGeneratorPlugin) {
+          if (buildToolMaven) {
+            source.addMavenDefinition!({
+              properties: [
+                { property: 'openapi-generator-maven-plugin.version', value: javaDependencies!['openapi-generator-maven-plugin'] },
+              ],
+              plugins: [{ groupId: 'org.openapitools', artifactId: 'openapi-generator-maven-plugin' }],
+              pluginManagement: [
+                {
+                  groupId: 'org.openapitools',
+                  artifactId: 'openapi-generator-maven-plugin',
+                  version: '${openapi-generator-maven-plugin.version}',
+                  additionalContent: `                <executions>
                     <execution>
                         <goals>
                             <goal>generate</goal>
@@ -109,20 +110,21 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
                     </execution>
                 </executions>
 `,
+                },
+              ],
+            });
+          }
+          if (buildToolGradle) {
+            source.addGradleBuildSrcDependencyCatalogLibraries?.([
+              {
+                libraryName: 'openapi-generator',
+                module: 'org.openapitools:openapi-generator-gradle-plugin',
+                version: javaDependencies!['gradle-openapi-generator'],
+                scope: 'implementation',
               },
-            ],
-          });
-        }
-        if (buildToolGradle) {
-          source.addGradleBuildSrcDependencyCatalogLibraries?.([
-            {
-              libraryName: 'openapi-generator',
-              module: 'org.openapitools:openapi-generator-gradle-plugin',
-              version: javaDependencies!['gradle-openapi-generator'],
-              scope: 'implementation',
-            },
-          ]);
-          source.addGradlePlugin?.({ id: 'jhipster.openapi-generator-conventions' });
+            ]);
+            source.addGradlePlugin?.({ id: 'jhipster.openapi-generator-conventions' });
+          }
         }
       },
     });

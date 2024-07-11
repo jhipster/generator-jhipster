@@ -63,6 +63,8 @@ export type JavaApplication = BaseApplication &
     prettierJava: boolean;
 
     imperativeOrReactive: string;
+
+    addOpenapiGeneratorPlugin: boolean;
   };
 
 export type JavaSourceType = {
