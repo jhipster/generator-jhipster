@@ -1,4 +1,4 @@
-import { extname } from 'path';
+import { basename, extname, resolve } from 'path';
 import { transform } from '@yeoman/transform';
 import BaseGenerator from '../../generators/base/index.js';
 import { packageJson } from '../../lib/index.js';
@@ -31,6 +31,18 @@ export default class extends BaseGenerator {
       async promptOptions() {
         if (this.global) {
           await promptSamplesFolder.call(this);
+        } else if (!process.env.CI && !this.projectFolder && basename(process.cwd()) !== this.sampleName) {
+          const answers = await this.prompt([
+            {
+              type: 'confirm',
+              name: 'confirmProjectFolder',
+              message: `Do you wan't to generate the sample in a folder named ${this.sampleName}?`,
+              default: true,
+            },
+          ]);
+          if (answers.confirmProjectFolder) {
+            this.projectFolder = resolve(this.sampleName);
+          }
         }
       },
     });
@@ -43,7 +55,7 @@ export default class extends BaseGenerator {
 
         await this.composeWithJHipster(GENERATOR_JDL, {
           generatorArgs: [this.templatePath('samples', this.sampleName)],
-          generatorOptions: { projectVersion: this.projectVersion, destinationPath: this.projectFolder },
+          generatorOptions: { projectVersion: this.projectVersion, destinationRoot: this.projectFolder },
         });
       },
       async generateSample() {
@@ -62,7 +74,7 @@ export default class extends BaseGenerator {
 
         let generatorOptions = {
           projectVersion: this.projectVersion,
-          destinationPath: this.projectFolder,
+          destinationRoot: this.projectFolder,
           ...sample.sample.generatorOptions,
         };
         if (sample.sample.workspaces && sample.sample.workspaces !== 'false') {
@@ -77,7 +89,7 @@ export default class extends BaseGenerator {
           if (sample.jdlFiles) {
             await this.composeWithJHipster(GENERATOR_JDL, {
               generatorArgs: sample.jdlFiles,
-              generatorOptions: { jsonOnly: true, destinationPath: this.projectFolder },
+              generatorOptions: { jsonOnly: true, destinationRoot: this.projectFolder },
             });
           }
           await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
@@ -104,7 +116,7 @@ export default class extends BaseGenerator {
             ),
           );
         }
-        await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { destinationPath: this.projectFolder } });
+        await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { destinationRoot: this.projectFolder } });
       },
       async updateVscodeWorkspace() {
         if (this.global) {
@@ -116,7 +128,7 @@ export default class extends BaseGenerator {
         }
       },
       async info() {
-        await this.composeWithJHipster(GENERATOR_INFO, { generatorOptions: { destinationPath: this.projectFolder } });
+        await this.composeWithJHipster(GENERATOR_INFO, { generatorOptions: { destinationRoot: this.projectFolder } });
       },
     });
   }
