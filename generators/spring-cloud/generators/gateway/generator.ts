@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.js';
-import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../../../java/support/files.js';
+import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
@@ -69,6 +69,17 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanup({ control, application }) {
+        control.cleanupFiles({
+          '8.6.1': [
+            [
+              application.reactive && (application as any).serviceDiscoveryAny,
+              `${application.javaPackageSrcDir}/web/filter/ModifyServersOpenApiFilter.java`,
+              `${application.javaPackageTestDir}/web/filter/ModifyServersOpenApiFilterTest.java`,
+            ],
+          ],
+        });
+      },
       async writing({ application }) {
         await this.writeFiles({
           blocks: [
@@ -78,11 +89,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
             }),
             javaMainPackageTemplatesBlock({
               condition: ctx => ctx.reactive && ctx.serviceDiscoveryAny,
-              templates: ['web/rest/vm/RouteVM.java', 'web/rest/GatewayResource.java', 'web/filter/ModifyServersOpenApiFilter.java'],
-            }),
-            javaTestPackageTemplatesBlock({
-              condition: ctx => ctx.reactive && ctx.serviceDiscoveryAny,
-              templates: ['web/filter/ModifyServersOpenApiFilterTest.java'],
+              templates: ['web/rest/vm/RouteVM.java', 'web/rest/GatewayResource.java'],
             }),
           ],
           context: application,

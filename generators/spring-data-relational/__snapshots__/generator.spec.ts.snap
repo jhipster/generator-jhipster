@@ -2094,6 +2094,9 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -2351,6 +2354,9 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -2597,6 +2603,9 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -2871,6 +2880,9 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -3114,6 +3126,9 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -3385,6 +3400,9 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -3616,6 +3634,9 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -3884,6 +3905,9 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -4127,6 +4151,9 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -4386,6 +4413,9 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -4620,6 +4650,9 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
@@ -4879,6 +4912,9 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -5125,6 +5161,9 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -5381,6 +5420,9 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -5630,6 +5672,9 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
