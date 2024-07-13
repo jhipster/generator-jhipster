@@ -84,9 +84,9 @@ export default class CypressGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
-        application.cypressDir = application.cypressDir ?? application.clientTestDir ? `${application.clientTestDir}cypress/` : 'cypress';
+        application.cypressDir = (application.cypressDir ?? application.clientTestDir) ? `${application.clientTestDir}cypress/` : 'cypress';
         application.cypressTemporaryDir =
-          application.cypressTemporaryDir ?? application.temporaryDir ? `${application.temporaryDir}cypress/` : '.cypress/';
+          (application.cypressTemporaryDir ?? application.temporaryDir) ? `${application.temporaryDir}cypress/` : '.cypress/';
         application.cypressBootstrapEntities = application.cypressBootstrapEntities ?? true;
       },
     });

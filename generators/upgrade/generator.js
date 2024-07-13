@@ -296,7 +296,7 @@ export default class UpgradeGenerator extends BaseGenerator {
    */
   async cleanUp() {
     const gitignoreContent = this.readDestination('.gitignore', { defaults: '' });
-    const ignoredFiles = gitignoreContent ? gitignore(gitignoreContent).patterns ?? [] : [];
+    const ignoredFiles = gitignoreContent ? (gitignore(gitignoreContent).patterns ?? []) : [];
     const filesToKeep = ['.yo-rc.json', '.jhipster', 'package.json', 'package-lock.json', 'node_modules', '.git', ...ignoredFiles];
     for (const file of await readdir(this.destinationPath())) {
       if (!filesToKeep.includes(file)) {
