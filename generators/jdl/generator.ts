@@ -157,7 +157,7 @@ export default class JdlGenerator extends BaseGenerator {
         const interactiveFallback = !allNew;
 
         this.interactive = this.interactive ?? interactiveFallback;
-        this.force = this.options.force ?? (nrApplications > 0 && allNew) ? true : undefined;
+        this.force = (this.options.force ?? (nrApplications > 0 && allNew)) ? true : undefined;
         this.reproducible = allNew;
       },
       customizeApplication() {

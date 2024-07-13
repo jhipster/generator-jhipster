@@ -240,7 +240,7 @@ export default function prepareEntity(entityWithConfig, generator, application) 
     __override__: false,
     i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${data.frontendAppName}.${data.entityTranslationKey}`,
     i18nAlertHeaderPrefix: data =>
-      data.i18nAlertHeaderPrefix ?? data.microserviceAppName
+      (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
         ? `${data.microserviceAppName}.${data.entityTranslationKey}`
         : data.i18nKeyPrefix,
     hasRelationshipWithBuiltInUser: ({ relationships }) => relationships.some(relationship => relationship.otherEntity.builtInUser),
