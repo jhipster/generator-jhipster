@@ -60,24 +60,25 @@
             #login
           />
 
-        @if (registerForm.get('login')!.invalid && (registerForm.get('login')!.dirty || registerForm.get('login')!.touched)) {
+        @let loginRef = registerForm.get('login')!;
+        @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
           <div>
-          @if (registerForm.get('login')?.errors?.required) {
+          @if (loginRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.required')</small>
           }
 
-          @if (registerForm.get('login')?.errors?.minlength) {
+          @if (loginRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.minlength')</small>
           }
 
-          @if (registerForm.get('login')?.errors?.maxlength) {
+          @if (loginRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.maxlength')</small>
           }
 
-          @if (registerForm.get('login')?.errors?.pattern) {
+          @if (loginRef?.errors?.pattern) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('register.messages.validate.login.pattern')</small>
           }
@@ -97,24 +98,25 @@
             data-cy="email"
           />
 
-        @if (registerForm.get('email')!.invalid && (registerForm.get('email')!.dirty || registerForm.get('email')!.touched)) {
+        @let emailRef = registerForm.get('email')!;
+        @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
           <div>
-          @if (registerForm.get('email')?.errors?.required) {
+          @if (emailRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.required')</small>
           }
 
-          @if (registerForm.get('email')?.errors?.invalid) {
+          @if (emailRef?.errors?.invalid) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
           }
 
-          @if (registerForm.get('email')?.errors?.minlength) {
+          @if (emailRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.minlength')</small>
           }
 
-          @if (registerForm.get('email')?.errors?.maxlength) {
+          @if (emailRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.maxlength')</small>
           }
@@ -169,20 +171,21 @@
             data-cy="secondPassword"
           />
 
-        @if (registerForm.get('confirmPassword')!.invalid &&
-          (registerForm.get('confirmPassword')!.dirty || registerForm.get('confirmPassword')!.touched)) {
+        @let confirmPasswordRef = registerForm.get('confirmPassword')!;
+        @if (confirmPasswordRef.invalid &&
+          (confirmPasswordRef.dirty || confirmPasswordRef.touched)) {
           <div>
-          @if (registerForm.get('confirmPassword')?.errors?.required) {
+          @if (confirmPasswordRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.required')</small>
           }
 
-          @if (registerForm.get('confirmPassword')?.errors?.minlength) {
+          @if (confirmPasswordRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.minlength')</small>
           }
 
-          @if (registerForm.get('confirmPassword')?.errors?.maxlength) {
+          @if (confirmPasswordRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.confirmpassword.maxlength')</small>
           }

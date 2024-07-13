@@ -43,19 +43,20 @@
             data-cy="firstname"
           />
 
-        @if (settingsForm.get('firstName')!.invalid && (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)) {
+        @let firstNameRef = settingsForm.get('firstName')!;
+        @if (firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched)) {
           <div>
-          @if (settingsForm.get('firstName')?.errors?.required) {
+          @if (firstNameRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.firstname.required')</small>
           }
 
-          @if (settingsForm.get('firstName')?.errors?.minlength) {
+          @if (firstNameRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.firstname.minlength')</small>
           }
 
-          @if (settingsForm.get('firstName')?.errors?.maxlength) {
+          @if (firstNameRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.firstname.maxlength')</small>
           }
@@ -75,19 +76,20 @@
             data-cy="lastname"
           />
 
-        @if (settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)) {
+        @let lastNameRef = settingsForm.get('lastName')!;
+        @if (lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched)) {
           <div>
-          @if (settingsForm.get('lastName')?.errors?.required) {
+          @if (lastNameRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.lastname.required')</small>
           }
 
-          @if (settingsForm.get('lastName')?.errors?.minlength) {
+          @if (lastNameRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.lastname.minlength')</small>
           }
 
-          @if (settingsForm.get('lastName')?.errors?.maxlength) {
+          @if (lastNameRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('settings.messages.validate.lastname.maxlength')</small>
           }
@@ -107,24 +109,25 @@
             data-cy="email"
           />
 
-        @if (settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)) {
+        @let emailRef = settingsForm.get('email')!;
+        @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
           <div>
-          @if (settingsForm.get('email')?.errors?.required) {
+          @if (emailRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.required')</small>
           }
 
-          @if (settingsForm.get('email')?.errors?.email) {
+          @if (emailRef?.errors?.email) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.invalid')</small>
           }
 
-          @if (settingsForm.get('email')?.errors?.minlength) {
+          @if (emailRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.minlength')</small>
           }
 
-          @if (settingsForm.get('email')?.errors?.maxlength) {
+          @if (emailRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.email.maxlength')</small>
           }
