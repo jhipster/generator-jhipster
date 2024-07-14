@@ -45,6 +45,7 @@
 _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%= field.fieldName %>.value !== null) {<% } %>
+                @let <%= fieldName %>Ref = editForm.get('<%= fieldName %>')!;
                 <div class="mb-3">
                     <label class="form-label" for="field_<%= fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%= i18nKeyPrefix %>.<%= fieldName %>')</label>
   <%_ if (field.fieldIsEnum) { _%>
@@ -59,17 +60,17 @@ _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                     <div>
       <%_ if (field.blobContentTypeImage) { _%>
-                    @if (editForm.get('<%= fieldName %>')!.value) {
-                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType')!.value + ';base64,' + editForm.get('<%= fieldName %>')!.value" style="max-height: 100px" alt="<%= entityInstance %>"/>
+                    @if (<%= fieldName %>Ref.value) {
+                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType')!.value + ';base64,' + <%= fieldName %>Ref.value" style="max-height: 100px" alt="<%= entityInstance %>"/>
                     }
       <%_ } _%>
-                    @if (editForm.get('<%= fieldName %>')!.value) {
+                    @if (<%= fieldName %>Ref.value) {
                         <div class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
-                            <a class="pull-start" (click)="openFile(editForm.get('<%= fieldName %>')!.value!, editForm.get('<%= fieldName %>ContentType')!.value!)">__jhiTranslateTag__('entity.action.open')</a><br>
-                            <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value!) }}</span>
+                            <a class="pull-start" (click)="openFile(<%= fieldName %>Ref.value!, editForm.get('<%= fieldName %>ContentType')!.value!)">__jhiTranslateTag__('entity.action.open')</a><br>
+                            <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(<%= fieldName %>Ref.value!) }}</span>
       <%_ } else { _%>
-                            <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(editForm.get('<%= fieldName %>')!.value!) }}</span>
+                            <span class="pull-start">{{ editForm.get('<%= fieldName %>ContentType')!.value }}, {{ byteSize(<%= fieldName %>Ref.value!) }}</span>
       <%_ } _%>
       <%_ if (field.blobContentTypeImage) { _%>
                             <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-end">
@@ -109,7 +110,7 @@ _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (field.fieldValidate) { _%>
-                @if (editForm.get('<%= fieldName %>')!.invalid && (editForm.get('<%= fieldName %>')!.dirty || editForm.get('<%= fieldName %>')!.touched)) {
+                @if (<%= fieldName %>Ref.invalid && (<%= fieldName %>Ref.dirty || <%= fieldName %>Ref.touched)) {
                     <div>
     <%_ if (field.fieldValidationRequired) { _%>
                     @if (editForm.get('<%= fieldName %>')?.errors?.required) {
