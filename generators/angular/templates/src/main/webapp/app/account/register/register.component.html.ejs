@@ -136,27 +136,28 @@
             data-cy="firstPassword"
           />
 
-        @if (registerForm.get('password')!.invalid &&
-          (registerForm.get('password')!.dirty || registerForm.get('password')!.touched)) {
+        @let passwordRef = registerForm.get('password')!;
+        @if (passwordRef.invalid &&
+          (passwordRef.dirty || passwordRef.touched)) {
           <div>
-          @if (registerForm.get('password')?.errors?.required) {
+          @if (passwordRef?.errors?.required) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.newpassword.required')</small>
           }
 
-          @if (registerForm.get('password')?.errors?.minlength) {
+          @if (passwordRef?.errors?.minlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.newpassword.minlength')</small>
           }
 
-          @if (registerForm.get('password')?.errors?.maxlength) {
+          @if (passwordRef?.errors?.maxlength) {
             <small class="form-text text-danger"
             >__jhiTranslateTag__('global.messages.validate.newpassword.maxlength')</small>
           }
           </div>
         }
 
-          <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerForm.get('password')!.value"></<%= jhiPrefixDashed %>-password-strength-bar>
+          <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="passwordRef.value"></<%= jhiPrefixDashed %>-password-strength-bar>
         </div>
 
         <div class="mb-3">
