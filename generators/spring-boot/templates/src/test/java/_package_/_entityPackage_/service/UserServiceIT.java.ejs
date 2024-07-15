@@ -547,7 +547,11 @@ class UserServiceIT {
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
         Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            "anonymous",
+            "anonymous",
+            authorities
+        );
         usernamePasswordAuthenticationToken.setDetails(userDetails);
         OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
 
