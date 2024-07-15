@@ -26,7 +26,7 @@ import cleanupOauth2 from './cleanup-oauth2.js';
  * need to be removed.
  */
 export default asWritingTask(function cleanupTask(this, taskParam) {
-  const { application } = taskParam;
+  const { application, control } = taskParam;
   if (application.authenticationTypeOauth2) {
     cleanupOauth2.call(this, taskParam);
   }
@@ -208,4 +208,8 @@ export default asWritingTask(function cleanupTask(this, taskParam) {
   if (this.isJhipsterVersionLessThan('8.4.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/LocaleConfiguration.java`);
   }
+
+  control.cleanupFiles({
+    '8.6.1': [[application.authenticationTypeOauth2!, `${application.javaPackageSrcDir}security/oauth2/JwtGrantedAuthorityConverter.java`]],
+  });
 });
