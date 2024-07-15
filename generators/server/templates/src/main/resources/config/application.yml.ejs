@@ -358,9 +358,6 @@ spring:
             client-secret: web_app
     <%_ } _%>
             scope: openid, profile, email, offline_access # last one for refresh tokens
-      resourceserver:
-        jwt:
-          principal-claim-name: preferred_username
   <%_ } _%>
   <%_ if (authenticationTypeJwt) { _%>
     oauth2:

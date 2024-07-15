@@ -1271,9 +1271,6 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "src/main/java/com/mycompany/security/oauth2/AudienceValidator.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2426,9 +2423,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/security/oauth2/CustomClaimConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
@@ -2792,9 +2786,6 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/oauth2/AudienceValidator.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/security/oauth2/JwtGrantedAuthorityConverter.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/security/oauth2/package-info.java": {

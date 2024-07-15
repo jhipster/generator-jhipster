@@ -24,7 +24,10 @@ import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.P
 
 import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.security.oauth2.AudienceValidator;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
+import reactor.core.publisher.Flux;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
@@ -39,6 +42,7 @@ import <%= packageName %>.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (authenticationTypeOauth2) { _%>
+import org.springframework.core.convert.converter.Converter;
   <%_ if (!applicationTypeMicroservice) { _%>
 import org.springframework.core.ParameterizedTypeReference;
   <%_ } _%>
@@ -303,7 +307,9 @@ public class SecurityConfiguration {
             .oauth2Login(oauth2 -> oauth2.authorizationRequestResolver(authorizationRequestResolver(this.clientRegistrationRepository)))
   <%_ } _%>
             .oauth2Client(withDefaults())
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(jwtAuthenticationConverter())));
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic(basic -> basic.disable())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
@@ -330,6 +336,20 @@ public class SecurityConfiguration {
                     .build());
     }
   <%_ } _%>
+
+    Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
+        ReactiveJwtAuthenticationConverter jwtAuthenticationConverter = new ReactiveJwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+            new Converter<Jwt, Flux<GrantedAuthority>>() {
+                @Override
+                public Flux<GrantedAuthority> convert(Jwt jwt) {
+                    return Flux.fromIterable(SecurityUtils.extractAuthorityFromClaims(jwt.getClaims()));
+                }
+            }
+        );
+        jwtAuthenticationConverter.setPrincipalClaimName(PREFERRED_USERNAME);
+        return jwtAuthenticationConverter;
+    }
 
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.

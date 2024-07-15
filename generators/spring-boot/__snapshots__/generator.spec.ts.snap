@@ -463,9 +463,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
   "src/main/java/com/mycompany/myapp/security/oauth2/CustomClaimConverter.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/security/oauth2/JwtGrantedAuthorityConverter.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/oauth2/package-info.java": {
     "stateCleared": "modified",
   },
