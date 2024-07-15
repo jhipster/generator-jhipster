@@ -186,7 +186,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
       ...clientApplicationTemplatesBlock(),
       templates: ['modules/administration/gateway/gateway.tsx'],
     },

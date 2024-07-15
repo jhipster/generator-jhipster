@@ -1,9 +1,9 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers } from '../../testing/index.js';
+import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
@@ -66,17 +66,14 @@ describe(`generator - ${clientFramework}`, () => {
     const { clientRootDir = '' } = sampleConfig;
 
     describe(name, () => {
-      let runResult;
-
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
           .withControl({ getWebappTranslation: () => 'translations' })
+          .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
-
-      after(() => runResult.cleanup());
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -98,13 +95,14 @@ describe(`generator - ${clientFramework}`, () => {
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
-          const assertion = (...args) => (generateAdminUi ? runResult.assertFile(...args) : runResult.assertNoFile(...args));
+          const assertion = (file: string | string[]) => (generateAdminUi ? runResult.assertFile(file) : runResult.assertNoFile(file));
           assertion(clientAdminFiles(clientSrcDir));
         });
 
         if (applicationType !== 'microservice') {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin related code' : 'should not generate admin related code';
-          const assertion = (...args) => (generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args));
+          const assertion = (file: string, content: string) =>
+            generateAdminUi ? runResult.assertFileContent(file, content) : runResult.assertNoFileContent(file, content);
 
           it(adminUiRoutingTitle, () => {
             assertion(

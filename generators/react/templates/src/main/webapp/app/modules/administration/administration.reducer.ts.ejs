@@ -25,7 +25,7 @@ import { AppThunk } from 'app/config/store';
 const initialState = {
   loading: false,
   errorMessage: null,
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   gateway: {
     routes: []
   },
@@ -53,7 +53,7 @@ const initialState = {
 export type AdministrationState =  Readonly<typeof initialState>;
 
 // Actions
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 export const getGatewayRoutes = createAsyncThunk('administration/fetch_gateway_route', async () => axios.get<any>('api/gateway/routes'), {
   serializeError: serializeAxiosError,
 });
@@ -117,9 +117,9 @@ export const AdministrationSlice = createSlice({
     <%_ } _%>
   },
   extraReducers(builder) {
-<%_ if (withAdminUi || (applicationTypeGateway && serviceDiscoveryAny)) { _%>
+<%_ if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { _%>
     builder
-      <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+      <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
       .addCase(getGatewayRoutes.fulfilled, (state, action) => {
         state.loading = false;
         state.gateway = {
@@ -163,7 +163,7 @@ export const AdministrationSlice = createSlice({
       <%_ } _%>
       .addMatcher(
         isPending(
-          <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+          <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           getGatewayRoutes,
           <%_ } _%>
           <%_ if (withAdminUi) { _%>
@@ -182,7 +182,7 @@ export const AdministrationSlice = createSlice({
       )
       .addMatcher(
         isRejected(
-          <%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+          <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           getGatewayRoutes,
           <%_ } _%>
           <%_ if (withAdminUi) { _%>

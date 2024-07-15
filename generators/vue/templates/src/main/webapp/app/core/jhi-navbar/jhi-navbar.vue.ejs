@@ -53,7 +53,7 @@
               <span class="no-bold" v-text="t$('global.menu.admin.main')">Administration</span>
             </span>
           </template>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           <b-dropdown-item to="/admin/gateway" active-class="active">
             <font-awesome-icon icon="road" />
             <span v-text="t$('global.menu.admin.gateway')">Gateway</span>

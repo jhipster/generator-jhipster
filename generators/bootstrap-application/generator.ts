@@ -66,6 +66,10 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         }
 
         applicationDefaults({
+          gatewayServicesApiAvailable: undefined,
+        });
+
+        applicationDefaults({
           useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
           documentationArchiveUrl: ({ jhipsterVersion }) =>
             `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
