@@ -236,7 +236,7 @@ export const files = {
       ],
     },
     {
-      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
       ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/gateway/gateway-route.model.ts',

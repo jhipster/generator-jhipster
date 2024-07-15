@@ -1,9 +1,9 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect } from 'esmocha';
+import { before, it, describe, expect } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers } from '../../testing/index.js';
+import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
@@ -86,17 +86,14 @@ describe(`generator - ${clientFramework}`, () => {
     const { clientRootDir = '' } = sampleConfig;
 
     describe(name, () => {
-      let runResult;
-
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorFile)
           .withJHipsterConfig(sampleConfig, entities)
+          .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withControl({ getWebappTranslation: () => 'translations' })
           .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
       });
-
-      after(() => runResult.cleanup());
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

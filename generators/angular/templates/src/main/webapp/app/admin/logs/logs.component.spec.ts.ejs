@@ -24,7 +24,7 @@ import { of } from 'rxjs';
 import LogsComponent from './logs.component';
 import { LogsService } from './logs.service';
 import { Log, LoggersResponse } from './log.model';
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
 
@@ -37,7 +37,7 @@ describe('LogsComponent', () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [LogsComponent],
-        providers: [provideHttpClient(), provideHttpClientTesting(), LogsService<%= applicationTypeGateway && serviceDiscoveryAny ? ', GatewayRoutesService' : '' %>],
+        providers: [provideHttpClient(), provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
       })
         .overrideTemplate(LogsComponent, '')
         .compileComponents();

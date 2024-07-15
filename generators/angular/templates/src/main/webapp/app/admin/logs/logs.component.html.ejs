@@ -20,7 +20,7 @@
   <div class="table-responsive">
     <h2 id="logs-page-heading" data-cy="logsPageHeading">__jhiTranslateTag__('logs.title')</h2>
 
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
     <div class="float-end">
       <select class="form-select" id="routesSelect" (change)="changeService($event)">
         <option [ngValue]="null"></option>

@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { finalize<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>, map<%_ } _%> } from 'rxjs/operators';
+import { finalize<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>, map<%_ } _%> } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
 import { Log, LoggersResponse, Level } from './log.model';
 import { LogsService } from './logs.service';
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
 import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
 
@@ -32,7 +32,7 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-logs',
   templateUrl: './logs.component.html',
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   providers: [GatewayRoutesService],
 <%_ } _%>
   imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
@@ -55,27 +55,27 @@ export default class LogsComponent implements OnInit {
     }
     return data;
   });
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   services: string[] = [];
   selectedService: string | undefined = undefined;
 <%_ } _%>
 
   private logsService = inject(LogsService);
   private sortService = inject(SortService);
-  <%= applicationTypeGateway && serviceDiscoveryAny ? 'private gatewayRoutesService = inject(GatewayRoutesService);' : '' %>
+  <%= applicationTypeGateway && gatewayServicesApiAvailable ? 'private gatewayRoutesService = inject(GatewayRoutesService);' : '' %>
 
   ngOnInit(): void {
     this.findAndExtractLoggers();
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
     this.loadServicesOptions();
 <%_ } _%>
   }
 
   changeLevel(name: string, level: Level): void {
-    this.logsService.changeLevel(name, level<%= applicationTypeGateway && serviceDiscoveryAny ? ', this.selectedService' : '' %>).subscribe(() => this.findAndExtractLoggers());
+    this.logsService.changeLevel(name, level<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', this.selectedService' : '' %>).subscribe(() => this.findAndExtractLoggers());
   }
 
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   changeService(event: any): void {
     this.selectedService = event.target.value?.replace('Service', '')?.toLowerCase();
     this.findAndExtractLoggers();
@@ -85,7 +85,7 @@ export default class LogsComponent implements OnInit {
   private findAndExtractLoggers(): void {
     this.isLoading.set(true);
     this.logsService
-      .findAll(<%= applicationTypeGateway && serviceDiscoveryAny ? 'this.selectedService' : '' %>)
+      .findAll(<%= applicationTypeGateway && gatewayServicesApiAvailable ? 'this.selectedService' : '' %>)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);
@@ -98,7 +98,7 @@ export default class LogsComponent implements OnInit {
       });
   }
 
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   private loadServicesOptions(): void {
     this.gatewayRoutesService
       .findAll()

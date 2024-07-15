@@ -108,7 +108,7 @@
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
           <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           <li>
             <a class="dropdown-item" routerLink="/admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="road" [fixedWidth]="true"></fa-icon>
