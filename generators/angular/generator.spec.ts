@@ -115,15 +115,15 @@ describe(`generator - ${clientFramework}`, () => {
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {
-          const assertion = (...args) => (generateAdminUi ? runResult.assertFile(...args) : runResult.assertNoFile(...args));
+          const assertion = (file: string | string[]) => (generateAdminUi ? runResult.assertFile(file) : runResult.assertNoFile(file));
           assertion(clientAdminFiles(clientSrcDir));
         });
 
         if (applicationType !== 'microservice') {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
           it(adminUiRoutingTitle, () => {
-            const assertion = (...args) =>
-              generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
+            const assertion = (file: string, content: string) =>
+              generateAdminUi ? runResult.assertFileContent(file, content) : runResult.assertNoFileContent(file, content);
             assertion(
               `${clientSrcDir}app/admin/admin.routes.ts`,
               `
