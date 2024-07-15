@@ -323,6 +323,7 @@ public class SecurityConfiguration {
         jwtAuthenticationConverter.setPrincipalClaimName(PREFERRED_USERNAME);
         return jwtAuthenticationConverter;
     }
+    <%_ if (!applicationTypeMicroservice) { _%>
 
     OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();
@@ -332,7 +333,6 @@ public class SecurityConfiguration {
             return new DefaultOidcUser(oidcUser.getAuthorities(), oidcUser.getIdToken(), oidcUser.getUserInfo(), PREFERRED_USERNAME);
         };
     }
-  <%_ if (!applicationTypeMicroservice) { _%>
 
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.
