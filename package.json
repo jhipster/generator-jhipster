@@ -121,7 +121,7 @@
     "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
-    "@types/lodash": "4.17.6",
+    "@types/lodash": "4.17.7",
     "@typescript-eslint/eslint-plugin": "7.16.1",
     "@typescript-eslint/parser": "7.16.1",
     "@yeoman/adapter": "1.4.0",
