@@ -145,6 +145,7 @@ relationship OneToOne {
 */
 
 @ChangelogDate(20210408164814)
+@AdminEntity
 entity Notification {
   title String required
 }
