@@ -236,10 +236,12 @@ spring:
             predicates:
               - Path=/services/<%= ms.route %>/**
             filters:
-              - StripPrefix=2
         <%_ if (authenticationTypeOauth2) { _%>
               - TokenRelay
         <%_ } _%>
+              - StripPrefix=2
+              # X-Forwarded-Prefix not working when using MVC https://github.com/spring-cloud/spring-cloud-gateway/issues/3354, add manually
+              - AddRequestHeader=X-Forwarded-Prefix,/services/<%= ms.route %>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>

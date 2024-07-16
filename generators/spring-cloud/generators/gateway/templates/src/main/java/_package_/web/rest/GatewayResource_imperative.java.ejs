@@ -1,0 +1,126 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.web.rest.vm.RouteVM;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.function.HandlerFunction;
+import org.springframework.web.servlet.function.RequestPredicate;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.RouterFunctions;
+import org.springframework.web.servlet.function.ServerRequest;
+
+/**
+ * REST controller for managing Gateway configuration.
+ */
+@RestController
+@RequestMapping("/api/gateway")
+@SuppressWarnings("rawtypes")
+public class GatewayResource {
+
+    private final RouterFunction gatewayCompositeRouterFunction;
+
+    @Value("${spring.application.name}")
+    private String appName;
+
+    public GatewayResource(RouterFunction gatewayCompositeRouterFunction) {
+        this.gatewayCompositeRouterFunction = gatewayCompositeRouterFunction;
+    }
+
+    /**
+     * {@code GET  /routes} : get the active routes.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of routes.
+     */
+    @GetMapping("/routes")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<List<RouteVM>> activeRoutes() {
+        var routes = getRouterFunctions();
+        var routeVMs = new ArrayList<RouteVM>();
+        routes.keySet().forEach(key -> {
+            var routeVM = new RouteVM();
+            var serviceId = key.substring(0, key.indexOf("_")).toLowerCase();
+            routeVM.setServiceId(serviceId + "Service");
+
+            var route = routes.get(key);
+            // Format "RouterFunction routeId=gateway_route delegate=/services/gateway/** -> ProxyExchangeHandlerFunction"
+            var predicate = route.toString().split(" ")[2].split("=")[1];
+            routeVM.setPath(predicate.substring(0, predicate.length() - 2));
+            // Exclude gateway app from routes
+            if (!serviceId.equalsIgnoreCase(appName)) {
+                routeVMs.add(routeVM);
+            }
+        });
+        return ResponseEntity.ok(routeVMs);
+    }
+
+    /* Based on https://github.com/spring-cloud/spring-cloud-gateway/issues/3233#issuecomment-1989318818 */
+    private Map<String, RouterFunction> getRouterFunctions() {
+        AtomicReference<Map<String, RouterFunction>> routerFunctionsRef = new AtomicReference<>();
+        gatewayCompositeRouterFunction.accept(
+            new AbstractRouterFunctionsVisitor() {
+                @Override
+                @SuppressWarnings("unchecked")
+                public void attributes(Map<String, Object> attributes) {
+                    if (attributes.containsKey("gatewayRouterFunctions")) {
+                        Map<String, RouterFunction> map = (Map<String, RouterFunction>) attributes.get("gatewayRouterFunctions");
+                        routerFunctionsRef.compareAndSet(null, map);
+                    }
+                }
+            }
+        );
+        Map<String, RouterFunction> routerFunctions = routerFunctionsRef.get();
+        return routerFunctions;
+    }
+
+    abstract static class AbstractRouterFunctionsVisitor implements RouterFunctions.Visitor {
+
+        @Override
+        public void startNested(RequestPredicate predicate) {}
+
+        @Override
+        public void endNested(RequestPredicate predicate) {}
+
+        @Override
+        public void route(RequestPredicate predicate, HandlerFunction<?> handlerFunction) {}
+
+        @Override
+        public void resources(Function<ServerRequest, Optional<Resource>> lookupFunction) {}
+
+        @Override
+        public void attributes(Map<String, Object> attributes) {}
+
+        @Override
+        public void unknown(RouterFunction<?> routerFunction) {}
+    }
+}

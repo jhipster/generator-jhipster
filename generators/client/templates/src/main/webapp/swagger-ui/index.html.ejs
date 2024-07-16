@@ -79,11 +79,15 @@
 
       async function fetchUrls(serverBaseUri, axiosConfig, baseUrl) {
         let urls;
-<%_ if (!applicationTypeMonolith && serviceDiscoveryAny) { _%>
+<%_ if ((!applicationTypeMonolith && serviceDiscoveryAny) || (gatewayRoutes ?? []).length > 0) { _%>
 
         try {
+  <%_ if ((gatewayRoutes ?? []).length > 0) { _%>
+          const services = [<%- [{ route: lowercaseBaseName }, ...(gatewayRoutes ?? [])].map(({ route }) => `'${route}'`) %>];
+  <%_ } else { _%>
           const response = await axios.get('/management/health/discoveryComposite', axiosConfig);
           const services = response.data?.components?.discoveryClient?.details?.services<% if (serviceDiscoveryConsul) { %>.filter(service => service !== 'consul')<% } %>;
+  <%_ } _%>
           console.log(`Services`, services);
 
           if (services && services.length > 0) {

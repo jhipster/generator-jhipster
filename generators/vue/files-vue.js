@@ -262,7 +262,7 @@ export const vueFiles = {
       ],
     },
     {
-      condition: generator => generator.applicationTypeGateway && generator.serviceDiscoveryAny,
+      condition: ctx => ctx.applicationTypeGateway && ctx.gatewayServicesApiAvailable,
       ...clientApplicationTemplatesBlock(),
       templates: [
         'admin/gateway/gateway.vue',

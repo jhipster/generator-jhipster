@@ -55,6 +55,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareGateway({ application }) {
+        application.gatewayServicesApiAvailable = (application as any).serviceDiscoveryAny || !application.reactive;
         application.gatewayRoutes = (application.routes ?? []).map(routeDef => {
           const [route, host = route, serverPort = '8080'] = routeDef.split(':');
           return { route, serverPort, host };
@@ -88,8 +89,16 @@ export default class GatewayGenerator extends BaseApplicationGenerator {
               templates: ['security/jwt/JWTRelayGatewayFilterFactory.java'],
             }),
             javaMainPackageTemplatesBlock({
+              condition: ctx => ctx.serviceDiscoveryAny || !ctx.reactive,
+              templates: ['web/rest/vm/RouteVM.java'],
+            }),
+            javaMainPackageTemplatesBlock({
+              condition: ctx => !ctx.reactive,
+              templates: ['web/rest/GatewayResource_imperative.java'],
+            }),
+            javaMainPackageTemplatesBlock({
               condition: ctx => ctx.reactive && ctx.serviceDiscoveryAny,
-              templates: ['web/rest/vm/RouteVM.java', 'web/rest/GatewayResource.java'],
+              templates: ['web/rest/GatewayResource_reactive.java'],
             }),
           ],
           context: application,

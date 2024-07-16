@@ -54,7 +54,7 @@ const routes: Routes = [
     title: 'metrics.title',
   },
 <%_ } _%>
-<%_ if (applicationTypeGateway && serviceDiscoveryAny) { _%>
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   {
     path: 'gateway',
     loadComponent: () => import('./gateway/gateway.component'),
