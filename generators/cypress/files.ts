@@ -35,6 +35,10 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CommonClientServer
     clientRootTemplatesBlock({
       templates: ['cypress.config.ts'],
     }),
+    clientRootTemplatesBlock({
+      condition: ctx => Boolean(ctx.eslintConfigFile),
+      templates: [{ sourceFile: 'eslint.config.js.jhi.cypress', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.cypress` }],
+    }),
   ],
   clientTestFw: [
     {

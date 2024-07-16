@@ -16,11 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<&_ if (fragment.importsSection) { -&>
-<%_ if (applicationTypeMicroservice) { _%>
-const { DefinePlugin } = require('webpack');
-<%_ } _%>
-<&_ } -&>
 <&_ if (fragment.moduleFederationSection) { -&>
 <%_ if (applicationTypeMicroservice) { _%>
         exposes: {

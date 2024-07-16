@@ -19,7 +19,13 @@
 import type { JHipsterCommandDefinition } from '../../../base/api.js';
 
 const command: JHipsterCommandDefinition = {
-  configs: {},
+  configs: {
+    typescriptEslint: {
+      cli: {
+        type: Boolean,
+      },
+    },
+  },
   import: [],
 };
 

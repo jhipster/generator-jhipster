@@ -23,6 +23,7 @@ export function asWriteFilesSection<Data = GeneratorDefinition['writingTaskParam
 ) {
   return section;
 }
+
 export function asWriteFilesBlock<Data = GeneratorDefinition['writingTaskParam']['application']>(
   section: WriteFileBlock<CoreGenerator, Data>,
 ) {

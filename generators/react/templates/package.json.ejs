@@ -26,6 +26,7 @@
     "node_modules"
   ],
   "dependencies": {
+    "@eslint/js": null,
     "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
     "@fortawesome/react-fontawesome": "<%= nodeDependencies['@fortawesome/react-fontawesome'] %>",
@@ -70,8 +71,6 @@
     "@types/react-redux": "<%= nodeDependencies['@types/react-redux'] %>",
     "@types/redux": "<%= nodeDependencies['@types/redux'] %>",
     "@types/webpack-env": "<%= nodeDependencies['@types/webpack-env'] %>",
-    "@typescript-eslint/eslint-plugin": "<%= nodeDependencies['@typescript-eslint/eslint-plugin'] %>",
-    "@typescript-eslint/parser": "<%= nodeDependencies['@typescript-eslint/parser'] %>",
     "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
     "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
@@ -82,6 +81,7 @@
     "css-minimizer-webpack-plugin": "<%= nodeDependencies['css-minimizer-webpack-plugin'] %>",
     "eslint": "<%= nodeDependencies['eslint'] %>",
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
+    "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-react": "<%= nodeDependencies['eslint-plugin-react'] %>",
     "eslint-webpack-plugin": "<%= nodeDependencies['eslint-webpack-plugin'] %>",
     "fork-ts-checker-webpack-plugin": "<%= nodeDependencies['fork-ts-checker-webpack-plugin'] %>",
@@ -120,6 +120,7 @@
     "cypress": "<%= nodeDependencies['cypress'] %>",
 <%_ } _%>
     "typescript": "<%= nodeDependencies['typescript'] %>",
+    "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>",
     "webpack": "<%= nodeDependencies['webpack'] %>",
     "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
     "webpack-dev-server": "<%= nodeDependencies['webpack-dev-server'] %>",
@@ -136,7 +137,7 @@
   "scripts": {
     "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
+    "lint": "eslint .",
     "lint:fix": "<%= clientPackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",

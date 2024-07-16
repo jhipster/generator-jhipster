@@ -1062,7 +1062,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
             const normalizedFile = resolveCallback(sourceFile || file);
             sourceFile = join(blockPath, normalizedFile);
-            destinationFile = this.destinationPath(blockTo, join(resolveCallback(destinationFile || renameTo, normalizedFile)));
+            destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
+            if (blockRenameTo) {
+              destinationFile = this.destinationPath(blockRenameTo.call(this, context, destinationFile, this));
+            } else {
+              destinationFile = this.destinationPath(blockTo, destinationFile);
+            }
 
             const override = resolveCallback(fileSpec.override);
             if (override !== undefined && !override && (this as any).fs.exists(destinationFile)) {

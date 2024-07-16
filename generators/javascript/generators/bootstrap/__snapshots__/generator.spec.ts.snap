@@ -73,7 +73,8 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should mat
   "engines": {
     "node": "^18.19.0 || >= 20.6.1"
   },
-  "scripts": {}
+  "scripts": {},
+  "type": "commonjs"
 }
 ",
     "stateCleared": "modified",

@@ -34,6 +34,7 @@ const command: JHipsterCommandDefinition = {
         hide: true,
       },
       choices: ['commonjs', 'module'],
+      default: 'commonjs',
       scope: 'storage',
     },
   },

@@ -19,16 +19,27 @@
 <&_
  // Register sections and max allowed fragments, 0 for unlimited.
  fragments.registerSections({
-   importSection: 0,
+   importsSection: 0,
    configSection: 0,
  });
 _&>
+<%_ if (typescriptEslint) { _%>
+// @ts-check
+
+<%_ } _%>
 import globals from 'globals';
 import prettier from 'eslint-plugin-prettier/recommended';
-<&- fragments.importSection() &>
+<%_ if (typescriptEslint) { _%>
+import tseslint from 'typescript-eslint';
+<%_ } _%>
+<&- fragments.importsSection() &>
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
 
+<%_ if (typescriptEslint) { _%>
+export default tseslint.config(
+<%_ } else { _%>
 export default [
+<%_ } _%>
   {
     languageOptions: {
       globals: {
@@ -39,4 +50,8 @@ export default [
 <&- fragments.configSection() &>
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
   prettier,
+<%_ if (typescriptEslint) { _%>
+);
+<%_ } else { _%>
 ];
+<%_ } _%>
