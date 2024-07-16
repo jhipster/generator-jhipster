@@ -3,7 +3,7 @@
 typesafe = { module = 'com.typesafe:config', version = '1.4.3' }
 
 # hazelcast
-hazelcast-hibernate53 = { module = 'com.hazelcast:hazelcast-hibernate53', version = '5.1.0' }
+hazelcast-hibernate53 = { module = 'com.hazelcast:hazelcast-hibernate53', version = '5.2.0' }
 
 hazelcast-spring = { module = 'com.hazelcast:hazelcast-spring', version = '5.4.0' }
 
