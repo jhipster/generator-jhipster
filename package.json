@@ -164,7 +164,7 @@
     "prettier-plugin-packagejson": "2.5.1",
     "prettier-plugin-properties": "0.3.0",
     "randexp": "0.5.3",
-    "semver": "7.6.2",
+    "semver": "7.6.3",
     "simple-git": "3.25.0",
     "sort-keys": "5.0.0",
     "type-fest": "4.21.0",
