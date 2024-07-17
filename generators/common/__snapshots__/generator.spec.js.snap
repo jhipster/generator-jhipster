@@ -49,33 +49,18 @@ trim_trailing_whitespace = false
     "contents": "node_modules
 package-lock.json
 .git
-target/
 ",
     "stateCleared": "modified",
   },
   ".prettierrc": {
-    "contents": "# Prettier configuration
-
-printWidth: 140
+    "contents": "printWidth: 140
 singleQuote: true
 tabWidth: 2
 useTabs: false
-
-# js and ts rules:
 arrowParens: avoid
-
-# jsx and tsx rules:
 bracketSameLine: false
-
 plugins:
   - prettier-plugin-packagejson
-  - prettier-plugin-java
-
-# java rules:
-overrides:
-  - files: "*.java"
-    options:
-      tabWidth: 4
 ",
     "stateCleared": "modified",
   },

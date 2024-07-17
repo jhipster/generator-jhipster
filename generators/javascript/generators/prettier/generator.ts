@@ -32,6 +32,10 @@ export default class PrettierGenerator extends BaseApplicationGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
+
+    if (!this.delegateToBlueprint && !this.options.fromInit) {
+      await this.dependsOnBootstrapApplication();
+    }
   }
 
   get preparing() {

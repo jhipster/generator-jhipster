@@ -32,7 +32,7 @@ import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import command from './command.js';
-import { writeFiles, prettierConfigFiles } from './files.js';
+import { writeFiles } from './files.js';
 
 const { REACT, ANGULAR } = clientFrameworkTypes;
 
@@ -73,6 +73,18 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        await this.composeWithJHipster('jhipster:javascript:prettier');
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get configuringEachEntity() {
@@ -179,33 +191,16 @@ export default class CommonGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get writing() {
-    return {
-      cleanup({ application }) {
-        if (this.isJhipsterVersionLessThan('7.1.1')) {
-          if (!application.skipCommitHook) {
-            this.removeFile('.huskyrc');
-          }
-        }
-        if (this.isJhipsterVersionLessThan('7.6.1')) {
-          if (application.skipClient) {
-            this.removeFile('npmw');
-            this.removeFile('npmw.cmd');
-          }
-        }
-        if (this.isJhipsterVersionLessThan('8.0.0-rc.2')) {
-          if (!application.skipCommitHook) {
-            this.removeFile('.lintstagedrc.js');
-          }
-        }
-      },
-      writePrettierConfig({ application }) {
-        return this.writeFiles({
-          sections: prettierConfigFiles,
-          context: application,
+    return this.asWritingTaskGroup({
+      cleanup({ application, control }) {
+        control.cleanupFiles({
+          '7.1.1': [[!application.skipCommitHook, '.huskyrc']],
+          '7.6.1': [[application.skipClient, 'npmw', 'npmw.cmd']],
+          '8.0.0-rc.2': [[!application.skipCommitHook, '.lintstagedrc.js']],
         });
       },
       ...writeFiles(),
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {

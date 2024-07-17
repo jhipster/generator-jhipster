@@ -21,11 +21,6 @@ import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 
 const command: JHipsterCommandDefinition = {
   options: {
-    prettierTabWidth: {
-      description: 'Default tab width for prettier',
-      type: Number,
-      scope: 'storage',
-    },
     skipCommitHook: {
       description: 'Skip adding husky commit hooks',
       type: Boolean,
@@ -45,7 +40,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE],
+  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier'],
 };
 
 export default command;

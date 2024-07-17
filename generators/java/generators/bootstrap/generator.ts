@@ -180,6 +180,25 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addPrettierJava({ application, source }) {
+        if (source.mergePrettierConfig) {
+          source.mergePrettierConfig({ plugins: ['prettier-plugin-java'], overrides: [{ files: '*.java', options: { tabWidth: 4 } }] });
+          this.packageJson.merge({
+            devDependencies: {
+              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
+            },
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
   /**
    * Check if a supported Java is installed
    *

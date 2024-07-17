@@ -151,6 +151,21 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     return this.delegateTasksToBlueprint(() => this.loadingWorkspaces);
   }
 
+  get writing() {
+    return this.asWritingTaskGroup({
+      async writing({ application }) {
+        await this.writeFiles({
+          blocks: [{ templates: ['.prettierignore.jhi.workspaces'] }],
+          context: application,
+        });
+      },
+    });
+  }
+
+  get [BaseWorkspacesGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
   get postWriting() {
     return this.asPostWritingTaskGroup({
       generatePackageJson({ applications }) {

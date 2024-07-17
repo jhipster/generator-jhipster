@@ -21,14 +21,6 @@
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-export const prettierConfigFiles = {
-  global: [
-    {
-      templates: ['.prettierrc', '.prettierignore.jhi'],
-    },
-  ],
-};
-
 export const commonFiles = {
   global: [
     {
