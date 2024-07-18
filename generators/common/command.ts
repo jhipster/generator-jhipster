@@ -20,13 +20,6 @@ import { JHipsterCommandDefinition } from '../base/api.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
 
 const command: JHipsterCommandDefinition = {
-  options: {
-    skipCommitHook: {
-      description: 'Skip adding husky commit hooks',
-      type: Boolean,
-      scope: 'storage',
-    },
-  },
   configs: {
     defaultEnvironment: {
       description: 'Default environment for the application',
@@ -40,7 +33,7 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier'],
+  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
 };
 
 export default command;

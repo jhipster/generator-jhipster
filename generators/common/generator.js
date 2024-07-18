@@ -79,6 +79,9 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         await this.composeWithJHipster('jhipster:javascript:prettier');
+        if (!this.jhipsterConfig.skipCommitHook) {
+          await this.composeWithJHipster('jhipster:javascript:husky');
+        }
       },
     });
   }
@@ -224,27 +227,6 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             ...Object.fromEntries(application.blueprints.map(blueprint => [blueprint.name, blueprint.version])),
           },
         });
-      },
-      addCommitHookDependencies({ application }) {
-        if (application.skipCommitHook) return;
-        this.packageJson.merge({
-          scripts: {
-            prepare: 'husky',
-          },
-          devDependencies: {
-            husky: application.nodeDependencies.husky,
-            'lint-staged': application.nodeDependencies['lint-staged'],
-            prettier: application.nodeDependencies.prettier,
-            'prettier-plugin-packagejson': application.nodeDependencies['prettier-plugin-packagejson'],
-          },
-        });
-        if (application.backendTypeJavaAny) {
-          this.packageJson.merge({
-            devDependencies: {
-              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
-            },
-          });
-        }
       },
     });
   }

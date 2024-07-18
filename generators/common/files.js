@@ -32,12 +32,6 @@ export const commonFiles = {
       templates: ['sonar-project.properties'],
     },
   ],
-  commitHooks: [
-    {
-      condition: generator => !generator.skipCommitHook,
-      templates: ['.lintstagedrc.cjs', '.husky/pre-commit'],
-    },
-  ],
 };
 
 export function writeFiles() {

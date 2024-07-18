@@ -30,11 +30,7 @@ trim_trailing_whitespace = false
     "stateCleared": "modified",
   },
   ".husky/pre-commit": {
-    "contents": "#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-
-"$(dirname "$0")/../npmw" exec --no-install lint-staged
+    "contents": "lint-staged
 ",
     "stateCleared": "modified",
   },
@@ -111,20 +107,27 @@ This application was generated using JHipster JHIPSTER_VERSION, you can find doc
   },
   "package.json": {
     "contents": "{
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "generator-jhipster": "JHIPSTER_VERSION",
+    "prettier": "PRETTIER_VERSION",
+    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
+    "husky": "HUSKY_VERSION",
+    "lint-staged": "LINT_STAGED_VERSION"
+  },
+  "engines": {},
+  "scripts": {
+    "prepare": "husky"
+  },
   "config": {
     "default_environment": "prod"
   },
-  "devDependencies": {
-    "generator-jhipster": "JHIPSTER_VERSION",
-    "husky": "HUSKY_VERSION",
-    "lint-staged": "LINT_STAGED_VERSION",
-    "prettier": "PRETTIER_VERSION",
-    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
-    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION"
-  },
-  "scripts": {
-    "prepare": "husky"
-  }
+  "name": "jhipster",
+  "version": "0.0.0",
+  "description": "Description for JHipster",
+  "license": "UNLICENSED",
+  "type": "commonjs"
 }
 ",
     "stateCleared": "modified",

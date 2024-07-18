@@ -190,8 +190,8 @@ Options:
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
-  --skip-commit-hook                       Skip adding husky commit hooks
   --prettier-tab-width <value>             Default tab width for prettier
+  --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
