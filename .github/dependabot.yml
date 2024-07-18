@@ -83,9 +83,6 @@ updates:
           - 'ngx-infinite-scroll'
           - 'typescript'
           - 'zone.js'
-      angular-eslint:
-        patterns:
-          - '@angular-eslint/*'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'

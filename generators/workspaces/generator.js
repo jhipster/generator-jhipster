@@ -200,8 +200,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
               rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
             },
             overrides: {
-              webpack: webpackVersion,
               'browser-sync': browserSyncVersion,
+              webpack: webpackVersion,
             },
           });
         }

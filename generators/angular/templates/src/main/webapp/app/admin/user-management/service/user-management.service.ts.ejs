@@ -62,7 +62,7 @@ export class UserManagementService {
   authorities(): Observable<string[]> {
   <%_ if (generateBuiltInAuthorityEntity) { _%>
     return this.http
-      .get<Array<{ name: string }>>(this.applicationConfigService.getEndpointFor('api/authorities'))
+      .get<{ name: string }[]>(this.applicationConfigService.getEndpointFor('api/authorities'))
       .pipe(map(authorities => authorities.map(a => a.name)));
   <%_ } else { _%>
     return of([Authority.ADMIN, Authority.USER]);

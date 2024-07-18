@@ -48,11 +48,8 @@ module.exports = async (config, options, targetOptions) => {
   if (config.mode === 'development') {
     config.plugins.push(
       new ESLintPlugin({
-        baseConfig: {
-          parserOptions: {
-            project: ['../tsconfig.app.json'],
-          },
-        },
+        configType: 'flat',
+        extensions: ['ts', 'js', 'html'],
       }),
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',

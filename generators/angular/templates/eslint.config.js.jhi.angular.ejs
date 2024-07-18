@@ -1,0 +1,141 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_ if (fragment.importsSection) { -&>
+import eslint from '@eslint/js';
+// For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_FLAT_CONFIG.md
+import angular from 'angular-eslint';
+<&_ } -&>
+<&_ if (fragment.configSection) { -&>
+  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
+  eslint.configs.recommended,
+  {
+    files: ['**/*.{js,cjs,mjs}'],
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts'],
+    extends: [...tseslint.configs.strictTypeChecked, ...tseslint.configs.stylistic, ...angular.configs.tsRecommended],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+      parserOptions: {
+        project: ['./tsconfig.app.json', './tsconfig.spec.json'],
+      },
+    },
+    processor: {
+      // https://github.com/angular-eslint/angular-eslint/issues/1917
+      meta:{
+        name:'extract-inline-html',
+      },
+      ...angular.processInlineTemplates,
+    },
+    rules: {
+      '@angular-eslint/component-selector': [
+        'error',
+        {
+          type: 'element',
+          prefix: '<%= jhiPrefixDashed %>',
+          style: 'kebab-case',
+        },
+      ],
+      '@angular-eslint/directive-selector': [
+        'error',
+        {
+          type: 'attribute',
+          prefix: '<%= jhiPrefix %>',
+          style: 'camelCase',
+        },
+      ],
+      '@angular-eslint/relative-url-prefix': 'error',
+      '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/member-ordering': [
+        'error',
+        {
+          default: [
+            'public-static-field',
+            'protected-static-field',
+            'private-static-field',
+            'public-instance-field',
+            'protected-instance-field',
+            'private-instance-field',
+            'constructor',
+            'public-static-method',
+            'protected-static-method',
+            'private-static-method',
+            'public-instance-method',
+            'protected-instance-method',
+            'private-instance-method',
+          ],
+        },
+      ],
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-extraneous-class': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-shadow': ['error'],
+      '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
+      '@typescript-eslint/unbound-method': 'off',
+      'arrow-body-style': 'error',
+      curly: 'error',
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      'guard-for-in': 'error',
+      'no-bitwise': 'error',
+      'no-caller': 'error',
+      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-eval': 'error',
+      'no-labels': 'error',
+      'no-new': 'error',
+      'no-new-wrappers': 'error',
+      'object-shorthand': ['error', 'always', { avoidExplicitReturnArrows: true }],
+      radix: 'error',
+      'spaced-comment': ['warn', 'always'],
+    },
+  },
+  {
+    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-empty-function': 'off',
+    },
+  },
+  {
+    files: ['**/*.html'],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
+    rules: {},
+  },
+  {
+    // Html templates requires some work
+    ignores: ['**/*.html'],
+    extends: [prettier],
+  },
+<&_ } -&>

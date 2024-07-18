@@ -17,13 +17,10 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.eslintrc.json": {
-    "stateCleared": "modified",
-  },
   "clientRoot/angular.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -700,13 +697,10 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.eslintrc.json": {
-    "stateCleared": "modified",
-  },
   "clientRoot/angular.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -1605,13 +1599,10 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.eslintrc.json": {
-    "stateCleared": "modified",
-  },
   "clientRoot/angular.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -2252,12 +2243,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
 
 exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -2274,6 +2259,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "angular.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -2923,12 +2911,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
 
 exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -2945,6 +2927,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "angular.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -3999,12 +3984,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
 
 exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -4021,6 +4000,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "angular.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -4655,12 +4637,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
 
 exports[`generator - angular monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match generated files snapshot 1`] = `
 {
-  ".eslintignore": {
-    "stateCleared": "modified",
-  },
-  ".eslintrc.json": {
-    "stateCleared": "modified",
-  },
   ".jhipster/EntityWithCustomId.json": {
     "stateCleared": "modified",
   },
@@ -4677,6 +4653,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "angular.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
