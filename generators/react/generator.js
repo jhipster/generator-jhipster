@@ -29,9 +29,9 @@ import {
   generateEntityClientImports as formatEntityClientImports,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-  clientRootTemplatesBlock,
 } from '../client/support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files-react.js';
@@ -159,17 +159,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
         });
       },
       cleanupOldFilesTask,
-      async writingEslintFile({ application }) {
-        await this.writeFiles({
-          blocks: [
-            clientRootTemplatesBlock({
-              templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
-            }),
-          ],
-          context: application,
-          rootTemplatesPath: this.fetchFromInstalledJHipster('javascript/generators/eslint/templates'),
-        });
-      },
+      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }

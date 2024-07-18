@@ -4,6 +4,12 @@ const renameTo = (ctx, filepath) => `${ctx.dockerServicesDir}${filepath}`.replac
 
 // eslint-disable-next-line import/prefer-default-export
 export const dockerFiles = {
+  commonFiles: [
+    {
+      condition: ctx => ctx.eslintConfigFile,
+      templates: [{ sourceFile: 'eslint.config.js.jhi.docker', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.docker` }],
+    },
+  ],
   sqlDatabasesFiles: [
     {
       condition: ctx => ctx.dockerServices.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
