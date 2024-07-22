@@ -11,7 +11,7 @@ cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.18.1' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.4.4' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.10.3' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.10.4' }
 
 # Cassandra
 lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
