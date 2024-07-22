@@ -48,7 +48,7 @@
     "rimraf": "5.0.8",
     "ts-jest": "29.2.3",
     "typescript": "5.4.5",
-    "typescript-eslint": "8.0.0-alpha.45",
+    "typescript-eslint": "8.0.0-alpha.49",
     "webpack": "5.93.0",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-merge": "6.0.1",
