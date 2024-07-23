@@ -7,4 +7,6 @@ export type JavaScriptApplication = {
   packageJsonNodeEngine?: boolean | string;
   packageJsonType?: string;
   eslintConfigFile?: string;
+
+  addPrettierExtensions?: (extensions: string[]) => void;
 };

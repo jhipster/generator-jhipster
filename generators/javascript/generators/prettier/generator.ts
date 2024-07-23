@@ -33,13 +33,16 @@ export default class PrettierGenerator extends BaseApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint && !this.options.fromInit) {
-      await this.dependsOnBootstrapApplication();
+    if (!this.delegateToBlueprint) {
+      if (!this.options.fromInit) {
+        await this.dependsOnBootstrapApplication();
+      }
+      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
     }
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get loading() {
+    return this.asLoadingTaskGroup({
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
           prettier: packageJson.dependencies.prettier,
@@ -47,6 +50,29 @@ export default class PrettierGenerator extends BaseApplicationGenerator {
           'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
         });
       },
+      loadDefaults({ application, applicationDefaults }) {
+        applicationDefaults({
+          prettierFolders: ',**/',
+          prettierExtensions: 'md,json,yml,js,cjs,mjs,ts,cts,mts',
+        });
+
+        application.addPrettierExtensions = (extensions: string[]) => {
+          const currentExtensions = application.prettierExtensions!.split(',');
+          const extensionsToAdd = extensions.filter(ext => !currentExtensions.includes(ext));
+          if (extensionsToAdd.length > 0) {
+            application.prettierExtensions = `${application.prettierExtensions},${extensionsToAdd.join(',')}`;
+          }
+        };
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
       source({ source }) {
         source.mergePrettierConfig = config => this.mergeDestinationYaml(this.prettierConfigFile, config);
         // `.prettierignore` file is only supported in the root of a project refer to https://github.com/prettier/prettier/issues/4081.
