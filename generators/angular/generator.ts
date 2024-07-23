@@ -88,13 +88,15 @@ export default class AngularGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefauts({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale,
         });
+
+        application.addPrettierExtensions?.(['html', 'css', 'scss']);
       },
       addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {

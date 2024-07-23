@@ -40,7 +40,7 @@ trim_trailing_whitespace = false
   },
   ".lintstagedrc.cjs": {
     "contents": "module.exports = {
-  '{,**/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java}': ['prettier --write'],
+  '{,**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts}': ['prettier --write'],
 };
 ",
     "stateCleared": "modified",

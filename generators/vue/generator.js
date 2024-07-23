@@ -71,6 +71,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareForTemplates({ application, source }) {
+        application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
+
         application.clientWebappDir = `${application.clientSrcDir}app/`;
         application.webappEnumerationsDir = `${application.clientWebappDir}shared/model/enumerations/`;
         application.clientSpecDir = `${application.clientTestDir}spec/`;

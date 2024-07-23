@@ -90,7 +90,9 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefauts({ application, applicationDefaults }) {
+        application.addPrettierExtensions?.(['html', 'tsx', 'css', 'scss']);
+
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
