@@ -75,6 +75,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      applicationDefaults({ application }) {
+        application.addPrettierExtensions?.(['java']);
+      },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
         source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;

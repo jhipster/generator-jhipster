@@ -41,7 +41,7 @@ describe(`generator - ${generator}`, () => {
           .withMockedJHipsterGenerators()
           .withMockedSource()
           .withMockedNodeDependencies()
-          .withSharedApplication({})
+          .withSharedApplication({ prettierExtensions: 'PRETTIER_EXTENSIONS', prettierFolders: 'PRETTIER_FOLDERS' })
           .withJHipsterConfig(config);
       });
 
@@ -54,7 +54,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toMatchObject(expect.arrayContaining(['jhipster:javascript:bootstrap']));
+        expect(result.composedMockedGenerators).toMatchObject(['jhipster:javascript:prettier'] as any);
       });
     });
   }

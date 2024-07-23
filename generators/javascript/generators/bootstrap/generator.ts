@@ -68,15 +68,20 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPrettierDependencies({ application }) {
-        const { packageJsonNodeEngine, packageJsonType } = application;
+        const { packageJsonNodeEngine, packageJsonType, dasherizedBaseName, projectDescription } = application;
+        this.packageJson.defaults({
+          name: dasherizedBaseName,
+          version: '0.0.0',
+          description: projectDescription,
+          license: 'UNLICENSED',
+        });
         if (packageJsonType) {
           this.packageJson.merge({ type: packageJsonType });
         }
         if (packageJsonNodeEngine) {
-          this.packageJson.merge({
-            engines: {
-              node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
-            },
+          this.packageJson.set('engines', {
+            ...(this.packageJson.get('engines') ?? {}),
+            node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
           });
         }
       },

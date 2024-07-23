@@ -5,15 +5,13 @@ exports[`generator - javascript:husky skipCommitHook(false) should call source s
 exports[`generator - javascript:husky skipCommitHook(false) should match files snapshot 1`] = `
 {
   ".husky/pre-commit": {
-    "contents": "#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npx --no-install lint-staged",
+    "contents": "lint-staged
+",
     "stateCleared": "modified",
   },
   ".lintstagedrc.cjs": {
     "contents": "module.exports = {
-  '{,src/**/,webpack/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}': ['prettier --write'],
+  '{PRETTIER_FOLDERS}*.{PRETTIER_EXTENSIONS}': ['prettier --write'],
 };
 ",
     "stateCleared": "modified",

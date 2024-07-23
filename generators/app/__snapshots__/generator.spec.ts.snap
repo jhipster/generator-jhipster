@@ -27,9 +27,9 @@ Options:
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
-  --skip-commit-hook                       Skip adding husky commit hooks
   --prettier-tab-width <value>             Default tab width for prettier
   --monorepository                         Use monorepository
+  --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
   --incremental-changelog                  Creates incremental database changelogs
   --skip-user-management                   Skip the user management module during app generation
@@ -213,6 +213,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "SERVER_TEST_SRC_DIR": "src/test/java/",
   "TEST_DIR": "src/test/",
   "VUE": "vue",
+  "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
@@ -719,10 +720,13 @@ exports[`generator - app with default config should match snapshot 1`] = `
       "packageName": "com.mycompany.myapp.web.rest.vm",
     },
   ],
+  "packageJsonNodeEngine": undefined,
+  "packageJsonType": "commonjs",
   "packageName": "com.mycompany.myapp",
   "pages": [],
   "prettierConfigFile": ".prettierrc",
-  "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
+  "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss",
+  "prettierFolders": ",**/",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabaseDriver": {
@@ -825,6 +829,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "SERVER_TEST_SRC_DIR": "src/test/java/",
   "TEST_DIR": "src/test/",
   "VUE": "vue",
+  "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
@@ -1327,10 +1332,13 @@ exports[`generator - app with gateway should match snapshot 1`] = `
       "packageName": "com.mycompany.myapp.web.rest.vm",
     },
   ],
+  "packageJsonNodeEngine": undefined,
+  "packageJsonType": "commonjs",
   "packageName": "com.mycompany.myapp",
   "pages": [],
   "prettierConfigFile": ".prettierrc",
-  "prettierExtensions": "md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss,java",
+  "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss",
+  "prettierFolders": ",**/",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabaseDriver": {
@@ -1435,6 +1443,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "SERVER_TEST_SRC_DIR": "src/test/java/",
   "TEST_DIR": "src/test/",
   "VUE": "vue",
+  "addPrettierExtensions": [Function],
   "addSpringMilestoneRepository": false,
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "microservice",
@@ -1831,6 +1840,8 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   },
   "nodeDependencies": {
     "concurrently": "CONCURRENTLY_VERSION",
+    "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+    "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
@@ -1880,10 +1891,13 @@ exports[`generator - app with microservice should match snapshot 1`] = `
       "packageName": "com.mycompany.myapp.web.rest.vm",
     },
   ],
+  "packageJsonNodeEngine": undefined,
+  "packageJsonType": "commonjs",
   "packageName": "com.mycompany.myapp",
   "pages": [],
   "prettierConfigFile": ".prettierrc",
-  "prettierExtensions": "md,json,yml,html,java",
+  "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java",
+  "prettierFolders": ",**/",
   "prettierJava": undefined,
   "prettierTabWidth": 2,
   "prodDatabaseDriver": {

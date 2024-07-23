@@ -69,12 +69,6 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           gatewayServicesApiAvailable: undefined,
         });
 
-        applicationDefaults({
-          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
-          documentationArchiveUrl: ({ jhipsterVersion }) =>
-            `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
-        });
-
         let prettierExtensions = 'md,json,yml,html';
         if (application.clientFrameworkAny) {
           prettierExtensions = `${prettierExtensions},cjs,mjs,js,ts,tsx,css,scss`;
@@ -85,7 +79,14 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
         if (!application.skipServer) {
           prettierExtensions = `${prettierExtensions},java`;
         }
-        application.prettierExtensions = prettierExtensions;
+
+        applicationDefaults({
+          // TODO remove prettierExtensions, moved to prettier generator
+          prettierExtensions,
+          useNpmWrapper: application => application.clientFrameworkAny && application.backendTypeJavaAny,
+          documentationArchiveUrl: ({ jhipsterVersion }) =>
+            `${JHIPSTER_DOCUMENTATION_URL}${JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`,
+        });
       },
     });
   }
