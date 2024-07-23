@@ -29,7 +29,7 @@ spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '6.25.0' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.9.3' }
 
-gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.17.5' }
+gradle-enterprise = { id = 'com.gradle.enterprise', version = '3.17.6' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.0.2' }
 
