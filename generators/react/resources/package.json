@@ -80,7 +80,7 @@
     "thread-loader": "4.0.2",
     "ts-jest": "29.2.3",
     "ts-loader": "9.5.1",
-    "typescript": "5.5.3",
+    "typescript": "5.5.4",
     "typescript-eslint": "7.17.0",
     "webpack": "5.93.0",
     "webpack-cli": "5.1.4",
