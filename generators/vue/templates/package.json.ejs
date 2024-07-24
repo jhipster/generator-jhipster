@@ -83,6 +83,8 @@
     "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
     "workbox-webpack-plugin": "<%= nodeDependencies['workbox-webpack-plugin'] %>",
 <%_ } _%>
+    "@eslint/eslintrc": null,
+    "@eslint/js": null,
     "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@rushstack/eslint-patch": "<%= nodeDependencies['@rushstack/eslint-patch'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
@@ -112,6 +114,7 @@
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
+    "typescript-eslint": null,
     "vite": null,
     "vitest": "<%= nodeDependencies.vitest %>",
     "vite-plugin-static-copy": null,
@@ -132,8 +135,8 @@
     "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
     "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
 <%_ } %>
-    "lint": "eslint . --ext .ts,.vue ",
-    "lint:fix": "eslint . --ext .ts,.vue --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "start": "<%= clientPackageManager %> run webapp:dev --",

@@ -27,10 +27,6 @@ export const files = {
       templates: ['README.md.jhi.client', '.prettierignore.jhi.client'],
     },
     clientRootTemplatesBlock({
-      condition: ctx => !ctx.clientFrameworkReact && !ctx.clientFrameworkAngular,
-      templates: ['.eslintignore'],
-    }),
-    clientRootTemplatesBlock({
       condition: generator => generator.microfrontend && (generator.clientFrameworkVue || generator.clientFrameworkReact),
       templates: ['webpack/webpack.microfrontend.js.jhi'],
     }),
