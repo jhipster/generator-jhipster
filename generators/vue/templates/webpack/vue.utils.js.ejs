@@ -1,9 +1,7 @@
 'use strict';
-const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const sass = require('sass');
 
-const packageConfig = require('../package.json');
 const config = require('./config');
 
 const sourceMapEnabled = production => (production ? config.build.productionSourceMap : config.dev.cssSourceMap);
