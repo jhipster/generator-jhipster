@@ -57,12 +57,6 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
       globals: { ...globals.browser },
     },
     rules: {
-      ...Object.fromEntries(
-        compat
-          .extends('@vue/eslint-config-typescript/recommended')
-          .map(({ rules }) => (rules ? Object.entries(rules) : []))
-          .flat(),
-      ),
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'vue/multi-word-component-names': 'off',

@@ -29,7 +29,6 @@
     "@types/node": "20.11.25",
     "@types/sinon": "17.0.3",
     "@vitejs/plugin-vue": "5.1.0",
-    "@vue/eslint-config-typescript": "13.0.0",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.5.1",
     "autoprefixer": "10.4.19",
