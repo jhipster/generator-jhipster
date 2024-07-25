@@ -17,18 +17,8 @@
  limitations under the License.
 -%>
 <&_ if (fragment.importsSection) { -&>
-import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
-import { FlatCompat } from '@eslint/eslintrc';
-
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import vue from 'eslint-plugin-vue';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
 
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
