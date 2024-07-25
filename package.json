@@ -177,10 +177,10 @@
   "devDependencies": {
     "@actions/core": "1.10.1",
     "@node-loaders/esbuildx": "1.4.0",
-    "@types/chai": "4.3.11",
+    "@types/chai": "4.3.16",
     "@types/node": "20.11.25",
     "@types/sinon-chai": "3.2.12",
-    "chai": "4.4.1",
+    "chai": "4.5.0",
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.0",
     "eslint-config-prettier": "9.1.0",
