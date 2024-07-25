@@ -87,9 +87,10 @@ updates:
         patterns:
           - '@fortawesome/fontawesome-svg-core'
           - '@fortawesome/free-solid-svg-icons'
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
+          - '@eslint/*'
+          - 'eslint'
 
   - package-ecosystem: 'npm'
     directory: '/generators/common/resources/'
@@ -184,9 +185,10 @@ updates:
       - dependency-name: '@module-federation/utilities'
         versions: ['*']
     groups:
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
+          - '@eslint/*'
+          - 'eslint'
       vue-eslint:
         patterns:
           - '@vue/eslint-config-typescript'
