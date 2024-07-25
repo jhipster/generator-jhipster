@@ -5,7 +5,7 @@ typesafe = { module = 'com.typesafe:config', version = '1.4.3' }
 # hazelcast
 hazelcast-hibernate53 = { module = 'com.hazelcast:hazelcast-hibernate53', version = '5.2.0' }
 
-hazelcast-spring = { module = 'com.hazelcast:hazelcast-spring', version = '5.4.0' }
+hazelcast-spring = { module = 'com.hazelcast:hazelcast-spring', version = '5.5.0' }
 
 # memcached
 xmemcached-provider = { module = 'com.google.code.simple-spring-memcached:xmemcached-provider', version = '4.1.3' }
