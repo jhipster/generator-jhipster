@@ -23,13 +23,13 @@ export const vueFiles = {
   common: [
     clientRootTemplatesBlock({
       templates: [
+        '.postcssrc.js',
+        { sourceFile: 'eslint.config.js.jhi.vue', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.vue` },
         'package.json',
         'tsconfig.json',
         'tsconfig.app.json',
         'tsconfig.node.json',
         'tsconfig.vitest.json',
-        '.postcssrc.js',
-        '.eslintrc.cjs',
         'vite.config.mts',
         'vitest.config.mts',
       ],

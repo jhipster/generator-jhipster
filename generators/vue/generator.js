@@ -32,6 +32,7 @@ import {
   getTypescriptKeyType as getTSKeyType,
 } from '../client/support/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
+import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { writeEntityFiles, postWriteEntityFiles, cleanupEntitiesFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles, writeEntitiesFiles } from './files-vue.js';
@@ -61,6 +62,12 @@ export default class VueGenerator extends BaseApplicationGenerator {
           this.fetchFromInstalledJHipster(GENERATOR_VUE, 'resources', 'package.json'),
         );
       },
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          typescriptEslint: true,
+        });
+      },
     });
   }
 
@@ -70,16 +77,16 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      applicationDefauts({ applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
+          clientWebappDir: app => `${app.clientSrcDir}app/`,
+          webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
+        });
+      },
       prepareForTemplates({ application, source }) {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
-
-        application.clientWebappDir = `${application.clientSrcDir}app/`;
-        application.webappEnumerationsDir = `${application.clientWebappDir}shared/model/enumerations/`;
-        application.clientSpecDir = `${application.clientTestDir}spec/`;
-
-        // Can be dropped if tests are moved near implementation
-        application.applicationRootRelativeToClientTestDir = `${relative(application.clientSpecDir, '.')}/`;
-        application.clientSrcDirRelativeToClientTestDir = `${relative(application.clientSpecDir, application.clientWebappDir)}/`;
 
         source.addWebpackConfig = args => {
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
@@ -148,7 +155,13 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      cleanup({ control }) {
+        control.cleanupFiles({
+          '8.6.1': ['.eslintrc.json', '.eslintignore'],
+        });
+      },
       cleanupOldFilesTask,
+      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }

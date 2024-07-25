@@ -31,7 +31,9 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend) { _%>
 import federation from "@originjs/vite-plugin-federation";
 
+  <%_ if (applicationTypeGateway) { _%>
 const sharedAppVersion = '0.0.0';
+  <%_ } _%>
 <%_ } _%>
 
 const getFileFromRepo = (file: string) =>
