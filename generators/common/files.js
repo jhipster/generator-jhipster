@@ -24,7 +24,7 @@
 export const commonFiles = {
   global: [
     {
-      templates: ['README.md.jhi', '.editorconfig'],
+      templates: ['README.md.jhi', '.editorconfig.jhi'],
     },
   ],
   sonar: [

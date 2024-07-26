@@ -172,6 +172,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
             javaMainPackageTemplatesBlock({
               templates: ['GeneratedByJHipster.java'],
             }),
+            { templates: ['.editorconfig.jhi.java'] },
           ],
           context: application,
         });
