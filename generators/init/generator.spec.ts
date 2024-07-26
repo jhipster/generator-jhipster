@@ -54,7 +54,7 @@ describe(`generator - ${generator}`, () => {
         await helpers
           .runJHipster('init')
           .withMockedJHipsterGenerators(['bootstrap'])
-          .withSharedApplication({ projectDescription: 'projectDescription' })
+          .withSharedApplication({ projectDescription: 'projectDescription', prettierTabWidth: 'prettierTabWidth' })
           .withJHipsterConfig();
       });
       it('should write files and match snapshot', () => {
