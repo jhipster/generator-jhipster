@@ -17,18 +17,8 @@
  limitations under the License.
 -%>
 <&_ if (fragment.importsSection) { -&>
-import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
-import { FlatCompat } from '@eslint/eslintrc';
-
 import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
 import vue from 'eslint-plugin-vue';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
 
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
@@ -57,12 +47,6 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
       globals: { ...globals.browser },
     },
     rules: {
-      ...Object.fromEntries(
-        compat
-          .extends('@vue/eslint-config-typescript/recommended')
-          .map(({ rules }) => (rules ? Object.entries(rules) : []))
-          .flat(),
-      ),
       'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
       'vue/multi-word-component-names': 'off',

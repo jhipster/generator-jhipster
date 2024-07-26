@@ -189,10 +189,6 @@ updates:
         patterns:
           - '@eslint/*'
           - 'eslint'
-      vue-eslint:
-        patterns:
-          - '@vue/eslint-config-typescript'
-          - 'eslint-plugin-vue'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'
