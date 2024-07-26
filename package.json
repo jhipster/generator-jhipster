@@ -117,7 +117,7 @@
     "update-snapshots": "esmocha jdl generators cli --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
-    "@eslint/js": "9.7.0",
+    "@eslint/js": "9.8.0",
     "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
