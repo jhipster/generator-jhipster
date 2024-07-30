@@ -12,4 +12,4 @@ xmemcached-provider = { module = 'com.google.code.simple-spring-memcached:xmemca
 
 xmemcached = { module = 'com.googlecode.xmemcached:xmemcached', version = '2.4.8' }
 
-redisson = { module = 'org.redisson:redisson', version = '3.33.0' }
+redisson = { module = 'org.redisson:redisson', version = '3.34.0' }
