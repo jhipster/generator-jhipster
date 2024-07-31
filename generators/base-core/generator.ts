@@ -897,17 +897,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
         }
         sourceFileFrom = existingTemplates.shift();
-
-        if (sourceFileFrom === undefined) {
-          throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
-        }
       } else if (typeof rootTemplatesAbsolutePath === 'string') {
         sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
       } else {
         sourceFileFrom = this.templatePath(sourceFile);
       }
 
-      const file = customizeTemplatePath({ sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
+      const file = customizeTemplatePath.call(this, { sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
       if (!file) {
         return undefined;
       }
@@ -916,19 +912,27 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
       let templatesRoots: string[] = [].concat(rootTemplatesAbsolutePath);
       for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
-        const file = contextCustomizeTemplatePath({
-          namespace: this.options.namespace,
-          sourceFile,
-          resolvedSourceFile: sourceFileFrom,
-          destinationFile: targetFile,
-          templatesRoots,
-        });
+        const file = contextCustomizeTemplatePath.call(
+          this,
+          {
+            namespace: this.options.namespace,
+            sourceFile,
+            resolvedSourceFile: sourceFileFrom,
+            destinationFile: targetFile,
+            templatesRoots,
+          },
+          context,
+        );
         if (!file) {
           return undefined;
         }
         sourceFileFrom = file.resolvedSourceFile;
         targetFile = file.destinationFile;
         templatesRoots = file.templatesRoots;
+      }
+
+      if (sourceFileFrom === undefined) {
+        throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
       }
 
       try {

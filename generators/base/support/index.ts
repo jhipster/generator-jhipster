@@ -22,7 +22,7 @@ export * from './config.js';
 export * from './contents.js';
 export * from './faker.js';
 export { default as getHipster } from './hipster.js';
-export { default as createJHipster7Context } from './jhipster7-context.js';
+export * from './jhipster7-context.js';
 export * from './logger.js';
 export * from './namespace.js';
 export * from './needles.js';
