@@ -17,7 +17,7 @@ import { upperFirstCamelCase } from './string.js';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
-const deprecatedProperties = {
+export const jhipster7deprecatedProperties = {
   GRADLE_VERSION: {
     replacement: 'gradleVersion',
     get: ({ data }) => data.gradleVersion,
@@ -248,7 +248,7 @@ const deprecatedProperties = {
         data.prettierExtensions,
   },
   _generateSqlSafeName: {
-    replacement: 'relationshipSqlSafeName',
+    replacement: 'relationshipSqlSafeName property',
     get: () => name => (isReservedTableName(name, 'sql') ? `e_${name}` : name),
   },
   isFilterableType: {
@@ -260,7 +260,7 @@ const deprecatedProperties = {
     get: () => getSpecificationBuildForType,
   },
   getColumnName: {
-    replacement: 'entityTableName || relationship.columnName',
+    replacement: 'entityTableName || relationship.columnName property',
     get: () => hibernateSnakeCase,
   },
   isUsingBuiltInUser: {
@@ -299,8 +299,8 @@ const getPropertBuilder =
 
     const { generator, data } = context;
     const value = prop in data ? data[prop] : undefined;
-    if (prop in deprecatedProperties) {
-      const { replacement, get } = deprecatedProperties[prop];
+    if (prop in jhipster7deprecatedProperties) {
+      const { replacement, get } = jhipster7deprecatedProperties[prop];
       const fallBackValue = get(context);
       const valueDesc = prop in data ? `Value: ${value}, ` : '';
       log(
@@ -378,6 +378,6 @@ const createHandler = ({ log } = {}) => {
   };
 };
 
-export default function createJHipster7Context(generator, data, options) {
+export function createJHipster7Context(generator, data, options) {
   return new Proxy({ generator, data }, createHandler(options));
 }
