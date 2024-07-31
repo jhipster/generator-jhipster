@@ -1,3 +1,4 @@
+import CoreGenerator from '../base-core/generator.ts';
 import { ClientApplication } from '../client/types.js';
 import { I18nApplication } from '../languages/types.js';
 import { SpringBootApplication } from '../server/types.js';
@@ -36,13 +37,17 @@ export type BaseApplication = {
 
   /** Customize templates sourceFile and destinationFile */
   customizeTemplatePaths: Array<
-    (file: {
-      namespace: string;
-      sourceFile: string;
-      resolvedSourceFile: string;
-      destinationFile: string;
-      templatesRoots: string[];
-    }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] }
+    (
+      this: CoreGenerator,
+      file: {
+        namespace: string;
+        sourceFile: string;
+        resolvedSourceFile: string;
+        destinationFile: string;
+        templatesRoots: string[];
+      },
+      context: any,
+    ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] }
   >;
 } & I18nApplication;
 

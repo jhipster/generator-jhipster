@@ -903,7 +903,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         sourceFileFrom = this.templatePath(sourceFile);
       }
 
-      const file = customizeTemplatePath({ sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
+      const file = customizeTemplatePath.call(this, { sourceFile, resolvedSourceFile: sourceFileFrom, destinationFile: targetFile });
       if (!file) {
         return undefined;
       }
@@ -912,13 +912,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
       let templatesRoots: string[] = [].concat(rootTemplatesAbsolutePath);
       for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
-        const file = contextCustomizeTemplatePath({
-          namespace: this.options.namespace,
-          sourceFile,
-          resolvedSourceFile: sourceFileFrom,
-          destinationFile: targetFile,
-          templatesRoots,
-        });
+        const file = contextCustomizeTemplatePath.call(
+          this,
+          {
+            namespace: this.options.namespace,
+            sourceFile,
+            resolvedSourceFile: sourceFileFrom,
+            destinationFile: targetFile,
+            templatesRoots,
+          },
+          context,
+        );
         if (!file) {
           return undefined;
         }
