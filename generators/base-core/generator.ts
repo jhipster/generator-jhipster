@@ -897,10 +897,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           }
         }
         sourceFileFrom = existingTemplates.shift();
-
-        if (sourceFileFrom === undefined) {
-          throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
-        }
       } else if (typeof rootTemplatesAbsolutePath === 'string') {
         sourceFileFrom = this.templatePath(rootTemplatesAbsolutePath, sourceFile);
       } else {
@@ -929,6 +925,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         sourceFileFrom = file.resolvedSourceFile;
         targetFile = file.destinationFile;
         templatesRoots = file.templatesRoots;
+      }
+
+      if (sourceFileFrom === undefined) {
+        throw new Error(`Template file ${sourceFile} was not found at ${rootTemplatesAbsolutePath}`);
       }
 
       try {
