@@ -28,11 +28,11 @@ const defaultXmlCommonOptions: Partial<X2jOptions & XmlBuilderOptions> = {
   parseAttributeValue: false,
 };
 
-const defaultXmlParserOptions: Partial<X2jOptions> = {
+export const defaultXmlParserOptions: Partial<X2jOptions> = {
   ...defaultXmlCommonOptions,
 };
 
-const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
+export const defaultXmlBuildOptions: Partial<XmlBuilderOptions> = {
   ...defaultXmlCommonOptions,
   suppressBooleanAttributes: false,
   suppressEmptyNode: true,

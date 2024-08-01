@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-import assert from 'assert/strict';
+import assert from 'node:assert/strict';
+import { basename } from 'node:path';
+import { passthrough } from '@yeoman/transform';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
@@ -25,7 +28,7 @@ import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../se
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
-import { createPomStorage, type PomStorage } from './support/index.js';
+import { createPomStorage, sortPomFile, type PomStorage } from './support/index.js';
 
 export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   pomStorage!: PomStorage;
@@ -125,6 +128,30 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      queueTranslateTransform() {
+        if (this.sortMavenPom) {
+          this.queueTransformStream(
+            {
+              name: 'translating angular application',
+              filter: file =>
+                isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && basename(file.path) === 'pom.xml',
+              refresh: false,
+            },
+            passthrough(file => {
+              file.contents = Buffer.from(sortPomFile(file.contents.toString()));
+            }),
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
