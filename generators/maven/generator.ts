@@ -136,7 +136,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         if (this.sortMavenPom) {
           this.queueTransformStream(
             {
-              name: 'translating angular application',
+              name: 'sorting pom.xml file',
               filter: file =>
                 isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && basename(file.path) === 'pom.xml',
               refresh: false,

@@ -106,29 +106,36 @@ const sortArtifacts = (artifacts: MavenArtifact[]) =>
 
 const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id?.localeCompare(b.id) ?? 1);
 
-export const sortPomProject = project => {
-  project = sortKeys(project, { compare: comparator(rootOrder) });
-  if (project.properties) {
-    project.properties = sortProperties(project.properties);
+const sortProjectLike = (projectLike: any): any => {
+  projectLike = sortKeys(projectLike, { compare: comparator(rootOrder) });
+  if (projectLike.properties) {
+    projectLike.properties = sortProperties(projectLike.properties);
   }
-  if (Array.isArray(project.dependencies?.dependency)) {
-    project.dependencies.dependency = sortArtifacts(project.dependencies.dependency);
+  if (Array.isArray(projectLike.dependencies?.dependency)) {
+    projectLike.dependencies.dependency = sortArtifacts(projectLike.dependencies.dependency);
   }
-  if (Array.isArray(project.dependencyManagement?.dependencies?.dependency)) {
-    project.dependencyManagement.dependencies.dependency = sortArtifacts(project.dependencyManagement.dependencies.dependency);
+  if (Array.isArray(projectLike.dependencyManagement?.dependencies?.dependency)) {
+    projectLike.dependencyManagement.dependencies.dependency = sortArtifacts(projectLike.dependencyManagement.dependencies.dependency);
   }
-  if (project.build) {
-    project.build = sortSection(project.build);
+  if (projectLike.build) {
+    projectLike.build = sortSection(projectLike.build);
 
-    if (Array.isArray(project.build.plugins?.plugin)) {
-      project.build.plugins.plugin = sortArtifacts(project.build.plugins.plugin);
+    if (Array.isArray(projectLike.build.plugins?.plugin)) {
+      projectLike.build.plugins.plugin = sortArtifacts(projectLike.build.plugins.plugin);
     }
-    if (Array.isArray(project.build.pluginManagement?.plugins?.plugin)) {
-      project.build.pluginManagement.plugins.plugin = sortArtifacts(project.build.pluginManagement.plugins.plugin);
+    if (Array.isArray(projectLike.build.pluginManagement?.plugins?.plugin)) {
+      projectLike.build.pluginManagement.plugins.plugin = sortArtifacts(projectLike.build.pluginManagement.plugins.plugin);
     }
   }
+  return projectLike;
+};
+
+export const sortPomProject = (project: any): any => {
+  project = sortProjectLike(project);
   if (Array.isArray(project.profiles?.profile)) {
-    project.profiles.profile = sortProfiles(project.profiles.profile);
+    project.profiles.profile = sortProfiles(project.profiles.profile.map(profile => sortProjectLike(profile)));
+  } else if (project.profiles?.profile) {
+    project.profiles.profile = sortProjectLike(project.profiles.profile);
   }
   return project;
 };
