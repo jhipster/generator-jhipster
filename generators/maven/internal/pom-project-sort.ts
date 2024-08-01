@@ -20,7 +20,9 @@ import sortKeys from 'sort-keys';
 
 import { MavenArtifact, MavenProfile } from '../types.js';
 
-const rootOrder = [
+const rootAndProfileOrder = [
+  'id',
+  'activation',
   'modelVersion',
   'groupId',
   'artifactId',
@@ -107,7 +109,7 @@ const sortArtifacts = (artifacts: MavenArtifact[]) =>
 const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id?.localeCompare(b.id) ?? 1);
 
 const sortProjectLike = (projectLike: any): any => {
-  projectLike = sortKeys(projectLike, { compare: comparator(rootOrder) });
+  projectLike = sortKeys(projectLike, { compare: comparator(rootAndProfileOrder) });
   if (projectLike.properties) {
     projectLike.properties = sortProperties(projectLike.properties);
   }
