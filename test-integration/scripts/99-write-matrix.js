@@ -17,7 +17,7 @@ const MATRIX_FILE = 'matrix.json';
 let existing = {};
 try {
   existing = JSON.parse(readFileSync(MATRIX_FILE));
-} catch (_) {
+} catch {
   console.log(`File ${MATRIX_FILE} not found`);
   existing = { include: [] };
 }

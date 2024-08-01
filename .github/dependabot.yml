@@ -36,9 +36,10 @@ updates:
       - dependency-name: '@types/node'
         versions: ['>=19']
     groups:
-      typescript-eslint:
+      eslint:
         patterns:
-          - '@typescript-eslint/*'
+          - '@eslint/*'
+          - 'eslint'
 
   - package-ecosystem: 'npm'
     directory: '/generators/generate-blueprint/resources/'
