@@ -43,6 +43,8 @@ const scopeSortOrder = {
   implementation: 2,
   compileOnly: 3,
   runtimeOnly: 4,
+  testImplementation: 5,
+  testRuntimeOnly: 6,
 };
 
 const wrapScope = (scope: string, dependency: string) =>
@@ -55,21 +57,25 @@ export const gradleNeedleOptionsWithDefaults = (options: GradleNeedleOptions): R
 
 export const sortDependencies = (a: GradleDependency, b: GradleDependency): number => {
   let ret = (scopeSortOrder[a.scope] ?? 100) - (scopeSortOrder[b.scope] ?? 100);
-  if (ret === 0) {
-    ret = a.groupId.localeCompare(b.groupId);
-    if (ret !== 0) {
-      // Keep Spring dependencies on top
-      const aIsSpring = a.groupId.startsWith('org.springframework.');
-      const bIsSpring = b.groupId.startsWith('org.springframework.');
-      if (aIsSpring !== bIsSpring && (aIsSpring || bIsSpring)) {
-        return aIsSpring ? -1 : 1;
-      }
+  // Keep implementation platform scope dependencies in the order they were added
+  if (ret !== 0 || a.scope === 'implementation platform') {
+    return ret;
+  }
+  ret = a.scope.localeCompare(b.scope);
+  if (ret !== 0) {
+    return ret;
+  }
+  ret = a.groupId.localeCompare(b.groupId);
+  if (ret !== 0) {
+    // Keep Spring dependencies on top
+    const aIsSpring = a.groupId.startsWith('org.springframework.');
+    const bIsSpring = b.groupId.startsWith('org.springframework.');
+    if (aIsSpring !== bIsSpring && (aIsSpring || bIsSpring)) {
+      return aIsSpring ? -1 : 1;
     }
+    return ret;
   }
-  if (ret === 0) {
-    ret = a.artifactId.localeCompare(b.artifactId);
-  }
-  return ret;
+  return ret === 0 ? a.artifactId.localeCompare(b.artifactId) : ret;
 };
 
 export const applyFromGradleCallback = ({ script }: GradleScript) =>
