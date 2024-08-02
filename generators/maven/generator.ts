@@ -47,7 +47,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
   get initializing() {
     return this.asInitializingTaskGroup({
       pomStorage() {
-        this.pomStorage = createPomStorage(this, { sortFile: this.sortMavenPom });
+        this.pomStorage = createPomStorage(this, { sortFile: false });
       },
     });
   }
