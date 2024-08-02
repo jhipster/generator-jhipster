@@ -31,13 +31,7 @@ import {
   MavenProperty,
   MavenRepository,
 } from '../types.js';
-import { sortPomProject } from '../internal/pom-project-sort.js';
-
-const formatFirstXmlLevel = content =>
-  content.replace(
-    /(\n {4}<(?:groupId|distributionManagement|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
-    '\n$1',
-  );
+import { sortPomProject, formatPomFirstLevel } from '../internal/pom-sort.js';
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => {
   return a.groupId === b.groupId && a.artifactId === b.artifactId;
@@ -264,7 +258,7 @@ export const createPomStorage = (generator: CoreGenerator, { sortFile }: { sortF
   const loadFile = () => generator.readDestination('pom.xml', { defaults: emptyPomFile })?.toString() ?? '';
   const pomStorage = new PomStorage({
     loadFile,
-    saveFile: content => generator.writeDestination('pom.xml', formatFirstXmlLevel(content)),
+    saveFile: content => generator.writeDestination('pom.xml', formatPomFirstLevel(content)),
     sortFile,
   });
   generator.fs.store.on('change', filename => {

@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 import assert from 'node:assert/strict';
-import { basename } from 'node:path';
 import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -137,8 +136,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
           this.queueTransformStream(
             {
               name: 'sorting pom.xml file',
-              filter: file =>
-                isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && basename(file.path) === 'pom.xml',
+              filter: file => isFileStateModified(file) && file.path === this.destinationPath('pom.xml'),
               refresh: false,
             },
             passthrough(file => {

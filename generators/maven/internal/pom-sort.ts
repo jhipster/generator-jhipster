@@ -20,6 +20,12 @@ import sortKeys from 'sort-keys';
 
 import { MavenArtifact, MavenProfile } from '../types.js';
 
+export const formatPomFirstLevel = content =>
+  content.replace(
+    /(\n {4}<(?:groupId|distributionManagement|repositories|pluginRepositories|properties|dependencyManagement|dependencies|build|profiles)>)/g,
+    '\n$1',
+  );
+
 const rootAndProfileOrder = [
   'id',
   'activation',
@@ -79,8 +85,8 @@ const toMaxInt = nr => (nr === -1 ? Number.MAX_SAFE_INTEGER : nr);
 const sortWithTemplate = (template: string[], a: string, b: string) => {
   if (isComment(a)) return -1;
   if (isComment(b)) return 1;
-  const indexOfA = toMaxInt(template.findIndex(item => item === a));
-  const indexOfB = toMaxInt(template.findIndex(item => item === b));
+  const indexOfA = toMaxInt(template.indexOf(a));
+  const indexOfB = toMaxInt(template.indexOf(b));
   if (indexOfA === indexOfB) {
     return a.localeCompare(b);
   }

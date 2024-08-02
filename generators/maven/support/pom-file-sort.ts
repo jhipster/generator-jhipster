@@ -19,7 +19,7 @@
 import { XMLParser, XMLBuilder, XmlBuilderOptions, X2jOptions } from 'fast-xml-parser';
 
 import { defaultXmlBuildOptions, defaultXmlParserOptions } from '../internal/xml-store.js';
-import { sortPomProject } from '../internal/pom-project-sort.js';
+import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
 
 type SortPomFileOptions = { xmlParserOptions?: Partial<X2jOptions>; xmlBuildOptions?: Partial<XmlBuilderOptions> };
 
@@ -29,5 +29,5 @@ export const sortPomFile = (pomFile: string, { xmlParserOptions, xmlBuildOptions
   pomObject.project = sortPomProject(pomObject.project);
 
   const builder = new XMLBuilder({ ...defaultXmlBuildOptions, ...xmlBuildOptions });
-  return builder.build(pomObject);
+  return formatPomFirstLevel(builder.build(pomObject));
 };
