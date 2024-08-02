@@ -37,11 +37,11 @@ import {
   addGradleDependenciesCatalogVersionCallback,
   addGradleDependencyCatalogLibrariesCallback,
   addGradleDependencyCatalogPluginsCallback,
-  addGradleDependencyFromCatalogCallback,
   addGradlePluginFromCatalogCallback,
   sortDependencies,
   gradleNeedleOptionsWithDefaults,
 } from './internal/needles.js';
+import { GradleDependency } from './types.js';
 
 const { PRE_CONFLICTS_QUEUE } = QUEUES;
 
@@ -138,7 +138,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
           const { gradleFile, gradleVersionCatalogFile } = gradleNeedleOptionsWithDefaults(options);
           libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile(gradleVersionCatalogFile, addGradleDependencyCatalogLibrariesCallback(libs));
-          this.editFile(gradleFile, addGradleDependencyFromCatalogCallback(libs));
+          source.addGradleDependencies!(libs.filter(lib => lib.scope) as GradleDependency[], { gradleFile });
         };
         source.addGradleDependencyCatalogLibrary = (lib, options) => source.addGradleDependencyCatalogLibraries!([lib], options);
         source.addGradleDependencyCatalogPlugins = plugins => {

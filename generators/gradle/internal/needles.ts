@@ -24,10 +24,10 @@ import type {
   GradleProperty,
   GradleRepository,
   GradleTomlVersion,
-  GradleLibrary,
   GradleTomlPlugin,
   GradleComment,
   GradleNeedleOptions,
+  GradleLibraryDependency,
 } from '../types.js';
 
 const tomlItemToString = (item: Record<string, string | undefined>) =>
@@ -50,6 +50,20 @@ const scopeSortOrder = {
 const wrapScope = (scope: string, dependency: string) =>
   `${scope}${scope === 'implementation platform' ? '(' : ' '}${dependency}${scope === 'implementation platform' ? ')' : ''}`;
 
+const serializeDependency = (dependency: GradleDependency) => {
+  if ('libraryName' in dependency) {
+    return wrapScope(dependency.scope, `libs.${gradleNameToReference(dependency.libraryName)}`);
+  }
+
+  const { groupId, artifactId, version, classifier, scope } = dependency;
+  return wrapScope(
+    scope,
+    classifier && !version
+      ? `group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
+      : `"${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
+  );
+};
+
 export const gradleNeedleOptionsWithDefaults = (options: GradleNeedleOptions): Required<GradleNeedleOptions> => {
   const { gradleFile = 'build.gradle', gradleVersionCatalogFile = 'gradle/libs.versions.toml' } = options;
   return { gradleFile, gradleVersionCatalogFile };
@@ -64,6 +78,13 @@ export const sortDependencies = (a: GradleDependency, b: GradleDependency): numb
   ret = a.scope.localeCompare(b.scope);
   if (ret !== 0) {
     return ret;
+  }
+  if ('libraryName' in a || 'libraryName' in b) {
+    // Keep catalog dependencies on top
+    if ('libraryName' in a && 'libraryName' in b) {
+      return a.libraryName.localeCompare(b.libraryName);
+    }
+    return 'libraryName' in a ? -1 : 1;
   }
   ret = a.groupId.localeCompare(b.groupId);
   if (ret !== 0) {
@@ -87,21 +108,14 @@ export const applyFromGradleCallback = ({ script }: GradleScript) =>
 export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency',
-    contentToAdd: dependencies.map(({ groupId, artifactId, version, scope, classifier }) =>
-      wrapScope(
-        scope,
-        classifier && !version
-          ? `group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
-          : `"${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
-      ),
-    ),
+    contentToAdd: dependencies.map(serializeDependency),
   });
 
 /** @deprecated use addGradleDependenciesCallback */
-export const addGradleBuildSrcDependencyCallback = ({ groupId, artifactId, version, scope }: GradleDependency) =>
+export const addGradleBuildSrcDependencyCallback = (dependency: GradleDependency) =>
   createNeedleCallback({
     needle: 'gradle-build-src-dependency',
-    contentToAdd: wrapScope(scope, `"${groupId}:${artifactId}${version ? `:${version}` : ''}"`),
+    contentToAdd: serializeDependency(dependency),
   });
 
 export const addGradleDependenciesCatalogVersionCallback = (versions: GradleTomlVersion[]) =>
@@ -110,20 +124,12 @@ export const addGradleDependenciesCatalogVersionCallback = (versions: GradleToml
     contentToAdd: versions.map(({ name, version }) => `${name} = "${version}"`),
   });
 
-export const addGradleDependencyCatalogLibrariesCallback = (libraries: GradleLibrary[]) =>
+export const addGradleDependencyCatalogLibrariesCallback = (libraries: GradleLibraryDependency[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency-catalog-libraries',
     contentToAdd: libraries.map(({ libraryName, scope: _scope, ...others }) =>
       'library' in others ? `${libraryName} = "${others.library}"` : `${libraryName} = ${tomlItemToString(others)}`,
     ),
-  });
-
-export const addGradleDependencyFromCatalogCallback = (libraries: GradleLibrary[]) =>
-  createNeedleCallback({
-    needle: 'gradle-dependency',
-    contentToAdd: libraries
-      .filter(({ scope }) => scope)
-      .map(({ libraryName, scope }) => wrapScope(scope!, `libs.${gradleNameToReference(libraryName)}`)),
   });
 
 export const addGradleDependencyCatalogPluginsCallback = (plugins: GradleTomlPlugin[]) =>
