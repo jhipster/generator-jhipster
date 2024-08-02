@@ -23,6 +23,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 
 import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
 import { mutateData } from '../base/support/config.js';
+import { QUEUES } from '../base/priorities.js';
 import files from './files.js';
 import { GRADLE } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
@@ -36,11 +37,13 @@ import {
   addGradleDependenciesCatalogVersionCallback,
   addGradleDependencyCatalogLibrariesCallback,
   addGradleDependencyCatalogPluginsCallback,
-  addGradleDependencyFromCatalogCallback,
   addGradlePluginFromCatalogCallback,
   sortDependencies,
   gradleNeedleOptionsWithDefaults,
 } from './internal/needles.js';
+import { GradleDependency } from './types.js';
+
+const { PRE_CONFLICTS_QUEUE } = QUEUES;
 
 export default class GradleGenerator extends BaseApplicationGenerator {
   gradleVersionFromWrapper;
@@ -103,6 +106,20 @@ export default class GradleGenerator extends BaseApplicationGenerator {
         source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
         source.addGradleDependencies = (dependencies, options = {}) => {
           const { gradleFile } = gradleNeedleOptionsWithDefaults(options);
+          if (gradleFile === 'build.gradle') {
+            (source as any)._gradleDependencies = source._gradleDependencies ?? [];
+            (source as any)._gradleDependencies.push(...dependencies);
+            this.queueTask({
+              method: () => {
+                this.editFile(gradleFile, addGradleDependenciesCallback((source as any)._gradleDependencies.sort(sortDependencies)));
+                (source as any)._gradleDependencies = [];
+              },
+              taskName: '_persiteGradleDependencies',
+              once: true,
+              queueName: PRE_CONFLICTS_QUEUE,
+            });
+            return;
+          }
           dependencies = [...dependencies].sort(sortDependencies);
           this.editFile(gradleFile, addGradleDependenciesCallback(dependencies));
         };
@@ -121,7 +138,7 @@ export default class GradleGenerator extends BaseApplicationGenerator {
           const { gradleFile, gradleVersionCatalogFile } = gradleNeedleOptionsWithDefaults(options);
           libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile(gradleVersionCatalogFile, addGradleDependencyCatalogLibrariesCallback(libs));
-          this.editFile(gradleFile, addGradleDependencyFromCatalogCallback(libs));
+          source.addGradleDependencies!(libs.filter(lib => lib.scope) as GradleDependency[], { gradleFile });
         };
         source.addGradleDependencyCatalogLibrary = (lib, options) => source.addGradleDependencyCatalogLibraries!([lib], options);
         source.addGradleDependencyCatalogPlugins = plugins => {

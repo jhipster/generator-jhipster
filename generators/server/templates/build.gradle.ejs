@@ -246,6 +246,7 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.retry:spring-retry"
 <%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 <%_ if (reactive) { _%>
     OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
     Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
@@ -257,7 +258,6 @@ if (addSpringMilestoneRepository) { _%>
         }
     }
 <%_ } _%>
-    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
 task cleanResources(type: Delete) {
