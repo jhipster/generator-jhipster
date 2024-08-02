@@ -235,6 +235,9 @@ export type ConfigSpec = {
    * The callback receives the generator as input for 'generator' scope.
    * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
    * The callback receives blueprintStorage contents as input for 'blueprint' scope.
+   *
+   * Default value will not be applied to generator (using 'generator' scope) in initializing priority. Use cli.default instead.
+   * Default value will be application to templates context object (application) in loading priority.
    */
   default?: string | boolean | number | string[] | ((this: CoreGenerator | void, ctx: any) => string | boolean | number | string[]);
   /**
