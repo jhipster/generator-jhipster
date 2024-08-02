@@ -23,9 +23,6 @@ exports[`generator - java:jib with defaults options should match files snapshot 
   "package.json": {
     "stateCleared": "modified",
   },
-  "pom.xml": {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": {
     "stateCleared": "modified",
   },

@@ -66,9 +66,6 @@ exports[`generator - maven with empty configuration should generate only maven f
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
-  "pom.xml": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -90,9 +87,6 @@ exports[`generator - maven with valid configuration should generate only maven f
     "stateCleared": "modified",
   },
   "mvnw.cmd": {
-    "stateCleared": "modified",
-  },
-  "pom.xml": {
     "stateCleared": "modified",
   },
 }

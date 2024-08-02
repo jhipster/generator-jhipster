@@ -30,6 +30,19 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
     <profiles>
         <profile>
             <id>prod</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>snapshotsId</id>
+                    <url>snapshotsUrl</url>
+                </snapshotRepository>
+                <repository>
+                    <id>releasesId</id>
+                    <url>releasesUrl</url>
+                </repository>
+            </distributionManagement>
+            <properties>
+                <propertyName.dotted>propertyValue</propertyName.dotted>
+            </properties>
             <dependencyManagement>
                 <dependencies>
                     <dependency>
@@ -47,19 +60,6 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                     </dependency>
                 </dependencies>
             </dependencyManagement>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>snapshotsId</id>
-                    <url>snapshotsUrl</url>
-                </snapshotRepository>
-                <repository>
-                    <id>releasesId</id>
-                    <url>releasesUrl</url>
-                </repository>
-            </distributionManagement>
-            <properties>
-                <propertyName.dotted>propertyValue</propertyName.dotted>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>dependencyGroupId</groupId>

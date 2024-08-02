@@ -26,6 +26,7 @@ const command: JHipsterCommandDefinition = {
       cli: {
         type: Boolean,
         hide: true,
+        default: true,
       },
       scope: 'generator',
     },
