@@ -18,7 +18,7 @@
  */
 import sortKeys from 'sort-keys';
 
-import { MavenArtifact, MavenProfile } from '../types.js';
+import { MavenDependency, MavenProfile } from '../types.js';
 
 export const formatPomFirstLevel = content =>
   content.replace(
@@ -97,8 +97,14 @@ const comparator = (order: string[]) => (a: string, b: string) => sortWithTempla
 
 const sortProperties = properties => sortKeys(properties, { compare: comparator(propertiesOrder) });
 
-const sortArtifacts = (artifacts: MavenArtifact[]) =>
-  artifacts.sort((a: MavenArtifact, b: MavenArtifact) => {
+const sortArtifacts = (artifacts: MavenDependency[]) =>
+  artifacts.sort((a: MavenDependency, b: MavenDependency) => {
+    if (a.scope === 'import' || b.scope === 'import') {
+      if (a.scope === b.scope) {
+        return 1;
+      }
+      return a.scope === 'import' ? -1 : 1;
+    }
     if (a.groupId !== b.groupId) {
       if (a.groupId === undefined) {
         return -1;
