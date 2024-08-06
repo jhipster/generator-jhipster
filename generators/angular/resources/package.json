@@ -16,7 +16,7 @@
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
     "tslib": "2.6.3",
-    "zone.js": "0.14.8"
+    "zone.js": "0.14.10"
   },
   "devDependencies": {
     "@angular-architects/module-federation": "18.0.4",
