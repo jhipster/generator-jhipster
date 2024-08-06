@@ -18,6 +18,30 @@ import { upperFirstCamelCase } from './string.js';
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 
 export const jhipster7deprecatedProperties = {
+  devDatabaseType: {
+    behaviorOnlyReason: 'v8: devDatabaseType is only used in jhipster:spring-data-relational generator',
+    get: ({ data }) => {
+      if (data.devDatabaseType === undefined) return data.devDatabaseType;
+      const fallbackValue = data.prodDatabaseType ?? data.databaseType;
+      // eslint-disable-next-line no-console
+      console.log(
+        `JHipster v8 behavior change(devDatabaseType is only used in jhipster:spring-data-relational generator): devDatabaseType is not set, using fallback: ${fallbackValue}`,
+      );
+      return fallbackValue;
+    },
+  },
+  prodDatabaseType: {
+    behaviorOnlyReason: 'v8: prodDatabaseType is only used in jhipster:spring-data-relational generator',
+    get: ({ data }) => data.prodDatabaseType ?? data.databaseType,
+    get: ({ data }) => {
+      if (data.prodDatabaseType === undefined) return data.prodDatabaseType;
+      // eslint-disable-next-line no-console
+      console.log(
+        `JHipster v8 behavior change(prodDatabaseType is only used in jhipster:spring-data-relational generator): devDatabaseType is not set, using fallback: ${data.databaseType}`,
+      );
+      return data.databaseType;
+    },
+  },
   GRADLE_VERSION: {
     replacement: 'gradleVersion',
     get: ({ data }) => data.gradleVersion,
@@ -300,12 +324,14 @@ const getPropertBuilder =
     const { generator, data } = context;
     const value = prop in data ? data[prop] : undefined;
     if (prop in jhipster7deprecatedProperties) {
-      const { replacement, get } = jhipster7deprecatedProperties[prop];
+      const { replacement, get, behaviorOnlyReason } = jhipster7deprecatedProperties[prop];
       const fallBackValue = get(context);
       const valueDesc = prop in data ? `Value: ${value}, ` : '';
-      log(
-        `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. ${valueDesc}FallbackValue: ${fallBackValue}`,
-      );
+      if (!behaviorOnlyReason) {
+        log(
+          `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. ${valueDesc}FallbackValue: ${fallBackValue}`,
+        );
+      }
       return value ?? fallBackValue;
     }
     if (prop?.startsWith?.('DOCKER_')) {
