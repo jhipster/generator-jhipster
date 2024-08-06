@@ -134,7 +134,7 @@ if (hasFieldConstraint) { _%>
             const otherEntityConstraintName = this.getFKConstraintName(relationship.joinTable.name, relationship.columnName, prodDatabaseType);
     _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= entity.primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
+        <addForeignKeyConstraint baseColumnNames="<%= entity.primaryKey.fields.map(field => entity.entityTableName + '_' + field.columnName).join(', ') %>"
                                  baseTableName="<%= relationship.joinTable.name %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="<%= entity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
