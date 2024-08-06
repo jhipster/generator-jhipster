@@ -46,8 +46,8 @@
     },
     "./package.json": "./package.json",
     "./eslint/recommended": {
-      "types": "./dist/types/lib/eslint/recommended.d.ts",
-      "default": "./dist/lib/eslint/recommended.js"
+      "types": "./dist/types/lib/eslint/index.d.ts",
+      "default": "./dist/lib/eslint/index.js"
     },
     "./generators": {
       "types": "./dist/types/generators/generator-list.d.ts",
