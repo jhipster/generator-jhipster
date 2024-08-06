@@ -203,7 +203,7 @@ export default class BootstrapGenerator extends BaseGenerator {
     if (!this.skipPrettier) {
       const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
       prettierTransforms.push(
-        createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js,cjs,mjs' }),
+        createESLintTransform.call(this, { ignoreErrors }),
         createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
         await createPrettierTransform.call(this, {
           ignoreErrors,

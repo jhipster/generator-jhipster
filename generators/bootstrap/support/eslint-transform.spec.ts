@@ -13,6 +13,7 @@ describe('generator - bootstrap - eslint', () => {
         path: 'foo.ts',
         contents: Buffer.from(`
 import { Foo } from 'bar';
+// eslint-disable-next-line no-console
 export const foo = 'bar';
 `),
       };
@@ -23,6 +24,7 @@ export const foo = 'bar';
         transform(() => undefined),
       );
       expect(file.contents.toString()).toBe(`
+// eslint-disable-next-line no-console
 export const foo = 'bar';
 `);
     });
