@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { basicHelpers as helpers } from '../../testing/index.js';
 

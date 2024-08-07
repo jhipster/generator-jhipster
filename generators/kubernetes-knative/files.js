@@ -37,7 +37,6 @@ const { GeneratorTypes } = kubernetesPlatformTypes;
 
 const { K8S } = GeneratorTypes;
 
-// eslint-disable-next-line import/prefer-default-export
 export function writeFiles() {
   const suffix = 'knative';
   return {

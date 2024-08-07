@@ -35,7 +35,6 @@ type CacheProviderDependencies = {
   hibernateCache?: CacheProviderDefinition;
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const getCacheProviderMavenDefinition: (
   cacheProvider: string,
   javaDependencies: Record<string, string>,

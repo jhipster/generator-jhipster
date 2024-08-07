@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-expressions */
-
 import fs from 'fs';
 import path from 'path';
 import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';

@@ -133,7 +133,7 @@ export function normalizeBlueprintName(blueprint) {
     }
     return ns.with({ unscoped: `generator-jhipster-${ns.unscoped}` }).toString();
     // eslint-disable-next-line no-empty
-  } catch (e) {}
+  } catch {}
   if (blueprint && blueprint.startsWith('@')) {
     return blueprint;
   }

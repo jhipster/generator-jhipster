@@ -13,12 +13,12 @@ export type Control = {
   reproducibleLiquibaseTimestamp?: Date;
   filterEntitiesForClient?: (entity: Entity[]) => Entity[];
   filterEntitiesAndPropertiesForClient?: (entity: Entity[]) => Entity[];
-  customizeRemoveFiles: Array<(file: string) => string | undefined>;
+  customizeRemoveFiles: ((file: string) => string | undefined)[];
   removeFiles: (options: { removedInVersion: string } | string, ...files: string[]) => Promise<void>;
   /**
    * Cleanup files conditionally based on version and condition.
    * @example
    * cleanupFiles({ '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
    */
-  cleanupFiles: (cleanup: Record<string, Array<string | [boolean, ...string[]]>>) => Promise<void>;
+  cleanupFiles: (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => Promise<void>;
 };

@@ -20,7 +20,7 @@ import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 import { Piscina } from 'piscina';
-import type prettier from 'prettier';
+import type { Options as PrettierOptions } from 'prettier';
 import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
 import type CoreGenerator from '../../base-core/index.js';
 
@@ -36,7 +36,7 @@ export const createPrettierTransform = async function (
     prettierPackageJson?: boolean;
     prettierJava?: boolean;
     prettierProperties?: boolean;
-    prettierOptions?: prettier.Options;
+    prettierOptions?: PrettierOptions;
   } = {},
 ) {
   const pool = new Piscina({

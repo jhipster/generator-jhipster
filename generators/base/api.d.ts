@@ -3,9 +3,7 @@ import type { RequireAtLeastOne, SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.js';
 
 export type ApplicationWithConfig = {
-  config: {
-    [key: string]: string | boolean | number | string[];
-  };
+  config: Record<string, string | boolean | number | string[]>;
   entities: Record<string, unknown>;
 };
 
@@ -115,7 +113,6 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
   queueCommandTasks?: boolean;
 };
 
-// eslint-disable-next-line no-use-before-define
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
 
 export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean };

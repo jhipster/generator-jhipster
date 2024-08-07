@@ -125,7 +125,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
   ) {
     try {
       printInfo(await this.spawn(command, args, { stdio: 'pipe' }));
-    } catch (_error) {
+    } catch {
       console.log(chalk.red(`'${command}' command could not be found`));
     }
   }

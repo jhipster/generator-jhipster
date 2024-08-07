@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-expressions */
-
 import { before, it, describe, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { parseFromContent } from '../readers/jdl-reader.js';

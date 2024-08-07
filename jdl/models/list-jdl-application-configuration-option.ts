@@ -24,7 +24,7 @@ export default class ListJDLApplicationConfigurationOption extends JDLApplicatio
   // TODO for v9, use set everywhere
   quoted: boolean;
 
-  constructor(name: string, value: string[], quoted: boolean = false) {
+  constructor(name: string, value: string[], quoted = false) {
     super(name, new Set(value));
     this.quoted = quoted;
   }

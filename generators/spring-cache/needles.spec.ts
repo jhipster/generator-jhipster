@@ -4,7 +4,6 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_SPRING_CACHE } from '../generator-list.js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);

@@ -21,7 +21,7 @@
  * @param {string} packageName - name of the blueprint's package name
  * @returns {string} namespace of the blueprint
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function packageNameToNamespace(packageName) {
   return packageName.replace('generator-', '');
 }

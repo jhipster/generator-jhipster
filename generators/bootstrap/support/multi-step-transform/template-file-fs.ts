@@ -25,7 +25,7 @@ import TemplateFile from './template-file.js';
 
 export default class TemplateFileFs {
   fragmentFiles: Record<string, TemplateFile>;
-  rootFiles: Array<MemFsEditorFile> = [];
+  rootFiles: MemFsEditorFile[] = [];
   extension: string;
   delimiter: string;
 

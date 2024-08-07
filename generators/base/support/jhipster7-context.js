@@ -21,9 +21,9 @@ export const jhipster7deprecatedProperties = {
   devDatabaseType: {
     behaviorOnlyReason: 'v8: devDatabaseType is only used in jhipster:spring-data-relational generator',
     get: ({ data }) => {
-      if (data.devDatabaseType === undefined) return data.devDatabaseType;
+      if (data.devDatabaseType !== undefined) return data.devDatabaseType;
       const fallbackValue = data.prodDatabaseType ?? data.databaseType;
-      // eslint-disable-next-line no-console
+
       console.log(
         `JHipster v8 behavior change(devDatabaseType is only used in jhipster:spring-data-relational generator): devDatabaseType is not set, using fallback: ${fallbackValue}`,
       );
@@ -32,10 +32,9 @@ export const jhipster7deprecatedProperties = {
   },
   prodDatabaseType: {
     behaviorOnlyReason: 'v8: prodDatabaseType is only used in jhipster:spring-data-relational generator',
-    get: ({ data }) => data.prodDatabaseType ?? data.databaseType,
     get: ({ data }) => {
-      if (data.prodDatabaseType === undefined) return data.prodDatabaseType;
-      // eslint-disable-next-line no-console
+      if (data.prodDatabaseType !== undefined) return data.prodDatabaseType;
+
       console.log(
         `JHipster v8 behavior change(prodDatabaseType is only used in jhipster:spring-data-relational generator): devDatabaseType is not set, using fallback: ${data.databaseType}`,
       );

@@ -1,5 +1,5 @@
-import { before, it, describe } from 'esmocha';
-import { basicHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { getGenerator, defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import ReactGenerator from '../../generators/react/index.js';
@@ -7,7 +7,6 @@ import BaseApplicationGenerator from '../../generators/base-application/index.js
 
 const { REACT } = clientFrameworkTypes;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);

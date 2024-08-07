@@ -9,7 +9,6 @@ const [_nodeExec, _exec, ...args] = process.argv;
 console.error('jhipster', ...args);
 
 (async () => {
-  // eslint-disable-next-line import/no-unresolved
   const { default: esbuildx } = await import('@node-loaders/esbuildx');
   await esbuildx(join(__dirname, 'cli.cjs'));
 })();

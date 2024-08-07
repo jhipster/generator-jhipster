@@ -1,14 +1,11 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*"],
+  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*", "test/**/*", ".blueprint/**/*"],
   "exclude": [
-    "generators/base-application/*.spec.*",
-    "generators/base-core/*.spec.*",
+    "generators/base-application/generator.spec.*",
+    "generators/base-core/generator-core.spec.*",
     "generators/base/**/*.spec.*",
-    "generators/base-application/*.spec.*",
-    "generators/bootstrap-application/*.spec.*",
-    "generators/bootstrap-application-base/*.spec.*",
-    "generators/java/generators/domain/*.spec.*",
-    "generators/server/support/needles.spec.ts"
+    "generators/server/support/needles.spec.ts",
+    "test/needle-api/**"
   ],
   "extends": "./tsconfig.json",
   "compilerOptions": {

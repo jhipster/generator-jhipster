@@ -4,7 +4,7 @@ import { MavenSourceType } from '../maven/types.js';
 import { LiquibaseSourceType } from '../liquibase/types.js';
 import { SpringCacheSourceType } from '../spring-cache/types.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
-import { GatewayApplication } from '../spring-cloud/generators/gateway/types.ts';
+import { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import { ApplicationPropertiesNeedles } from './support/needles.ts';
 import { MessageBrokerApplicationType } from './options/message-broker.js';

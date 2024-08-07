@@ -286,7 +286,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           const patternValidation = new JDLValidation({
             name: PATTERN,
-            // eslint-disable-next-line prettier/prettier,no-useless-escape
+
             value: '^d$',
           });
           const minBytesValidation = new JDLValidation({

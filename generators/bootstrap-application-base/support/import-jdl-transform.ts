@@ -13,7 +13,7 @@ export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinat
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesFolder = join(destinationPath, '.jhipster');
     const entitiesMatcher = new Minimatch(`${entitiesFolder}/*.json`);
-    const entityFields: Array<MemFsEditorFile> = [];
+    const entityFields: MemFsEditorFile[] = [];
 
     let jdlStoreFileInMemory: MemFsEditorFile | undefined;
     let yoRcFileInMemory: MemFsEditorFile | undefined;

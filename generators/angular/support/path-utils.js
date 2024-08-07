@@ -25,7 +25,7 @@
  * @param {string[]} prefix
  * @return {string}
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export const buildAngularFormPath = (reference, prefix = []) => {
   const formPath = [...prefix, ...reference.path].join("', '");
   return `'${formPath}'`;

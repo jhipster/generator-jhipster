@@ -141,10 +141,10 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
         const versions: JavaDependencyVersion[] = [];
         const definition = getCacheProviderMavenDefinition(cacheProvider, javaDependencies);
         versions.push(...(definition.base.versions ?? []));
-        dependencies.push(...definition.base.dependencies!);
+        dependencies.push(...definition.base.dependencies);
         if (enableHibernateCache && definition.hibernateCache) {
           versions.push(...(definition.hibernateCache.versions ?? []));
-          dependencies.push(...definition.hibernateCache.dependencies!);
+          dependencies.push(...definition.hibernateCache.dependencies);
         }
         source.addJavaDefinition?.(
           { dependencies, versions },

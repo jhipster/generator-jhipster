@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-unused-expressions */
 
 import { before, it, describe } from 'esmocha';
 import { expect } from 'chai';

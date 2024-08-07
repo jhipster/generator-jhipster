@@ -18,7 +18,7 @@
  */
 
 import JSONEntity from '../../jhipster/json-entity.js';
-import formatComment from '../../utils/format-utils.js';
+import { formatComment } from '../../utils/format-utils.js';
 import { getTableNameFromEntityNameFallback } from '../../jhipster/entity-table-name-creator.js';
 import { JDLEntity } from '../../models/index.js';
 

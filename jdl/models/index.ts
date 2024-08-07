@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export { default as JDLEntity } from './jdl-entity.js';
 export { default as JDLEnum } from './jdl-enum.js';

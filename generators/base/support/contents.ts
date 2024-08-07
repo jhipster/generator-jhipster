@@ -23,7 +23,7 @@
  * @param lineEnding
  * @returns normalized line ending string
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function normalizeLineEndings(str: string, lineEnding: string): string {
   return str.replace(/\r\n|\r|\n/g, lineEnding);
 }
@@ -35,7 +35,7 @@ export function normalizeLineEndings(str: string, lineEnding: string): string {
  *
  *  @param {string} content - the string to process
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export const stripMargin = content => {
   return content.replace(/^[ ]*\|/gm, '');
 };

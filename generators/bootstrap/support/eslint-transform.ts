@@ -22,16 +22,13 @@ import { Minimatch } from 'minimatch';
 import { Piscina } from 'piscina';
 
 import BaseGenerator from '../../base-core/index.js';
-import { getPackageRoot } from '../../../lib/index.js';
-import { JS_PRETTIER_EXTENSIONS } from '../../generator-constants.js';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const createESLintTransform = function (
   this: BaseGenerator | void,
-  transformOptions: { ignoreErrors?: boolean; extensions?: string } = {},
+  transformOptions: { ignoreErrors?: boolean; extensions?: string; cwd?: string } = {},
 ) {
-  const { extensions = JS_PRETTIER_EXTENSIONS, ignoreErrors } = transformOptions;
+  const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx', ignoreErrors, cwd } = transformOptions;
   const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
 
   const pool = new Piscina({
@@ -46,9 +43,10 @@ export const createESLintTransform = function (
       }
       const fileContents = file.contents.toString();
       const { result, error } = await pool.run({
-        resolvePluginsRelativeTo: getPackageRoot(),
+        cwd,
         filePath: file.path,
         fileContents,
+        extensions,
       });
       if (result) {
         file.contents = Buffer.from(result);

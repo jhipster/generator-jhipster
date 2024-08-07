@@ -125,7 +125,7 @@ async function _retrieveBootswatchThemes(generator, useApi) {
           }));
 
           resolve(bootswatchChoices);
-        } catch (err) {
+        } catch {
           reject(errorMessage);
         }
       },

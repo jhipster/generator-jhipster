@@ -139,7 +139,7 @@ export function getIsType(databaseType?: string, callback?: any): (type: any) =>
       isType = () => true;
       break;
     default:
-      callback && callback();
+      callback?.();
       throw new Error(
         "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
           " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'",

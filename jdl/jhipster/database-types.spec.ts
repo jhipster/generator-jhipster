@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-expressions */
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 import { databaseTypes } from '../jhipster/index.js';

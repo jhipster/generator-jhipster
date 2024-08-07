@@ -38,7 +38,6 @@ const { PROMETHEUS, NO: NO_MONITORING } = monitoringTypes;
 const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { Options: DeploymentOptions } = deploymentOptions;
 
-/* eslint-disable consistent-return */
 /**
  * @class
  * @extends {import('../base/index.js')}

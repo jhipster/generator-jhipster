@@ -39,7 +39,6 @@ describe('generator - base-application - support - prepareField', () => {
 
   describe('prepareFieldForTemplates', () => {
     describe('when called', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let field: any = { fieldName: 'name', fieldType: 'String' };
       beforeEach(() => {
         field = prepareFieldForTemplates(defaultEntity, field, defaultGenerator);
@@ -58,7 +57,6 @@ describe('generator - base-application - support - prepareField', () => {
       });
     });
     describe('with dto == mapstruct and @MapstructExpression', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let field: any = { fieldName: 'name', fieldType: 'String', mapstructExpression: 'java()' };
       beforeEach(() => {
         field = prepareFieldForTemplates({ ...defaultEntity, dto: 'mapstruct' }, field, defaultGenerator);

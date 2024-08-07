@@ -157,7 +157,7 @@ describe('integration-test', () => {
   });
 
   describe('::entities samples reproducibility', () => {
-    const changelogDates = [];
+    const changelogDates: string[] = [];
     for (const [name, entitySample] of itEntitiesSamplesEntries) {
       let entityJson = readJsonSync(entitySample);
       before(() => {

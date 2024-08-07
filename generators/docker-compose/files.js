@@ -22,7 +22,6 @@ const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE } = applicationTypes;
 const { OAUTH2 } = authenticationTypes;
 
-// eslint-disable-next-line import/prefer-default-export
 export function writeFiles() {
   return {
     cleanup() {

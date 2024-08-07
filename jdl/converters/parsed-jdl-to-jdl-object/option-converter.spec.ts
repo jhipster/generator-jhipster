@@ -71,7 +71,7 @@ describe('jdl - OptionConverter', () => {
             convertedOptions = convertOptions(
               {
                 [optionName]: {
-                  [optionValue!]: { list: ['A'], excluded: ['B'] },
+                  [optionValue]: { list: ['A'], excluded: ['B'] },
                 },
               },
               [],

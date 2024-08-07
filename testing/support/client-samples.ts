@@ -24,5 +24,4 @@ export const buildClientSamples = (commonConfig?: Record<string, unknown>): Reco
   return buildSamplesFromMatrix(clientMatrix, { commonConfig });
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const clientSamples = buildClientSamples();

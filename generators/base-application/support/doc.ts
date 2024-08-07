@@ -30,7 +30,7 @@ const isSimpleText = (previousLine, text) => {
 /**
  * Format As Liquibase Remarks
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export const formatDocAsSingleLine = (text: string): string => {
   let [description, ...rows] = text.split('\n');
   // discard blank rows

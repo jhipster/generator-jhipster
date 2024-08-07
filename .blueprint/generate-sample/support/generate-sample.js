@@ -1,13 +1,13 @@
 import { cpSync, existsSync, mkdirSync } from 'fs';
-import { join, resolve } from 'path';
+import { join } from 'path';
 import process from 'process';
 import { globSync } from 'glob';
 import { execa } from 'execa';
 
+import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, jhipsterBin, samplesFolder } from '../../constants.js';
 import getSamples, { DAILY_PREFIX, isDaily } from './get-workflow-samples.js';
 import copyEntitySamples from './copy-entity-samples.js';
 import copyJdlEntitySamples from './copy-jdl-entity-samples.js';
-import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, jhipsterBin, samplesFolder } from '../../constants.js';
 
 const commonCliOptions = ['--skip-jhipster-dependencies', '--skip-checks', '--skip-install', '--no-insight'];
 
@@ -34,6 +34,7 @@ export const generateSample = async (
   process.chdir(destProjectFolder);
 
   if (!sample) {
+    // eslint-disable-next-line no-console
     console.log(`Sample ${sampleName} was not found`);
   }
 

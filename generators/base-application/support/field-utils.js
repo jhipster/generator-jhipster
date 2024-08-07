@@ -39,7 +39,6 @@ const {
   BLOB,
 } = CommonDBTypes;
 
-// eslint-disable-next-line import/prefer-default-export
 export function fieldIsEnum(fieldType) {
   return ![
     STRING,

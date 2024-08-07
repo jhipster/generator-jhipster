@@ -58,7 +58,7 @@ export function createFolderIfItDoesNotExist(directory: string) {
 function getStatObject(file: string) {
   try {
     return fs.statSync(file);
-  } catch (error) {
+  } catch {
     return false;
   }
 }

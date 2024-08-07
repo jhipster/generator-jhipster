@@ -24,7 +24,7 @@
  * @param {Object} application
  * @param {Object} entity
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function cleanupOldFiles({
   application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
   entity: { entityClass, entityAbsoluteFolder },

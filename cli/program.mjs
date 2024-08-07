@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-/* eslint-disable import/no-dynamic-require */
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -334,7 +332,7 @@ export const buildJHipster = async ({
   printBlueprintLogo,
   devBlueprintPath,
   env,
-  /* eslint-disable-next-line global-require, import/no-dynamic-require */
+
   loadCommand = async key => {
     const { default: command } = await import(`./${key}.mjs`);
     return command;
@@ -342,7 +340,6 @@ export const buildJHipster = async ({
   defaultCommand,
   entrypointGenerator,
 } = {}) => {
-  // eslint-disable-next-line chai-friendly/no-unused-expressions
   createEnvBuilder =
     createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath }));
   envBuilder = envBuilder ?? (await createEnvBuilder());

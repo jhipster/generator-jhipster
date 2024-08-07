@@ -45,15 +45,14 @@ export default function parseFromDir(dir: string): JDLObject {
       const entityName = file.slice(0, file.length - 5);
       try {
         entities.set(entityName, readJSONFile(`${entityDir}/${file}`));
-      } catch (error) {
+      } catch {
         // Not an entity file, not adding
       }
     }
   });
   const applicationOptions = readJSONFile(`${dir}/.yo-rc.json`)['generator-jhipster'];
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-expect-error TODO
   const jdlObject = convertServerOptionsToJDL(applicationOptions);
   const convertedJDLObject = convertEntitiesToJDL(entities);
   return mergeJDLObjects(jdlObject, convertedJDLObject);

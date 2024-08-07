@@ -24,7 +24,6 @@ import { databaseTypes } from '../../../jdl/index.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
-// eslint-disable-next-line import/prefer-default-export
 export const addEntitiesOtherRelationships = (entities: JSONEntity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities.filter(entity => !entity.builtIn)) {

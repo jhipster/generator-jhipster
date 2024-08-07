@@ -21,5 +21,4 @@ const isReproducible = generator => {
   return generator.options.reproducible;
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export { isReproducible };

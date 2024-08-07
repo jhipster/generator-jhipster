@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -18,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable consistent-return */
 import { existsSync } from 'fs';
 import chalk from 'chalk';
 

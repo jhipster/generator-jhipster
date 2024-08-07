@@ -31,7 +31,7 @@ describe('generator - server - checkJava', () => {
     let result;
 
     before(async () => {
-      execa.execaCommandSync.mockReturnValue({ ...baseResult, stderr } as any);
+      execa.execaCommandSync.mockReturnValue({ ...baseResult, stderr });
       const { default: checkJava } = await import('./check-java.js');
       result = checkJava([]);
     });
@@ -50,7 +50,7 @@ describe('generator - server - checkJava', () => {
     let result;
 
     before(async () => {
-      execa.execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr } as any);
+      execa.execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr });
       const { default: checkJava } = await import('./check-java.js');
       result = checkJava([]);
     });

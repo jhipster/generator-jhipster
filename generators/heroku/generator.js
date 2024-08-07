@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
+
 import { kebabCase } from 'lodash-es';
 import chalk from 'chalk';
 import { glob } from 'glob';

@@ -311,9 +311,8 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   field.createRandexp = () => {
     // check if regex is valid. If not, issue warning and we skip fake data generation.
     try {
-      // eslint-disable-next-line no-new
       new RegExp(field.fieldValidateRulesPattern);
-    } catch (e) {
+    } catch {
       generator.log.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
     }

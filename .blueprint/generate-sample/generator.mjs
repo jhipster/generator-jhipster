@@ -2,9 +2,9 @@ import { basename, extname, resolve } from 'path';
 import { transform } from '@yeoman/transform';
 import BaseGenerator from '../../generators/base/index.js';
 import { packageJson } from '../../lib/index.js';
-import { generateSample, entitiesByType } from './support/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
+import { generateSample, entitiesByType } from './support/index.js';
 
 export default class extends BaseGenerator {
   sampleName;

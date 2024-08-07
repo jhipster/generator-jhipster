@@ -70,7 +70,6 @@ export const auditableEntityFields = () => [
 
 const authorityEntityName = 'Authority';
 
-// eslint-disable-next-line import/prefer-default-export
 export function createUserEntity(customUserData = {}, application) {
   const userEntityDefinition = this.getEntityConfig('User')?.getAll();
   if (userEntityDefinition) {

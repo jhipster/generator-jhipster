@@ -132,7 +132,7 @@ export async function askForIngressDomain() {
     try {
       const { stdout: istioIngressIp } = this.spawnCommandSync(istioIpCommand, { stdio: 'pipe' });
       defaultValue = `${istioIngressIp}.nip.io`;
-    } catch (ex) {
+    } catch {
       istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
     }
   } else if (this.ingressType === NGINX) {

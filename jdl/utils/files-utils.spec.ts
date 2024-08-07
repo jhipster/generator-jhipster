@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-expressions */
-
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';

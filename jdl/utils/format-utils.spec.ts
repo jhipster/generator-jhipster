@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';
-import formatComment from '../utils/format-utils.js';
+import { formatComment } from '../utils/format-utils.js';
 
 describe('jdl - FormatUtils', () => {
   describe('formatComment', () => {

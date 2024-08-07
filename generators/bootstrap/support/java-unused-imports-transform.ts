@@ -7,7 +7,6 @@ import { Piscina } from 'piscina';
 import type CoreGenerator from '../../base-core/index.js';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const createRemoveUnusedImportsTransform = function (
   this: CoreGenerator,
   options: {

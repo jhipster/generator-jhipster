@@ -82,8 +82,8 @@ function init(passedConfiguration: ParsedJDLRoot) {
 
 function fillApplications(): void {
   // TODO: Function which expects two arguments is called with three.
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+
+  // @ts-expect-error TODO
   const jdlApplications: JDLApplication[] = convertApplications(parsedContent.applications, configuration, entityNames);
   jdlApplications.forEach((jdlApplication: JDLApplication) => {
     jdlObject.addApplication(jdlApplication);
@@ -147,7 +147,7 @@ function fillAssociations(): void {
   const jdlRelationships = convertRelationships(parsedContent.relationships, convertAnnotationsToOptions);
   jdlRelationships.forEach(jdlRelationship => {
     // TODO: addRelationship only expects one argument.
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     jdlObject.addRelationship(jdlRelationship);
   });
 }

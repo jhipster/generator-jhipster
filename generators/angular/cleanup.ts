@@ -25,7 +25,7 @@ import { GeneratorDefinition } from '../base-application/generator.js';
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export default function cleanupOldFilesTask(this: CoreGenerator, { application }: GeneratorDefinition['writingTaskParam']) {
   if (this.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup

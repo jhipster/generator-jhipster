@@ -17,7 +17,8 @@ const MATRIX_FILE = 'matrix.json';
 let existing = {};
 try {
   existing = JSON.parse(readFileSync(MATRIX_FILE));
-} catch (_) {
+} catch {
+  // eslint-disable-next-line no-console
   console.log(`File ${MATRIX_FILE} not found`);
   existing = { include: [] };
 }
@@ -67,6 +68,7 @@ writeFileSync(
                   };
                 });
             } catch (error) {
+              // eslint-disable-next-line no-console
               console.log(`File ${file} not found`, error);
               return [];
             }

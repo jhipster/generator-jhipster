@@ -404,8 +404,6 @@ export default class EnvironmentBuilder {
     }
     let result;
     for (const [blueprint, packagePath] of blueprintPackagePaths) {
-      /* eslint-disable import/no-dynamic-require */
-      /* eslint-disable global-require */
       let blueprintCommand;
       const blueprintCommandFile = `${packagePath}/cli/commands`;
       const blueprintCommandExtension = ['.js', '.cjs', '.mjs'].find(extension => existsSync(`${blueprintCommandFile}${extension}`));
@@ -418,7 +416,7 @@ export default class EnvironmentBuilder {
             commandSpec.blueprint = commandSpec.blueprint || blueprint;
           });
           result = { ...result, ...blueprintCommands };
-        } catch (e) {
+        } catch {
           const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`;
           /* eslint-disable no-console */
           console.info(`${chalk.green.bold('INFO!')} ${msg}`);
@@ -456,8 +454,6 @@ export default class EnvironmentBuilder {
     }
 
     async function loadSharedOptionsFromFile(sharedOptionsBase, msg, errorMsg) {
-      /* eslint-disable import/no-dynamic-require */
-      /* eslint-disable global-require */
       try {
         const baseExtension = ['.js', '.cjs', '.mjs'].find(extension => existsSync(resolve(`${sharedOptionsBase}${extension}`)));
         if (baseExtension) {

@@ -2,7 +2,6 @@ import { TEMPLATES_DOCKER_DIR } from '../generator-constants.js';
 
 const renameTo = (ctx, filepath) => `${ctx.dockerServicesDir}${filepath}`.replace('/_eureka_', '').replace('/_consul_', '');
 
-// eslint-disable-next-line import/prefer-default-export
 export const dockerFiles = {
   commonFiles: [
     {

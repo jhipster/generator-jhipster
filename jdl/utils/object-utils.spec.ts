@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { before, it, describe, after } from 'esmocha';
 import { expect } from 'chai';
 import { areEntitiesEqual, merge } from '../utils/object-utils.js';

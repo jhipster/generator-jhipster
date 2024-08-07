@@ -6,7 +6,7 @@ import { ValidationResult } from '../../base/api.js';
 /**
  * Generate a KeyStore.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export async function generateKeyStore(keyStoreFile: string, { packageName }: { packageName: string }): Promise<ValidationResult> {
   try {
     const stat = await lstat(keyStoreFile);

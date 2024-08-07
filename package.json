@@ -46,8 +46,8 @@
     },
     "./package.json": "./package.json",
     "./eslint/recommended": {
-      "types": "./dist/types/lib/eslint/recommended.d.ts",
-      "default": "./dist/lib/eslint/recommended.js"
+      "types": "./dist/types/lib/eslint/index.d.ts",
+      "default": "./dist/lib/eslint/index.js"
     },
     "./generators": {
       "types": "./dist/types/generators/generator-list.d.ts",
@@ -101,7 +101,7 @@
     "copy-files": "cpy \"jdl/*.json\" \"dist/jdl\" && cpy \"generators/**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" dist/generators",
     "copy-types": "cpy \"generators/**/*.d.(|c|m)ts\" dist/types/generators && cpy \"jdl/**/*.d.(|c|m)ts\" dist/types/jdl",
     "ejslint": "ejslint generators/**/*.ejs",
-    "eslint": "eslint . --ext .js,.cjs,.mjs,.ts,.cts,.mts --max-warnings 5",
+    "eslint": "eslint . --max-warnings 5",
     "jdl:test": "esmocha jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
@@ -117,13 +117,12 @@
     "update-snapshots": "esmocha jdl generators cli --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
+    "@eslint/compat": "1.1.1",
     "@eslint/js": "9.8.0",
     "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
     "@types/lodash": "4.17.6",
-    "@typescript-eslint/eslint-plugin": "7.18.0",
-    "@typescript-eslint/parser": "7.18.0",
     "@yeoman/adapter": "1.4.0",
     "@yeoman/conflicter": "2.0.0",
     "@yeoman/namespace": "1.0.0",
@@ -139,12 +138,13 @@
     "dockerfile-ast": "0.6.1",
     "dot-properties": "1.0.1",
     "ejs": "3.1.10",
-    "eslint": "8.57.0",
+    "eslint": "9.8.0",
     "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-unused-imports": "3.2.0",
+    "eslint-plugin-unused-imports": "4.0.1",
     "execa": "9.3.0",
     "fast-xml-parser": "4.4.1",
     "glob": "10.4.2",
+    "globals": "15.9.0",
     "isbinaryfile": "5.0.2",
     "java-lint": "0.3.0",
     "js-yaml": "4.1.0",
@@ -169,6 +169,7 @@
     "sort-keys": "5.0.0",
     "type-fest": "4.23.0",
     "typescript": "5.4.5",
+    "typescript-eslint": "8.0.1",
     "winston": "3.13.1",
     "yaml": "2.5.0",
     "yeoman-environment": "4.4.1",
@@ -184,8 +185,8 @@
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.0",
     "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "3.6.1",
     "eslint-plugin-chai-friendly": "1.0.1",
-    "eslint-plugin-mocha": "10.5.0",
     "eslint-plugin-prettier": "5.2.1",
     "esmocha": "1.2.0",
     "jest-extended": "4.0.2",
@@ -214,5 +215,10 @@
     "type": "opencollective",
     "url": "https://opencollective.com/generator-jhipster",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "overrides": {
+    "eslint-plugin-import": {
+      "eslint": "$eslint"
+    }
   }
 }

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const mavenProfileContent = data => {
   return `
             <!-- force dependency version as used bonsai add-on as of now only supports 7.10.x -->

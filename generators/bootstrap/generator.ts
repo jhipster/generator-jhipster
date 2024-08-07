@@ -21,7 +21,7 @@ import { forceYoFiles, createConflicterTransform, createYoResolveTransform } fro
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified, isFilePending } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
-import prettier from 'prettier';
+import { Options as PrettierOptions } from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
 
 import BaseGenerator from '../base/index.js';
@@ -55,7 +55,7 @@ export default class BootstrapGenerator extends BaseGenerator {
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
-  prettierOptions: prettier.Options = { plugins: [] };
+  prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
 
   constructor(args: any, options: any, features: any) {
@@ -192,18 +192,18 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(
     { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
-    ...transforms: Array<FileTransform<MemFsEditorFile>>
+    ...transforms: FileTransform<MemFsEditorFile>[]
   ) {
-    const skipYoResolveTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    const skipYoResolveTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (!this.options.skipYoResolve) {
       skipYoResolveTransforms.push(createYoResolveTransform());
     }
 
-    const prettierTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    const prettierTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (!this.skipPrettier) {
       const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
       prettierTransforms.push(
-        createESLintTransform.call(this, { ignoreErrors, extensions: 'ts,js,cjs,mjs' }),
+        createESLintTransform.call(this, { ignoreErrors }),
         createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
         await createPrettierTransform.call(this, {
           ignoreErrors,
@@ -215,7 +215,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       );
     }
 
-    const autoCrlfTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    const autoCrlfTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (this.jhipsterConfig.autoCrlf) {
       autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
     }

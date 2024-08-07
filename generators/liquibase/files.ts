@@ -22,7 +22,6 @@ import { moveToJavaPackageSrcDir } from '../server/support/index.js';
 import { CommonClientServerApplication } from '../base-application/types.js';
 import type LiquibaseGenerator from './generator.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientServerApplication> = {
   liquibase: [
     {

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return, import/no-named-as-default-member */
+
 import fs from 'fs';
 import chalk from 'chalk';
 
@@ -185,7 +185,7 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
         try {
           fs.chmodSync('helm-apply.sh', '755');
           fs.chmodSync('helm-upgrade.sh', '755');
-        } catch (err) {
+        } catch {
           this.log.warn(
             "Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh",
           );

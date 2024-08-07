@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
+
 import fs from 'fs';
 import chalk from 'chalk';
 
@@ -76,7 +76,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
           await this.spawnCommand(
             'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\\.[8-9]{1,3}\\.[0-9]*',
           );
-        } catch (error) {
+        } catch {
           this.log.warn(
             'Knative 0.8.* or later is not installed on your computer.\n' +
               'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n',
@@ -218,7 +218,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
           // Make the apply script executable
           try {
             fs.chmodSync('kubectl-knative-apply.sh', '755');
-          } catch (err) {
+          } catch {
             this.log.warn("Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'");
           }
         } else {
@@ -229,7 +229,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
           try {
             fs.chmodSync('helm-knative-apply.sh', '755');
             fs.chmodSync('helm-knative-upgrade.sh', '755');
-          } catch (err) {
+          } catch {
             this.log.warn(
               "Failed to make 'helm-knative-apply.sh', 'helm-knative-upgrade.sh' executable, you may need to run 'chmod +x helm-knative-apply.sh helm-knative-upgrade.sh",
             );

@@ -200,7 +200,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           this.options.entities ?? entities.filter(entity => !entity.builtIn && !entity.skipServer).map(entity => entity.name);
         // Write only specified entities changelogs.
         const changes = entityChanges.filter(
-          databaseChangelog => entitiesToWrite!.length === 0 || entitiesToWrite!.includes(databaseChangelog.entityName),
+          databaseChangelog => entitiesToWrite.length === 0 || entitiesToWrite.includes(databaseChangelog.entityName),
         );
 
         for (const databaseChangelog of changes) {
@@ -697,7 +697,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
       return undefined;
     }
 
-    // eslint-disable-next-line no-nested-ternary
     const entityChanges = databaseChangelog.changelogData;
     entityChanges.skipFakeData = application.skipFakeData || entity.skipFakeData;
 

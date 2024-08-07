@@ -15,5 +15,4 @@ export const getPackageRoot = (relativePath?: string) => {
   return relativePath ? join(packageDirectory, relativePath) : packageDirectory;
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const packageJson = JSON.parse(readFileSync(getPackageRoot('package.json')).toString());

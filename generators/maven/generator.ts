@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
+
 import assert from 'node:assert/strict';
 import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
@@ -98,7 +98,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         source.addMavenProperty = properties => {
           properties = Array.isArray(properties) ? properties : [properties];
           for (const property of properties) {
-            javaProperties![property.property] = property.value!;
+            javaProperties[property.property] = property.value!;
             this.pomStorage.addProperty(property);
           }
         };
