@@ -1,25 +1,30 @@
 import globals from 'globals';
+import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 import chai from 'eslint-plugin-chai-friendly';
-import jhipster from './lib/eslint/recommended.js';
+import importRecommented from 'eslint-plugin-import/config/recommended.js';
+import jhipster from './lib/eslint/index.js';
 
 export default ts.config(
   {
     languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
       globals: {
         ...globals.node,
       },
     },
   },
   { ignores: ['dist'] },
-  jhipster,
+  js.configs.recommended,
+  jhipster.base,
   {
     files: ['**/*.ts'],
-    extends: [...ts.configs.stylistic],
+    extends: [...ts.configs.recommended, ...ts.configs.stylistic],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.spec.json'],
+        project: ['./tsconfig.spec.json', './tsconfig.eslint.json'],
       },
     },
     rules: {
@@ -28,42 +33,62 @@ export default ts.config(
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/prefer-for-of': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
     },
   },
   {
-    files: ['**/*.spec.ts', 'testing/**/*', 'test/**/*'],
+    files: ['**/*.spec.{js,ts}'],
+    rules: {
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+  {
+    languageOptions: {
+      // import plugin does not use ecmaVersion and sourceType from languageOptions object
+      parserOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+      },
+    },
+    settings: {
+      'import/parsers': {
+        espree: ['.js', '.cjs', '.mjs'],
+        '@typescript-eslint/parser': ['.ts'],
+      },
+      'import/resolver': {
+        node: true,
+        typescript: true,
+      },
+    },
+    rules: {
+      ...importRecommented.rules,
+      'import/no-named-as-default-member': 'off',
+      'import/named': 'off',
+      'import/extensions': [0, { pattern: { '{c,m,}{js,ts}': 'always' } }],
+      'import/prefer-default-export': 'off',
+      'import/namespace': 'off',
+    },
+  },
+  {
+    files: ['bin/**/*', '**/*.spec.ts', 'testing/**/*', 'test/**/*'],
     rules: {
       'import/no-unresolved': 'off',
     },
   },
   {
     rules: {
-      'default-param-last': 'off',
-      'prefer-regex-literals': 'off',
-      'linebreak-style': 0,
-      'eol-last': 2,
-      quotes: [2, 'single', { avoidEscape: true }],
-      semi: [2, 'always'],
-      eqeqeq: [2, 'smart'],
-      'no-restricted-globals': ['off'],
-      'no-restricted-exports': 'off',
-      'no-use-before-define': [2, 'nofunc'],
-      'no-confusing-arrow': 'off',
-      'no-multi-str': 2,
-      'no-promise-executor-return': 'off',
-      'no-irregular-whitespace': 2,
-      'comma-dangle': 'off',
-      'max-len': 'off',
-      'func-names': 'off',
-      'class-methods-use-this': 'off',
-      'no-underscore-dangle': 'off',
-      'no-plusplus': 'off',
-      'no-unused-expressions': 0,
-      'prefer-destructuring': 'off',
-      'no-multi-assign': 'off',
-      'no-param-reassign': 'off',
-      'lines-between-class-members': [2, 'always', { exceptAfterSingleLine: true }],
-      'no-await-in-loop': 'off',
+      'eol-last': 'error',
+      quotes: ['error', 'single', { avoidEscape: true }],
+      semi: ['error', 'always'],
+      eqeqeq: ['error', 'smart'],
+      'no-use-before-define': ['error', 'nofunc'],
+      'no-multi-str': 'error',
+      'no-irregular-whitespace': 'error',
+      'no-console': 'error',
+      'no-template-curly-in-string': 'error',
+      'no-nested-ternary': 'error',
+      'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
       'no-restricted-syntax': [
         'error',
         {
@@ -80,9 +105,6 @@ export default ts.config(
           message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
         },
       ],
-      'no-shadow': 'off',
-      'import/extensions': [0, { pattern: { '{c,m,}{js,ts}': 'always' } }],
-      'import/prefer-default-export': 'off',
     },
   },
   {

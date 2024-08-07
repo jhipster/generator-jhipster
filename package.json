@@ -117,6 +117,7 @@
     "update-snapshots": "esmocha jdl generators cli --update-snapshot --no-insight --forbid-only"
   },
   "dependencies": {
+    "@eslint/compat": "1.1.1",
     "@eslint/js": "9.8.0",
     "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
@@ -184,6 +185,7 @@
     "cpy-cli": "5.0.0",
     "ejs-lint": "2.0.0",
     "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-chai-friendly": "1.0.1",
     "eslint-plugin-prettier": "5.2.1",
     "esmocha": "1.2.0",
