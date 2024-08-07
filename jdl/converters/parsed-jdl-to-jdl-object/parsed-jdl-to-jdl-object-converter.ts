@@ -83,7 +83,7 @@ function init(passedConfiguration: ParsedJDLRoot) {
 function fillApplications(): void {
   // TODO: Function which expects two arguments is called with three.
 
-  // @ts-expect-error
+  // @ts-expect-error TODO
   const jdlApplications: JDLApplication[] = convertApplications(parsedContent.applications, configuration, entityNames);
   jdlApplications.forEach((jdlApplication: JDLApplication) => {
     jdlObject.addApplication(jdlApplication);

@@ -34,6 +34,7 @@ export const generateSample = async (
   process.chdir(destProjectFolder);
 
   if (!sample) {
+    // eslint-disable-next-line no-console
     console.log(`Sample ${sampleName} was not found`);
   }
 

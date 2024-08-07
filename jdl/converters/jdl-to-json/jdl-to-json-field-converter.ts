@@ -19,7 +19,7 @@
 import { capitalize } from 'lodash-es';
 
 import { validations } from '../../jhipster/index.js';
-import formatComment from '../../utils/format-utils.js';
+import { formatComment } from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';
 import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';

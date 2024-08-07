@@ -679,7 +679,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     let existingGenerator: string;
     try {
       existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
-    } catch (error) {
+    } catch {
       if (this.options.namespace) {
         const split = this.options.namespace.split(':', 2);
         existingGenerator = split.length === 1 ? split[0] : split[1];
@@ -771,7 +771,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         this.log.info(`Removing legacy folder ${relativePath}`);
         rmSync(destinationFolder, { recursive: true });
       }
-    } catch (error) {
+    } catch {
       this.log.log(`Could not remove folder ${destinationFolder}`);
     }
   }
@@ -1151,7 +1151,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     let originalContent;
     try {
       originalContent = this.readDestination(filePath);
-    } catch (_error) {
+    } catch {
       // null return should be treated like an error.
     }
 

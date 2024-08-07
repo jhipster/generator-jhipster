@@ -53,7 +53,7 @@ export function convertToJDL(directory = '.', output: string | false = 'app.jdl'
   } else {
     try {
       jdlObject = getJDLObjectFromMultipleApplications(directory);
-    } catch (error) {
+    } catch {
       return undefined;
     }
   }

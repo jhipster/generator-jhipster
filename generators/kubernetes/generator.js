@@ -211,7 +211,7 @@ export default class KubernetesGenerator extends BaseWorkspacesGenerator {
         // Make the apply script executable
         try {
           fs.chmodSync('kubectl-apply.sh', '755');
-        } catch (err) {
+        } catch {
           this.log.warn("Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'");
         }
       },

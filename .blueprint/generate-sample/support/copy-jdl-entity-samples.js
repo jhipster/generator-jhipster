@@ -5,7 +5,7 @@ import { jdlEntitiesSamplesFolder } from '../../constants.js';
 const isDirectory = dir => {
   try {
     return statSync(dir).isDirectory();
-  } catch (error) {
+  } catch {
     return false;
   }
 };

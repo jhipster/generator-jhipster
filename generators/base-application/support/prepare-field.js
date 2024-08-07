@@ -312,7 +312,7 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
     // check if regex is valid. If not, issue warning and we skip fake data generation.
     try {
       new RegExp(field.fieldValidateRulesPattern);
-    } catch (e) {
+    } catch {
       generator.log.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
     }

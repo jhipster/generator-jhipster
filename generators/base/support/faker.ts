@@ -58,7 +58,7 @@ export async function createFaker(nativeLanguage = 'en') {
   // See https://github.com/faker-js/faker/pull/642
   try {
     locale = (await import(`@faker-js/faker`))[nativeLanguage];
-  } catch (error) {
+  } catch {
     // Faker not implemented for the native language, fallback to en.
 
     locale = (await import('@faker-js/faker')).en;

@@ -18,6 +18,7 @@ let existing = {};
 try {
   existing = JSON.parse(readFileSync(MATRIX_FILE));
 } catch {
+  // eslint-disable-next-line no-console
   console.log(`File ${MATRIX_FILE} not found`);
   existing = { include: [] };
 }

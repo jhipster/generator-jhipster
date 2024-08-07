@@ -307,13 +307,13 @@ plugins {
         Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => args[0])]),
       );
       if (sourceCallsArg.addEntitiesToClient) {
-        sourceCallsArg.addEntitiesToClient = (sourceCallsArg.addEntitiesToClient as any).map(({ application, entities }) => ({
+        sourceCallsArg.addEntitiesToClient = sourceCallsArg.addEntitiesToClient.map(({ application, entities }) => ({
           application: `Application[${application.baseName}]`,
           entities: entities.map(entity => `Entity[${entity.name}]`),
         }));
       }
       if (sourceCallsArg.addEntityToCache) {
-        sourceCallsArg.addEntityToCache = (sourceCallsArg.addEntityToCache as any).map(({ relationships, ...fields }) => ({
+        sourceCallsArg.addEntityToCache = sourceCallsArg.addEntityToCache.map(({ relationships, ...fields }) => ({
           ...fields,
           relationships: relationships.map(rel => `Relationship[${rel.relationshipName}]`),
         }));

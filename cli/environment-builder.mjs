@@ -416,7 +416,7 @@ export default class EnvironmentBuilder {
             commandSpec.blueprint = commandSpec.blueprint || blueprint;
           });
           result = { ...result, ...blueprintCommands };
-        } catch (e) {
+        } catch {
           const msg = `Error parsing custom commands found within blueprint: ${blueprint} at ${blueprintCommandsUrl}`;
           /* eslint-disable no-console */
           console.info(`${chalk.green.bold('INFO!')} ${msg}`);

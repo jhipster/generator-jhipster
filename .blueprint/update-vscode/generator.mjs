@@ -22,6 +22,7 @@ export default class extends BaseGenerator {
               request: 'launch',
               internalConsoleOptions: 'neverOpen',
               name: 'update vscode launch.json',
+              // eslint-disable-next-line no-template-curly-in-string
               program: '${workspaceFolder}/test-integration/scripts/99-update-vscode.js',
               console: 'integratedTerminal',
             },
@@ -41,6 +42,7 @@ export default class extends BaseGenerator {
             request: 'launch',
             internalConsoleOptions: 'neverOpen',
             name: `generate sample from ${workflowName} workflow`,
+            // eslint-disable-next-line no-template-curly-in-string
             program: '${workspaceFolder}/bin/jhipster.cjs',
             args: ['generate-sample', `\${input:${workflowName}Sample}`, '--global'],
             console: 'integratedTerminal',

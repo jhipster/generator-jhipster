@@ -52,7 +52,7 @@ export default function parseFromDir(dir: string): JDLObject {
   });
   const applicationOptions = readJSONFile(`${dir}/.yo-rc.json`)['generator-jhipster'];
 
-  // @ts-expect-error
+  // @ts-expect-error TODO
   const jdlObject = convertServerOptionsToJDL(applicationOptions);
   const convertedJDLObject = convertEntitiesToJDL(entities);
   return mergeJDLObjects(jdlObject, convertedJDLObject);

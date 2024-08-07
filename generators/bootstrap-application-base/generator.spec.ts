@@ -23,7 +23,7 @@ import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { parseChangelog } from '../base/support/timestamp.ts';
+import { parseChangelog } from '../base/support/timestamp.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);

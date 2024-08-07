@@ -82,6 +82,7 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
                 {
                   groupId: 'org.openapitools',
                   artifactId: 'openapi-generator-maven-plugin',
+                  // eslint-disable-next-line no-template-curly-in-string
                   version: '${openapi-generator-maven-plugin.version}',
                   additionalContent: `                <executions>
                     <execution>

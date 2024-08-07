@@ -340,7 +340,6 @@ export const buildJHipster = async ({
   defaultCommand,
   entrypointGenerator,
 } = {}) => {
-  // eslint-disable-next-line chai-friendly/no-unused-expressions
   createEnvBuilder =
     createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath }));
   envBuilder = envBuilder ?? (await createEnvBuilder());

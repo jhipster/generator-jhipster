@@ -42,7 +42,7 @@ function getUselessTokens(usedTokens: any[], allDefinedTokens: any[]) {
   const usedCategories = uniq(flatMap(usedTokens, 'CATEGORIES'));
   // TODO: Calling uniq with two parameters is probably a bug.
 
-  // @ts-expect-error
+  // @ts-expect-error TODO
   const notDirectlyUsedTokens = difference(allDefinedTokens, uniq(usedTokens, usedCategories));
   const redundant = reject(notDirectlyUsedTokens, token => {
     const tokCategories = token.CATEGORIES;
