@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
-
 import { writeFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';

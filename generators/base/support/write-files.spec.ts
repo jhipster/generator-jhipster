@@ -32,7 +32,7 @@ describe('generator - base - support - writeFiles', () => {
 
     it('with a callback, should return the callback return', () => {
       const mock = esmocha.fn().mockReturnValue('return1');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const callback = joinCallbacks(mock as EditFileCallback<any>);
 
       expect(callback('original', 'file')).toBe('return1');
@@ -44,7 +44,7 @@ describe('generator - base - support - writeFiles', () => {
     it('with two callbacks, should forward last callback and return the last callback return', () => {
       const mock1 = esmocha.fn().mockReturnValue('return1');
       const mock2 = esmocha.fn().mockReturnValue('return2');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const callback = joinCallbacks(mock1 as EditFileCallback<any>, mock2 as EditFileCallback<any>);
 
       expect(callback('original', 'file')).toBe('return2');

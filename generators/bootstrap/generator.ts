@@ -192,14 +192,14 @@ export default class BootstrapGenerator extends BaseGenerator {
    */
   async commitSharedFs(
     { log, ...options }: PipelineOptions<MemFsEditorFile> & { log?: string } = {},
-    ...transforms: Array<FileTransform<MemFsEditorFile>>
+    ...transforms: FileTransform<MemFsEditorFile>[]
   ) {
-    const skipYoResolveTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    const skipYoResolveTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (!this.options.skipYoResolve) {
       skipYoResolveTransforms.push(createYoResolveTransform());
     }
 
-    const prettierTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    const prettierTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (!this.skipPrettier) {
       const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
       prettierTransforms.push(
@@ -215,7 +215,7 @@ export default class BootstrapGenerator extends BaseGenerator {
       );
     }
 
-    const autoCrlfTransforms: Array<FileTransform<MemFsEditorFile>> = [];
+    const autoCrlfTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (this.jhipsterConfig.autoCrlf) {
       autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
     }

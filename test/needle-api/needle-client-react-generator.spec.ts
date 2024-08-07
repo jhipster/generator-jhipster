@@ -7,7 +7,6 @@ import BaseApplicationGenerator from '../../generators/base-application/index.js
 
 const { REACT } = clientFrameworkTypes;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);

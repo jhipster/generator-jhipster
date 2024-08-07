@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { before, it, describe, expect } from 'esmocha';
 import JDLDeployment from '../models/jdl-deployment.js';
 

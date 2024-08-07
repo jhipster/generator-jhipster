@@ -28,7 +28,7 @@ export type UpdateClientLanguagesTaskParam = { application: CommonClientServerAp
  * @param configurationFile
  * @param commonjs
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function updateLanguagesInDayjsConfigurationTask(
   this: BaseGenerator,
   { application, control = {} }: UpdateClientLanguagesTaskParam,

@@ -3,7 +3,6 @@ import ClientGenerator from '../../generators/client/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { dryRunHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);
@@ -19,7 +18,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
     return this.asPostWritingTaskGroup({
       // @ts-ignore
       async additionalResource({ source }) {
-        source!.addExternalResourceToRoot!({
+        source.addExternalResourceToRoot!({
           resource: '<link rel="stylesheet" href="content/css/my.css">',
           comment: 'Comment added by JHipster API',
         });

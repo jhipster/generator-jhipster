@@ -18,7 +18,6 @@
  */
 import { extname } from 'path';
 import { readFile } from 'fs/promises';
-import { QueuedAdapter } from '@yeoman/adapter';
 import { upperFirst } from 'lodash-es';
 import { create as createMemFs, type Store as MemFs } from 'mem-fs';
 import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
@@ -270,7 +269,7 @@ export default class JdlGenerator extends BaseGenerator {
       applications.map(async application => {
         const rootCwd = this.destinationPath();
         const cwd = application.folder ? this.destinationPath(application.folder) : rootCwd;
-        const adapter = (this.env.adapter as QueuedAdapter).newAdapter();
+        const adapter = this.env.adapter.newAdapter();
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 

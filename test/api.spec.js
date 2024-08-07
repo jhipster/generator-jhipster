@@ -20,7 +20,6 @@ import { it, describe, expect } from 'esmocha';
 
 describe('public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {
-    // eslint-disable-next-line import/no-unresolved
     expect(await import('generator-jhipster/generators')).toMatchSnapshot();
   });
 

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { before, it, describe, after, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
@@ -753,7 +752,7 @@ JSONEntity {
             });
             const patternValidation = new JDLValidation({
               name: PATTERN,
-              // eslint-disable-next-line prettier/prettier,no-useless-escape
+
               value: '^d$',
             });
             const minBytesValidation = new JDLValidation({

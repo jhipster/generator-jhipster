@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import path from 'path';
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';

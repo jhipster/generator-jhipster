@@ -118,7 +118,7 @@ function getTypeForBlob(blobContentType: string): string {
 
 function addValidations(jdlField: JDLField, field: JSONField): void {
   if (field.fieldValidateRules) {
-    field.fieldValidateRules!.forEach((rule: string) => {
+    field.fieldValidateRules.forEach((rule: string) => {
       jdlField.addValidation(convertJSONToJDLValidation(rule, field));
     });
   }

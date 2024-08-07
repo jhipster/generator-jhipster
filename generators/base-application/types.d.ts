@@ -36,19 +36,17 @@ export type BaseApplication = {
   monorepository?: boolean;
 
   /** Customize templates sourceFile and destinationFile */
-  customizeTemplatePaths: Array<
-    (
-      this: CoreGenerator,
-      file: {
-        namespace: string;
-        sourceFile: string;
-        resolvedSourceFile: string;
-        destinationFile: string;
-        templatesRoots: string[];
-      },
-      context: any,
-    ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] }
-  >;
+  customizeTemplatePaths: ((
+    this: CoreGenerator,
+    file: {
+      namespace: string;
+      sourceFile: string;
+      resolvedSourceFile: string;
+      destinationFile: string;
+      templatesRoots: string[];
+    },
+    context: any,
+  ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
 } & I18nApplication;
 
 /* ApplicationType Start */

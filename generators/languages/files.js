@@ -18,7 +18,6 @@
  */
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const clientI18nFiles = {
   clientI18nFiles: [
     {

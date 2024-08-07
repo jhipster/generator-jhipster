@@ -31,7 +31,6 @@ describe('generator - base-application - support - prepareEntity', () => {
   describe('prepareEntityPrimaryKeyForTemplates', () => {
     describe('with field with id name', () => {
       describe('without @Id', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let entity: any = {
           ...entityDefaultConfig,
           name: 'Entity',

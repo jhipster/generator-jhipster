@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import fs from 'fs';
 import path, { dirname } from 'path';
 

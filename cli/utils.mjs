@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-console */
+
 import chalk from 'chalk';
 
 import { createJHipsterLogger, CLI_LOGGER } from '../generators/base/support/index.js';

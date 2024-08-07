@@ -459,7 +459,6 @@ export default class BaseApplicationGenerator<
     }
     const entitiesToLoad = [...new Set([...builtInEntities, ...this.getExistingEntityNames()])];
     return entitiesToLoad.map(entityName => {
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
       const generator = this;
       if (!this.sharedData.hasEntity(entityName)) {
         this.sharedData.setEntity(entityName, { name: entityName });

@@ -125,8 +125,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
 
         const { srcMainJava } = application;
         if (this.packageInfoFile && srcMainJava) {
-          const mainPackageMatch = matchMainJavaFiles(srcMainJava!);
-          const root = this.destinationPath(srcMainJava!);
+          const mainPackageMatch = matchMainJavaFiles(srcMainJava);
+          const root = this.destinationPath(srcMainJava);
           this.queueTransformStream(
             {
               name: 'adding package-info.java files',

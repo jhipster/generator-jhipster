@@ -24,7 +24,6 @@ import { Piscina } from 'piscina';
 import BaseGenerator from '../../base-core/index.js';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const createESLintTransform = function (
   this: BaseGenerator | void,
   transformOptions: { ignoreErrors?: boolean; extensions?: string; cwd?: string } = {},

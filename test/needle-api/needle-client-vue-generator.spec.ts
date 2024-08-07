@@ -8,7 +8,6 @@ import BaseApplicationGenerator from '../../generators/base-application/index.js
 
 const { VUE } = clientFrameworkTypes;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends VueGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);

@@ -28,7 +28,7 @@ import AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLApplication {
   config: JDLApplicationConfiguration;
-  namespaceConfigs: Array<JDLApplicationConfiguration>;
+  namespaceConfigs: JDLApplicationConfiguration[];
   entityNames: JDLApplicationEntities;
   options: JDLOptions;
 
@@ -116,7 +116,7 @@ export default class JDLApplication {
   }
 
   toString(): string {
-    let stringifiedApplication: string = `application {
+    let stringifiedApplication = `application {
 ${this.config.toString(2)}
 ${this.namespaceConfigs.map(config => `${config.toString(2)}\n`).join()}`;
     if (this.entityNames.size() !== 0) {

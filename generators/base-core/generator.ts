@@ -445,7 +445,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   async parseCurrentJHipsterCommand() {
     const generatorCommand = await this.getCurrentJHipsterCommand();
-    this.parseJHipsterCommand(generatorCommand!);
+    this.parseJHipsterCommand(generatorCommand);
   }
 
   /**
@@ -572,7 +572,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           positionalArguments = [];
         }
         if (argument !== undefined) {
-          const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument as any);
+          const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument);
           if ((argumentDef.scope ?? 'generator') === 'generator') {
             this[argumentName] = convertedValue;
           } else if (argumentDef.scope === 'storage') {
@@ -645,7 +645,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       } else {
         // Create a new counter
         const newCreationTimestamp = creationTimestamp ?? this.config.get('creationTimestamp');
-        now = newCreationTimestamp ? new Date(newCreationTimestamp as any) : now;
+        now = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
         now.setMilliseconds(0);
       }
       now.setMinutes(now.getMinutes() + 1);
@@ -797,7 +797,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions: CopyOptions = {}) {
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
     try {
       return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
@@ -1273,7 +1273,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     const gradleLibsVersions = this.readTemplate(gradleCatalog)?.toString();
     if (gradleLibsVersions) {
-      Object.assign(javaDependencies, this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions!), 'java'));
+      Object.assign(javaDependencies, this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions), 'java'));
     }
   }
 
@@ -1281,7 +1281,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     destination: Record<string, string>,
     packageJsonFile: string = this.templatePath('../resources/package.json'),
   ): void {
-    const { devDependencies, dependencies } = this.fs.readJSON(packageJsonFile, {}) as any;
+    const { devDependencies, dependencies } = this.fs.readJSON(packageJsonFile, {});
     this.loadNodeDependencies(destination, { ...devDependencies, ...dependencies });
   }
 

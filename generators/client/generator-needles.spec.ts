@@ -6,7 +6,6 @@ import ClientGenerator from './index.js';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
@@ -15,7 +14,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
   get [ClientGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       webpackPhase({ source }) {
-        source!.addWebpackConfig!({ config: '{devServer:{}}' });
+        source.addWebpackConfig!({ config: '{devServer:{}}' });
       },
     });
   }

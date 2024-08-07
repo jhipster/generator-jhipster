@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';

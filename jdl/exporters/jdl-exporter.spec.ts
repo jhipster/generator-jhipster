@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import fs from 'fs';
 import { expect } from 'chai';
 import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';

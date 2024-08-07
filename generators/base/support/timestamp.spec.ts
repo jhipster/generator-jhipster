@@ -23,13 +23,11 @@ describe('generator - base - support - timestamp', () => {
   describe('::parseChangelog', () => {
     describe('when not passing parameters', () => {
       it('throws', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         expect(() => parseChangelog(undefined as any)).toThrow(/^changelogDate is required\.$/);
       });
     });
     describe('when passing a number', () => {
       it('throws', () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         expect(() => parseChangelog(123)).toThrow(/^changelogDate 123 must be a string\.$/);
       });
     });

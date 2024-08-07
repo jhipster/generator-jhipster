@@ -1,6 +1,5 @@
 import properties from 'dot-properties';
 
-// eslint-disable-next-line import/prefer-default-export
 export const addSpringFactory =
   ({ key, value }) =>
   content => {

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';

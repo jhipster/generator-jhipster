@@ -26,7 +26,6 @@ export function loadConfig(
         let source = config;
         if (!source) {
           if (def.scope === 'generator') {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
             source = this;
           } else if (def.scope === 'blueprint') {
             source = (this as any).blueprintStorage.getAll();

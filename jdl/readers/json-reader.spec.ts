@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { renameSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';

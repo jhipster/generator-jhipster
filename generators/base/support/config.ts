@@ -24,7 +24,7 @@ const filterNullishValues = value => value !== undefined && value !== null;
  * @param object
  * @returns
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function removeFieldsWithNullishValues(object: Record<string, any>): Record<string, any> {
   return filterValue(object, filterNullishValues);
 }
@@ -33,7 +33,7 @@ export function removeFieldsWithNullishValues(object: Record<string, any>): Reco
  * @param object
  * @returns
  */
-// eslint-disable-next-line import/prefer-default-export, @typescript-eslint/no-explicit-any
+
 function filterValue(object: Record<string, any>, filterValue: (any) => boolean = filterNullishValues): Record<string, any> {
   const clone = {};
   for (const [key, value] of Object.entries(object)) {
@@ -76,12 +76,10 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
  */
 export const mutateData = (
   context: Record<string | number, any>,
-  ...mutations: Array<
-    Record<string | number, any> & {
-      /** Set to false if you don't want functions to override the value */
-      __override__?: boolean;
-    }
-  >
+  ...mutations: (Record<string | number, any> & {
+    /** Set to false if you don't want functions to override the value */
+    __override__?: boolean;
+  })[]
 ) => {
   for (const mutation of mutations) {
     const override = mutation.__override__;

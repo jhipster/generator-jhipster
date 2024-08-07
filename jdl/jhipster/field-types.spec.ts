@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -18,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';
 

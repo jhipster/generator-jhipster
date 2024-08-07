@@ -43,7 +43,7 @@ export default function createApplicationConfigurationFromObject(configurationOb
 
 export function createApplicationNamespaceConfigurationFromObject(
   parsedNamespaceConfigs: Record<string, Record<string, boolean | number | string[] | string>> = {},
-): Array<JDLApplicationConfiguration> {
+): JDLApplicationConfiguration[] {
   return Object.entries(parsedNamespaceConfigs).map(([namespace, parsedConfig]) => {
     const configuration = new JDLApplicationConfiguration(namespace);
     for (const [optionName, optionValue] of Object.entries(parsedConfig)) {

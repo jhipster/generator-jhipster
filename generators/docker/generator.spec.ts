@@ -56,7 +56,6 @@ matrix = extendMatrix(matrix, {
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE, ...NO_SQL],
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 Object.entries(matrix).forEach(([_name, config]) => {
   if (NO_SQL.includes(config.prodDatabaseType)) {
     config.databaseType = config.prodDatabaseType;

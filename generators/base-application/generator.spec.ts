@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *

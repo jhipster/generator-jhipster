@@ -275,7 +275,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap!, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
+          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
           application.user = bootstrap;
         }
       },
@@ -290,7 +290,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
           Object.assign(
-            bootstrap!,
+            bootstrap,
             createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
           );
           application.userManagement = bootstrap;
@@ -307,10 +307,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           }
 
           const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(
-            bootstrap!,
-            createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application),
-          );
+          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
           application.authority = bootstrap;
         }
       },

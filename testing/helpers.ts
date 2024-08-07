@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { merge, set, snakeCase } from 'lodash-es';
@@ -185,7 +184,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     });
   }
 
-  withGenerateWorkspaceApplications(generateWorkspaces: boolean = false): this {
+  withGenerateWorkspaceApplications(generateWorkspaces = false): this {
     return this.onBeforePrepare(() => {
       this.generateApplicationsSet = true;
       this.withOptions({ generateApplications: true, workspacesFolders: this.workspaceApplications, workspaces: generateWorkspaces });

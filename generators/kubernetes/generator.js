@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return, import/no-named-as-default-member */
+
 import fs from 'fs';
 import chalk from 'chalk';
 

@@ -6,7 +6,6 @@ import LanguagesGenerator from './index.js';
 
 const generatorPath = getGenerator('languages');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockBlueprintSubGen: any = class extends LanguagesGenerator {
   constructor(args, opts, features) {
     super(args, opts, features);

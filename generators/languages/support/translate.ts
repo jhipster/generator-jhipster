@@ -90,7 +90,7 @@ export const replaceTranslationKeysWithText = (
     } else if (stringify) {
       replacement = JSON.stringify(replacement);
     }
-    body = `${body.slice(0, match.index!)}${replacement}${body.slice(match.index! + target.length)}`;
+    body = `${body.slice(0, match.index)}${replacement}${body.slice(match.index + target.length)}`;
   }
   return body;
 };
@@ -144,7 +144,7 @@ export const replaceTranslateContents = (body: string, filePath: string, regexp:
       }
     }
 
-    body = `${body.slice(0, match.index!)}${converter({ filePath, key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index! + target.length)}`;
+    body = `${body.slice(0, match.index)}${converter({ filePath, key, interpolate, parsedInterpolate, type, prefix, suffix })}${body.slice(match.index + target.length)}`;
   }
   return body;
 };

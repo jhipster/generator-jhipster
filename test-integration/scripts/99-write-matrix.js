@@ -67,6 +67,7 @@ writeFileSync(
                   };
                 });
             } catch (error) {
+              // eslint-disable-next-line no-console
               console.log(`File ${file} not found`, error);
               return [];
             }

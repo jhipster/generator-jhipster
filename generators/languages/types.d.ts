@@ -29,6 +29,6 @@ export type I18nApplication = {
   | {
       enableTranslation: true;
       languages: string[];
-      languagesDefinition: ReadonlyArray<Language>;
+      languagesDefinition: readonly Language[];
     }
 );

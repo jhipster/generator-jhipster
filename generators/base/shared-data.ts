@@ -65,7 +65,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       customizeTemplatePaths: [],
     });
 
-    let customizeRemoveFiles: Array<(file: string) => string | undefined> = [];
+    let customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
     const removeFiles = async (assertions: { removedInVersion?: string } | string, ...files: string[]) => {
       if (typeof assertions === 'string') {
         files = [assertions, ...files];
@@ -103,7 +103,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       jhipsterOldVersion,
       removeFiles,
       customizeRemoveFiles: [],
-      cleanupFiles: async (cleanup: Record<string, Array<string | [boolean, ...string[]]>>) => {
+      cleanupFiles: async (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => {
         await Promise.all(
           Object.entries(cleanup).map(async ([version, files]) => {
             const stringFiles: string[] = [];

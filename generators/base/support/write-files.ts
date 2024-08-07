@@ -27,7 +27,7 @@ const isWin32 = platform() === 'win32';
  * TODO move to utils when converted to typescripts
  * Converts multiples EditFileCallback callbacks into one.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function joinCallbacks<Generator>(...callbacks: EditFileCallback<Generator>[]): EditFileCallback<Generator> {
   return function (this: Generator, content: string, filePath: string) {
     if (isWin32 && content.match(/\r\n/)) {

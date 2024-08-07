@@ -58,7 +58,7 @@ const getEnums = (enums, customValuesState, comments) => {
         comment: comments && comments[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
       };
     }
-    // eslint-disable-next-line no-unused-vars
+
     const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
     return {
       name: matched[1],
@@ -83,7 +83,7 @@ const extractEnumEntries = field => {
  * @param {String} [clientRootFolder] - the client's root folder
  * @return {Object} the enum info.
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export const getEnumInfo = (field, clientRootFolder) => {
   field.enumInstance = extractEnumInstance(field); // TODO remove side effect
   const enums = extractEnumEntries(field);

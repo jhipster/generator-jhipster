@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-unused-expressions */
 
 import { it, describe } from 'esmocha';
 import { expect } from 'chai';
@@ -37,7 +36,7 @@ describe('jdl - Rules', () => {
           expect(getRule('toto')).to.be.undefined;
         });
       });
-      (Object.keys(rulesNames) as Array<keyof typeof rulesNames>).forEach(ruleName => {
+      (Object.keys(rulesNames) as (keyof typeof rulesNames)[]).forEach(ruleName => {
         describe(`for rule name ${ruleName}`, () => {
           it('should return the corresponding rule', () => {
             expect(getRule(ruleName)).to.deep.equal(rules[ruleName]);

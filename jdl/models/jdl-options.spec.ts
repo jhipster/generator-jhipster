@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-unused-expressions */
 import { before, it, describe, expect as jestExpect, afterEach } from 'esmocha';
 import { expect } from 'chai';
 import { unaryOptions, binaryOptions } from '../jhipster/index.js';

@@ -1,7 +1,6 @@
 import { MatrixMonolith, MatrixMicroservice, MatrixGateway } from './application-samples.js';
 import { fromMatrix, extendMatrix, extendFilteredMatrix, buildSamplesFromMatrix } from './matrix-utils.js';
 
-// eslint-disable-next-line import/prefer-default-export
 export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
   let serverMatrix = {
     ...fromMatrix({

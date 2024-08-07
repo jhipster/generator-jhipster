@@ -263,7 +263,7 @@ const partialLanguages: PartialLanguage[] = [
   },
 ];
 
-export const supportedLanguages: ReadonlyArray<Language> = partialLanguages.map(language => ({
+export const supportedLanguages: readonly Language[] = partialLanguages.map(language => ({
   rtl: false,
   javaLocaleMessageSourceSuffix: languageToJavaLanguage(language.languageTag),
   angularLocale: languageToAngularLanguage(language.languageTag),
@@ -272,7 +272,7 @@ export const supportedLanguages: ReadonlyArray<Language> = partialLanguages.map(
   ...language,
 }));
 
-export const findLanguageForTag = (languageTag: string, languages: ReadonlyArray<Language> = supportedLanguages): Language | undefined =>
+export const findLanguageForTag = (languageTag: string, languages: readonly Language[] = supportedLanguages): Language | undefined =>
   languages.find(lang => lang.languageTag === languageTag);
 
 export const defaultLanguage = findLanguageForTag('en') as Required<Language>;
@@ -281,7 +281,7 @@ export const defaultLanguage = findLanguageForTag('en') as Required<Language>;
  * Generate language objects in array of "'en': { name: 'English' }" format
  * @param languages
  */
-export const generateLanguagesWebappOptions = (languages: ReadonlyArray<Language>) =>
+export const generateLanguagesWebappOptions = (languages: readonly Language[]) =>
   languages.map(language => `'${language.languageTag}': { name: '${language.displayName}'${language.rtl ? ', rtl: true' : ''} }`);
 
 type LanguageIdParts = { language: string; script?: string; country?: string; variant?: string };
@@ -325,6 +325,6 @@ function buildLanguageTag(parts: LanguageIdParts): string {
   return languageTag;
 }
 
-export function languagesAsChoices(languages: ReadonlyArray<Language> = supportedLanguages) {
+export function languagesAsChoices(languages: readonly Language[] = supportedLanguages) {
   return languages.map(language => ({ value: language.languageTag, name: language.name }));
 }
