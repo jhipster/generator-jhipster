@@ -482,11 +482,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           throw new Error('Some application fields are be mandatory');
         }
 
-        const {
-          liquibase: liquibaseVersion,
-          'gradle-liquibase': gradleLiquibaseVersion,
-          'gradle-liquibase-core': gradleLiquibaseCoreVersion,
-        } = application.javaDependencies;
+        const { liquibase: liquibaseVersion, 'gradle-liquibase': gradleLiquibaseVersion } = application.javaDependencies;
         if (!liquibaseVersion) {
           this.log.warn('liquibaseVersion is required by gradle-liquibase-plugin, make sure to add it to your dependencies');
         } else {
@@ -495,7 +491,9 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: gradleLiquibaseVersion });
-        source.addGradleProperty?.({ property: 'liquibaseCoreVersion', value: gradleLiquibaseCoreVersion });
+        if (application.javaManagedProperties && application.javaManagedProperties['liquibase.version']) {
+          source.addGradleProperty?.({ property: 'liquibaseCoreVersion', value: application.javaManagedProperties['liquibase.version'] });
+        }
 
         source.applyFromGradle?.({ script: 'gradle/liquibase.gradle' });
         source.addGradlePlugin?.({ id: 'org.liquibase.gradle' });
