@@ -130,7 +130,7 @@ export default class UserManagementComponent implements OnInit {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
       const page = params.get('page');
       this.page = +(page ?? 1);
-      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data['defaultSort']));
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data.defaultSort));
       this.loadAll();
     });
   }

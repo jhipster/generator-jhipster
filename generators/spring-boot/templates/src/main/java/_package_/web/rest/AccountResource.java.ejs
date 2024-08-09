@@ -342,8 +342,10 @@ public class AccountResource {
     }
 
     private static boolean isPasswordLengthInvalid(String password) {
-        return StringUtils.isEmpty(password) ||
+        return (
+            StringUtils.isEmpty(password) ||
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
-            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH;
+            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
+        );
     }
 }

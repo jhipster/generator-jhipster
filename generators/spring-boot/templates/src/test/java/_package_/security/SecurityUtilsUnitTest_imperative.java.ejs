@@ -91,12 +91,14 @@ class SecurityUtilsUnitTest {
         Map<String, Object> claims = new HashMap<>();
         claims.put("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
 
-        List<GrantedAuthority> expectedAuthorities = Arrays.asList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN), new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        List<GrantedAuthority> expectedAuthorities = Arrays.asList(
+            new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN),
+            new SimpleGrantedAuthority(AuthoritiesConstants.USER)
+        );
 
         List<GrantedAuthority> authorities = SecurityUtils.extractAuthorityFromClaims(claims);
 
-        assertThat(authorities).isNotNull().isNotEmpty().hasSize(2)
-            .containsAll(expectedAuthorities);
+        assertThat(authorities).isNotNull().isNotEmpty().hasSize(2).containsAll(expectedAuthorities);
     }
 
     @Test

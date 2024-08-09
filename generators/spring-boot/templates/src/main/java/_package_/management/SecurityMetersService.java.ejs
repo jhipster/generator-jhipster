@@ -27,7 +27,8 @@ import io.micrometer.core.instrument.MeterRegistry;
 public class SecurityMetersService {
 
     public static final String INVALID_TOKENS_METER_NAME = "security.authentication.invalid-tokens";
-    public static final String INVALID_TOKENS_METER_DESCRIPTION = "Indicates validation error count of the tokens presented by the clients.";
+    public static final String INVALID_TOKENS_METER_DESCRIPTION =
+        "Indicates validation error count of the tokens presented by the clients.";
     public static final String INVALID_TOKENS_METER_BASE_UNIT = "errors";
     public static final String INVALID_TOKENS_METER_CAUSE_DIMENSION = "cause";
 

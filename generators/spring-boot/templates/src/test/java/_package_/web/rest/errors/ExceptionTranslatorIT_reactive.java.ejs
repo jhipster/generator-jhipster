@@ -128,34 +128,51 @@ class ExceptionTranslatorIT {
 
     @Test
     void testMethodNotSupported() {
-        webTestClient.post().uri("/api/exception-translator-test/access-denied")
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/access-denied")
             .exchange()
-            .expectStatus().isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.405")
-            .jsonPath("$.detail").isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' is not supported.\"");
+            .jsonPath("$.message")
+            .isEqualTo("error.http.405")
+            .jsonPath("$.detail")
+            .isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' is not supported.\"");
     }
 
     @Test
     void testExceptionWithResponseStatus() {
-        webTestClient.get().uri("/api/exception-translator-test/response-status")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/response-status")
             .exchange()
-            .expectStatus().isBadRequest()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.400")
-            .jsonPath("$.title").isEqualTo("test response status");
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400")
+            .jsonPath("$.title")
+            .isEqualTo("test response status");
     }
 
     @Test
     void testInternalServerError() {
-        webTestClient.get().uri("/api/exception-translator-test/internal-server-error")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/internal-server-error")
             .exchange()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.500")
-            .jsonPath("$.title").isEqualTo("Internal Server Error");
+            .jsonPath("$.message")
+            .isEqualTo("error.http.500")
+            .jsonPath("$.title")
+            .isEqualTo("Internal Server Error");
     }
 
 }

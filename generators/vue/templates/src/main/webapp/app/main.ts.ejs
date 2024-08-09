@@ -101,7 +101,7 @@ const app = createApp({
         if (!translationService.getLocalStoreLanguage()) {
           await changeLanguage(value.langKey);
         }
-      }
+      },
     );
 
     watch(

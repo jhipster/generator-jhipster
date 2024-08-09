@@ -48,11 +48,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testgetCurrentUserLogin() {
         String login = SecurityUtils.getCurrentUserLogin()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "admin")
-                )
-            )
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin")))
             .block();
         assertThat(login).isEqualTo("admin");
     }
@@ -61,11 +57,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testgetCurrentUserJWT() {
         String jwt = SecurityUtils.getCurrentUserJWT()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "token")
-                )
-            )
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "token")))
             .block();
         assertThat(jwt).isEqualTo("token");
     }
@@ -74,11 +66,7 @@ class SecurityUtilsUnitTest {
     @Test
     void testIsAuthenticated() {
         Boolean isAuthenticated = SecurityUtils.isAuthenticated()
-            .contextWrite(
-                ReactiveSecurityContextHolder.withAuthentication(
-                    new UsernamePasswordAuthenticationToken("admin", "admin")
-                )
-            )
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin")))
             .block();
         assertThat(isAuthenticated).isTrue();
     }
