@@ -917,14 +917,11 @@ public class UserService {
                     }
                     if (idpModifiedDate.isAfter(dbModifiedDate)) {
                         LOG.debug("Updating user '{}' in local database", user.getLogin());
-                        return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                            user.getLangKey(), user.getImageUrl());
+                        return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
                     }
-                    // no last updated info, blindly update
                 } else {
                     LOG.debug("Updating user '{}' in local database", user.getLogin());
-                    return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                        user.getLangKey(), user.getImageUrl());
+                    return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
                 }
                 return Mono.empty();
             })

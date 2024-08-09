@@ -310,8 +310,9 @@ public class CacheConfiguration {
             LOG.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
             // In development, everything goes through 127.0.0.1, with a different port
             if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-                LOG.debug("Application is running with the \"dev\" profile, Hazelcast " +
-                          "cluster will only work with localhost instances");
+                LOG.debug(
+                    "Application is running with the \"dev\" profile, Hazelcast " + "cluster will only work with localhost instances"
+                );
 
                 config.getNetworkConfig().setPort(serverProperties.getPort() + 5701);
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);

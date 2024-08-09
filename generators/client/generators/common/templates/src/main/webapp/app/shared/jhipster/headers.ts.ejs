@@ -36,7 +36,7 @@ const headerToString = (headerValue: any): string => {
     throw new Error('Header value is not a string');
   }
   return headerValue;
-}
+};
 
 const decodeHeaderValue = (headerValue: string): string => decodeURIComponent(headerValue.replace(/\+/g, ' '));
 

@@ -20,7 +20,7 @@
   <h2>
     <span id="gateway-page-heading">__jhiTranslateTag__('gateway.title')</span>
 
-    <button class="btn btn-primary float-end" (click)="refresh()" (disabled)="updatingRoutes">
+    <button class="btn btn-primary float-end" (click)="refresh()" (disabled)="(updatingRoutes)">
       <fa-icon icon="sync"></fa-icon> <span>__jhiTranslateTag__('gateway.refresh.button')</span>
     </button>
   </h2>
@@ -37,46 +37,50 @@
         </tr>
       </thead>
       <tbody>
-      @for (route of gatewayRoutes; track route.path) {
-        <tr>
-          <td>{{ route.path }}</td>
-          <td>{{ route.serviceId }}</td>
-          <td>
-          @if (route.serviceInstances.length === 0) {
-            <div class="label label-danger">__jhiTranslateTag__('gateway.routes.error')</div>
-          }
-
-            <div class="table-responsive">
-            @if (route) {
-              <table class="table table-striped">
-              @for (instance of route.serviceInstances; track instance.uri) {
-                <tr>
-                  <td><a href="{{ instance.uri }}" target="_blank">{{ instance.uri }}</a></td>
-                  <td>
-                  @if (instance.instanceInfo) {
-                    <div class="badge bg-{{ instance.instanceInfo.status === 'UP' ? 'success' : 'danger' }}">{{ instance.instanceInfo.status }}</div>
-                  } @else {
-                    <div class="badge bg-warning">?</div>
-                  }
-                  </td>
-                  <td>
-                  @for (entry of (instance.metadata | keyvalue ); track entry.key) {
-                    <span>
-                      <span class="badge bg-default fw-normal">
-                        <span class="badge rounded-pill bg-info fw-normal">{{ entry.key }}</span>
-                        <span class="text-secondary">{{ entry.value }}</span>
-                      </span>
-                    </span>
-                  }
-                  </td>
-                </tr>
+        @for (route of gatewayRoutes; track route.path) {
+          <tr>
+            <td>{{ route.path }}</td>
+            <td>{{ route.serviceId }}</td>
+            <td>
+              @if (route.serviceInstances.length === 0) {
+                <div class="label label-danger">__jhiTranslateTag__('gateway.routes.error')</div>
               }
-              </table>
-            }
-            </div>
-          </td>
-        </tr>
-      }
+
+              <div class="table-responsive">
+                @if (route) {
+                  <table class="table table-striped">
+                    @for (instance of route.serviceInstances; track instance.uri) {
+                      <tr>
+                        <td>
+                          <a href="{{ instance.uri }}" target="_blank">{{ instance.uri }}</a>
+                        </td>
+                        <td>
+                          @if (instance.instanceInfo) {
+                            <div class="badge bg-{{ instance.instanceInfo.status === 'UP' ? 'success' : 'danger' }}">
+                              {{ instance.instanceInfo.status }}
+                            </div>
+                          } @else {
+                            <div class="badge bg-warning">?</div>
+                          }
+                        </td>
+                        <td>
+                          @for (entry of instance.metadata | keyvalue; track entry.key) {
+                            <span>
+                              <span class="badge bg-default fw-normal">
+                                <span class="badge rounded-pill bg-info fw-normal">{{ entry.key }}</span>
+                                <span class="text-secondary">{{ entry.value }}</span>
+                              </span>
+                            </span>
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </table>
+                }
+              </div>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
