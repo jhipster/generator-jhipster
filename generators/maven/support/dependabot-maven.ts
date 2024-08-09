@@ -17,13 +17,14 @@
  * limitations under the License.
  */
 import { XMLParser } from 'fast-xml-parser';
+import { defaultXmlParserOptions } from '../internal/xml-store.js';
 
 /**
  * Extract properties from pom content
  * @param pomContent
  */
 export function getPomProperties(pomContent: string): Record<string, string> {
-  return new XMLParser().parse(pomContent).project.properties;
+  return new XMLParser(defaultXmlParserOptions).parse(pomContent).project.properties;
 }
 
 export type MavenPom = {
@@ -44,7 +45,7 @@ export type MavenPomAndVersions = {
  * @param fileContent
  */
 export function parseMavenPom(fileContent: string): MavenPom {
-  return new XMLParser().parse(fileContent);
+  return new XMLParser(defaultXmlParserOptions).parse(fileContent);
 }
 
 /**

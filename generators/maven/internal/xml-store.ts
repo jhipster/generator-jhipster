@@ -25,10 +25,11 @@ const defaultXmlCommonOptions: Partial<X2jOptions & XmlBuilderOptions> = {
   ignoreAttributes: false,
   attributeNamePrefix: '@@',
   commentPropName: '#comment',
-  parseAttributeValue: false,
 };
 
 export const defaultXmlParserOptions: Partial<X2jOptions> = {
+  parseAttributeValue: false,
+  parseTagValue: false,
   ...defaultXmlCommonOptions,
 };
 
