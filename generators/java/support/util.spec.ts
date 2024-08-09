@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { getMainClassName } from './util.js';
 
 describe('generator > java', () => {

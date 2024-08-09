@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import JDLValidation from '../models/jdl-validation.js';
 import ValidationValidator from '../validators/validation-validator.js';

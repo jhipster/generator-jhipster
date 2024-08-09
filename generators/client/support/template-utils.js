@@ -18,7 +18,7 @@
  */
 import path from 'path';
 
-import { fieldTypes, clientFrameworkTypes } from '../../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;

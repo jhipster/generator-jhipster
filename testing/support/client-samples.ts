@@ -1,4 +1,4 @@
-import { MatrixMonolith, MatrixMicroserviceGateway } from './application-samples.js';
+import { MatrixMicroserviceGateway, MatrixMonolith } from './application-samples.js';
 import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.js';
 
 const CLIENT_ADDITIONAL_CONFIG_MATRIX = {

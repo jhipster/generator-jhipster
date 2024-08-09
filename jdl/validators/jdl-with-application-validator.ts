@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { fieldTypes, applicationOptions, relationshipOptions } from '../jhipster/index.js';
+import { applicationOptions, fieldTypes, relationshipOptions } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLApplication from '../models/jdl-application.js';

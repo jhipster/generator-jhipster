@@ -22,20 +22,20 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
-import { GENERATOR_VUE, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
+import { clientFrameworkTypes, fieldTypes } from '../../jdl/jhipster/index.js';
+import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.js';
 import {
+  generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-  generateEntityClientImports as formatEntityClientImports,
-  generateTestEntityId as getTestEntityId,
   getTypescriptKeyType as getTSKeyType,
+  generateTestEntityId as getTestEntityId,
 } from '../client/support/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { writeEntityFiles, postWriteEntityFiles, cleanupEntitiesFiles } from './entity-files-vue.js';
+import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles, writeEntitiesFiles } from './files-vue.js';
+import { writeEntitiesFiles, writeFiles } from './files-vue.js';
 import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.js';
 
 const { CommonDBTypes } = fieldTypes;

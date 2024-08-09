@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { convertEnums } from './enum-converter.js';
 
 describe('jdl - EnumConverter', () => {

@@ -1,13 +1,13 @@
 import assert from 'assert';
 
-import { messageBrokerTypes, databaseTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes, messageBrokerTypes } from '../../../jdl/jhipster/index.js';
 import {
-  GENERATOR_SPRING_CLOUD_STREAM,
+  GENERATOR_BOOTSTRAP,
   GENERATOR_JAVA,
   GENERATOR_PROJECT_NAME,
   GENERATOR_SERVER,
   GENERATOR_SPRING_BOOT,
-  GENERATOR_BOOTSTRAP,
+  GENERATOR_SPRING_CLOUD_STREAM,
 } from '../../generator-list.js';
 
 const { KAFKA, PULSAR } = messageBrokerTypes;

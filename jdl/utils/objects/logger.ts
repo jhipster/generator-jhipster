@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { transports, format, createLogger } from 'winston';
+import { createLogger, format, transports } from 'winston';
 
 const { Console } = transports;
 const { printf, combine } = format;

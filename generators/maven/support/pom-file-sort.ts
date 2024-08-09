@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { XMLParser, XMLBuilder, XmlBuilderOptions, X2jOptions } from 'fast-xml-parser';
+import { X2jOptions, XMLBuilder, XMLParser, XmlBuilderOptions } from 'fast-xml-parser';
 
 import { defaultXmlBuildOptions, defaultXmlParserOptions } from '../internal/xml-store.js';
 import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';

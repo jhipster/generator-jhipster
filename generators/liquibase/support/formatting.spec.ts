@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import formatAsLiquibaseRemarks from './formatting.js';
 
 describe('generator - liquibase - support - formatting', () => {

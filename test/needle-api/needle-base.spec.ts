@@ -1,4 +1,4 @@
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import NeedleApiBase from '../../generators/needle-base.js';
 
 describe('needle-api - base', () => {

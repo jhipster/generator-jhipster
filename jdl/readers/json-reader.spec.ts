@@ -18,9 +18,9 @@
  */
 
 import { renameSync } from 'fs';
-import { join, dirname } from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after } from 'esmocha';
+import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import parseFromDir from '../readers/json-reader.js';

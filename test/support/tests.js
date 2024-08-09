@@ -1,10 +1,10 @@
 import { existsSync } from 'fs';
 import sinon from 'sinon';
-import { before, it, describe, after, expect } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import { getGenerator, skipPrettierHelpers as helpers } from '../../testing/index.js';
-import { PRIORITY_NAMES, ENTITY_PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
+import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);

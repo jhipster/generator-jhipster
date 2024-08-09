@@ -1,6 +1,6 @@
 import type { RunResult } from 'yeoman-test';
 
-import { SERVER_MAIN_SRC_DIR, JAVA_DOCKER_DIR } from '../../generator-constants.js';
+import { JAVA_DOCKER_DIR, SERVER_MAIN_SRC_DIR } from '../../generator-constants.js';
 import { matchWrittenConfig, matchWrittenFiles } from '../../../testing/index.js';
 
 const expectedElasticsearchFiles = () => {

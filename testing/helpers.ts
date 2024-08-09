@@ -1,7 +1,7 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { merge, set, snakeCase } from 'lodash-es';
-import { YeomanTest, RunContext, RunContextSettings, RunResult, result } from 'yeoman-test';
+import { RunContext, RunContextSettings, RunResult, YeomanTest, result } from 'yeoman-test';
 import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';

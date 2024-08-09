@@ -21,11 +21,11 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
 
 import {
-  MAIN_DIR,
-  TEST_DIR,
-  SERVER_MAIN_RES_DIR,
-  JHIPSTER_DOCUMENTATION_URL,
   JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
+  JHIPSTER_DOCUMENTATION_URL,
+  MAIN_DIR,
+  SERVER_MAIN_RES_DIR,
+  TEST_DIR,
 } from '../generator-constants.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';

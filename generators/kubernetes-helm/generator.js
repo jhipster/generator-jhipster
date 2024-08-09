@@ -23,14 +23,14 @@ import chalk from 'chalk';
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
 import prompts from '../kubernetes/prompts.js';
-import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
+import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
-  checkKubernetes,
   checkHelm,
-  loadConfig,
-  setupKubernetesConstants,
-  setupHelmConstants,
+  checkKubernetes,
   derivedKubernetesPlatformProperties,
+  loadConfig,
+  setupHelmConstants,
+  setupKubernetesConstants,
 } from '../kubernetes/kubernetes-base.js';
 import { messageBrokerTypes } from '../../jdl/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';

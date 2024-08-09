@@ -26,7 +26,7 @@ import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { packageNameToNamespace } from './support/index.js';
-import { mergeBlueprints, parseBluePrints, loadBlueprintsFromConfiguration, normalizeBlueprintName } from './internal/index.js';
+import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
 import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';

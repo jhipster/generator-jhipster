@@ -20,7 +20,7 @@
 import { readFile } from '../readers/file-reader.js';
 import * as JDLReader from '../readers/jdl-reader.js';
 import Issues from './issues/issues.js';
-import { checkEntities, EntityDeclaration } from './entity-linter.js';
+import { EntityDeclaration, checkEntities } from './entity-linter.js';
 import { checkFields } from './field-linter.js';
 import { checkEnums } from './enum-linter.js';
 import { checkRelationships } from './relationship-linter.js';

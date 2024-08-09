@@ -19,8 +19,8 @@
 import { extname } from 'path';
 import { readFile } from 'fs/promises';
 import { upperFirst } from 'lodash-es';
-import { create as createMemFs, type Store as MemFs } from 'mem-fs';
-import { create as createMemFsEditor, type MemFsEditor } from 'mem-fs-editor';
+import { type Store as MemFs, create as createMemFs } from 'mem-fs';
+import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
 import BaseGenerator from '../base/index.js';
 import { downloadJdlFile } from '../../cli/download.mjs';

@@ -24,8 +24,8 @@ import {
   applicationOptions,
   applicationTypes,
   authenticationTypes,
-  databaseTypes,
   cacheTypes,
+  databaseTypes,
   testFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { MESSAGE_BROKER } from '../server/options/index.js';

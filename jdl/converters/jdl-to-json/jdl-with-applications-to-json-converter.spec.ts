@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, after, expect as jestExpect } from 'esmocha';
+import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -26,13 +26,13 @@ chai.use(sinonChai);
 
 import {
   applicationTypes,
+  binaryOptions,
   databaseTypes,
   fieldTypes,
-  validations,
-  unaryOptions,
-  binaryOptions,
-  relationshipTypes,
   relationshipOptions,
+  relationshipTypes,
+  unaryOptions,
+  validations,
 } from '../../jhipster/index.js';
 import createJDLApplication from '../../models/jdl-application-factory.js';
 import JDLObject from '../../models/jdl-object.js';

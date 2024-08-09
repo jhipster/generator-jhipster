@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, after } from 'esmocha';
+import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { areEntitiesEqual, merge } from '../utils/object-utils.js';
 

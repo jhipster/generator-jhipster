@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { JDLEnum } from '../models/index.js';
 import EnumValidator from '../validators/enum-validator.js';

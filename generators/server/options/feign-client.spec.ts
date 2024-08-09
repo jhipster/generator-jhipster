@@ -1,5 +1,5 @@
-import { before, it, describe, expect } from 'esmocha';
-import { createImporterFromContent, ImportState } from '../../../jdl/jdl-importer.js';
+import { before, describe, expect, it } from 'esmocha';
+import { ImportState, createImporterFromContent } from '../../../jdl/jdl-importer.js';
 import { FEIGN_CLIENT as optionName } from './index.js';
 
 describe(`generators - server - jdl - ${optionName}`, () => {

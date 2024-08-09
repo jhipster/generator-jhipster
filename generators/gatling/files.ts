@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { TEST_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import { WriteFileSection } from '../base/api.js';
 import { SpringBootApplication } from '../server/types.js';
 import Generator from './generator.js';

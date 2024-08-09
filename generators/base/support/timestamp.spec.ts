@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { parseChangelog } from './timestamp.js';
 
 describe('generator - base - support - timestamp', () => {

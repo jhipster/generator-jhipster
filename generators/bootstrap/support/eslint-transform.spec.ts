@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { transform } from 'p-transform';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 

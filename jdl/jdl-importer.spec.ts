@@ -20,11 +20,11 @@
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync, rmSync } from 'fs';
-import { before, it, describe, after, expect as jestExpect } from 'esmocha';
+import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.js';
-import { createImporterFromFiles, createImporterFromContent } from './jdl-importer.js';
+import { createImporterFromContent, createImporterFromFiles } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);

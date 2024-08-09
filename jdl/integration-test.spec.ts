@@ -20,7 +20,7 @@
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
-import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
+import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../testing/index.js';
 import { applicationTypes } from './jhipster/index.js';
 import { parseFromContent, parseFromFiles } from './readers/jdl-reader.js';

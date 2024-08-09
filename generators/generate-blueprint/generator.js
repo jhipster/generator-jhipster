@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { camelCase, upperFirst, snakeCase } from 'lodash-es';
+import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
 import BaseGenerator from '../base-application/index.js';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base/priorities.js';
@@ -27,23 +27,23 @@ import { packageJson } from '../../lib/index.js';
 import { BLUEPRINT_API_VERSION, NODE_VERSION } from '../generator-constants.js';
 import { files, generatorFiles } from './files.js';
 import {
-  requiredConfig,
-  defaultConfig,
-  defaultSubGeneratorConfig,
-  allGeneratorsConfig,
-  prompts,
-  subGeneratorPrompts,
-  GENERATE_SNAPSHOTS,
-  LINK_JHIPSTER_DEPENDENCY,
-  ALL_GENERATORS,
-  GENERATORS,
-  PRIORITIES,
-  SUB_GENERATORS,
   ADDITIONAL_SUB_GENERATORS,
-  WRITTEN,
-  LOCAL_BLUEPRINT_OPTION,
+  ALL_GENERATORS,
   ALL_PRIORITIES,
   DYNAMIC,
+  GENERATE_SNAPSHOTS,
+  GENERATORS,
+  LINK_JHIPSTER_DEPENDENCY,
+  LOCAL_BLUEPRINT_OPTION,
+  PRIORITIES,
+  SUB_GENERATORS,
+  WRITTEN,
+  allGeneratorsConfig,
+  defaultConfig,
+  defaultSubGeneratorConfig,
+  prompts,
+  requiredConfig,
+  subGeneratorPrompts,
 } from './constants.js';
 
 const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;

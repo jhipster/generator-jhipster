@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { it, describe, expect, esmocha, beforeEach } from 'esmocha';
+import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import { createTranslationReplacer } from './translate-angular.js';
 
 describe('generator - angular - transform', () => {

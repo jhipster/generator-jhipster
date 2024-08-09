@@ -19,7 +19,7 @@
 
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect as jestExpect } from 'esmocha';
+import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import matchEntity from '../../matchers/entity-matcher.js';
 import * as JDLReader from '../../readers/jdl-reader.js';
@@ -29,13 +29,13 @@ import JDLValidation from '../../models/jdl-validation.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import {
-  applicationTypes,
-  fieldTypes,
-  validations,
-  unaryOptions,
   applicationOptions,
-  entityOptions,
+  applicationTypes,
   binaryOptions,
+  entityOptions,
+  fieldTypes,
+  unaryOptions,
+  validations,
 } from '../../jhipster/index.js';
 import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
 

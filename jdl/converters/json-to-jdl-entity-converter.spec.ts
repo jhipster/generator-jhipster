@@ -20,10 +20,10 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
-import { unaryOptions, relationshipOptions, binaryOptions } from '../jhipster/index.js';
+import { binaryOptions, relationshipOptions, unaryOptions } from '../jhipster/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

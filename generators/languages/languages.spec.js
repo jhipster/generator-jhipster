@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.js';

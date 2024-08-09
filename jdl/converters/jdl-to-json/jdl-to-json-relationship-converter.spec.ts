@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import { before, it, describe, expect as jestExpect } from 'esmocha';
+import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLRelationship from '../../models/jdl-relationship.js';
-import { relationshipTypes, relationshipOptions } from '../../jhipster/index.js';
+import { relationshipOptions, relationshipTypes } from '../../jhipster/index.js';
 import { convert } from './jdl-to-json-relationship-converter.js';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;

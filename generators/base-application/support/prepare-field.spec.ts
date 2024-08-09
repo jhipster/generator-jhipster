@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { it, describe, beforeEach } from 'esmocha';
+import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
 import BaseGenerator from '../../base/index.js';

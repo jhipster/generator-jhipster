@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import type { Logger as LoggerApi } from '@yeoman/types';
-import { createLogger, LoggerOptions, Logger as DefaultLogger } from '@yeoman/adapter';
+import { Logger as DefaultLogger, LoggerOptions, createLogger } from '@yeoman/adapter';
 import createDebug from 'debug';
 
 /**

@@ -1,4 +1,4 @@
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.js';
 

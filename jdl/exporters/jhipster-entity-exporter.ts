@@ -20,7 +20,7 @@
 import path from 'path';
 
 import { applicationTypes } from '../jhipster/index.js';
-import { toFilePath, readJSONFile } from '../readers/json-file-reader.js';
+import { readJSONFile, toFilePath } from '../readers/json-file-reader.js';
 import { doesFileExist } from '../utils/file-utils.js';
 import { JSONEntity } from '../converters/types.js';
 import { JhipsterJSONJDLExporterWrapper } from './types.js';

@@ -19,10 +19,10 @@
 
 /* define global expect */
 
-import { it, describe } from 'esmocha';
+import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { lowerFirst, camelCase, upperFirst } from '../utils/string-utils.js';
+import { camelCase, lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 describe('jdl - StringUtils', () => {
   describe('camelCase', () => {

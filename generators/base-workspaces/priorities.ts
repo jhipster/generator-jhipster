@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { QUEUE_PREFIX, PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUES as QUEUES_BASE } from '../base/priorities.js';
+import { PRIORITY_NAMES as PRIORITY_NAMES_BASE, QUEUES as QUEUES_BASE, QUEUE_PREFIX } from '../base/priorities.js';
 
 const { DEFAULT } = PRIORITY_NAMES_BASE;
 

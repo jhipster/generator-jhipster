@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, expect as jestExpect } from 'esmocha';
+import { before, describe, it, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinonChai from 'sinon-chai';
 

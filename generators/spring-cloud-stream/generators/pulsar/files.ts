@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { WriteFileSection } from '../../../base/api.js';
-import { SERVER_TEST_SRC_DIR, GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
 import { moveToJavaPackageTestDir } from '../../../java/support/index.js';
 
 export const pulsarFiles: WriteFileSection<any, any> = {

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { snakeCase, startCase, upperFirst, defaults, kebabCase } from 'lodash-es';
+import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es';
 import { fieldTypes, validations } from '../../../jdl/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';

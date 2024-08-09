@@ -18,7 +18,7 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect, before, fn } from 'esmocha';
+import { before, describe, expect, fn, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 import git from 'simple-git';
 

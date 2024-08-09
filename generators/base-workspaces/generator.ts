@@ -26,7 +26,7 @@ import { YO_RC_FILE } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
 import { normalizePathEnd } from '../base/support/path.js';
 import command from './command.js';
-import { PRIORITY_NAMES, CUSTOM_PRIORITIES } from './priorities.js';
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
 
 const {
   PROMPTING_WORKSPACES,

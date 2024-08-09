@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, fieldTypes, unaryOptions, relationshipTypes } from '../jhipster/index.js';
+import { applicationTypes, fieldTypes, relationshipTypes, unaryOptions } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';

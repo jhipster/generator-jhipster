@@ -19,7 +19,7 @@
 import { basename, dirname, join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
 import { skipPrettierHelpers as helpers } from '../../testing/index.js';
 import { GENERATOR_GIT } from '../generator-list.js';

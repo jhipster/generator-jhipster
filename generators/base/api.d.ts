@@ -1,4 +1,4 @@
-import type { BaseOptions, BaseFeatures, ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
+import type { ArgumentSpec, BaseFeatures, BaseOptions, CliOptionSpec } from 'yeoman-generator';
 import type { RequireAtLeastOne, SetOptional } from 'type-fest';
 import type CoreGenerator from '../base-core/index.js';
 

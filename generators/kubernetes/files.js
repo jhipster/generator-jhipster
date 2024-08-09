@@ -22,10 +22,10 @@ import {
   applicationTypes,
   authenticationTypes,
   databaseTypes,
+  ingressTypes,
   monitoringTypes,
   searchEngineTypes,
   serviceDiscoveryTypes,
-  ingressTypes,
 } from '../../jdl/jhipster/index.js';
 
 const { ELASTICSEARCH } = searchEngineTypes;

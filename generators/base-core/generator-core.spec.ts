@@ -1,4 +1,4 @@
-import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
+import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../testing/index.js';
 
 import { createJHipsterLogger } from '../base/support/logger.js';

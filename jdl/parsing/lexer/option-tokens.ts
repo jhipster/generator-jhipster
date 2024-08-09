@@ -18,7 +18,7 @@
  */
 
 import createTokenFromConfig from './token-creator.js';
-import { KEYWORD, UNARY_OPTION, BINARY_OPTION } from './shared-tokens.js';
+import { BINARY_OPTION, KEYWORD, UNARY_OPTION } from './shared-tokens.js';
 
 const tokens = [
   { name: 'WITH', pattern: 'with' },

@@ -1,16 +1,16 @@
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import {
-  buildServerMatrix,
-  extendMatrix,
-  extendFilteredMatrix,
-  entitiesServerSamples as entities,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  entitiesServerSamples as entities,
+  extendFilteredMatrix,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
 } from '../../testing/index.js';
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 
-import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.js';
+import { cacheTypes, databaseTypes } from '../../jdl/jhipster/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;

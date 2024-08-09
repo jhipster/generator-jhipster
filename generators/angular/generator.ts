@@ -25,28 +25,28 @@ import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../gen
 import { defaultLanguage } from '../languages/support/index.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import {
+  generateTypescriptTestEntity as generateTestEntity,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
-  generateTypescriptTestEntity as generateTestEntity,
 } from '../client/support/index.js';
 import type { CommonClientServerApplication } from '../base-application/types.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-angular.js';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
 import {
-  buildAngularFormPath as angularFormPath,
   addEntitiesRoute,
-  addToEntitiesMenu,
-  translateAngularFilesTransform,
-  isTranslatedAngularFile,
-  addRoute,
-  addItemToMenu,
-  addItemToAdminMenu,
   addIconImport,
+  addItemToAdminMenu,
+  addItemToMenu,
+  addRoute,
+  addToEntitiesMenu,
+  buildAngularFormPath as angularFormPath,
+  isTranslatedAngularFile,
+  translateAngularFilesTransform,
 } from './support/index.js';
 
 const { ANGULAR } = clientFrameworkTypes;

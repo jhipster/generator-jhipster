@@ -1,5 +1,5 @@
 import type { Storage } from 'yeoman-generator';
-import { ControlTaskParam, BaseGeneratorDefinition, SourceTaskParam, GenericSourceTypeDefinition } from '../base/tasks.js';
+import { BaseGeneratorDefinition, ControlTaskParam, GenericSourceTypeDefinition, SourceTaskParam } from '../base/tasks.js';
 import { ClientSourceType } from '../client/types.js';
 import { BaseChangelog } from '../base-entity-changes/types.js';
 import { CommonClientServerApplication } from './types.js';

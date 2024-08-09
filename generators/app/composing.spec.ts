@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import { GENERATOR_APP } from '../generator-list.js';

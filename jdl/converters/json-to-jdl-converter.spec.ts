@@ -20,9 +20,9 @@
 import fs, { readFileSync } from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
+import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { convertToJDL, convertSingleContentToJDL } from '../converters/json-to-jdl-converter.js';
+import { convertSingleContentToJDL, convertToJDL } from '../converters/json-to-jdl-converter.js';
 import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../testing/index.js';
 
 const __filename = fileURLToPath(import.meta.url);

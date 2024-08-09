@@ -20,14 +20,14 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../../../base-application/index.js';
 import { JAVA_COMPATIBLE_VERSIONS } from '../../../generator-constants.js';
 import {
-  packageInfoTransform,
-  generatedAnnotationTransform,
-  checkJava,
-  isReservedJavaKeyword,
-  matchMainJavaFiles,
-  javaMainPackageTemplatesBlock,
-  addJavaImport,
   addJavaAnnotation,
+  addJavaImport,
+  checkJava,
+  generatedAnnotationTransform,
+  isReservedJavaKeyword,
+  javaMainPackageTemplatesBlock,
+  matchMainJavaFiles,
+  packageInfoTransform,
 } from '../../support/index.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {

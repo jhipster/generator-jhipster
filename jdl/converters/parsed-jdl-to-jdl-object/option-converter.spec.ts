@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { before, it, describe, expect } from 'esmocha';
-import { unaryOptions, binaryOptions, entityOptions, searchEngineTypes } from '../../jhipster/index.js';
+import { before, describe, expect, it } from 'esmocha';
+import { binaryOptions, entityOptions, searchEngineTypes, unaryOptions } from '../../jhipster/index.js';
 import { convertOptions } from './option-converter.js';
 
 const { MapperTypes, PaginationTypes } = entityOptions;

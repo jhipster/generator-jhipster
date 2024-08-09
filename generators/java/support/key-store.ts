@@ -1,4 +1,4 @@
-import { mkdir, lstat } from 'fs/promises';
+import { lstat, mkdir } from 'fs/promises';
 import { dirname } from 'path';
 import { execa } from 'execa';
 import { ValidationResult } from '../../base/api.js';

@@ -1,24 +1,24 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
-  buildServerMatrix,
-  extendMatrix,
-  extendFilteredMatrix,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  extendFilteredMatrix,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
 } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from '../server/index.js';
 
-import { databaseTypes, cacheTypes } from '../../jdl/jhipster/index.js';
+import { cacheTypes, databaseTypes } from '../../jdl/jhipster/index.js';
 import {
   filterBasicServerGenerators,
-  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
+  shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 

@@ -21,7 +21,7 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { GenericTaskGroup, GenericSourceTypeDefinition } from '../base/tasks.js';
+import { GenericSourceTypeDefinition, GenericTaskGroup } from '../base/tasks.js';
 import { SpringBootSourceType } from '../server/types.js';
 import { ClientSourceType } from '../client/types.js';
 import { I18nApplication } from '../languages/types.js';

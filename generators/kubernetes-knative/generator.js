@@ -22,16 +22,16 @@ import chalk from 'chalk';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import { checkImages, generateJwtSecret, configureImageNames, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
+import { checkImages, configureImageNames, generateJwtSecret, loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
   checkHelm,
   checkKubernetes,
-  loadConfig,
-  setupKubernetesConstants,
-  setupHelmConstants,
   derivedKubernetesPlatformProperties,
+  loadConfig,
+  setupHelmConstants,
+  setupKubernetesConstants,
 } from '../kubernetes/kubernetes-base.js';
-import { kubernetesPlatformTypes, buildToolTypes, messageBrokerTypes } from '../../jdl/jhipster/index.js';
+import { buildToolTypes, kubernetesPlatformTypes, messageBrokerTypes } from '../../jdl/jhipster/index.js';
 import { getJdbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';

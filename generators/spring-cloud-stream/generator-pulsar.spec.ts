@@ -18,7 +18,7 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';

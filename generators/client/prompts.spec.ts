@@ -1,13 +1,13 @@
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers } from '../../testing/index.js';
 import {
   applicationTypes,
-  databaseTypes,
-  cacheTypes,
   authenticationTypes,
-  testFrameworkTypes,
-  clientFrameworkTypes,
   buildToolTypes,
+  cacheTypes,
+  clientFrameworkTypes,
+  databaseTypes,
+  testFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 

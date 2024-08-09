@@ -24,29 +24,29 @@ import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { packageJson } from '../../lib/index.js';
 import {
-  SERVER_MAIN_SRC_DIR,
-  SERVER_MAIN_RES_DIR,
-  SERVER_TEST_SRC_DIR,
-  SERVER_TEST_RES_DIR,
   CLIENT_WEBPACK_DIR,
-  MAIN_DIR,
-  LOGIN_REGEX,
-  TEST_DIR,
-  JAVA_VERSION,
   JAVA_COMPATIBLE_VERSIONS,
+  JAVA_VERSION,
   JHIPSTER_DEPENDENCIES_VERSION,
+  LOGIN_REGEX,
+  MAIN_DIR,
+  SERVER_MAIN_RES_DIR,
+  SERVER_MAIN_SRC_DIR,
+  SERVER_TEST_RES_DIR,
+  SERVER_TEST_SRC_DIR,
+  TEST_DIR,
 } from '../generator-constants.js';
 
 import {
   applicationTypes,
   buildToolTypes,
+  clientFrameworkTypes,
   databaseTypes,
-  fieldTypes,
   entityOptions,
-  validations,
+  fieldTypes,
   reservedKeywords,
   searchEngineTypes,
-  clientFrameworkTypes,
+  validations,
 } from '../../jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
@@ -54,13 +54,13 @@ import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 import {
-  buildJavaGet as javaGetCall,
-  javaBeanCase as javaBeanClassNameFormat,
-  buildJavaGetter as javaGetter,
-  buildJavaSetter as javaSetter,
   getJavaValueGeneratorForType as getJavaValueForType,
   getPrimaryKeyValue as getPKValue,
   hibernateSnakeCase,
+  javaBeanCase as javaBeanClassNameFormat,
+  buildJavaGet as javaGetCall,
+  buildJavaGetter as javaGetter,
+  buildJavaSetter as javaSetter,
 } from './support/index.js';
 
 const dbTypes = fieldTypes;

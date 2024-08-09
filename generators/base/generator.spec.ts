@@ -18,7 +18,7 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect, esmocha } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
