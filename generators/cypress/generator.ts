@@ -110,7 +110,7 @@ export default class CypressGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
+      async cleanup({ control, application: { authenticationTypeOauth2, generateUserManagement, cypressDir } }) {
         if (this.isJhipsterVersionLessThan('7.0.0-beta.1')) {
           this.removeFile(`${cypressDir}support/keycloak-oauth2.ts`);
           this.removeFile(`${cypressDir}fixtures/users/user.json`);
@@ -131,6 +131,8 @@ export default class CypressGenerator extends BaseApplicationGenerator {
             this.removeFile(`${cypressDir}integration/account/reset-password-page.spec.ts`);
           }
         }
+
+        await control.cleanupFiles({ '8.6.1': [`${cypressDir}.eslintrc.json`] });
       },
       async writeFiles({ application }) {
         const faker = await createFaker();

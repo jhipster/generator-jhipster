@@ -45,7 +45,6 @@ export const cypressFiles: WriteFileSection<CypressGenerator, CommonClientServer
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
       templates: [
-        '.eslintrc.json',
         'fixtures/integration-test.png',
         'plugins/index.ts',
         'e2e/administration/administration.cy.ts',
