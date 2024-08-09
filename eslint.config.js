@@ -78,9 +78,6 @@ export default ts.config(
   },
   {
     rules: {
-      'eol-last': 'error',
-      quotes: ['error', 'single', { avoidEscape: true }],
-      semi: ['error', 'always'],
       eqeqeq: ['error', 'smart'],
       'no-use-before-define': ['error', 'nofunc'],
       'no-multi-str': 'error',
@@ -88,7 +85,6 @@ export default ts.config(
       'no-console': 'error',
       'no-template-curly-in-string': 'error',
       'no-nested-ternary': 'error',
-      'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
       'no-restricted-syntax': [
         'error',
         {
