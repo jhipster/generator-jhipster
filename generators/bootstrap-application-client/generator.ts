@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 import {
+  filterEntitiesAndPropertiesForClient,
+  filterEntitiesForClient,
   loadClientConfig,
   loadDerivedClientConfig,
   preparePostEntityClientDerivedProperties,
-  filterEntitiesAndPropertiesForClient,
-  filterEntitiesForClient,
 } from '../client/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';

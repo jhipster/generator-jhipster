@@ -22,21 +22,21 @@ import { escape, min } from 'lodash-es';
 import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
 import { getFKConstraintName, getUXConstraintName, prepareEntity as prepareEntityForServer } from '../server/support/index.js';
 import {
-  prepareEntityPrimaryKeyForTemplates,
-  prepareRelationship,
-  prepareField,
-  prepareEntity,
   loadRequiredConfigIntoEntity,
+  prepareEntity,
+  prepareEntityPrimaryKeyForTemplates,
+  prepareField,
+  prepareRelationship,
 } from '../base-application/support/index.js';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
 import { fieldTypes } from '../../jdl/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import { liquibaseFiles } from './files.js';
 import {
-  prepareField as prepareFieldForLiquibase,
-  postPrepareEntity,
-  prepareRelationshipForLiquibase,
   liquibaseComment,
+  postPrepareEntity,
+  prepareField as prepareFieldForLiquibase,
+  prepareRelationshipForLiquibase,
 } from './support/index.js';
 import mavenPlugin from './support/maven-plugin.js';
 import {
@@ -44,7 +44,7 @@ import {
   addLiquibaseConstraintsChangelogCallback,
   addLiquibaseIncrementalChangelogCallback,
 } from './internal/needles.js';
-import { addEntityFiles, updateEntityFiles, updateConstraintsFiles, updateMigrateFiles, fakeFiles } from './changelog-files.js';
+import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },

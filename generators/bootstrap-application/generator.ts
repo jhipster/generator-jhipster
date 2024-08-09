@@ -21,10 +21,10 @@ import assert from 'assert';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { validations } from '../../jdl/jhipster/index.js';
 import {
-  stringifyApplicationData,
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
   preparePostEntityCommonDerivedProperties,
+  stringifyApplicationData,
 } from '../base-application/support/index.js';
 
 import { preparePostEntityServerDerivedProperties } from '../server/support/index.js';

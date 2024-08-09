@@ -19,7 +19,7 @@
 import { lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import { databaseTypes, entityOptions, validations, checkAndReturnRelationshipOnValue } from '../../../jdl/jhipster/index.js';
+import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../base/support/config.js';
 import { stringifyApplicationData } from './debug.js';

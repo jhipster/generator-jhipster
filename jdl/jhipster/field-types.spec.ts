@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { it, describe } from 'esmocha';
+import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import { databaseTypes, fieldTypes, validations } from '../jhipster/index.js';

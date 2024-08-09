@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { NAME, KEYWORD } from '../../parsing/lexer/shared-tokens.js';
+import { KEYWORD, NAME } from '../../parsing/lexer/shared-tokens.js';
 import createTokenFromConfig from '../../parsing/lexer/token-creator.js';
 
 describe('jdl - TokenCreator', () => {

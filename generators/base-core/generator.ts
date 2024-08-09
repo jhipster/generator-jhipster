@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, join as joinPath, dirname, relative, isAbsolute, join, extname } from 'path';
+import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
 import { relative as posixRelative } from 'path/posix';
 import { createHash } from 'crypto';
 import { fileURLToPath } from 'url';
-import { statSync, rmSync, existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
 import { requireNamespace } from '@yeoman/namespace';
 import { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { kebabCase, snakeCase, merge, get, set, defaults, mergeWith } from 'lodash-es';
+import { defaults, get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
@@ -37,28 +37,28 @@ import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
 import {
+  Logger,
   createJHipster7Context,
   formatDateForChangelog,
   joinCallbacks,
-  Logger,
   removeFieldsWithNullishValues,
 } from '../base/support/index.js';
 
 import type {
-  JHipsterGeneratorOptions,
-  JHipsterGeneratorFeatures,
+  CascatedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
-  CascatedEditFileCallback,
+  JHipsterArguments,
+  JHipsterCommandDefinition,
+  JHipsterConfigs,
+  JHipsterGeneratorFeatures,
+  JHipsterGeneratorOptions,
   JHipsterOptions,
   ValidationResult,
   WriteFileOptions,
-  JHipsterArguments,
-  JHipsterConfigs,
-  JHipsterCommandDefinition,
 } from '../base/api.js';
 import { packageJson } from '../../lib/index.js';
-import { CommonClientServerApplication, type BaseApplication } from '../base-application/types.js';
+import { type BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';

@@ -30,12 +30,12 @@ import {
 } from '../generator-constants.js';
 import { loadRequiredConfigIntoEntity, prepareEntityPrimaryKeyForTemplates } from '../base-application/support/index.js';
 import {
-  loadRequiredConfigDerivedProperties,
-  prepareEntity as prepareEntityServerForTemplates,
   addEntitiesOtherRelationships,
   hibernateSnakeCase,
-  loadServerConfig,
   loadDerivedServerConfig,
+  loadRequiredConfigDerivedProperties,
+  loadServerConfig,
+  prepareEntity as prepareEntityServerForTemplates,
   prepareRelationship,
 } from '../server/support/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/index.js';

@@ -1,6 +1,6 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
@@ -14,8 +14,8 @@ import Generator from '../server/index.js';
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import {
   filterBasicServerGenerators,
-  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
+  shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 

@@ -1,4 +1,4 @@
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { GENERATOR_CI_CD } from '../generator-list.js';
 import { dryRunHelpers as helpers } from '../../testing/index.js';
 

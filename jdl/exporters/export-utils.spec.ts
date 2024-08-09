@@ -20,7 +20,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect, beforeEach } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 import { writeConfigFile } from '../exporters/export-utils.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
 

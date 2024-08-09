@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect, esmocha, beforeEach } from 'esmocha';
-import { checkContentIn, insertContentBeforeNeedle, createNeedleCallback, createBaseNeedle } from './needles.js';
+import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { checkContentIn, createBaseNeedle, createNeedleCallback, insertContentBeforeNeedle } from './needles.js';
 
 describe('needles - support', () => {
   describe('checkContentIn', () => {

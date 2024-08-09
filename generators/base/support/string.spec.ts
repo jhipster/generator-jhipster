@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { it, describe } from 'esmocha';
+import { describe, it } from 'esmocha';
 import { stringHashCode } from './string.js';
 
 describe('generator - base - support - string', () => {

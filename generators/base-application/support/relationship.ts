@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { upperFirst, lowerFirst } from 'lodash-es';
+import { lowerFirst, upperFirst } from 'lodash-es';
 
-import { JSONRelationship, JSONEntity } from '../../../jdl/converters/types.js';
+import { JSONEntity, JSONRelationship } from '../../../jdl/converters/types.js';
 import { ValidationResult } from '../../base/api.js';
 import { stringifyApplicationData } from './debug.js';
 import { findEntityInEntities } from './entity.js';

@@ -19,7 +19,7 @@
 import fs from 'fs';
 import * as _ from 'lodash-es';
 import chalk from 'chalk';
-import { moveToJavaPackageSrcDir, javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from '../java/support/index.js';
+import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock, moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.js';
 import { cleanupOldFiles } from './entity-cleanup.js';

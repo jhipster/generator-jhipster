@@ -18,11 +18,11 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers, basicHelpers, runResult } from '../../testing/index.js';
-import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
+import { basicHelpers, defaultHelpers as helpers, runResult } from '../../testing/index.js';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
 import Generator from './index.js';
 

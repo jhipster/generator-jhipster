@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { fieldTypes, databaseTypes } from '../../../../jdl/jhipster/index.js';
+import { databaseTypes, fieldTypes } from '../../../../jdl/jhipster/index.js';
 
 const dbTypes = fieldTypes;
 const { STRING, UUID, LONG, INTEGER } = dbTypes.CommonDBTypes;

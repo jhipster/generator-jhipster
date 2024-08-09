@@ -1,5 +1,5 @@
 import { Readable } from 'stream';
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { pipeline } from 'p-transform';
 import generatedAnnotationTransform from './generated-annotation-transform.js';
 

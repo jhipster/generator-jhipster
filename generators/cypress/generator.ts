@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { stringHashCode, createFaker } from '../base/support/index.js';
+import { createFaker, stringHashCode } from '../base/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';
-import { cypressFiles, cypressEntityFiles } from './files.js';
+import { cypressEntityFiles, cypressFiles } from './files.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 

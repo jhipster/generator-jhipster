@@ -1,4 +1,4 @@
-import { before, it, describe, expect, esmocha } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import { RunResult } from 'yeoman-test';
 import { toHaveBeenCalledAfter } from 'jest-extended';
 

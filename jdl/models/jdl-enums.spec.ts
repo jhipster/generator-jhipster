@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, after, expect as jestExpect } from 'esmocha';
+import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import JDLEnums from '../models/jdl-enums.js';
 import { JDLEnum } from '../models/index.js';

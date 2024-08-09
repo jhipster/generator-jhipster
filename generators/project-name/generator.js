@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { defaults, kebabCase, upperFirst, camelCase, startCase } from 'lodash-es';
+import { camelCase, defaults, kebabCase, startCase, upperFirst } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { getHipster } from '../base/support/index.js';

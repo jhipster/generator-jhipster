@@ -18,7 +18,7 @@
  */
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';

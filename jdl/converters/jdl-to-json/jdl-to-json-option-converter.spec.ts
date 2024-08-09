@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe, after, expect as jestExpect } from 'esmocha';
+import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
@@ -28,7 +28,7 @@ import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity } from '../../models/index.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { unaryOptions, binaryOptions } from '../../jhipster/index.js';
+import { binaryOptions, unaryOptions } from '../../jhipster/index.js';
 import logger from '../../utils/objects/logger.js';
 import { convert } from './jdl-to-json-option-converter.js';
 

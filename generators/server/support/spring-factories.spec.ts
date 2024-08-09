@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { addSpringFactory } from './spring-factories.js';
 
 describe('generator - server - support - spring-factories', () => {

@@ -18,16 +18,16 @@
  */
 import { createNeedleCallback } from '../../base/support/index.js';
 import type {
-  GradleScript,
+  GradleComment,
   GradleDependency,
+  GradleLibraryDependency,
+  GradleNeedleOptions,
   GradlePlugin,
   GradleProperty,
   GradleRepository,
-  GradleTomlVersion,
+  GradleScript,
   GradleTomlPlugin,
-  GradleComment,
-  GradleNeedleOptions,
-  GradleLibraryDependency,
+  GradleTomlVersion,
 } from '../types.js';
 
 const tomlItemToString = (item: Record<string, string | undefined>) =>

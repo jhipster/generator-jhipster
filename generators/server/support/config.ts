@@ -1,14 +1,14 @@
 import { mutateData, normalizePathEnd, pickFields } from '../../base/support/index.js';
 
 import {
-  databaseTypes,
-  monitoringTypes,
   authenticationTypes,
   buildToolTypes,
   cacheTypes,
-  websocketTypes,
-  serviceDiscoveryTypes,
+  databaseTypes,
+  monitoringTypes,
   searchEngineTypes,
+  serviceDiscoveryTypes,
+  websocketTypes,
 } from '../../../jdl/jhipster/index.js';
 import { prepareSqlApplicationProperties } from '../../spring-data-relational/support/index.js';
 import {

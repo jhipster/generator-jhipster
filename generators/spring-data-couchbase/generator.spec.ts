@@ -18,14 +18,14 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
-  buildServerMatrix,
-  extendMatrix,
-  entitiesSimple as entities,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  entitiesSimple as entities,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
 } from '../../testing/index.js';
@@ -34,8 +34,8 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/
 import { databaseTypes } from '../../jdl/jhipster/index.js';
 import {
   filterBasicServerGenerators,
-  shouldComposeWithSpringCloudStream,
   shouldComposeWithLiquibase,
+  shouldComposeWithSpringCloudStream,
 } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 

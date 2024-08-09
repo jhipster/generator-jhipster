@@ -18,20 +18,20 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
   buildSamplesFromMatrix,
+  buildServerMatrix,
   extendFilteredMatrix,
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-  buildServerMatrix,
 } from '../../testing/index.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
 
-import { databaseTypes, searchEngineTypes, serviceDiscoveryTypes, cacheTypes } from '../../jdl/jhipster/index.js';
+import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.js';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';

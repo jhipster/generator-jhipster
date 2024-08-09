@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-import { it, describe, beforeEach } from 'esmocha';
+import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
 import BaseGenerator from '../../base/index.js';
 import { getConfigWithDefaults } from '../../../jdl/jhipster/index.js';
-import { prepareEntityPrimaryKeyForTemplates, entityDefaultConfig } from './prepare-entity.js';
+import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.js';
 
 describe('generator - base-application - support - prepareEntity', () => {
   const defaultGenerator = { jhipsterConfig: getConfigWithDefaults() };

@@ -1,7 +1,7 @@
 import path, { basename, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import { skipPrettierHelpers as helpers, runResult } from '../../testing/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { createImporterFromContent } from '../../jdl/jdl-importer.js';

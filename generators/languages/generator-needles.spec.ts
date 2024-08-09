@@ -1,5 +1,5 @@
-import { before, it, describe } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult, getGenerator } from '../../testing/index.js';
+import { before, describe, it } from 'esmocha';
+import { getGenerator, defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import LanguagesGenerator from './index.js';

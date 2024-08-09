@@ -20,9 +20,9 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after } from 'esmocha';
+import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
+import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

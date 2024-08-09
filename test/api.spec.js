@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 
 describe('public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {

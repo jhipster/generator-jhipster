@@ -21,13 +21,13 @@ import path from 'path';
 import fs from 'fs';
 import JDLObject from '../models/jdl-object.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
-import { doesFileExist, doesDirectoryExist } from '../utils/file-utils.js';
+import { doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 import { readJSONFile } from '../readers/json-file-reader.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
 import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import JDLApplication from '../models/jdl-application.js';
-import { JSONEntity, JHipsterYoRcContent, PostProcessedJSONRootObject } from './types.js';
+import { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
 

@@ -20,9 +20,9 @@
 import BaseApplicationGenerator from '../base-application/index.js';
 
 import { LOGIN_REGEX_JS } from '../generator-constants.js';
-import { GENERATOR_CYPRESS, GENERATOR_COMMON, GENERATOR_CLIENT } from '../generator-list.js';
+import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generator-list.js';
 
-import { testFrameworkTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { createNeedleCallback } from '../base/support/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { addEnumerationFiles } from './entity-files.js';

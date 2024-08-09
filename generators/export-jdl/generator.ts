@@ -22,7 +22,7 @@ import BaseGenerator from '../base/index.js';
 
 import { applicationOptions } from '../../jdl/jhipster/index.js';
 import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
-import type { JHipsterGeneratorOptions, JHipsterGeneratorFeatures } from '../base/api.js';
+import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 
 const { OptionNames } = applicationOptions;
 

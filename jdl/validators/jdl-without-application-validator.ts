@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { fieldTypes, applicationTypes, databaseTypes, binaryOptions, relationshipOptions } from '../jhipster/index.js';
+import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipOptions } from '../jhipster/index.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import { isReservedFieldName, isReservedPaginationWords, isReservedTableName } from '../jhipster/reserved-keywords.js';

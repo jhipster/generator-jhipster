@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import { before, it, describe, beforeEach } from 'esmocha';
+import { before, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import Rule from './rule.js';
-import { INFO, ERROR } from './rule-levels.js';
+import { ERROR, INFO } from './rule-levels.js';
 
 describe('jdl - Rule', () => {
   describe('new', () => {

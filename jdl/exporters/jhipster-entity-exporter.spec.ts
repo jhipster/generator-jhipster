@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
+import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../jhipster/index.js';

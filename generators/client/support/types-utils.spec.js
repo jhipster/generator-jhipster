@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { fieldTypes } from '../../../jdl/jhipster/index.js';
 
 import { getTypescriptType } from './types-utils.js';

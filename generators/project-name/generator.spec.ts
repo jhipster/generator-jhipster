@@ -18,7 +18,7 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { basicTests, testBlueprintSupport } from '../../test/support/tests.js';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
 

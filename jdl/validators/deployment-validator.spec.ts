@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { deploymentOptions, applicationTypes, databaseTypes, searchEngineTypes } from '../jhipster/index.js';
+import { applicationTypes, databaseTypes, deploymentOptions, searchEngineTypes } from '../jhipster/index.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
 

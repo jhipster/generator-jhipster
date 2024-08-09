@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { it, describe, beforeEach } from 'esmocha';
+import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { rulesNames } from '../rules.js';
 import { relationshipTypes } from '../../jhipster/index.js';

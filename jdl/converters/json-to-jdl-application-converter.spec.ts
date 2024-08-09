@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import { convertApplicationsToJDL } from '../converters/json-to-jdl-application-converter.js';

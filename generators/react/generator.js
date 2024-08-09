@@ -22,17 +22,17 @@ import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
-import { fieldTypes, clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../jdl/jhipster/index.js';
 import {
+  generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-  generateEntityClientImports as formatEntityClientImports,
   generateTestEntityId as getTestEntityId,
   generateTestEntityPrimaryKey as getTestEntityPrimaryKey,
 } from '../client/support/index.js';
 import { createNeedleCallback, upperFirstCamelCase } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { writeEntitiesFiles, postWriteEntitiesFiles, cleanupEntitiesFiles } from './entity-files-react.js';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { writeFiles } from './files-react.js';
 import { prepareEntity } from './application/entities/index.js';

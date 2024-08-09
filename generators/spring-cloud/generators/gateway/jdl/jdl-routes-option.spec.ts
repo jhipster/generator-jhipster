@@ -1,5 +1,5 @@
-import { before, it, describe, expect } from 'esmocha';
-import { createImporterFromContent, ImportState } from '../../../../../jdl/jdl-importer.js';
+import { before, describe, expect, it } from 'esmocha';
+import { ImportState, createImporterFromContent } from '../../../../../jdl/jdl-importer.js';
 import { convertSingleContentToJDL } from '../../../../../jdl/converters/json-to-jdl-converter.js';
 
 const optionName = 'routes';

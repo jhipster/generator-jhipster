@@ -16,20 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase, kebabCase, startCase, upperFirst, sortedUniq, intersection, lowerFirst, uniq } from 'lodash-es';
+import { camelCase, intersection, kebabCase, lowerFirst, sortedUniq, startCase, uniq, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import type BaseGenerator from '../../base-core/index.js';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.js';
 import {
   createFaker,
+  getMicroserviceAppName,
+  mutateData,
   parseChangelog,
   stringHashCode,
   upperFirstCamelCase,
-  getMicroserviceAppName,
-  mutateData,
 } from '../../base/support/index.js';
-import { getTypescriptKeyType, getEntityParentPathAddition } from '../../client/support/index.js';
+import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
 import {
   applicationTypes,
   binaryOptions,

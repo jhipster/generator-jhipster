@@ -18,9 +18,9 @@
  */
 
 import { isString } from 'lodash-es';
-import { createToken, ITokenConfig } from 'chevrotain';
+import { ITokenConfig, createToken } from 'chevrotain';
 
-import { NAME, KEYWORD, namePattern } from './shared-tokens.js';
+import { KEYWORD, NAME, namePattern } from './shared-tokens.js';
 
 export default function createTokenFromConfig(config: ITokenConfig) {
   if (!config) {

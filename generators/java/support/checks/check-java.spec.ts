@@ -1,4 +1,4 @@
-import { after, before, it, describe, expect, resetAllMocks, esmocha } from 'esmocha';
+import { after, before, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
 import quibble from 'quibble';
 
 const execa = { execa: esmocha.fn(), execaSync: esmocha.fn(), execaCommandSync: esmocha.fn(), execaCommand: esmocha.fn() };

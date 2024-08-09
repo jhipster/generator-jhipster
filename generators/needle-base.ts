@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import BaseGenerator from './base/index.js';
-import { createNeedleCallback, NeedleInsertion } from './base/support/needles.js';
+import { NeedleInsertion, createNeedleCallback } from './base/support/needles.js';
 
 export type NeedleFileModel = {
   /**

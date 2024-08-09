@@ -1,4 +1,4 @@
-import { RelationshipType, RelationshipSide } from '../basic-types/relationships.js';
+import { RelationshipSide, RelationshipType } from '../basic-types/relationships.js';
 import { GENERATOR_JHIPSTER } from '../../generators/index.js';
 
 export type JSONField = {

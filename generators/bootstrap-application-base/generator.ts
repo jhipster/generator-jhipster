@@ -28,10 +28,10 @@ import {
   addFakerToEntity,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
-  stringifyApplicationData,
   prepareEntity as prepareEntityForTemplates,
   prepareField as prepareFieldForTemplates,
   prepareRelationship,
+  stringifyApplicationData,
 } from '../base-application/support/index.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';

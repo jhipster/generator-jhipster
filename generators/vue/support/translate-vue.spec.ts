@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { it, describe, expect } from 'esmocha';
-import { replaceTranslationTags, replaceTranslations, removeDeclarations } from './translate-vue.js';
+import { describe, expect, it } from 'esmocha';
+import { removeDeclarations, replaceTranslationTags, replaceTranslations } from './translate-vue.js';
 
 const FULL_BODY = `
 <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>

@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { databaseTypes } from '../../../jdl/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
 

@@ -28,18 +28,18 @@ import files from './files.js';
 import { GRADLE } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import {
-  applyFromGradleCallback,
   addGradleDependenciesCallback,
-  addGradleMavenRepositoryCallback,
-  addGradlePluginCallback,
-  addGradlePluginManagementCallback,
-  addGradlePropertyCallback,
   addGradleDependenciesCatalogVersionCallback,
   addGradleDependencyCatalogLibrariesCallback,
   addGradleDependencyCatalogPluginsCallback,
+  addGradleMavenRepositoryCallback,
+  addGradlePluginCallback,
   addGradlePluginFromCatalogCallback,
-  sortDependencies,
+  addGradlePluginManagementCallback,
+  addGradlePropertyCallback,
+  applyFromGradleCallback,
   gradleNeedleOptionsWithDefaults,
+  sortDependencies,
 } from './internal/needles.js';
 import { GradleDependency } from './types.js';
 

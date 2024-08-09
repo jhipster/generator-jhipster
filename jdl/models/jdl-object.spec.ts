@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { before, it, describe, expect as jestExpect, afterEach } from 'esmocha';
+import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, binaryOptions, unaryOptions, relationshipTypes } from '../jhipster/index.js';
+import { applicationTypes, binaryOptions, relationshipTypes, unaryOptions } from '../jhipster/index.js';
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';

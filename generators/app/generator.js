@@ -21,7 +21,7 @@ import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_COMMON, GENERATOR_CLIENT, GENERATOR_SERVER } from '../generator-list.js';
+import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.js';
 import { getDefaultAppName } from '../project-name/support/index.js';
 import { packageJson } from '../../lib/index.js';
 

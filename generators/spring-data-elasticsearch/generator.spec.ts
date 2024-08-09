@@ -18,19 +18,19 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, expect } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import {
-  buildServerMatrix,
-  extendMatrix,
-  entitiesServerSamples as entities,
   buildSamplesFromMatrix,
+  buildServerMatrix,
+  entitiesServerSamples as entities,
+  extendMatrix,
   defaultHelpers as helpers,
   runResult,
 } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { databaseTypes, searchEngineTypes, authenticationTypes, applicationTypes } from '../../jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../jdl/jhipster/index.js';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';

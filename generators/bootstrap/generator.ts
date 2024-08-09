@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import { Duplex } from 'stream';
-import { forceYoFiles, createConflicterTransform, createYoResolveTransform } from '@yeoman/conflicter';
+import { createConflicterTransform, createYoResolveTransform, forceYoFiles } from '@yeoman/conflicter';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import { isFileStateModified, isFilePending } from 'mem-fs-editor/state';
+import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import { Options as PrettierOptions } from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
@@ -31,14 +31,14 @@ import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.js';
 import type { BaseGeneratorDefinition, GenericTaskGroup } from '../base/tasks.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import {
+  autoCrlfTransform,
+  createESLintTransform,
+  createForceWriteConfigFilesTransform,
   createMultiStepTransform,
   createPrettierTransform,
-  createForceWriteConfigFilesTransform,
-  autoCrlfTransform,
-  isPrettierConfigFilePath,
-  createSortConfigFilesTransform,
-  createESLintTransform,
   createRemoveUnusedImportsTransform,
+  createSortConfigFilesTransform,
+  isPrettierConfigFilePath,
 } from './support/index.js';
 
 const { MULTISTEP_TRANSFORM, PRE_CONFLICTS } = PRIORITY_NAMES;

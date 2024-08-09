@@ -20,13 +20,13 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
 import {
-  reservedKeywords,
-  databaseTypes,
   applicationTypes,
+  clientFrameworkTypes,
+  databaseTypes,
   entityOptions,
   fieldTypes,
+  reservedKeywords,
   validations,
-  clientFrameworkTypes,
 } from '../../jdl/jhipster/index.js';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 

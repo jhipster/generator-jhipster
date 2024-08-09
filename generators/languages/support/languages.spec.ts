@@ -1,4 +1,4 @@
-import { it, describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { findLanguageForTag, generateLanguagesWebappOptions } from './languages.js';
 
 describe('generator - languages - support', () => {

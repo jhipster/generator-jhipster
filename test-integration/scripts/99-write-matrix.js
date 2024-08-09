@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { writeFileSync, readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
-  packageRoot,
+  BUILD_JHIPSTER_BOM,
   JAVA_VERSION,
-  NODE_VERSION,
-  NPM_VERSION,
   JHIPSTER_BOM_BRANCH,
   JHIPSTER_BOM_CICD_VERSION,
-  BUILD_JHIPSTER_BOM,
+  NODE_VERSION,
+  NPM_VERSION,
+  packageRoot,
 } from '../integration-test-constants.js';
 
 const MATRIX_FILE = 'matrix.json';

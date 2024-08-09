@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter.js';
 import JDLObject from '../models/jdl-object.js';

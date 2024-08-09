@@ -1,4 +1,4 @@
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { dryRunHelpers as helpers } from '../../testing/index.js';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';

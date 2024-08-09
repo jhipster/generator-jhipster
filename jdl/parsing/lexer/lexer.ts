@@ -20,7 +20,7 @@
 import { Lexer, TokenType } from 'chevrotain';
 
 import { relationshipOptions } from '../../jhipster/index.js';
-import { NAME, UNARY_OPTION, BINARY_OPTION } from './shared-tokens.js';
+import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.js';
 
 import ValidationTokens from './validation-tokens.js';
 import ApplicationTokens from './application-tokens.js';

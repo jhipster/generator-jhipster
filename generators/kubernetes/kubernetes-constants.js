@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { monitoringTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.js';
+import { kubernetesPlatformTypes, monitoringTypes } from '../../jdl/jhipster/index.js';
 
 const { NO } = monitoringTypes;
 const { ServiceTypes, IngressTypes, GeneratorTypes } = kubernetesPlatformTypes;

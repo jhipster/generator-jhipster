@@ -21,7 +21,7 @@ import fs from 'fs';
 import path, { dirname } from 'path';
 
 import { fileURLToPath } from 'url';
-import { it, describe, after, beforeEach } from 'esmocha';
+import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import * as JDLReader from '../readers/jdl-reader.js';
 import { basicHelpers as helpers } from '../../testing/index.js';

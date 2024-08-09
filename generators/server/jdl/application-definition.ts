@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { upperCase, snakeCase } from 'lodash-es';
+import { snakeCase, upperCase } from 'lodash-es';
 import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.js';
 import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';

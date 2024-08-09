@@ -18,11 +18,11 @@
  */
 import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { before, it, describe, after, expect } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.js';
-import { fromMatrix, extendMatrix, AuthenticationTypeMatrix, defaultHelpers as helpers } from '../../testing/index.js';
-import { shouldSupportFeatures, testBlueprintSupport, checkEnforcements } from '../../test/support/index.js';
+import { AuthenticationTypeMatrix, extendMatrix, fromMatrix, defaultHelpers as helpers } from '../../testing/index.js';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import { GENERATOR_CYPRESS } from '../generator-list.js';
 import Generator from './generator.js';
 

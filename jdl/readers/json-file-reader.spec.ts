@@ -18,7 +18,7 @@
  */
 
 import path from 'path';
-import { it, describe } from 'esmocha';
+import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import * as JSONFileReader from '../readers/json-file-reader.js';

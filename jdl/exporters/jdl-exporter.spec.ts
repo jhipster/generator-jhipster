@@ -19,7 +19,7 @@
 
 import fs from 'fs';
 import { expect } from 'chai';
-import { it, describe, expect as jestExpect, beforeEach } from 'esmocha';
+import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import JDLObject from '../models/jdl-object.js';
 import { JDLEntity } from '../models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';

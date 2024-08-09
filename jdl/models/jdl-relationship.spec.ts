@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
-import { relationshipTypes, relationshipOptions } from '../jhipster/index.js';
+import { relationshipOptions, relationshipTypes } from '../jhipster/index.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 

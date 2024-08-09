@@ -1,4 +1,4 @@
-import { resolveConfig, format } from 'prettier';
+import { format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginProperties from 'prettier-plugin-properties';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';

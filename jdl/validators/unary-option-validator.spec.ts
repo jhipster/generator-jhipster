@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, it, describe } from 'esmocha';
+import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import UnaryOptionValidator from '../validators/unary-option-validator.js';

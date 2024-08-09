@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mergeSections, addSectionsCondition } from '../base/support/index.js';
+import { addSectionsCondition, mergeSections } from '../base/support/index.js';
 import {
   javaMainPackageTemplatesBlock,
+  javaMainResourceTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaTestResourceTemplatesBlock,
-  javaMainResourceTemplatesBlock,
 } from '../java/support/index.js';
 
 export const sqlFiles = {

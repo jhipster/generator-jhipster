@@ -27,7 +27,7 @@ import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../se
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
-import { createPomStorage, sortPomFile, type PomStorage } from './support/index.js';
+import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
 
 export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
   pomStorage!: PomStorage;
