@@ -74,6 +74,7 @@ echo "::group::Check Client Common"
 git -c color.ui=always diff --exit-code @~1 -- \
   'generators/bootstrap-application-client' \
   'generators/client/**' \
+  'generators/cypress/**' \
   'generators/javascript/**' \
   || CLIENT_COMMON=true
 echo "::endgroup::"
