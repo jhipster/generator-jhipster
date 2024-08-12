@@ -1,18 +1,18 @@
 <template>
   <div class="modal-body">
-    <span class="badge badge-primary" v-on:click="threadDumpFilter = ''"
+    <span class="badge badge-primary" @click="threadDumpFilter = ''"
       >All&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpAll }}</span></span
     >&nbsp;
-    <span class="badge badge-success" v-on:click="threadDumpFilter = 'RUNNABLE'"
+    <span class="badge badge-success" @click="threadDumpFilter = 'RUNNABLE'"
       >Runnable&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpRunnable }}</span></span
     >&nbsp;
-    <span class="badge badge-info" v-on:click="threadDumpFilter = 'WAITING'"
+    <span class="badge badge-info" @click="threadDumpFilter = 'WAITING'"
       >Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpWaiting }}</span></span
     >&nbsp;
-    <span class="badge badge-warning" v-on:click="threadDumpFilter = 'TIMED_WAITING'"
+    <span class="badge badge-warning" @click="threadDumpFilter = 'TIMED_WAITING'"
       >Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpTimedWaiting }}</span></span
     >&nbsp;
-    <span class="badge badge-danger" v-on:click="threadDumpFilter = 'BLOCKED'"
+    <span class="badge badge-danger" @click="threadDumpFilter = 'BLOCKED'"
       >Blocked&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpBlocked }}</span></span
     >&nbsp;
     <div class="mt-2">&nbsp;</div>
@@ -22,7 +22,7 @@
       <h6>
         <span class="badge" :class="getBadgeClass(entry.threadState)">{{ entry.threadState }}</span
         >&nbsp;{{ entry.threadName }} (ID {{ entry.threadId }})
-        <a v-on:click="entry.show = !entry.show" href="javascript:void(0);">
+        <a @click="entry.show = !entry.show" href="javascript:void(0);">
           <span :hidden="entry.show" v-text="t$('metrics.jvm.threads.dump.show')">Show StackTrace</span>
           <span :hidden="!entry.show" v-text="t$('metrics.jvm.threads.dump.hide')">Hide StackTrace</span>
         </a>
