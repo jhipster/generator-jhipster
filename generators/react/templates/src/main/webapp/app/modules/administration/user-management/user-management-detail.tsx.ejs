@@ -83,17 +83,17 @@ export const UserManagementDetail = () => {
                     <li key={`user-auth-${i}`}>
                       <Badge color="info">{authority}</Badge>
                     </li>
-                ))) : null
-              }
+                  ))
+                : null}
             </ul>
           </dd>
         </dl>
       </Row>
-      <Button
-        tag={Link} to="/admin/user-management" replace
-        color="info"
-      >
-        <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+      <Button tag={Link} to="/admin/user-management" replace color="info">
+        <FontAwesomeIcon icon="arrow-left" />{' '}
+        <span className="d-none d-md-inline">
+          <Translate contentKey="entity.action.back">Back</Translate>
+        </span>
       </Button>
     </div>
   );

@@ -19,21 +19,17 @@ module.exports = {
   coverageDirectory: '<rootDir>/<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/',
   testMatch: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/**/@(*.)@(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  coveragePathIgnorePatterns: [
-    '<rootDir>/<%= this.relativeDir(clientRootDir, clientTestDir) %>',
-  ],
+  coveragePathIgnorePatterns: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientTestDir) %>'],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy',
-    'sinon': require.resolve('sinon/pkg/sinon.js')
+    sinon: require.resolve('sinon/pkg/sinon.js'),
   }),
   reporters: [
     'default',
     ['jest-junit', { outputDirectory: './<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/', outputName: 'TESTS-results-jest.xml' }],
     ['jest-sonar', { outputDirectory: './<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
   ],
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/'
-  ],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   setupFiles: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/setup-tests.ts'],
   globals: {
 <%_ if (enableTranslation) { _%>
