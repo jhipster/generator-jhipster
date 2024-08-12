@@ -138,7 +138,7 @@ export class AlertErrorComponent implements OnDestroy {
   }
 
   private handleFieldsError(httpErrorResponse: HttpErrorResponse): void {
-    const fieldErrors = httpErrorResponse.error.fieldErrors;
+    const { fieldErrors } = httpErrorResponse.error;
     for (const fieldError of fieldErrors) {
       if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
         fieldError.message = 'Size';

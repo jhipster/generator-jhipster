@@ -47,7 +47,7 @@ export class LazyTranslationModule {
   private stateStorageService = inject(StateStorageService);
 
   constructor() {
-    const currentLang = this.translateService.store.currentLang;
+    const { currentLang } = this.translateService.store;
     this.translateLoader.getTranslation(currentLang).subscribe(translation => {
       this.translateService.setTranslation(currentLang, translation);
     });
