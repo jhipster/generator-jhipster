@@ -1,18 +1,18 @@
 <template>
   <div>
     <h2>
-      <span id="health-page-heading" v-text="t$('health.title')" data-cy="healthPageHeading">Health Checks</span>
-      <button class="btn btn-primary float-right" v-on:click="refresh()" :disabled="updatingHealth">
-        <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="t$('health[\'refresh.button\']')">Refresh</span>
+      <span id="health-page-heading" data-cy="healthPageHeading" v-text="t$('health.title')">Health Checks</span>
+      <button class="btn btn-primary float-right" :disabled="updatingHealth" @click="refresh()">
+        <font-awesome-icon icon="sync" /> <span v-text="t$('health[\'refresh.button\']')">Refresh</span>
       </button>
     </h2>
     <div class="table-responsive">
       <table id="healthCheck" class="table table-striped" aria-describedby="Health check">
         <thead>
           <tr>
-            <th v-text="t$('health.table.service')" scope="col">Service Name</th>
-            <th class="text-center" v-text="t$('health.table.status')" scope="col">Status</th>
-            <th class="text-center" v-text="t$('health.details.details')" scope="col">Details</th>
+            <th scope="col" v-text="t$('health.table.service')">Service Name</th>
+            <th class="text-center" scope="col" v-text="t$('health.table.status')">Status</th>
+            <th class="text-center" scope="col" v-text="t$('health.details.details')">Details</th>
           </tr>
         </thead>
         <tbody>
@@ -24,8 +24,8 @@
               </span>
             </td>
             <td class="text-center">
-              <a class="hand" v-on:click="showHealth(health)" v-if="health.details || health.error">
-                <font-awesome-icon icon="eye"></font-awesome-icon>
+              <a v-if="health.details || health.error" class="hand" @click="showHealth(health)">
+                <font-awesome-icon icon="eye" />
               </a>
             </td>
           </tr>
@@ -43,7 +43,7 @@
         {{ subSystemName(currentHealth.name) }}
         </h4>
       </template>
-      <health-modal :current-health="currentHealth"></health-modal>
+      <health-modal :current-health="currentHealth" />
     </b-modal>
   </div>
 </template>

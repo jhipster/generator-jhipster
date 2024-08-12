@@ -3,14 +3,27 @@
     <div class="col-8">
       <div v-if="user">
         <h2 class="jh-entity-heading">
-          <span v-text="t$('userManagement.detail.title')">User</span> [<strong>{{user.login}}</strong>]
+          <span v-text="t$('userManagement.detail.title')">User</span> [<strong>{{ user.login }}</strong
+          >]
         </h2>
         <dl class="row jh-entity-details">
           <dt><span v-text="t$('userManagement.login')">Login</span></dt>
           <dd>
-            <span>{{user.login}}</span>
-            <b-badge variant="success" v-if="user.activated" v-text="t$('userManagement.activated')">Activated</b-badge>
-            <b-badge variant="danger" v-if="!user.activated" v-text="t$('userManagement.deactivated')">Deactivated</b-badge>
+            <span>{{ user.login }}</span>
+            <b-badge
+              variant="success"
+              v-if="user.activated"
+              v-text="t$('userManagement.activated')"
+            >
+              Activated
+            </b-badge>
+            <b-badge
+              variant="danger"
+              v-if="!user.activated"
+              v-text="t$('userManagement.deactivated')"
+            >
+              Deactivated
+            </b-badge>
           </dd>
           <dt><span v-text="t$('userManagement.firstName')">First Name</span></dt>
           <dd>{{user.firstName}}</dd>
@@ -27,22 +40,24 @@
           <dt><span v-text="t$('userManagement.createdDate')">Created Date</span></dt>
           <dd>
             <span v-if="user.createdDate">
-              {{formatDate(user.createdDate)}}
+              {{ formatDate(user.createdDate) }}
             </span>
           </dd>
           <dt><span v-text="t$('userManagement.lastModifiedBy')">Last Modified By</span></dt>
-          <dd>{{user.lastModifiedBy}}</dd>
+          <dd>{{ user.lastModifiedBy }}</dd>
           <dt><span v-text="t$('userManagement.lastModifiedDate')">Last Modified Date</span></dt>
           <dd>
             <span v-if="user.lastModifiedDate">
-                {{formatDate(user.lastModifiedDate)}}
+              {{ formatDate(user.lastModifiedDate) }}
             </span>
           </dd>
           <dt><span v-text="t$('userManagement.profiles')">Profiles</span></dt>
           <dd>
             <ul class="list-unstyled">
               <li v-for="authority of user.authorities" :key="authority">
-                <b-badge variant="info">{{authority}}</b-badge>
+                <b-badge variant="info">
+                  {{ authority }}
+                </b-badge>
               </li>
             </ul>
           </dd>

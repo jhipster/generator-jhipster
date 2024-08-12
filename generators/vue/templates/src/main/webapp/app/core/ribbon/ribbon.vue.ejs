@@ -1,5 +1,5 @@
 <template>
-  <div class="ribbon" v-if="ribbonEnabled">
+  <div v-if="ribbonEnabled" class="ribbon">
     <a href="" v-text="t$('global.ribbon.' + ribbonEnv)">{{ ribbonEnv }}</a>
   </div>
 </template>

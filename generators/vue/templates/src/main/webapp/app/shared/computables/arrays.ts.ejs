@@ -17,19 +17,27 @@
  limitations under the License.
 -%>
 const compareString = (a: string, b: string): number => {
-  if (b == null) return 1;
-  if (a == null) return -1;
+  if (b == null) {
+    return 1;
+  }
+  if (a == null) {
+    return -1;
+  }
 
   return a.localeCompare(b);
 };
 
 const asString = (val): string => {
-  return typeof val === 'string' ? val : '' + val;
+  return typeof val === 'string' ? val : `${val}`;
 };
 
 const compareAny = (a, b): number => {
-  if (b == null) return 1;
-  if (a == null) return -1;
+  if (b == null) {
+    return 1;
+  }
+  if (a == null) {
+    return -1;
+  }
 
   return a - b;
 };
@@ -37,7 +45,9 @@ const compareAny = (a, b): number => {
 export type OrderByOptions = { orderByProp: string; reverse?: boolean };
 
 export const orderBy = (array: any[], opts: OrderByOptions) => {
-  if (!Array.isArray(array)) return array;
+  if (!Array.isArray(array)) {
+    return array;
+  }
 
   const { orderByProp, reverse = false } = opts;
   let sorted: any[];
@@ -60,13 +70,17 @@ const filterObject = (val: any, opts: FilterByOptions): boolean => {
     return val.toLocaleLowerCase().startsWith(filterByTerm);
   }
   if (typeof val === 'object') {
-    if (filterMaxDepth < 0) return false;
+    if (filterMaxDepth < 0) {
+      return false;
+    }
     for (const value of Object.values(val)) {
-      if (filterObject(value, { filterByTerm, filterMaxDepth: filterMaxDepth - 1 })) return true;
+      if (filterObject(value, { filterByTerm, filterMaxDepth: filterMaxDepth - 1 })) {
+        return true;
+      }
     }
     return false;
   }
-  return ('' + val).toLocaleLowerCase().startsWith(filterByTerm);
+  return `${val}`.toLocaleLowerCase().startsWith(filterByTerm);
 };
 
 export const filterBy = (array: any, opts: FilterByOptions) => {

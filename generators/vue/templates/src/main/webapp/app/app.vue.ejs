@@ -11,7 +11,7 @@
 <%_ if (!authenticationTypeOauth2) { _%>
       <b-modal id="login-page" hide-footer lazy>
         <template #modal-title>
-          <span data-cy="loginTitle" id="login-title" v-text="t$('login.title')">Sign in</span>
+          <span id="login-title" data-cy="loginTitle" v-text="t$('login.title')">Sign in</span>
         </template>
         <login-form></login-form>
       </b-modal>

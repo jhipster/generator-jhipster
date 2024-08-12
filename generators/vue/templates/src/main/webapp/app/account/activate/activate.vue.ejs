@@ -3,11 +3,11 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <h1 v-text="t$('activate.title')">Activation</h1>
-        <div class="alert alert-success" v-if="success">
+        <div v-if="success" class="alert alert-success">
           <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
-          <a class="alert-link" v-on:click="openLogin" v-text="t$('global.messages.info.authenticated.link')">sign in</a>.
+          <a class="alert-link" @click="openLogin" v-text="t$('global.messages.info.authenticated.link')">sign in</a>.
         </div>
-        <div class="alert alert-danger" v-if="error" v-html="t$('activate.messages.error')">
+        <div v-if="error" class="alert alert-danger" v-html="t$('activate.messages.error')">
           <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
         </div>
       </div>

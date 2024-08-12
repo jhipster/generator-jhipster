@@ -74,14 +74,14 @@ const useDataUtils = () => ({
    */
   clearInputImage(entity, elementRef, field, fieldContentType, idInput) {
     if (entity && field && fieldContentType) {
-      if (Object.prototype.hasOwnProperty.call(entity, field)) {
+      if (Object.hasOwn(entity, field)) {
         entity[field] = null;
       }
-      if (Object.prototype.hasOwnProperty.call(entity, fieldContentType)) {
+      if (Object.hasOwn(entity, fieldContentType)) {
         entity[fieldContentType] = null;
       }
-      if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
-        elementRef.nativeElement.querySelector('#' + idInput).value = null;
+      if (elementRef && idInput && elementRef.nativeElement.querySelector(`#${idInput}`)) {
+        elementRef.nativeElement.querySelector(`#${idInput}`).value = null;
       }
     }
   },
@@ -105,7 +105,7 @@ const useDataUtils = () => ({
   },
 
   formatAsBytes(size) {
-    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
+    return `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`;
   },
 
   setFileData(event, entity, field, isImage) {
@@ -164,7 +164,7 @@ const useDataUtils = () => ({
       url.replace(new RegExp(/([^?=&]+)(=([^&]*))?/g), ($0, $1, $2, $3) => {
         queryString[$1] = $3;
       });
-      let page = queryString.page;
+      let { page } = queryString;
       if (typeof page === 'string') {
         page = parseInt(page, 10);
       }

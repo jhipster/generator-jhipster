@@ -12,25 +12,25 @@
           </span>
         </h2>
 
-        <div class="alert alert-success" role="alert" v-if="success" v-html="t$('settings.messages.success')">
+        <div v-if="success" class="alert alert-success" role="alert" v-html="t$('settings.messages.success')">
           <strong>Settings saved!</strong>
         </div>
 
-        <div class="alert alert-danger" role="alert" v-if="errorEmailExists" v-html="t$('register.messages.error.emailexists')">
+        <div v-if="errorEmailExists" class="alert alert-danger" role="alert" v-html="t$('register.messages.error.emailexists')">
           <strong>Email is already in use!</strong> Please choose another one.
         </div>
 
-        <form name="form" id="settings-form" v-on:submit.prevent="save()" v-if="settingsAccount" novalidate>
+        <form v-if="settingsAccount" id="settings-form" name="form" novalidate @submit.prevent="save()">
           <div class="form-group">
             <label class="form-control-label" for="firstName" v-text="t$('settings.form.firstname')">First Name</label>
             <input
+              id="firstName"
+              v-model="v$.settingsAccount.firstName.$model"
               type="text"
               class="form-control"
-              id="firstName"
               name="firstName"
-              v-bind:placeholder="t$('settings.form[\'firstname.placeholder\']')"
+              :placeholder="t$('settings.form[\'firstname.placeholder\']')"
               :class="{ valid: !v$.settingsAccount.firstName.$invalid, invalid: v$.settingsAccount.firstName.$invalid }"
-              v-model="v$.settingsAccount.firstName.$model"
               minlength="1"
               maxlength="50"
               required
@@ -38,22 +38,22 @@
             />
             <div v-if="v$.settingsAccount.firstName.$anyDirty && v$.settingsAccount.firstName.$invalid">
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.firstName.required"
+                class="form-text text-danger"
                 v-text="t$('settings.messages.validate.firstname.required')"
               >
                 Your first name is required.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.firstName.minLength"
+                class="form-text text-danger"
                 v-text="t$('settings.messages.validate.firstname.minlength')"
               >
                 Your first name is required to be at least 1 character.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.firstName.maxLength"
+                class="form-text text-danger"
                 v-text="t$('settings.messages.validate.firstname.maxlength')"
               >
                 Your first name cannot be longer than 50 characters.
@@ -63,13 +63,13 @@
           <div class="form-group">
             <label class="form-control-label" for="lastName" v-text="t$('settings.form.lastname')">Last Name</label>
             <input
+              id="lastName"
+              v-model="v$.settingsAccount.lastName.$model"
               type="text"
               class="form-control"
-              id="lastName"
               name="lastName"
-              v-bind:placeholder="t$('settings.form[\'lastname.placeholder\']')"
+              :placeholder="t$('settings.form[\'lastname.placeholder\']')"
               :class="{ valid: !v$.settingsAccount.lastName.$invalid, invalid: v$.settingsAccount.lastName.$invalid }"
-              v-model="v$.settingsAccount.lastName.$model"
               minlength="1"
               maxlength="50"
               required
@@ -77,22 +77,22 @@
             />
             <div v-if="v$.settingsAccount.lastName.$anyDirty && v$.settingsAccount.lastName.$invalid">
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.lastName.required"
+                class="form-text text-danger"
                 v-text="t$('settings.messages.validate.lastname.required')"
               >
                 Your last name is required.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.lastName.minLength"
+                class="form-text text-danger"
                 v-text="t$('settings.messages.validate.lastname.minlength')"
               >
                 Your last name is required to be at least 1 character.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.lastName.maxLength"
+                class="form-text text-danger"
                 v-text="t$('settings.messages.validate.lastname.maxlength')"
               >
                 Your last name cannot be longer than 50 characters.
@@ -102,13 +102,13 @@
           <div class="form-group">
             <label class="form-control-label" for="email" v-text="t$('global.form[\'email.label\']')">Email</label>
             <input
+              id="email"
+              v-model="v$.settingsAccount.email.$model"
               type="email"
               class="form-control"
-              id="email"
               name="email"
-              v-bind:placeholder="t$('global.form[\'email.placeholder\']')"
+              :placeholder="t$('global.form[\'email.placeholder\']')"
               :class="{ valid: !v$.settingsAccount.email.$invalid, invalid: v$.settingsAccount.email.$invalid }"
-              v-model="v$.settingsAccount.email.$model"
               minlength="5"
               maxlength="254"
               email
@@ -117,29 +117,29 @@
             />
             <div v-if="v$.settingsAccount.email.$anyDirty && v$.settingsAccount.email.$invalid">
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.email.required"
+                class="form-text text-danger"
                 v-text="t$('global.messages.validate.email.required')"
               >
                 Your email is required.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.email.email"
+                class="form-text text-danger"
                 v-text="t$('global.messages.validate.email.invalid')"
               >
                 Your email is invalid.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.email.minLength"
+                class="form-text text-danger"
                 v-text="t$('global.messages.validate.email.minlength')"
               >
                 Your email is required to be at least 5 characters.
               </small>
               <small
-                class="form-text text-danger"
                 v-if="!v$.settingsAccount.email.maxLength"
+                class="form-text text-danger"
                 v-text="t$('global.messages.validate.email.maxlength')"
               >
                 Your email cannot be longer than 100 characters.
@@ -150,7 +150,8 @@
           <div class="form-group" v-if="languages && Object.keys(languages).length > 1">
             <label for="langKey" v-text="t$('settings.form.language')">Language</label>
             <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
-              <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
+              <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">
+                {{ language.name }}
               </option>
             </select>
           </div>

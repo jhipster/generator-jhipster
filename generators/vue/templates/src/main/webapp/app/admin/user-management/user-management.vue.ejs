@@ -71,8 +71,8 @@
                     <span class="d-none d-md-inline" v-text="t$('entity.action.edit')">Edit</span>
                   </button>
                 </router-link>
-                <b-button v-on:click="prepareRemove(user)" variant="danger" class="btn btn-sm delete" :disabled="username === user.login">
-                  <font-awesome-icon icon="times"></font-awesome-icon>
+                <b-button variant="danger" class="btn btn-sm delete" :disabled="username === user.login" @click="prepareRemove(user)">
+                  <font-awesome-icon icon="times" />
                   <span class="d-none d-md-inline" v-text="t$('entity.action.delete')">Delete</span>
                 </b-button>
               </div>
@@ -86,20 +86,20 @@
           </div>
           <template #modal-footer>
             <div>
-              <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-              <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" v-on:click="deleteUser()">Delete</button>
+              <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" @click="closeDialog()">Cancel</button>
+              <button type="button" class="btn btn-primary" id="confirm-delete-user" v-text="t$('entity.action.delete')" @click="deleteUser()">Delete</button>
             </div>
           </template>
       </b-modal>
     </div>
 <%_ if (!databaseTypeCassandra) { _%>
     <div v-show="users && users.length > 0">
-        <div class="row justify-content-center">
-            <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
-        </div>
-        <div class="row justify-content-center">
-            <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
-        </div>
+      <div class="row justify-content-center">
+        <jhi-item-count :page="page" :total="queryCount" :items-per-page="itemsPerPage"></jhi-item-count>
+      </div>
+      <div class="row justify-content-center">
+        <b-pagination v-model="page" size="md" :total-rows="totalItems" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
+      </div>
     </div>
 <%_ } _%>
   </div>

@@ -106,7 +106,7 @@ export default defineComponent({
     },
 <%_ if (!databaseTypeCassandra) { _%>
     sort(): any {
-      const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
+      const result = [`${this.propOrder},${this.reverse ? 'desc' : 'asc'}`];
       if (this.propOrder !== 'id') {
         result.push('id');
       }
