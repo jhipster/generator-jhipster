@@ -169,7 +169,7 @@
     "sort-keys": "5.0.0",
     "type-fest": "4.24.0",
     "typescript": "5.4.5",
-    "typescript-eslint": "8.0.1",
+    "typescript-eslint": "8.1.0",
     "winston": "3.14.1",
     "yaml": "2.5.0",
     "yeoman-environment": "4.4.1",
