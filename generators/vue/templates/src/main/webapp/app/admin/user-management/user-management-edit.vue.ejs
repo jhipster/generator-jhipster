@@ -44,7 +44,7 @@
               class="form-control"
               id="firstName"
               name="firstName"
-              v-bind:placeholder="t$('settings.form[\'firstname.placeholder\']')"
+              :placeholder="t$('settings.form[\'firstname.placeholder\']')"
               :class="{ valid: !v$.userAccount.firstName.$invalid, invalid: v$.userAccount.firstName.$invalid }"
               v-model="v$.userAccount.firstName.$model"
             />
@@ -65,7 +65,7 @@
               class="form-control"
               id="lastName"
               name="lastName"
-              v-bind:placeholder="t$('settings.form[\'lastname.placeholder\']')"
+              :placeholder="t$('settings.form[\'lastname.placeholder\']')"
               :class="{ valid: !v$.userAccount.lastName.$invalid, invalid: v$.userAccount.lastName.$invalid }"
               v-model="v$.userAccount.lastName.$model"
             />
@@ -86,7 +86,7 @@
               class="form-control"
               id="email"
               name="email"
-              v-bind:placeholder="t$('global.form[\'email.placeholder\']')"
+              :placeholder="t$('global.form[\'email.placeholder\']')"
               :class="{ valid: !v$.userAccount.email.$invalid, invalid: v$.userAccount.email.$invalid }"
               v-model="v$.userAccount.email.$model"
               email

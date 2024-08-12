@@ -24,7 +24,7 @@
                 <form name="searchForm" class="form-inline" @submit.prevent="search(currentSearch)">
                     <div class="input-group w-100 mt-3">
                         <input type="text" class="form-control" name="currentSearch" id="currentSearch"
-                            v-bind:placeholder="t$('<%= i18nKeyPrefix %>.home.search')"
+                            :placeholder="t$('<%= i18nKeyPrefix %>.home.search')"
                             v-model="currentSearch" />
                         <button type="button" id="launch-search" class="btn btn-primary" @click="search(currentSearch)">
                             <font-awesome-icon icon="search"></font-awesome-icon>
@@ -71,7 +71,7 @@
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                         <a v-if="<%= entityInstance %>.<%= fieldName %>" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
-                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %>"/>
+                            <img :src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %>"/>
                         </a>
                         <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>

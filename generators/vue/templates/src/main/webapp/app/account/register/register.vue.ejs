@@ -37,7 +37,7 @@
               minlength="1"
               maxlength="50"
               pattern="^[a-zA-Z0-9!#$&'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
-              v-bind:placeholder="t$('global.form[\'username.placeholder\']')"
+              :placeholder="t$('global.form[\'username.placeholder\']')"
               data-cy="username"
             />
             <div v-if="v$.registerAccount.login.$anyDirty && v$.registerAccount.login.$invalid">
@@ -84,7 +84,7 @@
               maxlength="254"
               email
               required
-              v-bind:placeholder="t$('global.form[\'email.placeholder\']')"
+              :placeholder="t$('global.form[\'email.placeholder\']')"
               data-cy="email"
             />
             <div v-if="v$.registerAccount.email.$anyDirty && v$.registerAccount.email.$invalid">
@@ -130,7 +130,7 @@
               minlength="4"
               maxlength="50"
               required
-              v-bind:placeholder="t$('global.form[\'newpassword.placeholder\']')"
+              :placeholder="t$('global.form[\'newpassword.placeholder\']')"
               data-cy="firstPassword"
             />
             <div v-if="v$.registerAccount.password.$anyDirty && v$.registerAccount.password.$invalid">
@@ -171,7 +171,7 @@
               minlength="4"
               maxlength="50"
               required
-              v-bind:placeholder="t$('global.form[\'confirmpassword.placeholder\']')"
+              :placeholder="t$('global.form[\'confirmpassword.placeholder\']')"
               data-cy="secondPassword"
             />
             <div v-if="v$.confirmPassword.$dirty && v$.confirmPassword.$invalid">

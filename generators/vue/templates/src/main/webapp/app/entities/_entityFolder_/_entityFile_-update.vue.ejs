@@ -35,14 +35,14 @@ _%>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%= fieldName %>" :class="{'valid': !v$.<%= fieldName %>.$invalid, 'invalid': v$.<%= fieldName %>.$invalid }" v-model="v$.<%= fieldName %>.$model" id="<%= entityFileName %>-<%= fieldName %>" data-cy="<%= fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-                            <option v-for="<%= this._.lowerFirst(fieldType) %> in <%= this._.lowerFirst(fieldType)%>Values" :key="<%= this._.lowerFirst(fieldType) %>" v-bind:value="<%= this._.lowerFirst(fieldType) %>" v-bind:label="t$('<%= enumPrefix %>.'+<%= this._.lowerFirst(fieldType) %>)">{{ <%= this._.lowerFirst(fieldType) %> }}</option>
+                            <option v-for="<%= this._.lowerFirst(fieldType) %> in <%= this._.lowerFirst(fieldType)%>Values" :key="<%= this._.lowerFirst(fieldType) %>" :value="<%= this._.lowerFirst(fieldType) %>" :label="t$('<%= enumPrefix %>.'+<%= this._.lowerFirst(fieldType) %>)">{{ <%= this._.lowerFirst(fieldType) %> }}</option>
 
                         </select>
   <%_ } else { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                         <div>
       <%_ if (field.blobContentTypeImage) { _%>
-                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %>"/>
+                            <img :src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" v-if="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %>"/>
       <%_ } _%>
                             <div v-if="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
       <%_ if (field.blobContentTypeAny) { _%>
@@ -135,18 +135,18 @@ _%>
                         <label class="form-control-label" v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" data-cy="<%= relationshipFieldName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
     <%_ if (!relationshipRequired) { _%>
-                            <option v-bind:value="null"></option>
+                            <option :value="null"></option>
     <%_ } else { _%>
-                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" v-bind:value="null" selected></option>
+                            <option v-if="!<%= entityInstance %>.<%= relationshipName %>" :value="null" selected></option>
     <%_ } _%>
-                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option :value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %> === <%= entityInstance %>.<%=relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %> ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } else if (relationship.persistableRelationship) { _%>
                     <div class="form-group">
                         <label v-text="t$('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= relationshipName %>" v-if="<%=entityInstance %>.<%=relationshipFieldNamePlural %> !== undefined" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
-                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option, '<%= relationship.otherEntity.primaryKey.name %>')" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            <option :value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option, '<%= relationship.otherEntity.primaryKey.name %>')" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.<%= relationship.otherEntity.primaryKey.name %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                         </select>
                     </div>
   <%_ } _%>
