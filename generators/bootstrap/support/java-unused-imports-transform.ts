@@ -1,4 +1,5 @@
 import { extname } from 'path';
+import os from 'node:os';
 import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { VinylMemFsEditorFile } from 'mem-fs-editor';
@@ -16,7 +17,7 @@ export const createRemoveUnusedImportsTransform = function (
   const { ignoreErrors } = options;
 
   const pool = new Piscina({
-    maxThreads: 1,
+    maxThreads: Math.ceil(os.availableParallelism() / 3),
     filename: new URL('./java-lint-worker.js', import.meta.url).href,
   });
 

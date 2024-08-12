@@ -5,15 +5,20 @@ import jhipster from '../../../lib/eslint/index.js';
 
 let eslintInstance;
 
-export default async ({ cwd, filePath, fileContents, extensions }) => {
-  if (!eslintInstance) {
+export default async ({ cwd, filePath, fileContents, extensions, config, additionalConfig = [], recreateEslint }) => {
+  if (recreateEslint || !eslintInstance) {
     eslintInstance = new eslint.ESLint({
       fix: true,
       overrideConfigFile: true,
       allowInlineConfig: false,
       cache: false,
       cwd,
-      baseConfig: ts.config({ files: [`**/*.{${extensions}}`] }, ts.configs.base, jhipster.base),
+      baseConfig: ts.config(
+        { files: [`**/*.{${extensions}}`] },
+        ts.configs.base,
+        ...additionalConfig,
+        config ? JSON.parse(config) : jhipster.base,
+      ),
     });
   }
 

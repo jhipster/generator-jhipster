@@ -28,23 +28,36 @@ const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
 export const isPrettierConfigFile = (file: MemFsEditorFile) => isPrettierConfigFilePath(file.path);
 
+type PrettierWorkerOptions = {
+  prettierPackageJson?: boolean;
+  prettierJava?: boolean;
+  prettierProperties?: boolean;
+  prettierOptions?: PrettierOptions;
+};
+
+export class PrettierPool extends Piscina {
+  constructor(options = {}) {
+    super({
+      maxThreads: 1,
+      filename: new URL('./prettier-worker.js', import.meta.url).href,
+      ...options,
+    });
+  }
+
+  apply(
+    data: PrettierWorkerOptions & { relativeFilePath: string; filePath: string; fileContents: string },
+  ): Promise<{ result?: string; errorMessage?: string }> {
+    return this.run(data);
+  }
+}
+
 export const createPrettierTransform = async function (
   this: CoreGenerator,
-  options: {
-    ignoreErrors?: boolean;
-    extensions?: string;
-    prettierPackageJson?: boolean;
-    prettierJava?: boolean;
-    prettierProperties?: boolean;
-    prettierOptions?: PrettierOptions;
-  } = {},
+  options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string } = {},
 ) {
-  const pool = new Piscina({
-    maxThreads: 1,
-    filename: new URL('./prettier-worker.js', import.meta.url).href,
-  });
+  const pool = new PrettierPool();
 
-  const { ignoreErrors = false, extensions = '*', prettierPackageJson, prettierJava, prettierProperties, prettierOptions } = options;
+  const { ignoreErrors = false, extensions = '*', ...workerOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
 
@@ -56,15 +69,11 @@ export const createPrettierTransform = async function (
       if (!file.contents) {
         throw new Error(`File content doesn't exist for ${file.relative}`);
       }
-      const { result, errorMessage } = await pool.run({
+      const { result, errorMessage } = await pool.apply({
         relativeFilePath: file.relative,
         filePath: file.path,
         fileContents: file.contents.toString('utf8'),
-        prettierOptions,
-        prettierPackageJson,
-        prettierJava,
-        prettierProperties,
-        ignoreErrors,
+        ...workerOptions,
       });
       if (result) {
         file.contents = Buffer.from(result);
