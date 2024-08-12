@@ -186,7 +186,9 @@ public class SecurityConfiguration {
 
     @Bean
     public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService) {
-        UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+        UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(
+            userDetailsService
+        );
         authenticationManager.setPasswordEncoder(passwordEncoder());
         return authenticationManager;
     }
@@ -195,8 +197,7 @@ public class SecurityConfiguration {
     @Bean
     public MapReactiveUserDetailsService userDetailsService(SecurityProperties properties) {
         SecurityProperties.User user = properties.getUser();
-        UserDetails userDetails = User
-            .withUsername(user.getName())
+        UserDetails userDetails = User.withUsername(user.getName())
             .password("{noop}" + user.getPassword())
             .roles(StringUtils.toStringArray(user.getRoles()))
             .build();
@@ -419,8 +420,7 @@ public class SecurityConfiguration {
         return new ReactiveJwtDecoder() {
             @Override
             public Mono<Jwt> decode(String token) throws JwtException {
-                return jwtDecoder.decode(token)
-                    .flatMap(jwt -> enrich(token, jwt));
+                return jwtDecoder.decode(token).flatMap(jwt -> enrich(token, jwt));
             }
 
             private Mono<Jwt> enrich(String token, Jwt jwt) {
@@ -429,17 +429,15 @@ public class SecurityConfiguration {
                     return Mono.just(jwt);
                 }
                 // Get user info from `users` cache if present
-                return Optional.ofNullable(users.getIfPresent(jwt.getSubject()))
-                    // Retrieve user info from OAuth provider if not already loaded
-                    .orElseGet(() -> WebClient.create()
+                return Optional.ofNullable(users.getIfPresent(jwt.getSubject())).orElseGet(() -> // Retrieve user info from OAuth provider if not already loaded
+                    WebClient.create()
                         .get()
                         .uri(userInfoUri)
                         .headers(headers -> headers.setBearerAuth(token))
                         .retrieve()
                         .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                         .map(userInfo ->
-                            Jwt
-                                .withTokenValue(jwt.getTokenValue())
+                            Jwt.withTokenValue(jwt.getTokenValue())
                                 .subject(jwt.getSubject())
                                 .audience(jwt.getAudience())
                                 .headers(headers -> headers.putAll(jwt.getHeaders()))
@@ -464,7 +462,7 @@ public class SecurityConfiguration {
                         )
                         // Put user info into the `users` cache
                         .doOnNext(newJwt -> users.put(jwt.getSubject(), Mono.just(newJwt)))
-                    );
+                );
             }
         };
     }

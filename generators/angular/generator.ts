@@ -142,7 +142,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
             { ignoreNonExisting },
             createNeedleCallback({
               needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `,${args.config}`,
+              contentToAdd: `${args.config},`,
             }),
           );
         };

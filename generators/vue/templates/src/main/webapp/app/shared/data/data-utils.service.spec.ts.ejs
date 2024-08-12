@@ -78,7 +78,7 @@ describe('Formatter i18n', () => {
         '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12>; rel="first"',
     );
 
-    expect(result['last']).toBe(2);
+    expect(result.last).toBe(2);
   });
 
   it('should return empty JSON object for empty string', () => {

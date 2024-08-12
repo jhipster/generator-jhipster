@@ -324,7 +324,7 @@ class AccountResourceIT {
 <%_ } _%>
     void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("funky-log(n");// <-- invalid
+        invalidUser.setLogin("funky-log(n"); // <-- invalid
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
         invalidUser.setLastName("One");
@@ -360,9 +360,9 @@ class AccountResourceIT {
 
     static Stream<ManagedUserVM> invalidUsers() {
         return Stream.of(
-            createInvalidUser("bob", "password", "Bob", "Green", "invalid", true),// <-- invalid
-            createInvalidUser("bob", "123", "Bob", "Green", "bob@example.com", true),// password with only 3 digits
-            createInvalidUser("bob", null, "Bob", "Green", "bob@example.com", true)// invalid null password
+            createInvalidUser("bob", "password", "Bob", "Green", "invalid", true), // <-- invalid
+            createInvalidUser("bob", "123", "Bob", "Green", "bob@example.com", true), // password with only 3 digits
+            createInvalidUser("bob", null, "Bob", "Green", "bob@example.com", true) // invalid null password
         );
     }
 
@@ -391,7 +391,14 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    private static ManagedUserVM createInvalidUser(String login, String password, String firstName, String lastName, String email, boolean activated) {
+    private static ManagedUserVM createInvalidUser(
+        String login,
+        String password,
+        String firstName,
+        String lastName,
+        String email,
+        boolean activated
+    ) {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin(login);
         invalidUser.setPassword(password);

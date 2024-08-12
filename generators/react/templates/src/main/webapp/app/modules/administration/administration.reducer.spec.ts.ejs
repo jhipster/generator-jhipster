@@ -98,9 +98,9 @@ describe('Administration reducer tests', () => {
         state => {
           expect(state).toMatchObject({
             errorMessage: null,
-            loading: true
+            loading: true,
           });
-        }
+        },
       );
     });
   });
@@ -130,7 +130,7 @@ describe('Administration reducer tests', () => {
         },
         {
           message: 'error',
-        }
+        },
       );
     });
   });
@@ -161,7 +161,7 @@ describe('Administration reducer tests', () => {
 
       expect(toTest).toMatchObject({
         loading: false,
-        logs: payload.data
+        logs: payload.data,
       });
     });
 
@@ -216,8 +216,8 @@ describe('Administration reducer tests', () => {
         loading: false,
         configuration: {
           configProps: {},
-          env: payload.data
-        }
+          env: payload.data,
+        },
       });
     });
 <%_ } _%>

@@ -21,25 +21,25 @@
     <div class="col-md-8">
       <h1 data-cy="registerTitle">__jhiTranslateTag__('register.title')</h1>
 
-    @if (success()) {
-      <div class="alert alert-success">__jhiTranslateTag__('register.messages.success')</div>
-    }
+      @if (success()) {
+        <div class="alert alert-success">__jhiTranslateTag__('register.messages.success')</div>
+      }
 
-    @if (error()) {
-      <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.fail')</div>
-    }
+      @if (error()) {
+        <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.fail')</div>
+      }
 
-    @if (errorUserExists()) {
-      <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.userexists')</div>
-    }
+      @if (errorUserExists()) {
+        <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.userexists')</div>
+      }
 
-    @if (errorEmailExists()) {
-      <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.emailexists')</div>
-    }
+      @if (errorEmailExists()) {
+        <div class="alert alert-danger">__jhiTranslateTag__('register.messages.error.emailexists')</div>
+      }
 
-    @if (doNotMatch()) {
-      <div class="alert alert-danger">__jhiTranslateTag__('global.messages.error.dontmatch')</div>
-    }
+      @if (doNotMatch()) {
+        <div class="alert alert-danger">__jhiTranslateTag__('global.messages.error.dontmatch')</div>
+      }
     </div>
   </div>
 
