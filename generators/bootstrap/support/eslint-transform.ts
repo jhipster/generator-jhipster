@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import os from 'node:os';
 import { passthrough } from 'p-transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
@@ -31,7 +30,7 @@ type ESLintWorkerOptions = { cwd?: string; extensions: string; recreateEslint?: 
 export class ESLintPool extends Piscina {
   constructor(options?: PoolOptions) {
     super({
-      maxThreads: Math.ceil(os.availableParallelism() / 3),
+      maxThreads: 1,
       filename: new URL('./eslint-worker.js', import.meta.url).href,
       ...options,
     });
