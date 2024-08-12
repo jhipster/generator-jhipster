@@ -63,7 +63,7 @@ public class LiquibaseConfiguration {
     }
 <%_ if (databaseTypeSql && !reactive) { _%>
 
-    @Value( "${application.liquibase.async-start:true}" )
+    @Value("${application.liquibase.async-start:true}")
     private Boolean asyncStart;
 <%_ } _%>
 

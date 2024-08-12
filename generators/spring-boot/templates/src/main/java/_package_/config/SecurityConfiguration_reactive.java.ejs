@@ -321,20 +321,22 @@ public class SecurityConfiguration {
 <%_ if (authenticationTypeOauth2) { _%>
   <%_ if (!applicationTypeMicroservice) { _%>
     private ServerOAuth2AuthorizationRequestResolver authorizationRequestResolver(
-        ReactiveClientRegistrationRepository clientRegistrationRepository) {
-        DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver =
-            new DefaultServerOAuth2AuthorizationRequestResolver(clientRegistrationRepository);
+        ReactiveClientRegistrationRepository clientRegistrationRepository
+    ) {
+        DefaultServerOAuth2AuthorizationRequestResolver authorizationRequestResolver = new DefaultServerOAuth2AuthorizationRequestResolver(
+            clientRegistrationRepository
+        );
         if (this.issuerUri.contains("auth0.com")) {
             authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
         }
-        return  authorizationRequestResolver;
+        return authorizationRequestResolver;
     }
 
     private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
-        return customizer -> customizer
-            .authorizationRequestUri(uriBuilder ->
-                uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience())
-                    .build());
+        return customizer ->
+            customizer.authorizationRequestUri(uriBuilder ->
+                uriBuilder.queryParam("audience", jHipsterProperties.getSecurity().getOauth2().getAudience()).build()
+            );
     }
   <%_ } _%>
 
@@ -410,8 +412,7 @@ public class SecurityConfiguration {
 
     private ReactiveJwtDecoder createJwtDecoder(String issuerUri, String jwkSetUri, String userInfoUri) {
         NimbusReactiveJwtDecoder jwtDecoder = new NimbusReactiveJwtDecoder(jwkSetUri);
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(
-            jHipsterProperties.getSecurity().getOauth2().getAudience());
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 

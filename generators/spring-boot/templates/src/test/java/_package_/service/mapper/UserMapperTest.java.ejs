@@ -153,9 +153,7 @@ class UserMapperTest {
 
         List<<%= user.dtoClass %>> userDTOS = userMapper.usersToUserDTOs(users);
 
-        assertThat(userDTOS)
-          .isNotEmpty()
-          .size().isEqualTo(1);
+        assertThat(userDTOS).isNotEmpty().size().isEqualTo(1);
     }
 
     @Test
@@ -166,9 +164,7 @@ class UserMapperTest {
 
         List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users)
-          .isNotEmpty()
-          .size().isEqualTo(1);
+        assertThat(users).isNotEmpty().size().isEqualTo(1);
     }
 
     @Test
@@ -182,9 +178,7 @@ class UserMapperTest {
 
         List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users)
-          .isNotEmpty()
-          .size().isEqualTo(1);
+        assertThat(users).isNotEmpty().size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isNotEmpty();
 <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
@@ -204,9 +198,7 @@ class UserMapperTest {
 
         List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
-        assertThat(users)
-          .isNotEmpty()
-          .size().isEqualTo(1);
+        assertThat(users).isNotEmpty().size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
         assertThat(users.get(0).getAuthorities()).isEmpty();
     }

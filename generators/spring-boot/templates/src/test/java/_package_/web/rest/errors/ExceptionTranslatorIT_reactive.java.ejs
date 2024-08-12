@@ -59,69 +59,103 @@ class ExceptionTranslatorIT {
 
     @Test
     void testConcurrencyFailure() {
-        webTestClient.get().uri("/api/exception-translator-test/concurrency-failure")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/concurrency-failure")
             .exchange()
-            .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isEqualTo(HttpStatus.CONFLICT)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
 <%_ } _%>
 
     @Test
     void testMethodArgumentNotValid() {
-         webTestClient.post().uri("/api/exception-translator-test/method-argument")
-             .contentType(MediaType.APPLICATION_JSON)
-             .bodyValue("{}")
-             .exchange()
-             .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
-             .expectBody()
-             .jsonPath("$.message").isEqualTo(ErrorConstants.ERR_VALIDATION)
-             .jsonPath("$.fieldErrors.[0].objectName").isEqualTo("test")
-             .jsonPath("$.fieldErrors.[0].field").isEqualTo("test")
-             .jsonPath("$.fieldErrors.[0].message").isEqualTo("must not be null");
+        webTestClient
+            .post()
+            .uri("/api/exception-translator-test/method-argument")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{}")
+            .exchange()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("$.message")
+            .isEqualTo(ErrorConstants.ERR_VALIDATION)
+            .jsonPath("$.fieldErrors.[0].objectName")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].field")
+            .isEqualTo("test")
+            .jsonPath("$.fieldErrors.[0].message")
+            .isEqualTo("must not be null");
     }
 
     @Test
     void testMissingRequestPart() {
-        webTestClient.get().uri("/api/exception-translator-test/missing-servlet-request-part")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/missing-servlet-request-part")
             .exchange()
-            .expectStatus().isBadRequest()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.400");
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400");
     }
 
     @Test
     void testMissingRequestParameter() {
-        webTestClient.get().uri("/api/exception-translator-test/missing-servlet-request-parameter")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/missing-servlet-request-parameter")
             .exchange()
-            .expectStatus().isBadRequest()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isBadRequest()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.400");
+            .jsonPath("$.message")
+            .isEqualTo("error.http.400");
     }
 
     @Test
     void testAccessDenied() {
-        webTestClient.get().uri("/api/exception-translator-test/access-denied")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/access-denied")
             .exchange()
-            .expectStatus().isForbidden()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isForbidden()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.403")
-            .jsonPath("$.detail").isEqualTo("test access denied!");
+            .jsonPath("$.message")
+            .isEqualTo("error.http.403")
+            .jsonPath("$.detail")
+            .isEqualTo("test access denied!");
     }
 
     @Test
     void testUnauthorized() {
-        webTestClient.get().uri("/api/exception-translator-test/unauthorized")
+        webTestClient
+            .get()
+            .uri("/api/exception-translator-test/unauthorized")
             .exchange()
-            .expectStatus().isUnauthorized()
-            .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectStatus()
+            .isUnauthorized()
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
-            .jsonPath("$.message").isEqualTo("error.http.401")
-            .jsonPath("$.path").isEqualTo("/api/exception-translator-test/unauthorized")
+            .jsonPath("$.message")
+            .isEqualTo("error.http.401")
+            .jsonPath("$.path")
+            .isEqualTo("/api/exception-translator-test/unauthorized")
             .jsonPath("$.detail")
             .value(AnyOf.anyOf(IsEqual.equalTo("test authentication failed!"), IsEqual.equalTo("Invalid credentials")));
     }

@@ -291,7 +291,8 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
   <%_ if (reactive) { _%>
     public Mono<Void> requestPasswordReset(@RequestBody String mail) {
-        return userService.requestPasswordReset(mail)
+        return userService
+            .requestPasswordReset(mail)
             .doOnSuccess(user -> {
                 if (Objects.nonNull(user)) {
                     mailService.sendPasswordResetMail(user);

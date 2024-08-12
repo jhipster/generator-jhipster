@@ -180,12 +180,12 @@ _%>
         String title = extractTitle(err, problem.getStatus());
         String problemTitle = problem.getTitle();
         if (problemTitle == null || !problemTitle.equals(title)) {
-        	problem.setTitle(title);
+            problem.setTitle(title);
         }
 
         if (problem.getDetail() == null) {
             // higher precedence to cause
-        	problem.setDetail(getCustomizedErrorDetails(err));
+            problem.setDetail(getCustomizedErrorDetails(err));
         }
 
         Map<String, Object> problemProperties = problem.getProperties();
@@ -255,8 +255,7 @@ _%>
     }
 
     private URI getMappedType(Throwable err) {
-        if(err instanceof MethodArgumentNotValidException)
-            return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        if (err instanceof MethodArgumentNotValidException) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
 
@@ -277,8 +276,7 @@ _%>
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if(err instanceof MethodArgumentNotValidException)
-            return "Method argument not valid";
+        if (err instanceof MethodArgumentNotValidException) return "Method argument not valid";
         return null;
     }
 
@@ -313,9 +311,15 @@ _%>
     }
 
     private HttpHeaders buildHeaders(Throwable err) {
-        return err instanceof BadRequestAlertException badRequestAlertException ?
-                HeaderUtil.createFailureAlert(applicationName, true, badRequestAlertException.getEntityName(),
-                        badRequestAlertException.getErrorKey(), badRequestAlertException.getMessage()) : null;
+        return err instanceof BadRequestAlertException badRequestAlertException
+            ? HeaderUtil.createFailureAlert(
+                applicationName,
+                true,
+                badRequestAlertException.getEntityName(),
+                badRequestAlertException.getErrorKey(),
+                badRequestAlertException.getMessage()
+            )
+            : null;
     }
 <%_ if (reactive) { _%>
     private HttpHeaders updateContentType(HttpHeaders headers) {

@@ -106,7 +106,10 @@ class SecurityUtilsUnitTest {
         Map<String, Object> claims = new HashMap<>();
         claims.put(SecurityUtils.CLAIMS_NAMESPACE + "roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
 
-        List<GrantedAuthority> expectedAuthorities = Arrays.asList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN), new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        List<GrantedAuthority> expectedAuthorities = Arrays.asList(
+            new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN),
+            new SimpleGrantedAuthority(AuthoritiesConstants.USER)
+        );
 
         List<GrantedAuthority> authorities = SecurityUtils.extractAuthorityFromClaims(claims);
 
