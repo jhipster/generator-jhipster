@@ -148,7 +148,7 @@
             <span v-text="t$('global.menu.account.sessions')">Sessions</span>
           </b-dropdown-item>
 <%_ } _%>
-          <b-dropdown-item data-cy="logout" v-if="authenticated"  v-on:click="logout()" id="logout" active-class="active">
+          <b-dropdown-item data-cy="logout" v-if="authenticated"  @click="logout()" id="logout" active-class="active">
             <font-awesome-icon icon="sign-out-alt" />
             <span v-text="t$('global.menu.account.logout')">Sign out</span>
           </b-dropdown-item>
