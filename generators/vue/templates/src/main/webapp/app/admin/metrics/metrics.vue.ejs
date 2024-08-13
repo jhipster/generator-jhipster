@@ -2,7 +2,7 @@
   <div>
     <h2>
       <span id="metrics-page-heading" v-text="t$('metrics.title')" data-cy="metricsPageHeading">Application Metrics</span>
-      <button class="btn btn-primary float-right" v-on:click="refresh()">
+      <button class="btn btn-primary float-right" @click="refresh()">
         <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="t$('metrics[\'refresh.button\']')">Refresh</span>
       </button>
     </h2>
@@ -66,7 +66,7 @@
 
         <span
           >Total: {{ threadStats.threadDumpAll }}
-          <a class="hand" v-b-modal.metricsModal data-toggle="modal" v-on:click="openModal()" data-target="#threadDump">
+          <a class="hand" v-b-modal.metricsModal data-toggle="modal" @click="openModal()" data-target="#threadDump">
             <font-awesome-icon icon="eye"></font-awesome-icon>
           </a>
         </span>

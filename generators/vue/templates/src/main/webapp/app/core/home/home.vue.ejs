@@ -14,16 +14,18 @@
 
         <div class="alert alert-warning" v-if="!authenticated">
           <span v-text="t$('global.messages.info.authenticated.prefix')">If you want to </span>
-          <a class="alert-link" v-on:click="openLogin()" v-text="t$('global.messages.info.authenticated.link')">sign
-            in</a><span v-html="t$('global.messages.info.authenticated.suffix')">, you can try the default
-            accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-            password="user").</span>
+          <a class="alert-link" @click="openLogin()" v-text="t$('global.messages.info.authenticated.link')">sign in</a
+          ><span v-html="t$('global.messages.info.authenticated.suffix')"
+            >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
+            password="user").</span
+          >
         </div>
 <%_ if (generateUserManagement) { _%>
         <div class="alert alert-warning" v-if="!authenticated">
           <span v-text="t$('global.messages.info.register.noaccount')">You don't have an account yet?</span>&nbsp;
-          <router-link class="alert-link" to="/register" v-text="t$('global.messages.info.register.link')">Register a
-            new account</router-link>
+          <router-link class="alert-link" to="/register" v-text="t$('global.messages.info.register.link')"
+            >Register a new account</router-link
+          >
         </div>
 <%_ } _%>
       </div>

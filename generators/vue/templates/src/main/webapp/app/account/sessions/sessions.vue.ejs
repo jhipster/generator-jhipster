@@ -30,7 +30,7 @@
             <td>{{ session.userAgent }}</td>
             <td>{{ session.tokenDate }}</td>
             <td>
-              <button type="submit" class="btn btn-primary" v-on:click="invalidate(session.series)" v-text="t$('sessions.table.button')">
+              <button type="submit" class="btn btn-primary" @click="invalidate(session.series)" v-text="t$('sessions.table.button')">
                 Invalidate
               </button>
             </td>

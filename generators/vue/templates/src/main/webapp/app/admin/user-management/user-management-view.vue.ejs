@@ -8,7 +8,7 @@
         <dl class="row jh-entity-details">
           <dt><span v-text="t$('userManagement.login')">Login</span></dt>
           <dd>
-            <span>{{user.login}}</span>
+            <span>{{ user.login }}</span>
             <b-badge variant="success" v-if="user.activated" v-text="t$('userManagement.activated')">Activated</b-badge>
             <b-badge variant="danger" v-if="!user.activated" v-text="t$('userManagement.deactivated')">Deactivated</b-badge>
           </dd>

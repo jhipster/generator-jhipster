@@ -15,14 +15,14 @@
                         <span v-text="t$('<%= frontendAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
-                            <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
-                                <img v-bind:src="'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%=entityInstance %>"/>
+                            <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
+                                <img :src="'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%=entityInstance %>"/>
                             </a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
-                            <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a>
+                            <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="t$('entity.action.open')">open</a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
   <%_ } else if (field.fieldTypeDuration) { _%>
@@ -71,7 +71,7 @@
 <%_ } _%>
                 </dl>
                 <button type="submit"
-                        v-on:click.prevent="previousState()"
+                        @click.prevent="previousState()"
                         class="btn btn-info"
                         data-cy="entityDetailsBackButton">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"> Back</span>
