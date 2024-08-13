@@ -32,7 +32,7 @@ const initialState = {
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
   logs: {
-    loggers: [] as any[]
+    loggers: [] as any[],
   },
   health: {} as any,
   metrics: {} as any,
@@ -201,7 +201,7 @@ export const AdministrationSlice = createSlice({
         (state, action) => {
           state.errorMessage = action.error.message;
           state.loading = false;
-        }
+        },
       );
 <%_ } _%>
   },

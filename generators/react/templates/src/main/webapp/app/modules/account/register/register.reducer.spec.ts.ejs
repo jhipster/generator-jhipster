@@ -67,7 +67,7 @@ describe('Creating account tests', () => {
       register(undefined, {
         type: handleRegister.fulfilled.type,
         payload: 'fake payload',
-      })
+      }),
     ).toEqual({
       ...initialState,
       registrationSuccess: true,

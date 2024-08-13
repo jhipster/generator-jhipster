@@ -165,7 +165,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
 <%_ } _%>
         errorMessage: null,
-        redirectMessage: null
+        redirectMessage: null,
       });
       expect(isAccountEmpty(toTest));
     });
@@ -182,7 +182,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
 <%_ } _%>
         errorMessage: null,
-        redirectMessage: message
+        redirectMessage: message,
       });
       expect(isAccountEmpty(toTest));
     });

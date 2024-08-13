@@ -99,7 +99,7 @@ describe(`generator - ${clientFramework}`, () => {
             assertion(
               `${clientSrcDir}app/modules/administration/administration.reducer.ts`,
               'logs: {\n' +
-                '    loggers: [] as any[]\n' +
+                '    loggers: [] as any[],\n' +
                 '  },\n' +
                 '  health: {} as any,\n' +
                 '  metrics: {} as any,\n' +

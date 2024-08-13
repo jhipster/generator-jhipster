@@ -49,7 +49,7 @@ import { sendActivity } from 'app/config/websocket-middleware';
 const loading = <div>loading ...</div>;
 <%_ if (generateUserManagement) { _%>
 
-  const Account = Loadable({
+const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
   loading: () => loading,
 });
