@@ -140,34 +140,37 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
       addDependencies({ application, source }) {
         const { reactive, javaDependencies, packageFolder } = application;
 
-        if (reactive) {
-          source.addJavaDependencies?.([
-            { groupId: 'commons-beanutils', artifactId: 'commons-beanutils', version: javaDependencies['commons-beanutils'] },
-            { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
-          ]);
-        } else {
-          source.addJavaDependencies?.([
-            { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
-            { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
-            { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
-            { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
-            { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
-          ]);
-        }
-
-        source.addJavaDependencies?.([
-          { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
-          { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
-          { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
-        ]);
-
-        source.addJavaDependencies?.([
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'jdbc' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
-        ]);
+        source.addJavaDefinitions?.(
+          {
+            condition: reactive,
+            dependencies: [
+              { groupId: 'commons-beanutils', artifactId: 'commons-beanutils', version: javaDependencies['commons-beanutils'] },
+              { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
+            ],
+          },
+          {
+            condition: !reactive,
+            dependencies: [
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
+              { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
+              { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
+              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
+              { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
+              { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
+            ],
+          },
+          {
+            dependencies: [
+              { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
+              { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
+              { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'jdbc' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
+            ],
+          },
+        );
 
         if (application.buildToolMaven) {
           const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;

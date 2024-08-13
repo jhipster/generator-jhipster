@@ -304,7 +304,7 @@ plugins {
     const runResult = (await super.run()) as unknown as JHipsterRunResult;
     if (this.sharedSource) {
       const sourceCallsArg = Object.fromEntries(
-        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => args[0])]),
+        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => (args.length > 1 ? args : args[0]))]),
       );
       if (sourceCallsArg.addEntitiesToClient) {
         sourceCallsArg.addEntitiesToClient = sourceCallsArg.addEntitiesToClient.map(({ application, entities }) => ({

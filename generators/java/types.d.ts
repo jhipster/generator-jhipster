@@ -67,6 +67,8 @@ export type JavaApplication = BaseApplication &
     addOpenapiGeneratorPlugin: boolean;
   };
 
+export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
+
 export type JavaSourceType = {
   /**
    * Add a JavaDefinition to the application.
@@ -74,6 +76,10 @@ export type JavaSourceType = {
    * A dependency with versionRef requires a valid referenced version at `versions` otherwise it will be ignored.
    */
   addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;
+  addJavaDefinitions?(
+    optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
+    ...definitions: ConditionalJavaDefinition[]
+  ): void;
   addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
   hasJavaProperty?(propertyName: string): boolean;
   hasJavaManagedProperty?(propertyName: string): boolean;
