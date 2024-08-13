@@ -27,7 +27,7 @@ const postcssRTLCSS = require('postcss-rtlcss');
   <%_ } _%>
 <%_ } _%>
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -54,7 +54,7 @@ module.exports = async (config, options, targetOptions) => {
       new WebpackNotifierPlugin({
         title: '<%= humanizedBaseName %>',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
-      })
+      }),
     );
   }
 

@@ -39,7 +39,7 @@ const <%= entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularReadAuthorities %>],
 <%_ } _%>
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':<%= primaryKey.name %>/view',
