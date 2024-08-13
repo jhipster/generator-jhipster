@@ -29,7 +29,7 @@ export default class HealthService {
       const split = name.split('.');
       split.splice(0, 1);
       const remainder = split.join('.');
-      return remainder ? ' - ' + remainder : '';
+      return remainder ? ` - ${remainder}` : '';
     }
   }
 
@@ -44,7 +44,7 @@ export default class HealthService {
     let hasDetails = false;
 
     for (const key in healthObject) {
-      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
+      if (Object.hasOwn(healthObject, key)) {
         const value = healthObject[key];
         if (key === 'status' || key === 'error') {
           healthData[key] = value;
@@ -71,7 +71,7 @@ export default class HealthService {
 
   public flattenHealthData(result: any, path: any, data: any): any {
     for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
+      if (Object.hasOwn(data, key)) {
         const value = data[key];
         if (this.isHealthObject(value)) {
           if (this.hasSubSystem(value)) {
@@ -93,16 +93,15 @@ export default class HealthService {
       return path;
     } else if (name) {
       return name;
-    } else {
-      return '';
     }
+    return '';
   }
 
   public hasSubSystem(healthObject: any): any {
     let result = false;
 
     for (const key in healthObject) {
-      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
+      if (Object.hasOwn(healthObject, key)) {
         const value = healthObject[key];
         if (value && value.status) {
           result = true;
@@ -116,7 +115,7 @@ export default class HealthService {
     let result = false;
 
     for (const key in healthObject) {
-      if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
+      if (Object.hasOwn(healthObject, key)) {
         if (key === 'status') {
           result = true;
         }

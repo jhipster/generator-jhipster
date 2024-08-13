@@ -31,10 +31,8 @@ const cssLoaders = options => {
 
     if (loader) {
       loaders.push({
-        loader: loader + '-loader',
-        options: Object.assign({}, loaderOptions, {
-          sourceMap: options.sourceMap,
-        }),
+        loader: `${loader}-loader`,
+        options: { ...loaderOptions, sourceMap: options.sourceMap },
       });
     }
 
@@ -63,7 +61,7 @@ const styleLoaders = options => {
   for (const extension in loaders) {
     const loader = loaders[extension];
     output.push({
-      test: new RegExp('\\.' + extension + '$'),
+      test: new RegExp(`\\.${extension}$`),
       use: loader,
     });
   }

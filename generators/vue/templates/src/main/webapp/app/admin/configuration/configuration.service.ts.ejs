@@ -7,7 +7,7 @@ export default class ConfigurationService {
         const properties = [];
         const propertiesObject = this.getConfigPropertiesObjects(res.data);
         for (const key in propertiesObject) {
-          if (Object.prototype.hasOwnProperty.call(propertiesObject, key)) {
+          if (Object.hasOwn(propertiesObject, key)) {
             properties.push(propertiesObject[key]);
           }
         }
@@ -32,7 +32,7 @@ export default class ConfigurationService {
           const detailProperties = propertyObject.properties;
           const vals = [];
           for (const keyDetail in detailProperties) {
-            if (Object.prototype.hasOwnProperty.call(detailProperties, keyDetail)) {
+            if (Object.hasOwn(detailProperties, keyDetail)) {
               vals.push({ key: keyDetail, val: detailProperties[keyDetail].value });
             }
           }

@@ -152,7 +152,7 @@
             <font-awesome-icon icon="sign-out-alt" />
             <span v-text="t$('global.menu.account.logout')">Sign out</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated"  @click="openLogin()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="openLogin()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span v-text="t$('global.menu.account.login')">Sign in</span>
           </b-dropdown-item>
@@ -168,8 +168,7 @@
   </b-navbar>
 </template>
 
-<script lang="ts" src="./jhi-navbar.component.ts">
-</script>
+<script lang="ts" src="./jhi-navbar.component.ts"></script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
