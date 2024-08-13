@@ -153,9 +153,7 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
     }
 
     @Override
-    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication
-        successfulAuthentication) {
-
+    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
         String login = successfulAuthentication.getName();
 
         LOG.debug("Creating new persistent login for user {}", login);

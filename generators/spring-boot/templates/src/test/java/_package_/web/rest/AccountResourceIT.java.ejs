@@ -180,8 +180,8 @@ class AccountResourceIT {
             .expectBody().isEmpty();
 <%_ } else { _%>
     void testNonAuthenticatedUser() throws Exception {
-        restAccountMockMvc.perform(get("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON))
+        restAccountMockMvc
+            .perform(get("/api/authenticate").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(""));
 <%_ } _%>
@@ -199,9 +199,8 @@ class AccountResourceIT {
             .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
 <%_ } else { _%>
     void testAuthenticatedUser() throws Exception {
-        restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> request)
-            .accept(MediaType.APPLICATION_JSON))
+        restAccountMockMvc
+            .perform(get("/api/authenticate").with(request -> request).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
 <%_ } _%>
@@ -1208,7 +1207,8 @@ class AccountResourceIT {
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(token);
 
-        restAccountMockMvc.perform(get("/api/account/sessions"))
+        restAccountMockMvc
+            .perform(get("/api/account/sessions"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[*].series").value(hasItem(token.getSeries())))
             .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))

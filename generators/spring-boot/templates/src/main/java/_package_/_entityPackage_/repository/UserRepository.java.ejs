@@ -368,7 +368,9 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     @Override
     public Flux<<%= user.persistClass %>> findAllWithAuthorities(Pageable pageable) {
         String property = pageable.getSort().stream().map(Sort.Order::getProperty).findFirst().orElse("id");
-        String direction = String.valueOf(pageable.getSort().stream().map(Sort.Order::getDirection).findFirst().orElse(Sort.DEFAULT_DIRECTION));
+        String direction = String.valueOf(
+            pageable.getSort().stream().map(Sort.Order::getDirection).findFirst().orElse(Sort.DEFAULT_DIRECTION)
+        );
         long page = pageable.getPageNumber();
         long size = pageable.getPageSize();
 
@@ -381,7 +383,11 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .all()
             .groupBy(t -> t.getT1().getLogin())
             .flatMap(l -> l.collectList().map(t -> updateUserWithAuthorities(t.get(0).getT1(), t)))
-            .sort(Sort.Direction.fromString(direction) == Sort.DEFAULT_DIRECTION ? new BeanComparator<>(property) : new BeanComparator<>(property).reversed())
+            .sort(
+                Sort.Direction.fromString(direction) == Sort.DEFAULT_DIRECTION
+                    ? new BeanComparator<>(property)
+                    : new BeanComparator<>(property).reversed()
+            )
             .skip(page * size)
             .take(size);
     }

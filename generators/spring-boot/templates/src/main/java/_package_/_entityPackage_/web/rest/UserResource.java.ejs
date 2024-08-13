@@ -170,7 +170,8 @@ public class UserResource {
             // Lowercase the user login before comparing with database
 <%_ if (reactive) { _%>
         }
-        return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
+        return userRepository
+            .findOneByLogin(userDTO.getLogin().toLowerCase())
             .hasElement()
             .flatMap(loginExists -> {
                 if (Boolean.TRUE.equals(loginExists)) {
@@ -282,9 +283,15 @@ public class UserResource {
             return Mono.just(ResponseEntity.badRequest().build());
         }
 
-        return userService.countManagedUsers()
+        return userService
+            .countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()), page))
+            .map(page ->
+                PaginationUtil.generatePaginationHttpHeaders(
+                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
+                    page
+                )
+            )
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
   <%_ } else { _%>
     public ResponseEntity<List<<%= user.adminUserDto %>>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
