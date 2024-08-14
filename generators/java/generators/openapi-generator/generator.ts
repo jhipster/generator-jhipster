@@ -62,18 +62,20 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ source, application }) {
-        const { addOpenapiGeneratorPlugin, buildToolGradle, buildToolMaven, javaDependencies } = application;
-        source.addJavaDependencies!([
+        const { addOpenapiGeneratorPlugin, buildToolGradle, javaDependencies } = application;
+        source.addJavaDefinitions!(
           {
-            groupId: 'org.openapitools',
-            artifactId: 'jackson-databind-nullable',
-            version: javaDependencies!['jackson-databind-nullable'],
+            dependencies: [
+              {
+                groupId: 'org.openapitools',
+                artifactId: 'jackson-databind-nullable',
+                version: javaDependencies!['jackson-databind-nullable'],
+              },
+            ],
           },
-        ]);
-
-        if (addOpenapiGeneratorPlugin) {
-          if (buildToolMaven) {
-            source.addMavenDefinition!({
+          {
+            condition: addOpenapiGeneratorPlugin,
+            mavenDefinition: {
               properties: [
                 { property: 'openapi-generator-maven-plugin.version', value: javaDependencies!['openapi-generator-maven-plugin'] },
               ],
@@ -113,8 +115,11 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
 `,
                 },
               ],
-            });
-          }
+            },
+          },
+        );
+
+        if (addOpenapiGeneratorPlugin) {
           if (buildToolGradle) {
             source.addGradleBuildSrcDependencyCatalogLibraries?.([
               {
