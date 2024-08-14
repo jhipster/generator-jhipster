@@ -2,6 +2,7 @@ import { RequireOneOrNone } from 'type-fest';
 import { BaseApplication } from '../base-application/types.js';
 import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
 import { EditFileCallback } from '../base/api.js';
+import { MavenDefinition } from '../maven/types.js';
 import { JavaAnnotation } from './support/add-java-annotation.ts';
 
 export type JavaDependencyVersion = {
@@ -27,6 +28,7 @@ export type JavaDependency = JavaArtifact & JavaArtifactVersion;
 export type JavaDefinition = {
   versions?: JavaDependencyVersion[];
   dependencies?: JavaDependency[];
+  mavenDefinition?: MavenDefinition;
 };
 
 export type JavaNeedleOptions = GradleNeedleOptions;
@@ -67,6 +69,8 @@ export type JavaApplication = BaseApplication &
     addOpenapiGeneratorPlugin: boolean;
   };
 
+export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
+
 export type JavaSourceType = {
   /**
    * Add a JavaDefinition to the application.
@@ -74,6 +78,10 @@ export type JavaSourceType = {
    * A dependency with versionRef requires a valid referenced version at `versions` otherwise it will be ignored.
    */
   addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;
+  addJavaDefinitions?(
+    optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
+    ...definitions: ConditionalJavaDefinition[]
+  ): void;
   addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
   hasJavaProperty?(propertyName: string): boolean;
   hasJavaManagedProperty?(propertyName: string): boolean;

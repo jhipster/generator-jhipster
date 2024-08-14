@@ -489,29 +489,32 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           application;
         const { serviceDiscoveryAny } = application as any;
 
-        if (application.buildToolMaven) {
-          source.addMavenProperty?.({
-            property: 'spring-boot.version',
-            // eslint-disable-next-line no-template-curly-in-string
-            value: '${project.parent.version}',
-          });
-        }
-
-        source.addJavaDependencies?.([
-          { groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! },
-        ]);
-
-        if (applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny) {
-          source.addJavaDependencies?.([
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-dependencies',
-              type: 'pom',
-              scope: 'import',
-              version: javaDependencies!['spring-cloud-dependencies'],
+        source.addJavaDefinitions?.(
+          {
+            dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! }],
+            mavenDefinition: {
+              properties: [
+                {
+                  property: 'spring-boot.version',
+                  // eslint-disable-next-line no-template-curly-in-string
+                  value: '${project.parent.version}',
+                },
+              ],
             },
-          ]);
-        }
+          },
+          {
+            condition: applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny,
+            dependencies: [
+              {
+                groupId: 'org.springframework.cloud',
+                artifactId: 'spring-cloud-dependencies',
+                type: 'pom',
+                scope: 'import',
+                version: javaDependencies!['spring-cloud-dependencies'],
+              },
+            ],
+          },
+        );
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;

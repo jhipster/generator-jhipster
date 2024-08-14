@@ -21,7 +21,7 @@ import BaseApplicationGenerator from '../../../base-application/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 import type { MavenDependency } from '../../../maven/types.js';
 import { javaScopeToGradleScope } from '../../support/index.js';
-import type { JavaDependency } from '../../types.js';
+import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -109,7 +109,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
         };
 
         source.addJavaDefinition = (definition, options) => {
-          const { dependencies, versions } = definition;
+          const { dependencies, versions, mavenDefinition } = definition;
           if (dependencies) {
             source.addJavaDependencies!(
               dependencies.filter(dep => {
@@ -128,7 +128,27 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
               });
             }
             if (application.buildToolGradle) {
-              source.addGradleDependencyCatalogVersions?.(versions, options);
+              source.addGradleDependencyCatalogVersions!(versions, options);
+            }
+          }
+          if (application.buildToolMaven && mavenDefinition) {
+            source.addMavenDefinition!(mavenDefinition);
+          }
+        };
+
+        source.addJavaDefinitions = (
+          optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
+          ...definitions: ConditionalJavaDefinition[]
+        ) => {
+          let options: JavaNeedleOptions | undefined = undefined;
+          if ('gradleFile' in optionsOrDefinition || 'gradleVersionCatalogFile' in optionsOrDefinition) {
+            options = optionsOrDefinition;
+          } else {
+            definitions.unshift(optionsOrDefinition as ConditionalJavaDefinition);
+          }
+          for (const definition of definitions) {
+            if (definition.condition ?? true) {
+              source.addJavaDefinition!(definition, options);
             }
           }
         };
