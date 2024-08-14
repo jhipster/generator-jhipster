@@ -109,7 +109,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
         };
 
         source.addJavaDefinition = (definition, options) => {
-          const { dependencies, versions } = definition;
+          const { dependencies, versions, mavenDefinition } = definition;
           if (dependencies) {
             source.addJavaDependencies!(
               dependencies.filter(dep => {
@@ -128,8 +128,11 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
               });
             }
             if (application.buildToolGradle) {
-              source.addGradleDependencyCatalogVersions?.(versions, options);
+              source.addGradleDependencyCatalogVersions!(versions, options);
             }
+          }
+          if (application.buildToolMaven && mavenDefinition) {
+            source.addMavenDefinition!(mavenDefinition);
           }
         };
 

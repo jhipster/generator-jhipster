@@ -2,6 +2,7 @@ import { RequireOneOrNone } from 'type-fest';
 import { BaseApplication } from '../base-application/types.js';
 import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
 import { EditFileCallback } from '../base/api.js';
+import { MavenDefinition } from '../maven/types.js';
 import { JavaAnnotation } from './support/add-java-annotation.ts';
 
 export type JavaDependencyVersion = {
@@ -27,6 +28,7 @@ export type JavaDependency = JavaArtifact & JavaArtifactVersion;
 export type JavaDefinition = {
   versions?: JavaDependencyVersion[];
   dependencies?: JavaDependency[];
+  mavenDefinition?: MavenDefinition;
 };
 
 export type JavaNeedleOptions = GradleNeedleOptions;

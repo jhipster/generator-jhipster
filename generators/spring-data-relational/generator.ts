@@ -139,6 +139,12 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
       },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies, packageFolder } = application;
+        const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
+        const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, {
+          inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,
+          javaDependencies,
+        });
+        const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
         source.addJavaDefinitions?.(
           {
@@ -148,6 +154,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
               { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
               { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
             ],
+            mavenDefinition: dbDefinitions.r2dbc,
           },
           {
             condition: !reactive,
@@ -159,6 +166,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
               { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
             ],
+            mavenDefinition: { dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }] },
           },
           {
             dependencies: [
@@ -169,31 +177,17 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
             ],
+            mavenDefinition: dbDefinitions.jdbc,
+          },
+          {
+            condition: devDatabaseTypeH2Any,
+            mavenDefinition: h2Definitions?.jdbc,
+          },
+          {
+            condition: devDatabaseTypeH2Any && reactive,
+            mavenDefinition: h2Definitions?.r2dbc,
           },
         );
-
-        if (application.buildToolMaven) {
-          const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
-
-          const inProfile = devDatabaseTypeH2Any ? 'prod' : undefined;
-          if (!reactive) {
-            source.addMavenDefinition?.({
-              dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }],
-            });
-          }
-          if (devDatabaseTypeH2Any) {
-            const h2Definitions = getH2MavenDefinition({ prodDatabaseType, packageFolder });
-            source.addMavenDefinition?.(h2Definitions.jdbc);
-            if (reactive) {
-              source.addMavenDefinition?.(h2Definitions.r2dbc);
-            }
-          }
-          const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, { inProfile, javaDependencies });
-          source.addMavenDefinition?.(dbDefinitions.jdbc);
-          if (reactive) {
-            source.addMavenDefinition?.(dbDefinitions.r2dbc);
-          }
-        }
       },
     });
   }
