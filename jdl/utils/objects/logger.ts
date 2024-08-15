@@ -16,16 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { createJHipsterLogger } from '../../../generators/base/support/logger.js';
 
-import { createLogger, format, transports } from 'winston';
+const logger = createJHipsterLogger({ namespace: 'jhipster:jdl' });
 
-const { Console } = transports;
-const { printf, combine } = format;
-
-const myFormat = printf(info => `${info.level}: ${info.message}`);
-
-export default createLogger({
-  transports: [new Console()],
-  format: combine(myFormat),
-  handleExceptions: true,
-});
+export default {
+  info: (message: string) => logger.verboseInfo(message),
+  error: (message: string) => logger.error(message),
+  warn: (message: string) => logger.warn(message),
+  debug: (message: string) => logger.debug(message),
+};

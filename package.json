@@ -168,7 +168,6 @@
     "type-fest": "4.25.0",
     "typescript": "5.4.5",
     "typescript-eslint": "8.2.0",
-    "winston": "3.14.2",
     "yaml": "2.5.0",
     "yeoman-environment": "4.4.1",
     "yeoman-generator": "7.3.2"
