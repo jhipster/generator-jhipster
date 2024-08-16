@@ -56,6 +56,7 @@ jobs:
         uses: ./.github/actions/build-matrix
         with:
           workflow-samples-file: angular
+
   applications:
     name: ${{ matrix.name }} (n${{ matrix.node }}/j${{ matrix.java }})
     runs-on: ${{ matrix.os || 'ubuntu-20.04' }}
@@ -175,7 +176,6 @@ jobs:
       - name: 'ANALYSIS: Sonar analysis'
         if: >-
           github.event_name == 'push' &&
-          github.repository == 'jhipster/generator-jhipster' &&
           matrix.sonar-analyse == 'true' &&
           steps.compare.outputs.equals != 'true' &&
           matrix.workspaces != 'true' &&
@@ -186,11 +186,133 @@ jobs:
         run: |
           ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.projectKey=jhipster-sample-application \
+            -Dsonar.projectKey=sultanov-jhipster-sample-application \
             -Dsonar.organization=jhipster \
             -Dsonar.login=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # New steps to cache, load, and analyze with local SonarQube in Docker
+      - name: 'CACHE: Store Maven/JUnit results (main)'
+        if: github.ref == 'refs/heads/main'
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/target
+            **/.sonar
+            **/jacoco
+          key: cache-maven-junit-main-${{ github.sha }}
+          restore-keys: |
+
+      # Install jq if not available
+      - name: 'Install jq'
+        if: github.event_name == 'pull_request'
+        run: sudo apt-get install -y jq
+
+      # Start SonarQube locally only for PRs
+      - name: 'SETUP: Start SonarQube'
+        if: github.event_name == 'pull_request'
+        run: |
+          docker run -d --name sonar-server -p 9000:9000 sonarqube:latest
+          until curl -s http://localhost:9000/api/system/status | grep -q '"status":"UP"'; do
+            echo "Waiting for SonarQube to start..."
+            sleep 5
+          done
+            cache-maven-junit-main-
+
+      - name: 'CACHE: Load Maven/JUnit results (PR)'
+        if: github.event_name == 'pull_request'
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/target
+            **/.sonar
+            **/jacoco
+          key: cache-maven-junit-main-${{ github.event.pull_request.base.sha }}
+          restore-keys: |
+            cache-maven-junit-main-
+
+      - name: 'ANALYSIS: Run SonarQube on previous results'
+        if: github.event_name == 'pull_request'
+        run: |
+          docker run --rm -e SONAR_HOST_URL=http://localhost:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin \
+          -v ${{ github.workspace }}/app:/usr/src \
+          sonarqube sonar-scanner \
+          -Dsonar.projectKey=sultanov-jhipster-sample-application \
+          -Dsonar.sources=src \
+          -Dsonar.tests=src/test \
+          -Dsonar.java.binaries=target \
+          -Dsonar.junit.reportPaths=target/test-results/test \
+          -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+          -Dsonar.report.export.path=issues_report-main.json
+
+      - name: 'ANALYSIS: Run SonarQube on new code'
+        if: github.event_name == 'pull_request'
+        run: |
+          docker run --rm -e SONAR_HOST_URL=http://localhost:9000 -e SONAR_LOGIN=admin -e SONAR_PASSWORD=admin \
+          -v ${{ github.workspace }}/app:/usr/src \
+          sonarqube sonar-scanner \
+          -Dsonar.projectKey=sultanov-jhipster-sample-application-pr \
+          -Dsonar.sources=src \
+          -Dsonar.tests=src/test \
+          -Dsonar.java.binaries=target \
+          -Dsonar.junit.reportPaths=target/test-results/test \
+          -Dsonar.jacoco.reportPaths=target/jacoco.exec \
+          -Dsonar.report.export.path=issues_report-pr.json
+
+      - name: 'ANALYSIS: Compare SonarQube results'
+        id: compare-sonar
+        if: github.event_name == 'pull_request' && steps.compare.outputs.equals != 'true'
+        run: |
+          jq '.[].issues[] | select(.status != "RESOLVED") | .message' issues_report-pr.json > pr_issues.txt
+          jq '.[].issues[] | select(.status != "RESOLVED") | .message' issues_report-main.json > main_issues.txt
+
+          # Compare the issues in the PR with the issues in the main branch
+          new_issues=$(grep -Fxvf main_issues.txt pr_issues.txt || true)
+          fixed_issues=$(grep -Fxvf pr_issues.txt main_issues.txt || true)
+
+          if [ -n "$fixed_issues" ]; then
+            echo "Fixed issues:"
+            echo "$fixed_issues"
+          fi
+
+          if [ -n "$new_issues" ]; then
+            echo "New issues introduced:"
+            echo "$new_issues"
+            echo "## New SonarQube Issues" > sonar-result.md
+            echo "$new_issues" | sed 's/^/- /' >> sonar-result.md
+            exit 1
+          else
+            echo "No new issues introduced."
+            echo "## SonarQube Analysis" > sonar-result.md
+            echo "No new issues introduced." >> sonar-result.md
+          fi
+
+      # Post the SonarQube results as a comment in the PR
+      - name: 'Find previous SonarQube comment'
+        if: github.event_name == 'pull_request'
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: '## SonarQube Analysis'
+
+      - name: 'Create or update SonarQube comment'
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            $(cat sonar-result.md)
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+
+      # Stop SonarQube server only if started
+      - name: 'STOP: Stop SonarQube'
+        if: github.event_name == 'pull_request' && always()
+        run: |
+          docker stop sonar-server
+          docker rm sonar-server
+
   check-angular:
     permissions:
       contents: none
