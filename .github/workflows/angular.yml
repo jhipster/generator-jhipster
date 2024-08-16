@@ -218,7 +218,6 @@ jobs:
             echo "Waiting for SonarQube to start..."
             sleep 5
           done
-            cache-maven-junit-main-
 
       - name: 'CACHE: Load Maven/JUnit results (PR)'
         if: github.event_name == 'pull_request'
