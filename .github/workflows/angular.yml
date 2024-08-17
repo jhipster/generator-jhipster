@@ -191,6 +191,21 @@ jobs:
             -Dsonar.login=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: 'ANALYSIS: Local SonarQube PR Analysis'
+        if: >-
+          matrix.sonar-analyse == 'true' &&
+          steps.compare.outputs.equals != 'true' &&
+          matrix.workspaces != 'true' &&
+          matrix.skip-frontend-tests != 'true' &&
+          needs.build-matrix.outputs.client != 'false' &&
+          matrix.skip-backend-tests != 'true' &&
+          needs.build-matrix.outputs.server != 'false'
+        uses: ./generator-jhipster/.github/actions/sonar
+        with:
+          sonar_project_key: 'jhipster-sample-application'
+          workdir: ${{ github.workspace }}/app
+
   check-angular:
     permissions:
       contents: none

@@ -1,0 +1,195 @@
+#
+# Copyright 2013-2024 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+name: 'SonarQube PR Analysis'
+description: 'A GitHub Action to perform SonarQube analysis on a PR with caching and metrics retrieval.'
+
+inputs:
+  sonar_project_key:
+    description: 'SonarQube project key'
+    required: true
+  workdir:
+    description: 'Working directory for the action'
+    required: false
+    default: '.'
+
+runs:
+  using: composite
+  steps:
+    - name: 'Create cache directory and copy files'
+      if: github.ref == 'refs/heads/main'
+      shell: bash
+      run: |
+        mkdir -p ./${{ inputs.sonar_project_key }}-cached
+        cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar_project_key }}-cached/
+
+    - name: 'Cache copied project (main)'
+      if: github.ref == 'refs/heads/main'
+      uses: actions/cache@v4
+      with:
+        path: ./${{ inputs.sonar_project_key }}-cached
+        key: cache-${{ inputs.sonar_project_key }}-${{ github.sha }}
+
+    - name: 'Restore project cache to specific directory'
+      if: github.event_name == 'pull_request'
+      id: restore-cache
+      uses: actions/cache@v4
+      with:
+        path: ./${{ inputs.sonar_project_key }}-cached
+        key: cache-${{ inputs.sonar_project_key }}-${{ github.event.pull_request.base.sha }}
+        restore-keys: |
+          cache-${{ inputs.sonar_project_key }}-
+
+    - name: 'Install jq'
+      if: github.event_name == 'pull_request' && steps.restore-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: sudo apt-get install -y jq
+
+    - name: 'Start SonarQube'
+      if: github.event_name == 'pull_request' && steps.restore-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        docker run -d --name sonar-server -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 mc1arke/sonarqube-with-community-branch-plugin:latest
+        until curl -s http://localhost:9000/api/system/status | grep -q '"status":"UP"'; do
+          echo "Waiting for SonarQube to start..."
+          sleep 5
+        done
+
+    - name: 'Create SonarQube project'
+      shell: bash
+      run: |
+        curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar_project_key }}&project=${{ inputs.sonar_project_key }}" || true
+
+    - name: 'Run SonarQube on main (cached)'
+      if: github.event_name == 'pull_request' && steps.restore-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        cd ${{ inputs.sonar_project_key }}-cached
+        ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
+          -Dsonar.host.url=http://localhost:9000 \
+          -Dsonar.projectKey=${{ inputs.sonar_project_key }} \
+          -Dsonar.login=admin \
+          -Dsonar.password=admin \
+          -Dsonar.branch.name=main \
+          -Dsonar.qualitygate.wait=true
+
+    - name: 'Run SonarQube on PR'
+      if: github.event_name == 'pull_request' && steps.restore-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        cd ${{ inputs.workdir }}
+        ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
+          -Dsonar.host.url=http://localhost:9000 \
+          -Dsonar.projectKey=${{ inputs.sonar_project_key }} \
+          -Dsonar.login=admin \
+          -Dsonar.password=admin \
+          -Dsonar.qualitygate.wait=true \
+          -Dsonar.pullrequest.key=${{github.event.pull_request.number}} \
+          -Dsonar.pullrequest.branch=${{github.head_ref}} \
+          -Dsonar.pullrequest.base=main
+
+    - name: 'Retrieve PR metrics from SonarQube'
+      if: github.event_name == 'pull_request' && steps.restore-cache.outputs.cache-hit == 'true'
+      id: sonar-metrics
+      shell: bash
+      run: |
+        sonar_response=$(curl -s -u admin:admin \
+        "http://localhost:9000/api/measures/component?component=${{ inputs.sonar_project_key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
+
+        echo "SonarQube Analysis response: $sonar_response"
+
+        export_measure() {
+          metric_name=$1
+          env_var_name=$2
+          metric_value=$(echo "$sonar_response" | jq -r ".component.measures[] | select(.metric == \"$metric_name\") | .period.value")
+          if [ -z "$metric_value" ] || [ "$metric_value" == "null" ]; then
+            metric_value="N/A"
+          fi
+          echo "$env_var_name=$metric_value" >> $GITHUB_ENV
+          export $env_var_name=$metric_value
+        }
+
+        # Export each metric value from the measures response
+        export_measure "new_vulnerabilities" "new_vul"
+        export_measure "new_code_smells" "new_csm"
+        export_measure "new_bugs" "new_bug"
+        export_measure "new_violations" "new_violations"
+        export_measure "new_coverage" "new_cov"
+        export_measure "new_duplicated_lines_density" "new_dup"
+
+        # Write the markdown content to a file using the environment variables
+        {
+          echo "## :bar_chart: SonarQube Analysis for ${{ inputs.sonar_project_key }}"
+          echo ""
+          echo "| Metric                      | Value       |"
+          echo "|-----------------------------|-------------|"
+          echo "| **New Vulnerabilities**     | ${new_vul} |"
+          echo "| **New Bugs**                | ${new_bug} |"
+          echo "| **New Code smells**         | ${new_csm} |"
+          echo "| **Coverage on New Code**    | ${new_cov}% |"
+          echo "| **Duplication on New Code** | ${new_dup}% |"
+
+          if [[ "${new_violations}" != "N/A" && "${new_violations}" != "0" ]]; then
+            echo ""
+            echo "<details><summary>Unresolved Issues (click to expand)</summary>"
+            echo ""
+            issues=$(curl -s -u admin:admin \
+              "http://localhost:9000/api/issues/search?componentKeys=${{ inputs.sonar_project_key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
+              jq -r '.issues[] | "File: \(.component) Line: \(.line)\n  [\(.rule)] \(.message)\n"')
+            echo "$issues"
+            echo "</details>"
+          fi
+        } > sonar_result.md
+
+        {
+          echo 'comment_body<<EOF'
+          cat sonar_result.md
+          echo 'EOF'
+        } >> "$GITHUB_ENV"
+
+    - name: 'Find previous comment'
+      if: github.event_name == 'pull_request' && steps.sonar-metrics.outcome == 'success'
+      id: find-comment
+      uses: peter-evans/find-comment@v3
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: github-actions[bot]
+        body-includes: '## :bar_chart: SonarQube Analysis for ${{ inputs.sonar_project_key }}'
+
+    - name: 'Create or update PR comment with SonarQube results'
+      if: github.event_name == 'pull_request' && steps.sonar-metrics.outcome == 'success'
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: ${{ env.comment_body }}
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: replace
+
+    - name: 'Fail on issues'
+      if: github.event_name == 'pull_request' && steps.sonar-metrics.outcome == 'success' && env.new_violations != 'N/A' && env.new_violations != 0
+      shell: bash
+      run: |
+        echo "SonarQube PR Analysis failed due to unresolved issues."
+        exit 1
+
+    - name: 'Stop SonarQube'
+      if: github.event_name == 'pull_request' && steps.restore-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        docker stop sonar-server
+        docker rm sonar-server
