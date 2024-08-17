@@ -45,7 +45,7 @@
 _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%= field.fieldName %>.value !== null) {<% } %>
-                @let <%= fieldName %>Ref = editForm.get('<%= fieldName %>')!;
+                <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%= fieldName %>Ref = editForm.get('<%= fieldName %>')!;<% } %>
                 <div class="mb-3">
                     <label class="form-label" for="field_<%= fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%= i18nKeyPrefix %>.<%= fieldName %>')</label>
   <%_ if (field.fieldIsEnum) { _%>
