@@ -31,7 +31,6 @@ inputs:
 runs:
   using: composite
   steps:
-
     # Cache the main branch project for future PR analysis
     - name: 'Cache project on main branch'
       if: github.ref == 'refs/heads/main'
