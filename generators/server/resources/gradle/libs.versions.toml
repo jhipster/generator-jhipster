@@ -35,4 +35,4 @@ common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-da
 
 gatling-gradle = { id = 'io.gatling.gradle', version = '3.11.5.2' }
 
-gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.7.0' }
+gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.8.0' }
