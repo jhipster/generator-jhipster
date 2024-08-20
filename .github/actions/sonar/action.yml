@@ -73,7 +73,7 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: |
-        docker-compose -f ${{ inputs.docker_compose_file }} up -d
+        docker compose -f ${{ inputs.docker_compose_file }} up -d
         timeout 120s bash -c 'until curl -s http://localhost:9000/api/system/status | grep -q "\"status\":\"UP\""; do sleep 5; done' || (echo "SonarQube failed to start in time" && exit 1)
 
     # Create SonarQube project
