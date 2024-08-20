@@ -266,5 +266,4 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: |
-        docker stop sonar-server
-        docker rm sonar-server
+        docker compose -f ${{ inputs.docker_compose_file }} down
