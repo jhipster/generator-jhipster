@@ -19,7 +19,7 @@
 import { existsSync } from 'fs';
 import pathjs from 'path';
 import chalk from 'chalk';
-import jsyaml from 'js-yaml';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
 import { defaults } from 'lodash-es';
 
@@ -173,7 +173,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           const parentConfiguration = {};
           const path = this.destinationPath(workspaces.directoryPath, appConfig.appFolder);
           // Add application configuration
-          const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
+          const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`));
           const yamlConfig = yaml.services.app;
           if (yamlConfig.depends_on) {
             yamlConfig.depends_on = Object.fromEntries(
@@ -252,7 +252,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.databaseTypeAny && !appConfig.prodDatabaseTypeOracle) {
             const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
-            const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
+            const databaseYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}.yml`));
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[database];
             // Don't export database ports
@@ -260,7 +260,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
             if (appConfig.databaseTypeCassandra) {
               // migration service config
-              const cassandraMigrationYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
+              const cassandraMigrationYaml = parseYaml(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
               const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
@@ -274,7 +274,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             }
 
             if (appConfig.clusteredDb) {
-              const clusterDbYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
+              const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
               databaseYamlConfig = clusterDbYaml.services[database];
@@ -293,14 +293,14 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.searchEngineElasticsearch) {
             // Add search engine configuration
             const searchEngine = appConfig.searchEngine;
-            const searchEngineYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
+            const searchEngineYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
             const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = jsyaml.load(this.readDestination(`${path}/src/main/docker/memcached.yml`));
+            const memcachedYaml = parseYaml(this.readDestination(`${path}/src/main/docker/memcached.yml`));
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -308,7 +308,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = jsyaml.load(this.readDestination(`${path}/src/main/docker/redis.yml`));
+            const redisYaml = parseYaml(this.readDestination(`${path}/src/main/docker/redis.yml`));
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
@@ -317,7 +317,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           deployment.authenticationType = appConfig.authenticationType;
 
           // Dump the file
-          let yamlString = jsyaml.dump(parentConfiguration, { indent: 2, lineWidth: -1 });
+          let yamlString = stringifyYaml(parentConfiguration, { indent: 2, lineWidth: 0 });
 
           // Add extra indentation for each lines
           const yamlArray = yamlString.split('\n');

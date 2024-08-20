@@ -122,7 +122,7 @@
     "@faker-js/faker": "8.4.1",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
-    "@types/lodash": "4.17.6",
+    "@types/lodash-es": "4.17.12",
     "@yeoman/adapter": "1.4.0",
     "@yeoman/conflicter": "2.0.0",
     "@yeoman/namespace": "1.0.0",
@@ -132,7 +132,6 @@
     "chalk": "5.3.0",
     "chevrotain": "11.0.3",
     "commander": "12.1.0",
-    "conf": "13.0.1",
     "debug": "4.3.6",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.6.1",
@@ -147,7 +146,6 @@
     "globals": "15.9.0",
     "isbinaryfile": "5.0.2",
     "java-lint": "0.3.0",
-    "js-yaml": "4.1.0",
     "latest-version": "9.0.0",
     "lodash-es": "4.17.21",
     "mem-fs": "4.1.0",
@@ -170,7 +168,6 @@
     "type-fest": "4.25.0",
     "typescript": "5.4.5",
     "typescript-eslint": "8.2.0",
-    "winston": "3.14.2",
     "yaml": "2.5.0",
     "yeoman-environment": "4.4.1",
     "yeoman-generator": "7.3.2"
@@ -219,6 +216,9 @@
   "overrides": {
     "eslint-plugin-import": {
       "eslint": "$eslint"
+    },
+    "ejs-lint": {
+      "ejs": "$ejs"
     }
   }
 }
