@@ -103,12 +103,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -128,7 +128,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -149,7 +149,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -294,12 +294,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -319,7 +319,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -339,7 +339,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -366,7 +366,7 @@ jhipster:
       test:
         - CMD
         - cqlsh
-        - '-e'
+        - -e
         - describe keyspaces
       interval: 5s
       timeout: 25s
@@ -547,12 +547,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -572,7 +572,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -592,7 +592,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -612,7 +612,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -633,7 +633,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -666,7 +666,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
@@ -685,7 +685,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -699,11 +699,11 @@ jhipster:
       test:
         - CMD
         - echo
-        - '''db.runCommand("ping").ok'''
-        - '|'
+        - "'db.runCommand(\\"ping\\").ok'"
+        - "|"
         - mongo
         - localhost:27017/test
-        - '--quiet'
+        - --quiet
       interval: 5s
       timeout: 5s
       retries: 10
@@ -722,7 +722,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -742,8 +742,8 @@ jhipster:
       test:
         - CMD
         - /usr/local/bin/healthcheck.sh
-        - '--connect'
-        - '--innodb_initialized'
+        - --connect
+        - --innodb_initialized
       interval: 5s
       timeout: 5s
       retries: 10
@@ -928,12 +928,12 @@ jhipster:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -955,7 +955,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -978,7 +978,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1000,7 +1000,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -1024,7 +1024,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1059,7 +1059,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
@@ -1083,7 +1083,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1103,7 +1103,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8091/ui/index.html
       interval: 5s
       timeout: 5s
@@ -1126,7 +1126,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1148,8 +1148,8 @@ jhipster:
       test:
         - CMD
         - /usr/local/bin/healthcheck.sh
-        - '--connect'
-        - '--innodb_initialized'
+        - --connect
+        - --innodb_initialized
       interval: 5s
       timeout: 5s
       retries: 10
@@ -1357,12 +1357,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -1382,7 +1382,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -1402,7 +1402,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1422,7 +1422,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -1443,7 +1443,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1476,7 +1476,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
@@ -1495,7 +1495,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1692,12 +1692,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -1717,7 +1717,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -1737,7 +1737,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1757,7 +1757,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -1778,7 +1778,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1811,7 +1811,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
@@ -1832,7 +1832,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1850,7 +1850,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8091/ui/index.html
       interval: 5s
       timeout: 5s
@@ -1870,7 +1870,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -1890,8 +1890,8 @@ jhipster:
       test:
         - CMD
         - /usr/local/bin/healthcheck.sh
-        - '--connect'
-        - '--innodb_initialized'
+        - --connect
+        - --innodb_initialized
       interval: 5s
       timeout: 5s
       retries: 10
@@ -2017,12 +2017,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2042,7 +2042,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2062,7 +2062,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2082,7 +2082,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2209,12 +2209,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2234,7 +2234,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2254,7 +2254,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2274,7 +2274,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2426,12 +2426,12 @@ management:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2451,7 +2451,7 @@ management:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2471,7 +2471,7 @@ management:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2491,7 +2491,7 @@ management:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2707,12 +2707,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2732,7 +2732,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2752,7 +2752,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -2772,7 +2772,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2864,12 +2864,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - SPRING_LIQUIBASE_URL=jdbc:mysql://samplemysql-mysql:3306/samplemysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_ELASTICSEARCH_URIS=http://samplemysql-elasticsearch:9200
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -2891,7 +2891,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -2906,7 +2906,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:9200/_cluster/health?wait_for_status=green&timeout=10s
       interval: 5s
       timeout: 10s
@@ -3003,7 +3003,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -3023,7 +3023,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -3132,12 +3132,12 @@ jhipster:
       - SPRING_R2DBC_URL=r2dbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://jhgate-mysql:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
@@ -3157,7 +3157,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -3269,7 +3269,7 @@ jhipster:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8081/management/health
       interval: 5s
       timeout: 5s
@@ -3289,7 +3289,7 @@ jhipster:
       test:
         - CMD
         - mysql
-        - '-e'
+        - -e
         - SHOW DATABASES;
       interval: 5s
       timeout: 5s
@@ -3378,12 +3378,12 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle-mono-oracle:1521:oracle-mono
     ports:
-      - '8080:8080'
+      - 8080:8080
     healthcheck:
       test:
         - CMD
         - curl
-        - '-f'
+        - -f
         - http://localhost:8080/management/health
       interval: 5s
       timeout: 5s
