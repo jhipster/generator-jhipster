@@ -637,7 +637,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   useNpmWrapperInstallTask() {
     this.setFeatures({
       customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
-        const buildTool = this.jhipsterConfig.buildTool;
+        const buildTool = this.jhipsterConfigWithDefaults.buildTool;
         if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
           return defaultInstallTask();
         }
