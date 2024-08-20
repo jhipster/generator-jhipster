@@ -25,8 +25,13 @@ inputs:
     required: true
   workdir:
     description: 'Working directory for the action'
-    required: false
-    default: '.'
+    required: true
+  docker_compose_file:
+    description: 'Path to the Docker Compose file'
+    required: true
+  github_token:
+    description: 'GitHub token for commenting on the PR'
+    required: true
 
 runs:
   using: composite
@@ -63,12 +68,12 @@ runs:
       shell: bash
       run: sudo apt-get install -y jq
 
-    # Start SonarQube server using Docker
+    # Start SonarQube server using Docker Compose
     - name: 'Start SonarQube server'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: |
-        docker run -d --name sonar-server -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 mc1arke/sonarqube-with-community-branch-plugin:latest
+        docker-compose -f ${{ inputs.docker_compose_file }} up -d
         timeout 120s bash -c 'until curl -s http://localhost:9000/api/system/status | grep -q "\"status\":\"UP\""; do sleep 5; done' || (echo "SonarQube failed to start in time" && exit 1)
 
     # Create SonarQube project
@@ -234,8 +239,8 @@ runs:
       uses: peter-evans/find-comment@v3
       with:
         issue-number: ${{ github.event.pull_request.number }}
-        comment-author: github-actions[bot]
         body-includes: '## :bar_chart: SonarQube Analysis for ${{ inputs.sonar_project_key }}'
+        token: ${{ inputs.github_token }}
 
     # Create or update PR comment with SonarQube results
     - name: 'Post SonarQube results as PR comment'
@@ -246,6 +251,7 @@ runs:
         body: ${{ env.COMMENT_BODY }}
         comment-id: ${{ steps.find_comment.outputs.comment-id }}
         edit-mode: replace
+        token: ${{ inputs.github_token }}
 
     # Fail the action if there are unresolved issues
     - name: 'Fail PR if unresolved issues are found'

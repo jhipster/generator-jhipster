@@ -205,6 +205,8 @@ jobs:
         with:
           sonar_project_key: 'jhipster-sample-application'
           workdir: ${{ github.workspace }}/app
+          docker_compose_file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
+          github_token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}
 
   check-angular:
     permissions:

@@ -1,0 +1,8 @@
+services:
+  sonarqube:
+    image: mc1arke/sonarqube-with-community-branch-plugin:10.3-community
+    container_name: sonar-server
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    ports:
+      - "9000:9000"
