@@ -524,16 +524,23 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
      */
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
-        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>()
+        <% if (persistableRelationships.length === 0) { %>return <% } else { %><%= persistClass %> <%= persistInstance %> = <% } %>new <%= persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
             .<%= primaryKey.name %>(UUID.randomUUID())
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
             .<%= primaryKey.name %>(UUID.randomUUID().toString())
     <%_ } _%>
-    <% for (field of fieldsToTest) { %>
-            .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
-            .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+    <%_ for (field of fieldsToTest) { _%>
+            .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
+      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+            .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
+      <%_ } _%>
+    <%_ } _%>;
+    <%_ if (persistableRelationships.length === 0) { _%>
+    }
+    <%_   return; _%>
+    <%_ } _%>
   <%_ } else { _%>
         <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
