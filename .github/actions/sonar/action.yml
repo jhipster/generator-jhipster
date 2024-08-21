@@ -71,7 +71,7 @@ runs:
     - name: 'Start SonarQube server'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
-      run: docker compose -f ${{ inputs.docker-compose-file }} up -d --wait
+      run: docker compose -f ${{ inputs.docker-compose-file }} up --build -d --wait
 
     # Create SonarQube project
     - name: 'Create SonarQube project'
