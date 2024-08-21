@@ -20,16 +20,16 @@ name: 'SonarQube PR Analysis'
 description: 'A GitHub Action to perform SonarQube analysis on a PR with caching and metrics retrieval.'
 
 inputs:
-  sonar_project_key:
+  sonar-project-key:
     description: 'SonarQube project key'
     required: true
   workdir:
     description: 'Working directory for the action'
     required: true
-  docker_compose_file:
+  docker-compose-file:
     description: 'Path to the Docker Compose file'
     required: true
-  github_token:
+  comment-token:
     description: 'GitHub token for commenting on the PR'
     required: true
 
@@ -41,15 +41,15 @@ runs:
       if: github.ref == 'refs/heads/main'
       shell: bash
       run: |
-        mkdir -p ./${{ inputs.sonar_project_key }}-cached
-        cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar_project_key }}-cached/
+        mkdir -p ./${{ inputs.sonar-project-key }}-cached
+        cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar-project-key }}-cached/
 
     - name: 'Store cache (main branch)'
       if: github.ref == 'refs/heads/main'
       uses: actions/cache/save@v4
       with:
-        path: ./${{ inputs.sonar_project_key }}-cached
-        key: cache-${{ inputs.sonar_project_key }}-${{ github.sha }}
+        path: ./${{ inputs.sonar-project-key }}-cached
+        key: cache-${{ inputs.sonar-project-key }}-${{ github.sha }}
 
     # Restore the cache for PR analysis
     - name: 'Restore project cache for PR analysis'
@@ -57,10 +57,10 @@ runs:
       id: restore_cache
       uses: actions/cache/restore@v4
       with:
-        path: ./${{ inputs.sonar_project_key }}-cached
-        key: cache-${{ inputs.sonar_project_key }}-${{ github.event.pull_request.base.sha }}
+        path: ./${{ inputs.sonar-project-key }}-cached
+        key: cache-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
         restore-keys: |
-          cache-${{ inputs.sonar_project_key }}-
+          cache-${{ inputs.sonar-project-key }}-
 
     # Install required tools
     - name: 'Install jq for JSON parsing'
@@ -72,13 +72,13 @@ runs:
     - name: 'Start SonarQube server'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
-      run: docker compose -f ${{ inputs.docker_compose_file }} up -d --wait
+      run: docker compose -f ${{ inputs.docker-compose-file }} up -d --wait
 
     # Create SonarQube project
     - name: 'Create SonarQube project'
       shell: bash
       run: |
-        curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar_project_key }}&project=${{ inputs.sonar_project_key }}" || true
+        curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar-project-key }}&project=${{ inputs.sonar-project-key }}" || true
 
     # Set up a temporary Git repository with files from the main branch cache
     - name: 'Prepare repository with main branch files'
@@ -88,7 +88,7 @@ runs:
         mkdir -p ./sonarqube_analysis_repo
         cd ./sonarqube_analysis_repo
 
-        cp -r ../${{ inputs.sonar_project_key }}-cached/. .
+        cp -r ../${{ inputs.sonar-project-key }}-cached/. .
 
     # Run SonarQube analysis on the main branch
     - name: 'Run SonarQube analysis on main branch'
@@ -98,7 +98,7 @@ runs:
         cd ./sonarqube_analysis_repo
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
           -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.projectKey=${{ inputs.sonar_project_key }} \
+          -Dsonar.projectKey=${{ inputs.sonar-project-key }} \
           -Dsonar.login=admin \
           -Dsonar.password=admin \
           -Dsonar.branch.name=main
@@ -134,7 +134,7 @@ runs:
         cd ./sonarqube_analysis_repo
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
           -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.projectKey=${{ inputs.sonar_project_key }} \
+          -Dsonar.projectKey=${{ inputs.sonar-project-key }} \
           -Dsonar.login=admin \
           -Dsonar.password=admin \
           -Dsonar.pullrequest.key=${{github.event.pull_request.number}} \
@@ -148,7 +148,7 @@ runs:
       shell: bash
       run: |
         timeout 300s bash -c 'while :; do
-          response=$(curl -s -u admin:admin "http://localhost:9000/api/ce/component?component=${{ inputs.sonar_project_key }}")
+          response=$(curl -s -u admin:admin "http://localhost:9000/api/ce/component?component=${{ inputs.sonar-project-key }}")
           queue_status=$(echo "$response" | jq -r ".queue[]?.status")
           current_status=$(echo "$response" | jq -r ".current.status")
 
@@ -173,7 +173,7 @@ runs:
       shell: bash
       run: |
         SONAR_RESPONSE=$(curl -s -u admin:admin \
-        "http://localhost:9000/api/measures/component?component=${{ inputs.sonar_project_key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
+        "http://localhost:9000/api/measures/component?component=${{ inputs.sonar-project-key }}&pullRequest=${{ github.event.pull_request.number }}&metricKeys=new_bugs,new_vulnerabilities,new_code_smells,new_coverage,new_duplicated_lines_density,new_violations")
 
         export_measure() {
           METRIC_NAME=$1
@@ -194,7 +194,7 @@ runs:
         export_measure "new_duplicated_lines_density" "NEW_DUP"
 
         {
-          echo "## :bar_chart: SonarQube Analysis for ${{ inputs.sonar_project_key }}"
+          echo "## :bar_chart: SonarQube Analysis for ${{ inputs.sonar-project-key }}"
           echo ""
           echo "| Metric                      | Value       |"
           echo "|-----------------------------|-------------|"
@@ -209,7 +209,7 @@ runs:
             echo "<details><summary>Unresolved Issues (click to expand)</summary>"
             echo ""
             ISSUES=$(curl -s -u admin:admin \
-              "http://localhost:9000/api/issues/search?componentKeys=${{ inputs.sonar_project_key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
+              "http://localhost:9000/api/issues/search?componentKeys=${{ inputs.sonar-project-key }}&resolved=false&pullRequest=${{ github.event.pull_request.number }}" | \
               jq -r '.issues[] | "File: \(.component) Line: \(.line)\n  [\(.rule)] \(.message)\n"')
             echo "$ISSUES"
             echo "</details>"
@@ -229,8 +229,8 @@ runs:
       uses: peter-evans/find-comment@v3
       with:
         issue-number: ${{ github.event.pull_request.number }}
-        body-includes: '## :bar_chart: SonarQube Analysis for ${{ inputs.sonar_project_key }}'
-        token: ${{ inputs.github_token }}
+        body-includes: '## :bar_chart: SonarQube Analysis for ${{ inputs.sonar-project-key }}'
+        token: ${{ inputs.comment-token }}
 
     # Create or update PR comment with SonarQube results
     - name: 'Post SonarQube results as PR comment'
@@ -241,7 +241,7 @@ runs:
         body: ${{ env.COMMENT_BODY }}
         comment-id: ${{ steps.find_comment.outputs.comment-id }}
         edit-mode: replace
-        token: ${{ inputs.github_token }}
+        token: ${{ inputs.comment-token }}
 
     # Fail the action if there are unresolved issues
     - name: 'Fail PR if unresolved issues are found'
@@ -256,4 +256,4 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: |
-        docker compose -f ${{ inputs.docker_compose_file }} down
+        docker compose -f ${{ inputs.docker-compose-file }} down

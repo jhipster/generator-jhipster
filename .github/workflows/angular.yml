@@ -203,10 +203,10 @@ jobs:
           needs.build-matrix.outputs.server != 'false'
         uses: ./generator-jhipster/.github/actions/sonar
         with:
-          sonar_project_key: 'jhipster-sample-application'
+          sonar-project-key: 'jhipster-sample-application'
           workdir: ${{ github.workspace }}/app
-          docker_compose_file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
-          github_token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}
+          docker-compose-file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
+          comment-token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}
 
   check-angular:
     permissions:
