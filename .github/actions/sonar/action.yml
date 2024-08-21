@@ -102,7 +102,7 @@ runs:
       run: >-
         git init &&
         git commit -m "Initial commit" --allow-empty &&
-        docker run --rm sonarsource/sonar-scanner-cli --net=host
+        docker run --net=host --rm sonarsource/sonar-scanner-cli
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
         -Dsonar.login=admin
