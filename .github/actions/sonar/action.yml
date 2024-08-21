@@ -23,8 +23,8 @@ inputs:
   sonar-project-key:
     description: 'SonarQube project key'
     required: true
-  workdir:
-    description: 'Working directory for the action'
+  application-dir:
+    description: 'Application directory'
     required: true
   docker-compose-file:
     description: 'Path to the Docker Compose file'
@@ -45,7 +45,7 @@ runs:
       if: github.ref == 'refs/heads/main'
       shell: bash
       run: |
-        cp -r ${{ inputs.workdir }}/. .
+        cp -r ${{ inputs.application-dir }}/. .
         rm -rf node_modules \
             package-lock.json \
             target/node \
@@ -122,8 +122,8 @@ runs:
       if: github.event_name == 'pull_request'
       shell: bash
       run: |
-        rm -rf "${{ inputs.workdir }}/.git"
-        cp -r ${{ inputs.workdir }}/. .
+        rm -rf "${{ inputs.application-dir }}/.git"
+        cp -r ${{ inputs.application-dir }}/. .
 
         git checkout -b dev
         git add -A
@@ -263,7 +263,6 @@ runs:
 
     # Stop the SonarQube server
     - name: 'Stop SonarQube server'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       shell: bash
-      run: |
-        docker compose -f ${{ inputs.docker-compose-file }} down
+      run: docker compose -f ${{ inputs.docker-compose-file }} down

@@ -199,7 +199,7 @@ jobs:
         uses: ./generator-jhipster/.github/actions/sonar
         with:
           sonar-project-key: ${{ matrix.name }}
-          workdir: ${{ github.workspace }}/app
+          application-dir: ${{ github.workspace }}/app
           docker-compose-file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
           comment-token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}
 
