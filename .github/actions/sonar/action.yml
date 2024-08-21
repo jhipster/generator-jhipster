@@ -69,19 +69,32 @@ runs:
         restore-keys: |
           application-${{ inputs.sonar-project-key }}-
 
+    # Create an empty project if cache is not found
+    - name: 'Create an empty project if cache is not found'
+      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        mkdir -p ./${{ inputs.sonar-project-key }}
+        cd ${{ inputs.sonar-project-key }}
+        git init
+        touch README.md
+        git add README.md
+        git commit -m "Initial commit"
+
     # Start SonarQube server using Docker Compose
     - name: 'Start SonarQube server'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       shell: bash
       run: docker compose -f ${{ inputs.docker-compose-file }} up --build -d --wait
 
     # Create SonarQube project
     - name: 'Create SonarQube project'
+      if: github.event_name == 'pull_request'
       shell: bash
       run: |
         curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar-project-key }}&project=${{ inputs.sonar-project-key }}" || true
 
-    # Run SonarQube analysis on the main branch
+    # Run SonarQube analysis on the main branch or add an empty scan
     - name: 'Run SonarQube analysis on main branch'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
@@ -94,15 +107,26 @@ runs:
         -Dsonar.branch.name=main
       working-directory: ${{ inputs.sonar-project-key }}
 
+    - name: Add an empty scan to sonar main branch
+      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: >-
+        docker run --rm sonarsource/sonar-scanner-cli --net=host
+        -Dsonar.host.url=http://localhost:9000
+        -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        -Dsonar.login=admin
+        -Dsonar.password=admin
+        -Dsonar.branch.name=main
+
     # Prepare the repository for the PR changes
     - name: 'Clean repository for PR changes'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       shell: bash
       run: find . -mindepth 1 -not -path "./.git*" -delete
       working-directory: ${{ inputs.sonar-project-key }}
 
     - name: 'Apply PR changes to the repository'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       shell: bash
       run: |
         rm -rf "${{ inputs.workdir }}/.git"
@@ -115,7 +139,7 @@ runs:
 
     # Run SonarQube analysis on the PR changes
     - name: 'Run SonarQube analysis on PR changes'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       shell: bash
       run: >-
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
@@ -131,7 +155,7 @@ runs:
 
     # Wait for SonarQube tasks to complete
     - name: 'Wait for SonarQube tasks to complete'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       shell: bash
       run: |
         timeout 300s bash -c 'while :; do
@@ -155,7 +179,7 @@ runs:
 
     # Retrieve SonarQube metrics for the PR
     - name: 'Retrieve SonarQube metrics'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request'
       id: sonar_metrics
       shell: bash
       run: |
