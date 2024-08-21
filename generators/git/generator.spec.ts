@@ -50,7 +50,7 @@ describe(`generator - ${generator}`, () => {
     describe('with default option', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath);
+        runResult = await helpers.run(generatorPath).withOptions({ skipGit: false });
       });
       it('should create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
@@ -75,8 +75,8 @@ describe(`generator - ${generator}`, () => {
     describe('regenerating', () => {
       let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath);
-        runResult = await runResult.create(generatorPath).withOptions({ baseName: 'changed' }).run();
+        runResult = await helpers.run(generatorPath).withOptions({ skipGit: false });
+        runResult = await runResult.create(generatorPath).withOptions({ skipGit: false, baseName: 'changed' }).run();
       });
       it('should have 1 commit', async () => {
         const git = runResult.generator.createGit();
