@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", ":disableDependencyDashboard"],
-  "enabledManagers": ["maven-wrapper", "gradle-wrapper", "nodenv", "dockerfile", "regex"],
+  "enabledManagers": ["maven-wrapper", "gradle-wrapper", "nodenv", "regex"],
   "customManagers": [
     {
       "customType": "regex",

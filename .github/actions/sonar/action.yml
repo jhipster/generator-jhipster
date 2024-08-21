@@ -38,12 +38,13 @@ runs:
   steps:
     # Make sure the sonar project folder exists.
     - run: mkdir -p ./${{ inputs.sonar-project-key }}
+      shell: bash
+
     # Cache the main branch project for future PR analysis
     - name: 'Cache project on main branch'
       if: github.ref == 'refs/heads/main'
       shell: bash
       run: |
-        mkdir -p ./${{ inputs.sonar-project-key }}
         cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar-project-key }}/
         rm -rf ${{ inputs.sonar-project-key }}/node_modules \
             ${{ inputs.sonar-project-key }}/package-lock.json \
@@ -68,18 +69,6 @@ runs:
         key: application-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
         restore-keys: |
           application-${{ inputs.sonar-project-key }}-
-
-    # Create an empty project if cache is not found
-    - name: 'Create an empty project if cache is not found'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
-      shell: bash
-      run: |
-        mkdir -p ./${{ inputs.sonar-project-key }}
-        cd ${{ inputs.sonar-project-key }}
-        git init
-        touch README.md
-        git add README.md
-        git commit -m "Initial commit"
 
     # Start SonarQube server using Docker Compose
     - name: 'Start SonarQube server'
@@ -111,12 +100,15 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
       shell: bash
       run: >-
+        git init
+        git commit -m "Initial commit" --allow-empty
         docker run --rm sonarsource/sonar-scanner-cli --net=host
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
         -Dsonar.login=admin
         -Dsonar.password=admin
         -Dsonar.branch.name=main
+      working-directory: ${{ inputs.sonar-project-key }}
 
     # Prepare the repository for the PR changes
     - name: 'Clean repository for PR changes'
