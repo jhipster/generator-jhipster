@@ -92,7 +92,7 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: >-
-        echo "::group::Scanning main branch application"
+        echo "::group::Scanning main branch application" &&
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
@@ -106,7 +106,7 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
       shell: bash
       run: >-
-        echo ":: group::Scanning empty commit"
+        echo ":: group::Scanning empty commit" &&
         git init &&
         git commit -m "Initial commit" --allow-empty &&
         docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
