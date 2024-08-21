@@ -173,6 +173,7 @@ Options:
   --workspaces-folders <value...>          Folders to use as monorepository workspace
   --workspaces                             Generate workspaces for multiples applications
   --skip-git                               Skip git repository initialization
+  --force-git                              Force commit to git repository
   --monorepository                         Use monorepository
   --defaults                               Execute jhipster with default config
   --skip-client                            Skip the client-side application generation
