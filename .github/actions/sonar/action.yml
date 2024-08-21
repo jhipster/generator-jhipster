@@ -46,7 +46,7 @@ runs:
 
     - name: 'Store cache (main branch)'
       if: github.ref == 'refs/heads/main'
-      uses: actions/cache@v4
+      uses: actions/cache/save@v4
       with:
         path: ./${{ inputs.sonar_project_key }}-cached
         key: cache-${{ inputs.sonar_project_key }}-${{ github.sha }}
@@ -55,7 +55,7 @@ runs:
     - name: 'Restore project cache for PR analysis'
       if: github.event_name == 'pull_request'
       id: restore_cache
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
         path: ./${{ inputs.sonar_project_key }}-cached
         key: cache-${{ inputs.sonar_project_key }}-${{ github.event.pull_request.base.sha }}
@@ -72,9 +72,7 @@ runs:
     - name: 'Start SonarQube server'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
-      run: |
-        docker compose -f ${{ inputs.docker_compose_file }} up -d
-        timeout 120s bash -c 'until curl -s http://localhost:9000/api/system/status | grep -q "\"status\":\"UP\""; do sleep 5; done' || (echo "SonarQube failed to start in time" && exit 1)
+      run: docker compose -f ${{ inputs.docker_compose_file }} up -d --wait
 
     # Create SonarQube project
     - name: 'Create SonarQube project'
@@ -91,14 +89,6 @@ runs:
         cd ./sonarqube_analysis_repo
 
         cp -r ../${{ inputs.sonar_project_key }}-cached/. .
-        rm -rf .git
-
-        git init
-        git config user.name "GitHub Action"
-        git config user.email "action@github.com"
-
-        git add -A
-        git commit -m "Initial commit from main branch"
 
     # Run SonarQube analysis on the main branch
     - name: 'Run SonarQube analysis on main branch'
