@@ -45,12 +45,13 @@ runs:
       if: github.ref == 'refs/heads/main'
       shell: bash
       run: |
-        cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar-project-key }}/
-        rm -rf ${{ inputs.sonar-project-key }}/node_modules \
-            ${{ inputs.sonar-project-key }}/package-lock.json \
-            ${{ inputs.sonar-project-key }}/target/node \
-            ${{ inputs.sonar-project-key }}/target/*.original \
-            ${{ inputs.sonar-project-key }}/target/*.jar
+        cp -r ${{ inputs.workdir }}/. .
+        rm -rf node_modules \
+            package-lock.json \
+            target/node \
+            target/*.original \
+            target/*.jar
+      working-directory: ${{ inputs.sonar-project-key }}
 
     - name: 'Store cache (main branch)'
       if: github.ref == 'refs/heads/main'
@@ -102,7 +103,7 @@ runs:
       run: >-
         git init &&
         git commit -m "Initial commit" --allow-empty &&
-        docker run --net=host --rm sonarsource/sonar-scanner-cli
+        docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
         -Dsonar.login=admin
