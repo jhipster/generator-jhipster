@@ -100,8 +100,8 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
       shell: bash
       run: >-
-        git init
-        git commit -m "Initial commit" --allow-empty
+        git init &&
+        git commit -m "Initial commit" --allow-empty &&
         docker run --rm sonarsource/sonar-scanner-cli --net=host
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
