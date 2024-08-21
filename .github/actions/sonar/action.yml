@@ -75,7 +75,10 @@ runs:
     - name: 'Start SonarQube server'
       if: github.event_name == 'pull_request'
       shell: bash
-      run: docker compose -f ${{ inputs.docker-compose-file }} up --build -d --wait
+      run: |
+        echo "::group::Starting sonarqube"
+        docker compose -f ${{ inputs.docker-compose-file }} up --build -d --wait
+        echo "::endgroup::"
 
     # Create SonarQube project
     - name: 'Create SonarQube project'
@@ -89,18 +92,21 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: >-
+        echo "::group::Scanning main branch application"
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
         -Dsonar.login=admin
         -Dsonar.password=admin
-        -Dsonar.branch.name=main
+        -Dsonar.branch.name=main &&
+        echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
 
     - name: Add an empty scan to sonar main branch
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
       shell: bash
       run: >-
+        echo ":: group::Scanning empty commit"
         git init &&
         git commit -m "Initial commit" --allow-empty &&
         docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
@@ -108,7 +114,8 @@ runs:
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
         -Dsonar.login=admin
         -Dsonar.password=admin
-        -Dsonar.branch.name=main
+        -Dsonar.branch.name=main &&
+        echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
 
     # Prepare the repository for the PR changes
@@ -122,12 +129,14 @@ runs:
       if: github.event_name == 'pull_request'
       shell: bash
       run: |
+        echo "::group::Creating changes commit"
         rm -rf "${{ inputs.application-dir }}/.git"
         cp -r ${{ inputs.application-dir }}/. .
 
         git checkout -b dev
         git add -A
         git commit -m "Apply changes from PR branch"
+        echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
 
     # Run SonarQube analysis on the PR changes
@@ -135,6 +144,7 @@ runs:
       if: github.event_name == 'pull_request'
       shell: bash
       run: >-
+        echo "::group::Scanning PR application changes" &&
         ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
         -Dsonar.host.url=http://localhost:9000
         -Dsonar.projectKey=${{ inputs.sonar-project-key }}
@@ -143,7 +153,8 @@ runs:
         -Dsonar.pullrequest.key=${{github.event.pull_request.number}}
         -Dsonar.pullrequest.branch=dev
         -Dsonar.pullrequest.base=main
-        -Dsonar.scm.revision=$(git rev-parse HEAD)
+        -Dsonar.scm.revision=$(git rev-parse HEAD) &&
+        echo "::endgroup::"
       working-directory: ${{ inputs.sonar-project-key }}
 
     # Wait for SonarQube tasks to complete
