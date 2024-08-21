@@ -36,6 +36,8 @@ inputs:
 runs:
   using: composite
   steps:
+    # Make sure the sonar project folder exists.
+    - run: mkdir -p ./${{ inputs.sonar-project-key }}
     # Cache the main branch project for future PR analysis
     - name: 'Cache project on main branch'
       if: github.ref == 'refs/heads/main'
