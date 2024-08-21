@@ -203,7 +203,7 @@ jobs:
           needs.build-matrix.outputs.server != 'false'
         uses: ./generator-jhipster/.github/actions/sonar
         with:
-          sonar-project-key: 'jhipster-sample-application'
+          sonar-project-key: ${{ matrix.name }}
           workdir: ${{ github.workspace }}/app
           docker-compose-file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
           comment-token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}

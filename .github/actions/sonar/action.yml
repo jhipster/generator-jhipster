@@ -41,14 +41,14 @@ runs:
       if: github.ref == 'refs/heads/main'
       shell: bash
       run: |
-        mkdir -p ./${{ inputs.sonar-project-key }}-cached
-        cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar-project-key }}-cached/
+        mkdir -p ./${{ inputs.sonar-project-key }}
+        cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar-project-key }}/
 
     - name: 'Store cache (main branch)'
       if: github.ref == 'refs/heads/main'
       uses: actions/cache/save@v4
       with:
-        path: ./${{ inputs.sonar-project-key }}-cached
+        path: ./${{ inputs.sonar-project-key }}
         key: cache-${{ inputs.sonar-project-key }}-${{ github.sha }}
 
     # Restore the cache for PR analysis
@@ -57,16 +57,10 @@ runs:
       id: restore_cache
       uses: actions/cache/restore@v4
       with:
-        path: ./${{ inputs.sonar-project-key }}-cached
+        path: ./${{ inputs.sonar-project-key }}
         key: cache-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
         restore-keys: |
           cache-${{ inputs.sonar-project-key }}-
-
-    # Install required tools
-    - name: 'Install jq for JSON parsing'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
-      shell: bash
-      run: sudo apt-get install -y jq
 
     # Start SonarQube server using Docker Compose
     - name: 'Start SonarQube server'
@@ -88,7 +82,7 @@ runs:
         mkdir -p ./sonarqube_analysis_repo
         cd ./sonarqube_analysis_repo
 
-        cp -r ../${{ inputs.sonar-project-key }}-cached/. .
+        cp -r ../${{ inputs.sonar-project-key }}/. .
 
     # Run SonarQube analysis on the main branch
     - name: 'Run SonarQube analysis on main branch'
