@@ -49,7 +49,7 @@ runs:
       uses: actions/cache/save@v4
       with:
         path: ./${{ inputs.sonar-project-key }}
-        key: cache-${{ inputs.sonar-project-key }}-${{ github.sha }}
+        key: application-${{ inputs.sonar-project-key }}-${{ github.sha }}
 
     # Restore the cache for PR analysis
     - name: 'Restore project cache for PR analysis'
@@ -58,9 +58,9 @@ runs:
       uses: actions/cache/restore@v4
       with:
         path: ./${{ inputs.sonar-project-key }}
-        key: cache-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
+        key: application-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
         restore-keys: |
-          cache-${{ inputs.sonar-project-key }}-
+          application-${{ inputs.sonar-project-key }}-
 
     # Start SonarQube server using Docker Compose
     - name: 'Start SonarQube server'
@@ -216,6 +216,8 @@ runs:
           echo 'EOF'
         } >> "$GITHUB_ENV"
 
+        cat sonar_result.md
+
     # Find previous SonarQube analysis comment
     - name: 'Find existing PR comment with SonarQube results'
       if: github.event_name == 'pull_request' && steps.sonar_metrics.outcome == 'success'
@@ -239,7 +241,11 @@ runs:
 
     # Fail the action if there are unresolved issues
     - name: 'Fail PR if unresolved issues are found'
-      if: github.event_name == 'pull_request' && steps.sonar_metrics.outcome == 'success' && env.NEW_VIOLATIONS != 'N/A' && env.NEW_VIOLATIONS != 0
+      if: >-
+        github.event_name == 'pull_request' &&
+        steps.sonar_metrics.outcome == 'success' &&
+        env.NEW_VIOLATIONS != 'N/A' && env.NEW_VIOLATIONS != 0 &&
+        !contains(github.event.pull_request.labels.*.name, 'pr: disable-sonar')
       shell: bash
       run: |
         echo "SonarQube PR Analysis failed due to unresolved issues."
