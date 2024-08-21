@@ -43,6 +43,11 @@ runs:
       run: |
         mkdir -p ./${{ inputs.sonar-project-key }}
         cp -r ${{ inputs.workdir }}/. ./${{ inputs.sonar-project-key }}/
+        rm -rf ${{ inputs.sonar-project-key }}/node_modules \
+            ${{ inputs.sonar-project-key }}/package-lock.json \
+            ${{ inputs.sonar-project-key }}/target/node \
+            ${{ inputs.sonar-project-key }}/target/*.original \
+            ${{ inputs.sonar-project-key }}/target/*.jar
 
     - name: 'Store cache (main branch)'
       if: github.ref == 'refs/heads/main'
@@ -74,67 +79,53 @@ runs:
       run: |
         curl -s -u admin:admin -X POST "http://localhost:9000/api/projects/create?name=${{ inputs.sonar-project-key }}&project=${{ inputs.sonar-project-key }}" || true
 
-    # Set up a temporary Git repository with files from the main branch cache
-    - name: 'Prepare repository with main branch files'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
-      shell: bash
-      run: |
-        mkdir -p ./sonarqube_analysis_repo
-        cd ./sonarqube_analysis_repo
-
-        cp -r ../${{ inputs.sonar-project-key }}/. .
-
     # Run SonarQube analysis on the main branch
     - name: 'Run SonarQube analysis on main branch'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
-      run: |
-        cd ./sonarqube_analysis_repo
-        ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
-          -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.projectKey=${{ inputs.sonar-project-key }} \
-          -Dsonar.login=admin \
-          -Dsonar.password=admin \
-          -Dsonar.branch.name=main
+      run: >-
+        ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
+        -Dsonar.host.url=http://localhost:9000
+        -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        -Dsonar.login=admin
+        -Dsonar.password=admin
+        -Dsonar.branch.name=main
+      working-directory: ${{ inputs.sonar-project-key }}
 
     # Prepare the repository for the PR changes
     - name: 'Clean repository for PR changes'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
-      run: |
-        cd ./sonarqube_analysis_repo
-        find . -mindepth 1 -not -path "./.git*" -delete
+      run: find . -mindepth 1 -not -path "./.git*" -delete
+      working-directory: ${{ inputs.sonar-project-key }}
 
     - name: 'Apply PR changes to the repository'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
       run: |
-        cd ./sonarqube_analysis_repo
         rm -rf "${{ inputs.workdir }}/.git"
         cp -r ${{ inputs.workdir }}/. .
 
         git checkout -b dev
         git add -A
         git commit -m "Apply changes from PR branch"
-
-        LATEST_COMMIT_HASH=$(git rev-parse HEAD)
-        echo "LATEST_COMMIT_HASH=${LATEST_COMMIT_HASH}" >> $GITHUB_ENV
+      working-directory: ${{ inputs.sonar-project-key }}
 
     # Run SonarQube analysis on the PR changes
     - name: 'Run SonarQube analysis on PR changes'
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
       shell: bash
-      run: |
-        cd ./sonarqube_analysis_repo
-        ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
-          -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.projectKey=${{ inputs.sonar-project-key }} \
-          -Dsonar.login=admin \
-          -Dsonar.password=admin \
-          -Dsonar.pullrequest.key=${{github.event.pull_request.number}} \
-          -Dsonar.pullrequest.branch=dev \
-          -Dsonar.pullrequest.base=main \
-          -Dsonar.scm.revision=${{ env.LATEST_COMMIT_HASH }}
+      run: >-
+        ./mvnw --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar
+        -Dsonar.host.url=http://localhost:9000
+        -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+        -Dsonar.login=admin
+        -Dsonar.password=admin
+        -Dsonar.pullrequest.key=${{github.event.pull_request.number}}
+        -Dsonar.pullrequest.branch=dev
+        -Dsonar.pullrequest.base=main
+        -Dsonar.scm.revision=$(git rev-parse HEAD)
+      working-directory: ${{ inputs.sonar-project-key }}
 
     # Wait for SonarQube tasks to complete
     - name: 'Wait for SonarQube tasks to complete'
