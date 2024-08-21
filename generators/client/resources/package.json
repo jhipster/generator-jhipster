@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "dayjs": "1.11.12"
+    "dayjs": "1.11.13"
   },
   "devDependencies": {
     "@cypress/code-coverage": "3.12.45",
