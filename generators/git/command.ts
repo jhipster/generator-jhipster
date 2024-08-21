@@ -19,14 +19,21 @@
 import { JHipsterCommandDefinition } from '../base/api.js';
 
 const command: JHipsterCommandDefinition = {
-  options: {
+  configs: {
     skipGit: {
       description: 'Skip git repository initialization',
-      type: Boolean,
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
-  },
-  configs: {
+    forceGit: {
+      description: 'Force commit to git repository',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
     monorepository: {
       description: 'Use monorepository',
       cli: {
