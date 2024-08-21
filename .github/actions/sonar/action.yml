@@ -230,7 +230,7 @@ runs:
 
     # Find previous SonarQube analysis comment
     - name: 'Find existing PR comment with SonarQube results'
-      if: github.event_name == 'pull_request' && steps.sonar_metrics.outcome == 'success'
+      if: github.event_name == 'pull_request' && inputs.comment-token && steps.sonar_metrics.outcome == 'success'
       id: find_comment
       uses: peter-evans/find-comment@v3
       with:
@@ -240,7 +240,7 @@ runs:
 
     # Create or update PR comment with SonarQube results
     - name: 'Post SonarQube results as PR comment'
-      if: github.event_name == 'pull_request' && steps.sonar_metrics.outcome == 'success'
+      if: github.event_name == 'pull_request' && inputs.comment-token && steps.sonar_metrics.outcome == 'success'
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
