@@ -89,7 +89,7 @@ runs:
 
     # Run SonarQube analysis on the main branch or add an empty scan
     - name: 'Run SonarQube analysis on main branch'
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit == 'true'
+      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-matched-key
       shell: bash
       run: >-
         echo "::group::Scanning main branch application" &&
@@ -103,7 +103,7 @@ runs:
       working-directory: ${{ inputs.sonar-project-key }}
 
     - name: Add an empty scan to sonar main branch
-      if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
+      if: github.event_name == 'pull_request' && !steps.restore_cache.outputs.cache-matched-key
       shell: bash
       run: >-
         echo "::group::Scanning empty commit" &&
