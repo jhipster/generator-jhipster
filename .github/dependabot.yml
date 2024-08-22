@@ -210,6 +210,17 @@ updates:
       - dependency-name: 'mongo'
         versions: ['>=7.0.6']
 
+  - package-ecosystem: 'docker'
+    directory: '/test-integration/sonar-pr/'
+    schedule:
+      interval: 'daily'
+      time: '00:30'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: docker :whale:'
+      - 'skip-changelog'
+
   - package-ecosystem: 'maven'
     directory: '/generators/server/resources/'
     schedule:
