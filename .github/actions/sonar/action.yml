@@ -106,7 +106,7 @@ runs:
       if: github.event_name == 'pull_request' && steps.restore_cache.outputs.cache-hit != 'true'
       shell: bash
       run: >-
-        echo ":: group::Scanning empty commit" &&
+        echo "::group::Scanning empty commit" &&
         git init &&
         git commit -m "Initial commit" --allow-empty &&
         docker run --net=host -v ".:/usr/src" --rm sonarsource/sonar-scanner-cli
@@ -276,4 +276,7 @@ runs:
     - name: 'Stop SonarQube server'
       if: github.event_name == 'pull_request'
       shell: bash
-      run: docker compose -f ${{ inputs.docker-compose-file }} down
+      run: |
+        echo "::group::Stopping SonarQube"
+        docker compose -f ${{ inputs.docker-compose-file }} down
+        echo "::endgroup::"
