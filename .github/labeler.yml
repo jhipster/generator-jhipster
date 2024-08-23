@@ -75,7 +75,10 @@
   - changed-files:
       - any-glob-to-any-file:
           - generators/common/**
+          - generators/java/**/*
+          - generators/liquibase/**/*
           - generators/server/**/*
+          - generators/spring-*/**/*
 
 'theme: upgrade':
   - changed-files:

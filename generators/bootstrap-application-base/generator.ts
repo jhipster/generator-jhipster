@@ -382,6 +382,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
+      hasRequiredRelationship({ entity }) {
+        entity.anyRelationshipIsRequired = entity.relationships.some(rel => rel.relationshipRequired || rel.id);
+      },
       checkForCircularRelationships({ entity }) {
         const detectCyclicRequiredRelationship = (entity, relatedEntities) => {
           if (relatedEntities.has(entity)) return true;
