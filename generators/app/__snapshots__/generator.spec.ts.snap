@@ -198,9 +198,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "DOCUMENTATION_URL": "https://www.jhipster.tech",
   "JAVA_COMPATIBLE_VERSIONS": [
     "17",
-    "18",
-    "19",
-    "20",
     "21",
     "22",
   ],
@@ -487,9 +484,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
     "17",
-    "18",
-    "19",
-    "20",
     "21",
     "22",
   ],
@@ -814,9 +808,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "DOCUMENTATION_URL": "https://www.jhipster.tech",
   "JAVA_COMPATIBLE_VERSIONS": [
     "17",
-    "18",
-    "19",
-    "20",
     "21",
     "22",
   ],
@@ -1105,9 +1096,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
     "17",
-    "18",
-    "19",
-    "20",
     "21",
     "22",
   ],
@@ -1428,9 +1416,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "DOCUMENTATION_URL": "https://www.jhipster.tech",
   "JAVA_COMPATIBLE_VERSIONS": [
     "17",
-    "18",
-    "19",
-    "20",
     "21",
     "22",
   ],
@@ -1717,9 +1702,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
     "17",
-    "18",
-    "19",
-    "20",
     "21",
     "22",
   ],
