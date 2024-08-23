@@ -95,6 +95,8 @@ import <%= user.entityAbsolutePackage %>.repository.UserRepository;
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.repository.EntityManager;
+<%_ } else if (databaseTypeSql && anyRelationshipIsRequired) { _%>
+import jakarta.persistence.EntityManager;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
 import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
@@ -163,9 +165,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive && (implementsEagerLoadApis || searchEngineElasticsearch)) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-<%_ } _%>
-<%_ if (databaseTypeSql && !reactive) { _%>
-import jakarta.persistence.EntityManager;
 <%_ } _%>
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
@@ -492,7 +491,7 @@ if (field.fieldTypeString || field.blobContentTypeText) {
     @Autowired
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql && (reactive || anyRelationshipIsRequired)) { _%>
 
     @Autowired
     private EntityManager em;
