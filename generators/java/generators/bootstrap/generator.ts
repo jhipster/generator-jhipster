@@ -96,7 +96,13 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         applicationDefaults({
           optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
           optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
+          optionalOrMonoClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Mono' : 'java.util.Optional'),
+          wrapMono:
+            ({ reactive }) =>
+            className =>
+              reactive ? `Mono<${className}>` : className,
           listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
+          listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
         });
       },
     });

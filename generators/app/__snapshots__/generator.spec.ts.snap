@@ -586,6 +586,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "listOrFlux": "List",
+  "listOrFluxClassPath": "java.util.List",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -684,6 +685,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
   "optionalOrMono": "Optional",
+  "optionalOrMonoClassPath": "java.util.Optional",
   "optionalOrMonoOfNullable": "Optional.ofNullable",
   "packageFolder": "com/mycompany/myapp/",
   "packageInfoJavadocs": [
@@ -806,6 +808,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,
+  "wrapMono": [Function],
 }
 `;
 
@@ -1201,6 +1204,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "listOrFlux": "Flux",
+  "listOrFluxClassPath": "reactor.core.publisher.Flux",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -1299,6 +1303,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
   "optionalOrMono": "Mono",
+  "optionalOrMonoClassPath": "reactor.core.publisher.Mono",
   "optionalOrMonoOfNullable": "Mono.justOrEmpty",
   "packageFolder": "com/mycompany/myapp/",
   "packageInfoJavadocs": [
@@ -1423,6 +1428,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,
+  "wrapMono": [Function],
 }
 `;
 
@@ -1822,6 +1828,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
   "listOrFlux": "List",
+  "listOrFluxClassPath": "java.util.List",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -1861,6 +1868,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
   "optionalOrMono": "Optional",
+  "optionalOrMonoClassPath": "java.util.Optional",
   "optionalOrMonoOfNullable": "Optional.ofNullable",
   "packageFolder": "com/mycompany/myapp/",
   "packageInfoJavadocs": [
@@ -1978,5 +1986,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "useNpmWrapper": false,
   "websocket": "no",
   "withAdminUi": false,
+  "wrapMono": [Function],
 }
 `;

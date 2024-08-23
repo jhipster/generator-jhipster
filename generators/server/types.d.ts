@@ -110,6 +110,10 @@ export type SpringBootApplication = JavaApplication &
     optionalOrMono: string;
     optionalOrMonoOfNullable: string;
     listOrFlux: string;
+    optionalOrMonoClassPath: string;
+    wrapMono: (className: string) => string;
+    listOrFluxClassPath: string;
+
     generateAuthenticationApi?: boolean;
     generateInMemoryUserCredentials?: boolean;
 

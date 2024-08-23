@@ -27,8 +27,6 @@ import <%= packageName %>.domain.Authority;
 import java.security.Principal;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
-<%_ } else { _%>
-import java.util.Optional;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
