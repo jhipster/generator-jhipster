@@ -11,6 +11,7 @@ import {
   NPM_VERSION,
   packageRoot,
 } from '../integration-test-constants.js';
+import { JAVA_COMPATIBLE_VERSIONS } from '../../generators/generator-constants.js';
 
 const MATRIX_FILE = 'matrix.json';
 
@@ -41,7 +42,7 @@ writeFileSync(
               return JSON.parse(readFileSync(file).toString())
                 .include.filter(sample => !sample.disabled)
                 .map(({ generatorOptions, name, ...sample }) => {
-                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, '17', '21', '22']);
+                  const javaVersion = randomReproducibleValue(`java-${name}`, [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS]);
                   const nodeVersion = randomReproducibleValue(`node-${name}`, [NODE_VERSION, '18', '20']);
                   return {
                     name,
