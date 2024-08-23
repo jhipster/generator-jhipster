@@ -128,6 +128,11 @@ type Entity = Required<BaseEntity> &
      */
     anyFieldHasFileBasedContentType: boolean;
 
+    /**
+     * Any relationship is required or id
+     */
+    anyRelationshipIsRequired: boolean;
+
     dtoMapstruct: boolean;
   };
 

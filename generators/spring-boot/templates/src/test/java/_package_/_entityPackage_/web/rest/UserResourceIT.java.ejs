@@ -226,7 +226,7 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= user.persistClass %> createEntity(<% if (databaseTypeSql) { %>EntityManager em<% } %>) {
+    public static <%= user.persistClass %> createEntity() {
         <%= user.persistClass %> persistUser = new <%= user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         persistUser.setId(UUID.randomUUID().toString());
@@ -260,8 +260,8 @@ class UserResourceIT {
     /**
      * Setups the database with one user.
      */
-    public static <%= user.persistClass %> initTestUser(<% if (databaseTypeSql) { %>EntityManager em<% } _%>) {
-        <%= user.persistClass %> persistUser = createEntity(<% if (databaseTypeSql ) { %>em<% } _%>);
+    public static <%= user.persistClass %> initTestUser() {
+        <%= user.persistClass %> persistUser = createEntity();
 <%_ if (databaseTypeSql) { _%>
         persistUser.setLogin(DEFAULT_LOGIN);
         persistUser.setEmail(DEFAULT_EMAIL);
@@ -271,7 +271,7 @@ class UserResourceIT {
 
     @BeforeEach
     public void initTest() {
-        user = initTestUser(<% if (databaseTypeSql) { %>em<% } _%>);
+        user = initTestUser();
     }
 
     @AfterEach
