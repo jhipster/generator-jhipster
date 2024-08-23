@@ -585,6 +585,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   ],
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
+  "listOrFlux": "List",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -682,6 +683,8 @@ exports[`generator - app with default config should match snapshot 1`] = `
   },
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
+  "optionalOrMono": "Optional",
+  "optionalOrMonoOfNullable": "Optional.ofNullable",
   "packageFolder": "com/mycompany/myapp/",
   "packageInfoJavadocs": [
     {
@@ -1197,6 +1200,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   ],
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
+  "listOrFlux": "Flux",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -1294,6 +1298,8 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   },
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
+  "optionalOrMono": "Mono",
+  "optionalOrMonoOfNullable": "Mono.justOrEmpty",
   "packageFolder": "com/mycompany/myapp/",
   "packageInfoJavadocs": [
     {
@@ -1815,6 +1821,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   ],
   "liquibaseAddH2Properties": false,
   "liquibaseDefaultSchemaName": "",
+  "listOrFlux": "List",
   "lowercaseBaseName": "jhipster",
   "mainClass": "JhipsterApp",
   "mainJavaDir": "src/main/java/",
@@ -1853,6 +1860,8 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   },
   "nodePackageManager": "npm",
   "nodeVersion": "NODE_VERSION",
+  "optionalOrMono": "Optional",
+  "optionalOrMonoOfNullable": "Optional.ofNullable",
   "packageFolder": "com/mycompany/myapp/",
   "packageInfoJavadocs": [
     {

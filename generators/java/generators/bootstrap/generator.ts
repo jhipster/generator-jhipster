@@ -92,6 +92,13 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
             ...editFileCallback,
           );
       },
+      imperativeOrReactive({ applicationDefaults }) {
+        applicationDefaults({
+          optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
+          optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),
+          listOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'List'),
+        });
+      },
     });
   }
 

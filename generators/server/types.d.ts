@@ -107,6 +107,9 @@ export type SpringBootApplication = JavaApplication &
     skipCheckLengthOfIdentifier: boolean;
 
     imperativeOrReactive: string;
+    optionalOrMono: string;
+    optionalOrMonoOfNullable: string;
+    listOrFlux: string;
     generateAuthenticationApi?: boolean;
     generateInMemoryUserCredentials?: boolean;
 

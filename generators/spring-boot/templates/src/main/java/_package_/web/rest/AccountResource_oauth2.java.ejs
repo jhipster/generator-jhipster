@@ -24,6 +24,7 @@ import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 
+import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -31,13 +32,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 <%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 <%_ } _%>
-
-import java.security.Principal;
 
 /**
  * REST controller for managing the current user's account.
@@ -82,18 +80,12 @@ public class AccountResource {
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
-     * @param request the HTTP request.
+     * @param principal the authentication principal.
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-<%_ if (reactive) { _%>
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
+    public <%- optionalOrMono %><String> isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
-<%_ } else { _%>
-    public String isAuthenticated(HttpServletRequest request) {
-        LOG.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-<%_ } _%>
+        return <%- optionalOrMonoOfNullable %>(principal).map(Principal::getName);
     }
 }

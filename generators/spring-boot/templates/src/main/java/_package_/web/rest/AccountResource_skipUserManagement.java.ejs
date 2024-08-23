@@ -23,26 +23,21 @@ import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.domain.Authority;
 
 <%_ } _%>
+
+import java.security.Principal;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 <%_ } _%>
-
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-  <%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
-import java.security.Principal;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 <%_ } else { _%>
   <%_ if (reactive) { _%>
-import java.security.Principal;
-import org.springframework.web.server.ServerWebExchange;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -147,19 +142,13 @@ public class AccountResource {
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
-     * @param request the HTTP request.
+     * @param principal the authentication principal.
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-  <%_ if (reactive) { _%>
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
+    public <%- optionalOrMono %><String> isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
-  <%_ } else { _%>
-    public String isAuthenticated(HttpServletRequest request) {
-        LOG.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-  <%_ } _%>
+        return <%- optionalOrMonoOfNullable %>(principal).map(Principal::getName);
     }
 <%_ } _%>
 

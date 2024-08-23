@@ -18,13 +18,13 @@
 -%>
 package <%= packageName %>.web.rest;
 
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.repository.PersistentTokenRepository;
-  <%_ } _%>
-  <%_ if (!reactive) { _%>
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import <%= user.entityAbsoluteClass %>;
-  <%_ } _%>
+<%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.service.MailService;
@@ -35,31 +35,23 @@ import <%= packageName %>.web.rest.errors.*;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 
+import java.security.Principal;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-  <%_ if (reactive) { _%>
-import org.springframework.web.server.ServerWebExchange;
+<%_ if (reactive) { _%>
+import java.util.Objects;
 import reactor.core.publisher.Mono;
-  <%_ } _%>
-
-  <%_ if (!reactive && !authenticationTypeJwt) { _%>
-import jakarta.servlet.http.HttpServletRequest;
-  <%_ } _%>
+<%_ } else { _%>
+import java.util.*;
+<%_ } _%>
 import jakarta.validation.Valid;
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
 import java.nio.charset.StandardCharsets;
 import java.net.URLDecoder;
-  <%_ } _%>
-  <%_ if (reactive) { _%>
-import java.security.Principal;
-import java.util.Objects;
-  <%_ } _%>
-  <%_ if (!reactive) { _%>
-import java.util.*;
-  <%_ } _%>
+<%_ } _%>
 
 /**
  * REST controller for managing the current user's account.
@@ -144,19 +136,13 @@ public class AccountResource {
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
-     * @param request the HTTP request.
+     * @param principal the authentication principal.
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-    <%_ if (reactive) { _%>
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
+    public <%- optionalOrMono %><String> isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
-    <%_ } else { _%>
-    public String isAuthenticated(HttpServletRequest request) {
-        LOG.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-    <%_ } _%>
+        return <%- optionalOrMonoOfNullable %>(principal).map(Principal::getName);
     }
 
   <%_ } _%>
