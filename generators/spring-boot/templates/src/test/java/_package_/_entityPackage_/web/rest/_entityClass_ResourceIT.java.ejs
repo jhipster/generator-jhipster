@@ -516,6 +516,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
 <%_ });
 }_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
+<%_   const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance;  _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
@@ -524,7 +525,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
      */
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
-        <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%= persistClass %> <%= persistInstance %> = <% } %>new <%= persistClass %>()
+        <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%= persistClass %> <%= createInstance %> = <% } %>new <%= persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
             .<%= primaryKey.name %>(UUID.randomUUID())
     <%_ } _%>
@@ -542,17 +543,17 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     <%_   return; _%>
     <%_ } _%>
   <%_ } else { _%>
-        <%= persistClass %> <%= persistInstance %> = new <%= persistClass %>();
+        <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
+        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-        <%= persistInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
+        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-        <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
+        <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -601,14 +602,14 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         <%_ } _%>
       <%_ } _%>
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
-        <%= persistInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
+        <%= createInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
       <%_ } else { _%>
-        <%= persistInstance %>.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
+        <%= createInstance %>.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
       <%_ } _%>
         <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
     <%_ } _%>
   <%_ } _%>
-        return <%= persistInstance %>;
+        return <%= createInstance %>;
     }
 <%_ }); _%>
 
