@@ -146,9 +146,9 @@ public class AccountResource {
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-    public <%- optionalOrMono %><String> isAuthenticated(Principal principal) {
+    public String isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return <%- optionalOrMonoOfNullable %>(principal).map(Principal::getName);
+        return principal == null ? null : principal.getName();
     }
 <%_ } _%>
 
