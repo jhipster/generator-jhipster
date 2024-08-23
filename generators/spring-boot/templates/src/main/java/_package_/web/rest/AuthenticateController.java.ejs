@@ -43,13 +43,11 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
-<%_ if (reactive) { _%>
 import java.security.Principal;
+<%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
-import org.springframework.web.server.ServerWebExchange;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 <%_ } else { _%>
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
@@ -120,19 +118,13 @@ public class AuthenticateController {
     /**
      * {@code GET /authenticate} : check if the user is authenticated, and return its login.
      *
-     * @param request the HTTP request.
+     * @param principal the authentication principal.
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-<%_ if (reactive) { _%>
-    public Mono<String> isAuthenticated(ServerWebExchange request) {
+    public String isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return request.getPrincipal().map(Principal::getName);
-<%_ } else { _%>
-    public String isAuthenticated(HttpServletRequest request) {
-        LOG.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
-<%_ } _%>
+        return principal == null ? null : principal.getName();
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
