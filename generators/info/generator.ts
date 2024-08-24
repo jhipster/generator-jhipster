@@ -27,6 +27,7 @@ import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-co
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { JSONEntity } from '../../jdl/converters/types.js';
+import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
@@ -53,7 +54,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
         console.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
       },
 
-      displayConfiguration() {
+      async displayConfiguration() {
         // Omit sensitive information.
         const yoRc = this.readDestinationJSON(YO_RC_FILE);
         if (yoRc) {
@@ -64,7 +65,11 @@ export default class InfoGenerator extends BaseApplicationGenerator {
           console.log('\n##### **JHipster configuration not found**\n');
         }
 
-        const packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        let packages = this.jhipsterConfig.appsFolders ?? this.jhipsterConfig.packages ?? [];
+        if (!yoRc && packages.length === 0) {
+          packages = await applicationsLookup(this.destinationRoot());
+        }
+
         if (packages.length > 0) {
           for (const pkg of packages) {
             const yoRc = this.readDestinationJSON(this.destinationPath(pkg, YO_RC_FILE));
