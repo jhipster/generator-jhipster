@@ -21,6 +21,9 @@ plugins {
 }
 
 jib {
+<%_ if (backendTypeSpringBoot) { _%>
+    configurationName = "productionRuntimeClasspath"
+<%_ } _%>
     from {
         image = "<%- dockerContainers.javaJre %>"
         platforms {
