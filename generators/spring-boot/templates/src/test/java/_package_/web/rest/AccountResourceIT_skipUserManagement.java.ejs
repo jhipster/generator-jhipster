@@ -116,13 +116,13 @@ class AccountResourceIT {
     void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON)
+            .accept(MediaType.TEXT_PLAIN)
             .exchange()
             .expectStatus().isOk()
             .expectBody().isEmpty();
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(MediaType.TEXT_PLAIN))
             .andExpect(status().isOk())
             .andExpect(content().string(""));
 <%_ } _%>
@@ -134,14 +134,14 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
         accountWebTestClient
             .get().uri("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON)
+            .accept(MediaType.TEXT_PLAIN)
             .exchange()
             .expectStatus().isOk()
             .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
 <%_ } else { _%>
         restAccountMockMvc.perform(get("/api/authenticate")
             .with(request -> request)
-            .accept(MediaType.APPLICATION_JSON))
+            .accept(MediaType.TEXT_PLAIN))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
 <%_ } _%>

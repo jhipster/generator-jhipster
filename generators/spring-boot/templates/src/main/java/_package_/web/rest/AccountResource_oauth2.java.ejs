@@ -24,6 +24,7 @@ import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
 import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +79,7 @@ public class AccountResource {
      * @param principal the authentication principal.
      * @return the login if the user is authenticated.
      */
-    @GetMapping("/authenticate")
+    @GetMapping(value = "/authenticate", produces = MediaType.TEXT_PLAIN_VALUE)
     public String isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
         return principal == null ? null : principal.getName();
