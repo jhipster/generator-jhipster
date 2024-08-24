@@ -90,17 +90,6 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                 <pluginManagement>
                     <plugins>
                         <plugin>
-                            <groupId>mavenPluginManagementGroupId</groupId>
-                            <artifactId>mavenPluginManagementArtifactId</artifactId>
-                            <version>version</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>exclusionGroupId</groupId>
-                                    <artifactId>exclusionArtifactId</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </plugin>
-                        <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-compiler-plugin</artifactId>
                             <configuration>
@@ -112,6 +101,17 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                                     </path>
                                 </annotationProcessorPaths>
                             </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>mavenPluginManagementGroupId</groupId>
+                            <artifactId>mavenPluginManagementArtifactId</artifactId>
+                            <version>version</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>exclusionGroupId</groupId>
+                                    <artifactId>exclusionArtifactId</artifactId>
+                                </exclusion>
+                            </exclusions>
                         </plugin>
                     </plugins>
                 </pluginManagement>

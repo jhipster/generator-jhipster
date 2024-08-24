@@ -65,7 +65,13 @@ const propertiesOrder = [
   'spring-boot.version',
 ];
 
-const groupIdOrder = ['tech.jhipster', 'org.springframework.boot', 'org.springframework.security', 'org.springdoc'];
+const groupIdOrder = [
+  'tech.jhipster',
+  'org.apache.maven.plugins',
+  'org.springframework.boot',
+  'org.springframework.security',
+  'org.springdoc',
+];
 
 const sortSection = section => {
   return Object.fromEntries(
