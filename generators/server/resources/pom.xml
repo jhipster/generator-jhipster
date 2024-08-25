@@ -23,7 +23,6 @@
         <frontend-maven-plugin.version>1.15.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.9.6</gatling-maven-plugin.version>
         <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
-        <jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
@@ -97,11 +96,6 @@
                   <groupId>com.github.eirslett</groupId>
                   <artifactId>frontend-maven-plugin</artifactId>
                   <version>${frontend-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                  <groupId>com.google.cloud.tools</groupId>
-                  <artifactId>jib-maven-plugin</artifactId>
-                  <version>${jib-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
                   <groupId>com.puppycrawl.tools</groupId>

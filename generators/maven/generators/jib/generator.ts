@@ -97,8 +97,31 @@ export default class JibGenerator extends BaseApplicationGenerator {
                 <mode>755</mode>
             </permission>
         </permissions>
-    </extraDirectories>
-</configuration>`,
+    </extraDirectories>${
+      application.backendTypeSpringBoot
+        ? `
+    <pluginExtensions>
+        <pluginExtension>
+            <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+        </pluginExtension>
+    </pluginExtensions>
+`
+        : ''
+    }
+</configuration>${
+                application.backendTypeSpringBoot
+                  ? `
+<dependencies>
+    <dependency>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-spring-boot-extension-maven</artifactId>
+        <version>${application.javaDependencies!['jib-spring-boot-extension-maven']}</version>
+    </dependency>
+</dependencies>
+`
+                  : ''
+              }
+`,
             },
           ],
         });
