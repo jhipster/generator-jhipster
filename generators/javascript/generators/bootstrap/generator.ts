@@ -80,7 +80,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
         }
         if (packageJsonNodeEngine) {
           this.packageJson.set('engines', {
-            ...(this.packageJson.get('engines') ?? {}),
+            ...((this.packageJson.get('engines') as object) ?? {}),
             node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
           });
         }
