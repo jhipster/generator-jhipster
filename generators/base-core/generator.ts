@@ -644,7 +644,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         now = control.reproducibleLiquibaseTimestamp;
       } else {
         // Create a new counter
-        const newCreationTimestamp = creationTimestamp ?? this.config.get('creationTimestamp');
+        const newCreationTimestamp: string = (creationTimestamp as string) ?? this.config.get('creationTimestamp');
         now = newCreationTimestamp ? new Date(newCreationTimestamp) : now;
         now.setMilliseconds(0);
       }
