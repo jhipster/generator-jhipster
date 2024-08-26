@@ -54,24 +54,27 @@ import org.hibernate.type.SqlTypes;
   <%_ } _%>
   <%_ if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
-  <%_ } else { _%>
-    @Column(
-      name = "<%- field.fieldNameAsDatabaseColumn %>"
-    <%_ if (field.fieldValidationMaxLength) { _%>
+  <%_ } _%>
+  @Column(name = "<%- field.fieldNameAsDatabaseColumn %>"
+  <%_ if (field.fieldTypeBigDecimal) { _%>
+    , precision = 21, scale = 2
+  <%_ } else if (fieldTypeUuidAndMysqlDbType) { _%>
+    , length = 36
+  <%_ } _%>
+
+  <%_ if (field.fieldValidate === true) { _%>
+    <%_ if (field.fieldValidationMaxLength && !fieldTypeUuidAndMysqlDbType) { _%>
       , length = <%= field.fieldValidateRulesMaxlength %>
     <%_ } _%>
-    <%_ if (field.fieldTypeBigDecimal) { _%>
-      , precision = 21, scale = 2
-    <%_ } _%>
-    <%_ if (field.fieldValidationRequired) { %>
+    <%_ if (field.fieldValidationRequired) { _%>
       , nullable = false
     <%_ } _%>
-    <%_ if (field.fieldValidationUnique) { %>
+    <%_ if (field.fieldValidationUnique) { _%>
       , unique = true
     <%_ } _%>
-  )
   <%_ } _%>
+  )
+
 <&_ } -&>
 <%_ } -%>
 
