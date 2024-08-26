@@ -63,7 +63,6 @@ import org.hibernate.type.SqlTypes;
   <%_ } else if (fieldTypeUuidAndMysqlDbType) { _%>
     , length = 36
   <%_ } _%>
-
   <%_ if (field.fieldValidate === true) { _%>
     <%_ if (field.fieldValidationMaxLength && !fieldTypeUuidAndMysqlDbType) { _%>
       , length = <%= field.fieldValidateRulesMaxlength %>
@@ -74,6 +73,9 @@ import org.hibernate.type.SqlTypes;
     <%_ if (field.fieldValidationUnique) { _%>
       , unique = true
     <%_ } _%>
+  <%_ } _%>
+  <%_ if (field.readonly && !(field.id && field.autoGenerate)) { _%>
+    , insertable = false, updatable = false
   <%_ } _%>
   )
 
