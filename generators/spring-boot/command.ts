@@ -42,14 +42,14 @@ const command: JHipsterCommandDefinition = {
         type: Boolean,
       },
       prompt: gen => ({
-        when: () => ['monolith', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        when: () => ['monolith', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType!),
         type: 'confirm',
         message: 'Do you want to make it reactive with Spring WebFlux?',
       }),
     },
     serverPort: {
       prompt: gen => ({
-        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType!),
         type: 'input',
         validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
         message:
@@ -68,7 +68,7 @@ const command: JHipsterCommandDefinition = {
         type: String,
       },
       prompt: gen => ({
-        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType!),
         type: 'list',
         message: 'Which service discovery server do you want to use?',
         default: 'consul',
@@ -90,14 +90,14 @@ const command: JHipsterCommandDefinition = {
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
           gen.jhipsterConfigWithDefaults.applicationType !== 'monolith'
-            ? (config.choices as any).filter(({ value }) => value !== 'session')
+            ? (config.choices as any).filter(({ value }) => value !== SESSION)
             : config.choices,
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),
       choices: [
-        { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
-        { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
-        { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
+        { value: JWT, name: 'JWT authentication (stateless, with a token)' },
+        { value: OAUTH2, name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
+        { value: SESSION, name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
       ],
       configure: gen => {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
@@ -135,10 +135,10 @@ const command: JHipsterCommandDefinition = {
       prompt: gen => ({
         type: 'confirm',
         message: 'Do you want to allow relationships with User entity?',
-        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
+        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === OAUTH2,
       }),
       configure: gen => {
-        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
+        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === OAUTH2) {
           if (gen.isJhipsterVersionLessThan('8.1.1')) {
             gen.jhipsterConfig.syncUserWithIdp = true;
           }

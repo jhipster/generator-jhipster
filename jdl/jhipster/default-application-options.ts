@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
+import { MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
+import { JSONGeneratorJhipsterContent } from '../../jdl/converters/types.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -42,15 +43,11 @@ const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 const { MAVEN } = buildToolTypes;
 
 const {
-  APPLICATION_TYPE,
   AUTHENTICATION_TYPE,
   BASE_NAME,
-  BUILD_TOOL,
-  CACHE_PROVIDER,
   CLIENT_FRAMEWORK,
   CLIENT_THEME,
   CLIENT_THEME_VARIANT,
-  WITH_ADMIN_UI,
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
   DTO_SUFFIX,
@@ -67,151 +64,156 @@ const {
   REACTIVE,
   SEARCH_ENGINE,
   SERVER_PORT,
-  SERVICE_DISCOVERY_TYPE,
   SKIP_CLIENT,
   SKIP_USER_MANAGEMENT,
-  TEST_FRAMEWORKS,
   WEBSOCKET,
   ENABLE_GRADLE_ENTERPRISE,
   GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
 const commonDefaultOptions = {
-  [AUTHENTICATION_TYPE]: JWT,
-  [BUILD_TOOL]: MAVEN,
-  [DTO_SUFFIX]: OptionValues[DTO_SUFFIX],
-  [ENABLE_SWAGGER_CODEGEN]: OptionValues[ENABLE_SWAGGER_CODEGEN],
-  [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
-  [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
-  [JHI_PREFIX]: OptionValues[JHI_PREFIX],
-  [MESSAGE_BROKER]: MESSAGE_BROKER_NO,
-  [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
-  [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
+  authenticationType: JWT as string,
+  buildTool: MAVEN as string,
+  dtoSuffix: OptionValues[DTO_SUFFIX] as string,
+  enableSwaggerCodegen: OptionValues[ENABLE_SWAGGER_CODEGEN] as boolean,
+  enableTranslation: OptionValues[ENABLE_TRANSLATION] as boolean,
+  entitySuffix: OptionValues[ENTITY_SUFFIX] as string,
+  jhiPrefix: OptionValues[JHI_PREFIX] as string,
+  messageBroker: MESSAGE_BROKER_NO as string,
+  searchEngine: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
+  websocket: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };
 
-export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}) {
-  const applicationType = typeof customOptions === 'string' ? customOptions : customOptions.applicationType;
+export function getConfigWithDefaults(
+  customOptions: string | Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
+  const isCustomOptionString = typeof customOptions === 'string';
+  const applicationType = isCustomOptionString ? customOptions : customOptions.applicationType;
   if (applicationType === GATEWAY) {
-    return getConfigForGatewayApplication(customOptions);
+    return getConfigForGatewayApplication(isCustomOptionString ? {} : customOptions);
   }
   if (applicationType === MICROSERVICE) {
-    return getConfigForMicroserviceApplication(customOptions);
+    return getConfigForMicroserviceApplication(isCustomOptionString ? {} : customOptions);
   }
-  return getConfigForMonolithApplication(customOptions);
+  return getConfigForMonolithApplication(isCustomOptionString ? {} : customOptions);
 }
 
-export function getConfigForClientApplication(options: any = {}): any {
+export function getConfigForClientApplication(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (options[SKIP_CLIENT]) {
-    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
+    options.clientFramework = NO_CLIENT_FRAMEWORK;
   }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
-    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
+    options.microfrontend = Boolean(options.microfrontends?.length);
   }
   const clientFramework = options[CLIENT_FRAMEWORK];
   if (clientFramework !== NO_CLIENT_FRAMEWORK) {
     if (!options[CLIENT_THEME]) {
-      options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-      options[CLIENT_THEME_VARIANT] = '';
+      options.clientTheme = OptionValues[CLIENT_THEME] as string;
+      options.clientThemeVariant = '';
     } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
-      options[CLIENT_THEME_VARIANT] = 'primary';
+      options.clientThemeVariant = 'primary';
     }
   }
   return options;
 }
 
-export function getConfigForAuthenticationType(options: any = {}): any {
+export function getConfigForAuthenticationType(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     if (options[AUTHENTICATION_TYPE] === OAUTH2) {
-      options[SKIP_USER_MANAGEMENT] = true;
+      options.skipUserManagement = true;
     } else {
-      options[SKIP_USER_MANAGEMENT] = OptionValues[SKIP_USER_MANAGEMENT];
+      options.skipUserManagement = OptionValues[SKIP_USER_MANAGEMENT] as boolean;
     }
   }
   return options;
 }
 
-export function getConfigForPackageName(options: any = {}): any {
+export function getConfigForPackageName(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
-    options[PACKAGE_FOLDER] = OptionValues[PACKAGE_FOLDER];
+    options.packageFolder = OptionValues[PACKAGE_FOLDER] as string;
   }
   if (!options[PACKAGE_NAME] && options[PACKAGE_FOLDER]) {
-    options[PACKAGE_NAME] = options[PACKAGE_FOLDER].replace(/\//g, '.');
+    options.packageName = options[PACKAGE_FOLDER].replace(/\//g, '.');
   }
   if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
-    options[PACKAGE_FOLDER] = options[PACKAGE_NAME].replace(/\./g, '/');
+    options.packageFolder = options[PACKAGE_NAME].replace(/\./g, '/');
   }
   return options;
 }
 
-export function getConfigForCacheProvider(options: any = {}): any {
+export function getConfigForCacheProvider(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (options[REACTIVE]) {
-    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
+    options.cacheProvider = NO_CACHE_PROVIDER;
   }
   return options;
 }
 
-export function getConfigForReactive(options: any = {}): any {
+export function getConfigForReactive(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (options[REACTIVE] === undefined) {
-    options[REACTIVE] = false;
+    options.reactive = false;
   }
   return options;
 }
 
-export function getConfigForTranslation(options: any = {}): any {
+export function getConfigForTranslation(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (options[ENABLE_TRANSLATION] === undefined) {
-    options[ENABLE_TRANSLATION] = true;
+    options.enableTranslation = true;
   }
   if (options[NATIVE_LANGUAGE] === undefined) {
-    options[NATIVE_LANGUAGE] = 'en';
+    options.nativeLanguage = 'en';
   }
   if (options[ENABLE_TRANSLATION] && options[LANGUAGES] === undefined) {
-    options[LANGUAGES] = [];
+    options.languages = [];
   }
   return options;
 }
 
-export function getConfigForDatabaseType(options: any = {}): any {
+export function getConfigForDatabaseType(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
   if (options[DATABASE_TYPE] === undefined) {
-    options[DATABASE_TYPE] = SQL;
+    options.databaseType = SQL;
   }
   if (options[DATABASE_TYPE] === SQL) {
     if (options[PROD_DATABASE_TYPE] === undefined) {
-      options[PROD_DATABASE_TYPE] = POSTGRESQL;
+      options.prodDatabaseType = POSTGRESQL;
     }
     if (options[DEV_DATABASE_TYPE] === undefined) {
-      options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
+      options.devDatabaseType = options[PROD_DATABASE_TYPE];
     }
   } else if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
     if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
-      options[ENABLE_HIBERNATE_CACHE] = false;
+      options.enableHibernateCache = false;
     }
   }
   if (options[REACTIVE]) {
-    options[ENABLE_HIBERNATE_CACHE] = false;
+    options.enableHibernateCache = false;
   }
   if (options[ENABLE_HIBERNATE_CACHE] === undefined) {
-    options[ENABLE_HIBERNATE_CACHE] = true;
+    options.enableHibernateCache = true;
   }
   return options;
 }
 
-export function getServerConfigForMonolithApplication(customOptions: any = {}): any {
+export function getServerConfigForMonolithApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   const options = {
     ...commonDefaultOptions,
-    [CACHE_PROVIDER]: EHCACHE,
-    [CLIENT_FRAMEWORK]: ANGULAR,
-    [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
-    [WITH_ADMIN_UI]: true,
+    cacheProvider: EHCACHE,
+    clientFramework: ANGULAR,
+    serverPort: OptionValues[SERVER_PORT] as number,
+    serviceDiscoveryType: NO_SERVICE_DISCOVERY,
+    withAdminUi: true,
     ...customOptions,
   };
   return {
     ...options,
-    [APPLICATION_TYPE]: MONOLITH,
+    applicationType: MONOLITH,
   };
 }
 
-export function getConfigForMonolithApplication(customOptions: any = {}): any {
+export function getConfigForMonolithApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   let options = getServerConfigForMonolithApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -222,26 +224,30 @@ export function getConfigForMonolithApplication(customOptions: any = {}): any {
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForGatewayApplication(customOptions: any = {}): any {
+export function getServerConfigForGatewayApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   const options = {
     ...commonDefaultOptions,
-    [CLIENT_FRAMEWORK]: ANGULAR,
-    [SERVER_PORT]: OptionValues[SERVER_PORT],
-    [SERVICE_DISCOVERY_TYPE]: CONSUL,
-    [WITH_ADMIN_UI]: true,
+    clientFramework: ANGULAR,
+    serverPort: OptionValues[SERVER_PORT] as number,
+    serviceDiscoveryType: CONSUL,
+    withAdminUi: true,
     ...customOptions,
   };
-  options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
-  options[ENABLE_HIBERNATE_CACHE] = false;
+  options.cacheProvider = NO_CACHE_PROVIDER;
+  options.enableHibernateCache = false;
 
   return {
-    [REACTIVE]: true,
+    reactive: true,
     ...options,
-    [APPLICATION_TYPE]: GATEWAY,
+    applicationType: GATEWAY,
   };
 }
 
-export function getConfigForGatewayApplication(customOptions: any = {}): any {
+export function getConfigForGatewayApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   let options = getServerConfigForGatewayApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -252,26 +258,30 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getServerConfigForMicroserviceApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   const DEFAULT_SERVER_PORT = 8081;
   const options = {
     ...commonDefaultOptions,
-    [CACHE_PROVIDER]: HAZELCAST,
-    [SERVER_PORT]: DEFAULT_SERVER_PORT,
-    [SERVICE_DISCOVERY_TYPE]: CONSUL,
-    [SKIP_USER_MANAGEMENT]: true,
-    [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK,
+    cacheProvider: HAZELCAST,
+    serverPort: DEFAULT_SERVER_PORT,
+    serviceDiscoveryType: CONSUL,
+    skipUserManagement: true,
+    clientFramework: NO_CLIENT_FRAMEWORK,
     ...customOptions,
   };
 
-  options[WITH_ADMIN_UI] = false;
+  options.withAdminUi = false;
   return {
     ...options,
-    [APPLICATION_TYPE]: MICROSERVICE,
+    applicationType: MICROSERVICE,
   };
 }
 
-export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getConfigForMicroserviceApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   let options = getServerConfigForMicroserviceApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -282,14 +292,16 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
   return getConfigForAuthenticationType(options);
 }
 
-export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
+export function getDefaultConfigForNewApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
+): Partial<JSONGeneratorJhipsterContent> {
   const options = {
     ...commonDefaultOptions,
-    [BASE_NAME]: OptionValues[BASE_NAME],
-    [LANGUAGES]: OptionValues[LANGUAGES],
-    [TEST_FRAMEWORKS]: [],
-    [ENABLE_GRADLE_ENTERPRISE]: OptionValues[ENABLE_GRADLE_ENTERPRISE],
-    [GRADLE_ENTERPRISE_HOST]: OptionValues[GRADLE_ENTERPRISE_HOST],
+    baseName: OptionValues[BASE_NAME] as string,
+    languages: OptionValues[LANGUAGES] as string[],
+    testFrameworks: [],
+    enableGradleEnterprise: OptionValues[ENABLE_GRADLE_ENTERPRISE] as boolean,
+    gradleEnterpriseHost: OptionValues[GRADLE_ENTERPRISE_HOST] as string,
     ...customOptions,
   };
   return getConfigWithDefaults(options);

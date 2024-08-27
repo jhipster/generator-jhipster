@@ -68,6 +68,7 @@ import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gr
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
 import { extractArgumentsFromConfigs } from '../base/internal/command.js';
+import { JSONGeneratorJhipsterContent } from '../../jdl/converters/types.js';
 
 const {
   INITIALIZING,
@@ -143,7 +144,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   readonly sharedData!: SharedData<CommonClientServerApplication>;
   readonly logger: Logger;
-  jhipsterConfig!: Record<string, any>;
+  jhipsterConfig!: JSONGeneratorJhipsterContent;
   /**
    * @deprecated
    */
@@ -180,7 +181,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       this._config = this._getStorage('generator-jhipster');
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy();
+      this.jhipsterConfig = this.config.createProxy() as JSONGeneratorJhipsterContent;
 
       this.sharedData = this.createSharedData({ help: this.options.help }) as any;
 
@@ -246,7 +247,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults() {
+  get jhipsterConfigWithDefaults(): Partial<JSONGeneratorJhipsterContent> {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,

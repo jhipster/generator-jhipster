@@ -58,7 +58,10 @@ describe('generators - spring-cloud:gateway - jdl', () => {
 
     before(() => {
       jdl = convertSingleContentToJDL({
-        'generator-jhipster': { baseName: 'bar', [optionName]: ['blog:blog_host:123', 'store:store_host', 'notification'] },
+        'generator-jhipster': {
+          baseName: 'bar',
+          [optionName]: ['blog:blog_host:123', 'store:store_host', 'notification'],
+        },
       });
     });
 

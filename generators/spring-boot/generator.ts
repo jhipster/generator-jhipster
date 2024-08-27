@@ -105,7 +105,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.asConfiguringTaskGroup({
       checks() {
         const config = this.jhipsterConfigWithDefaults;
-        if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider)) {
+        if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider!)) {
           this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
           this.jhipsterConfig.enableHibernateCache = false;
         }
@@ -199,7 +199,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
         }
-        if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider)) {
+        if ([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS].includes(cacheProvider!)) {
           await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
         }
       },
@@ -609,7 +609,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
    * @param {string} defaultValue - default value
    * @returns {string} java primary key value
    */
-  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType, defaultValue = 1) {
+  getPrimaryKeyValue(primaryKey, databaseType = this.jhipsterConfig.databaseType!, defaultValue = 1) {
     return getPrimaryKeyValue(primaryKey, databaseType, defaultValue);
   }
 }
