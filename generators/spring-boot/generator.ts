@@ -572,6 +572,26 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           ]);
         }
       },
+      addSpringBootCompose({ application, source }) {
+        const dockerComposeArtifact = { groupId: 'org.springframework.boot', artifactId: 'spring-boot-docker-compose' };
+        if (application.buildToolGradle) {
+          source.addGradleDependency!({ ...dockerComposeArtifact, scope: 'developmentOnly' });
+        } else if (application.buildToolMaven) {
+          // Add dependency to profile due to jib issue https://github.com/GoogleContainerTools/jib-extensions/issues/158
+          source.addMavenDefinition!({
+            profiles: [
+              {
+                id: 'docker-compose',
+                content: `
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>`,
+              },
+            ],
+          });
+          source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
+        }
+      },
     });
   }
 
