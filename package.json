@@ -212,9 +212,6 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "overrides": {
-    "eslint-plugin-import": {
-      "eslint": "$eslint"
-    },
     "ejs-lint": {
       "ejs": "$ejs"
     }
