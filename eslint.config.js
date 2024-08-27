@@ -59,9 +59,6 @@ export default ts.config(
     },
     rules: {
       'import-x/no-named-as-default-member': 'off',
-      // 'import-x/named': 'off',
-      // 'import-x/extensions': [0, { pattern: { '{c,m,}{js,ts}': 'always' } }],
-      // 'import-x/prefer-default-export': 'off',
       'import-x/namespace': 'off',
     },
   },
