@@ -3,7 +3,6 @@ import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 import chai from 'eslint-plugin-chai-friendly';
-import importRecommented from 'eslint-plugin-import/config/recommended.js';
 import jhipster from './lib/eslint/index.js';
 
 export default ts.config(
@@ -41,33 +40,6 @@ export default ts.config(
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
-    },
-  },
-  {
-    languageOptions: {
-      // import plugin does not use ecmaVersion and sourceType from languageOptions object
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module',
-      },
-    },
-    settings: {
-      'import/parsers': {
-        espree: ['.js', '.cjs', '.mjs'],
-        '@typescript-eslint/parser': ['.ts'],
-      },
-      'import/resolver': {
-        node: true,
-        typescript: true,
-      },
-    },
-    rules: {
-      ...importRecommented.rules,
-      'import/no-named-as-default-member': 'off',
-      'import/named': 'off',
-      'import/extensions': [0, { pattern: { '{c,m,}{js,ts}': 'always' } }],
-      'import/prefer-default-export': 'off',
-      'import/namespace': 'off',
     },
   },
   {
