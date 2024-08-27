@@ -93,6 +93,7 @@ describe(`generator - ${databaseType}`, () => {
         await helpers
           .runJHipster('server')
           .withJHipsterConfig(sampleConfig)
+          .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
             except: ['jhipster:spring-data-relational'],
             filter: filterBasicServerGenerators,

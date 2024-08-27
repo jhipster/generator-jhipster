@@ -218,7 +218,8 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
       .commitFiles();
   }
 
-  withMockedSource(): this {
+  withMockedSource(options: { except?: string[] } = {}): this {
+    const { except = [] } = options;
     this.sharedSource = new Proxy(
       {},
       {
@@ -228,7 +229,13 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
           }
           return target[name];
         },
-        set() {
+        set(target, property, value) {
+          if (except.includes(property as string)) {
+            if (target[property]) {
+              throw new Error(`Cannot set ${property as string} mock`);
+            }
+            target[property] = value;
+          }
           return true;
         },
       },
@@ -305,7 +312,9 @@ plugins {
     const runResult = (await super.run()) as unknown as JHipsterRunResult;
     if (this.sharedSource) {
       const sourceCallsArg = Object.fromEntries(
-        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => (args.length > 1 ? args : args[0]))]),
+        Object.entries(this.sharedSource)
+          .filter(([_name, fn]) => fn.mock)
+          .map(([name, fn]) => [name, fn.mock.calls.map(args => (args.length > 1 ? args : args[0]))]),
       );
       if (sourceCallsArg.addEntitiesToClient) {
         sourceCallsArg.addEntitiesToClient = sourceCallsArg.addEntitiesToClient.map(({ application, entities }) => ({

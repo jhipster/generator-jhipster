@@ -26,6 +26,7 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({ authenticationType: 'jwt' })
+        .withMockedSource({ except: ['addTestSpringFactory'] })
         .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
     });
 
@@ -39,6 +40,7 @@ describe(`generator - ${generator}`, () => {
       await helpers
         .runJHipster(generator)
         .withJHipsterConfig({ authenticationType: 'oauth2' })
+        .withMockedSource({ except: ['addTestSpringFactory'] })
         .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
     });
 
