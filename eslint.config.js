@@ -3,7 +3,7 @@ import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import prettier from 'eslint-plugin-prettier/recommended';
 import chai from 'eslint-plugin-chai-friendly';
-import importRecommented from 'eslint-plugin-import/config/recommended.js';
+import imports from 'eslint-plugin-import-x';
 import jhipster from './lib/eslint/index.js';
 
 export default ts.config(
@@ -44,6 +44,7 @@ export default ts.config(
     },
   },
   {
+    extends: [imports.flatConfigs.recommended, imports.flatConfigs.typescript],
     languageOptions: {
       // import plugin does not use ecmaVersion and sourceType from languageOptions object
       parserOptions: {
@@ -52,28 +53,22 @@ export default ts.config(
       },
     },
     settings: {
-      'import/parsers': {
-        espree: ['.js', '.cjs', '.mjs'],
-        '@typescript-eslint/parser': ['.ts'],
-      },
-      'import/resolver': {
-        node: true,
+      'import-x/resolver': {
         typescript: true,
       },
     },
     rules: {
-      ...importRecommented.rules,
-      'import/no-named-as-default-member': 'off',
-      'import/named': 'off',
-      'import/extensions': [0, { pattern: { '{c,m,}{js,ts}': 'always' } }],
-      'import/prefer-default-export': 'off',
-      'import/namespace': 'off',
+      'import-x/no-named-as-default-member': 'off',
+      // 'import-x/named': 'off',
+      // 'import-x/extensions': [0, { pattern: { '{c,m,}{js,ts}': 'always' } }],
+      // 'import-x/prefer-default-export': 'off',
+      'import-x/namespace': 'off',
     },
   },
   {
     files: ['bin/**/*', '**/*.spec.ts', 'testing/**/*', 'test/**/*'],
     rules: {
-      'import/no-unresolved': 'off',
+      'import-x/no-unresolved': 'off',
     },
   },
   {
