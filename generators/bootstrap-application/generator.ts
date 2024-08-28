@@ -19,7 +19,7 @@
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { validations } from '../../jdl/jhipster/index.js';
+import { authenticationTypes, databaseTypes, validations } from '../../jdl/jhipster/index.js';
 import {
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,
@@ -31,6 +31,8 @@ import { preparePostEntityServerDerivedProperties } from '../server/support/inde
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { JHIPSTER_DOCUMENTATION_ARCHIVE_PATH, JHIPSTER_DOCUMENTATION_URL } from '../generator-constants.js';
 
+const { OAUTH2 } = authenticationTypes;
+const { NO: NO_DATABASE } = databaseTypes;
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
   SUPPORTED_VALIDATION_RULES,
@@ -61,7 +63,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application, applicationDefaults }) {
-        if (application.authenticationType === 'oauth2' || application.databaseType === 'no') {
+        if (application.authenticationType === OAUTH2 || application.databaseType === NO_DATABASE) {
           (application as any).skipUserManagement = true;
         }
 

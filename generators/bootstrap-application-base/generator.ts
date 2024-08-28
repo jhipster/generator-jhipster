@@ -33,6 +33,7 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../base-application/support/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes } from '../../jdl/jhipster/index.js';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '../generator-list.js';
 import { packageJson } from '../../lib/index.js';
@@ -41,6 +42,9 @@ import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../ap
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
+const { OAUTH2 } = authenticationTypes;
+const { GATEWAY } = applicationTypes;
+const { NO: NO_DATABASE, CASSANDRA } = databaseTypes;
 const isWin32 = os.platform() === 'win32';
 
 export default class BootstrapApplicationBase extends BaseApplicationGenerator {
@@ -178,13 +182,13 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       syncUserWithIdp({ application, applicationDefaults }) {
         if (!application.backendTypeSpringBoot) return;
 
-        if (application.syncUserWithIdp === undefined && application.authenticationType === 'oauth2') {
+        if (application.syncUserWithIdp === undefined && application.authenticationType === OAUTH2) {
           applicationDefaults({
             __override__: false,
             syncUserWithIdp: data =>
-              data.databaseType !== 'no' && (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
+              data.databaseType !== NO_DATABASE && (data.applicationType === GATEWAY || data.anyEntityHasRelationshipWithUser),
           });
-        } else if (application.syncUserWithIdp && application.authenticationType !== 'oauth2') {
+        } else if (application.syncUserWithIdp && application.authenticationType !== OAUTH2) {
           throw new Error('syncUserWithIdp is only supported with oauth2 authenticationType');
         }
       },
@@ -192,7 +196,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         applicationDefaults({
           generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
           generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
-            generateBuiltInUserEntity && databaseType !== 'cassandra',
+            generateBuiltInUserEntity && databaseType !== CASSANDRA,
         });
       },
     });
