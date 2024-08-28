@@ -60,6 +60,22 @@ describe('generators - spring-cloud:gateway - jdl', () => {
       jdl = convertSingleContentToJDL({
         'generator-jhipster': {
           baseName: 'bar',
+          applicationType: 'gateway',
+          cacheProvider: 'no',
+          databaseType: 'sql',
+          enableHibernateCache: true,
+          packageName: 'io.jhipster',
+          packageFolder: 'io/jhipster',
+          clientFramework: 'angular',
+          skipClient: false,
+          microfrontend: false,
+          withAdminUi: true,
+          skipUserManagement: false,
+          authenticationType: 'jwt',
+          serverPort: 8080,
+          reactive: false,
+          serviceDiscoveryType: 'consul',
+          buildTool: 'maven',
           [optionName]: ['blog:blog_host:123', 'store:store_host', 'notification'],
         },
       });
@@ -68,8 +84,23 @@ describe('generators - spring-cloud:gateway - jdl', () => {
     it('should set expected value', () => {
       expect(jdl).toEqual(`application {
   config {
+    applicationType gateway
+    authenticationType jwt
     baseName bar
+    buildTool maven
+    cacheProvider no
+    clientFramework angular
+    databaseType sql
+    enableHibernateCache true
+    microfrontend false
+    packageName io.jhipster
+    reactive false
     routes ["blog:blog_host:123", "store:store_host", "notification"]
+    serverPort 8080
+    serviceDiscoveryType consul
+    skipClient false
+    skipUserManagement false
+    withAdminUi true
   }
 }
 `);

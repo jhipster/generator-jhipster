@@ -18,7 +18,17 @@
  */
 
 import { MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
-import { JSONGeneratorJhipsterContent } from '../../jdl/converters/types.js';
+import {
+  JSONGeneratorJhipsterApplicationtypeContent,
+  JSONGeneratorJhipsterAuthenticationContent,
+  JSONGeneratorJhipsterCacheProviderContent,
+  JSONGeneratorJhipsterClientContent,
+  JSONGeneratorJhipsterContent,
+  JSONGeneratorJhipsterDatabaseContent,
+  JSONGeneratorJhipsterPackageContent,
+  JSONGeneratorJhipsterServerContent,
+  JSONGeneratorJhipsterTranslationContent,
+} from '../../jdl/converters/types.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -72,7 +82,6 @@ const {
 } = OptionNames;
 
 const commonDefaultOptions = {
-  authenticationType: JWT as string,
   buildTool: MAVEN as string,
   dtoSuffix: OptionValues[DTO_SUFFIX] as string,
   enableSwaggerCodegen: OptionValues[ENABLE_SWAGGER_CODEGEN] as boolean,
@@ -86,27 +95,44 @@ const commonDefaultOptions = {
 
 export function getConfigWithDefaults(
   customOptions: string | Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
+): Omit<JSONGeneratorJhipsterContent, 'baseName'> {
   const isCustomOptionString = typeof customOptions === 'string';
   const applicationType = isCustomOptionString ? customOptions : customOptions.applicationType;
   if (applicationType === GATEWAY) {
-    return getConfigForGatewayApplication(isCustomOptionString ? {} : customOptions);
+    return getConfigForApplication(isCustomOptionString ? { applicationType } : { ...customOptions, applicationType: GATEWAY });
   }
   if (applicationType === MICROSERVICE) {
-    return getConfigForMicroserviceApplication(isCustomOptionString ? {} : customOptions);
+    return getConfigForApplication(isCustomOptionString ? { applicationType } : { ...customOptions, applicationType: MICROSERVICE });
   }
-  return getConfigForMonolithApplication(isCustomOptionString ? {} : customOptions);
+  return getConfigForApplication(isCustomOptionString ? { applicationType } : { ...customOptions, applicationType: MONOLITH });
 }
 
-export function getConfigForClientApplication(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
+export function getConfigForClientApplication(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterClientContent & JSONGeneratorJhipsterApplicationtypeContent {
   if (options[SKIP_CLIENT]) {
     options.clientFramework = NO_CLIENT_FRAMEWORK;
+  } else {
+    options.skipClient = false;
   }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
     options.microfrontend = Boolean(options.microfrontends?.length);
   }
-  const clientFramework = options[CLIENT_FRAMEWORK];
-  if (clientFramework !== NO_CLIENT_FRAMEWORK) {
+  if (options[CLIENT_FRAMEWORK] === undefined) {
+    if (options.applicationType === MONOLITH || options.applicationType === GATEWAY) {
+      options.clientFramework ??= ANGULAR;
+    } else if (options.applicationType === MICROSERVICE) {
+      options.clientFramework ??= NO_CLIENT_FRAMEWORK;
+    }
+  }
+  if (options.withAdminUi === undefined) {
+    if ((options.applicationType === MONOLITH || options.applicationType === GATEWAY) && options.clientFramework !== NO_CLIENT_FRAMEWORK) {
+      options.withAdminUi ??= true;
+    } else {
+      options.withAdminUi ??= false;
+    }
+  }
+  if (options[CLIENT_FRAMEWORK] !== NO_CLIENT_FRAMEWORK) {
     if (!options[CLIENT_THEME]) {
       options.clientTheme = OptionValues[CLIENT_THEME] as string;
       options.clientThemeVariant = '';
@@ -114,21 +140,40 @@ export function getConfigForClientApplication(options: Partial<JSONGeneratorJhip
       options.clientThemeVariant = 'primary';
     }
   }
-  return options;
+  return {
+    ...options,
+    skipClient: options.skipClient!,
+    microfrontend: options.microfrontend!,
+    clientFramework: options.clientFramework!,
+    withAdminUi: options.withAdminUi!,
+  };
 }
 
-export function getConfigForAuthenticationType(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
+export function getConfigForAuthenticationType(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterAuthenticationContent {
+  if (options[AUTHENTICATION_TYPE] === undefined) {
+    options.authenticationType = JWT;
+  }
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
-    if (options[AUTHENTICATION_TYPE] === OAUTH2) {
+    if (options[AUTHENTICATION_TYPE] === OAUTH2 || options.applicationType === MICROSERVICE) {
       options.skipUserManagement = true;
     } else {
       options.skipUserManagement = OptionValues[SKIP_USER_MANAGEMENT] as boolean;
     }
   }
-  return options;
+  return {
+    ...options,
+    authenticationType: options.authenticationType!,
+    skipUserManagement: options.skipUserManagement!,
+  };
 }
 
-export function getConfigForPackageName(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
+export function getConfigForPackageName(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> &
+  Omit<JSONGeneratorJhipsterPackageContent, 'baseName'> &
+  JSONGeneratorJhipsterApplicationtypeContent {
   if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
     options.packageFolder = OptionValues[PACKAGE_FOLDER] as string;
   }
@@ -138,24 +183,49 @@ export function getConfigForPackageName(options: Partial<JSONGeneratorJhipsterCo
   if (!options[PACKAGE_FOLDER] && options[PACKAGE_NAME]) {
     options.packageFolder = options[PACKAGE_NAME].replace(/\./g, '/');
   }
-  return options;
+  return {
+    ...options,
+    packageFolder: options.packageFolder!,
+    packageName: options.packageName!,
+  };
 }
 
-export function getConfigForCacheProvider(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
-  if (options[REACTIVE]) {
+export function getConfigForCacheProvider(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterCacheProviderContent & JSONGeneratorJhipsterApplicationtypeContent {
+  if (options.cacheProvider === undefined) {
+    if (options.applicationType === MONOLITH) {
+      options.cacheProvider = EHCACHE;
+    }
+    if (options.applicationType === MICROSERVICE) {
+      options.cacheProvider = HAZELCAST;
+    }
+  }
+  if (options[REACTIVE] || options.applicationType === GATEWAY) {
     options.cacheProvider = NO_CACHE_PROVIDER;
   }
-  return options;
+  return {
+    ...options,
+    cacheProvider: options.cacheProvider!,
+  };
 }
 
-export function getConfigForReactive(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
+export function getConfigForReactive(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent {
   if (options[REACTIVE] === undefined) {
-    options.reactive = false;
+    if (options.applicationType === GATEWAY) {
+      options.reactive = true;
+    } else {
+      options.reactive = false;
+    }
   }
   return options;
 }
 
-export function getConfigForTranslation(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
+export function getConfigForTranslation(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterTranslationContent & JSONGeneratorJhipsterApplicationtypeContent {
   if (options[ENABLE_TRANSLATION] === undefined) {
     options.enableTranslation = true;
   }
@@ -168,7 +238,9 @@ export function getConfigForTranslation(options: Partial<JSONGeneratorJhipsterCo
   return options;
 }
 
-export function getConfigForDatabaseType(options: Partial<JSONGeneratorJhipsterContent> = {}): Partial<JSONGeneratorJhipsterContent> {
+export function getConfigForDatabaseType(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterDatabaseContent & JSONGeneratorJhipsterApplicationtypeContent {
   if (options[DATABASE_TYPE] === undefined) {
     options.databaseType = SQL;
   }
@@ -184,112 +256,58 @@ export function getConfigForDatabaseType(options: Partial<JSONGeneratorJhipsterC
       options.enableHibernateCache = false;
     }
   }
-  if (options[REACTIVE]) {
+  if (options[REACTIVE] || options.applicationType === GATEWAY) {
     options.enableHibernateCache = false;
   }
   if (options[ENABLE_HIBERNATE_CACHE] === undefined) {
     options.enableHibernateCache = true;
   }
-  return options;
-}
-
-export function getServerConfigForMonolithApplication(
-  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
-  const options = {
-    ...commonDefaultOptions,
-    cacheProvider: EHCACHE,
-    clientFramework: ANGULAR,
-    serverPort: OptionValues[SERVER_PORT] as number,
-    serviceDiscoveryType: NO_SERVICE_DISCOVERY,
-    withAdminUi: true,
-    ...customOptions,
-  };
   return {
     ...options,
-    applicationType: MONOLITH,
+    databaseType: options.databaseType!,
+    enableHibernateCache: options.enableHibernateCache!,
   };
 }
 
-export function getConfigForMonolithApplication(
-  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
-  let options = getServerConfigForMonolithApplication(customOptions);
-  options = getConfigForClientApplication(options);
-  options = getConfigForPackageName(options);
-  options = getConfigForCacheProvider(options);
-  options = getConfigForDatabaseType(options);
-  options = getConfigForReactive(options);
-  options = getConfigForTranslation(options);
-  return getConfigForAuthenticationType(options);
-}
-
-export function getServerConfigForGatewayApplication(
-  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
-  const options = {
-    ...commonDefaultOptions,
-    clientFramework: ANGULAR,
-    serverPort: OptionValues[SERVER_PORT] as number,
-    serviceDiscoveryType: CONSUL,
-    withAdminUi: true,
-    ...customOptions,
-  };
-  options.cacheProvider = NO_CACHE_PROVIDER;
-  options.enableHibernateCache = false;
-
+export function getConfigForApplication(
+  customOptions: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Omit<JSONGeneratorJhipsterContent, 'baseName'> {
+  const serverOptions = getConfigForServer(customOptions);
+  const clientOptions = getConfigForClientApplication(serverOptions);
+  const packageNameOptions = getConfigForPackageName(clientOptions);
+  const cacheProviderOptions = getConfigForCacheProvider(packageNameOptions);
+  const databaseTypeOptions = getConfigForDatabaseType(cacheProviderOptions);
+  const reactiveOptions = getConfigForReactive(databaseTypeOptions);
+  const translationOptions = getConfigForTranslation(reactiveOptions);
+  const authenticationOptions = getConfigForAuthenticationType(translationOptions);
   return {
-    reactive: true,
-    ...options,
-    applicationType: GATEWAY,
+    ...authenticationOptions,
   };
 }
 
-export function getConfigForGatewayApplication(
-  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
-  let options = getServerConfigForGatewayApplication(customOptions);
-  options = getConfigForClientApplication(options);
-  options = getConfigForPackageName(options);
-  options = getConfigForCacheProvider(options);
-  options = getConfigForDatabaseType(options);
-  options = getConfigForReactive(options);
-  options = getConfigForTranslation(options);
-  return getConfigForAuthenticationType(options);
-}
-
-export function getServerConfigForMicroserviceApplication(
-  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
-  const DEFAULT_SERVER_PORT = 8081;
-  const options = {
-    ...commonDefaultOptions,
-    cacheProvider: HAZELCAST,
-    serverPort: DEFAULT_SERVER_PORT,
-    serviceDiscoveryType: CONSUL,
-    skipUserManagement: true,
-    clientFramework: NO_CLIENT_FRAMEWORK,
-    ...customOptions,
-  };
-
-  options.withAdminUi = false;
+export function getConfigForServer(
+  options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
+): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterServerContent & JSONGeneratorJhipsterApplicationtypeContent {
+  if (options.serviceDiscoveryType === undefined) {
+    if (options.applicationType === MONOLITH) {
+      options.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
+    } else if (options.applicationType === GATEWAY || options.applicationType === MICROSERVICE) {
+      options.serviceDiscoveryType = CONSUL;
+    }
+  }
+  if (options.serverPort === undefined) {
+    if (options.applicationType === MICROSERVICE) {
+      options.serverPort = 8081;
+    } else {
+      options.serverPort = OptionValues[SERVER_PORT] as number;
+    }
+  }
   return {
+    ...commonDefaultOptions,
     ...options,
-    applicationType: MICROSERVICE,
+    serverPort: options.serverPort!,
+    serviceDiscoveryType: options.serviceDiscoveryType!,
   };
-}
-
-export function getConfigForMicroserviceApplication(
-  customOptions: Partial<JSONGeneratorJhipsterContent> = {},
-): Partial<JSONGeneratorJhipsterContent> {
-  let options = getServerConfigForMicroserviceApplication(customOptions);
-  options = getConfigForClientApplication(options);
-  options = getConfigForPackageName(options);
-  options = getConfigForCacheProvider(options);
-  options = getConfigForDatabaseType(options);
-  options = getConfigForReactive(options);
-  options = getConfigForTranslation(options);
-  return getConfigForAuthenticationType(options);
 }
 
 export function getDefaultConfigForNewApplication(

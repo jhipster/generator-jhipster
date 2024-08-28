@@ -50,79 +50,89 @@ export type JSONGeneratorJhipsterContentDeployment = {
   clusteredDbApps?: string[];
 };
 
-export type ApplicationtypeJSONGeneratorJhipsterContent = {
-  applicationType?: string;
+export type JSONGeneratorJhipsterApplicationtypeContent = {
+  applicationType: string;
 };
 
 export type JSONGeneratorJhipsterCacheProviderContent = {
-  cacheProvider?: string;
+  cacheProvider: string;
 };
 
 export type JSONGeneratorJhipsterDatabaseContent = {
-  prodDatabaseType?: string;
-  databaseType?: string;
+  databaseType: string;
   devDatabaseType?: string;
-  enableHibernateCache?: boolean;
+  prodDatabaseType?: string;
+  enableHibernateCache: boolean;
 };
 
 export type JSONGeneratorJhipsterClientContent = {
-  clientFramework?: string;
-  skipClient?: boolean;
+  clientFramework: string;
+  skipClient: boolean;
   clientPackageManager?: string;
   clientTheme?: string;
   clientThemeVariant?: string;
-  microfrontend?: boolean;
-  microfrontends?: JSONMicrofrontend[];
-  withAdminUi?: boolean;
+  microfrontend: boolean;
+  withAdminUi: boolean;
 };
 
 export type JSONGeneratorJhipsterPackageContent = {
-  packageName?: string;
-  packageFolder?: string;
-  baseName: string;
-};
+  packageName: string;
+  packageFolder: string;
+} & JSONMicrofrontend;
 
 export type JSONGeneratorJhipsterAuthenticationContent = {
-  authenticationType?: string;
-  skipUserManagement?: boolean;
+  authenticationType: string;
+  skipUserManagement: boolean;
+  jwtSecretKey?: string;
+};
+
+export type JSONGeneratorJhipsterReactiveContent = {
+  reactive: boolean;
+};
+
+export type JSONGeneratorJhipsterServerContent = {
+  serverPort: number;
+  serviceDiscoveryType: string;
+  buildTool: string;
+  enableGradleEnterprise?: boolean;
+  gradleEnterpriseHost?: string;
+  dtoSuffix?: string;
+  messageBroker?: string;
+};
+
+export type JSONGeneratorJhipsterTranslationContent = {
+  languages?: string[];
+  nativeLanguage?: string;
+  enableTranslation?: boolean;
 };
 
 export type AbstractJSONGeneratorJhipsterContent = {
   entities?: string[];
   jhipsterVersion?: string;
-  buildTool?: string;
-  dtoSuffix?: string;
   enableSwaggerCodegen?: boolean;
   creationTimestamp?: number;
-  enableTranslation?: boolean;
   jhiPrefix?: string;
   entitySuffix?: string;
-  jwtSecretKey?: string;
-  languages?: string[];
-  messageBroker?: string;
-  serverPort?: number;
-  nativeLanguage?: string;
-  reactive?: boolean;
   searchEngine?: string;
-  serviceDiscoveryType?: string;
   testFrameworks?: string[];
-  enableGradleEnterprise?: boolean;
-  gradleEnterpriseHost?: string;
   websocket?: string;
-} & ApplicationtypeJSONGeneratorJhipsterContent &
+} & JSONGeneratorJhipsterApplicationtypeContent &
   JSONGeneratorJhipsterContentDeployment &
   JSONGeneratorJhipsterCacheProviderContent &
   JSONGeneratorJhipsterDatabaseContent &
   JSONGeneratorJhipsterPackageContent &
+  JSONGeneratorJhipsterClientContent &
   JSONGeneratorJhipsterAuthenticationContent &
+  JSONGeneratorJhipsterServerContent &
+  JSONGeneratorJhipsterTranslationContent &
+  JSONGeneratorJhipsterReactiveContent &
   Record<string, any>;
 
 export type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
   microfrontends?: JSONMicrofrontend[] | null;
-} & AbstractJSONGeneratorJhipsterContent &
-  JSONGeneratorJhipsterClientContent;
+} & AbstractJSONGeneratorJhipsterContent;
 
 export type PostProcessedJSONGeneratorJhipsterContent = {
   blueprints?: string[];

@@ -247,7 +247,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults(): Partial<JSONGeneratorJhipsterContent> {
+  get jhipsterConfigWithDefaults(): Omit<JSONGeneratorJhipsterContent, 'baseName'> {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,

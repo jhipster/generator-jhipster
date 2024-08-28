@@ -20,22 +20,24 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { defaultApplicationOptions } from '../jhipster/index.js';
+import {
+  defaultApplicationOptions,
+  getConfigForApplication,
+  getConfigForAuthenticationType,
+  getConfigForClientApplication,
+  getConfigForServer,
+  getConfigWithDefaults,
+} from '../jhipster/index.js';
 
-const {
-  getConfigForMonolithApplication,
-  getConfigForGatewayApplication,
-  getConfigForMicroserviceApplication,
-  getDefaultConfigForNewApplication,
-} = defaultApplicationOptions;
+const { getDefaultConfigForNewApplication } = defaultApplicationOptions;
 
 describe('jdl - DefaultApplicationOptions', () => {
-  describe('getConfigForMonolithApplication', () => {
+  describe('getConfigWithDefaults', () => {
     describe('without passing custom options', () => {
       let options;
 
       before(() => {
-        options = getConfigForMonolithApplication();
+        options = getConfigWithDefaults();
       });
 
       it('should set the application type to monolith', () => {
@@ -70,7 +72,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let clientThemeVariantOption: any;
 
       before(() => {
-        clientThemeVariantOption = getConfigForMonolithApplication({
+        clientThemeVariantOption = getConfigForClientApplication({
+          applicationType: 'monolith',
           clientTheme: 'custom',
         }).clientThemeVariant;
       });
@@ -83,7 +86,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let skipUserManagementOption: any;
 
       before(() => {
-        skipUserManagementOption = getConfigForMonolithApplication({
+        skipUserManagementOption = getConfigForAuthenticationType({
+          applicationType: 'monolith',
           authenticationType: 'oauth2',
         }).skipUserManagement;
       });
@@ -96,7 +100,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       let options;
 
       before(() => {
-        options = getConfigForMonolithApplication({
+        options = getConfigWithDefaults({
           applicationType: 'custom',
         });
       });
@@ -111,7 +115,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       let options;
 
       before(() => {
-        options = getConfigForGatewayApplication();
+        options = getConfigWithDefaults({ applicationType: 'gateway' });
       });
 
       it('should set the application type to gateway', () => {
@@ -155,7 +159,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let serviceDiscoveryTypeOption;
 
       before(() => {
-        serviceDiscoveryTypeOption = getConfigForGatewayApplication({
+        serviceDiscoveryTypeOption = getConfigForServer({
+          applicationType: 'gateway',
           serviceDiscoveryType: 'no',
         }).serviceDiscoveryType;
       });
@@ -168,7 +173,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let clientThemeVariantOption;
 
       before(() => {
-        clientThemeVariantOption = getConfigForGatewayApplication({
+        clientThemeVariantOption = getConfigForClientApplication({
+          applicationType: 'gateway',
           clientTheme: 'custom',
         }).clientThemeVariant;
       });
@@ -181,7 +187,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let skipUserManagementOption;
 
       before(() => {
-        skipUserManagementOption = getConfigForGatewayApplication({
+        skipUserManagementOption = getConfigForAuthenticationType({
+          applicationType: 'gateway',
           authenticationType: 'oauth2',
         }).skipUserManagement;
       });
@@ -194,8 +201,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let options;
 
       before(() => {
-        options = getConfigForGatewayApplication({
-          applicationType: 'custom',
+        options = getConfigWithDefaults({
+          applicationType: 'gateway',
         });
       });
 
@@ -209,7 +216,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       let options;
 
       before(() => {
-        options = getConfigForMicroserviceApplication();
+        options = getConfigForApplication({ applicationType: 'microservice' });
       });
 
       it('should set the application type to microservice', () => {
@@ -250,7 +257,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let serviceDiscoveryTypeOption;
 
       before(() => {
-        serviceDiscoveryTypeOption = getConfigForMicroserviceApplication({
+        serviceDiscoveryTypeOption = getConfigForServer({
+          applicationType: 'microservice',
           serviceDiscoveryType: 'no',
         }).serviceDiscoveryType;
       });
@@ -263,8 +271,8 @@ describe('jdl - DefaultApplicationOptions', () => {
       let options;
 
       before(() => {
-        options = getConfigForMicroserviceApplication({
-          applicationType: 'ignored',
+        options = getConfigForApplication({
+          applicationType: 'microservice',
           skipClient: false,
           clientFramework: 'react',
           clientTheme: 'something',

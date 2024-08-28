@@ -44,12 +44,54 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
       before(() => {
         jdlObject = convertApplicationsToJDL({
-          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
+          applications: [
+            {
+              'generator-jhipster': {
+                baseName: 'toto',
+                applicationType: MONOLITH,
+                cacheProvider: 'ehcache',
+                databaseType: 'sql',
+                enableHibernateCache: true,
+                packageName: 'io.jhipster',
+                packageFolder: 'io/jhipster',
+                clientFramework: 'angular',
+                skipClient: false,
+                microfrontend: false,
+                withAdminUi: true,
+                skipUserManagement: false,
+                authenticationType: 'jwt',
+                serverPort: 8080,
+                reactive: false,
+                serviceDiscoveryType: 'consul',
+                buildTool: 'maven',
+              },
+            },
+          ],
         });
       });
 
       it('should return the converted applications', () => {
-        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' }));
+        expect(jdlObject.applications.toto).to.deep.equal(
+          createJDLApplication({
+            applicationType: MONOLITH,
+            baseName: 'toto',
+            cacheProvider: 'ehcache',
+            databaseType: 'sql',
+            enableHibernateCache: true,
+            packageName: 'io.jhipster',
+            packageFolder: 'io/jhipster',
+            clientFramework: 'angular',
+            skipClient: false,
+            microfrontend: false,
+            withAdminUi: true,
+            skipUserManagement: false,
+            authenticationType: 'jwt',
+            serverPort: 8080,
+            reactive: false,
+            serviceDiscoveryType: 'consul',
+            buildTool: 'maven',
+          }),
+        );
       });
     });
     describe('when passing a jdl object', () => {
@@ -57,16 +99,98 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
 
       before(() => {
         const previousJDLObject = new JDLObject();
-        previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: MONOLITH }));
+        previousJDLObject.addApplication(
+          createJDLApplication({
+            baseName: 'tata',
+            applicationType: MONOLITH,
+            cacheProvider: 'ehcache',
+            databaseType: 'sql',
+            enableHibernateCache: true,
+            packageName: 'io.jhipster',
+            packageFolder: 'io/jhipster',
+            clientFramework: 'angular',
+            skipClient: false,
+            microfrontend: false,
+            withAdminUi: true,
+            skipUserManagement: false,
+            authenticationType: 'jwt',
+            serverPort: 8080,
+            reactive: false,
+            serviceDiscoveryType: 'consul',
+            buildTool: 'maven',
+          }),
+        );
         jdlObject = convertApplicationsToJDL({
-          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
+          applications: [
+            {
+              'generator-jhipster': {
+                baseName: 'toto',
+                applicationType: MONOLITH,
+                cacheProvider: 'ehcache',
+                databaseType: 'sql',
+                enableHibernateCache: true,
+                packageName: 'io.jhipster',
+                packageFolder: 'io/jhipster',
+                clientFramework: 'angular',
+                skipClient: false,
+                microfrontend: false,
+                withAdminUi: true,
+                skipUserManagement: false,
+                authenticationType: 'jwt',
+                serverPort: 8080,
+                reactive: false,
+                serviceDiscoveryType: 'consul',
+                buildTool: 'maven',
+              },
+            },
+          ],
           jdl: previousJDLObject,
         });
       });
 
       it('should add the converted applications', () => {
-        expect(jdlObject.applications.tata).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'tata' }));
-        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ applicationType: MONOLITH, baseName: 'toto' }));
+        expect(jdlObject.applications.tata).to.deep.equal(
+          createJDLApplication({
+            applicationType: MONOLITH,
+            baseName: 'tata',
+            cacheProvider: 'ehcache',
+            databaseType: 'sql',
+            enableHibernateCache: true,
+            packageName: 'io.jhipster',
+            packageFolder: 'io/jhipster',
+            clientFramework: 'angular',
+            skipClient: false,
+            microfrontend: false,
+            withAdminUi: true,
+            skipUserManagement: false,
+            authenticationType: 'jwt',
+            serverPort: 8080,
+            reactive: false,
+            serviceDiscoveryType: 'consul',
+            buildTool: 'maven',
+          }),
+        );
+        expect(jdlObject.applications.toto).to.deep.equal(
+          createJDLApplication({
+            applicationType: MONOLITH,
+            baseName: 'toto',
+            cacheProvider: 'ehcache',
+            databaseType: 'sql',
+            enableHibernateCache: true,
+            packageName: 'io.jhipster',
+            packageFolder: 'io/jhipster',
+            clientFramework: 'angular',
+            skipClient: false,
+            microfrontend: false,
+            withAdminUi: true,
+            skipUserManagement: false,
+            authenticationType: 'jwt',
+            serverPort: 8080,
+            reactive: false,
+            serviceDiscoveryType: 'consul',
+            buildTool: 'maven',
+          }),
+        );
       });
     });
   });

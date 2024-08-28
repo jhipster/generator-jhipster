@@ -395,6 +395,22 @@ describe('jdl - JSONToJDLConverter', () => {
         jdl = convertSingleContentToJDL({
           'generator-jhipster': {
             baseName: 'x',
+            applicationType: 'monolith',
+            cacheProvider: 'ehcache',
+            databaseType: 'sql',
+            enableHibernateCache: true,
+            packageName: 'io.jhipster',
+            packageFolder: 'io/jhipster',
+            clientFramework: 'angular',
+            skipClient: false,
+            microfrontend: false,
+            withAdminUi: true,
+            skipUserManagement: false,
+            authenticationType: 'jwt',
+            serverPort: 8080,
+            reactive: false,
+            serviceDiscoveryType: 'consul',
+            buildTool: 'maven',
             microfrontends: [
               {
                 baseName: 'foo',
@@ -415,6 +431,22 @@ describe('jdl - JSONToJDLConverter', () => {
       it('should not fail', () => {
         convertSingleContentToJDL({
           'generator-jhipster': {
+            applicationType: 'monolith',
+            cacheProvider: 'ehcache',
+            databaseType: 'sql',
+            enableHibernateCache: true,
+            packageName: 'io.jhipster',
+            packageFolder: 'io/jhipster',
+            clientFramework: 'angular',
+            skipClient: false,
+            microfrontend: false,
+            withAdminUi: true,
+            skipUserManagement: false,
+            authenticationType: 'jwt',
+            serverPort: 8080,
+            reactive: false,
+            serviceDiscoveryType: 'consul',
+            buildTool: 'maven',
             baseName: 'x',
             blueprints: null,
             microfrontends: undefined,
