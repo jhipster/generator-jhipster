@@ -80,52 +80,6 @@ describe('MetricsComponent', () => {
     });
   });
 
-  describe('metricsKeyExists', () => {
-    it('should check that metrics key exists', () => {
-      // GIVEN
-      comp.metrics.set({
-        garbageCollector: {
-          'PS Scavenge': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-          'PS MarkSweep': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-        },
-      } as unknown as Metrics);
-
-      // WHEN
-      const garbageCollectorKeyExists = comp.metricsKeyExists('garbageCollector');
-
-      // THEN
-      expect(garbageCollectorKeyExists).toBeTruthy();
-    });
-
-    it('should check that metrics key does not exist', () => {
-      // GIVEN
-      comp.metrics.set({
-        garbageCollector: {
-          'PS Scavenge': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-          'PS MarkSweep': {
-            collectionCount: 0,
-            collectionTime: 0,
-          },
-        },
-      } as unknown as Metrics);
-
-      // WHEN
-      const databasesCollectorKeyExists = comp.metricsKeyExists('databases');
-
-      // THEN
-      expect(databasesCollectorKeyExists).toBeFalsy();
-    });
-  });
-
   describe('metricsKeyExistsAndObjectNotEmpty', () => {
     it('should check that metrics key exists and is not empty', () => {
       // GIVEN
