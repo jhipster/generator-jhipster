@@ -38,10 +38,10 @@
   </div>
 }
 
-@if (metricsRef && metricsKeyExists('garbageCollector')) {
+@if (metricsRef?.garbageCollector; as metricsRefGarbageCollector) {
   <<%= jhiPrefixDashed %>-metrics-garbagecollector
     [updating]="updatingMetrics()"
-    [garbageCollectorMetrics]="metricsRef.garbageCollector"
+    [garbageCollectorMetrics]="metricsRefGarbageCollector"
   ></<%= jhiPrefixDashed %>-metrics-garbagecollector>
 }
 
@@ -49,24 +49,24 @@
   <div class="well well-lg">__jhiTranslateTag__('metrics.updating')</div>
 }
 
-@if (metricsRef && metricsKeyExists('http.server.requests')) {
+@if (metricsRef?.['http.server.requests']; as metricsRefHttpServerRequests) {
   <<%= jhiPrefixDashed %>-metrics-request
     [updating]="updatingMetrics()"
-    [requestMetrics]="metricsRef['http.server.requests']"
+    [requestMetrics]="metricsRefHttpServerRequests"
   ></<%= jhiPrefixDashed %>-metrics-request>
 }
 
-@if (metricsRef && metricsKeyExists('services')) {
+@if (metricsRef?.services; as metricsRefServices) {
   <<%= jhiPrefixDashed %>-metrics-endpoints-requests
     [updating]="updatingMetrics()"
-    [endpointsRequestsMetrics]="metricsRef.services"
+    [endpointsRequestsMetrics]="metricsRefServices"
   ></<%= jhiPrefixDashed %>-metrics-endpoints-requests>
 }
 
-@if (metricsRef && metricsKeyExists('cache')) {
+@if (metricsRef?.cache; as metricsRefCache) {
   <<%= jhiPrefixDashed %>-metrics-cache
     [updating]="updatingMetrics()"
-    [cacheMetrics]="metricsRef.cache"
+    [cacheMetrics]="metricsRefCache"
   ></<%= jhiPrefixDashed %>-metrics-cache>
 }
 
