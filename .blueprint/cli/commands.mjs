@@ -34,6 +34,10 @@ const defaultCommands = {
     desc: 'Generate a test sample',
     blueprint: '@jhipster/jhipster-dev',
   },
+  'github-build-matrix': {
+    desc: 'Generate a matrix for GitHub Actions',
+    blueprint: '@jhipster/jhipster-dev',
+  },
   'update-vscode': {
     desc: 'Update generator-jhipster vscode files',
     blueprint: '@jhipster/jhipster-dev',
