@@ -26,13 +26,25 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
     skipPrettier: {
-      description: 'Skip prettier',
+      description: 'Skip prettier transformation',
+      type: Boolean,
+      hide: true,
+      scope: 'generator',
+    },
+    skipEslint: {
+      description: 'Skip ESlint transformation',
       type: Boolean,
       hide: true,
       scope: 'generator',
     },
     refreshOnCommit: {
       description: 'Refresh files on commit',
+      type: Boolean,
+      hide: true,
+      scope: 'generator',
+    },
+    skipForks: {
+      description: 'Dont use forks',
       type: Boolean,
       hide: true,
       scope: 'generator',

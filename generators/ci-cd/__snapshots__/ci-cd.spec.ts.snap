@@ -9,7 +9,9 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -17,98 +19,98 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   },
   "azure-pipelines.yml": {
     "contents": "jobs:
-  - job: Test
-    pool:
-      vmImage: "ubuntu-20.04"
-    variables:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: NEVER
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: "false"
-      JHI_E2E_HEADLESS: true
+- job: Test
+  pool:
+    vmImage: 'ubuntu-20.04'
+  variables:
+    NODE_VERSION: NODE_VERSION
+    SPRING_OUTPUT_ANSI_ENABLED: NEVER
+    SPRING_JPA_SHOW_SQL: false
+    JHI_DISABLE_WEBPACK_LOGS: true
+    NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
-    steps:
-      #----------------------------------------------------------------------
-      # Install all tools and check configuration
-      #----------------------------------------------------------------------
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(NODE_VERSION)
-        displayName: "TOOLS: install Node.js"
-      - task: Bash@3
-        inputs:
-          targetType: "inline"
-          script: |
-            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: "TOOLS: install Chrome"
-      #----------------------------------------------------------------------
-      # Tests
-      #----------------------------------------------------------------------
-      - task: Npm@1
-        inputs:
-          command: "install"
-        displayName: "INSTALL: launch npm install"
-      - script: chmod +x gradlew
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:backend:test"
-        displayName: "TESTS: backend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "**/TEST-*.xml"
-          searchFolder: "$(Build.SourcesDirectory)/build/test-results"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:frontend:test"
-        displayName: "TESTS: frontend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run java:jar:prod"
-        displayName: "TESTS: packaging"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:package"
-        displayName: "E2E: Package"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:prepare"
-        displayName: "E2E: Prepare"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:run"
-        displayName: "E2E: Run"
-        env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          artifactName: "cypress-screenshots"
-          targetPath: "$(Build.SourcesDirectory)/build/cypress/screenshots"
-        condition: failed()
-        displayName: "E2E: Publish Cypress Screenshots"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:teardown"
-        displayName: "E2E: Teardown"
+  steps:
+  #----------------------------------------------------------------------
+  # Install all tools and check configuration
+  #----------------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(NODE_VERSION)
+    displayName: 'TOOLS: install Node.js'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+    displayName: 'TOOLS: install Chrome'
+  #----------------------------------------------------------------------
+  # Tests
+  #----------------------------------------------------------------------
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+  - script: chmod +x gradlew
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
+    displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/build/test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:frontend:test'
+    displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
+    displayName: 'TESTS: packaging'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:package'
+    displayName: 'E2E: Package'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:prepare'
+    displayName: 'E2E: Prepare'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:run'
+    displayName: 'E2E: Run'
+    env:
+      CYPRESS_ENABLE_RECORD: false
+      CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'cypress-screenshots'
+      targetPath: '$(Build.SourcesDirectory)/build/cypress/screenshots'
+    condition: failed()
+    displayName: 'E2E: Publish Cypress Screenshots'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:teardown'
+    displayName: 'E2E: Teardown'
 ",
     "stateCleared": "modified",
   },
@@ -124,7 +126,9 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -132,110 +136,110 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Gradle Angular
   },
   "azure-pipelines.yml": {
     "contents": "jobs:
-  - job: Test
-    pool:
-      vmImage: "ubuntu-20.04"
-    variables:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: NEVER
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: "false"
-      JHI_E2E_HEADLESS: true
+- job: Test
+  pool:
+    vmImage: 'ubuntu-20.04'
+  variables:
+    NODE_VERSION: NODE_VERSION
+    SPRING_OUTPUT_ANSI_ENABLED: NEVER
+    SPRING_JPA_SHOW_SQL: false
+    JHI_DISABLE_WEBPACK_LOGS: true
+    NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
-    steps:
-      #----------------------------------------------------------------------
-      # Install all tools and check configuration
-      #----------------------------------------------------------------------
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(NODE_VERSION)
-        displayName: "TOOLS: install Node.js"
-      - task: Bash@3
-        inputs:
-          targetType: "inline"
-          script: |
-            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: "TOOLS: install Chrome"
-      #----------------------------------------------------------------------
-      # Tests
-      #----------------------------------------------------------------------
-      - task: Npm@1
-        inputs:
-          command: "install"
-        displayName: "INSTALL: launch npm install"
-      - script: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
-          chmod +x snyk
-        displayName: "INSTALL: Snyk CLI"
-      - script: ./snyk test --all-projects || true
-        displayName: "CHECK: Snyk test"
-        env:
-          SNYK_TOKEN: $(SNYK_TOKEN)
-      - script: ./snyk monitor --all-projects
-        displayName: "CHECK: Snyk monitor"
-        env:
-          SNYK_TOKEN: $(SNYK_TOKEN)
-      - script: chmod +x gradlew
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:backend:test"
-        displayName: "TESTS: backend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "**/TEST-*.xml"
-          searchFolder: "$(Build.SourcesDirectory)/build/test-results"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:frontend:test"
-        displayName: "TESTS: frontend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run java:jar:prod"
-        displayName: "TESTS: packaging"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:package"
-        displayName: "E2E: Package"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:prepare"
-        displayName: "E2E: Prepare"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:run"
-        displayName: "E2E: Run"
-        env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          artifactName: "cypress-screenshots"
-          targetPath: "$(Build.SourcesDirectory)/build/cypress/screenshots"
-        condition: failed()
-        displayName: "E2E: Publish Cypress Screenshots"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:teardown"
-        displayName: "E2E: Teardown"
+  steps:
+  #----------------------------------------------------------------------
+  # Install all tools and check configuration
+  #----------------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(NODE_VERSION)
+    displayName: 'TOOLS: install Node.js'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+    displayName: 'TOOLS: install Chrome'
+  #----------------------------------------------------------------------
+  # Tests
+  #----------------------------------------------------------------------
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+  - script: |
+      curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+      chmod +x snyk
+    displayName: 'INSTALL: Snyk CLI'
+  - script: ./snyk test --all-projects || true
+    displayName: 'CHECK: Snyk test'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+  - script: ./snyk monitor --all-projects
+    displayName: 'CHECK: Snyk monitor'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+  - script: chmod +x gradlew
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
+    displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/build/test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:frontend:test'
+    displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/build/test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
+    displayName: 'TESTS: packaging'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:package'
+    displayName: 'E2E: Package'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:prepare'
+    displayName: 'E2E: Prepare'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:run'
+    displayName: 'E2E: Run'
+    env:
+      CYPRESS_ENABLE_RECORD: false
+      CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'cypress-screenshots'
+      targetPath: '$(Build.SourcesDirectory)/build/cypress/screenshots'
+    condition: failed()
+    displayName: 'E2E: Publish Cypress Screenshots'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:teardown'
+    displayName: 'E2E: Teardown'
 ",
     "stateCleared": "modified",
   },
@@ -251,7 +255,9 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -259,98 +265,98 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   },
   "azure-pipelines.yml": {
     "contents": "jobs:
-  - job: Test
-    pool:
-      vmImage: "ubuntu-20.04"
-    variables:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: NEVER
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: "false"
-      JHI_E2E_HEADLESS: true
+- job: Test
+  pool:
+    vmImage: 'ubuntu-20.04'
+  variables:
+    NODE_VERSION: NODE_VERSION
+    SPRING_OUTPUT_ANSI_ENABLED: NEVER
+    SPRING_JPA_SHOW_SQL: false
+    JHI_DISABLE_WEBPACK_LOGS: true
+    NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
-    steps:
-      #----------------------------------------------------------------------
-      # Install all tools and check configuration
-      #----------------------------------------------------------------------
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(NODE_VERSION)
-        displayName: "TOOLS: install Node.js"
-      - task: Bash@3
-        inputs:
-          targetType: "inline"
-          script: |
-            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: "TOOLS: install Chrome"
-      #----------------------------------------------------------------------
-      # Tests
-      #----------------------------------------------------------------------
-      - task: Npm@1
-        inputs:
-          command: "install"
-        displayName: "INSTALL: launch npm install"
-      - script: chmod +x mvnw
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:backend:test"
-        displayName: "TESTS: backend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "**/TEST-*.xml"
-          searchFolder: "$(Build.SourcesDirectory)/target/test-results"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:frontend:test"
-        displayName: "TESTS: frontend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run java:jar:prod"
-        displayName: "TESTS: packaging"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:package"
-        displayName: "E2E: Package"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:prepare"
-        displayName: "E2E: Prepare"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:run"
-        displayName: "E2E: Run"
-        env:
-          CYPRESS_ENABLE_RECORD: true
-          CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          artifactName: "cypress-screenshots"
-          targetPath: "$(Build.SourcesDirectory)/target/cypress/screenshots"
-        condition: failed()
-        displayName: "E2E: Publish Cypress Screenshots"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:teardown"
-        displayName: "E2E: Teardown"
+  steps:
+  #----------------------------------------------------------------------
+  # Install all tools and check configuration
+  #----------------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(NODE_VERSION)
+    displayName: 'TOOLS: install Node.js'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+    displayName: 'TOOLS: install Chrome'
+  #----------------------------------------------------------------------
+  # Tests
+  #----------------------------------------------------------------------
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+  - script: chmod +x mvnw
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
+    displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/target/test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:frontend:test'
+    displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
+    displayName: 'TESTS: packaging'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:package'
+    displayName: 'E2E: Package'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:prepare'
+    displayName: 'E2E: Prepare'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:run'
+    displayName: 'E2E: Run'
+    env:
+      CYPRESS_ENABLE_RECORD: true
+      CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'cypress-screenshots'
+      targetPath: '$(Build.SourcesDirectory)/target/cypress/screenshots'
+    condition: failed()
+    displayName: 'E2E: Publish Cypress Screenshots'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:teardown'
+    displayName: 'E2E: Teardown'
 ",
     "stateCleared": "modified",
   },
@@ -366,7 +372,9 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -374,110 +382,110 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: Maven Angular 
   },
   "azure-pipelines.yml": {
     "contents": "jobs:
-  - job: Test
-    pool:
-      vmImage: "ubuntu-20.04"
-    variables:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: NEVER
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: "false"
-      JHI_E2E_HEADLESS: true
+- job: Test
+  pool:
+    vmImage: 'ubuntu-20.04'
+  variables:
+    NODE_VERSION: NODE_VERSION
+    SPRING_OUTPUT_ANSI_ENABLED: NEVER
+    SPRING_JPA_SHOW_SQL: false
+    JHI_DISABLE_WEBPACK_LOGS: true
+    NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
-    steps:
-      #----------------------------------------------------------------------
-      # Install all tools and check configuration
-      #----------------------------------------------------------------------
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(NODE_VERSION)
-        displayName: "TOOLS: install Node.js"
-      - task: Bash@3
-        inputs:
-          targetType: "inline"
-          script: |
-            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: "TOOLS: install Chrome"
-      #----------------------------------------------------------------------
-      # Tests
-      #----------------------------------------------------------------------
-      - task: Npm@1
-        inputs:
-          command: "install"
-        displayName: "INSTALL: launch npm install"
-      - script: |
-          curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
-          chmod +x snyk
-        displayName: "INSTALL: Snyk CLI"
-      - script: ./snyk test --all-projects || true
-        displayName: "CHECK: Snyk test"
-        env:
-          SNYK_TOKEN: $(SNYK_TOKEN)
-      - script: ./snyk monitor --all-projects
-        displayName: "CHECK: Snyk monitor"
-        env:
-          SNYK_TOKEN: $(SNYK_TOKEN)
-      - script: chmod +x mvnw
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:backend:test"
-        displayName: "TESTS: backend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "**/TEST-*.xml"
-          searchFolder: "$(Build.SourcesDirectory)/target/test-results"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:frontend:test"
-        displayName: "TESTS: frontend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run java:jar:prod"
-        displayName: "TESTS: packaging"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:package"
-        displayName: "E2E: Package"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:prepare"
-        displayName: "E2E: Prepare"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:run"
-        displayName: "E2E: Run"
-        env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          artifactName: "cypress-screenshots"
-          targetPath: "$(Build.SourcesDirectory)/target/cypress/screenshots"
-        condition: failed()
-        displayName: "E2E: Publish Cypress Screenshots"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:teardown"
-        displayName: "E2E: Teardown"
+  steps:
+  #----------------------------------------------------------------------
+  # Install all tools and check configuration
+  #----------------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(NODE_VERSION)
+    displayName: 'TOOLS: install Node.js'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+    displayName: 'TOOLS: install Chrome'
+  #----------------------------------------------------------------------
+  # Tests
+  #----------------------------------------------------------------------
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+  - script: |
+      curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+      chmod +x snyk
+    displayName: 'INSTALL: Snyk CLI'
+  - script: ./snyk test --all-projects || true
+    displayName: 'CHECK: Snyk test'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+  - script: ./snyk monitor --all-projects
+    displayName: 'CHECK: Snyk monitor'
+    env:
+      SNYK_TOKEN: $(SNYK_TOKEN)
+  - script: chmod +x mvnw
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
+    displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/target/test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:frontend:test'
+    displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
+    displayName: 'TESTS: packaging'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:package'
+    displayName: 'E2E: Package'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:prepare'
+    displayName: 'E2E: Prepare'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:run'
+    displayName: 'E2E: Run'
+    env:
+      CYPRESS_ENABLE_RECORD: false
+      CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'cypress-screenshots'
+      targetPath: '$(Build.SourcesDirectory)/target/cypress/screenshots'
+    condition: failed()
+    displayName: 'E2E: Publish Cypress Screenshots'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:teardown'
+    displayName: 'E2E: Teardown'
 ",
     "stateCleared": "modified",
   },
@@ -493,7 +501,9 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -501,98 +511,98 @@ exports[`generator - CI-CD Azure Pipelines tests Azure Pipelines: autoconfigure 
   },
   "azure-pipelines.yml": {
     "contents": "jobs:
-  - job: Test
-    pool:
-      vmImage: "ubuntu-20.04"
-    variables:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: NEVER
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: "false"
-      JHI_E2E_HEADLESS: true
+- job: Test
+  pool:
+    vmImage: 'ubuntu-20.04'
+  variables:
+    NODE_VERSION: NODE_VERSION
+    SPRING_OUTPUT_ANSI_ENABLED: NEVER
+    SPRING_JPA_SHOW_SQL: false
+    JHI_DISABLE_WEBPACK_LOGS: true
+    NG_CLI_ANALYTICS: "false"
+    JHI_E2E_HEADLESS: true
 
-    steps:
-      #----------------------------------------------------------------------
-      # Install all tools and check configuration
-      #----------------------------------------------------------------------
-      - task: NodeTool@0
-        inputs:
-          versionSpec: $(NODE_VERSION)
-        displayName: "TOOLS: install Node.js"
-      - task: Bash@3
-        inputs:
-          targetType: "inline"
-          script: |
-            wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install ./google-chrome-stable_current_amd64.deb
-        displayName: "TOOLS: install Chrome"
-      #----------------------------------------------------------------------
-      # Tests
-      #----------------------------------------------------------------------
-      - task: Npm@1
-        inputs:
-          command: "install"
-        displayName: "INSTALL: launch npm install"
-      - script: chmod +x mvnw
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:backend:test"
-        displayName: "TESTS: backend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "**/TEST-*.xml"
-          searchFolder: "$(Build.SourcesDirectory)/target/test-results"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:frontend:test"
-        displayName: "TESTS: frontend"
-      - task: PublishTestResults@2
-        inputs:
-          testResultsFormat: "JUnit"
-          testResultsFiles: "$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml"
-        condition: succeededOrFailed()
-        displayName: "TESTS: publish test results"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run java:jar:prod"
-        displayName: "TESTS: packaging"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:package"
-        displayName: "E2E: Package"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:prepare"
-        displayName: "E2E: Prepare"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:run"
-        displayName: "E2E: Run"
-        env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
-          CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          artifactName: "cypress-screenshots"
-          targetPath: "$(Build.SourcesDirectory)/target/cypress/screenshots"
-        condition: failed()
-        displayName: "E2E: Publish Cypress Screenshots"
-      - task: Npm@1
-        inputs:
-          command: "custom"
-          customCommand: " run ci:e2e:teardown"
-        displayName: "E2E: Teardown"
+  steps:
+  #----------------------------------------------------------------------
+  # Install all tools and check configuration
+  #----------------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(NODE_VERSION)
+    displayName: 'TOOLS: install Node.js'
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+    displayName: 'TOOLS: install Chrome'
+  #----------------------------------------------------------------------
+  # Tests
+  #----------------------------------------------------------------------
+  - task: Npm@1
+    inputs:
+      command: 'install'
+    displayName: 'INSTALL: launch npm install'
+  - script: chmod +x mvnw
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:backend:test'
+    displayName: 'TESTS: backend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
+      searchFolder: '$(Build.SourcesDirectory)/target/test-results'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:frontend:test'
+    displayName: 'TESTS: frontend'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)/target/test-results/TESTS-results-jest.xml'
+    condition: succeededOrFailed()
+    displayName: 'TESTS: publish test results'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run java:jar:prod'
+    displayName: 'TESTS: packaging'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:package'
+    displayName: 'E2E: Package'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:prepare'
+    displayName: 'E2E: Prepare'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:run'
+    displayName: 'E2E: Run'
+    env:
+      CYPRESS_ENABLE_RECORD: false
+      CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)
+      CYPRESS_RECORD_KEY: $(CYPRESS_RECORD_KEY)
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'cypress-screenshots'
+      targetPath: '$(Build.SourcesDirectory)/target/cypress/screenshots'
+    condition: failed()
+    displayName: 'E2E: Publish Cypress Screenshots'
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: ' run ci:e2e:teardown'
+    displayName: 'E2E: Teardown'
 ",
     "stateCleared": "modified",
   },
@@ -604,60 +614,60 @@ exports[`generator - CI-CD Circle CI test Circle CI: Gradle Angular NPM should m
   ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
-  build:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
-            # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
-            - v1-dependencies-
-      - run:
-          name: Print Java Version
-          command: "java -version"
-      - run:
-          name: Print Node Version
-          command: "node -v"
-      - run:
-          name: Print NPM Version
-          command: "npm -v"
-      - run:
-          name: Install Node Modules
-          command: "npm install"
-      - save_cache:
-          paths:
-            - node
-            - node_modules
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+    build:
+        machine:
+            image: ubuntu-2004:current
+        resource_class: large
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+                    # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
+                    - v1-dependencies-
+            - run:
+                name: Print Java Version
+                command: 'java -version'
+            - run:
+                name: Print Node Version
+                command: 'node -v'
+            - run:
+                name: Print NPM Version
+                command: 'npm -v'
+            - run:
+                name: Install Node Modules
+                command: 'npm install'
+            - save_cache:
+                paths:
+                    - node
+                    - node_modules
+                    - ~/.gradle
+                key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
-      - run:
-          name: Give Executable Power
-          command: "chmod +x gradlew"
-      - run:
-          name: Backend tests
-          command: npm run ci:backend:test
-      - run:
-          name: Run Front End Tests
-          command: npm run ci:frontend:test
-      # - run:
-      #     name: 'E2E: Package'
-      #     command: npm run ci:e2e:package
-      # - run:
-      #     name: 'E2E: Prepare'
-      #     command: npm run ci:e2e:prepare
-      # - run:
-      #     name: 'E2E: Run'
-      #     command: npm run ci:e2e:run
-      #     environment:
-      #       CYPRESS_ENABLE_RECORD: false
-      # - run:
-      #     name: 'E2E: Teardown'
-      #     command: npm run ci:e2e:teardown
+            - run:
+                name: Give Executable Power
+                command: 'chmod +x gradlew'
+            - run:
+                name: Backend tests
+                command: npm run ci:backend:test
+            - run:
+                name: Run Front End Tests
+                command: npm run ci:frontend:test
+            # - run:
+            #     name: 'E2E: Package'
+            #     command: npm run ci:e2e:package
+            # - run:
+            #     name: 'E2E: Prepare'
+            #     command: npm run ci:e2e:prepare
+            # - run:
+            #     name: 'E2E: Run'
+            #     command: npm run ci:e2e:run
+            #     environment:
+            #       CYPRESS_ENABLE_RECORD: false
+            # - run:
+            #     name: 'E2E: Teardown'
+            #     command: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -668,7 +678,9 @@ jobs:
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -682,71 +694,71 @@ exports[`generator - CI-CD Circle CI test Circle CI: Gradle with Snyk should mat
   ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
-  build:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
-            # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
-            - v1-dependencies-
-      - run:
-          name: Print Java Version
-          command: "java -version"
-      - run:
-          name: Print Node Version
-          command: "node -v"
-      - run:
-          name: Print NPM Version
-          command: "npm -v"
-      - run:
-          name: Install Node Modules
-          command: "npm install"
-      - run:
-          name: Install Snyk CLI
-          command: |
-            curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
-            chmod +x snyk
-      - run:
-          name: Snyk test
-          command: "./snyk test --all-projects || true"
-      - run:
-          name: Snyk monitor
-          command: "./snyk monitor --all-projects"
-      - save_cache:
-          paths:
-            - node
-            - node_modules
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+    build:
+        machine:
+            image: ubuntu-2004:current
+        resource_class: large
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+                    # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
+                    - v1-dependencies-
+            - run:
+                name: Print Java Version
+                command: 'java -version'
+            - run:
+                name: Print Node Version
+                command: 'node -v'
+            - run:
+                name: Print NPM Version
+                command: 'npm -v'
+            - run:
+                name: Install Node Modules
+                command: 'npm install'
+            - run:
+                name: Install Snyk CLI
+                command: |
+                    curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+                    chmod +x snyk
+            - run:
+                name: Snyk test
+                command: './snyk test --all-projects || true'
+            - run:
+                name: Snyk monitor
+                command: './snyk monitor --all-projects'
+            - save_cache:
+                paths:
+                    - node
+                    - node_modules
+                    - ~/.gradle
+                key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 
-      - run:
-          name: Give Executable Power
-          command: "chmod +x gradlew"
-      - run:
-          name: Backend tests
-          command: npm run ci:backend:test
-      - run:
-          name: Run Front End Tests
-          command: npm run ci:frontend:test
-      # - run:
-      #     name: 'E2E: Package'
-      #     command: npm run ci:e2e:package
-      # - run:
-      #     name: 'E2E: Prepare'
-      #     command: npm run ci:e2e:prepare
-      # - run:
-      #     name: 'E2E: Run'
-      #     command: npm run ci:e2e:run
-      #     environment:
-      #       CYPRESS_ENABLE_RECORD: false
-      # - run:
-      #     name: 'E2E: Teardown'
-      #     command: npm run ci:e2e:teardown
+            - run:
+                name: Give Executable Power
+                command: 'chmod +x gradlew'
+            - run:
+                name: Backend tests
+                command: npm run ci:backend:test
+            - run:
+                name: Run Front End Tests
+                command: npm run ci:frontend:test
+            # - run:
+            #     name: 'E2E: Package'
+            #     command: npm run ci:e2e:package
+            # - run:
+            #     name: 'E2E: Prepare'
+            #     command: npm run ci:e2e:prepare
+            # - run:
+            #     name: 'E2E: Run'
+            #     command: npm run ci:e2e:run
+            #     environment:
+            #       CYPRESS_ENABLE_RECORD: false
+            # - run:
+            #     name: 'E2E: Teardown'
+            #     command: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -757,7 +769,9 @@ jobs:
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -771,60 +785,60 @@ exports[`generator - CI-CD Circle CI test Circle CI: Maven Angular NPM should ma
   ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
-  build:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
-            # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
-            - v1-dependencies-
-      - run:
-          name: Print Java Version
-          command: "java -version"
-      - run:
-          name: Print Node Version
-          command: "node -v"
-      - run:
-          name: Print NPM Version
-          command: "npm -v"
-      - run:
-          name: Install Node Modules
-          command: "npm install"
-      - save_cache:
-          paths:
-            - node
-            - node_modules
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+    build:
+        machine:
+            image: ubuntu-2004:current
+        resource_class: large
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+                    # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
+                    - v1-dependencies-
+            - run:
+                name: Print Java Version
+                command: 'java -version'
+            - run:
+                name: Print Node Version
+                command: 'node -v'
+            - run:
+                name: Print NPM Version
+                command: 'npm -v'
+            - run:
+                name: Install Node Modules
+                command: 'npm install'
+            - save_cache:
+                paths:
+                    - node
+                    - node_modules
+                    - ~/.m2
+                key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
-      - run:
-          name: Give Executable Power
-          command: "chmod +x mvnw"
-      - run:
-          name: Backend tests
-          command: npm run ci:backend:test
-      - run:
-          name: Run Front End Tests
-          command: npm run ci:frontend:test
-      # - run:
-      #     name: 'E2E: Package'
-      #     command: npm run ci:e2e:package
-      # - run:
-      #     name: 'E2E: Prepare'
-      #     command: npm run ci:e2e:prepare
-      # - run:
-      #     name: 'E2E: Run'
-      #     command: npm run ci:e2e:run
-      #     environment:
-      #       CYPRESS_ENABLE_RECORD: true
-      # - run:
-      #     name: 'E2E: Teardown'
-      #     command: npm run ci:e2e:teardown
+            - run:
+                name: Give Executable Power
+                command: 'chmod +x mvnw'
+            - run:
+                name: Backend tests
+                command: npm run ci:backend:test
+            - run:
+                name: Run Front End Tests
+                command: npm run ci:frontend:test
+            # - run:
+            #     name: 'E2E: Package'
+            #     command: npm run ci:e2e:package
+            # - run:
+            #     name: 'E2E: Prepare'
+            #     command: npm run ci:e2e:prepare
+            # - run:
+            #     name: 'E2E: Run'
+            #     command: npm run ci:e2e:run
+            #     environment:
+            #       CYPRESS_ENABLE_RECORD: true
+            # - run:
+            #     name: 'E2E: Teardown'
+            #     command: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -835,7 +849,9 @@ jobs:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -849,71 +865,71 @@ exports[`generator - CI-CD Circle CI test Circle CI: Maven with Snyk should matc
   ".circleci/config.yml": {
     "contents": "version: 2.1
 jobs:
-  build:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
-            # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
-            - v1-dependencies-
-      - run:
-          name: Print Java Version
-          command: "java -version"
-      - run:
-          name: Print Node Version
-          command: "node -v"
-      - run:
-          name: Print NPM Version
-          command: "npm -v"
-      - run:
-          name: Install Node Modules
-          command: "npm install"
-      - run:
-          name: Install Snyk CLI
-          command: |
-            curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
-            chmod +x snyk
-      - run:
-          name: Snyk test
-          command: "./snyk test --all-projects || true"
-      - run:
-          name: Snyk monitor
-          command: "./snyk monitor --all-projects"
-      - save_cache:
-          paths:
-            - node
-            - node_modules
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+    build:
+        machine:
+            image: ubuntu-2004:current
+        resource_class: large
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+                    # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
+                    - v1-dependencies-
+            - run:
+                name: Print Java Version
+                command: 'java -version'
+            - run:
+                name: Print Node Version
+                command: 'node -v'
+            - run:
+                name: Print NPM Version
+                command: 'npm -v'
+            - run:
+                name: Install Node Modules
+                command: 'npm install'
+            - run:
+                name: Install Snyk CLI
+                command: |
+                    curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+                    chmod +x snyk
+            - run:
+                name: Snyk test
+                command: './snyk test --all-projects || true'
+            - run:
+                name: Snyk monitor
+                command: './snyk monitor --all-projects'
+            - save_cache:
+                paths:
+                    - node
+                    - node_modules
+                    - ~/.m2
+                key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 
-      - run:
-          name: Give Executable Power
-          command: "chmod +x mvnw"
-      - run:
-          name: Backend tests
-          command: npm run ci:backend:test
-      - run:
-          name: Run Front End Tests
-          command: npm run ci:frontend:test
-      # - run:
-      #     name: 'E2E: Package'
-      #     command: npm run ci:e2e:package
-      # - run:
-      #     name: 'E2E: Prepare'
-      #     command: npm run ci:e2e:prepare
-      # - run:
-      #     name: 'E2E: Run'
-      #     command: npm run ci:e2e:run
-      #     environment:
-      #       CYPRESS_ENABLE_RECORD: false
-      # - run:
-      #     name: 'E2E: Teardown'
-      #     command: npm run ci:e2e:teardown
+            - run:
+                name: Give Executable Power
+                command: 'chmod +x mvnw'
+            - run:
+                name: Backend tests
+                command: npm run ci:backend:test
+            - run:
+                name: Run Front End Tests
+                command: npm run ci:frontend:test
+            # - run:
+            #     name: 'E2E: Package'
+            #     command: npm run ci:e2e:package
+            # - run:
+            #     name: 'E2E: Prepare'
+            #     command: npm run ci:e2e:prepare
+            # - run:
+            #     name: 'E2E: Run'
+            #     command: npm run ci:e2e:run
+            #     environment:
+            #       CYPRESS_ENABLE_RECORD: false
+            # - run:
+            #     name: 'E2E: Teardown'
+            #     command: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -924,7 +940,9 @@ jobs:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -939,54 +957,54 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular N
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-  validation:
-    name: "Gradle Wrapper Validation"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v1
-  pipeline:
-    name: sampleMysql pipeline
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
-    timeout-minutes: 40
-    env:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: DETECT
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: NODE_VERSION
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: JAVA_VERSION
-      - name: Install Node.js packages
-        run: npm install
-      - name: Run backend test
-        run: |
-          chmod +x gradlew
-          npm run ci:backend:test
-      - name: Run frontend test
-        run: npm run ci:frontend:test
-      - name: Package application
-        run: npm run java:jar:prod
-      - name: "E2E: Package"
-        run: npm run ci:e2e:package
-      - name: "E2E: Prepare"
-        run: npm run ci:e2e:prepare
-      - name: "E2E: Run"
-        run: npm run ci:e2e:run
+    validation:
+        name: "Gradle Wrapper Validation"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: gradle/wrapper-validation-action@v1
+    pipeline:
+        name: sampleMysql pipeline
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        timeout-minutes: 40
         env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: "E2E: Teardown"
-        run: npm run ci:e2e:teardown
+            NODE_VERSION: NODE_VERSION
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+            NG_CLI_ANALYTICS: false
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: NODE_VERSION
+            - uses: actions/setup-java@v4
+              with:
+                  distribution: 'temurin'
+                  java-version: JAVA_VERSION
+            - name: Install Node.js packages
+              run: npm install
+            - name: Run backend test
+              run: |
+                  chmod +x gradlew
+                  npm run ci:backend:test
+            - name: Run frontend test
+              run: npm run ci:frontend:test
+            - name: Package application
+              run: npm run java:jar:prod
+            - name: 'E2E: Package'
+              run: npm run ci:e2e:package
+            - name: 'E2E: Prepare'
+              run: npm run ci:e2e:prepare
+            - name: 'E2E: Run'
+              run: npm run ci:e2e:run
+              env:
+                CYPRESS_ENABLE_RECORD: false
+                CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
+                CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: 'E2E: Teardown'
+              run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -997,7 +1015,9 @@ jobs:
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1012,94 +1032,94 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Gradle Angular N
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-  validation:
-    name: "Gradle Wrapper Validation"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v1
-  pipeline:
-    name: sampleMysql pipeline
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
-    timeout-minutes: 40
-    env:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: DETECT
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: NODE_VERSION
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: JAVA_VERSION
-      - name: Install Node.js packages
-        run: npm install
-      - name: Install Snyk CLI
-        run: |
-          curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
-          chmod +x snyk
-      - name: Snyk test
-        continue-on-error: true
-        run: ./snyk test --all-projects
+    validation:
+        name: "Gradle Wrapper Validation"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: gradle/wrapper-validation-action@v1
+    pipeline:
+        name: sampleMysql pipeline
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        timeout-minutes: 40
         env:
-          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
-      - name: Snyk monitor
-        continue-on-error: true
-        run: ./snyk monitor --all-projects
-        env:
-          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
-      - name: Run backend test
-        run: |
-          chmod +x gradlew
-          npm run ci:backend:test
-      - name: Run frontend test
-        run: npm run ci:frontend:test
-      - name: Analyze code with SonarQube
-        env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
-        run: |
-          if [ ! -z "$SONAR_TOKEN" ]; then
-              ./gradlew sonarqube --no-daemon -Dsonar.host.url=http://sonar.com:9000
-          else
-              echo No SONAR_TOKEN, skipping...
-          fi
-      - name: Package application
-        run: npm run java:jar:prod
-      - name: Deploy to Heroku
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
-        run: |
-          if [ ! -z "$HEROKU_API_KEY" ]; then
-              ./gradlew deployHeroku --no-daemon
-          else
-              echo No HEROKU_API_KEY, skipping...
-          fi
-      - name: Build and publish docker image
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
-        run: |
-          GIT_TAG=:\${GITHUB_REF#refs/tags/}
-          DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
-          ./gradlew jib -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username="\${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="\${{ secrets.DOCKER_PASSWORD }}" -Pprod
-      - name: "E2E: Package"
-        run: npm run ci:e2e:package
-      - name: "E2E: Prepare"
-        run: npm run ci:e2e:prepare
-      - name: "E2E: Run"
-        run: npm run ci:e2e:run
-        env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: "E2E: Teardown"
-        run: npm run ci:e2e:teardown
+            NODE_VERSION: NODE_VERSION
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+            NG_CLI_ANALYTICS: false
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: NODE_VERSION
+            - uses: actions/setup-java@v4
+              with:
+                  distribution: 'temurin'
+                  java-version: JAVA_VERSION
+            - name: Install Node.js packages
+              run: npm install
+            - name: Install Snyk CLI
+              run: |
+                  curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
+                  chmod +x snyk
+            - name: Snyk test
+              continue-on-error: true
+              run: ./snyk test --all-projects
+              env:
+                  SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+            - name: Snyk monitor
+              continue-on-error: true
+              run: ./snyk monitor --all-projects
+              env:
+                  SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+            - name: Run backend test
+              run: |
+                  chmod +x gradlew
+                  npm run ci:backend:test
+            - name: Run frontend test
+              run: npm run ci:frontend:test
+            - name: Analyze code with SonarQube
+              env:
+                  GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
+              run: |
+                  if [ ! -z "$SONAR_TOKEN" ]; then
+                      ./gradlew sonarqube --no-daemon -Dsonar.host.url=http://sonar.com:9000
+                  else
+                      echo No SONAR_TOKEN, skipping...
+                  fi
+            - name: Package application
+              run: npm run java:jar:prod
+            - name: Deploy to Heroku
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              env:
+                  HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
+              run: |
+                  if [ ! -z "$HEROKU_API_KEY" ]; then
+                      ./gradlew deployHeroku --no-daemon
+                  else
+                      echo No HEROKU_API_KEY, skipping...
+                  fi
+            - name: Build and publish docker image
+              if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+              run: |
+                  GIT_TAG=:\${GITHUB_REF#refs/tags/}
+                  DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
+                  ./gradlew jib -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username="\${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="\${{ secrets.DOCKER_PASSWORD }}" -Pprod
+            - name: 'E2E: Package'
+              run: npm run ci:e2e:package
+            - name: 'E2E: Prepare'
+              run: npm run ci:e2e:prepare
+            - name: 'E2E: Run'
+              run: npm run ci:e2e:run
+              env:
+                CYPRESS_ENABLE_RECORD: false
+                CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
+                CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: 'E2E: Teardown'
+              run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -1110,7 +1130,9 @@ jobs:
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1124,29 +1146,29 @@ services:
     ports:
       - 5000:5000
     #environment:
-    # uncomment to enable basic auth
-    #- REGISTRY_AUTH=htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+        # uncomment to enable basic auth
+        #- REGISTRY_AUTH=htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
 
-    # uncomment to enable tls with a certificate
-    #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
-    #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
+        # uncomment to enable tls with a certificate
+        #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
+        #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
 
-    # uncomment to enable tls with letsencrypt
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
+        # uncomment to enable tls with letsencrypt
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
     #volumes:
-    # uncomment to enable basic auth
-    # you will need to generate a \`htpasswd\` file using :
-    # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
-    #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
+        # uncomment to enable basic auth
+        # you will need to generate a \`htpasswd\` file using :
+        # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
+        #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
 
-    # uncomment to enable tls
-    #- ~/volumes/registry/certs:/certs
+        # uncomment to enable tls
+        #- ~/volumes/registry/certs:/certs
 
-    # uncomment to persist data to a volume
-    #- ~/volumes/registry/data:/var/lib/registry
+        # uncomment to persist data to a volume
+        #- ~/volumes/registry/data:/var/lib/registry
   registry-ui:
     image: konradkleine/docker-registry-frontend:v2
     environment:
@@ -1155,6 +1177,7 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
+
 ",
     "stateCleared": "modified",
   },
@@ -1167,48 +1190,48 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Maven Angular NP
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-  pipeline:
-    name: sampleMysql pipeline
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
-    timeout-minutes: 40
-    env:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: DETECT
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: NODE_VERSION
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: JAVA_VERSION
-      - name: Install Node.js packages
-        run: npm install
-      - name: Run backend test
-        run: |
-          chmod +x mvnw
-          npm run ci:backend:test
-      - name: Run frontend test
-        run: npm run ci:frontend:test
-      - name: Package application
-        run: npm run java:jar:prod
-      - name: "E2E: Package"
-        run: npm run ci:e2e:package
-      - name: "E2E: Prepare"
-        run: npm run ci:e2e:prepare
-      - name: "E2E: Run"
-        run: npm run ci:e2e:run
+    pipeline:
+        name: sampleMysql pipeline
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        timeout-minutes: 40
         env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: "E2E: Teardown"
-        run: npm run ci:e2e:teardown
+            NODE_VERSION: NODE_VERSION
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+            NG_CLI_ANALYTICS: false
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: NODE_VERSION
+            - uses: actions/setup-java@v4
+              with:
+                  distribution: 'temurin'
+                  java-version: JAVA_VERSION
+            - name: Install Node.js packages
+              run: npm install
+            - name: Run backend test
+              run: |
+                  chmod +x mvnw
+                  npm run ci:backend:test
+            - name: Run frontend test
+              run: npm run ci:frontend:test
+            - name: Package application
+              run: npm run java:jar:prod
+            - name: 'E2E: Package'
+              run: npm run ci:e2e:package
+            - name: 'E2E: Prepare'
+              run: npm run ci:e2e:prepare
+            - name: 'E2E: Run'
+              run: npm run ci:e2e:run
+              env:
+                CYPRESS_ENABLE_RECORD: false
+                CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
+                CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: 'E2E: Teardown'
+              run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -1219,7 +1242,9 @@ jobs:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1234,88 +1259,88 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: Maven Angular NP
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-  pipeline:
-    name: sampleMysql pipeline
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
-    timeout-minutes: 40
-    env:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: DETECT
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: NODE_VERSION
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: JAVA_VERSION
-      - name: Install Node.js packages
-        run: npm install
-      - name: Install Snyk CLI
-        run: |
-          curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
-          chmod +x snyk
-      - name: Snyk test
-        continue-on-error: true
-        run: ./snyk test --all-projects
+    pipeline:
+        name: sampleMysql pipeline
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        timeout-minutes: 40
         env:
-          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
-      - name: Snyk monitor
-        continue-on-error: true
-        run: ./snyk monitor --all-projects
-        env:
-          SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
-      - name: Run backend test
-        run: |
-          chmod +x mvnw
-          npm run ci:backend:test
-      - name: Run frontend test
-        run: npm run ci:frontend:test
-      - name: Analyze code with SonarQube
-        env:
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
-        run: |
-          if [ ! -z "$SONAR_TOKEN" ]; then
-              ./mvnw -ntp initialize sonar:sonar -Dsonar.host.url=http://sonar.com:9000
-          else
-              echo No SONAR_TOKEN, skipping...
-          fi
-      - name: Package application
-        run: npm run java:jar:prod
-      - name: Deploy to Heroku
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
-        run: |
-          if [ ! -z "$HEROKU_API_KEY" ]; then
-              ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
-          else
-              echo No HEROKU_API_KEY, skipping...
-          fi
-      - name: Build and publish docker image
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
-        run: |
-          GIT_TAG=:\${GITHUB_REF#refs/tags/}
-          DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
-          ./mvnw -ntp jib:build -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username="\${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="\${{ secrets.DOCKER_PASSWORD }}" -Pprod
-      - name: "E2E: Package"
-        run: npm run ci:e2e:package
-      - name: "E2E: Prepare"
-        run: npm run ci:e2e:prepare
-      - name: "E2E: Run"
-        run: npm run ci:e2e:run
-        env:
-          CYPRESS_ENABLE_RECORD: true
-          CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: "E2E: Teardown"
-        run: npm run ci:e2e:teardown
+            NODE_VERSION: NODE_VERSION
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+            NG_CLI_ANALYTICS: false
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: NODE_VERSION
+            - uses: actions/setup-java@v4
+              with:
+                  distribution: 'temurin'
+                  java-version: JAVA_VERSION
+            - name: Install Node.js packages
+              run: npm install
+            - name: Install Snyk CLI
+              run: |
+                  curl --compressed https://static.snyk.io/cli/latest/snyk-linux -o snyk
+                  chmod +x snyk
+            - name: Snyk test
+              continue-on-error: true
+              run: ./snyk test --all-projects
+              env:
+                  SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+            - name: Snyk monitor
+              continue-on-error: true
+              run: ./snyk monitor --all-projects
+              env:
+                  SNYK_TOKEN: \${{ secrets.SNYK_TOKEN }}
+            - name: Run backend test
+              run: |
+                  chmod +x mvnw
+                  npm run ci:backend:test
+            - name: Run frontend test
+              run: npm run ci:frontend:test
+            - name: Analyze code with SonarQube
+              env:
+                  GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: \${{ secrets.SONAR_TOKEN }}
+              run: |
+                  if [ ! -z "$SONAR_TOKEN" ]; then
+                      ./mvnw -ntp initialize sonar:sonar -Dsonar.host.url=http://sonar.com:9000
+                  else
+                      echo No SONAR_TOKEN, skipping...
+                  fi
+            - name: Package application
+              run: npm run java:jar:prod
+            - name: Deploy to Heroku
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              env:
+                  HEROKU_API_KEY: \${{ secrets.HEROKU_API_KEY }}
+              run: |
+                  if [ ! -z "$HEROKU_API_KEY" ]; then
+                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql
+                  else
+                      echo No HEROKU_API_KEY, skipping...
+                  fi
+            - name: Build and publish docker image
+              if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+              run: |
+                  GIT_TAG=:\${GITHUB_REF#refs/tags/}
+                  DOCKER_TAG=\${GIT_TAG#:refs/heads/main}
+                  ./mvnw -ntp jib:build -Djib.to.image=jhipster-publish-docker\${DOCKER_TAG} -Djib.to.auth.username="\${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="\${{ secrets.DOCKER_PASSWORD }}" -Pprod
+            - name: 'E2E: Package'
+              run: npm run ci:e2e:package
+            - name: 'E2E: Prepare'
+              run: npm run ci:e2e:prepare
+            - name: 'E2E: Run'
+              run: npm run ci:e2e:run
+              env:
+                CYPRESS_ENABLE_RECORD: true
+                CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
+                CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: 'E2E: Teardown'
+              run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -1326,7 +1351,9 @@ jobs:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1359,29 +1386,29 @@ services:
     ports:
       - 5000:5000
     #environment:
-    # uncomment to enable basic auth
-    #- REGISTRY_AUTH=htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+        # uncomment to enable basic auth
+        #- REGISTRY_AUTH=htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
 
-    # uncomment to enable tls with a certificate
-    #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
-    #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
+        # uncomment to enable tls with a certificate
+        #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
+        #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
 
-    # uncomment to enable tls with letsencrypt
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
+        # uncomment to enable tls with letsencrypt
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
     #volumes:
-    # uncomment to enable basic auth
-    # you will need to generate a \`htpasswd\` file using :
-    # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
-    #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
+        # uncomment to enable basic auth
+        # you will need to generate a \`htpasswd\` file using :
+        # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
+        #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
 
-    # uncomment to enable tls
-    #- ~/volumes/registry/certs:/certs
+        # uncomment to enable tls
+        #- ~/volumes/registry/certs:/certs
 
-    # uncomment to persist data to a volume
-    #- ~/volumes/registry/data:/var/lib/registry
+        # uncomment to persist data to a volume
+        #- ~/volumes/registry/data:/var/lib/registry
   registry-ui:
     image: konradkleine/docker-registry-frontend:v2
     environment:
@@ -1390,6 +1417,7 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
+
 ",
     "stateCleared": "modified",
   },
@@ -1402,48 +1430,48 @@ exports[`generator - CI-CD GitHub Actions tests GitHub Actions: autoconfigure sh
     "contents": "name: Application CI
 on: [push, pull_request]
 jobs:
-  pipeline:
-    name: sampleMysql pipeline
-    runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
-    timeout-minutes: 40
-    env:
-      NODE_VERSION: NODE_VERSION
-      SPRING_OUTPUT_ANSI_ENABLED: DETECT
-      SPRING_JPA_SHOW_SQL: false
-      JHI_DISABLE_WEBPACK_LOGS: true
-      NG_CLI_ANALYTICS: false
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: NODE_VERSION
-      - uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: JAVA_VERSION
-      - name: Install Node.js packages
-        run: npm install
-      - name: Run backend test
-        run: |
-          chmod +x mvnw
-          npm run ci:backend:test
-      - name: Run frontend test
-        run: npm run ci:frontend:test
-      - name: Package application
-        run: npm run java:jar:prod
-      - name: "E2E: Package"
-        run: npm run ci:e2e:package
-      - name: "E2E: Prepare"
-        run: npm run ci:e2e:prepare
-      - name: "E2E: Run"
-        run: npm run ci:e2e:run
+    pipeline:
+        name: sampleMysql pipeline
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        timeout-minutes: 40
         env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: "E2E: Teardown"
-        run: npm run ci:e2e:teardown
+            NODE_VERSION: NODE_VERSION
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+            NG_CLI_ANALYTICS: false
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: NODE_VERSION
+            - uses: actions/setup-java@v4
+              with:
+                  distribution: 'temurin'
+                  java-version: JAVA_VERSION
+            - name: Install Node.js packages
+              run: npm install
+            - name: Run backend test
+              run: |
+                  chmod +x mvnw
+                  npm run ci:backend:test
+            - name: Run frontend test
+              run: npm run ci:frontend:test
+            - name: Package application
+              run: npm run java:jar:prod
+            - name: 'E2E: Package'
+              run: npm run ci:e2e:package
+            - name: 'E2E: Prepare'
+              run: npm run ci:e2e:prepare
+            - name: 'E2E: Run'
+              run: npm run ci:e2e:run
+              env:
+                CYPRESS_ENABLE_RECORD: false
+                CYPRESS_PROJECT_ID: \${{ secrets.CYPRESS_PROJECT_ID }}
+                CYPRESS_RECORD_KEY: \${{ secrets.CYPRESS_RECORD_KEY }}
+            - name: 'E2E: Teardown'
+              run: npm run ci:e2e:teardown
 ",
     "stateCleared": "modified",
   },
@@ -1454,7 +1482,9 @@ jobs:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1466,82 +1496,86 @@ jobs:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: Gradle Angular NPM should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - .gradle/
+    "contents": "
+cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+        - .gradle/
 stages:
-  - check
-  - build
-  - test
-  - analyze
-  - package
-  - release
-  - deploy
+    - check
+    - build
+    - test
+    - analyze
+    - package
+    - release
+    - deploy
 before_script:
-  - export NG_CLI_ANALYTICS="false"
-  - export GRADLE_USER_HOME=\`pwd\`/.gradle
-  - ./gradlew npm_install -PnodeInstall --no-daemon
+    - export NG_CLI_ANALYTICS="false"
+    - export GRADLE_USER_HOME=\`pwd\`/.gradle
+    - ./gradlew npm_install -PnodeInstall --no-daemon
 nohttp:
-  stage: check
-  script:
-    - ./gradlew checkstyleNohttp --no-daemon
+    stage: check
+    script:
+        - ./gradlew checkstyleNohttp --no-daemon
 
 gradle-compile:
-  stage: build
-  script:
-    - ./gradlew compileJava -x check -PnodeInstall --no-daemon
-  artifacts:
-    paths:
-      - build/classes/
-      - build/generated/
-    expire_in: 1 day
+    stage: build
+    script:
+        - ./gradlew compileJava -x check -PnodeInstall --no-daemon
+    artifacts:
+        paths:
+          - build/classes/
+          - build/generated/
+        expire_in: 1 day
 
 gradle-test:
-  stage: test
-  script:
-    - ./gradlew test -PnodeInstall --no-daemon
-  artifacts:
-    reports:
-      junit: build/test-results/test/TEST-*.xml
-    paths:
-      - build/test-results/
-      - build/jacoco/
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./gradlew test -PnodeInstall --no-daemon
+    artifacts:
+        reports:
+            junit: build/test-results/test/TEST-*.xml
+        paths:
+            - build/test-results/
+            - build/jacoco/
+        expire_in: 1 day
 
 gradle-integration-test:
-  stage: test
-  script:
-    - ./gradlew integrationTest -PnodeInstall --no-daemon
-  artifacts:
-    reports:
-      junit: build/test-results/integrationTest/TEST-*.xml
-    paths:
-      - build/test-results/
-      - build/jacoco/
-    expire_in: 1 day
+
+    stage: test
+    script:
+        - ./gradlew integrationTest -PnodeInstall --no-daemon
+    artifacts:
+        reports:
+            junit: build/test-results/integrationTest/TEST-*.xml
+        paths:
+            - build/test-results/
+            - build/jacoco/
+        expire_in: 1 day
 
 frontend-test:
-  stage: test
-  script:
-    - ./gradlew npm_run_test -PnodeInstall --no-daemon
-  artifacts:
-    reports:
-      junit: build/test-results/TESTS-results-jest.xml
-    paths:
-      - build/test-results/
-      - build/jacoco/
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./gradlew npm_run_test -PnodeInstall --no-daemon
+    artifacts:
+        reports:
+            junit: build/test-results/TESTS-results-jest.xml
+        paths:
+            - build/test-results/
+            - build/jacoco/
+        expire_in: 1 day
+
 
 gradle-package:
-  stage: package
-  script:
-    - ./gradlew bootJar -Pprod -PnodeInstall -x check --no-daemon
-  artifacts:
-    paths:
-      - build/libs/*.jar
-      - build/classes
-    expire_in: 1 day
+    stage: package
+    script:
+        - ./gradlew bootJar -Pprod -PnodeInstall -x check --no-daemon
+    artifacts:
+        paths:
+            - build/libs/*.jar
+            - build/classes
+        expire_in: 1 day
+
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
 #    stage: release
@@ -1563,7 +1597,9 @@ gradle-package:
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1578,99 +1614,99 @@ exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM inside D
     "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
 
 cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - .maven/
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+        - .maven/
 stages:
-  - check
-  - build
-  - test
-  - analyze
-  - package
-  - release
-  - deploy
+    - check
+    - build
+    - test
+    - analyze
+    - package
+    - release
+    - deploy
 before_script:
-  - export NG_CLI_ANALYTICS="false"
-  - export MAVEN_USER_HOME=\`pwd\`/.maven
+    - export NG_CLI_ANALYTICS="false"
+    - export MAVEN_USER_HOME=\`pwd\`/.maven
 
 nohttp:
-  stage: check
-  script:
-    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+    stage: check
+    script:
+        - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
 dependency-scanning:
-  stage: check
-  script:
-    - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
-    - chmod +x snyk
-    - ./snyk test --all-projects
-    - ./snyk monitor --all-projects
-  allow_failure: true
+    stage: check
+    script:
+        - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+        - chmod +x snyk
+        - ./snyk test --all-projects
+        - ./snyk monitor --all-projects
+    allow_failure: true
 
 maven-compile:
-  stage: build
-  script:
-    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/classes/
-      - target/generated-sources/
-    expire_in: 1 day
+    stage: build
+    script:
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/classes/
+            - target/generated-sources/
+        expire_in: 1 day
 
 maven-test:
-  services:
-    - docker:dind
+    services:
+        - docker:dind
 
-  variables:
-    # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: "tcp://docker:2375"
-    # Improve performance with overlayfs.
-    DOCKER_DRIVER: overlay2
+    variables:
+        # Instruct Testcontainers to use the daemon of DinD.
+        DOCKER_HOST: 'tcp://docker:2375'
+        # Improve performance with overlayfs.
+        DOCKER_DRIVER: overlay2
 
-  stage: test
-  script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-    paths:
-      - target/surefire-reports
-      - target/failsafe-reports
-      - target/site
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
+        paths:
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
+        expire_in: 1 day
 
 frontend-test:
-  stage: test
-  script:
-    - npm install
-    - npm test
-  artifacts:
-    reports:
-      junit: target/test-results/TESTS-results-jest.xml
-    paths:
-      - target/test-results
-      - target/jacoco
-    expire_in: 1 day
+    stage: test
+    script:
+        - npm install
+        - npm test
+    artifacts:
+        reports:
+            junit: target/test-results/TESTS-results-jest.xml
+        paths:
+            - target/test-results
+            - target/jacoco
+        expire_in: 1 day
 sonar-analyze:
-  stage: analyze
-  dependencies:
-    - maven-test
-    - frontend-test
-  script:
-    - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
-  allow_failure: true
+    stage: analyze
+    dependencies:
+        - maven-test
+        - frontend-test
+    script:
+        - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+    allow_failure: true
 
 maven-package:
-  stage: package
-  script:
-    - ./mvnw -ntp verify deploy -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/*.jar
-      - target/classes
-    expire_in: 1 day
+    stage: package
+    script:
+        - ./mvnw -ntp verify deploy -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.jar
+            - target/classes
+        expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
@@ -1684,12 +1720,12 @@ maven-package:
 #        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
 
 deploy-to-production:
-  stage: deploy
-  script:
-    - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
-  environment:
-    name: production
-  when: manual
+    stage: deploy
+    script:
+      - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
+    environment:
+        name: production
+    when: manual
 ",
     "stateCleared": "modified",
   },
@@ -1700,7 +1736,9 @@ deploy-to-production:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1731,75 +1769,78 @@ deploy-to-production:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - .maven/
+    "contents": "
+cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+        - .maven/
 stages:
-  - check
-  - build
-  - test
-  - analyze
-  - package
-  - release
-  - deploy
+    - check
+    - build
+    - test
+    - analyze
+    - package
+    - release
+    - deploy
 before_script:
-  - export NG_CLI_ANALYTICS="false"
-  - export MAVEN_USER_HOME=\`pwd\`/.maven
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
+    - export NG_CLI_ANALYTICS="false"
+    - export MAVEN_USER_HOME=\`pwd\`/.maven
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
 
 nohttp:
-  stage: check
-  script:
-    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+    stage: check
+    script:
+        - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-compile:
-  stage: build
-  script:
-    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/classes/
-      - target/generated-sources/
-    expire_in: 1 day
+    stage: build
+    script:
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/classes/
+            - target/generated-sources/
+        expire_in: 1 day
 
 maven-test:
-  stage: test
-  script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-    paths:
-      - target/surefire-reports
-      - target/failsafe-reports
-      - target/site
-    expire_in: 1 day
+
+    stage: test
+    script:
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
+        paths:
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
+        expire_in: 1 day
 
 frontend-test:
-  stage: test
-  script:
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit: target/test-results/TESTS-results-jest.xml
-    paths:
-      - target/test-results
-      - target/jacoco
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit: target/test-results/TESTS-results-jest.xml
+        paths:
+            - target/test-results
+            - target/jacoco
+        expire_in: 1 day
 
 maven-package:
-  stage: package
-  script:
-    - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/*.jar
-      - target/classes
-    expire_in: 1 day
+    stage: package
+    script:
+        - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.jar
+            - target/classes
+        expire_in: 1 day
+
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
 #    stage: release
@@ -1821,7 +1862,9 @@ maven-package:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1833,92 +1876,94 @@ maven-package:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular NPM with full options should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - .maven/
+    "contents": "
+cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+        - .maven/
 stages:
-  - check
-  - build
-  - test
-  - analyze
-  - package
-  - release
-  - deploy
+    - check
+    - build
+    - test
+    - analyze
+    - package
+    - release
+    - deploy
 before_script:
-  - export NG_CLI_ANALYTICS="false"
-  - export MAVEN_USER_HOME=\`pwd\`/.maven
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
-  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
+    - export NG_CLI_ANALYTICS="false"
+    - export MAVEN_USER_HOME=\`pwd\`/.maven
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
 
 nohttp:
-  stage: check
-  script:
-    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+    stage: check
+    script:
+        - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
 dependency-scanning:
-  stage: check
-  script:
-    - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
-    - chmod +x snyk
-    - ./snyk test --all-projects
-    - ./snyk monitor --all-projects
-  allow_failure: true
+    stage: check
+    script:
+        - curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \\" | tr -d ' ')
+        - chmod +x snyk
+        - ./snyk test --all-projects
+        - ./snyk monitor --all-projects
+    allow_failure: true
 
 maven-compile:
-  stage: build
-  script:
-    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/classes/
-      - target/generated-sources/
-    expire_in: 1 day
+    stage: build
+    script:
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/classes/
+            - target/generated-sources/
+        expire_in: 1 day
 
 maven-test:
-  stage: test
-  script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-    paths:
-      - target/surefire-reports
-      - target/failsafe-reports
-      - target/site
-    expire_in: 1 day
+
+    stage: test
+    script:
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
+        paths:
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
+        expire_in: 1 day
 
 frontend-test:
-  stage: test
-  script:
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit: target/test-results/TESTS-results-jest.xml
-    paths:
-      - target/test-results
-      - target/jacoco
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit: target/test-results/TESTS-results-jest.xml
+        paths:
+            - target/test-results
+            - target/jacoco
+        expire_in: 1 day
 sonar-analyze:
-  stage: analyze
-  dependencies:
-    - maven-test
-    - frontend-test
-  script:
-    - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
-  allow_failure: true
+    stage: analyze
+    dependencies:
+        - maven-test
+        - frontend-test
+    script:
+        - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+    allow_failure: true
 
 maven-package:
-  stage: package
-  script:
-    - ./mvnw -ntp verify deploy -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/*.jar
-      - target/classes
-    expire_in: 1 day
+    stage: package
+    script:
+        - ./mvnw -ntp verify deploy -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.jar
+            - target/classes
+        expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
@@ -1932,12 +1977,12 @@ maven-package:
 #        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
 
 deploy-to-production:
-  stage: deploy
-  script:
-    - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
-  environment:
-    name: production
-  when: manual
+    stage: deploy
+    script:
+      - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=sample-mysql -Dmaven.repo.local=$MAVEN_USER_HOME
+    environment:
+        name: production
+    when: manual
 ",
     "stateCleared": "modified",
   },
@@ -1948,7 +1993,9 @@ deploy-to-production:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -1982,82 +2029,83 @@ exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular Yarn inside 
     "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
 
 cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - .maven/
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+        - .maven/
 stages:
-  - check
-  - build
-  - test
-  - analyze
-  - package
-  - release
-  - deploy
+    - check
+    - build
+    - test
+    - analyze
+    - package
+    - release
+    - deploy
 before_script:
-  - export NG_CLI_ANALYTICS="false"
-  - export MAVEN_USER_HOME=\`pwd\`/.maven
+    - export NG_CLI_ANALYTICS="false"
+    - export MAVEN_USER_HOME=\`pwd\`/.maven
 
 nohttp:
-  stage: check
-  script:
-    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+    stage: check
+    script:
+        - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-compile:
-  stage: build
-  script:
-    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/classes/
-      - target/generated-sources/
-    expire_in: 1 day
+    stage: build
+    script:
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/classes/
+            - target/generated-sources/
+        expire_in: 1 day
 
 maven-test:
-  services:
-    - docker:dind
+    services:
+        - docker:dind
 
-  variables:
-    # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: "tcp://docker:2375"
-    # Improve performance with overlayfs.
-    DOCKER_DRIVER: overlay2
+    variables:
+        # Instruct Testcontainers to use the daemon of DinD.
+        DOCKER_HOST: 'tcp://docker:2375'
+        # Improve performance with overlayfs.
+        DOCKER_DRIVER: overlay2
 
-  stage: test
-  script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-    paths:
-      - target/surefire-reports
-      - target/failsafe-reports
-      - target/site
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
+        paths:
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
+        expire_in: 1 day
 
 frontend-test:
-  stage: test
-  script:
-    - npm install
-    - npm test
-  artifacts:
-    reports:
-      junit: target/test-results/TESTS-results-jest.xml
-    paths:
-      - target/test-results
-      - target/jacoco
-    expire_in: 1 day
+    stage: test
+    script:
+        - npm install
+        - npm test
+    artifacts:
+        reports:
+            junit: target/test-results/TESTS-results-jest.xml
+        paths:
+            - target/test-results
+            - target/jacoco
+        expire_in: 1 day
 
 maven-package:
-  stage: package
-  script:
-    - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/*.jar
-      - target/classes
-    expire_in: 1 day
+    stage: package
+    script:
+        - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.jar
+            - target/classes
+        expire_in: 1 day
+
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
 #    stage: release
@@ -2079,7 +2127,9 @@ maven-package:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -2094,70 +2144,70 @@ exports[`generator - CI-CD GitLab CI tests GitLab CI: npm skip server should mat
     "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
 
 before_script:
-  - export NG_CLI_ANALYTICS="false"
-  - export MAVEN_USER_HOME=\`pwd\`/.maven
+    - export NG_CLI_ANALYTICS="false"
+    - export MAVEN_USER_HOME=\`pwd\`/.maven
 
 nohttp:
-  stage: check
-  script:
-    - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+    stage: check
+    script:
+        - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
 
 maven-compile:
-  stage: build
-  script:
-    - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/classes/
-      - target/generated-sources/
-    expire_in: 1 day
+    stage: build
+    script:
+        - ./mvnw -ntp compile -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/classes/
+            - target/generated-sources/
+        expire_in: 1 day
 
 maven-test:
-  services:
-    - docker:dind
+    services:
+        - docker:dind
 
-  variables:
-    # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: "tcp://docker:2375"
-    # Improve performance with overlayfs.
-    DOCKER_DRIVER: overlay2
+    variables:
+        # Instruct Testcontainers to use the daemon of DinD.
+        DOCKER_HOST: 'tcp://docker:2375'
+        # Improve performance with overlayfs.
+        DOCKER_DRIVER: overlay2
 
-  stage: test
-  script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-    paths:
-      - target/surefire-reports
-      - target/failsafe-reports
-      - target/site
-    expire_in: 1 day
+    stage: test
+    script:
+        - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit:
+                - target/surefire-reports/TEST-*.xml
+                - target/failsafe-reports/TEST-*.xml
+        paths:
+            - target/surefire-reports
+            - target/failsafe-reports
+            - target/site
+        expire_in: 1 day
 
 frontend-test:
-  stage: test
-  script:
-    - npm install
-    - npm test
-  artifacts:
-    reports:
-      junit: target/test-results/TESTS-results-jest.xml
-    paths:
-      - target/test-results
-      - target/jacoco
-    expire_in: 1 day
+    stage: test
+    script:
+        - npm install
+        - npm test
+    artifacts:
+        reports:
+            junit: target/test-results/TESTS-results-jest.xml
+        paths:
+            - target/test-results
+            - target/jacoco
+        expire_in: 1 day
 
 maven-package:
-  stage: package
-  script:
-    - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-  artifacts:
-    paths:
-      - target/*.jar
-      - target/classes
-    expire_in: 1 day
+    stage: package
+    script:
+        - ./mvnw -ntp verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/*.jar
+            - target/classes
+        expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
@@ -2171,40 +2221,40 @@ maven-package:
 #        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
 
 cache:
-  paths:
-    - node_modules/
+    paths:
+        - node_modules/
 stages:
-  - build
-  - test
-  - packaging
+    - build
+    - test
+    - packaging
 webapp-build:
-  stage: build
-  script:
-    - npm install
-    - npm run webapp:build
-  artifacts:
-    paths:
-      - build/
+    stage: build
+    script:
+        - npm install
+        - npm run webapp:build
+    artifacts:
+        paths:
+            - build/
 webapp-test:
-  stage: test
-  dependencies:
-    - webapp-build
-  script:
-    - npm run webapp:test
-  artifacts:
-    reports:
-      junit: build/test-results/TESTS-results-jest.xml
-    paths:
-      - build/test-results
-    expire_in: 1 day
+    stage: test
+    dependencies:
+        - webapp-build
+    script:
+        - npm run webapp:test
+    artifacts:
+        reports:
+            junit: build/test-results/TESTS-results-jest.xml
+        paths:
+            - build/test-results
+        expire_in: 1 day
 webapp-prod:
-  stage: packaging
-  script:
-    - npm run webapp:prod
-    # - add cmd to zip the app folder build/resources/main/static
-  artifacts:
-    paths:
-      - build/
+    stage: packaging
+    script:
+        - npm run webapp:prod
+        # - add cmd to zip the app folder build/resources/main/static
+    artifacts:
+        paths:
+            - build/
 ",
     "stateCleared": "modified",
   },
@@ -2233,7 +2283,9 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Gradle Angular NPM should matc
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -2301,11 +2353,11 @@ node {
     # uncomment for docker in docker
     #privileged: true
     #volumes:
-    # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
-    #- ~/volumes/jenkins_home:/var/jenkins_home
-    # mount docker sock and binary for docker in docker (only works on linux)
-    #- /var/run/docker.sock:/var/run/docker.sock
-    #- /usr/bin/docker:/usr/bin/docker
+        # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
+        #- ~/volumes/jenkins_home:/var/jenkins_home
+        # mount docker sock and binary for docker in docker (only works on linux)
+        #- /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
 ",
     "stateCleared": "modified",
   },
@@ -2415,7 +2467,9 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM inside Docke
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -2530,29 +2584,29 @@ services:
     ports:
       - 5000:5000
     #environment:
-    # uncomment to enable basic auth
-    #- REGISTRY_AUTH=htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+        # uncomment to enable basic auth
+        #- REGISTRY_AUTH=htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
 
-    # uncomment to enable tls with a certificate
-    #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
-    #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
+        # uncomment to enable tls with a certificate
+        #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
+        #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
 
-    # uncomment to enable tls with letsencrypt
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
+        # uncomment to enable tls with letsencrypt
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
     #volumes:
-    # uncomment to enable basic auth
-    # you will need to generate a \`htpasswd\` file using :
-    # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
-    #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
+        # uncomment to enable basic auth
+        # you will need to generate a \`htpasswd\` file using :
+        # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
+        #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
 
-    # uncomment to enable tls
-    #- ~/volumes/registry/certs:/certs
+        # uncomment to enable tls
+        #- ~/volumes/registry/certs:/certs
 
-    # uncomment to persist data to a volume
-    #- ~/volumes/registry/data:/var/lib/registry
+        # uncomment to persist data to a volume
+        #- ~/volumes/registry/data:/var/lib/registry
   registry-ui:
     image: konradkleine/docker-registry-frontend:v2
     environment:
@@ -2561,6 +2615,7 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
+
 ",
     "stateCleared": "modified",
   },
@@ -2574,11 +2629,11 @@ services:
     # uncomment for docker in docker
     #privileged: true
     #volumes:
-    # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
-    #- ~/volumes/jenkins_home:/var/jenkins_home
-    # mount docker sock and binary for docker in docker (only works on linux)
-    #- /var/run/docker.sock:/var/run/docker.sock
-    #- /usr/bin/docker:/usr/bin/docker
+        # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
+        #- ~/volumes/jenkins_home:/var/jenkins_home
+        # mount docker sock and binary for docker in docker (only works on linux)
+        #- /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
 ",
     "stateCleared": "modified",
   },
@@ -2688,7 +2743,9 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM should match
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -2759,11 +2816,11 @@ node {
     # uncomment for docker in docker
     #privileged: true
     #volumes:
-    # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
-    #- ~/volumes/jenkins_home:/var/jenkins_home
-    # mount docker sock and binary for docker in docker (only works on linux)
-    #- /var/run/docker.sock:/var/run/docker.sock
-    #- /usr/bin/docker:/usr/bin/docker
+        # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
+        #- ~/volumes/jenkins_home:/var/jenkins_home
+        # mount docker sock and binary for docker in docker (only works on linux)
+        #- /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
 ",
     "stateCleared": "modified",
   },
@@ -2873,7 +2930,9 @@ exports[`generator - CI-CD Jenkins tests Jenkins: Maven Angular NPM with full op
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -2985,29 +3044,29 @@ services:
     ports:
       - 5000:5000
     #environment:
-    # uncomment to enable basic auth
-    #- REGISTRY_AUTH=htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
-    #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+        # uncomment to enable basic auth
+        #- REGISTRY_AUTH=htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+        #- REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
 
-    # uncomment to enable tls with a certificate
-    #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
-    #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
+        # uncomment to enable tls with a certificate
+        #- REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt
+        #- REGISTRY_HTTP_TLS_KEY=/certs/domain.key
 
-    # uncomment to enable tls with letsencrypt
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
-    #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
+        # uncomment to enable tls with letsencrypt
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_CACHEFILE=/path/to/cache-file
+        #- REGISTRY_HTTP_TLS_LETSENCRYPT_EMAIL=mail@example.com
     #volumes:
-    # uncomment to enable basic auth
-    # you will need to generate a \`htpasswd\` file using :
-    # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
-    #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
+        # uncomment to enable basic auth
+        # you will need to generate a \`htpasswd\` file using :
+        # docker run --entrypoint htpasswd registry:2 -Bbn admin admin > ~/volumes/registry/htpasswd
+        #- ~/volumes/registry/htpasswd:/auth/htpasswd:ro
 
-    # uncomment to enable tls
-    #- ~/volumes/registry/certs:/certs
+        # uncomment to enable tls
+        #- ~/volumes/registry/certs:/certs
 
-    # uncomment to persist data to a volume
-    #- ~/volumes/registry/data:/var/lib/registry
+        # uncomment to persist data to a volume
+        #- ~/volumes/registry/data:/var/lib/registry
   registry-ui:
     image: konradkleine/docker-registry-frontend:v2
     environment:
@@ -3016,6 +3075,7 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
+
 ",
     "stateCleared": "modified",
   },
@@ -3029,11 +3089,11 @@ services:
     # uncomment for docker in docker
     #privileged: true
     #volumes:
-    # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
-    #- ~/volumes/jenkins_home:/var/jenkins_home
-    # mount docker sock and binary for docker in docker (only works on linux)
-    #- /var/run/docker.sock:/var/run/docker.sock
-    #- /usr/bin/docker:/usr/bin/docker
+        # enable persistent volume (warning: make sure that the local jenkins_home folder is created)
+        #- ~/volumes/jenkins_home:/var/jenkins_home
+        # mount docker sock and binary for docker in docker (only works on linux)
+        #- /var/run/docker.sock:/var/run/docker.sock
+        #- /usr/bin/docker:/usr/bin/docker
 ",
     "stateCleared": "modified",
   },
@@ -3185,9 +3245,9 @@ script:
 
 notifications:
   webhooks:
-    on_success: change # options: [always|never|change] default: always
-    on_failure: always # options: [always|never|change] default: always
-    on_start: false # default: false
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false
 ",
     "stateCleared": "modified",
   },
@@ -3198,7 +3258,9 @@ notifications:
     "buildTool": "gradle",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -3259,9 +3321,9 @@ script:
 
 notifications:
   webhooks:
-    on_success: change # options: [always|never|change] default: always
-    on_failure: always # options: [always|never|change] default: always
-    on_start: false # default: false
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false
 ",
     "stateCleared": "modified",
   },
@@ -3272,7 +3334,9 @@ notifications:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
@@ -3339,9 +3403,9 @@ script:
 
 notifications:
   webhooks:
-    on_success: change # options: [always|never|change] default: always
-    on_failure: always # options: [always|never|change] default: always
-    on_start: false # default: false
+    on_success: change  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false
 ",
     "stateCleared": "modified",
   },
@@ -3352,7 +3416,9 @@ notifications:
     "buildTool": "maven",
     "creationTimestamp": 1577836800000,
     "entities": [],
-    "testFrameworks": ["cypress"]
+    "testFrameworks": [
+      "cypress"
+    ]
   }
 }
 ",
