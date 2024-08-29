@@ -68,6 +68,10 @@ describe('generators - spring-cloud:gateway - jdl', () => {
           packageFolder: 'io/jhipster',
           clientFramework: 'angular',
           skipClient: false,
+          dtoSuffix: '',
+          jhiPrefix: 'jhi',
+          jhipsterVersion: '8.7.0',
+          entitySuffix: '',
           microfrontend: false,
           withAdminUi: true,
           skipUserManagement: false,
@@ -92,6 +96,8 @@ describe('generators - spring-cloud:gateway - jdl', () => {
     clientFramework angular
     databaseType sql
     enableHibernateCache true
+    jhiPrefix jhi
+    jhipsterVersion "8.7.0"
     microfrontend false
     packageName io.jhipster
     reactive false

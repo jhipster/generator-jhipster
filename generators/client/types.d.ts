@@ -10,12 +10,17 @@ type ClientFrameworkType = ['no', 'angular', 'react', 'vue', 'svelte'];
 
 type ClientFrameworkApplication = OptionWithDerivedProperties<'clientFramework', ClientFrameworkType>;
 
+export type PersistedClientApplication = {
+  withAdminUi: boolean;
+};
+
 type ApplicationClientProperties = ExportStoragePropertiesFromCommand<Command>;
 
 export type ClientApplication = ApplicationClientProperties &
   ClientFrameworkApplication &
   JavaScriptApplication &
   AngularApplication &
+  PersistedClientApplication &
   CypressApplication & {
     webappLoginRegExp: string;
     webappEnumerationsDir?: string;

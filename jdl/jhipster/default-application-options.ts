@@ -83,11 +83,8 @@ const {
 
 const commonDefaultOptions = {
   buildTool: MAVEN as string,
-  dtoSuffix: OptionValues[DTO_SUFFIX] as string,
   enableSwaggerCodegen: OptionValues[ENABLE_SWAGGER_CODEGEN] as boolean,
   enableTranslation: OptionValues[ENABLE_TRANSLATION] as boolean,
-  entitySuffix: OptionValues[ENTITY_SUFFIX] as string,
-  jhiPrefix: OptionValues[JHI_PREFIX] as string,
   messageBroker: MESSAGE_BROKER_NO as string,
   searchEngine: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
   websocket: (OptionValues[WEBSOCKET] as Record<string, string>).no,
@@ -287,7 +284,9 @@ export function getConfigForApplication(
 
 export function getConfigForServer(
   options: Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterApplicationtypeContent,
-): Partial<JSONGeneratorJhipsterContent> & JSONGeneratorJhipsterServerContent & JSONGeneratorJhipsterApplicationtypeContent {
+): Partial<JSONGeneratorJhipsterContent> &
+  Omit<JSONGeneratorJhipsterServerContent, 'jhipsterVersion' | 'baseName'> &
+  JSONGeneratorJhipsterApplicationtypeContent {
   if (options.serviceDiscoveryType === undefined) {
     if (options.applicationType === MONOLITH) {
       options.serviceDiscoveryType = NO_SERVICE_DISCOVERY;
@@ -302,10 +301,17 @@ export function getConfigForServer(
       options.serverPort = OptionValues[SERVER_PORT] as number;
     }
   }
+  options.dtoSuffix ??= OptionValues[DTO_SUFFIX] as string;
+  options.entitySuffix ??= OptionValues[ENTITY_SUFFIX] as string;
+  options.jhiPrefix ??= OptionValues[JHI_PREFIX] as string;
+
   return {
     ...commonDefaultOptions,
     ...options,
     serverPort: options.serverPort!,
+    dtoSuffix: options.dtoSuffix!,
+    entitySuffix: options.entitySuffix!,
+    jhiPrefix: options.jhiPrefix!,
     serviceDiscoveryType: options.serviceDiscoveryType!,
   };
 }

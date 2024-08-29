@@ -1,5 +1,7 @@
 import { RelationshipSide, RelationshipType } from '../basic-types/relationships.js';
 import { GENERATOR_JHIPSTER } from '../../generators/index.js';
+import { PersistedBaseApplication, PersistedServerApplication, PersistedUserManagement } from '../../generators/base-application/types.js';
+import { PersistedClientApplication } from '../../generators/client/types.js';
 
 export type JSONField = {
   fieldName: string;
@@ -72,8 +74,7 @@ export type JSONGeneratorJhipsterClientContent = {
   clientTheme?: string;
   clientThemeVariant?: string;
   microfrontend: boolean;
-  withAdminUi: boolean;
-};
+} & PersistedClientApplication;
 
 export type JSONGeneratorJhipsterPackageContent = {
   packageName: string;
@@ -82,23 +83,21 @@ export type JSONGeneratorJhipsterPackageContent = {
 
 export type JSONGeneratorJhipsterAuthenticationContent = {
   authenticationType: string;
-  skipUserManagement: boolean;
   jwtSecretKey?: string;
-};
+} & PersistedUserManagement;
 
 export type JSONGeneratorJhipsterReactiveContent = {
   reactive: boolean;
 };
 
 export type JSONGeneratorJhipsterServerContent = {
-  serverPort: number;
   serviceDiscoveryType: string;
   buildTool: string;
   enableGradleEnterprise?: boolean;
   gradleEnterpriseHost?: string;
-  dtoSuffix?: string;
   messageBroker?: string;
-};
+} & PersistedBaseApplication &
+  PersistedServerApplication;
 
 export type JSONGeneratorJhipsterTranslationContent = {
   languages?: string[];
@@ -108,11 +107,8 @@ export type JSONGeneratorJhipsterTranslationContent = {
 
 export type AbstractJSONGeneratorJhipsterContent = {
   entities?: string[];
-  jhipsterVersion?: string;
   enableSwaggerCodegen?: boolean;
   creationTimestamp?: number;
-  jhiPrefix?: string;
-  entitySuffix?: string;
   searchEngine?: string;
   testFrameworks?: string[];
   websocket?: string;

@@ -4,9 +4,17 @@ import { I18nApplication } from '../languages/types.js';
 import { SpringBootApplication } from '../server/types.js';
 import { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from './application-options.js';
 
-export type BaseApplication = {
+export type PersistedBaseApplication = {
+  dtoSuffix: string;
+  jhiPrefix: string;
   jhipsterVersion: string;
   baseName: string;
+  entitySuffix: string;
+  skipClient?: boolean;
+  skipServer?: boolean;
+};
+
+export type BaseApplication = {
   capitalizedBaseName: string;
   dasherizedBaseName: string;
   humanizedBaseName: string;
@@ -19,10 +27,6 @@ export type BaseApplication = {
   projectVersion: string;
   projectDescription: string;
 
-  jhiPrefix: string;
-  entitySuffix: string;
-  dtoSuffix: string;
-
   skipCommitHook: boolean;
   skipJhipsterDependencies: boolean;
   fakerSeed?: string;
@@ -31,8 +35,6 @@ export type BaseApplication = {
   nodePackageManager: string;
   nodeDependencies: Record<string, string>;
 
-  skipClient?: boolean;
-  skipServer?: boolean;
   monorepository?: boolean;
 
   /** Customize templates sourceFile and destinationFile */
@@ -47,7 +49,8 @@ export type BaseApplication = {
     },
     context: any,
   ) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] })[];
-} & I18nApplication;
+} & I18nApplication &
+  PersistedBaseApplication;
 
 /* ApplicationType Start */
 type MicroservicesArchitectureApplication = {
@@ -68,14 +71,18 @@ type ApplicationType = DeterministicOptionWithDerivedProperties<
 /* ApplicationType End */
 
 /* AuthenticationType Start */
+export type PersistedUserManagement = {
+  skipUserManagement: boolean;
+};
+
 type UserManagement =
-  | {
+  | ({
       skipUserManagement: true;
       generateUserManagement: false;
       generateBuiltInUserEntity?: false;
       generateBuiltInAuthorityEntity: false;
-    }
-  | {
+    } & PersistedUserManagement)
+  | ({
       skipUserManagement: false;
       generateBuiltInUserEntity?: boolean;
       generateUserManagement: true;
@@ -83,14 +90,13 @@ type UserManagement =
       userManagement: any;
       generateBuiltInAuthorityEntity: boolean;
       authority: any;
-    };
+    } & PersistedUserManagement);
 
 type JwtApplication = UserManagement & {
   jwtSecretKey: string;
 };
 
 type Oauth2Application = {
-  jwtSecretKey: string;
   generateBuiltInUserEntity?: boolean;
   user: any;
   generateBuiltInAuthorityEntity: false;
@@ -113,7 +119,12 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
+export type PersistedServerApplication = {
+  serverPort: number;
+};
+
 export type CommonClientServerApplication = BaseApplication &
+  PersistedServerApplication &
   QuirksApplication &
   AuthenticationType &
   SpringBootApplication &
@@ -126,7 +137,6 @@ export type CommonClientServerApplication = BaseApplication &
     devServerPort: number;
     pages: string[];
 
-    serverPort: number;
     backendType?: string;
     backendTypeJavaAny?: boolean;
     backendTypeSpringBoot?: boolean;
@@ -152,7 +162,6 @@ export type CommonClientServerApplication = BaseApplication &
 
     skipUserManagement?: boolean;
     syncUserWithIdp?: boolean;
-    generateUserManagement?: boolean;
   };
 
 type ServiceDiscoveryApplication = OptionWithDerivedProperties<'serviceDiscoveryType', ['no', 'eureka', 'consul']>;
