@@ -18,9 +18,9 @@
  */
 
 import type BaseGenerator from '../../base/index.js';
-import { type SpringBootApplication } from '../types.js';
+import { type CommonClientServerApplication } from '../../base-application/types.js';
 
-type UpdateServerLanguagesTaskParam = { application: SpringBootApplication & { enableTranslation: true }; control: any };
+type UpdateServerLanguagesTaskParam = { application: CommonClientServerApplication & { enableTranslation: true }; control: any };
 
 /**
  * Update Languages In MailServiceIT

@@ -1,18 +1,22 @@
 import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
 import type { AngularApplication } from '../angular/types.js';
 import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { ExportStoragePropertiesFromCommand } from '../base/api.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
+import type { Command } from './command.ts';
 
 type ClientFrameworkType = ['no', 'angular', 'react', 'vue', 'svelte'];
 
 type ClientFrameworkApplication = OptionWithDerivedProperties<'clientFramework', ClientFrameworkType>;
 
-export type ClientApplication = ClientFrameworkApplication &
+type ApplicationClientProperties = ExportStoragePropertiesFromCommand<Command>;
+
+export type ClientApplication = ApplicationClientProperties &
+  ClientFrameworkApplication &
   JavaScriptApplication &
   AngularApplication &
   CypressApplication & {
-    withAdminUi: boolean;
     webappLoginRegExp: string;
     webappEnumerationsDir?: string;
   };

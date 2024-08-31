@@ -36,7 +36,7 @@ const promptValueToMicrofrontends = answer =>
         .map(baseName => ({ baseName }))
     : [];
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {},
   configs: {
     clientFramework: {
@@ -57,6 +57,7 @@ const command: JHipsterCommandDefinition = {
         { value: VUE, name: 'Vue' },
         { value: CLIENT_FRAMEWORK_NO, name: 'No client' },
       ],
+      scope: 'storage',
     },
     microfrontend: {
       description: 'Enable microfrontend support',
@@ -71,6 +72,7 @@ const command: JHipsterCommandDefinition = {
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
         default: false,
       }),
+      scope: 'storage',
     },
     microfrontends: {
       description: 'Microfrontends to load',
@@ -95,6 +97,7 @@ const command: JHipsterCommandDefinition = {
         filter: promptValueToMicrofrontends,
         transformer: microfrontendsToPromptValue,
       }),
+      scope: 'storage',
     },
     clientTestFrameworks: {
       description: 'Client test frameworks',
@@ -105,6 +108,7 @@ const command: JHipsterCommandDefinition = {
         default: () => intersection([CYPRESS], config.testFrameworks),
       }),
       choices: [{ name: 'Cypress', value: CYPRESS }],
+      scope: 'storage',
     },
     withAdminUi: {
       description: 'Generate administrative user interface',
@@ -116,15 +120,19 @@ const command: JHipsterCommandDefinition = {
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         message: 'Do you want to generate the admin UI?',
       }),
+      scope: 'storage',
     },
     clientRootDir: {
       description: 'Client root',
       cli: {
         type: String,
       },
+      scope: 'storage',
     },
   },
   import: [GENERATOR_COMMON],
-};
+} as const;
 
-export default command;
+export type Command = typeof command;
+
+export default command as JHipsterCommandDefinition;

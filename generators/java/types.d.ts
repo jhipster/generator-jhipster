@@ -1,9 +1,13 @@
 import { RequireOneOrNone } from 'type-fest';
-import { BaseApplication } from '../base-application/types.js';
 import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
-import { EditFileCallback } from '../base/api.js';
+import { EditFileCallback, ExportStoragePropertiesFromCommand } from '../base/api.js';
 import { MavenDefinition } from '../maven/types.js';
 import { JavaAnnotation } from './support/add-java-annotation.ts';
+import { Command as OpenapiGeneratorCommand } from './generators/openapi-generator/command.js';
+import { Command as BootstrapCommand } from './generators/bootstrap/command.js';
+
+type JavaBootstrapStorageProperties = ExportStoragePropertiesFromCommand<BootstrapCommand>;
+type JavaOpenapiGeneratorStorageProperties = ExportStoragePropertiesFromCommand<OpenapiGeneratorCommand>;
 
 export type JavaDependencyVersion = {
   name: string;
@@ -33,11 +37,10 @@ export type JavaDefinition = {
 
 export type JavaNeedleOptions = GradleNeedleOptions;
 
-export type JavaApplication = BaseApplication &
+export type JavaApplication = JavaBootstrapStorageProperties &
   GradleApplication & {
     javaVersion: string;
 
-    packageName: string;
     packageFolder: string;
     entityPackages: string[];
 

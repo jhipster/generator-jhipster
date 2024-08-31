@@ -16,22 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asCommand } from '../../../type-utils.js';
+import { JHipsterCommandDefinition } from './base/api.js';
 
-const command = {
-  configs: {
-    addOpenapiGeneratorPlugin: {
-      cli: {
-        type: Boolean,
-        hide: true,
-      },
-      default: true,
-      scope: 'storage',
-    },
-  },
-  import: [],
-} as const;
-
-export type Command = typeof command;
-
-export default asCommand(command);
+/**
+ * Type inferring function to create a JHipster command definition.
+ *
+ * @param {JHipsterCommandDefinition} command
+ * @returns {JHipsterCommandDefinition}
+ */
+export const asCommand = (command: JHipsterCommandDefinition): JHipsterCommandDefinition => command;

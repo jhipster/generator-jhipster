@@ -598,12 +598,12 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     return Object.entries(configs)
       .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {
-        const promptSpec = typeof def.prompt === 'function' ? def.prompt(this as any, def) : { ...def.prompt };
+        let promptSpec = typeof def.prompt === 'function' ? def.prompt(this as any, def) : { ...def.prompt };
         let storage: any;
         if ((def.scope ?? 'storage') === 'storage') {
           storage = this.config;
           if (promptSpec.default === undefined) {
-            promptSpec.default = () => (this as any).jhipsterConfigWithDefaults?.[name];
+            promptSpec = { ...promptSpec, default: () => (this as any).jhipsterConfigWithDefaults?.[name] };
           }
         } else if (def.scope === 'blueprint') {
           storage = this.blueprintStorage;
@@ -631,7 +631,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   dateFormatForLiquibase(reproducible?: boolean) {
     const control = this.sharedData.getControl();
-    reproducible = reproducible ?? control.reproducible;
+    reproducible = reproducible ?? Boolean(control.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
