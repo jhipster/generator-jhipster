@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../base/api.js';
+import { asCommand } from '../../../type-utils.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     addOpenapiGeneratorPlugin: {
       cli: {
@@ -30,6 +30,8 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [],
-};
+} as const;
 
-export default command;
+export type Command = typeof command;
+
+export default asCommand(command);

@@ -1,6 +1,9 @@
 import type { ArgumentSpec, BaseFeatures, BaseOptions, CliOptionSpec } from 'yeoman-generator';
-import type { RequireAtLeastOne, SetOptional } from 'type-fest';
+import type { RequireAtLeastOne, SetOptional, TaggedUnion } from 'type-fest';
 import type CoreGenerator from '../base-core/index.js';
+
+type ConfigScope = 'storage' | 'blueprint' | 'control' | 'generator';
+type CliSpecType = CliOptionSpec['type'];
 
 export type ApplicationWithConfig = {
   config: Record<string, string | boolean | number | string[]>;
@@ -192,13 +195,13 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
     }
 );
 
-export type JHispterChoices = string[] | { value: string; name: string }[];
+export type JHispterChoices = readonly string[] | readonly { value: string; name: string }[];
 
 export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
-  name?: string;
-  scope?: 'storage' | 'blueprint' | 'control' | 'generator';
-  env?: string;
-  choices?: JHispterChoices;
+  readonly name?: string;
+  readonly scope?: 'storage' | 'blueprint' | 'control' | 'generator';
+  readonly env?: string;
+  readonly choices?: JHispterChoices;
 };
 
 export type ValidationResult = {
@@ -209,25 +212,27 @@ export type ValidationResult = {
 };
 
 export type PromptSpec = {
-  type: 'input' | 'list' | 'confirm' | 'checkbox';
-  message: string | ((any) => string);
-  when?: boolean | ((any) => boolean);
-  default?: any | ((any) => any);
-  filter?: any | ((any) => any);
-  transformer?: any | ((any) => any);
-  validate?: any | ((any) => any);
+  readonly type: 'input' | 'list' | 'confirm' | 'checkbox';
+  readonly message: string | ((any) => string);
+  readonly when?: boolean | ((any) => boolean);
+  readonly default?: any | ((any) => any);
+  readonly filter?: any | ((any) => any);
+  readonly transformer?: any | ((any) => any);
+  readonly validate?: any | ((any) => any);
 };
 
 export type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: 'storage' | 'blueprint' | 'generator' };
 
 export type ConfigSpec = {
-  description?: string;
-  choices?: JHispterChoices;
+  readonly description?: string;
+  readonly choices?: JHispterChoices;
 
-  cli?: SetOptional<CliOptionSpec, 'name'> & { env?: string };
-  argument?: JHipsterArgumentConfig;
-  prompt?: PromptSpec | ((gen: CoreGenerator & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec) => PromptSpec);
-  scope?: 'storage' | 'blueprint' | 'generator';
+  readonly cli?: SetOptional<CliOptionSpec, 'name'> & { env?: string };
+  readonly argument?: JHipsterArgumentConfig;
+  readonly prompt?:
+    | PromptSpec
+    | ((gen: CoreGenerator & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec) => PromptSpec);
+  readonly scope?: 'storage' | 'blueprint' | 'generator';
   /**
    * The callback receives the generator as input for 'generator' scope.
    * The callback receives jhipsterConfigWithDefaults as input for 'storage' (default) scope.
@@ -236,11 +241,16 @@ export type ConfigSpec = {
    * Default value will not be applied to generator (using 'generator' scope) in initializing priority. Use cli.default instead.
    * Default value will be application to templates context object (application) in loading priority.
    */
-  default?: string | boolean | number | string[] | ((this: CoreGenerator | void, ctx: any) => string | boolean | number | string[]);
+  readonly default?:
+    | string
+    | boolean
+    | number
+    | readonly string[]
+    | ((this: CoreGenerator | void, ctx: any) => string | boolean | number | readonly string[]);
   /**
    * Configure the generator according to the selected configuration.
    */
-  configure?: (gen: CoreGenerator) => void;
+  readonly configure?: (gen: CoreGenerator) => void;
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
@@ -250,26 +260,69 @@ export type JHipsterOptions = Record<string, JHipsterOption>;
 export type JHipsterConfigs = Record<string, RequireAtLeastOne<ConfigSpec, 'argument' | 'cli' | 'prompt'>>;
 
 export type JHipsterCommandDefinition = {
-  arguments?: JHipsterArguments;
-  options?: JHipsterOptions;
-  configs?: JHipsterConfigs;
+  readonly arguments?: JHipsterArguments;
+  readonly options?: JHipsterOptions;
+  readonly configs?: JHipsterConfigs;
   /**
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  import?: string[];
+  readonly import?: readonly string[];
   /**
    * @experimental
    * Compose with generator.
    * @example ['server', 'jhipster-blueprint:server']
    */
-  compose?: string[];
+  readonly compose?: readonly string[];
   /**
    * Override options from the generator been blueprinted.
    */
-  override?: boolean;
+  readonly override?: boolean;
   /**
    * Load old options definition (yeoman's `this.options()`) from the generator.
    */
-  loadGeneratorOptions?: boolean;
+  readonly loadGeneratorOptions?: boolean;
 };
+
+/**
+ * A simplified version of the `JHipsterCommandDefinition` type for types parsing.
+ */
+type ParseableConfig = {
+  type?: CliSpecType;
+  cli?: {
+    type: CliSpecType;
+  };
+  scope: ConfigScope;
+};
+type ParseableCommand = {
+  readonly options?: Record<any, ParseableConfig>;
+  readonly configs?: Record<any, ParseableConfig>;
+};
+
+/** Extract contructor return type, eg: Boolean, String */
+type ConstructorReturn<T> = T extends new () => infer R ? R : any;
+type FilteredConfigScope = ConfigScope | undefined;
+/** Add name to Options/Configs */
+type TaggedParseableConfigUnion<D> = D extends Record<string, any> ? TaggedUnion<'name', D> : never;
+/** Get union of Options and Configs */
+type CommandUnion<C extends ParseableCommand> = TaggedParseableConfigUnion<C['configs']> | TaggedParseableConfigUnion<C['options']>;
+type GetType<C extends ParseableConfig> =
+  C extends Record<'type', CliSpecType> ? C['type'] : C extends Record<'cli', Record<'type', CliSpecType>> ? C['cli']['type'] : never;
+// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
+type WrapperToPrimitive<T> = T extends boolean ? Boolean : T extends String ? string : T extends Number ? number : T;
+
+type UnionToObject<U extends { name: string; scope: ConfigScope }> = {
+  [K in U as K['name']]?: WrapperToPrimitive<ConstructorReturn<GetType<K>>>;
+};
+
+/** Filter Options/Config by scope */
+type FilterScope<D, S extends FilteredConfigScope> =
+  D extends Record<'scope', S> ? D : D extends Record<'scope', ConfigScope> ? never : S extends undefined ? D : never;
+
+export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'storage'>>;
+
+export type ExportGeneratorPropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'generator'>>;
+
+export type ExportControlPropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'control'>>;
+
+export type ExportBlueprintPropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'blueprint'>>;

@@ -1,11 +1,14 @@
 import type { Entity } from '../base-application/index.ts';
+import { ExportControlPropertiesFromCommand } from './api.js';
+import type { Command } from './command.ts';
 
-export type Control = {
+type BaseApplicationControlProperties = ExportControlPropertiesFromCommand<Command>;
+
+export type Control = BaseApplicationControlProperties & {
   existingProject: boolean;
   ignoreNeedlesError: boolean;
   jhipsterOldVersion: string | null;
   useVersionPlaceholders?: boolean;
-  reproducible?: boolean;
   /**
    * Configure blueprints once per application.
    */

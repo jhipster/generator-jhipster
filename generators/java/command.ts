@@ -16,11 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JHipsterCommandDefinition } from '../base/api.js';
+import { asCommand } from '../type-utils.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {},
   import: ['jhipster:java:bootstrap', 'jhipster:java:domain', 'jhipster:java:build-tool'],
 };
 
-export default command;
+export type Coomand = typeof command;
+
+export default asCommand(command);
