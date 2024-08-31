@@ -9,6 +9,15 @@ import type { Command } from './command.ts';
 export type StoredClientProperties = ExportStoragePropertiesFromCommand<Command>;
 type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<Command>;
 
+export type ClientCommandStorageResult = {
+  clientFramework: string;
+  microfrontend: boolean;
+  clientTestFrameworks: string[];
+  withAdminUi: boolean;
+  clientRootDir: string;
+  microfrontends: string[];
+};
+
 export type ClientApplication = ApplicationClientProperties &
   JavaScriptApplication &
   AngularApplication &

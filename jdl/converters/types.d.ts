@@ -1,5 +1,6 @@
 import type { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.ts';
 import type { RelationshipSide, RelationshipType } from '../basic-types/relationships.js';
+import type { ClientCommandStorageResult } from '../../generators/client/types.js';
 
 export type JSONField = {
   fieldName: string;
@@ -86,12 +87,14 @@ export type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
   microfrontends?: JSONMicrofrontend[] | null;
-} & AbstractJSONGeneratorJhipsterContent;
+} & AbstractJSONGeneratorJhipsterContent &
+  Omit<ClientCommandStorageResult, 'microfrontends'>;
 
 export type PostProcessedJSONGeneratorJhipsterContent = {
   blueprints?: string[];
   microfrontends?: string[];
-} & AbstractJSONGeneratorJhipsterContent;
+} & AbstractJSONGeneratorJhipsterContent &
+  Omit<ClientCommandStorageResult, 'microfrontends'>;
 
 export type PostProcessedJSONRootObject = {
   [YO_RC_CONFIG_KEY]: PostProcessedJSONGeneratorJhipsterContent;
