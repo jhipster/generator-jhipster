@@ -12,6 +12,15 @@ type ClientFrameworkApplication = OptionWithDerivedProperties<'clientFramework',
 
 type ApplicationClientProperties = ExportStoragePropertiesFromCommand<Command>;
 
+export type ClientCommandStorageResult = {
+  clientFramework: string;
+  microfrontend: boolean;
+  clientTestFrameworks: string[];
+  withAdminUi: boolean;
+  clientRootDir: string;
+  microfrontends: string[];
+};
+
 export type ClientApplication = ApplicationClientProperties &
   ClientFrameworkApplication &
   JavaScriptApplication &

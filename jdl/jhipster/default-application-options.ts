@@ -18,6 +18,7 @@
  */
 
 import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
+import { ClientCommandStorageResult } from '../../generators/client/types.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -50,7 +51,6 @@ const {
   CLIENT_FRAMEWORK,
   CLIENT_THEME,
   CLIENT_THEME_VARIANT,
-  WITH_ADMIN_UI,
   DATABASE_TYPE,
   DEV_DATABASE_TYPE,
   DTO_SUFFIX,
@@ -89,7 +89,7 @@ const commonDefaultOptions = {
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };
 
-export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}) {
+export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}): any & ClientCommandStorageResult {
   const applicationType = typeof customOptions === 'string' ? customOptions : customOptions.applicationType;
   if (applicationType === GATEWAY) {
     return getConfigForGatewayApplication(customOptions);
@@ -100,13 +100,37 @@ export function getConfigWithDefaults(customOptions: string | Record<string, any
   return getConfigForMonolithApplication(customOptions);
 }
 
-export function getConfigForClientApplication(options: any = {}): any {
+export function getConfigForClientCommand(options: any & Partial<ClientCommandStorageResult> = {}): any & ClientCommandStorageResult {
   if (options[SKIP_CLIENT]) {
-    options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
+    options.clientFramework = NO_CLIENT_FRAMEWORK;
+  } else if (options[CLIENT_FRAMEWORK] === undefined) {
+    if (options[APPLICATION_TYPE] === MICROSERVICE) {
+      options.clientFramework = NO_CLIENT_FRAMEWORK;
+    } else {
+      options.clientFramework = ANGULAR;
+    }
   }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
-    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
+    options.microfrontend = Boolean(options.microfrontends?.length);
   }
+  if (options[TEST_FRAMEWORKS] === undefined) {
+    options[TEST_FRAMEWORKS] = [];
+  }
+  if (options.clientTestFrameworks !== undefined) {
+    options[TEST_FRAMEWORKS] = [...new Set([...(options[TEST_FRAMEWORKS] ?? []), ...options.clientTestFrameworks])];
+  }
+  if (options.withAdminUi === undefined) {
+    if (options[APPLICATION_TYPE] === MICROSERVICE) {
+      options.withAdminUi = false;
+    } else {
+      options.withAdminUi = true;
+    }
+  }
+  return options;
+}
+
+export function getConfigForClientApplication(options: any = {}): any & ClientCommandStorageResult {
+  options = getConfigForClientCommand(options);
   const clientFramework = options[CLIENT_FRAMEWORK];
   if (clientFramework !== NO_CLIENT_FRAMEWORK) {
     if (!options[CLIENT_THEME]) {
@@ -199,10 +223,8 @@ export function getServerConfigForMonolithApplication(customOptions: any = {}): 
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
-    [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: NO_SERVICE_DISCOVERY,
-    [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
   return {
@@ -225,10 +247,8 @@ export function getConfigForMonolithApplication(customOptions: any = {}): any {
 export function getServerConfigForGatewayApplication(customOptions: any = {}): any {
   const options = {
     ...commonDefaultOptions,
-    [CLIENT_FRAMEWORK]: ANGULAR,
     [SERVER_PORT]: OptionValues[SERVER_PORT],
     [SERVICE_DISCOVERY_TYPE]: CONSUL,
-    [WITH_ADMIN_UI]: true,
     ...customOptions,
   };
   options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
@@ -241,7 +261,7 @@ export function getServerConfigForGatewayApplication(customOptions: any = {}): a
   };
 }
 
-export function getConfigForGatewayApplication(customOptions: any = {}): any {
+export function getConfigForGatewayApplication(customOptions: any = {}): any & ClientCommandStorageResult {
   let options = getServerConfigForGatewayApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -252,7 +272,7 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getServerConfigForMicroserviceApplication(customOptions: any = {}): any & ClientCommandStorageResult {
   const DEFAULT_SERVER_PORT = 8081;
   const options = {
     ...commonDefaultOptions,
@@ -260,18 +280,16 @@ export function getServerConfigForMicroserviceApplication(customOptions: any = {
     [SERVER_PORT]: DEFAULT_SERVER_PORT,
     [SERVICE_DISCOVERY_TYPE]: CONSUL,
     [SKIP_USER_MANAGEMENT]: true,
-    [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK,
     ...customOptions,
   };
 
-  options[WITH_ADMIN_UI] = false;
   return {
     ...options,
     [APPLICATION_TYPE]: MICROSERVICE,
   };
 }
 
-export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getConfigForMicroserviceApplication(customOptions: any = {}): any & ClientCommandStorageResult {
   let options = getServerConfigForMicroserviceApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);

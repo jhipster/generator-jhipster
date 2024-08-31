@@ -72,7 +72,7 @@ const command = {
         message: `Do you want to enable ${chalk.yellow('*microfrontends*')}?`,
         default: false,
       }),
-      scope: 'storage',
+      scope: 'storage', // TODO derived property, no need to store
     },
     microfrontends: {
       description: 'Microfrontends to load',

@@ -1,5 +1,6 @@
 import { RelationshipSide, RelationshipType } from '../basic-types/relationships.js';
 import { GENERATOR_JHIPSTER } from '../../generators/index.js';
+import { ClientCommandStorageResult } from '../../generators/client/types.js';
 
 export type JSONField = {
   fieldName: string;
@@ -86,12 +87,14 @@ export type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
   microfrontends?: JSONMicrofrontend[] | null;
-} & AbstractJSONGeneratorJhipsterContent;
+} & AbstractJSONGeneratorJhipsterContent &
+  Omit<ClientCommandStorageResult, 'microfrontends'>;
 
 export type PostProcessedJSONGeneratorJhipsterContent = {
   blueprints?: string[];
   microfrontends?: string[];
-} & AbstractJSONGeneratorJhipsterContent;
+} & AbstractJSONGeneratorJhipsterContent &
+  Omit<ClientCommandStorageResult, 'microfrontends'>;
 
 export type PostProcessedJSONRootObject = {
   [GENERATOR_JHIPSTER]: PostProcessedJSONGeneratorJhipsterContent;
