@@ -1,6 +1,7 @@
 import type { ArgumentSpec, BaseFeatures, BaseOptions, CliOptionSpec } from 'yeoman-generator';
-import type { RequireAtLeastOne, SetOptional, TaggedUnion } from 'type-fest';
+import type { RequireAtLeastOne, SetOptional, Simplify, TaggedUnion, TupleToUnion, ValueOf } from 'type-fest';
 import type CoreGenerator from '../base-core/index.js';
+import { MergeUnion } from './internal/merge-union.js';
 
 type ConfigScope = 'storage' | 'blueprint' | 'control' | 'generator';
 type CliSpecType = CliOptionSpec['type'];
@@ -195,7 +196,7 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
     }
 );
 
-export type JHispterChoices = readonly string[] | readonly { value: string; name: string }[];
+export type JHispterChoices = readonly [...(string | { value: string; name: string })[]];
 
 export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   readonly name?: string;
@@ -288,41 +289,198 @@ export type JHipsterCommandDefinition = {
  * A simplified version of the `JHipsterCommandDefinition` type for types parsing.
  */
 type ParseableConfig = {
-  type?: CliSpecType;
-  cli?: {
-    type: CliSpecType;
+  readonly type?: CliSpecType;
+  readonly cli?: {
+    readonly type: CliSpecType;
   };
-  scope: ConfigScope;
+  readonly choices?: JHispterChoices;
+  readonly scope: ConfigScope;
 };
+
+type ParseableConfigs = Record<string, ParseableConfig>;
+
 type ParseableCommand = {
-  readonly options?: Record<any, ParseableConfig>;
-  readonly configs?: Record<any, ParseableConfig>;
+  readonly options?: ParseableConfigs;
+  readonly configs?: ParseableConfigs;
 };
 
 /** Extract contructor return type, eg: Boolean, String */
-type ConstructorReturn<T> = T extends new () => infer R ? R : any;
+type ConstructorReturn<T> = T extends new () => infer R ? R : undefined;
 type FilteredConfigScope = ConfigScope | undefined;
 /** Add name to Options/Configs */
-type TaggedParseableConfigUnion<D> = D extends Record<string, any> ? TaggedUnion<'name', D> : never;
-/** Get union of Options and Configs */
-type CommandUnion<C extends ParseableCommand> = TaggedParseableConfigUnion<C['configs']> | TaggedParseableConfigUnion<C['options']>;
-type GetType<C extends ParseableConfig> =
-  C extends Record<'type', CliSpecType> ? C['type'] : C extends Record<'cli', Record<'type', CliSpecType>> ? C['cli']['type'] : never;
-// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
-type WrapperToPrimitive<T> = T extends boolean ? Boolean : T extends String ? string : T extends Number ? number : T;
+type TaggedParseableConfigUnion<D> = D extends Record<string, any> ? Simplify<TaggedUnion<'name', D>> : never;
 
-type UnionToObject<U extends { name: string; scope: ConfigScope }> = {
-  [K in U as K['name']]?: WrapperToPrimitive<ConstructorReturn<GetType<K>>>;
+/**
+ * @example
+ * ```ts
+ * type MergedConfigsOptions = MergeConfigsOptions<{
+ *   configs: { clientFramework: { type: 'string'; scope: 'storage'; choices: ['angular', 'no'] } };
+ *   options: { clientTestFramework: { type: 'string'; scope: 'storage'; choices: ['cypress', 'no'] } };
+ * }>
+ * ```
+ */
+type MergeConfigsOptions<D extends ParseableCommand> = Simplify<
+  D extends { configs: ParseableConfigs }
+    ? { [K in keyof D['configs']]: D['configs'][K] }
+    : never & D extends { options: ParseableConfigs }
+      ? { [K in keyof D['options']]: D['options'][K] }
+      : never
+>;
+
+type GetType<C extends ParseableConfig> =
+  C extends Record<'type', CliSpecType> ? C['type'] : C extends Record<'cli', Record<'type', CliSpecType>> ? C['cli']['type'] : undefined;
+// eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
+type WrapperToPrimitive<T> = T extends Boolean ? boolean : T extends String ? string : T extends Number ? number : T;
+
+/*
+ * @example
+ * ```ts
+ * DerivedPropertiesOf<'clientFramework', 'angular', 'angular', 'no'> =
+ * { clientFrameworkAngular: true; clientFrameworkNo: false; clientFramework: 'angular'; clientFrameworkAny: true; }
+ * ```
+ */
+type DerivedPropertiesOf<P extends string, V extends string, C extends string> = Simplify<
+  {
+    [K in C as `${P}${Capitalize<K>}`]: K extends V ? true : false;
+  } & Record<P, V> &
+    Record<`${P}Any`, V extends 'no' ? false : true>
+>;
+
+type GetChoiceValue<Choice extends string | { value: string }> = Choice extends string
+  ? Choice
+  : Choice extends { value: string }
+    ? Choice['value']
+    : never;
+
+/**
+ * @example
+ * type Normalized = NormalizeChoices<['angular', { value: 'no' }]>;
+ * type Normalized = ['angular', 'no'];
+ */
+type NormalizeChoices<Choices extends readonly [...(string | { value: string })[]]> = {
+  [Index in keyof Choices]: GetChoiceValue<Choices[Index]>;
 };
 
+/**
+ * ```ts
+ * type ExplodedConfigChoices = ExplodeConfigChoicesWithInference<['angular', 'no'], 'clientFramework'>;
+ * type ExplodedConfigChoices =
+ *   | { clientFrameworkAngular: true; clientFrameworkNo: false; clientFramework: 'angular'; clientFrameworkAny: true; }
+ *   | { clientFrameworkAngular: false; clientFrameworkNo: true; clientFramework: 'no'; clientFrameworkAny: true; }
+ * ```
+ */
+type ExplodeConfigChoicesWithInference<Choices extends [...string[]], Property extends string> = ValueOf<{
+  [Index in Exclude<keyof Choices, keyof any[]>]: Choices[Index] extends infer Choice
+    ? Choice extends string
+      ? DerivedPropertiesOf<Property, Choice, Choices[number]>
+      : never
+    : never;
+}>;
+
+/**
+ * @example
+ * ```ts
+ * type ExplodedCommandChoices = ExplodeCommandChoicesWithInference<{ clientFramework: { choices: ['angular', 'no'] }, clientTestFramework: { choices: ['cypress', 'no'] } }>
+ * {
+ *   clientFramework:
+ *     | { clientFrameworkAngular: true; clientFrameworkNo: false; clientFramework: 'angular'; clientFrameworkAny: true; };
+ *     | { clientFrameworkAngular: false; clientFrameworkNo: true; clientFramework: 'no'; clientFrameworkAny: false; }
+ *   clientTestFramework:
+ *     |{ clientTestFrameworkCypress: true; clientTestFrameworkNo: false; clientTestFramework: 'cypress'; clientTestFrameworkAny: true; };
+ *     |{ clientTestFrameworkCypress: false; clientTestFrameworkNo: true; clientTestFramework: 'no'; clientTestFrameworkAny: false; };
+ * }
+ * ```
+ */
+type ExplodeCommandChoicesWithInference<U extends ParseableConfigs> = {
+  [K in keyof U]: U[K] extends infer RequiredChoices
+    ? RequiredChoices extends { choices: JHispterChoices }
+      ? K extends infer StringKey
+        ? StringKey extends string
+          ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
+            ? // @ts-expect-error Mapped typle type is loosy https://github.com/microsoft/TypeScript/issues/27995
+              Simplify<ExplodeConfigChoicesWithInference<NormalizedChoices, StringKey>>
+            : never
+          : never
+        : never
+      : never
+    : never;
+};
+
+type DerivedPropertiesNoInferenceOf<Property extends string, Choices extends string> = Simplify<
+  {
+    [K in Choices as `${Property}${Capitalize<K>}`]: boolean;
+  } & Record<Property, Choices[number] | undefined> &
+    Record<`${Property}Any`, boolean>
+>;
+
+type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
+  [K in keyof U]: U[K] extends infer RequiredChoices
+    ? RequiredChoices extends { choices: any }
+      ? K extends infer StringKey
+        ? StringKey extends string
+          ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
+            ? // @ts-expect-error Mapped typle type is loosy https://github.com/microsoft/TypeScript/issues/27995
+              Simplify<DerivedPropertiesNoInferenceOf<StringKey, NormalizedChoices[number]>>
+            : never
+          : never
+        : never
+      : never
+    : never;
+};
+
+type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
+  [K in keyof U]?: U[K] extends Record<'choices', JHispterChoices>
+    ? TupleToUnion<U[K]['choices']>
+    : WrapperToPrimitive<ConstructorReturn<GetType<U[K]>>> extends infer T
+      ? T extends undefined
+        ? string
+        : T
+      : never;
+}>;
+
 /** Filter Options/Config by scope */
-type FilterScope<D, S extends FilteredConfigScope> =
+type FilterScope<D extends ParseableConfig, S extends FilteredConfigScope> =
   D extends Record<'scope', S> ? D : D extends Record<'scope', ConfigScope> ? never : S extends undefined ? D : never;
 
-export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'storage'>>;
+type FilterCommandScope<D extends ParseableConfigs, S extends FilteredConfigScope> = {
+  [K in keyof D as FilterScope<D[K], S> extends D[K] ? K : never]: D[K];
+};
 
-export type ExportGeneratorPropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'generator'>>;
+/** Keep Options/Config filtered by choices */
+type OnlyChoices<D, C extends boolean> = D extends { choices: JHispterChoices } ? (C extends true ? D : never) : C extends true ? never : D;
 
-export type ExportControlPropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'control'>>;
+/** Keep Options/Config filtered by choices */
+type OnlyCofigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
+  [K in keyof D as OnlyChoices<D[K], C> extends never ? never : K]: D[K];
+};
 
-export type ExportBlueprintPropertiesFromCommand<C extends ParseableCommand> = UnionToObject<FilterScope<CommandUnion<C>, 'blueprint'>>;
+export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
+  MergeConfigsOptions<C> extends infer Merged
+    ? Merged extends ParseableConfigs
+      ? FilterCommandScope<Merged, 'storage'> extends infer F
+        ? F extends ParseableConfigs
+          ? // Add value inference to properties with choices
+            // ? PrepareConfigsWithType<OnlyCofigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyCofigsWithChoice<F, true>>>
+            Simplify<
+              PrepareConfigsWithType<OnlyCofigsWithChoice<F, false>> &
+                MergeUnion<ValueOf<ExplodeCommandChoicesNoInference<OnlyCofigsWithChoice<F, true>>>>
+            >
+          : never
+        : never
+      : never
+    : never;
+
+type ExportScopedPropertiesFromCommand<C extends ParseableCommand, S extends FilteredConfigScope> =
+  MergeConfigsOptions<C> extends infer Merged
+    ? Merged extends ParseableConfigs
+      ? PrepareConfigsWithType<FilterCommandScope<Merged, S>>
+      : never
+    : never;
+
+export type ExportStoragePropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;
+
+export type ExportGeneratorPropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'generator'>;
+
+export type ExportControlPropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'control'>;
+
+export type ExportBlueprintPropertiesFromCommand<C extends ParseableCommand> = ExportScopedPropertiesFromCommand<C, 'blueprint'>;

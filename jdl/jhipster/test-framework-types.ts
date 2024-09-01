@@ -22,5 +22,5 @@ const testFrameworkTypes = {
   CUCUMBER: 'cucumber',
   GATLING: 'gatling',
   NO: 'no',
-};
+} as const;
 export default testFrameworkTypes;

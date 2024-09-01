@@ -23,5 +23,5 @@ const clientFrameworkTypes = {
   VUE: 'vue',
   SVELTE: 'svelte',
   NO: 'no',
-};
+} as const;
 export default clientFrameworkTypes;
