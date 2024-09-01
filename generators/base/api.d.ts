@@ -430,7 +430,7 @@ type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
 
 type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
   [K in keyof U]?: U[K] extends Record<'choices', JHispterChoices>
-    ? TupleToUnion<U[K]['choices']>
+    ? TupleToUnion<NormalizeChoices<U[K]['choices']>>
     : WrapperToPrimitive<ConstructorReturn<GetType<U[K]>>> extends infer T
       ? T extends undefined
         ? string
