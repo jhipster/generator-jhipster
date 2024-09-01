@@ -19,9 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { entityTableNameCreator, getTableNameFromEntityNameFallback } from '../jhipster/index.js';
-
-const getTableNameFromEntityName = entityTableNameCreator;
+import getTableNameFromEntityName, { getTableNameFromEntityNameFallback } from '../utils/entity-table-name-creator.js';
 
 describe('jdl - EntityTableNameCreator', () => {
   describe('getTableNameFromEntityName', () => {

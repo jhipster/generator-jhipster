@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { deploymentOptions } from '../jhipster/index.js';
+import deploymentOptions from './deployment-options.js';
 
 const { DeploymentTypes, Options } = deploymentOptions;
 

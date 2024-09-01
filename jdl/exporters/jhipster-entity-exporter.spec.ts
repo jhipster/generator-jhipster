@@ -20,9 +20,8 @@
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
-import { applicationTypes } from '../jhipster/index.js';
+import { applicationTypes, entityOptions } from '../built-in-options/index.js';
 
-import entityOptions from '../jhipster/entity-options.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
 

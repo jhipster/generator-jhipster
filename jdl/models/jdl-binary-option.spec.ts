@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { binaryOptions } from '../jhipster/index.js';
+import { binaryOptions } from '../built-in-options/index.js';
 
 describe('jdl - JDLBinaryOption', () => {
   describe('new', () => {

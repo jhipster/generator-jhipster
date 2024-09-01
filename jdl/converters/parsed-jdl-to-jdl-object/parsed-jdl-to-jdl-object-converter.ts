@@ -19,7 +19,7 @@
 import { lowerFirst } from 'lodash-es';
 import JDLObject from '../../models/jdl-object.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { applicationTypes, binaryOptions } from '../../jhipster/index.js';
+import { applicationTypes, binaryOptions } from '../../built-in-options/index.js';
 
 import JDLApplication from '../../models/jdl-application.js';
 import JDLField from '../../models/jdl-field.js';

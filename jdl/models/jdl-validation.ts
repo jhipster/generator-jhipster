@@ -18,7 +18,7 @@
  */
 
 import { merge } from '../utils/object-utils.js';
-import { validations } from '../jhipster/index.js';
+import { validations } from '../built-in-options/index.js';
 
 const {
   Validations: { REQUIRED, PATTERN },

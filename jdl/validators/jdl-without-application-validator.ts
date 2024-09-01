@@ -17,10 +17,16 @@
  * limitations under the License.
  */
 
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipOptions } from '../jhipster/index.js';
+import {
+  applicationTypes,
+  binaryOptions,
+  databaseTypes,
+  fieldTypes,
+  relationshipOptions,
+  reservedKeywords,
+} from '../built-in-options/index.js';
 import JDLObject from '../models/jdl-object.js';
 import JDLRelationship from '../models/jdl-relationship.js';
-import { isReservedFieldName, isReservedPaginationWords, isReservedTableName } from '../jhipster/reserved-keywords.js';
 import JDLField from '../models/jdl-field.js';
 import AbstractJDLOption from '../models/abstract-jdl-option.js';
 import EntityValidator from './entity-validator.js';
@@ -34,6 +40,7 @@ import BinaryOptionValidator from './binary-option-validator.js';
 
 import { ValidatorOptions } from './validator.js';
 
+const { isReservedFieldName, isReservedPaginationWords, isReservedTableName } = reservedKeywords;
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { SQL } = databaseTypes;
 

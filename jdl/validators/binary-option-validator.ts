@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import BinaryOptions from '../jhipster/binary-options.js';
+import BinaryOptions from '../built-in-options/binary-options.js';
 import OptionValidator from './option-validator.js';
 
 export default class BinaryOptionValidator extends OptionValidator {

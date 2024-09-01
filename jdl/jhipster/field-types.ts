@@ -19,7 +19,7 @@
 
 import { snakeCase } from 'lodash-es';
 import JDLEnum from '../models/jdl-enum.js';
-import validations from './validations.js';
+import validations from '../built-in-options/validations.js';
 import databaseTypes from './database-types.js';
 
 const {

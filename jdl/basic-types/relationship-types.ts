@@ -16,27 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { camelCase, upperFirst } from 'lodash-es';
+import { JDLRelationshipType, RelationshipType, relationshipTypes } from './relationships.js';
 
-import { reservedKeywords } from '../built-in-options/index.js';
-import Validator, { ValidatorOptions } from './validator.js';
+export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 
-const { isReservedClassName } = reservedKeywords;
+export const relationshipTypeExists = (relationship: JDLRelationshipType) => Object.values(relationshipTypes).includes(relationship);
 
-export default class EntityValidator extends Validator {
-  constructor() {
-    super('entity', ['name']);
-  }
-
-  validate(jdlEntity, options: ValidatorOptions = {}) {
-    super.validate(jdlEntity);
-    if (options.checkReservedKeywords) {
-      checkForReservedClassName(jdlEntity);
-    }
-  }
-}
-
-function checkForReservedClassName(jdlEntity) {
-  if (isReservedClassName(jdlEntity.name)) {
-    throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
-  }
-}
+export default relationshipTypes;

@@ -23,7 +23,7 @@ import { expect } from 'chai';
 import matchField from '../matchers/field-matcher.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
-import { validations } from '../jhipster/index.js';
+import { validations } from '../built-in-options/index.js';
 
 const {
   Validations: { MIN },

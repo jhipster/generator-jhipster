@@ -19,20 +19,30 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { relationshipOptions } from '../jhipster/index.js';
+import validations from './validations.js';
 
-const { BUILT_IN_ENTITY, exists } = relationshipOptions;
+const {
+  Validations: { REQUIRED, MAXLENGTH, MAXBYTES },
+} = validations;
 
-describe('jdl - RelationshipOptions', () => {
+describe('jdl - Validations', () => {
   describe('exists', () => {
-    describe('when the option does not exist', () => {
-      it('should return false', () => {
-        expect(exists('toto')).to.be.false;
+    describe('when checking for a valid validation', () => {
+      it('should return true', () => {
+        expect(validations.Validations.exists(MAXBYTES)).to.be.true;
       });
     });
-    describe('when the option exists', () => {
-      it('should return true', () => {
-        expect(exists(BUILT_IN_ENTITY)).to.be.true;
+    describe('when checking for an invalid validation', () => {
+      it('should return false', () => {
+        expect(validations.Validations.exists('NOTHING')).to.be.false;
+      });
+    });
+  });
+  describe('needsValue', () => {
+    describe('when checking whether a validation needs a value', () => {
+      it('should return so', () => {
+        expect(validations.Validations.needsValue(MAXLENGTH)).to.be.true;
+        expect(validations.Validations.needsValue(REQUIRED)).to.be.false;
       });
     });
   });

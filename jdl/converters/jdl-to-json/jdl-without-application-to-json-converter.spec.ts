@@ -24,16 +24,17 @@ import sinonChai from 'sinon-chai';
 
 chai.use(sinonChai);
 
+import { relationshipTypes } from '../../basic-types/index.js';
+
 import {
   applicationTypes,
   binaryOptions,
   databaseTypes,
   fieldTypes,
   relationshipOptions,
-  relationshipTypes,
   unaryOptions,
   validations,
-} from '../../jhipster/index.js';
+} from '../../built-in-options/index.js';
 
 import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../models/index.js';

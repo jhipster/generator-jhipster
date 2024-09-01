@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import JSONEntity from '../../jhipster/json-entity.js';
+import JSONEntity from '../../basic-types/json-entity.js';
 import { formatComment } from '../../utils/format-utils.js';
-import { getTableNameFromEntityNameFallback } from '../../jhipster/entity-table-name-creator.js';
+import { getTableNameFromEntityNameFallback } from '../../utils/entity-table-name-creator.js';
 import { JDLEntity } from '../../models/index.js';
 
 export default {

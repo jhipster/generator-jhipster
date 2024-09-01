@@ -25,7 +25,8 @@ import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipTypes, validations } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
+import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, validations } from '../built-in-options/index.js';
 import createValidator from '../validators/jdl-without-application-validator.js';
 
 const { GATEWAY } = applicationTypes;

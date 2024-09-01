@@ -16,28 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import applicationOptions from './application-options.js';
 
-const Options: any = {
-  SKIP_CLIENT: applicationOptions.OptionNames.SKIP_CLIENT,
-  SKIP_SERVER: applicationOptions.OptionNames.SKIP_SERVER,
-  NO_FLUENT_METHOD: 'noFluentMethod',
-  READ_ONLY: 'readOnly',
-  FILTER: 'filter',
-  EMBEDDED: 'embedded',
-};
+import { describe, it } from 'esmocha';
+import { expect } from 'chai';
+import relationshipTypes, { relationshipTypeExists } from './relationship-types.js';
 
-const optionNames = Object.values(Options);
-
-Options.forEach = passedFunction => {
-  if (!passedFunction) {
-    throw new Error('A function has to be passed to loop over the unary options.');
-  }
-  optionNames.forEach(optionName => {
-    passedFunction(optionName);
+describe('jdl - RelationshipTypes', () => {
+  describe('exists', () => {
+    describe('when checking for a valid unary relationship type', () => {
+      it('should return true', () => {
+        expect(relationshipTypeExists(relationshipTypes.MANY_TO_ONE)).to.be.true;
+      });
+    });
+    describe('when checking for an invalid relationship type', () => {
+      it('should return false', () => {
+        // @ts-expect-error
+        expect(relationshipTypeExists('NOTHING')).to.be.false;
+      });
+    });
   });
-};
-
-Options.exists = option => Object.values(Options).includes(option);
-
-export default Options;
+});

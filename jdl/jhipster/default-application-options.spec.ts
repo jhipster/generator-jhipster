@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { defaultApplicationOptions } from '../jhipster/index.js';
+import * as defaultApplicationOptions from './default-application-options.js';
 
 const {
   getConfigForMonolithApplication,

@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { reservedKeywords } from '../jhipster/index.js';
+import reservedKeywords from './reserved-keywords.js';
 
 describe('jdl - ReservedKeywords', () => {
   describe('isReserved', () => {

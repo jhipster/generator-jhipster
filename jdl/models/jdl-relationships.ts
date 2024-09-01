@@ -18,8 +18,8 @@
  */
 
 import { JDLRelationshipType } from '../basic-types/relationships.js';
-import { relationshipTypes } from '../jhipster/index.js';
-import { relationshipTypeExists } from '../jhipster/relationship-types.js';
+import { relationshipTypes } from '../basic-types/index.js';
+import { relationshipTypeExists } from '../basic-types/relationship-types.js';
 import JDLRelationship from './jdl-relationship.js';
 
 export default class JDLRelationships {

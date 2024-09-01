@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, databaseTypes, deploymentOptions, searchEngineTypes } from '../jhipster/index.js';
+import { applicationTypes, databaseTypes, deploymentOptions, searchEngineTypes } from '../built-in-options/index.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
 

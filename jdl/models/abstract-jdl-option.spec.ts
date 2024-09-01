@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { binaryOptions } from '../jhipster/index.js';
+import { binaryOptions } from '../built-in-options/index.js';
 
 describe('jdl - AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {

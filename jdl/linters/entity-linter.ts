@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { shouldWriteEntityTableName } from '../jhipster/index.js';
+import { shouldWriteEntityTableName } from '../utils/entity-table-name-creator.js';
 import EntityIssue from './issues/entity-issue.js';
 import { rulesNames } from './rules.js';
 

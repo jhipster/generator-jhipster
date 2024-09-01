@@ -18,7 +18,7 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import { unaryOptions } from '../jhipster/index.js';
+import { unaryOptions } from '../built-in-options/index.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;

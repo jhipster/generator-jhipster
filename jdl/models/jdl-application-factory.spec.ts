@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import createJDLApplication from '../models/jdl-application-factory.js';
-import { applicationTypes } from '../jhipster/index.js';
+import { applicationTypes } from '../built-in-options/index.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 

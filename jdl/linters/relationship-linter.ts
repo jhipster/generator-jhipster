@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { relationshipTypes } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
 import RelationshipIssue from './issues/relationship-issue.js';
 
 import { rulesNames } from './rules.js';

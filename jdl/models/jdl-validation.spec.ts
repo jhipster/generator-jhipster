@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import JDLValidation from '../models/jdl-validation.js';
-import { validations } from '../jhipster/index.js';
+import { validations } from '../built-in-options/index.js';
 
 const {
   Validations: { PATTERN },

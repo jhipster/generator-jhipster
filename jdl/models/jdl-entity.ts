@@ -19,7 +19,7 @@
 
 import { upperFirst } from 'lodash-es';
 import { merge } from '../utils/object-utils.js';
-import { shouldWriteEntityTableName } from '../jhipster/index.js';
+import { shouldWriteEntityTableName } from '../utils/entity-table-name-creator.js';
 import JDLField from './jdl-field.js';
 
 export default class JDLEntity {

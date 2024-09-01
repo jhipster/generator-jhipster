@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
-import { binaryOptions, relationshipOptions, unaryOptions } from '../jhipster/index.js';
+import { binaryOptions, relationshipOptions, unaryOptions } from '../built-in-options/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

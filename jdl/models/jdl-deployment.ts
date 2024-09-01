@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { isEqual } from 'lodash-es';
-import { applicationOptions, deploymentOptions, serviceDiscoveryTypes } from '../jhipster/index.js';
+import { applicationOptions, deploymentOptions, serviceDiscoveryTypes } from '../built-in-options/index.js';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 import { ParsedJDLDeployment } from '../converters/parsed-jdl-to-jdl-object/types.js';

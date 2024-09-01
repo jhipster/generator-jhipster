@@ -19,7 +19,8 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, fieldTypes, relationshipTypes, unaryOptions } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
+import { applicationTypes, fieldTypes, unaryOptions } from '../built-in-options/index.js';
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';

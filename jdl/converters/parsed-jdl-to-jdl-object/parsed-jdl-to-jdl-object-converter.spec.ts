@@ -36,7 +36,7 @@ import {
   fieldTypes,
   unaryOptions,
   validations,
-} from '../../jhipster/index.js';
+} from '../../built-in-options/index.js';
 import ParsedJDLToJDLObjectConverter from './parsed-jdl-to-jdl-object-converter.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;

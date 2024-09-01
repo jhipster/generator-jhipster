@@ -18,7 +18,7 @@
  */
 
 import JDLValidation from '../../models/jdl-validation.js';
-import { validations } from '../../jhipster/index.js';
+import { validations } from '../../built-in-options/index.js';
 import { ParsedJDLValidation } from './types.js';
 
 const {
