@@ -23,7 +23,7 @@ import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
 import JDLValidation from '../../models/jdl-validation.js';
-import { fieldTypes, validations } from '../../jhipster/index.js';
+import { fieldTypes, validations } from '../../built-in-options/index.js';
 import { convert } from './jdl-to-json-field-converter.js';
 
 const { CommonDBTypes } = fieldTypes;

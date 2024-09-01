@@ -19,7 +19,7 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { applicationOptions, binaryOptions } from '../jhipster/index.js';
+import { applicationOptions, binaryOptions } from '../built-in-options/index.js';
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
 import JDLApplication from '../models/jdl-application.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';

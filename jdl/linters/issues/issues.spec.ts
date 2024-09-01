@@ -20,7 +20,7 @@
 import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { rulesNames } from '../rules.js';
-import { relationshipTypes } from '../../jhipster/index.js';
+import { relationshipTypes } from '../../basic-types/index.js';
 import Issues from './issues.js';
 import EntityIssue from './entity-issue.js';
 import FieldIssue from './field-issue.js';

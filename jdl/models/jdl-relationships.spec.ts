@@ -21,7 +21,7 @@ import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLRelationship from '../models/jdl-relationship.js';
-import { relationshipTypes } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
 import JDLRelationships from '../models/jdl-relationships.js';
 
 describe('jdl - JDLRelationships', () => {

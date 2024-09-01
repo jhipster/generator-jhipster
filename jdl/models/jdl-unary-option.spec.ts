@@ -21,7 +21,7 @@ import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import JDLUnaryOption from '../models/jdl-unary-option.js';
-import { unaryOptions } from '../jhipster/index.js';
+import { unaryOptions } from '../built-in-options/index.js';
 
 describe('jdl - JDLUnaryOption', () => {
   describe('new', () => {

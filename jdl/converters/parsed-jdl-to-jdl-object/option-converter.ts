@@ -19,7 +19,7 @@
 
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { binaryOptions, unaryOptions } from '../../jhipster/index.js';
+import { binaryOptions, unaryOptions } from '../../built-in-options/index.js';
 import AbstractJDLOption from '../../models/abstract-jdl-option.js';
 import { ParsedJDLOption, ParsedJDLUseOption } from './types.js';
 

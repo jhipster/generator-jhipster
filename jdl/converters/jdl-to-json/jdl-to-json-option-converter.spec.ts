@@ -28,7 +28,7 @@ import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity } from '../../models/index.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import { binaryOptions, unaryOptions } from '../../jhipster/index.js';
+import { binaryOptions, unaryOptions } from '../../built-in-options/index.js';
 import logger from '../../utils/objects/logger.js';
 import { convert } from './jdl-to-json-option-converter.js';
 

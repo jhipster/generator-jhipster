@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { databaseTypes } from '../jhipster/index.js';
+import databaseTypes from './database-types.js';
 
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NO, ORACLE, POSTGRESQL, SQL } = databaseTypes;
 

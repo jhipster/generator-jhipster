@@ -19,20 +19,20 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { relationshipTypes } from '../jhipster/index.js';
-import { relationshipTypeExists } from './relationship-types.js';
+import relationshipOptions from './relationship-options.js';
 
-describe('jdl - RelationshipTypes', () => {
+const { BUILT_IN_ENTITY, exists } = relationshipOptions;
+
+describe('jdl - RelationshipOptions', () => {
   describe('exists', () => {
-    describe('when checking for a valid unary relationship type', () => {
-      it('should return true', () => {
-        expect(relationshipTypeExists(relationshipTypes.MANY_TO_ONE)).to.be.true;
+    describe('when the option does not exist', () => {
+      it('should return false', () => {
+        expect(exists('toto')).to.be.false;
       });
     });
-    describe('when checking for an invalid relationship type', () => {
-      it('should return false', () => {
-        // @ts-expect-error
-        expect(relationshipTypeExists('NOTHING')).to.be.false;
+    describe('when the option exists', () => {
+      it('should return true', () => {
+        expect(exists(BUILT_IN_ENTITY)).to.be.true;
       });
     });
   });

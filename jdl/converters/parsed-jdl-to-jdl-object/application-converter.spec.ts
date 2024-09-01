@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes } from '../../jhipster/index.js';
+import { applicationTypes } from '../../built-in-options/index.js';
 import createJDLApplication from '../../models/jdl-application-factory.js';
 import { convertApplications } from './application-converter.js';
 

@@ -23,7 +23,7 @@ import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../models/jdl-deployment.js';
-import { deploymentOptions } from '../jhipster/index.js';
+import { deploymentOptions } from '../built-in-options/index.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
 
 const {

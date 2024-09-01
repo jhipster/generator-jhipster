@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { relationshipTypes } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
 import JDLRelationship from '../models/jdl-relationship.js';
-import { relationshipTypeExists } from '../jhipster/relationship-types.js';
+import { relationshipTypeExists } from '../basic-types/relationship-types.js';
 import Validator from './validator.js';
 
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;

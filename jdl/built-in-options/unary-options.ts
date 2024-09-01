@@ -16,11 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase, upperFirst } from 'lodash-es';
-import { JDLRelationshipType, RelationshipType, relationshipTypes } from '../basic-types/relationships.js';
+const Options: any = {
+  SKIP_CLIENT: 'skipClient',
+  SKIP_SERVER: 'skipServer',
+  NO_FLUENT_METHOD: 'noFluentMethod',
+  READ_ONLY: 'readOnly',
+  FILTER: 'filter',
+  EMBEDDED: 'embedded',
+};
 
-export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
+const optionNames = Object.values(Options);
 
-export const relationshipTypeExists = (relationship: JDLRelationshipType) => Object.values(relationshipTypes).includes(relationship);
+Options.forEach = passedFunction => {
+  if (!passedFunction) {
+    throw new Error('A function has to be passed to loop over the unary options.');
+  }
+  optionNames.forEach(optionName => {
+    passedFunction(optionName);
+  });
+};
 
-export default relationshipTypes;
+Options.exists = option => Object.values(Options).includes(option);
+
+export default Options;

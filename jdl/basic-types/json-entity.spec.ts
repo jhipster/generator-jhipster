@@ -19,7 +19,7 @@
 
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { jsonEntity as JSONEntity } from '../jhipster/index.js';
+import JSONEntity from './json-entity.js';
 
 describe('jdl - JSONEntity', () => {
   describe('new', () => {

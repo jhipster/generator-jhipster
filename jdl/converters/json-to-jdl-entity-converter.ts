@@ -27,8 +27,8 @@ import JDLBinaryOption from '../models/jdl-binary-option.js';
 
 import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
-import { binaryOptions, fieldTypes, relationshipOptions, unaryOptions } from '../jhipster/index.js';
-import { asJdlRelationshipType } from '../jhipster/relationship-types.js';
+import { binaryOptions, fieldTypes, relationshipOptions, unaryOptions } from '../built-in-options/index.js';
+import { asJdlRelationshipType } from '../basic-types/relationship-types.js';
 import { JSONEntity, JSONField, JSONRelationship } from './types.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;

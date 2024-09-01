@@ -18,7 +18,7 @@
  */
 
 import { ITokenConfig, Lexer } from 'chevrotain';
-import { applicationOptions } from '../../jhipster/index.js';
+import { applicationOptions } from '../../built-in-options/index.js';
 import jhipsterDefinition from '../../../generators/app/jdl/index.js';
 import createTokenFromConfig from './token-creator.js';
 import { KEYWORD, UNARY_OPTION } from './shared-tokens.js';

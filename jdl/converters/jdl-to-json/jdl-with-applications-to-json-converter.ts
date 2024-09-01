@@ -19,7 +19,7 @@
 
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
-import JSONEntity from '../../jhipster/json-entity.js';
+import JSONEntity from '../../basic-types/json-entity.js';
 import { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
 import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';

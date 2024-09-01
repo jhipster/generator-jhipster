@@ -18,7 +18,7 @@
  */
 import deduplicate from '../utils/array-utils.js';
 
-import { applicationOptions, entityOptions, relationshipOptions, validations } from '../jhipster/index.js';
+import { applicationOptions, entityOptions, relationshipOptions, validations } from '../built-in-options/index.js';
 import JDLParser from './jdl-parser.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;

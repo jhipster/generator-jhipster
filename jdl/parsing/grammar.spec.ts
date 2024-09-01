@@ -20,7 +20,8 @@
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { parseFromContent } from '../readers/jdl-reader.js';
-import { binaryOptions, relationshipTypes, unaryOptions, validations } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
+import { binaryOptions, unaryOptions, validations } from '../built-in-options/index.js';
 
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = relationshipTypes;
 const {

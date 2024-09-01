@@ -18,7 +18,7 @@
  */
 
 import { kebabCase } from 'lodash-es';
-import { relationshipOptions, validations } from '../../jhipster/index.js';
+import { relationshipOptions, validations } from '../../built-in-options/index.js';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import JDLRelationship from '../../models/jdl-relationship.js';
 import { JSONRelationship } from '../types.js';

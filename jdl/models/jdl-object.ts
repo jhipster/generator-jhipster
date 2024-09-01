@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { binaryOptions } from '../jhipster/index.js';
+import { binaryOptions } from '../built-in-options/index.js';
 import JDLEnums from './jdl-enums.js';
 import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import ApplicationOptions from '../jhipster/application-options.js';
+import { applicationOptions as ApplicationOptions } from '../built-in-options/index.js';
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const { OptionNames } = ApplicationOptions;

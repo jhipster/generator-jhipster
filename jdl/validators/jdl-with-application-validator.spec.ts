@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, relationshipTypes, validations } from '../jhipster/index.js';
+import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, validations } from '../built-in-options/index.js';
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
@@ -29,6 +29,7 @@ import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLValidation from '../models/jdl-validation.js';
 import createValidator from '../validators/jdl-with-application-validator.js';
+import { relationshipTypes } from '../basic-types/index.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const {

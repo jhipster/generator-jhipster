@@ -18,7 +18,7 @@
  */
 
 import createJDLApplication from '../../models/jdl-application-factory.js';
-import ApplicationOptions from '../../jhipster/application-options.js';
+import { applicationOptions as ApplicationOptions } from '../../built-in-options/index.js';
 import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import AbstractJDLOption from '../../models/abstract-jdl-option.js';

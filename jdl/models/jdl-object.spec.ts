@@ -19,7 +19,8 @@
 
 import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, binaryOptions, relationshipTypes, unaryOptions } from '../jhipster/index.js';
+import { relationshipTypes } from '../basic-types/index.js';
+import { applicationTypes, binaryOptions, unaryOptions } from '../built-in-options/index.js';
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';

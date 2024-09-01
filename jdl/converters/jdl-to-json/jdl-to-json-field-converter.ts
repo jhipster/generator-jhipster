@@ -18,10 +18,9 @@
  */
 import { capitalize } from 'lodash-es';
 
-import { validations } from '../../jhipster/index.js';
+import { fieldTypes, validations } from '../../built-in-options/index.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';
-import fieldTypes from '../../jhipster/field-types.js';
 import JDLObject from '../../models/jdl-object.js';
 import { JSONField } from '../types.js';
 import { JDLEntity } from '../../models/index.js';

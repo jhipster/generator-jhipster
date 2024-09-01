@@ -22,7 +22,7 @@ import { expect } from 'chai';
 import createJDLApplication from '../models/jdl-application-factory.js';
 import { convertApplicationsToJDL } from '../converters/json-to-jdl-application-converter.js';
 import JDLObject from '../models/jdl-object.js';
-import { applicationTypes } from '../jhipster/index.js';
+import { applicationTypes } from '../built-in-options/index.js';
 
 const { MONOLITH } = applicationTypes;
 
