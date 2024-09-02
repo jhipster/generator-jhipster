@@ -20,15 +20,17 @@ import { snakeCase, upperCase } from 'lodash-es';
 import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.js';
 import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';
-import { feignClientDefinition, syncUserWithIdpDefinition } from '../options/index.js';
+import { syncUserWithIdpDefinition } from '../options/index.js';
 import { jdlRoutesOptions } from '../../spring-cloud/generators/gateway/jdl/jdl-routes-option.js';
+import command from '../../spring-boot/command.js';
+import { extractJdlDefinitionFromCommandConfig } from '../../../lib/command/index.js';
 
 const jdlOptions: JHipsterOptionDefinition[] = [
   databaseMigrationOption,
   messageBrokerOption,
-  feignClientDefinition,
   syncUserWithIdpDefinition,
   jdlRoutesOptions,
+  ...extractJdlDefinitionFromCommandConfig(command.configs),
 ];
 
 const applicationConfig: JDLApplicationConfig = {

@@ -125,6 +125,10 @@ const command: JHipsterCommandDefinition = {
           [MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
           (reactive ?? gen.jhipsterConfigWithDefaults.reactive) === false,
       }),
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       default: false,
     },
     syncUserWithIdp: {
