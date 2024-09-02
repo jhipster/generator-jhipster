@@ -21,7 +21,5 @@ export {
   /** @deprecated */
   entityOptions,
   /** @deprecated */
-  clientFrameworkTypes,
-  /** @deprecated */
   serviceDiscoveryTypes,
 } from '../jhipster/index.js';

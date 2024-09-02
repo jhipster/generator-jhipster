@@ -25,10 +25,9 @@ import { JDLEntity } from '../models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../models/jdl-application.js';
 import { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
-import { applicationOptions, clientFrameworkTypes } from '../built-in-options/index.js';
+import { applicationOptions } from '../built-in-options/index.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
 
-const NO_CLIENT_FRAMEWORK = clientFrameworkTypes.NO;
 const {
   OptionNames: { CLIENT_FRAMEWORK },
 } = applicationOptions;
@@ -104,7 +103,7 @@ describe('jdl - JDLExporter', () => {
             beforeEach(() => {
               jdlObject = new JDLObject();
               const jdlApplication: JDLJSONApplicationConfiguration = {
-                config: { [CLIENT_FRAMEWORK]: NO_CLIENT_FRAMEWORK },
+                config: { [CLIENT_FRAMEWORK]: 'no' },
               };
               jdlObject.addApplication(new JDLApplication(jdlApplication));
             });
