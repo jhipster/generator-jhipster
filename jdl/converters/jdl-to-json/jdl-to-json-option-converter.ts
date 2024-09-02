@@ -18,7 +18,7 @@
  */
 
 import logger from '../../utils/objects/logger.js';
-import { binaryOptions, entityOptions, searchEngineTypes, unaryOptions } from '../../built-in-options/index.js';
+import { binaryOptions, entityOptions, unaryOptions } from '../../built-in-options/index.js';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 import AbstractJDLOption from '../../models/abstract-jdl-option.js';
@@ -27,7 +27,6 @@ import JDLBinaryOption from '../../models/jdl-binary-option.js';
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
 const { ServiceTypes } = entityOptions;
-const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 
 const NO_SERVICE = ServiceTypes.NO;
 const {
@@ -120,7 +119,7 @@ function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; 
 
 function preventEntitiesFromBeingSearched(entityNames: Set<string>) {
   entityNames.forEach(entityName => {
-    setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
+    setOptionToEntityName({ optionName: 'searchEngine', optionValue: 'no' }, entityName);
   });
 }
 
