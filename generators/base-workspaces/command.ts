@@ -1,4 +1,4 @@
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {},

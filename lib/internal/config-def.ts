@@ -1,18 +1,6 @@
-import type { ConfigSpec, JHipsterConfigs, JHipsterOption } from '../../generators/base/api.js';
+import type { JHipsterConfigs } from '../../lib/command/index.js';
 import type CoreGenerator from '../../generators/base-core/index.js';
 import { upperFirstCamelCase } from '../../generators/base/support/string.js';
-
-export const convertConfigToOption = (name: string, config?: ConfigSpec): JHipsterOption | undefined => {
-  if (!config?.cli?.type) return undefined;
-  const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)) as any;
-  return {
-    name,
-    description: config.description,
-    choices,
-    scope: config.scope ?? 'storage',
-    ...config.cli,
-  };
-};
 
 export function loadConfig(
   this: CoreGenerator | void,

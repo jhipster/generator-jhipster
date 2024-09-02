@@ -27,7 +27,7 @@ import { packageJson } from '../lib/index.js';
 import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
 import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
-import { extractArgumentsFromConfigs } from '../generators/base/internal/command.js';
+import { extractArgumentsFromConfigs } from '../lib/command/index.js';
 import logo from './logo.mjs';
 import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.mjs';

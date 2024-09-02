@@ -19,7 +19,7 @@
 import { join } from 'node:path';
 import process from 'node:process';
 import { defaultSamplesFolder } from '../constants.js';
-import { JHipsterCommandDefinition } from '../../generators/base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 
 const command: JHipsterCommandDefinition = {

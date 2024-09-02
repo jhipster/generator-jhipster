@@ -1,6 +1,6 @@
 import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
 import type { AngularApplication } from '../angular/types.js';
-import type { ExportApplicationPropertiesFromCommand, ExportStoragePropertiesFromCommand } from '../base/api.js';
+import type { ExportApplicationPropertiesFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
 import type { Command } from './command.ts';

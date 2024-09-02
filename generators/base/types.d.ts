@@ -1,5 +1,5 @@
-import type { Entity } from '../base-application/index.ts';
-import { ExportControlPropertiesFromCommand } from './api.js';
+import type { Entity } from '../base-application/index.js';
+import type { ExportControlPropertiesFromCommand } from '../../lib/command/index.js';
 import type { Command } from './command.ts';
 
 type BaseApplicationControlProperties = ExportControlPropertiesFromCommand<Command>;
