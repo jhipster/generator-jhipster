@@ -19,7 +19,7 @@
 
 import { describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationOptions } from '../built-in-options/index.js';
+import { applicationOptions } from '../jhipster/index.js';
 import JDLApplicationDefinition from './jdl-application-definition.js';
 
 const { OptionNames } = applicationOptions;

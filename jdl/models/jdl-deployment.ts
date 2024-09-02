@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import { isEqual } from 'lodash-es';
-import { applicationOptions, deploymentOptions, serviceDiscoveryTypes } from '../built-in-options/index.js';
+import { applicationOptions, deploymentOptions } from '../built-in-options/index.js';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
 import { ParsedJDLDeployment } from '../converters/parsed-jdl-to-jdl-object/types.js';
 
 const { Options } = deploymentOptions;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];
-const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
 
 export default class JDLDeployment {
   deploymentType!: string;
@@ -48,7 +47,7 @@ export default class JDLDeployment {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
         this[key] = new Set(option);
       } else if (key === applicationOptions.OptionNames.SERVICE_DISCOVERY_TYPE && option === Options.serviceDiscoveryType.no) {
-        this[key] = NO_SERVICE_DISCOVERY;
+        this[key] = 'no';
       } else {
         this[key] = option;
       }

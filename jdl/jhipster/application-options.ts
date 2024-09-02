@@ -22,7 +22,7 @@ import {
   JDLApplicationOptionType,
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
-} from '../models/jdl-application-definition.js';
+} from '../built-in-options/jdl-application-definition.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';

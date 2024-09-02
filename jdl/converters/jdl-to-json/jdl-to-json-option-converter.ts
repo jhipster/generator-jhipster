@@ -18,7 +18,7 @@
  */
 
 import logger from '../../utils/objects/logger.js';
-import { binaryOptions, entityOptions, searchEngineTypes, unaryOptions } from '../../built-in-options/index.js';
+import { binaryOptions, unaryOptions } from '../../built-in-options/index.js';
 import JDLObject from '../../models/jdl-object.js';
 import JDLApplication from '../../models/jdl-application.js';
 import AbstractJDLOption from '../../models/abstract-jdl-option.js';
@@ -26,10 +26,6 @@ import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
-const { ServiceTypes } = entityOptions;
-const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
-
-const NO_SERVICE = ServiceTypes.NO;
 const {
   Options: { ANGULAR_SUFFIX, MICROSERVICE, SEARCH, DTO },
 } = binaryOptions;
@@ -82,7 +78,7 @@ function setOptionsToEachEntityName(jdlOption: AbstractJDLOption): void {
   });
   jdlOption.entityNames.forEach(entityName => {
     const serviceOptionValue = convertedOptionContent.get(entityName).service;
-    if ((!serviceOptionValue || serviceOptionValue === NO_SERVICE) && [DTO, FILTER].includes(jdlOption.name)) {
+    if ((!serviceOptionValue || serviceOptionValue === 'no') && [DTO, FILTER].includes(jdlOption.name)) {
       logger.info(
         `The ${jdlOption.name} option is set for ${entityName}, the '${serviceClassOptionValue}' value for the ` +
           "'service' is gonna be set for this entity if no other value has been set.",
@@ -120,7 +116,7 @@ function getJSONOptionKeyAndValue(jdlOption: AbstractJDLOption): { key: string; 
 
 function preventEntitiesFromBeingSearched(entityNames: Set<string>) {
   entityNames.forEach(entityName => {
-    setOptionToEntityName({ optionName: 'searchEngine', optionValue: NO_SEARCH_ENGINE }, entityName);
+    setOptionToEntityName({ optionName: 'searchEngine', optionValue: 'no' }, entityName);
   });
 }
 

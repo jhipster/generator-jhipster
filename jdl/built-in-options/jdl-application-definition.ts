@@ -1,4 +1,4 @@
-import { jhipsterOptionTypes, jhipsterOptionValues, jhipsterQuotedOptionNames } from '../built-in-options/index.js';
+import { jhipsterOptionTypes, jhipsterOptionValues, jhipsterQuotedOptionNames } from '../jhipster/index.js';
 
 export type JDLApplicationOptionValue = string | number | boolean | undefined | never[] | Record<string, string>;
 export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list' | 'quotedList';

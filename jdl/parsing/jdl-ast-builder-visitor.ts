@@ -18,17 +18,16 @@
  */
 import deduplicate from '../utils/array-utils.js';
 
-import { applicationOptions, entityOptions, relationshipOptions, validations } from '../built-in-options/index.js';
+import { applicationOptions, relationshipOptions, validations } from '../built-in-options/index.js';
+import logger from '../utils/objects/logger.js';
 import JDLParser from './jdl-parser.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { OptionNames } = applicationOptions;
-const { PaginationTypes } = entityOptions;
 const {
   Validations: { PATTERN, REQUIRED, UNIQUE },
 } = validations;
 
-const { PAGINATION } = PaginationTypes;
 const { PACKAGE_NAME } = OptionNames;
 
 const parser = JDLParser.getParser();
@@ -97,7 +96,9 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.binaryOptionDeclaration) {
       context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
         if (option.optionName === 'paginate') {
-          option.optionName = PAGINATION;
+          // TODO drop for v9
+          logger.warn('The paginate option is deprecated, please use pagination instead.');
+          option.optionName = 'pagination';
         }
         const newOption = !ast.options[option.optionName];
         if (newOption) {
@@ -526,7 +527,9 @@ export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
     if (context.binaryOptionDeclaration) {
       context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
         if (option.optionName === 'paginate') {
-          option.optionName = PAGINATION;
+          // TODO drop for v9
+          logger.warn('The paginate option is deprecated, please use pagination instead.');
+          option.optionName = 'pagination';
         }
         const newOption = !applicationSubDeclaration.options[option.optionName];
         if (newOption) {

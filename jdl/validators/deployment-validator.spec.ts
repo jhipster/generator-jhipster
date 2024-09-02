@@ -19,12 +19,11 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, databaseTypes, deploymentOptions, searchEngineTypes } from '../built-in-options/index.js';
+import { applicationTypes, deploymentOptions } from '../built-in-options/index.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
 
 const { MICROSERVICE } = applicationTypes;
-const { MONGODB, NO } = databaseTypes;
 const { Options } = deploymentOptions;
 
 describe('jdl - DeploymentValidator', () => {
@@ -199,112 +198,6 @@ describe('jdl - DeploymentValidator', () => {
                 /^An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.$/,
               );
             });
-          });
-        });
-      });
-      describe('when having an openshift-related deployment', () => {
-        describe('without appFolders', () => {
-          it('should fail', () => {
-            expect(() =>
-              validator.validate({
-                deploymentType: Options.deploymentType.openshift,
-                directoryPath: '../',
-                gatewayType: Options.gatewayType.springCloudGateway,
-                openshiftNamespace: 'default',
-              }),
-            ).to.throw(/^The deployment attribute appsFolders was not found.$/);
-          });
-        });
-        describe('without directoryPath', () => {
-          it('should fail', () => {
-            expect(() =>
-              validator.validate({
-                deploymentType: Options.deploymentType.openshift,
-                appsFolders: ['beers', 'burgers'],
-                monitoring: 'no',
-                openshiftNamespace: 'default',
-              }),
-            ).to.throw(/^The deployment attribute directoryPath was not found.$/);
-          });
-        });
-        describe('without monitoring', () => {
-          it('should not fail', () => {
-            expect(() =>
-              validator.validate({
-                deploymentType: Options.deploymentType.openshift,
-                appsFolders: ['beers', 'burgers'],
-                directoryPath: '../',
-                openshiftNamespace: 'default',
-              }),
-            ).not.to.throw();
-          });
-        });
-        describe('without openshiftNamespace', () => {
-          it('should not fail', () => {
-            expect(() =>
-              validator.validate({
-                deploymentType: Options.deploymentType.openshift,
-                appsFolders: ['beers', 'burgers'],
-                directoryPath: '../',
-              }),
-            ).not.to.throw();
-          });
-        });
-        describe('when there is no prodDatabaseType', () => {
-          it('should fail if there is a storageType', () => {
-            expect(() =>
-              validator.validate(
-                {
-                  deploymentType: Options.deploymentType.openshift,
-                  appsFolders: ['beers', 'burgers'],
-                  directoryPath: '../',
-                  storageType: Options.storageType.ephemeral,
-                },
-                { prodDatabaseType: NO },
-              ),
-            ).to.throw(/^Can't have the storageType option set when there is no prodDatabaseType.$/);
-          });
-        });
-        describe('when the search engine is elasticsearch', () => {
-          it('should fail if there is a storageType', () => {
-            expect(() =>
-              validator.validate(
-                {
-                  deploymentType: Options.deploymentType.openshift,
-                  appsFolders: ['beers', 'burgers'],
-                  directoryPath: '../',
-                  storageType: Options.storageType.ephemeral,
-                },
-                { searchEngine: searchEngineTypes.ELASTICSEARCH },
-              ),
-            ).to.throw(/^Can't have the storageType option set when elasticsearch is the search engine.$/);
-          });
-        });
-        describe('when the monitoring is done with prometheus', () => {
-          it('should fail if there is a storageType', () => {
-            expect(() =>
-              validator.validate({
-                deploymentType: Options.deploymentType.openshift,
-                appsFolders: ['beers', 'burgers'],
-                directoryPath: '../',
-                storageType: Options.storageType.ephemeral,
-                monitoring: Options.monitoring.prometheus,
-              }),
-            ).to.throw(/^Can't have the storageType option set when the monitoring is done with prometheus.$/);
-          });
-        });
-        describe('when the prodDatabaseType is set and the storageType is not set', () => {
-          it('should not fail', () => {
-            expect(() =>
-              validator.validate(
-                {
-                  deploymentType: Options.deploymentType.openshift,
-                  appsFolders: ['beers', 'burgers'],
-                  directoryPath: '../',
-                },
-                { prodDatabaseType: MONGODB },
-              ),
-            ).not.to.throw();
           });
         });
       });

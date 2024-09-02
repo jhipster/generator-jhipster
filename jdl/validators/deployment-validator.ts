@@ -17,16 +17,12 @@
  * limitations under the License.
  */
 
-import { applicationOptions, applicationTypes, databaseTypes, deploymentOptions, searchEngineTypes } from '../built-in-options/index.js';
+import { applicationTypes, deploymentOptions } from '../built-in-options/index.js';
 import JDLDeployment from '../models/jdl-deployment.js';
 import Validator from './validator.js';
 
 const { Options } = deploymentOptions;
 const { MICROSERVICE } = applicationTypes;
-const { NO } = databaseTypes;
-const { ELASTICSEARCH } = searchEngineTypes;
-const { OptionNames } = applicationOptions;
-const { PROD_DATABASE_TYPE } = OptionNames;
 
 export default class DeploymentValidator extends Validator {
   constructor() {
@@ -42,9 +38,6 @@ export default class DeploymentValidator extends Validator {
         break;
       case Options.deploymentType.kubernetes:
         validateKubernetesRelatedDeployment(jdlDeployment);
-        break;
-      case Options.deploymentType.openshift:
-        validateOpenshiftRelatedDeployment(jdlDeployment, options);
         break;
       default:
         throw new Error(`The deployment type ${jdlDeployment.deploymentType} isn't supported.`);
@@ -69,21 +62,5 @@ function validateKubernetesRelatedDeployment(jdlDeployment: JDLDeployment) {
   }
   if (jdlDeployment.kubernetesServiceType === Options.kubernetesServiceType.ingress && !jdlDeployment.ingressType) {
     throw new Error('An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.');
-  }
-}
-
-function validateOpenshiftRelatedDeployment(jdlDeployment: JDLDeployment, options) {
-  if (jdlDeployment.storageType) {
-    if (options.prodDatabaseType === NO) {
-      throw new Error(`Can't have the storageType option set when there is no ${PROD_DATABASE_TYPE}.`);
-    }
-
-    if (options.searchEngine === ELASTICSEARCH) {
-      throw new Error("Can't have the storageType option set when elasticsearch is the search engine.");
-    }
-
-    if (jdlDeployment.monitoring === Options.monitoring.prometheus) {
-      throw new Error("Can't have the storageType option set when the monitoring is done with prometheus.");
-    }
   }
 }

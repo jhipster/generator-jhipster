@@ -18,12 +18,12 @@
  */
 
 import logger from '../utils/objects/logger.js';
+import JDLApplicationDefinition, { JDLApplicationOptionTypeValue } from '../built-in-options/jdl-application-definition.js';
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.js';
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
-import JDLApplicationDefinition, { JDLApplicationOptionTypeValue } from './jdl-application-definition.js';
 import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const applicationDefinition = new JDLApplicationDefinition();

@@ -17,17 +17,5 @@ export {
   /** @deprecated */
   deploymentOptions,
   /** @deprecated */
-  searchEngineTypes,
-  /** @deprecated */
   entityOptions,
-  /** @deprecated */
-  jhipsterOptionTypes,
-  /** @deprecated */
-  jhipsterOptionValues,
-  /** @deprecated */
-  jhipsterQuotedOptionNames,
-  /** @deprecated */
-  clientFrameworkTypes,
-  /** @deprecated */
-  serviceDiscoveryTypes,
 } from '../jhipster/index.js';
