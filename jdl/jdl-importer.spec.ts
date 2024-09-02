@@ -357,7 +357,7 @@ relationship OneToOne {
     });
     describe('when parsing deployment config', () => {
       const contents: any[] = [];
-      const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
+      const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes'];
 
       before(() => {
         const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'deployments.jdl')]);

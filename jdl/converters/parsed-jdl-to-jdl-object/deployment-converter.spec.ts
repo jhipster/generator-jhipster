@@ -34,7 +34,7 @@ describe('jdl - DeploymentConverter', () => {
       before(() => {
         convertedDeployments = convertDeployments([
           {
-            deploymentType: 'openshift',
+            deploymentType: 'docker-compose',
             appsFolders: ['tata', 'titi'],
             dockerRepositoryName: 'test',
           },
@@ -50,20 +50,17 @@ describe('jdl - DeploymentConverter', () => {
       "titi",
     },
     "clusteredDbApps": Set {},
-    "deploymentType": "openshift",
+    "deploymentType": "docker-compose",
     "directoryPath": "../",
-    "dockerPushCommand": "docker push",
     "dockerRepositoryName": "test",
-    "gatewayType": undefined,
+    "gatewayType": "SpringCloudGateway",
     "ingressDomain": undefined,
     "ingressType": undefined,
     "istio": undefined,
     "kubernetesServiceType": undefined,
     "monitoring": "no",
-    "openshiftNamespace": "default",
-    "registryReplicas": 2,
     "serviceDiscoveryType": "consul",
-    "storageType": "ephemeral",
+    "storageType": undefined,
   },
 ]
 `);

@@ -15,7 +15,6 @@ export { default as kubernetesPlatformTypes } from './kubernetes-platform-types.
 export { default as messageBrokerTypes } from './message-broker-types.js';
 export { default as monitoringTypes } from './monitoring-types.js';
 export { default as openapiOptions } from './openapi-options.js';
-export { default as openshiftPlatformTypes } from './openshift-platform-types.js';
 export { default as reservedKeywords } from './reserved-keywords.js';
 export { default as searchEngineTypes } from './search-engine-types.js';
 export { default as serviceDiscoveryTypes } from './service-discovery-types.js';

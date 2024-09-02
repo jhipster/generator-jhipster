@@ -78,22 +78,6 @@ describe('jdl - DeploymentOptions', () => {
           });
         });
       });
-      describe('when passing openshift as arg', () => {
-        it('should return openshift deployment config', () => {
-          expect(Options.defaults('openshift')).to.eql({
-            appsFolders: [],
-            clusteredDbApps: [],
-            directoryPath: '../',
-            dockerPushCommand: 'docker push',
-            dockerRepositoryName: '',
-            monitoring: 'no',
-            serviceDiscoveryType: 'consul',
-            openshiftNamespace: 'default',
-            storageType: 'ephemeral',
-            registryReplicas: 2,
-          });
-        });
-      });
     });
   });
 });

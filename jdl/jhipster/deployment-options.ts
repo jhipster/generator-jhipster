@@ -17,14 +17,11 @@
  * limitations under the License.
  */
 import kubernetesPlatformTypes from './kubernetes-platform-types.js';
-import openshiftPlatformTypes from './openshift-platform-types.js';
 import monitoringTypes from './monitoring-types.js';
 import serviceDiscoveryTypes from './service-discovery-types.js';
 
 const { LOAD_BALANCER, NODE_PORT, INGRESS } = kubernetesPlatformTypes.ServiceTypes;
 const { NGINX, GKE } = kubernetesPlatformTypes.IngressTypes;
-
-const { EPHEMERAL, PERSISTENT } = openshiftPlatformTypes.StorageTypes;
 
 const { EUREKA, CONSUL } = serviceDiscoveryTypes;
 const NO_SERVICE_DISCOVERY = serviceDiscoveryTypes.NO;
@@ -35,13 +32,11 @@ const { PROMETHEUS } = monitoringTypes;
 export const DeploymentTypes = {
   DOCKERCOMPOSE: 'docker-compose',
   KUBERNETES: 'kubernetes',
-  OPENSHIFT: 'openshift',
   exists: (deploymentType?: any) => !!deploymentType && !!DeploymentTypes[deploymentType.toUpperCase().replace('-', '')],
 };
 
 export const DOCKERCOMPOSE = DeploymentTypes.DOCKERCOMPOSE;
 export const KUBERNETES = DeploymentTypes.KUBERNETES;
-export const OPENSHIFT = DeploymentTypes.OPENSHIFT;
 
 const kubernetesRelatedOptions = {
   kubernetesNamespace: 'default',
@@ -63,17 +58,6 @@ const kubernetesRelatedOptions = {
   istio: {
     false: false,
     true: true,
-  },
-};
-
-const openshiftRelatedOptions = {
-  openshiftNamespace: 'default',
-  registryReplicas: {
-    two: 2,
-  },
-  storageType: {
-    ephemeral: EPHEMERAL,
-    persistent: PERSISTENT,
   },
 };
 
@@ -103,13 +87,11 @@ const Options: any = {
   deploymentType: {
     dockerCompose: DeploymentTypes.DOCKERCOMPOSE,
     kubernetes: DeploymentTypes.KUBERNETES,
-    openshift: DeploymentTypes.OPENSHIFT,
   },
   dockerPushCommand: 'docker push',
   dockerRepositoryName: '',
   ...dockerComposeRelatedOptions,
   ...kubernetesRelatedOptions,
-  ...openshiftRelatedOptions,
 };
 
 Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
@@ -150,7 +132,6 @@ Options.defaults = (deploymentType = Options.deploymentType.dockerCompose) => {
     monitoring: Options.monitoring.no,
     dockerRepositoryName: Options.dockerRepositoryName,
     dockerPushCommand: Options.dockerPushCommand,
-    openshiftNamespace: Options.openshiftNamespace,
     storageType: Options.storageType.ephemeral,
     registryReplicas: Options.registryReplicas.two,
   };

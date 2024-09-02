@@ -1844,7 +1844,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const ALPHANUMERIC_DASH_NAME = ['kubernetesNamespace', 'openshiftNamespace'];
+    const ALPHANUMERIC_DASH_NAME = ['kubernetesNamespace'];
 
     ALPHANUMERIC_DASH_NAME.forEach(type => {
       describe(`and using for ${type}`, () => {

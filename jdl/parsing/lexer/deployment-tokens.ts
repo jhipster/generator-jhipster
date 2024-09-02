@@ -41,7 +41,6 @@ const deploymentTokens = [
   { name: 'KUBERNETES_STORAGE_CLASS_NAME', pattern: 'kubernetesStorageClassName' },
   { name: 'KUBERNETES_USE_DYNAMIC_STORAGE', pattern: 'kubernetesUseDynamicStorage' },
   { name: 'MONITORING', pattern: 'monitoring' },
-  { name: 'OPENSHIFT_NAMESPACE', pattern: 'openshiftNamespace' },
   { name: 'REGISTRY_REPLICAS', pattern: 'registryReplicas' },
   { name: 'STORAGE_TYPE', pattern: 'storageType' },
 ].map(tokenConfig => {

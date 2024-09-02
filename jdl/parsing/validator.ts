@@ -310,11 +310,6 @@ const deploymentConfigPropsValidations = {
     type: 'BOOLEAN',
     msg: 'istio property',
   },
-  OPENSHIFT_NAMESPACE: {
-    type: 'NAME',
-    pattern: ALPHANUMERIC_DASH,
-    msg: 'openshiftNamespace property',
-  },
   REGISTRY_REPLICAS: { type: 'INTEGER' },
   STORAGE_TYPE: {
     type: 'NAME',
