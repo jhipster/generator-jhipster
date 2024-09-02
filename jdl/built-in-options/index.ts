@@ -19,8 +19,6 @@ export {
   /** @deprecated */
   searchEngineTypes,
   /** @deprecated */
-  entityOptions,
-  /** @deprecated */
   clientFrameworkTypes,
   /** @deprecated */
   serviceDiscoveryTypes,
