@@ -18,14 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { binaryOptions, entityOptions, searchEngineTypes, unaryOptions } from '../../built-in-options/index.js';
+import { binaryOptions, unaryOptions } from '../../built-in-options/index.js';
 import { convertOptions } from './option-converter.js';
-
-const { MapperTypes, PaginationTypes } = entityOptions;
-const { COUCHBASE } = searchEngineTypes;
-
-const { MAPSTRUCT } = MapperTypes;
-const { PAGINATION } = PaginationTypes;
 
 describe('jdl - OptionConverter', () => {
   describe('convertOptions', () => {
@@ -91,12 +85,12 @@ describe('jdl - OptionConverter', () => {
         before(() => {
           convertedOptions = convertOptions({}, [
             {
-              optionValues: [MAPSTRUCT, COUCHBASE],
+              optionValues: ['mapstruct', 'elasticsearch'],
               list: ['*'],
               excluded: ['B'],
             },
             {
-              optionValues: [PAGINATION],
+              optionValues: ['pagination'],
               list: ['A', 'C'],
               excluded: [],
             },
@@ -123,7 +117,7 @@ describe('jdl - OptionConverter', () => {
       "B",
     },
     "name": "search",
-    "value": "couchbase",
+    "value": "elasticsearch",
   },
   JDLBinaryOption {
     "entityNames": Set {
@@ -144,7 +138,7 @@ describe('jdl - OptionConverter', () => {
         before(() => {
           convertedOptions = convertOptions({}, [
             {
-              optionValues: [MAPSTRUCT],
+              optionValues: ['mapstruct'],
               list: ['*'],
               excluded: ['B'],
             },
