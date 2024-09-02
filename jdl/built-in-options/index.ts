@@ -21,12 +21,6 @@ export {
   /** @deprecated */
   entityOptions,
   /** @deprecated */
-  jhipsterOptionTypes,
-  /** @deprecated */
-  jhipsterOptionValues,
-  /** @deprecated */
-  jhipsterQuotedOptionNames,
-  /** @deprecated */
   clientFrameworkTypes,
   /** @deprecated */
   serviceDiscoveryTypes,
