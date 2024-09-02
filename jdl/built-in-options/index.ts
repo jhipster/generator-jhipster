@@ -20,6 +20,4 @@ export {
   searchEngineTypes,
   /** @deprecated */
   entityOptions,
-  /** @deprecated */
-  serviceDiscoveryTypes,
 } from '../jhipster/index.js';
