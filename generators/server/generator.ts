@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -348,9 +349,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           if (field.fieldType === BYTE_BUFFER) {
             this.log.warn(
-              `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(
-                field,
-              )} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`,
+              `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)} 
+Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`,
             );
             field.fieldValidate = false;
             field.fieldValidateRules = [];
@@ -558,7 +558,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
 
     if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
-      return `The table name cannot contain special characters.\n${instructions}`;
+      return `The table name cannot contain special characters.
+${instructions}`;
     }
     if (!entityTableName) {
       return 'The table name cannot be empty';
@@ -566,12 +567,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     if (isReservedTableName(entityTableName, prodDatabaseType)) {
       if (jhiTablePrefix) {
         this.log.warn(
-          `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`,
+          `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.
+${instructions}`,
         );
         entity.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
       } else {
         this.log.warn(
-          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`,
+          `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.
+${instructions}`,
         );
       }
     }

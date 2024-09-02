@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -55,11 +56,11 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   // Public API method used by the getter and also by Blueprints
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadSharedConfig({ application }) {
         loadConfig.call(this, command.configs, { application });
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.LOADING]() {

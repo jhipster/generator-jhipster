@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 
 export const vueFiles = {
@@ -294,14 +295,14 @@ export const entitiesFiles = {
   ],
 };
 
-export async function writeFiles({ application }) {
+export const writeFiles = asWritingTask(async function writeFiles({ application }) {
   await this.writeFiles({
     sections: vueFiles,
     context: application,
   });
-}
+});
 
-export async function writeEntitiesFiles({ application, entities }) {
+export const writeEntitiesFiles = asWritingTask(async function writeEntitiesFiles({ application, entities }) {
   entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,
@@ -310,4 +311,4 @@ export async function writeEntitiesFiles({ application, entities }) {
       entities,
     },
   });
-}
+});

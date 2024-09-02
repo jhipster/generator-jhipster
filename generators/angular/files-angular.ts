@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 
 export const files = {
@@ -437,11 +437,11 @@ export const files = {
   ],
 };
 
-export async function writeFiles({ application }) {
+export const writeFiles = asWritingTask(async function writeFiles({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   await this.writeFiles({
     sections: files,
     context: application,
   });
-}
+});

@@ -61,9 +61,9 @@ const getEnums = (enums, customValuesState, comments) => {
 
     const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
     return {
-      name: matched[1],
-      value: matched[2],
-      comment: comments && comments[matched[1]] && formatDocAsJavaDoc(comments[matched[1]], 4),
+      name: matched![1],
+      value: matched![2],
+      comment: comments && comments[matched![1]] && formatDocAsJavaDoc(comments[matched![1]], 4),
     };
   });
 };

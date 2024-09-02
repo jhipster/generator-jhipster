@@ -84,7 +84,7 @@ const commonDefaultOptions = {
   [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
   [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
   [JHI_PREFIX]: OptionValues[JHI_PREFIX],
-  [MESSAGE_BROKER]: MESSAGE_BROKER_NO,
+  [MESSAGE_BROKER]: [MESSAGE_BROKER_NO],
   [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };

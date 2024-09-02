@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingTask } from '../base-application/support/index.js';
 import { addSectionsCondition, mergeSections } from '../base/support/index.js';
 import {
   javaMainPackageTemplatesBlock,
@@ -127,9 +128,9 @@ export const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgresql),
 );
 
-export default async function writeSqlFiles({ application }) {
+export default asWritingTask(async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,
     context: application,
   });
-}
+});

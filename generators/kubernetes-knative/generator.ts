@@ -151,6 +151,7 @@ export default class KubernetesKnativeGenerator extends BaseWorkspacesGenerator 
 
       setPostPromptProp() {
         this.appConfigs.forEach(element => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
           if (element.messageBroker === KAFKA) {
             this.useKafka = true;

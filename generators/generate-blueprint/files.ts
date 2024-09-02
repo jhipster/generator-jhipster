@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection } from '../base-application/support/task-type-inference.js';
+import { asWriteFilesSection } from '../base-application/support/index.js';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
 
 export const files = asWriteFilesSection({
