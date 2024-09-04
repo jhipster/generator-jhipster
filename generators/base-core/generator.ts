@@ -56,7 +56,7 @@ import {
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import type { type BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
+import type { BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';
