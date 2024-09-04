@@ -21,7 +21,7 @@ import { createConflicterTransform, createYoResolveTransform, forceYoFiles } fro
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
-import { Options as PrettierOptions } from 'prettier';
+import type { Options as PrettierOptions } from 'prettier';
 import type { FileTransform, PipelineOptions } from 'mem-fs';
 
 import BaseGenerator from '../base/index.js';

@@ -26,7 +26,7 @@ import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-co
 import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
-import { JSONEntity } from '../../jdl/converters/types.js';
+import type { JSONEntity } from '../../jdl/converters/types.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 

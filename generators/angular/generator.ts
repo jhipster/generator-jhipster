@@ -37,11 +37,11 @@ import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
+import type { addItemToMenu } from './support/index.js';
 import {
   addEntitiesRoute,
   addIconImport,
   addItemToAdminMenu,
-  addItemToMenu,
   addRoute,
   addToEntitiesMenu,
   buildAngularFormPath as angularFormPath,

@@ -26,8 +26,8 @@ import { readJSONFile } from '../readers/json-file-reader.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
 import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import JDLApplication from '../models/jdl-application.js';
-import { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
+import type JDLApplication from '../models/jdl-application.js';
+import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
 

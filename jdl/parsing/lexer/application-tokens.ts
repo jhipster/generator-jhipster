@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { ITokenConfig, Lexer } from 'chevrotain';
+import type { ITokenConfig } from 'chevrotain';
+import { Lexer } from 'chevrotain';
 import { applicationOptions } from '../../built-in-options/index.js';
 import jhipsterDefinition from '../../../generators/app/jdl/index.js';
 import createTokenFromConfig from './token-creator.js';

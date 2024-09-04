@@ -21,7 +21,7 @@ import JDLRelationship from '../../models/jdl-relationship.js';
 import { lowerFirst } from '../../utils/string-utils.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { asJdlRelationshipType } from '../../basic-types/relationship-types.js';
-import { ParsedJDLAnnotation, ParsedJDLRelationship } from './types.js';
+import type { ParsedJDLAnnotation, ParsedJDLRelationship } from './types.js';
 
 export default { convertRelationships };
 

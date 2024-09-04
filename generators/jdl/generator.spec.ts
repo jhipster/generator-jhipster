@@ -20,9 +20,9 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
-import { SinonSpy } from 'sinon';
+import type { SinonSpy } from 'sinon';
 
-import { RunResult } from 'yeoman-test';
+import type { RunResult } from 'yeoman-test';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
 import * as GENERATORS from '../generator-list.js';

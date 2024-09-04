@@ -1,4 +1,4 @@
-import { RequireOneOrNone } from 'type-fest';
+import type { RequireOneOrNone } from 'type-fest';
 
 export type GradleComment = { comment?: string };
 

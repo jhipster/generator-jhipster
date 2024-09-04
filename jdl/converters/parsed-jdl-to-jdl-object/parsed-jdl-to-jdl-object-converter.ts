@@ -21,10 +21,10 @@ import JDLObject from '../../models/jdl-object.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { applicationTypes, binaryOptions } from '../../built-in-options/index.js';
 
-import JDLApplication from '../../models/jdl-application.js';
-import JDLField from '../../models/jdl-field.js';
-import JDLValidation from '../../models/jdl-validation.js';
-import { JDLEntity } from '../../models/index.js';
+import type JDLApplication from '../../models/jdl-application.js';
+import type JDLField from '../../models/jdl-field.js';
+import type JDLValidation from '../../models/jdl-validation.js';
+import type { JDLEntity } from '../../models/index.js';
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
 import { convertEnums } from './enum-converter.js';
@@ -33,7 +33,7 @@ import { convertValidations } from './validation-converter.js';
 import { convertOptions } from './option-converter.js';
 import { convertRelationships } from './relationship-converter.js';
 import { convertDeployments } from './deployment-converter.js';
-import {
+import type {
   ParsedJDLAnnotation,
   ParsedJDLApplication,
   ParsedJDLApplications,

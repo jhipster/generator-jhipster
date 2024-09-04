@@ -19,10 +19,10 @@
 
 import logger from '../../utils/objects/logger.js';
 import { binaryOptions, unaryOptions } from '../../built-in-options/index.js';
-import JDLObject from '../../models/jdl-object.js';
-import JDLApplication from '../../models/jdl-application.js';
-import AbstractJDLOption from '../../models/abstract-jdl-option.js';
-import JDLBinaryOption from '../../models/jdl-binary-option.js';
+import type JDLObject from '../../models/jdl-object.js';
+import type JDLApplication from '../../models/jdl-application.js';
+import type AbstractJDLOption from '../../models/abstract-jdl-option.js';
+import type JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 

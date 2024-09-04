@@ -21,12 +21,12 @@ import { binaryOptions } from '../built-in-options/index.js';
 import JDLEnums from './jdl-enums.js';
 import JDLRelationships from './jdl-relationships.js';
 import JDLOptions from './jdl-options.js';
-import JDLEntity from './jdl-entity.js';
-import JDLRelationship from './jdl-relationship.js';
-import AbstractJDLOption from './abstract-jdl-option.js';
-import JDLEnum from './jdl-enum.js';
-import JDLDeployment from './jdl-deployment.js';
-import JDLApplication from './jdl-application.js';
+import type JDLEntity from './jdl-entity.js';
+import type JDLRelationship from './jdl-relationship.js';
+import type AbstractJDLOption from './abstract-jdl-option.js';
+import type JDLEnum from './jdl-enum.js';
+import type JDLDeployment from './jdl-deployment.js';
+import type JDLApplication from './jdl-application.js';
 
 /**
  * The JDL object class, containing applications, entities etc.

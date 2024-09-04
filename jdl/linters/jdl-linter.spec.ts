@@ -23,10 +23,11 @@ import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../testing/index.js';
-import { JDLLinter, createJDLLinterFromContent, createJDLLinterFromFile } from './jdl-linter.js';
-import Issues from './issues/issues.js';
-import EnumIssue from './issues/enum-issue.js';
-import relationshipIssue from './issues/relationship-issue.js';
+import type { JDLLinter } from './jdl-linter.js';
+import { createJDLLinterFromContent, createJDLLinterFromFile } from './jdl-linter.js';
+import type Issues from './issues/issues.js';
+import type EnumIssue from './issues/enum-issue.js';
+import type relationshipIssue from './issues/relationship-issue.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

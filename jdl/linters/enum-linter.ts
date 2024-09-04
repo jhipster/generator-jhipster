@@ -19,7 +19,7 @@
 
 import { rulesNames } from './rules.js';
 import EnumIssue from './issues/enum-issue.js';
-import { FieldDeclaration } from './field-linter.js';
+import type { FieldDeclaration } from './field-linter.js';
 
 let issues: EnumIssue[];
 

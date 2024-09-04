@@ -1,7 +1,7 @@
 import { lstat, mkdir } from 'fs/promises';
 import { dirname } from 'path';
 import { execa } from 'execa';
-import { ValidationResult } from '../../base/api.js';
+import type { ValidationResult } from '../../base/api.js';
 
 /**
  * Generate a KeyStore.

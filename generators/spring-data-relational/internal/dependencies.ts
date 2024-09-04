@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { MavenDefinition, MavenPlugin } from '../../maven/types.js';
+import type { MavenDefinition, MavenPlugin } from '../../maven/types.js';
 
 type DatabaseTypeDependencies = {
   jdbc: MavenDefinition;

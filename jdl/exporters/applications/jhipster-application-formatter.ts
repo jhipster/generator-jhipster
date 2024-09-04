@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-import JDLApplication from '../../models/jdl-application.js';
+import type JDLApplication from '../../models/jdl-application.js';
 import { GENERATOR_NAME } from '../export-utils.js';
-import { JDLJSONApplication, JDLJSONApplicationContent, PostProcessedJDLJSONApplication, RawJDLJSONApplication } from '../types.js';
-import JDLApplicationConfigurationOption from '../../models/jdl-application-configuration-option.js';
-import JDLApplicationConfiguration from '../../models/jdl-application-configuration.js';
+import type { JDLJSONApplication, JDLJSONApplicationContent, PostProcessedJDLJSONApplication, RawJDLJSONApplication } from '../types.js';
+import type JDLApplicationConfigurationOption from '../../models/jdl-application-configuration-option.js';
+import type JDLApplicationConfiguration from '../../models/jdl-application-configuration.js';
 
 /**
  * Exports JDL applications to JDL files in separate folders (based on application base names).

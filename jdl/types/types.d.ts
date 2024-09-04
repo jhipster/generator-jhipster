@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ITokenConfig } from 'chevrotain';
+import type { ITokenConfig } from 'chevrotain';
 
 export type JDLTokenConfig = Pick<ITokenConfig, 'name' | 'pattern'>;
 

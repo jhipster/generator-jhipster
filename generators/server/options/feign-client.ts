@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JHipsterOptionDefinition } from '../../../jdl/types/types.js';
+import type { JHipsterOptionDefinition } from '../../../jdl/types/types.js';
 
 export const FEIGN_CLIENT = 'feignClient';
 

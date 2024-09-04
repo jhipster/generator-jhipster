@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { snakeCase, upperCase } from 'lodash-es';
-import { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.js';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../../../jdl/types/types.js';
 import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';
 import { feignClientDefinition, syncUserWithIdpDefinition } from '../options/index.js';

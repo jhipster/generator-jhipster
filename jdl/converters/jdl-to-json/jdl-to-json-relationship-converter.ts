@@ -20,9 +20,9 @@
 import { kebabCase } from 'lodash-es';
 import { relationshipOptions, validations } from '../../built-in-options/index.js';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
-import JDLRelationship from '../../models/jdl-relationship.js';
-import { JSONRelationship } from '../types.js';
-import { RelationshipType } from '../../basic-types/relationships.js';
+import type JDLRelationship from '../../models/jdl-relationship.js';
+import type { JSONRelationship } from '../types.js';
+import type { RelationshipType } from '../../basic-types/relationships.js';
 
 const {
   Validations: { REQUIRED },

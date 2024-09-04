@@ -27,7 +27,8 @@ import { parseFromContent, parseFromFiles } from './readers/jdl-reader.js';
 import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import exportToJDL from './exporters/jdl-exporter.js';
 import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import { ApplicationWithEntities, createImporterFromContent } from './jdl-importer.js';
+import type { ApplicationWithEntities } from './jdl-importer.js';
+import { createImporterFromContent } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);

@@ -18,7 +18,7 @@
  */
 
 import JDLDeployment from '../../models/jdl-deployment.js';
-import { ParsedJDLDeployment } from './types.js';
+import type { ParsedJDLDeployment } from './types.js';
 
 export default { convertDeployments };
 

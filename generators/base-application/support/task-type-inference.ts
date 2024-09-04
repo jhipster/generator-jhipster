@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import CoreGenerator from '../../base-core/generator.js';
-import { WriteFileBlock, WriteFileSection } from '../../base/api.js';
-import { GeneratorDefinition } from '../generator.js';
+import type CoreGenerator from '../../base-core/generator.js';
+import type { WriteFileBlock, WriteFileSection } from '../../base/api.js';
+import type { GeneratorDefinition } from '../generator.js';
 
 export function asWriteFilesSection<Data = GeneratorDefinition['writingTaskParam']['application']>(
   section: WriteFileSection<CoreGenerator, Data>,

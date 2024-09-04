@@ -1,7 +1,7 @@
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 import type { RequireAtLeastOne, SetOptional, Simplify, TaggedUnion, TupleToUnion, ValueOf } from 'type-fest';
 import type { JHipsterOptionDefinition } from '../../jdl/types/types.js';
-import { MergeUnion } from './support/merge-union.js';
+import type { MergeUnion } from './support/merge-union.js';
 
 type ConfigScope = 'storage' | 'blueprint' | 'control' | 'generator';
 type CliSpecType = CliOptionSpec['type'];

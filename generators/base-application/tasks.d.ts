@@ -1,9 +1,9 @@
 import type { Storage } from 'yeoman-generator';
-import { BaseGeneratorDefinition, ControlTaskParam, GenericSourceTypeDefinition, SourceTaskParam } from '../base/tasks.js';
-import { ClientSourceType } from '../client/types.js';
-import { BaseChangelog } from '../base-entity-changes/types.js';
-import { CommonClientServerApplication } from './types.js';
-import { Entity, Field, Relationship } from './types/index.js';
+import type { BaseGeneratorDefinition, ControlTaskParam, GenericSourceTypeDefinition, SourceTaskParam } from '../base/tasks.js';
+import type { ClientSourceType } from '../client/types.js';
+import type { BaseChangelog } from '../base-entity-changes/types.js';
+import type { CommonClientServerApplication } from './types.js';
+import type { Entity, Field, Relationship } from './types/index.js';
 
 export type GenericApplicationDefinition<ApplicationType = CommonClientServerApplication> = {
   applicationType: ApplicationType;

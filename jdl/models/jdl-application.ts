@@ -20,11 +20,11 @@
 import createApplicationConfigurationFromObject, {
   createApplicationNamespaceConfigurationFromObject,
 } from './jdl-application-configuration-factory.js';
-import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
-import JDLApplicationConfiguration from './jdl-application-configuration.js';
+import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
+import type JDLApplicationConfiguration from './jdl-application-configuration.js';
 import JDLApplicationEntities from './jdl-application-entities.js';
 import JDLOptions from './jdl-options.js';
-import AbstractJDLOption from './abstract-jdl-option.js';
+import type AbstractJDLOption from './abstract-jdl-option.js';
 
 export default class JDLApplication {
   config: JDLApplicationConfiguration;

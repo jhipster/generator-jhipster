@@ -18,7 +18,7 @@
  */
 
 import fs from 'fs';
-import JDLObject from '../models/jdl-object.js';
+import type JDLObject from '../models/jdl-object.js';
 
 /**
  * Writes down the given JDL to a file.

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { fieldTypes } from '../../../jdl/jhipster/index.js';
-import { LiquibaseEntity } from '../types.js';
-import { GeneratorDefinition } from '../../base-application/generator.js';
+import type { LiquibaseEntity } from '../types.js';
+import type { GeneratorDefinition } from '../../base-application/generator.js';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;

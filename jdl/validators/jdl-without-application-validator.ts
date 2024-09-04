@@ -25,10 +25,10 @@ import {
   relationshipOptions,
   reservedKeywords,
 } from '../built-in-options/index.js';
-import JDLObject from '../models/jdl-object.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLField from '../models/jdl-field.js';
-import AbstractJDLOption from '../models/abstract-jdl-option.js';
+import type JDLObject from '../models/jdl-object.js';
+import type JDLRelationship from '../models/jdl-relationship.js';
+import type JDLField from '../models/jdl-field.js';
+import type AbstractJDLOption from '../models/abstract-jdl-option.js';
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
 import ValidationValidator from './validation-validator.js';
@@ -38,7 +38,7 @@ import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
 
-import { ValidatorOptions } from './validator.js';
+import type { ValidatorOptions } from './validator.js';
 
 const { isReservedFieldName, isReservedPaginationWords, isReservedTableName } = reservedKeywords;
 const { BUILT_IN_ENTITY } = relationshipOptions;

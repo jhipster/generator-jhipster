@@ -18,7 +18,7 @@
  */
 
 import { relationshipTypes } from '../basic-types/index.js';
-import JDLRelationship from '../models/jdl-relationship.js';
+import type JDLRelationship from '../models/jdl-relationship.js';
 import { relationshipTypeExists } from '../basic-types/relationship-types.js';
 import Validator from './validator.js';
 

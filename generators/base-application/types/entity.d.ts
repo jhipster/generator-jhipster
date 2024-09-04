@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { SpringEntity } from '../../server/types.js';
-import Field from './field.js';
-import Relationship from './relationship.js';
+import type { SpringEntity } from '../../server/types.js';
+import type Field from './field.js';
+import type Relationship from './relationship.js';
 
 export type BaseEntity = {
   name: string;

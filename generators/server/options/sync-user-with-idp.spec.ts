@@ -1,5 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import { ImportState, createImporterFromContent } from '../../../jdl/jdl-importer.js';
+import type { ImportState } from '../../../jdl/jdl-importer.js';
+import { createImporterFromContent } from '../../../jdl/jdl-importer.js';
 import { SYNC_USER_WITH_IDP as optionName } from './sync-user-with-idp.js';
 
 describe(`generators - server - jdl - ${optionName}`, () => {

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { camelCase, upperFirst } from 'lodash-es';
-import { JDLRelationshipType, RelationshipType, relationshipTypes } from './relationships.js';
+import type { JDLRelationshipType, RelationshipType } from './relationships.js';
+import { relationshipTypes } from './relationships.js';
 
 export const asJdlRelationshipType = (type: RelationshipType): JDLRelationshipType => upperFirst(camelCase(type)) as JDLRelationshipType;
 

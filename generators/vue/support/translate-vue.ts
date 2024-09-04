@@ -18,7 +18,7 @@
  */
 import { passthrough } from '@yeoman/transform';
 import { Minimatch } from 'minimatch';
-import CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.js';
 
 type GetWebappTranslation = (s: string, data?: Record<string, any>) => string;
 

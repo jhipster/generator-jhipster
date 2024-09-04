@@ -1,5 +1,5 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
-import { RunResult } from 'yeoman-test';
+import type { RunResult } from 'yeoman-test';
 import { toHaveBeenCalledAfter } from 'jest-extended';
 
 import { basicHelpers as helpers } from '../../testing/index.js';

@@ -18,8 +18,8 @@
  */
 import type { GeneratorDefinition } from '../base-application/generator.js';
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
-import CoreGenerator from '../base-core/index.js';
-import { WriteFileSection } from '../base/api.js';
+import type CoreGenerator from '../base-core/index.js';
+import type { WriteFileSection } from '../base/api.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({

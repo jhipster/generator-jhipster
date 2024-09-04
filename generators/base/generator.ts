@@ -28,7 +28,7 @@ import { loadStoredAppOptions } from '../app/support/index.js';
 import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
-import { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
+import type { BaseGeneratorDefinition, GenericTaskGroup } from './tasks.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 

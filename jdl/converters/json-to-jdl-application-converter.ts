@@ -19,7 +19,7 @@
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
-import { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from './types.js';
+import type { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from './types.js';
 
 const GENERATOR_NAME = 'generator-jhipster';
 

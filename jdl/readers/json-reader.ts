@@ -22,8 +22,8 @@ import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter
 import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
-import JDLObject from '../models/jdl-object.js';
-import { JSONEntity } from '../converters/types.js';
+import type JDLObject from '../models/jdl-object.js';
+import type { JSONEntity } from '../converters/types.js';
 import { readJSONFile } from './json-file-reader.js';
 
 /* Parse the given jhipster app dir and return a JDLObject */

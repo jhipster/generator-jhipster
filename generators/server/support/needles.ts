@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.js';
 import { createBaseNeedle } from '../../base/support/needles.js';
-import { SpringBootApplication } from '../types.js';
+import type { SpringBootApplication } from '../types.js';
 
 export type ApplicationPropertiesNeedles = {
   property?: string;

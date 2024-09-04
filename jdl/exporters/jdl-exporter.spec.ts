@@ -24,7 +24,7 @@ import JDLObject from '../models/jdl-object.js';
 import { JDLEntity } from '../models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../models/jdl-application.js';
-import { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
+import type { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
 import { applicationOptions } from '../built-in-options/index.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
 

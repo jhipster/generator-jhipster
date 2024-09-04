@@ -21,7 +21,7 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_LIQUIBASE } from '../generator-list.js';
 import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.js';
-import { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
+import type { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
