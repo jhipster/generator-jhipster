@@ -51,7 +51,7 @@
     "eslint": "9.9.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-react": "7.35.1",
+    "eslint-plugin-react": "7.35.2",
     "eslint-webpack-plugin": "4.2.0",
     "folder-hash": "4.0.4",
     "fork-ts-checker-webpack-plugin": "9.0.2",
