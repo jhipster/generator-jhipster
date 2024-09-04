@@ -48,26 +48,29 @@ import type {
   CascatedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
-  JHipsterArguments,
-  JHipsterCommandDefinition,
-  JHipsterConfigs,
   JHipsterGeneratorFeatures,
   JHipsterGeneratorOptions,
-  JHipsterOptions,
   ValidationResult,
   WriteFileOptions,
 } from '../base/api.js';
+import {
+  type JHipsterArguments,
+  type JHipsterCommandDefinition,
+  type JHipsterConfigs,
+  type JHipsterOptions,
+  convertConfigToOption,
+} from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
 import { type BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';
 import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
-import { convertConfigToOption, loadConfig } from '../../lib/internal/index.js';
+import { loadConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/index.js';
-import { extractArgumentsFromConfigs } from '../base/internal/command.js';
+import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 
 const {
   INITIALIZING,

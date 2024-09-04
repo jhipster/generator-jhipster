@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
 import { createBase64Secret, createSecret } from '../base/support/secret.js';
 import { applicationTypes, authenticationTypes } from '../../jdl/index.js';

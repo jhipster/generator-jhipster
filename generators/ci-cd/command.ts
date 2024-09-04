@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
-import type { JHipsterCommandDefinition } from '../base/api.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
 const includesValue = (prop, values) => answers => answers[prop] && intersection(answers[prop], values).length > 0;
 
