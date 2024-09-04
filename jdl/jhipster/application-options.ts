@@ -18,11 +18,7 @@
  */
 
 import jhipsterDefinition from '../../generators/app/jdl/application-options.js';
-import {
-  JDLApplicationOptionType,
-  JDLApplicationOptionTypeValue,
-  JDLApplicationOptionValue,
-} from '../built-in-options/jdl-application-definition.js';
+import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/types.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';

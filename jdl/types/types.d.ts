@@ -17,14 +17,20 @@
  * limitations under the License.
  */
 import { ITokenConfig } from 'chevrotain';
-import {
-  JDLApplicationOptionType,
-  JDLApplicationOptionTypeValue,
-  JDLApplicationOptionValue,
-} from '../built-in-options/jdl-application-definition.ts';
-import { JDLValidatorOption, JDLValidatorOptionType } from '../parsing/validator.ts';
 
 export type JDLTokenConfig = Pick<ITokenConfig, 'name' | 'pattern'>;
+
+export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
+
+export type JDLValidatorOption = {
+  type: JDLValidatorOptionType;
+  pattern?: RegExp;
+  msg?: string;
+};
+
+export type JDLApplicationOptionValue = string | number | boolean | undefined | never[] | Record<string, string>;
+export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list' | 'quotedList';
+export type JDLApplicationOptionType = { type: JDLApplicationOptionTypeValue };
 
 export type JDLApplicationConfig = {
   tokenConfigs: JDLTokenConfig[];
@@ -40,5 +46,3 @@ export type JHipsterOptionDefinition = {
   tokenValuePattern?: RegExp;
   knownChoices?: string[];
 };
-
-export { JDLValidatorOption };

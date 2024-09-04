@@ -22,6 +22,7 @@ import { first, flatten, includes, values } from 'lodash-es';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import jhipsterDefinition from '../../generators/app/jdl/index.js';
+import { JDLValidatorOption } from '../types/types.js';
 import JDLParser from './jdl-parser.js';
 import { tokens as LexerTokens } from './lexer/lexer.js';
 import { checkConfigKeys } from './self-checks/parsing-system-checker.js';
@@ -51,14 +52,6 @@ const JWT_SECRET_KEY_PATTERN = /^\S+$/;
 const REMEMBER_ME_KEY_PATTERN = /^\S+$/;
 const NUMERIC = /^\d$/;
 const BASIC_NPM_PACKAGE_NAME_PATTERN = /^(@[a-z0-9-][a-z0-9-._]*\/)?[a-z0-9-][a-z0-9-._]*$/;
-
-export type JDLValidatorOptionType = 'BOOLEAN' | 'INTEGER' | 'list' | 'NAME' | 'qualifiedName' | 'STRING' | 'quotedList';
-
-export type JDLValidatorOption = {
-  type: JDLValidatorOptionType;
-  pattern?: RegExp;
-  msg?: string;
-};
 
 const configPropsValidations: Record<string, JDLValidatorOption> = {
   APPLICATION_TYPE: {

@@ -1,8 +1,5 @@
 import { jhipsterOptionTypes, jhipsterOptionValues, jhipsterQuotedOptionNames } from '../jhipster/index.js';
-
-export type JDLApplicationOptionValue = string | number | boolean | undefined | never[] | Record<string, string>;
-export type JDLApplicationOptionTypeValue = 'string' | 'integer' | 'boolean' | 'list' | 'quotedList';
-export type JDLApplicationOptionType = { type: JDLApplicationOptionTypeValue };
+import { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/types.js';
 
 export default class JDLApplicationDefinition {
   optionValues: Record<string, JDLApplicationOptionValue> = jhipsterOptionValues;
