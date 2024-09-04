@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import JDLObject from '../../models/jdl-object.js';
-import JSONEntity from '../../basic-types/json-entity.js';
-import { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
+import type JDLObject from '../../models/jdl-object.js';
+import type JSONEntity from '../../basic-types/json-entity.js';
+import type { JdlObjectWrapper } from '../../models/jdl-object-wrapper.js';
 import BasicEntityConverter from './jdl-to-json-basic-entity-converter.js';
 import FieldConverter from './jdl-to-json-field-converter.js';
 import RelationshipConverter from './jdl-to-json-relationship-converter.js';

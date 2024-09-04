@@ -1,4 +1,4 @@
-import { JavaArtifactType } from '../types.js';
+import type { JavaArtifactType } from '../types.js';
 
 export const javaScopeToGradleScope = (artifactType: JavaArtifactType): string => {
   const { scope = 'compile', type = 'jar' } = artifactType;

@@ -1,11 +1,11 @@
-import { RequireOneOrNone } from 'type-fest';
-import { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
-import { EditFileCallback } from '../base/api.js';
-import { MavenDefinition } from '../maven/types.js';
-import { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
-import { JavaAnnotation } from './support/add-java-annotation.ts';
-import { Command as OpenapiGeneratorCommand } from './generators/openapi-generator/command.js';
-import { Command as BootstrapCommand } from './generators/bootstrap/command.js';
+import type { RequireOneOrNone } from 'type-fest';
+import type { GradleApplication, GradleNeedleOptions } from '../gradle/types.js';
+import type { EditFileCallback } from '../base/api.js';
+import type { MavenDefinition } from '../maven/types.js';
+import type { ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
+import type { JavaAnnotation } from './support/add-java-annotation.ts';
+import type { Command as OpenapiGeneratorCommand } from './generators/openapi-generator/command.js';
+import type { Command as BootstrapCommand } from './generators/bootstrap/command.js';
 
 type JavaBootstrapStorageProperties = ExportStoragePropertiesFromCommand<BootstrapCommand>;
 type JavaOpenapiGeneratorStorageProperties = ExportStoragePropertiesFromCommand<OpenapiGeneratorCommand>;

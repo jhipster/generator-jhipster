@@ -21,10 +21,10 @@ import { capitalize } from 'lodash-es';
 import { fieldTypes, validations } from '../../built-in-options/index.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';
-import JDLObject from '../../models/jdl-object.js';
-import { JSONField } from '../types.js';
-import { JDLEntity } from '../../models/index.js';
-import JDLField from '../../models/jdl-field.js';
+import type JDLObject from '../../models/jdl-object.js';
+import type { JSONField } from '../types.js';
+import type { JDLEntity } from '../../models/index.js';
+import type JDLField from '../../models/jdl-field.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },

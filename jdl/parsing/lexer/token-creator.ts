@@ -18,7 +18,8 @@
  */
 
 import { isString } from 'lodash-es';
-import { ITokenConfig, createToken } from 'chevrotain';
+import type { ITokenConfig } from 'chevrotain';
+import { createToken } from 'chevrotain';
 
 import { KEYWORD, NAME, namePattern } from './shared-tokens.js';
 

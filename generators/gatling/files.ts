@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
-import { WriteFileSection } from '../base/api.js';
-import { SpringBootApplication } from '../server/types.js';
-import Generator from './generator.js';
+import type { WriteFileSection } from '../base/api.js';
+import type { SpringBootApplication } from '../server/types.js';
+import type Generator from './generator.js';
 
 const gatlingFiles: WriteFileSection<Generator, SpringBootApplication> = {
   gatlingFiles: [

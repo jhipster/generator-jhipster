@@ -18,7 +18,8 @@
  */
 
 import { reservedKeywords } from '../built-in-options/index.js';
-import Validator, { ValidatorOptions } from './validator.js';
+import type { ValidatorOptions } from './validator.js';
+import Validator from './validator.js';
 
 const { isReservedClassName } = reservedKeywords;
 export default class EnumValidator extends Validator {

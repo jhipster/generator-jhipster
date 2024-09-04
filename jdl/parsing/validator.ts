@@ -22,7 +22,7 @@ import { first, flatten, includes, values } from 'lodash-es';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import jhipsterDefinition from '../../generators/app/jdl/index.js';
-import { JDLValidatorOption } from '../types/types.js';
+import type { JDLValidatorOption } from '../types/types.js';
 import JDLParser from './jdl-parser.js';
 import { tokens as LexerTokens } from './lexer/lexer.js';
 import { checkConfigKeys } from './self-checks/parsing-system-checker.js';

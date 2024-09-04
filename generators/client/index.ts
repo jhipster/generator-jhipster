@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GeneratorDefinition } from '../base-application/generator.js';
+import type { GeneratorDefinition } from '../base-application/generator.js';
 
 export { default } from './generator.js';
 export { default as command } from './command.js';

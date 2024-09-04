@@ -1,8 +1,8 @@
-import CoreGenerator from '../base-core/generator.ts';
-import { ClientApplication } from '../client/types.js';
-import { I18nApplication } from '../languages/types.js';
-import { SpringBootApplication } from '../server/types.js';
-import { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from './application-options.js';
+import type CoreGenerator from '../base-core/generator.ts';
+import type { ClientApplication } from '../client/types.js';
+import type { I18nApplication } from '../languages/types.js';
+import type { SpringBootApplication } from '../server/types.js';
+import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from './application-options.js';
 
 export type BaseApplication = {
   jhipsterVersion: string;

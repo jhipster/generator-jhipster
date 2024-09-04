@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Language } from './support/languages.js';
+import type { Language } from './support/languages.js';
 
 export type I18nApplication = {
   enableI18nRTL: boolean;

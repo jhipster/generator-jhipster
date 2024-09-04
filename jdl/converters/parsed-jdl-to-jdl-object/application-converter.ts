@@ -19,11 +19,11 @@
 
 import createJDLApplication from '../../models/jdl-application-factory.js';
 import { applicationOptions as ApplicationOptions } from '../../built-in-options/index.js';
-import JDLUnaryOption from '../../models/jdl-unary-option.js';
-import JDLBinaryOption from '../../models/jdl-binary-option.js';
-import AbstractJDLOption from '../../models/abstract-jdl-option.js';
-import JDLApplication from '../../models/jdl-application.js';
-import { ParsedJDLApplication } from './types.js';
+import type JDLUnaryOption from '../../models/jdl-unary-option.js';
+import type JDLBinaryOption from '../../models/jdl-binary-option.js';
+import type AbstractJDLOption from '../../models/abstract-jdl-option.js';
+import type JDLApplication from '../../models/jdl-application.js';
+import type { ParsedJDLApplication } from './types.js';
 import { convertOptions } from './option-converter.js';
 
 const {

@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 import { existsSync, readFileSync, rmSync, statSync } from 'fs';
 import assert from 'assert';
 import { requireNamespace } from '@yeoman/namespace';
-import { GeneratorMeta } from '@yeoman/types';
+import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { defaults, get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
@@ -36,13 +36,8 @@ import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
 import SharedData from '../base/shared-data.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from '../base/priorities.js';
-import {
-  Logger,
-  createJHipster7Context,
-  formatDateForChangelog,
-  joinCallbacks,
-  removeFieldsWithNullishValues,
-} from '../base/support/index.js';
+import type { Logger } from '../base/support/index.js';
+import { createJHipster7Context, formatDateForChangelog, joinCallbacks, removeFieldsWithNullishValues } from '../base/support/index.js';
 
 import type {
   CascatedEditFileCallback,
@@ -61,7 +56,7 @@ import {
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import { type BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
+import type { type BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';

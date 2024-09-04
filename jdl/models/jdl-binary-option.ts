@@ -19,7 +19,8 @@
 
 import BinaryOptions from '../built-in-options/binary-options.js';
 import { join } from '../utils/set-utils.js';
-import AbstractJDLOption, { JDLOptionParams } from './abstract-jdl-option.js';
+import type { JDLOptionParams } from './abstract-jdl-option.js';
+import AbstractJDLOption from './abstract-jdl-option.js';
 
 /**
  * For options like the DTO, the service, etc.

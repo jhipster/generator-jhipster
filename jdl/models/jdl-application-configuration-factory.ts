@@ -25,7 +25,7 @@ import StringJDLApplicationConfigurationOption from './string-jdl-application-co
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
 import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-configuration-option.js';
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
-import JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
+import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
 const applicationDefinition = new JDLApplicationDefinition();
 

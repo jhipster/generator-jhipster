@@ -1,5 +1,5 @@
 import { jhipsterOptionTypes, jhipsterOptionValues, jhipsterQuotedOptionNames } from '../jhipster/index.js';
-import { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/types.js';
+import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/types.js';
 
 export default class JDLApplicationDefinition {
   optionValues: Record<string, JDLApplicationOptionValue> = jhipsterOptionValues;

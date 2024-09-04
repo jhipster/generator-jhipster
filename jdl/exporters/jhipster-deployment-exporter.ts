@@ -20,8 +20,8 @@
 import path from 'path';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
 import DeploymentValidator from '../validators/deployment-validator.js';
-import JDLDeployment from '../models/jdl-deployment.js';
-import { JHipsterYoRcContent } from '../converters/types.js';
+import type JDLDeployment from '../models/jdl-deployment.js';
+import type { JHipsterYoRcContent } from '../converters/types.js';
 import { GENERATOR_NAME, writeConfigFile } from './export-utils.js';
 
 /**

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CommonClientServerApplication } from '../../base-application/types.js';
-import BaseGenerator from '../../base/index.js';
+import type { CommonClientServerApplication } from '../../base-application/types.js';
+import type BaseGenerator from '../../base/index.js';
 
 export type UpdateClientLanguagesTaskParam = { application: CommonClientServerApplication & { enableTranslation: true }; control?: any };
 

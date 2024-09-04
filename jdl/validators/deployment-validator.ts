@@ -18,7 +18,7 @@
  */
 
 import { applicationTypes, deploymentOptions } from '../built-in-options/index.js';
-import JDLDeployment from '../models/jdl-deployment.js';
+import type JDLDeployment from '../models/jdl-deployment.js';
 import Validator from './validator.js';
 
 const { Options } = deploymentOptions;

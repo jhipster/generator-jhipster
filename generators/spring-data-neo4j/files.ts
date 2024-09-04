@@ -18,7 +18,7 @@
  */
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import Generator from './generator.js';
+import type Generator from './generator.js';
 
 export const neo4jFiles = {
   serverResource: [

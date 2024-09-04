@@ -41,7 +41,7 @@ import {
   gradleNeedleOptionsWithDefaults,
   sortDependencies,
 } from './internal/needles.js';
-import { GradleDependency } from './types.js';
+import type { GradleDependency } from './types.js';
 
 const { PRE_CONFLICTS_QUEUE } = QUEUES;
 

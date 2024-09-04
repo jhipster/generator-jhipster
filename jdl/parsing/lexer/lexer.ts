@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { Lexer, TokenType } from 'chevrotain';
+import type { TokenType } from 'chevrotain';
+import { Lexer } from 'chevrotain';
 
 import { relationshipOptions } from '../../built-in-options/index.js';
 import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.js';

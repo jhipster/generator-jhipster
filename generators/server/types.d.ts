@@ -1,13 +1,13 @@
-import { JavaApplication, JavaSourceType } from '../java/types.js';
-import { GradleSourceType } from '../gradle/types.js';
-import { MavenSourceType } from '../maven/types.js';
-import { LiquibaseSourceType } from '../liquibase/types.js';
-import { SpringCacheSourceType } from '../spring-cache/types.js';
+import type { JavaApplication, JavaSourceType } from '../java/types.js';
+import type { GradleSourceType } from '../gradle/types.js';
+import type { MavenSourceType } from '../maven/types.js';
+import type { LiquibaseSourceType } from '../liquibase/types.js';
+import type { SpringCacheSourceType } from '../spring-cache/types.js';
 import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
-import { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
-import { JavaAnnotation } from '../java/support/add-java-annotation.ts';
-import { ApplicationPropertiesNeedles } from './support/needles.ts';
-import { MessageBrokerApplicationType } from './options/message-broker.js';
+import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
+import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
+import type { ApplicationPropertiesNeedles } from './support/needles.ts';
+import type { MessageBrokerApplicationType } from './options/message-broker.js';
 
 export type SpringEntity = {
   /* Generate entity's Entity */

@@ -1,7 +1,7 @@
 import { lstat, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { InfoFile } from '../generators/info/support/extract-info.js';
+import type { InfoFile } from '../generators/info/support/extract-info.js';
 import { GENERATOR_JHIPSTER } from '../generators/generator-constants.js';
 import { mutateData } from '../generators/base/support/config.js';
 

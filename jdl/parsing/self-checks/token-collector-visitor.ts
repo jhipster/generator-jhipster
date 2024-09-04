@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { Alternation, Alternative, GAstVisitor, NonTerminal, Option, Repetition, RepetitionMandatory, Rule } from 'chevrotain';
+import type { Alternation, Alternative, NonTerminal, Option, Repetition, RepetitionMandatory, Rule } from 'chevrotain';
+import { GAstVisitor } from 'chevrotain';
 
 export default class TokenCollectorVisitor extends GAstVisitor {
   visitNonTerminal(_node: NonTerminal) {}

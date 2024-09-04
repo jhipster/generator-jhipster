@@ -1,7 +1,8 @@
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { merge, set, snakeCase } from 'lodash-es';
-import { RunContext, RunContextSettings, RunResult, YeomanTest, result } from 'yeoman-test';
+import type { RunContextSettings, RunResult } from 'yeoman-test';
+import { RunContext, YeomanTest, result } from 'yeoman-test';
 import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
@@ -13,7 +14,7 @@ import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
 import type { JSONEntity } from '../jdl/converters/types.js';
-import CoreGenerator from '../generators/base-core/generator.js';
+import type CoreGenerator from '../generators/base-core/generator.js';
 import getGenerator from './get-generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;

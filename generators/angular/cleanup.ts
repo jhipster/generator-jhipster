@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import CoreGenerator from '../base-core/index.js';
+import type CoreGenerator from '../base-core/index.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
-import { GeneratorDefinition } from '../base-application/generator.js';
+import type { GeneratorDefinition } from '../base-application/generator.js';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore

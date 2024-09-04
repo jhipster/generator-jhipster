@@ -6,7 +6,7 @@ import { Minimatch } from 'minimatch';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { getJDLObjectFromSingleApplication } from '../../../jdl/converters/json-to-jdl-converter.js';
-import { JSONEntity } from '../../../jdl/converters/types.js';
+import type { JSONEntity } from '../../../jdl/converters/types.js';
 
 export const exportJDLTransform = ({
   destinationPath,

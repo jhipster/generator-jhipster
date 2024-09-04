@@ -21,7 +21,7 @@ import {
   SERVER_TEST_SRC_DIR,
 } from '../../generator-constants.js';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../../server/options/index.js';
-import { PlatformApplication } from '../../base-application/types.js';
+import type { PlatformApplication } from '../../base-application/types.js';
 
 const { NO: NO_DATABASE, SQL, MONGODB, COUCHBASE, NEO4J, CASSANDRA } = databaseTypes;
 const { PROMETHEUS, ELK } = monitoringTypes;

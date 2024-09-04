@@ -21,7 +21,8 @@ import JDLObject from '../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship, { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../models/jdl-relationship.js';
+import type { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../models/jdl-relationship.js';
+import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
 
@@ -29,7 +30,7 @@ import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 import { binaryOptions, fieldTypes, relationshipOptions, unaryOptions } from '../built-in-options/index.js';
 import { asJdlRelationshipType } from '../basic-types/relationship-types.js';
-import { JSONEntity, JSONField, JSONRelationship } from './types.js';
+import type { JSONEntity, JSONField, JSONRelationship } from './types.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;

@@ -20,7 +20,7 @@
 import JSONEntity from '../../basic-types/json-entity.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { getTableNameFromEntityNameFallback } from '../../utils/entity-table-name-creator.js';
-import { JDLEntity } from '../../models/index.js';
+import type { JDLEntity } from '../../models/index.js';
 
 export default {
   convert,

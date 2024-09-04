@@ -1,4 +1,5 @@
-import sinon, { SinonStub } from 'sinon';
+import type { SinonStub } from 'sinon';
+import sinon from 'sinon';
 import { beforeEach, describe, expect, it } from 'esmocha';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { defaultHelpers as helpers, runResult } from '../../testing/index.js';

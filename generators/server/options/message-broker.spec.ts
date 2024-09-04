@@ -1,5 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import { ImportState, createImporterFromContent } from '../../../jdl/jdl-importer.js';
+import type { ImportState } from '../../../jdl/jdl-importer.js';
+import { createImporterFromContent } from '../../../jdl/jdl-importer.js';
 import optionDefinition from './message-broker.js';
 import { MESSAGE_BROKER } from './index.js';
 

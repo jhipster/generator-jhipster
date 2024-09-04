@@ -19,9 +19,9 @@
 
 import { get, set } from 'lodash-es';
 
-import CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.js';
 import XmlStorage from '../internal/xml-store.js';
-import {
+import type {
   MavenAnnotationProcessor,
   MavenArtifact,
   MavenDependency,

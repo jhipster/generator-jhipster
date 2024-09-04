@@ -18,11 +18,11 @@
  */
 
 import { applicationOptions, fieldTypes, relationshipOptions } from '../built-in-options/index.js';
-import JDLObject from '../models/jdl-object.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLApplication from '../models/jdl-application.js';
-import JDLField from '../models/jdl-field.js';
-import JDLApplicationConfigurationOption from '../models/jdl-application-configuration-option.js';
+import type JDLObject from '../models/jdl-object.js';
+import type JDLRelationship from '../models/jdl-relationship.js';
+import type JDLApplication from '../models/jdl-application.js';
+import type JDLField from '../models/jdl-field.js';
+import type JDLApplicationConfigurationOption from '../models/jdl-application-configuration-option.js';
 import EntityValidator from './entity-validator.js';
 import FieldValidator from './field-validator.js';
 import ValidationValidator from './validation-validator.js';
@@ -31,7 +31,7 @@ import EnumValidator from './enum-validator.js';
 import DeploymentValidator from './deployment-validator.js';
 import UnaryOptionValidator from './unary-option-validator.js';
 import BinaryOptionValidator from './binary-option-validator.js';
-import { ValidatorOptions } from './validator.js';
+import type { ValidatorOptions } from './validator.js';
 
 const { OptionNames } = applicationOptions;
 

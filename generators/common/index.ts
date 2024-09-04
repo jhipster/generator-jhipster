@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { BaseApplicationGeneratorDefinition } from '../base-application/tasks.js';
+import type { BaseApplicationGeneratorDefinition } from '../base-application/tasks.js';
 import { type Entity } from '../base-application/index.js';
-import { ClientServerApplication } from './types.js';
+import type { ClientServerApplication } from './types.js';
 
 export { default } from './generator.js';
 export { default as command } from './command.js';
