@@ -3,7 +3,7 @@ spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-d
 
 springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.6.0' }
 
-feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.0.3' }
+feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.1.1' }
 
 # Cucumber
 testng = { module = 'org.testng:testng', version = '7.10.2' }
