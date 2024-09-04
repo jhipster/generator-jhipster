@@ -16,13 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/**
- * This file defines the exported JDL DSL related APIs
- * This file will be used as webpack entry point to produce a UMD bundle.
- */
-import { JDLLexer, tokens } from './lexer/lexer.js';
-import { getSyntacticAutoCompleteSuggestions, parse } from './api.js';
-import JDLParser from './jdl-parser.js';
-
-export { tokens, JDLLexer, JDLParser, parse, getSyntacticAutoCompleteSuggestions };
+export const ALPHABETIC = /^[A-Za-z]+$/;
+export const ALPHABETIC_LOWER = /^[a-z]+$/;
+export const ALPHANUMERIC = /^[A-Za-z][A-Za-z0-9]*$/;
+export const ALPHANUMERIC_DASH = /^[A-Za-z][A-Za-z0-9-]*$/;
+export const ALPHABETIC_DASH_LOWER = /^[a-z][a-z-]*$/;
+export const ALPHANUMERIC_SPACE = /^"?[A-Za-z][A-Za-z0-9- ]*"?$/;
+export const ALPHANUMERIC_UNDERSCORE = /^[A-Za-z][A-Za-z0-9_]*$/;

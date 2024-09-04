@@ -23,8 +23,11 @@ import { applicationOptions, binaryOptions } from '../built-in-options/index.js'
 import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
 import JDLApplication from '../models/jdl-application.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
+import { getDefaultRuntime } from '../runtime.js';
 
 const { OptionNames } = applicationOptions;
+
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLApplication', () => {
   describe('hasConfigurationOption', () => {
@@ -32,7 +35,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should return false', () => {
@@ -43,7 +46,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
       });
 
@@ -57,7 +60,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should fail', () => {
@@ -68,7 +71,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
       });
 
@@ -80,7 +83,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application2'));
       });
@@ -95,7 +98,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should fail', () => {
@@ -106,7 +109,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should return undefined', () => {
@@ -117,7 +120,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
       });
 
@@ -131,7 +134,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should not do anything', () => {
@@ -142,7 +145,7 @@ describe('jdl - JDLApplication', () => {
       let result;
 
       before(() => {
-        const application = new JDLApplication();
+        const application = new JDLApplication(undefined, runtime);
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'toto'));
         application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.JHI_PREFIX, 'prefix'));
         result = [];
@@ -162,7 +165,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should fail', () => {
@@ -174,7 +177,7 @@ describe('jdl - JDLApplication', () => {
         let entityNames;
 
         before(() => {
-          const application = new JDLApplication();
+          const application = new JDLApplication(undefined, runtime);
           application.addEntityName('A');
           entityNames = application.getEntityNames();
         });
@@ -187,7 +190,7 @@ describe('jdl - JDLApplication', () => {
         let entityNames;
 
         before(() => {
-          const application = new JDLApplication();
+          const application = new JDLApplication(undefined, runtime);
           application.addEntityName('A');
           application.addEntityName('A');
           entityNames = application.getEntityNames();
@@ -204,15 +207,18 @@ describe('jdl - JDLApplication', () => {
       let entityNames;
 
       before(() => {
-        const application = new JDLApplication({
-          config: {
-            baseName: 'toto',
+        const application = new JDLApplication(
+          {
+            config: {
+              baseName: 'toto',
+            },
+            entityNames: ['A', 'B'],
           },
-          entityNames: ['A', 'B'],
-        });
+          runtime,
+        );
         application.addEntityNames();
         entityNames = application.getEntityNames();
-      });
+      }, runtime);
 
       it('should not alter the entity names', () => {
         expect(entityNames.length).to.equal(2);
@@ -222,15 +228,18 @@ describe('jdl - JDLApplication', () => {
       let entityNames;
 
       before(() => {
-        const application = new JDLApplication({
-          config: {
-            baseName: 'toto',
+        const application = new JDLApplication(
+          {
+            config: {
+              baseName: 'toto',
+            },
+            entityNames: ['A', 'B'],
           },
-          entityNames: ['A', 'B'],
-        });
+          runtime,
+        );
         application.addEntityNames([]);
         entityNames = application.getEntityNames();
-      });
+      }, runtime);
 
       it('should not alter the entity names', () => {
         expect(entityNames.length).to.equal(2);
@@ -240,12 +249,15 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication({
-          config: {
-            baseName: 'toto',
+        application = new JDLApplication(
+          {
+            config: {
+              baseName: 'toto',
+            },
+            entityNames: ['A', 'B'],
           },
-          entityNames: ['A', 'B'],
-        });
+          runtime,
+        );
         application.addEntityNames(['B', 'C']);
       });
 
@@ -259,7 +271,7 @@ describe('jdl - JDLApplication', () => {
       let entityNames;
 
       before(() => {
-        const jdlApplication = new JDLApplication();
+        const jdlApplication = new JDLApplication(undefined, runtime);
         entityNames = jdlApplication.getEntityNames();
       });
 
@@ -271,10 +283,13 @@ describe('jdl - JDLApplication', () => {
       let entityNames;
 
       before(() => {
-        const jdlApplication = new JDLApplication({
-          config: {},
-          entityNames: ['A', 'B'],
-        });
+        const jdlApplication = new JDLApplication(
+          {
+            config: {},
+            entityNames: ['A', 'B'],
+          },
+          runtime,
+        );
         entityNames = jdlApplication.getEntityNames();
       });
 
@@ -287,7 +302,7 @@ describe('jdl - JDLApplication', () => {
     let application;
 
     before(() => {
-      application = new JDLApplication({ entityNames: ['A', 'B'] });
+      application = new JDLApplication({ entityNames: ['A', 'B'] }, runtime);
     });
 
     describe('when not passing a function', () => {
@@ -319,7 +334,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should fail', () => {
@@ -330,7 +345,7 @@ describe('jdl - JDLApplication', () => {
       let result;
 
       before(() => {
-        const application = new JDLApplication();
+        const application = new JDLApplication(undefined, runtime);
         const option = new JDLBinaryOption({
           name: binaryOptions.Options.PAGINATION,
           value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
@@ -351,7 +366,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
       });
 
       it('should return 0', () => {
@@ -362,7 +377,7 @@ describe('jdl - JDLApplication', () => {
       let application;
 
       before(() => {
-        application = new JDLApplication();
+        application = new JDLApplication(undefined, runtime);
         const option1 = new JDLBinaryOption({
           name: binaryOptions.Options.PAGINATION,
           value: binaryOptions.Values.pagination['INFINITE-SCROLL'],
@@ -389,7 +404,7 @@ describe('jdl - JDLApplication', () => {
       let jdlApplication;
 
       before(() => {
-        jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
+        jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } }, runtime);
       });
 
       it('should stringify the application object', () => {
@@ -404,7 +419,7 @@ describe('jdl - JDLApplication', () => {
       let jdlApplication;
 
       before(() => {
-        jdlApplication = new JDLApplication({ entityNames: ['A', 'B', 'C', 'C'] });
+        jdlApplication = new JDLApplication({ entityNames: ['A', 'B', 'C', 'C'] }, runtime);
       });
 
       it('should export the entity names', () => {
@@ -422,7 +437,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { jhipsterVersion: '6.5.1' } });
+          const application = new JDLApplication({ config: { jhipsterVersion: '6.5.1' } }, runtime);
           result = application.toString();
         });
 
@@ -434,7 +449,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { jhipsterVersion: '"6.5.1"' } });
+          const application = new JDLApplication({ config: { jhipsterVersion: '"6.5.1"' } }, runtime);
           result = application.toString();
         });
 
@@ -448,7 +463,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { jwtSecretKey: 'ASTUPIDLYLONGWORD=' } });
+          const application = new JDLApplication({ config: { jwtSecretKey: 'ASTUPIDLYLONGWORD=' } }, runtime);
           result = application.toString();
         });
 
@@ -460,7 +475,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { jwtSecretKey: '"ASTUPIDLYLONGWORD="' } });
+          const application = new JDLApplication({ config: { jwtSecretKey: '"ASTUPIDLYLONGWORD="' } }, runtime);
           result = application.toString();
         });
 
@@ -474,7 +489,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { rememberMeKey: 'ASTUPIDLYLONGWORD=' } });
+          const application = new JDLApplication({ config: { rememberMeKey: 'ASTUPIDLYLONGWORD=' } }, runtime);
           result = application.toString();
         });
 
@@ -486,7 +501,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { rememberMeKey: '"ASTUPIDLYLONGWORD="' } });
+          const application = new JDLApplication({ config: { rememberMeKey: '"ASTUPIDLYLONGWORD="' } }, runtime);
           result = application.toString();
         });
 
@@ -500,7 +515,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { entitySuffix: '' } });
+          const application = new JDLApplication({ config: { entitySuffix: '' } }, runtime);
           result = application.toString();
         });
 
@@ -512,7 +527,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { entitySuffix: 'Entity' } });
+          const application = new JDLApplication({ config: { entitySuffix: 'Entity' } }, runtime);
           result = application.toString();
         });
 
@@ -526,7 +541,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { dtoSuffix: '' } });
+          const application = new JDLApplication({ config: { dtoSuffix: '' } }, runtime);
           result = application.toString();
         });
 
@@ -538,7 +553,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { dtoSuffix: 'DTO' } });
+          const application = new JDLApplication({ config: { dtoSuffix: 'DTO' } }, runtime);
           result = application.toString();
         });
 
@@ -552,7 +567,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { clientThemeVariant: '' } });
+          const application = new JDLApplication({ config: { clientThemeVariant: '' } }, runtime);
           result = application.toString();
         });
 
@@ -564,7 +579,7 @@ describe('jdl - JDLApplication', () => {
         let result;
 
         before(() => {
-          const application = new JDLApplication({ config: { clientThemeVariant: 'aVariant' } });
+          const application = new JDLApplication({ config: { clientThemeVariant: 'aVariant' } }, runtime);
           result = application.toString();
         });
 
@@ -577,7 +592,7 @@ describe('jdl - JDLApplication', () => {
       let result;
 
       before(() => {
-        const application = new JDLApplication({ config: { packageFolder: 'whatever' } });
+        const application = new JDLApplication({ config: { packageFolder: 'whatever' } }, runtime);
         result = application.toString();
       });
 
@@ -589,9 +604,12 @@ describe('jdl - JDLApplication', () => {
       let result;
 
       before(() => {
-        const application = new JDLApplication({
-          entityNames: ['A', 'B', 'C'],
-        });
+        const application = new JDLApplication(
+          {
+            entityNames: ['A', 'B', 'C'],
+          },
+          runtime,
+        );
         const option1 = new JDLBinaryOption({
           name: binaryOptions.Options.PAGINATION,
           value: binaryOptions.Values.pagination['INFINITE-SCROLL'],

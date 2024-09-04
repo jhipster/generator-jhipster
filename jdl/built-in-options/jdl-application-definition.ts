@@ -1,10 +1,15 @@
-import { jhipsterOptionTypes, jhipsterOptionValues, jhipsterQuotedOptionNames } from '../jhipster/index.js';
 import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/types.js';
 
 export default class JDLApplicationDefinition {
-  optionValues: Record<string, JDLApplicationOptionValue> = jhipsterOptionValues;
-  optionTypes: Record<string, JDLApplicationOptionType> = jhipsterOptionTypes;
-  quotedOptionNames: string[] = jhipsterQuotedOptionNames;
+  optionValues: Record<string, JDLApplicationOptionValue>;
+  optionTypes: Record<string, JDLApplicationOptionType>;
+  quotedOptionNames: string[];
+
+  constructor({ optionValues, optionTypes, quotedOptionNames }) {
+    this.optionValues = optionValues;
+    this.optionTypes = optionTypes;
+    this.quotedOptionNames = quotedOptionNames;
+  }
 
   /**
    * Returns the option's type, one of string, boolean, list or integer.

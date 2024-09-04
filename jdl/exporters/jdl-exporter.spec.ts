@@ -27,10 +27,13 @@ import JDLApplication from '../models/jdl-application.js';
 import type { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
 import { applicationOptions } from '../built-in-options/index.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
+import { getDefaultRuntime } from '../runtime.js';
 
 const {
   OptionNames: { CLIENT_FRAMEWORK },
 } = applicationOptions;
+
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLExporter', () => {
   beforeEach(async () => {
@@ -105,7 +108,7 @@ describe('jdl - JDLExporter', () => {
               const jdlApplication: JDLJSONApplicationConfiguration = {
                 config: { [CLIENT_FRAMEWORK]: 'no' },
               };
-              jdlObject.addApplication(new JDLApplication(jdlApplication));
+              jdlObject.addApplication(new JDLApplication(jdlApplication, runtime));
             });
 
             it('should export the JDL and match snapshot', () => {

@@ -19,39 +19,33 @@
 
 import { uniq } from 'lodash-es';
 import { EOF } from 'chevrotain';
-import JDLAstBuilderVisitor from './jdl-ast-builder-visitor.js';
-import { JDLLexer, tokens } from './lexer/lexer.js';
-import JDLParser from './jdl-parser.js';
+import type { JDLRuntime } from '../types/runtime.js';
+import { getDefaultRuntime } from '../runtime.js';
+import { buildJDLAstBuilderVisitor } from './jdl-ast-builder-visitor.js';
 import performAdditionalSyntaxChecks from './validator.js';
-import { checkTokens } from './self-checks/parsing-system-checker.js';
 
-const parserSingleton = JDLParser.getParser();
-parserSingleton.parse();
-const rules = parserSingleton.getGAstProductions();
-checkTokens(Object.values(tokens), Object.values(rules));
-
-export function parse(input, startRule = 'prog') {
-  const cst = getCst(input, startRule);
-  const astBuilderVisitor = new JDLAstBuilderVisitor();
+export function parse(input, startRule = 'prog', runtime: JDLRuntime = getDefaultRuntime()) {
+  const cst = getCst(input, startRule, runtime);
+  const astBuilderVisitor = buildJDLAstBuilderVisitor(runtime);
   return astBuilderVisitor.visit(cst);
 }
 
-export function getCst(input, startRule = 'prog') {
-  const lexResult = JDLLexer.tokenize(input);
+export function getCst(input, startRule = 'prog', runtime: JDLRuntime = getDefaultRuntime()) {
+  const lexResult = runtime.lexer.tokenize(input);
 
   if (lexResult.errors.length > 0) {
     throw Error(lexResult.errors[0].message);
   }
 
-  parserSingleton.input = lexResult.tokens;
+  runtime.parser.input = lexResult.tokens;
 
-  const cst = parserSingleton[startRule]();
+  const cst = runtime.parser[startRule]();
 
-  if (parserSingleton.errors.length > 0) {
-    throwParserError(parserSingleton.errors);
+  if (runtime.parser.errors.length > 0) {
+    throwParserError(runtime.parser.errors);
   }
 
-  const extraSyntaxErrors = performAdditionalSyntaxChecks(cst);
+  const extraSyntaxErrors = performAdditionalSyntaxChecks(cst, runtime);
 
   if (extraSyntaxErrors.length > 0) {
     throwSyntaxError(extraSyntaxErrors);
@@ -85,13 +79,13 @@ function throwSyntaxError(errors) {
 
 // A more complete example can be found here:
 // https://github.com/SAP/chevrotain/blob/master/examples/parser/content_assist/official_feature_content_assist.js#L134
-export function getSyntacticAutoCompleteSuggestions(input, startRule = 'prog') {
-  const lexResult = JDLLexer.tokenize(input);
+export function getSyntacticAutoCompleteSuggestions(input, startRule = 'prog', runtime: JDLRuntime = getDefaultRuntime()) {
+  const lexResult = runtime.lexer.tokenize(input);
 
   // ".input" is a setter which will reset the parsers' internal state.
-  parserSingleton.input = lexResult.tokens;
+  runtime.parser.input = lexResult.tokens;
 
-  const syntacticSuggestions = parserSingleton.computeContentAssist(startRule, lexResult.tokens);
+  const syntacticSuggestions = runtime.parser.computeContentAssist(startRule, lexResult.tokens);
 
   // Each suggestion includes additional information such as the "Rule Stack" at suggestion point.
   // This may be handy for advanced implementations, e.g: different logic for suggesting a NAME token in an entity

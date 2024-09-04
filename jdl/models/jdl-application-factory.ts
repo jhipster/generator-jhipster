@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { getDefaultRuntime } from '../runtime.js';
+import type { JDLRuntime } from '../types/runtime.js';
 import JDLApplication from './jdl-application.js';
 
 /**
@@ -23,6 +25,10 @@ import JDLApplication from './jdl-application.js';
  * @param {Object} config - the application configuration.
  * @returns {JDLApplication} the created JDL application.
  */
-export default function createJDLApplication(config?: any, namespaceConfigs?: Record<string, Record<string, any>>) {
-  return new JDLApplication({ config: { baseName: 'jhipster', ...config }, namespaceConfigs });
+export default function createJDLApplication(
+  config: any,
+  namespaceConfigs: Record<string, Record<string, any>> | undefined,
+  runtime: JDLRuntime = getDefaultRuntime(),
+) {
+  return new JDLApplication({ config: { baseName: 'jhipster', ...config }, namespaceConfigs }, runtime);
 }

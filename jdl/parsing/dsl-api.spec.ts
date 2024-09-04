@@ -19,9 +19,10 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { tokens } from './lexer/lexer.js';
-
+import { getDefaultRuntime } from '../runtime.js';
 import { getSyntacticAutoCompleteSuggestions, parse } from './api.js';
+
+const { tokens } = getDefaultRuntime();
 
 describe('jdl - JDL DSL API', () => {
   describe('when wanting an AST', () => {

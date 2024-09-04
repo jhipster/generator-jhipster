@@ -18,8 +18,8 @@
  */
 
 import logger from '../utils/objects/logger.js';
-import JDLApplicationDefinition from '../built-in-options/jdl-application-definition.js';
 import type { JDLApplicationOptionTypeValue } from '../types/types.js';
+import type { JDLRuntime } from '../types/runtime.js';
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.js';
 import IntegerJDLApplicationConfigurationOption from './integer-jdl-application-configuration-option.js';
@@ -27,28 +27,30 @@ import BooleanJDLApplicationConfigurationOption from './boolean-jdl-application-
 import ListJDLApplicationConfigurationOption from './list-jdl-application-configuration-option.js';
 import type JDLApplicationConfigurationOption from './jdl-application-configuration-option.js';
 
-const applicationDefinition = new JDLApplicationDefinition();
-
-export default function createApplicationConfigurationFromObject(configurationObject = {}): JDLApplicationConfiguration {
+export default function createApplicationConfigurationFromObject(
+  configurationObject = {},
+  runtime: JDLRuntime,
+): JDLApplicationConfiguration {
   const configuration = new JDLApplicationConfiguration();
   Object.keys(configurationObject).forEach(optionName => {
     const optionValue = configurationObject[optionName];
-    if (!applicationDefinition.doesOptionExist(optionName)) {
+    if (!runtime.applicationDefinition.doesOptionExist(optionName)) {
       logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
     }
-    configuration.setOption(createApplicationJDLConfigurationOption(optionName, optionValue));
+    configuration.setOption(createApplicationJDLConfigurationOption(optionName, optionValue, runtime));
   });
   return configuration;
 }
 
 export function createApplicationNamespaceConfigurationFromObject(
   parsedNamespaceConfigs: Record<string, Record<string, boolean | number | string[] | string>> = {},
+  runtime: JDLRuntime,
 ): JDLApplicationConfiguration[] {
   return Object.entries(parsedNamespaceConfigs).map(([namespace, parsedConfig]) => {
     const configuration = new JDLApplicationConfiguration(namespace);
     for (const [optionName, optionValue] of Object.entries(parsedConfig)) {
-      configuration.setOption(createUnknownJDLConfigurationOption(optionName, optionValue));
+      configuration.setOption(createUnknownJDLConfigurationOption(optionName, optionValue, runtime));
     }
     return configuration;
   });
@@ -57,6 +59,7 @@ export function createApplicationNamespaceConfigurationFromObject(
 function createUnknownJDLConfigurationOption(
   name: string,
   value: boolean | number | string[] | string,
+  runtime: JDLRuntime,
 ): JDLApplicationConfigurationOption<any> {
   let type;
   if (typeof value === 'boolean') {
@@ -71,25 +74,27 @@ function createUnknownJDLConfigurationOption(
   } else {
     throw new Error(`Unknown value type for option ${name}`);
   }
-  return createJDLConfigurationOption(type, name, value);
+  return createJDLConfigurationOption(type, name, value, runtime);
 }
 
 function createApplicationJDLConfigurationOption(
   name: string,
   value: boolean | number | string[] | string,
+  runtime: JDLRuntime,
 ): JDLApplicationConfigurationOption<any> {
-  const type = applicationDefinition.getTypeForOption(name);
-  return createJDLConfigurationOption(type, name, value);
+  const type = runtime.applicationDefinition.getTypeForOption(name);
+  return createJDLConfigurationOption(type, name, value, runtime);
 }
 
 function createJDLConfigurationOption(
   type: JDLApplicationOptionTypeValue,
   name: string,
   value: boolean | number | string[] | string,
+  runtime: JDLRuntime,
 ): JDLApplicationConfigurationOption<any> {
   switch (type) {
     case 'string':
-      return new StringJDLApplicationConfigurationOption(name, value as string, applicationDefinition.shouldTheValueBeQuoted(name));
+      return new StringJDLApplicationConfigurationOption(name, value as string, runtime.applicationDefinition.shouldTheValueBeQuoted(name));
     case 'integer':
       return new IntegerJDLApplicationConfigurationOption(name, value as number);
     case 'boolean':

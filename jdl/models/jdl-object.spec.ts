@@ -31,8 +31,11 @@ import JDLValidation from '../models/jdl-validation.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import JDLBinaryOption from '../models/jdl-binary-option.js';
+import { getDefaultRuntime } from '../runtime.js';
 
 const { MONOLITH } = applicationTypes;
+
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLObject', () => {
   describe('addApplication', () => {
@@ -54,7 +57,7 @@ describe('jdl - JDLObject', () => {
 
       before(() => {
         const object = new JDLObject();
-        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
+        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' }, undefined, runtime);
         const baseName = originalApplication.getConfigurationOptionValue('baseName');
         object.addApplication(originalApplication);
         addedApplication = object.applications[baseName];
@@ -81,9 +84,13 @@ describe('jdl - JDLObject', () => {
     describe('when having one or more applications', () => {
       before(() => {
         jdlObject.addApplication(
-          createJDLApplication({
-            applicationType: MONOLITH,
-          }),
+          createJDLApplication(
+            {
+              applicationType: MONOLITH,
+            },
+            undefined,
+            runtime,
+          ),
         );
       });
 
@@ -98,7 +105,7 @@ describe('jdl - JDLObject', () => {
 
       before(() => {
         jdlObject = new JDLObject();
-        jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+        jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }), undefined, runtime);
       });
 
       it('should return undefined', () => {
@@ -111,7 +118,7 @@ describe('jdl - JDLObject', () => {
 
         before(() => {
           jdlObject = new JDLObject();
-          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }), undefined, runtime);
         });
 
         it('should return undefined', () => {
@@ -124,7 +131,7 @@ describe('jdl - JDLObject', () => {
 
         before(() => {
           jdlObject = new JDLObject();
-          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }), undefined, runtime);
         });
 
         it('should return undefined', () => {
@@ -199,8 +206,8 @@ describe('jdl - JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'A' }));
-      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }));
+      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'A' }, undefined, runtime));
+      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }, undefined, runtime));
     });
 
     describe('when not passing a function', () => {

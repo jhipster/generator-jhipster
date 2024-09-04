@@ -20,7 +20,7 @@ import deduplicate from '../utils/array-utils.js';
 
 import { applicationOptions, relationshipOptions, validations } from '../built-in-options/index.js';
 import logger from '../utils/objects/logger.js';
-import JDLParser from './jdl-parser.js';
+import type { JDLRuntime } from '../types/runtime.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { OptionNames } = applicationOptions;
@@ -30,649 +30,650 @@ const {
 
 const { PACKAGE_NAME } = OptionNames;
 
-const parser = JDLParser.getParser();
-parser.parse();
+export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
+  const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
 
-const BaseJDLCSTVisitor = parser.getBaseCstVisitorConstructor();
-
-export default class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
-  constructor() {
-    super();
-    this.validateVisitor();
-  }
-
-  prog(context) {
-    const ast = {
-      applications: [],
-      deployments: [],
-      constants: {},
-      entities: [],
-      relationships: [],
-      enums: [],
-      options: {},
-      useOptions: [],
-    };
-
-    if (context.constantDeclaration) {
-      const constants = context.constantDeclaration.map(this.visit, this);
-      constants.forEach(currConst => {
-        ast.constants[currConst.name] = currConst.value;
-      });
+  class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
+    constructor() {
+      super();
+      this.validateVisitor();
     }
 
-    if (context.applicationDeclaration) {
-      ast.applications = context.applicationDeclaration.map(this.visit, this);
+    prog(context) {
+      const ast = {
+        applications: [],
+        deployments: [],
+        constants: {},
+        entities: [],
+        relationships: [],
+        enums: [],
+        options: {},
+        useOptions: [],
+      };
+
+      if (context.constantDeclaration) {
+        const constants = context.constantDeclaration.map(this.visit, this);
+        constants.forEach(currConst => {
+          ast.constants[currConst.name] = currConst.value;
+        });
+      }
+
+      if (context.applicationDeclaration) {
+        ast.applications = context.applicationDeclaration.map(this.visit, this);
+      }
+
+      if (context.deploymentDeclaration) {
+        ast.deployments = context.deploymentDeclaration.map(this.visit, this);
+      }
+
+      if (context.entityDeclaration) {
+        ast.entities = context.entityDeclaration.map(this.visit, this);
+      }
+
+      if (context.relationDeclaration) {
+        ast.relationships = context.relationDeclaration.flatMap(this.visit, this);
+      }
+
+      if (context.enumDeclaration) {
+        ast.enums = context.enumDeclaration.map(this.visit, this);
+      }
+
+      if (context.unaryOptionDeclaration) {
+        context.unaryOptionDeclaration.map(this.visit, this).forEach(option => {
+          if (!ast.options[option.optionName]) {
+            ast.options[option.optionName] = {};
+          }
+          const astResult = ast.options[option.optionName];
+
+          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+          astResult.list = entityList;
+          astResult.excluded = excludedEntityList;
+        });
+      }
+
+      if (context.binaryOptionDeclaration) {
+        context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
+          if (option.optionName === 'paginate') {
+            // TODO drop for v9
+            logger.warn('The paginate option is deprecated, please use pagination instead.');
+            option.optionName = 'pagination';
+          }
+          const newOption = !ast.options[option.optionName];
+          if (newOption) {
+            ast.options[option.optionName] = {};
+          }
+          const newOptionValue = !ast.options[option.optionName][option.optionValue];
+          if (newOptionValue) {
+            ast.options[option.optionName][option.optionValue] = {};
+          }
+          const astResult = ast.options[option.optionName][option.optionValue];
+
+          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+          astResult.list = entityList;
+          astResult.excluded = excludedEntityList;
+        });
+      }
+
+      if (context.useOptionDeclaration) {
+        ast.useOptions = context.useOptionDeclaration.map(this.visit, this);
+      }
+
+      return ast;
     }
 
-    if (context.deploymentDeclaration) {
-      ast.deployments = context.deploymentDeclaration.map(this.visit, this);
-    }
-
-    if (context.entityDeclaration) {
-      ast.entities = context.entityDeclaration.map(this.visit, this);
-    }
-
-    if (context.relationDeclaration) {
-      ast.relationships = context.relationDeclaration.flatMap(this.visit, this);
-    }
-
-    if (context.enumDeclaration) {
-      ast.enums = context.enumDeclaration.map(this.visit, this);
-    }
-
-    if (context.unaryOptionDeclaration) {
-      context.unaryOptionDeclaration.map(this.visit, this).forEach(option => {
-        if (!ast.options[option.optionName]) {
-          ast.options[option.optionName] = {};
-        }
-        const astResult = ast.options[option.optionName];
-
-        const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-        astResult.list = entityList;
-        astResult.excluded = excludedEntityList;
-      });
-    }
-
-    if (context.binaryOptionDeclaration) {
-      context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
-        if (option.optionName === 'paginate') {
-          // TODO drop for v9
-          logger.warn('The paginate option is deprecated, please use pagination instead.');
-          option.optionName = 'pagination';
-        }
-        const newOption = !ast.options[option.optionName];
-        if (newOption) {
-          ast.options[option.optionName] = {};
-        }
-        const newOptionValue = !ast.options[option.optionName][option.optionValue];
-        if (newOptionValue) {
-          ast.options[option.optionName][option.optionValue] = {};
-        }
-        const astResult = ast.options[option.optionName][option.optionValue];
-
-        const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-        astResult.list = entityList;
-        astResult.excluded = excludedEntityList;
-      });
-    }
-
-    if (context.useOptionDeclaration) {
-      ast.useOptions = context.useOptionDeclaration.map(this.visit, this);
-    }
-
-    return ast;
-  }
-
-  constantDeclaration(context) {
-    return {
-      name: context.NAME[0].image,
-      value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image,
-    };
-  }
-
-  entityDeclaration(context) {
-    const annotations: any[] = [];
-    if (context.annotationDeclaration) {
-      context.annotationDeclaration.forEach(contextObject => {
-        annotations.push(this.visit(contextObject));
-      });
-    }
-
-    let documentation = null;
-    if (context.JAVADOC) {
-      documentation = trimComment(context.JAVADOC[0].image);
-    }
-
-    const name = context.NAME[0].image;
-
-    let tableName;
-    if (context.entityTableNameDeclaration) {
-      tableName = this.visit(context.entityTableNameDeclaration);
-    }
-
-    let body = [];
-    if (context.entityBody) {
-      body = this.visit(context.entityBody);
-    }
-
-    return {
-      annotations,
-      name,
-      tableName,
-      body,
-      documentation,
-    };
-  }
-
-  annotationDeclaration(context) {
-    const optionName = context.option[0].image;
-    if (!context.value) {
-      return { optionName, type: 'UNARY' };
-    }
-    let { image: optionValue } = context.value[0];
-    const { tokenType } = context.value[0];
-    switch (tokenType.name) {
-      case 'INTEGER':
-        optionValue = parseInt(optionValue, 10);
-        break;
-      case 'DECIMAL':
-        optionValue = parseFloat(optionValue);
-        break;
-      case 'TRUE':
-        optionValue = true;
-        break;
-      case 'FALSE':
-        optionValue = false;
-        break;
-      default:
-        optionValue = optionValue.replace(/"/g, '');
-    }
-    return { optionName, optionValue, type: 'BINARY' };
-  }
-
-  entityTableNameDeclaration(context) {
-    return context.NAME[0].image;
-  }
-
-  entityBody(context) {
-    if (!context.fieldDeclaration) {
-      return [];
-    }
-    return context.fieldDeclaration.map(element => this.visit(element));
-  }
-
-  fieldDeclaration(context) {
-    const annotations: any[] = [];
-    if (context.annotationDeclaration) {
-      context.annotationDeclaration.forEach(contextObject => {
-        annotations.push(this.visit(contextObject));
-      });
-    }
-
-    // filter actual comment as the comment rule may be empty
-    const comment = context.JAVADOC ? trimComment(context.JAVADOC[0].image) : null;
-
-    let validations = [];
-    if (context.validation) {
-      validations = context.validation.map(element => this.visit(element));
-    }
-
-    return {
-      name: context.NAME[0].image,
-      // context.type is an array with a single item.
-      // in that case:
-      // this.visit(context.type) is equivalent to this.visit(context.type[0])
-      type: this.visit(context.type),
-      validations,
-      documentation: comment,
-      annotations,
-    };
-  }
-
-  type(context) {
-    return context.NAME[0].image;
-  }
-
-  validation(context) {
-    // only one of these alternatives can exist at the same time.
-    if (context.REQUIRED) {
+    constantDeclaration(context) {
       return {
-        key: REQUIRED,
-        value: '',
+        name: context.NAME[0].image,
+        value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image,
       };
     }
-    if (context.UNIQUE) {
+
+    entityDeclaration(context) {
+      const annotations: any[] = [];
+      if (context.annotationDeclaration) {
+        context.annotationDeclaration.forEach(contextObject => {
+          annotations.push(this.visit(contextObject));
+        });
+      }
+
+      let documentation = null;
+      if (context.JAVADOC) {
+        documentation = trimComment(context.JAVADOC[0].image);
+      }
+
+      const name = context.NAME[0].image;
+
+      let tableName;
+      if (context.entityTableNameDeclaration) {
+        tableName = this.visit(context.entityTableNameDeclaration);
+      }
+
+      let body = [];
+      if (context.entityBody) {
+        body = this.visit(context.entityBody);
+      }
+
       return {
-        key: UNIQUE,
-        value: '',
+        annotations,
+        name,
+        tableName,
+        body,
+        documentation,
       };
     }
-    if (context.minMaxValidation) {
-      return this.visit(context.minMaxValidation);
-    }
-    return this.visit(context.pattern);
-  }
 
-  minMaxValidation(context) {
-    if (context.NAME) {
+    annotationDeclaration(context) {
+      const optionName = context.option[0].image;
+      if (!context.value) {
+        return { optionName, type: 'UNARY' };
+      }
+      let { image: optionValue } = context.value[0];
+      const { tokenType } = context.value[0];
+      switch (tokenType.name) {
+        case 'INTEGER':
+          optionValue = parseInt(optionValue, 10);
+          break;
+        case 'DECIMAL':
+          optionValue = parseFloat(optionValue);
+          break;
+        case 'TRUE':
+          optionValue = true;
+          break;
+        case 'FALSE':
+          optionValue = false;
+          break;
+        default:
+          optionValue = optionValue.replace(/"/g, '');
+      }
+      return { optionName, optionValue, type: 'BINARY' };
+    }
+
+    entityTableNameDeclaration(context) {
+      return context.NAME[0].image;
+    }
+
+    entityBody(context) {
+      if (!context.fieldDeclaration) {
+        return [];
+      }
+      return context.fieldDeclaration.map(element => this.visit(element));
+    }
+
+    fieldDeclaration(context) {
+      const annotations: any[] = [];
+      if (context.annotationDeclaration) {
+        context.annotationDeclaration.forEach(contextObject => {
+          annotations.push(this.visit(contextObject));
+        });
+      }
+
+      // filter actual comment as the comment rule may be empty
+      const comment = context.JAVADOC ? trimComment(context.JAVADOC[0].image) : null;
+
+      let validations = [];
+      if (context.validation) {
+        validations = context.validation.map(element => this.visit(element));
+      }
+
+      return {
+        name: context.NAME[0].image,
+        // context.type is an array with a single item.
+        // in that case:
+        // this.visit(context.type) is equivalent to this.visit(context.type[0])
+        type: this.visit(context.type),
+        validations,
+        documentation: comment,
+        annotations,
+      };
+    }
+
+    type(context) {
+      return context.NAME[0].image;
+    }
+
+    validation(context) {
+      // only one of these alternatives can exist at the same time.
+      if (context.REQUIRED) {
+        return {
+          key: REQUIRED,
+          value: '',
+        };
+      }
+      if (context.UNIQUE) {
+        return {
+          key: UNIQUE,
+          value: '',
+        };
+      }
+      if (context.minMaxValidation) {
+        return this.visit(context.minMaxValidation);
+      }
+      return this.visit(context.pattern);
+    }
+
+    minMaxValidation(context) {
+      if (context.NAME) {
+        return {
+          key: context.MIN_MAX_KEYWORD[0].image,
+          value: context.NAME[0].image,
+          constant: true,
+        };
+      }
+
       return {
         key: context.MIN_MAX_KEYWORD[0].image,
-        value: context.NAME[0].image,
-        constant: true,
+        value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image,
       };
     }
 
-    return {
-      key: context.MIN_MAX_KEYWORD[0].image,
-      value: context.INTEGER ? context.INTEGER[0].image : context.DECIMAL[0].image,
-    };
-  }
+    pattern(context) {
+      const patternImage = context.REGEX[0].image;
 
-  pattern(context) {
-    const patternImage = context.REGEX[0].image;
-
-    return {
-      key: PATTERN,
-      value: patternImage.substring(1, patternImage.length - 1),
-    };
-  }
-
-  relationDeclaration(context) {
-    const cardinality = this.visit(context.relationshipType);
-    const relationshipBodies = context.relationshipBody.map(this.visit, this);
-
-    relationshipBodies.forEach(relationshipBody => {
-      relationshipBody.cardinality = cardinality;
-    });
-
-    return relationshipBodies;
-  }
-
-  relationshipType(context) {
-    return context.RELATIONSHIP_TYPE[0].image;
-  }
-
-  relationshipBody(context) {
-    const optionsForTheSourceSide = context.annotationOnSourceSide ? context.annotationOnSourceSide.map(this.visit, this) : [];
-    const optionsForTheDestinationSide = context.annotationOnDestinationSide
-      ? context.annotationOnDestinationSide.map(this.visit, this)
-      : [];
-
-    const from = this.visit(context.from);
-    const to = this.visit(context.to);
-
-    const relationshipOptions: any[] = [];
-    if (context.relationshipOptions) {
-      this.visit(context.relationshipOptions).forEach(option => relationshipOptions.push(option));
+      return {
+        key: PATTERN,
+        value: patternImage.substring(1, patternImage.length - 1),
+      };
     }
 
-    return {
-      from,
-      to,
-      options: {
-        global: relationshipOptions,
-        source: optionsForTheSourceSide,
-        destination: optionsForTheDestinationSide,
-      },
-    };
-  }
+    relationDeclaration(context) {
+      const cardinality = this.visit(context.relationshipType);
+      const relationshipBodies = context.relationshipBody.map(this.visit, this);
 
-  relationshipSide(context) {
-    const documentation = this.visit(context.comment);
-    const name = context.NAME[0].image;
+      relationshipBodies.forEach(relationshipBody => {
+        relationshipBody.cardinality = cardinality;
+      });
 
-    const required = !!context.REQUIRED;
-    let injectedField: string | null = null;
+      return relationshipBodies;
+    }
 
-    if (context.injectedField) {
-      injectedField = context.injectedField[0].image;
+    relationshipType(context) {
+      return context.RELATIONSHIP_TYPE[0].image;
+    }
 
-      if (context.injectedFieldParam) {
-        injectedField += `(${context.injectedFieldParam[0].image})`;
+    relationshipBody(context) {
+      const optionsForTheSourceSide = context.annotationOnSourceSide ? context.annotationOnSourceSide.map(this.visit, this) : [];
+      const optionsForTheDestinationSide = context.annotationOnDestinationSide
+        ? context.annotationOnDestinationSide.map(this.visit, this)
+        : [];
+
+      const from = this.visit(context.from);
+      const to = this.visit(context.to);
+
+      const relationshipOptions: any[] = [];
+      if (context.relationshipOptions) {
+        this.visit(context.relationshipOptions).forEach(option => relationshipOptions.push(option));
       }
-    }
 
-    const ast: any = {
-      name,
-      injectedField,
-      documentation,
-      required,
-    };
-
-    if (!injectedField) {
-      delete ast.required;
-    }
-    return ast;
-  }
-
-  relationshipOptions(context) {
-    return context.relationshipOption.map(this.visit, this).reduce((final, current) => [...final, current], []);
-  }
-
-  relationshipOption(context) {
-    if (context.BUILT_IN_ENTITY) {
-      return { optionName: BUILT_IN_ENTITY, type: 'UNARY' };
-    }
-
-    /* istanbul ignore next */
-    throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}'.`);
-  }
-
-  enumDeclaration(context) {
-    const name = context.NAME[0].image;
-    const values = this.visit(context.enumPropList);
-    let documentation = null;
-    if (context.JAVADOC) {
-      documentation = trimComment(context.JAVADOC[0].image);
-    }
-
-    return { name, values, documentation };
-  }
-
-  enumPropList(context) {
-    return context.enumProp.map(this.visit, this);
-  }
-
-  enumProp(context) {
-    const prop: any = {
-      key: context.enumPropKey[0].image,
-    };
-
-    if (context.JAVADOC) {
-      prop.comment = trimComment(context.JAVADOC[0].image);
-    }
-    if (context.enumPropValue) {
-      prop.value = context.enumPropValue[0].image;
-    }
-    if (context.enumPropValueWithQuotes) {
-      prop.value = context.enumPropValueWithQuotes[0].image.replace(/"/g, '');
-    }
-    return prop;
-  }
-
-  entityList(context) {
-    let entityList: any[] = [];
-    if (context.NAME) {
-      entityList = context.NAME.map(nameToken => nameToken.image);
-    }
-
-    const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
-
-    if (context.STAR || entityOnlyListContainsAll) {
-      entityList = ['*'];
-    }
-
-    if (context.method) {
-      entityList.push(context.method[0].image);
-    }
-    if (context.methodPath) {
-      entityList.push(context.methodPath[0].image);
-    }
-
-    return deduplicate(entityList);
-  }
-
-  exclusion(context) {
-    return context.NAME.map(nameToken => nameToken.image, this);
-  }
-
-  unaryOptionDeclaration(context) {
-    return getUnaryOptionFromContext(context, this);
-  }
-
-  binaryOptionDeclaration(context) {
-    return getBinaryOptionFromContext(context, this);
-  }
-
-  useOptionDeclaration(context) {
-    return getSpecialUnaryOptionDeclaration(context, this);
-  }
-
-  filterDef(context) {
-    let entityList: any[] = [];
-    if (context.NAME) {
-      entityList = context.NAME.map(nameToken => nameToken.image, this);
-    }
-
-    const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
-
-    if (context.STAR || entityOnlyListContainsAll) {
-      entityList = ['*'];
-    }
-
-    return deduplicate(entityList);
-  }
-
-  comment(context) {
-    if (context.JAVADOC) {
-      return trimComment(context.JAVADOC[0].image);
-    }
-
-    return null;
-  }
-
-  deploymentDeclaration(context) {
-    const config = {};
-
-    if (context.deploymentConfigDeclaration) {
-      const configProps = context.deploymentConfigDeclaration.map(this.visit, this);
-      configProps.forEach(configProp => {
-        config[configProp.key] = configProp.value;
-      });
-    }
-
-    return config;
-  }
-
-  deploymentConfigDeclaration(context) {
-    const key = context.DEPLOYMENT_KEY[0].image;
-    const value = this.visit(context.deploymentConfigValue);
-
-    return { key, value };
-  }
-
-  deploymentConfigValue(context) {
-    return this.configValue(context);
-  }
-
-  applicationDeclaration(context) {
-    return this.visit(context.applicationSubDeclaration);
-  }
-
-  applicationSubDeclaration(context) {
-    const applicationSubDeclaration: {
-      config: any;
-      namespaceConfigs: Record<string, Record<string, any>>;
-      entities: {
-        entityList: any[];
-        excluded: any[];
+      return {
+        from,
+        to,
+        options: {
+          global: relationshipOptions,
+          source: optionsForTheSourceSide,
+          destination: optionsForTheDestinationSide,
+        },
       };
-      options: any;
-      useOptions: any[];
-    } = {
-      config: {},
-      namespaceConfigs: {},
-      entities: { entityList: [], excluded: [] },
-      options: {},
-      useOptions: [],
-    };
-
-    if (context.applicationSubConfig) {
-      // Apparently the pegjs grammar only returned the last config
-      applicationSubDeclaration.config = this.visit(context.applicationSubConfig[context.applicationSubConfig.length - 1]);
-    }
-    if (context.applicationSubNamespaceConfig) {
-      const { namespace, config } = this.visit(context.applicationSubNamespaceConfig[context.applicationSubNamespaceConfig.length - 1]);
-      applicationSubDeclaration.namespaceConfigs[namespace] = config;
     }
 
-    if (context.applicationSubEntities) {
-      // Apparently the pegjs grammar only returned the last entities
-      applicationSubDeclaration.entities = this.visit(context.applicationSubEntities[context.applicationSubEntities.length - 1]);
-    }
+    relationshipSide(context) {
+      const documentation = this.visit(context.comment);
+      const name = context.NAME[0].image;
 
-    if (context.unaryOptionDeclaration) {
-      context.unaryOptionDeclaration.map(this.visit, this).forEach(option => {
-        if (!applicationSubDeclaration.options[option.optionName]) {
-          applicationSubDeclaration.options[option.optionName] = {};
+      const required = !!context.REQUIRED;
+      let injectedField: string | null = null;
+
+      if (context.injectedField) {
+        injectedField = context.injectedField[0].image;
+
+        if (context.injectedFieldParam) {
+          injectedField += `(${context.injectedFieldParam[0].image})`;
         }
-        const astResult = applicationSubDeclaration.options[option.optionName];
+      }
 
-        const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-        astResult.list = entityList;
-        astResult.excluded = excludedEntityList;
-      });
+      const ast: any = {
+        name,
+        injectedField,
+        documentation,
+        required,
+      };
+
+      if (!injectedField) {
+        delete ast.required;
+      }
+      return ast;
     }
 
-    if (context.binaryOptionDeclaration) {
-      context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
-        if (option.optionName === 'paginate') {
-          // TODO drop for v9
-          logger.warn('The paginate option is deprecated, please use pagination instead.');
-          option.optionName = 'pagination';
-        }
-        const newOption = !applicationSubDeclaration.options[option.optionName];
-        if (newOption) {
-          applicationSubDeclaration.options[option.optionName] = {};
-        }
-        const newOptionValue = !applicationSubDeclaration.options[option.optionName][option.optionValue];
-        if (newOptionValue) {
-          applicationSubDeclaration.options[option.optionName][option.optionValue] = {};
-        }
-        const astResult = applicationSubDeclaration.options[option.optionName][option.optionValue];
-
-        const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-        astResult.list = entityList;
-        astResult.excluded = excludedEntityList;
-      });
+    relationshipOptions(context) {
+      return context.relationshipOption.map(this.visit, this).reduce((final, current) => [...final, current], []);
     }
 
-    if (context.useOptionDeclaration) {
-      context.useOptionDeclaration.map(this.visit, this).forEach(option => {
-        applicationSubDeclaration.useOptions.push(option);
-      });
+    relationshipOption(context) {
+      if (context.BUILT_IN_ENTITY) {
+        return { optionName: BUILT_IN_ENTITY, type: 'UNARY' };
+      }
+
+      /* istanbul ignore next */
+      throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}'.`);
     }
 
-    return applicationSubDeclaration;
+    enumDeclaration(context) {
+      const name = context.NAME[0].image;
+      const values = this.visit(context.enumPropList);
+      let documentation = null;
+      if (context.JAVADOC) {
+        documentation = trimComment(context.JAVADOC[0].image);
+      }
+
+      return { name, values, documentation };
+    }
+
+    enumPropList(context) {
+      return context.enumProp.map(this.visit, this);
+    }
+
+    enumProp(context) {
+      const prop: any = {
+        key: context.enumPropKey[0].image,
+      };
+
+      if (context.JAVADOC) {
+        prop.comment = trimComment(context.JAVADOC[0].image);
+      }
+      if (context.enumPropValue) {
+        prop.value = context.enumPropValue[0].image;
+      }
+      if (context.enumPropValueWithQuotes) {
+        prop.value = context.enumPropValueWithQuotes[0].image.replace(/"/g, '');
+      }
+      return prop;
+    }
+
+    entityList(context) {
+      let entityList: any[] = [];
+      if (context.NAME) {
+        entityList = context.NAME.map(nameToken => nameToken.image);
+      }
+
+      const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
+
+      if (context.STAR || entityOnlyListContainsAll) {
+        entityList = ['*'];
+      }
+
+      if (context.method) {
+        entityList.push(context.method[0].image);
+      }
+      if (context.methodPath) {
+        entityList.push(context.methodPath[0].image);
+      }
+
+      return deduplicate(entityList);
+    }
+
+    exclusion(context) {
+      return context.NAME.map(nameToken => nameToken.image, this);
+    }
+
+    unaryOptionDeclaration(context) {
+      return getUnaryOptionFromContext(context, this);
+    }
+
+    binaryOptionDeclaration(context) {
+      return getBinaryOptionFromContext(context, this);
+    }
+
+    useOptionDeclaration(context) {
+      return getSpecialUnaryOptionDeclaration(context, this);
+    }
+
+    filterDef(context) {
+      let entityList: any[] = [];
+      if (context.NAME) {
+        entityList = context.NAME.map(nameToken => nameToken.image, this);
+      }
+
+      const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
+
+      if (context.STAR || entityOnlyListContainsAll) {
+        entityList = ['*'];
+      }
+
+      return deduplicate(entityList);
+    }
+
+    comment(context) {
+      if (context.JAVADOC) {
+        return trimComment(context.JAVADOC[0].image);
+      }
+
+      return null;
+    }
+
+    deploymentDeclaration(context) {
+      const config = {};
+
+      if (context.deploymentConfigDeclaration) {
+        const configProps = context.deploymentConfigDeclaration.map(this.visit, this);
+        configProps.forEach(configProp => {
+          config[configProp.key] = configProp.value;
+        });
+      }
+
+      return config;
+    }
+
+    deploymentConfigDeclaration(context) {
+      const key = context.DEPLOYMENT_KEY[0].image;
+      const value = this.visit(context.deploymentConfigValue);
+
+      return { key, value };
+    }
+
+    deploymentConfigValue(context) {
+      return this.configValue(context);
+    }
+
+    applicationDeclaration(context) {
+      return this.visit(context.applicationSubDeclaration);
+    }
+
+    applicationSubDeclaration(context) {
+      const applicationSubDeclaration: {
+        config: any;
+        namespaceConfigs: Record<string, Record<string, any>>;
+        entities: {
+          entityList: any[];
+          excluded: any[];
+        };
+        options: any;
+        useOptions: any[];
+      } = {
+        config: {},
+        namespaceConfigs: {},
+        entities: { entityList: [], excluded: [] },
+        options: {},
+        useOptions: [],
+      };
+
+      if (context.applicationSubConfig) {
+        // Apparently the pegjs grammar only returned the last config
+        applicationSubDeclaration.config = this.visit(context.applicationSubConfig[context.applicationSubConfig.length - 1]);
+      }
+      if (context.applicationSubNamespaceConfig) {
+        const { namespace, config } = this.visit(context.applicationSubNamespaceConfig[context.applicationSubNamespaceConfig.length - 1]);
+        applicationSubDeclaration.namespaceConfigs[namespace] = config;
+      }
+
+      if (context.applicationSubEntities) {
+        // Apparently the pegjs grammar only returned the last entities
+        applicationSubDeclaration.entities = this.visit(context.applicationSubEntities[context.applicationSubEntities.length - 1]);
+      }
+
+      if (context.unaryOptionDeclaration) {
+        context.unaryOptionDeclaration.map(this.visit, this).forEach(option => {
+          if (!applicationSubDeclaration.options[option.optionName]) {
+            applicationSubDeclaration.options[option.optionName] = {};
+          }
+          const astResult = applicationSubDeclaration.options[option.optionName];
+
+          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+          astResult.list = entityList;
+          astResult.excluded = excludedEntityList;
+        });
+      }
+
+      if (context.binaryOptionDeclaration) {
+        context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
+          if (option.optionName === 'paginate') {
+            // TODO drop for v9
+            logger.warn('The paginate option is deprecated, please use pagination instead.');
+            option.optionName = 'pagination';
+          }
+          const newOption = !applicationSubDeclaration.options[option.optionName];
+          if (newOption) {
+            applicationSubDeclaration.options[option.optionName] = {};
+          }
+          const newOptionValue = !applicationSubDeclaration.options[option.optionName][option.optionValue];
+          if (newOptionValue) {
+            applicationSubDeclaration.options[option.optionName][option.optionValue] = {};
+          }
+          const astResult = applicationSubDeclaration.options[option.optionName][option.optionValue];
+
+          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+          astResult.list = entityList;
+          astResult.excluded = excludedEntityList;
+        });
+      }
+
+      if (context.useOptionDeclaration) {
+        context.useOptionDeclaration.map(this.visit, this).forEach(option => {
+          applicationSubDeclaration.useOptions.push(option);
+        });
+      }
+
+      return applicationSubDeclaration;
+    }
+
+    applicationSubNamespaceConfig(context) {
+      const config: any = {};
+
+      const namespace = context.namespace[0].image;
+      if (context.applicationNamespaceConfigDeclaration) {
+        const configProps = context.applicationNamespaceConfigDeclaration.map(this.visit, this);
+        configProps.forEach(configProp => {
+          config[configProp.key] = configProp.value;
+        });
+      }
+
+      return { namespace, config };
+    }
+
+    applicationNamespaceConfigDeclaration(context) {
+      const key = context.NAME[0].image;
+      const value = this.visit(context.namespaceConfigValue);
+
+      return { key, value };
+    }
+
+    namespaceConfigValue(context) {
+      if (context.qualifiedName) {
+        return this.visit(context.qualifiedName);
+      }
+      if (context.list) {
+        return this.visit(context.list);
+      }
+      if (context.quotedList) {
+        return this.visit(context.quotedList);
+      }
+      if (context.INTEGER) {
+        return context.INTEGER[0].image;
+      }
+      if (context.STRING) {
+        const stringImage = context.STRING[0].image;
+        return stringImage.substring(1, stringImage.length - 1);
+      }
+      if (context.BOOLEAN) {
+        return context.BOOLEAN[0].image === 'true';
+      }
+
+      /* istanbul ignore next */
+      throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
+    }
+
+    applicationSubConfig(context) {
+      const config: any = {};
+
+      if (context.applicationConfigDeclaration) {
+        const configProps = context.applicationConfigDeclaration.map(this.visit, this);
+        configProps.forEach(configProp => {
+          config[configProp.key] = configProp.value;
+
+          if (configProp.key === PACKAGE_NAME && !config.packageFolder) {
+            config.packageFolder = configProp.value.replace(/[.]/g, '/');
+          }
+        });
+      }
+
+      return config;
+    }
+
+    applicationSubEntities(context) {
+      return getEntityListFromContext(context, this);
+    }
+
+    applicationConfigDeclaration(context) {
+      const key = context.CONFIG_KEY[0].image;
+      const value = this.visit(context.configValue);
+
+      return { key, value };
+    }
+
+    configValue(context) {
+      if (context.qualifiedName) {
+        return this.visit(context.qualifiedName);
+      }
+      if (context.list) {
+        return this.visit(context.list);
+      }
+      if (context.quotedList) {
+        return this.visit(context.quotedList);
+      }
+      if (context.INTEGER) {
+        return context.INTEGER[0].image;
+      }
+      if (context.STRING) {
+        const stringImage = context.STRING[0].image;
+        return stringImage.substring(1, stringImage.length - 1);
+      }
+      if (context.BOOLEAN) {
+        return context.BOOLEAN[0].image === 'true';
+      }
+
+      /* istanbul ignore next */
+      throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
+    }
+
+    qualifiedName(context) {
+      return context.NAME.map(namePart => namePart.image, this).join('.');
+    }
+
+    list(context) {
+      if (!context.NAME) {
+        return [];
+      }
+      return context.NAME.map(namePart => namePart.image, this);
+    }
+
+    quotedList(context) {
+      if (!context.STRING) {
+        return [];
+      }
+      return context.STRING.map(namePart => namePart.image.slice(1, -1), this);
+    }
   }
 
-  applicationSubNamespaceConfig(context) {
-    const config: any = {};
-
-    const namespace = context.namespace[0].image;
-    if (context.applicationNamespaceConfigDeclaration) {
-      const configProps = context.applicationNamespaceConfigDeclaration.map(this.visit, this);
-      configProps.forEach(configProp => {
-        config[configProp.key] = configProp.value;
-      });
-    }
-
-    return { namespace, config };
-  }
-
-  applicationNamespaceConfigDeclaration(context) {
-    const key = context.NAME[0].image;
-    const value = this.visit(context.namespaceConfigValue);
-
-    return { key, value };
-  }
-
-  namespaceConfigValue(context) {
-    if (context.qualifiedName) {
-      return this.visit(context.qualifiedName);
-    }
-    if (context.list) {
-      return this.visit(context.list);
-    }
-    if (context.quotedList) {
-      return this.visit(context.quotedList);
-    }
-    if (context.INTEGER) {
-      return context.INTEGER[0].image;
-    }
-    if (context.STRING) {
-      const stringImage = context.STRING[0].image;
-      return stringImage.substring(1, stringImage.length - 1);
-    }
-    if (context.BOOLEAN) {
-      return context.BOOLEAN[0].image === 'true';
-    }
-
-    /* istanbul ignore next */
-    throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
-  }
-
-  applicationSubConfig(context) {
-    const config: any = {};
-
-    if (context.applicationConfigDeclaration) {
-      const configProps = context.applicationConfigDeclaration.map(this.visit, this);
-      configProps.forEach(configProp => {
-        config[configProp.key] = configProp.value;
-
-        if (configProp.key === PACKAGE_NAME && !config.packageFolder) {
-          config.packageFolder = configProp.value.replace(/[.]/g, '/');
-        }
-      });
-    }
-
-    return config;
-  }
-
-  applicationSubEntities(context) {
-    return getEntityListFromContext(context, this);
-  }
-
-  applicationConfigDeclaration(context) {
-    const key = context.CONFIG_KEY[0].image;
-    const value = this.visit(context.configValue);
-
-    return { key, value };
-  }
-
-  configValue(context) {
-    if (context.qualifiedName) {
-      return this.visit(context.qualifiedName);
-    }
-    if (context.list) {
-      return this.visit(context.list);
-    }
-    if (context.quotedList) {
-      return this.visit(context.quotedList);
-    }
-    if (context.INTEGER) {
-      return context.INTEGER[0].image;
-    }
-    if (context.STRING) {
-      const stringImage = context.STRING[0].image;
-      return stringImage.substring(1, stringImage.length - 1);
-    }
-    if (context.BOOLEAN) {
-      return context.BOOLEAN[0].image === 'true';
-    }
-
-    /* istanbul ignore next */
-    throw new Error('No valid config value was found, expected a qualified name, a list, an integer, a string or a boolean.');
-  }
-
-  qualifiedName(context) {
-    return context.NAME.map(namePart => namePart.image, this).join('.');
-  }
-
-  list(context) {
-    if (!context.NAME) {
-      return [];
-    }
-    return context.NAME.map(namePart => namePart.image, this);
-  }
-
-  quotedList(context) {
-    if (!context.STRING) {
-      return [];
-    }
-    return context.STRING.map(namePart => namePart.image.slice(1, -1), this);
-  }
-}
+  return new JDLAstBuilderVisitor();
+};
 
 function getOptionEntityAndExcludedEntityLists(astResult, option) {
   let entityList = astResult.list || [];

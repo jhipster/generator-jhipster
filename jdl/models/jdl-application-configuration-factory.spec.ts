@@ -20,8 +20,11 @@
 import { before, describe, expect, it } from 'esmocha';
 import createApplicationConfigurationFromObject from '../models/jdl-application-configuration-factory.js';
 import { applicationOptions } from '../built-in-options/index.js';
+import { getDefaultRuntime } from '../runtime.js';
 
 const { OptionNames } = applicationOptions;
+
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLApplicationConfigurationFactory', () => {
   describe('createApplicationConfigurationFromObject', () => {
@@ -29,7 +32,7 @@ describe('jdl - JDLApplicationConfigurationFactory', () => {
       let createdConfiguration;
 
       before(() => {
-        createdConfiguration = createApplicationConfigurationFromObject();
+        createdConfiguration = createApplicationConfigurationFromObject(undefined, runtime);
       });
 
       it('should a configuration without option', () => {
@@ -46,9 +49,12 @@ JDLApplicationConfiguration {
         let createdConfiguration;
 
         before(() => {
-          createdConfiguration = createApplicationConfigurationFromObject({
-            [OptionNames.BASE_NAME]: 'application',
-          });
+          createdConfiguration = createApplicationConfigurationFromObject(
+            {
+              [OptionNames.BASE_NAME]: 'application',
+            },
+            runtime,
+          );
         });
 
         it('should create it', () => {
@@ -70,9 +76,12 @@ JDLApplicationConfiguration {
         let createdConfiguration;
 
         before(() => {
-          createdConfiguration = createApplicationConfigurationFromObject({
-            [OptionNames.SERVER_PORT]: 8042,
-          });
+          createdConfiguration = createApplicationConfigurationFromObject(
+            {
+              [OptionNames.SERVER_PORT]: 8042,
+            },
+            runtime,
+          );
         });
 
         it('should create it', () => {
@@ -93,9 +102,12 @@ JDLApplicationConfiguration {
         let createdConfiguration;
 
         before(() => {
-          createdConfiguration = createApplicationConfigurationFromObject({
-            [OptionNames.ENABLE_TRANSLATION]: true,
-          });
+          createdConfiguration = createApplicationConfigurationFromObject(
+            {
+              [OptionNames.ENABLE_TRANSLATION]: true,
+            },
+            runtime,
+          );
         });
 
         it('should create it', () => {
@@ -116,9 +128,12 @@ JDLApplicationConfiguration {
         let createdConfiguration;
 
         before(() => {
-          createdConfiguration = createApplicationConfigurationFromObject({
-            [OptionNames.TEST_FRAMEWORKS]: ['gatling'],
-          });
+          createdConfiguration = createApplicationConfigurationFromObject(
+            {
+              [OptionNames.TEST_FRAMEWORKS]: ['gatling'],
+            },
+            runtime,
+          );
         });
 
         it('should create it', () => {

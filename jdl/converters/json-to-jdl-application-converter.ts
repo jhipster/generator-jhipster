@@ -19,6 +19,7 @@
 
 import JDLObject from '../models/jdl-object.js';
 import createJDLApplication from '../models/jdl-application-factory.js';
+import type { JDLRuntime } from '../types/runtime.js';
 import type { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from './types.js';
 
 const GENERATOR_NAME = 'generator-jhipster';
@@ -28,16 +29,16 @@ type JHipsterYoRcContentAndJDLWrapper = {
   jdl?: JDLObject;
 };
 
-export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcContentAndJDLWrapper = {}) {
+export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcContentAndJDLWrapper, runtime: JDLRuntime) {
   const jsonApplications: JHipsterYoRcContent[] = applications || [];
   const jdlObject: JDLObject = jdl || new JDLObject();
   jsonApplications.forEach((application: JHipsterYoRcContent) => {
-    const convertedApplication = convertApplicationToJDL({ application });
+    const convertedApplication = convertApplicationToJDL({ application }, runtime);
     jdlObject.addApplication(convertedApplication);
   });
   return jdlObject;
 }
 
-export function convertApplicationToJDL({ application }: JHipsterYoRcContentWrapper = {}) {
-  return createJDLApplication(application![GENERATOR_NAME]);
+export function convertApplicationToJDL({ application }: JHipsterYoRcContentWrapper = {}, runtime: JDLRuntime) {
+  return createJDLApplication(application![GENERATOR_NAME], undefined, runtime);
 }

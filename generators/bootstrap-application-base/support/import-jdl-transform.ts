@@ -7,6 +7,7 @@ import { upperFirst } from 'lodash-es';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { createImporterFromContent } from '../../../jdl/jdl-importer.js';
 import { mergeYoRcContent } from '../../../jdl/index.js';
+import jhipsterDefinition from '../../../generators/app/jdl/index.js';
 
 export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinationPath: string; jdlStorePath: string }) =>
   Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
@@ -44,7 +45,7 @@ export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinat
     if (entityFields.length > 0) {
       throw new Error('Entities configuration files are not supported by jdlStore');
     }
-    const importer = createImporterFromContent(jdlStoreContents.toString());
+    const importer = createImporterFromContent(jdlStoreContents.toString(), undefined, jhipsterDefinition);
     const importState = importer.import();
     const applicationWithEntities = Object.values(importState.exportedApplicationsWithEntities);
     if (applicationWithEntities.length !== 1) {

@@ -32,6 +32,7 @@ const jdlOptions: JHipsterOptionDefinition[] = [
 ];
 
 const applicationConfig: JDLApplicationConfig = {
+  quotedOptionNames: [],
   tokenConfigs: jdlOptions.map(option => ({
     name: upperCase(snakeCase(option.name)),
     pattern: option.name,

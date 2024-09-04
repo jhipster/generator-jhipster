@@ -19,7 +19,9 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { JDLLexer } from './lexer.js';
+import { getDefaultRuntime } from '../../runtime.js';
+
+const { lexer: JDLLexer } = getDefaultRuntime();
 
 describe('jdl - JDLLexer', () => {
   describe('when passing a valid JDL input', () => {

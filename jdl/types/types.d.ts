@@ -37,6 +37,7 @@ export type JDLApplicationConfig = {
   validatorConfig: Record<string, JDLValidatorOption>;
   optionsValues: Record<string, JDLApplicationOptionValue>;
   optionsTypes: Record<string, JDLApplicationOptionType>;
+  quotedOptionNames: string[];
 };
 
 export type JHipsterOptionDefinition = {

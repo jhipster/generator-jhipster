@@ -23,6 +23,7 @@ import type JDLUnaryOption from '../../models/jdl-unary-option.js';
 import type JDLBinaryOption from '../../models/jdl-binary-option.js';
 import type AbstractJDLOption from '../../models/abstract-jdl-option.js';
 import type JDLApplication from '../../models/jdl-application.js';
+import type { JDLRuntime } from '../../types/runtime.js';
 import type { ParsedJDLApplication } from './types.js';
 import { convertOptions } from './option-converter.js';
 
@@ -37,12 +38,12 @@ export default { convertApplications };
  * @param {Array<Object>} parsedApplications - the parsed applications.
  * @return {Array} the converted JDL applications.
  */
-export function convertApplications(parsedApplications: ParsedJDLApplication[]): JDLApplication[] {
+export function convertApplications(parsedApplications: ParsedJDLApplication[], runtime: JDLRuntime): JDLApplication[] {
   if (!parsedApplications) {
     throw new Error('Applications have to be passed so as to be converted.');
   }
   return parsedApplications.map(parsedApplication => {
-    const jdlApplication = createJDLApplication(parsedApplication.config, parsedApplication.namespaceConfigs);
+    const jdlApplication = createJDLApplication(parsedApplication.config, parsedApplication.namespaceConfigs, runtime);
     jdlApplication.addEntityNames(parsedApplication.entities);
     const entityOptions = getEntityOptionsInApplication(parsedApplication);
     checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue(BASE_NAME), entityOptions, parsedApplication.entities);

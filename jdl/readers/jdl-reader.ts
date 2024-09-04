@@ -21,6 +21,7 @@ import logger from '../utils/objects/logger.js';
 
 import * as parser from '../parsing/api.js';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';
+import type { JDLRuntime } from '../types/runtime.js';
 import { readFile, readFiles } from './file-reader.js';
 
 /**
@@ -30,10 +31,10 @@ import { readFile, readFiles } from './file-reader.js';
  * @param files the files to parse.
  * @returns {Object} the intermediate object.
  */
-export function parseFromFiles(files: string[]) {
+export function parseFromFiles(files: string[], runtime: JDLRuntime) {
   checkFiles(files);
   checkAllTheFilesAreJDLFiles(files);
-  return parse(getFilesContent(files));
+  return parse(getFilesContent(files), runtime);
 }
 
 /**
@@ -41,15 +42,15 @@ export function parseFromFiles(files: string[]) {
  * @param content the JDL content to parse.
  * @returns {Object} the intermediate object.
  */
-export function parseFromContent(content: string) {
+export function parseFromContent(content: string, runtime: JDLRuntime) {
   if (!content) {
     throw new Error('A valid JDL content must be passed so as to be parsed.');
   }
-  return parse(content);
+  return parse(content, runtime);
 }
 
-export function getCstFromContent(content: string) {
-  return getCst(content);
+export function getCstFromContent(content: string, runtime: JDLRuntime) {
+  return getCst(content, runtime);
 }
 
 function checkFiles(files: string[]) {
@@ -73,22 +74,29 @@ function checkAllTheFilesAreJDLFiles(files) {
  * @param content the JDL content.
  * @returns the intermediate object.
  */
-function parse(content: string) {
-  const parsedContent = callApiMethod('parse', content);
-  return performJDLPostParsingTasks(parsedContent);
-}
-
-function getCst(content: string) {
-  return callApiMethod('getCst', content);
-}
-
-function callApiMethod(methodName: string, content: string) {
+function parse(content: string, runtime: JDLRuntime) {
   if (!content) {
     throw new Error('File content must be passed, it is currently empty.');
   }
   try {
     const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
-    return parser[methodName](processedInput);
+    const parsedContent = parser.parse(processedInput, undefined, runtime);
+    return performJDLPostParsingTasks(parsedContent);
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      logger.error(`Syntax error message:\n\t${error.message}`);
+    }
+    throw error;
+  }
+}
+
+function getCst(content: string, runtime: JDLRuntime) {
+  if (!content) {
+    throw new Error('File content must be passed, it is currently empty.');
+  }
+  try {
+    const processedInput = filterJDLDirectives(removeInternalJDLComments(content));
+    return parser.getCst(processedInput, undefined, runtime);
   } catch (error) {
     if (error instanceof SyntaxError) {
       logger.error(`Syntax error message:\n\t${error.message}`);
