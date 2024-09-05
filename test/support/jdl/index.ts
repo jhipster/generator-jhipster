@@ -13,6 +13,8 @@ import {
 } from '../../../jdl/linters/jdl-linter.js';
 import { convertApplications as originalConvertApplications } from '../../../jdl/converters/parsed-jdl-to-jdl-object/application-converter.js';
 import { createJDLApplication as originalCreateJDLApplication } from '../../../jdl/models/jdl-application-factory.js';
+import type { JHipsterYoRcContentAndJDLWrapper } from '../../../jdl/converters/json-to-jdl-application-converter.js';
+import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../../jdl/converters/json-to-jdl-application-converter.js';
 
 const runtime = getDefaultRuntime();
 
@@ -31,3 +33,6 @@ export const createJDLLinterFromFile = (file: string) => originalCreateJDLLinter
 export const convertApplications = (applications: ParsedJDLApplication[]) => originalConvertApplications(applications, runtime);
 export const createJDLApplication = (config: any, namespaceConfigs?: Record<string, Record<string, any>> | undefined) =>
   originalCreateJDLApplication(config, namespaceConfigs, runtime);
+
+export const convertApplicationsToJDL = (applications: JHipsterYoRcContentAndJDLWrapper) =>
+  originalConvertApplicationsToJDL(applications, runtime);

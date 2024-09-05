@@ -24,7 +24,7 @@ import type { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from './types.js
 
 const GENERATOR_NAME = 'generator-jhipster';
 
-type JHipsterYoRcContentAndJDLWrapper = {
+export type JHipsterYoRcContentAndJDLWrapper = {
   applications?: JHipsterYoRcContent[];
   jdl?: JDLObject;
 };
