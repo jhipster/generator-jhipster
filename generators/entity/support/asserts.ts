@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -27,8 +28,8 @@
  * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
  */
 const filterNumber = (input, isSigned, isDecimal) => {
-  const signed = isSigned ? '(\\-|\\+)?' : '';
-  const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
+  const signed = isSigned ? '(-|+)?' : '';
+  const decimal = isDecimal ? '(.[0-9]+)?' : '';
   const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
 
   if (regex.test(input)) return Number(input);

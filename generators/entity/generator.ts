@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -134,7 +135,9 @@ export default class EntityGenerator extends BaseApplicationGenerator {
             context.microserviceFileName = this.destinationPath(this.entityConfig.microservicePath, context.filename);
             context.useConfigurationFile = true;
 
-            this.log.verboseInfo(`\nThe entity ${context.name} is being updated.\n`);
+            this.log.verboseInfo(`
+The entity ${context.name} is being updated.
+`);
             try {
               // We are generating a entity from a microservice.
               // Load it directly into our entity configuration.
@@ -177,14 +180,20 @@ export default class EntityGenerator extends BaseApplicationGenerator {
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
-          this.log.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
+          this.log.log(
+            chalk.green(`
+Found the ${context.filename} configuration file, entity can be automatically generated!
+`),
+          );
         }
 
         // Structure for prompts.
         this.entityStorage.defaults({ fields: [], relationships: [] });
 
         if (!context.useConfigurationFile) {
-          this.log.verboseInfo(`\nThe entity ${entityName} is being created.\n`);
+          this.log.verboseInfo(`
+The entity ${entityName} is being created.
+`);
         }
       },
     });

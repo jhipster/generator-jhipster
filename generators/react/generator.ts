@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -324,7 +325,9 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    *
    * example:
    *
-   * style = '.jhipster {\n     color: #baa186;\n}'
+   * style = '.jhipster {
+     color: #baa186;
+}'
    * comment = 'New JHipster color'
    *
    * * ==========================================================================

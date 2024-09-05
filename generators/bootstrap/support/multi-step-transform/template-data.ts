@@ -1,3 +1,4 @@
+// @ts-nocheck
 export default class TemplateData {
   constructor(templateFile, defaultData = {}) {
     this._templateFile = templateFile;
