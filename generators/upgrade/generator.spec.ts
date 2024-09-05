@@ -20,7 +20,7 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, fn, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
-import git from 'simple-git';
+import { simpleGit } from 'simple-git';
 
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { basicHelpers as helpers, result } from '../../testing/index.js';
@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
         })
         .commitFiles()
         .onEnvironment(async ctx => {
-          await git(ctx.cwd).init().add('package.json').commit('project');
+          await simpleGit(ctx.cwd).init().add('package.json').commit('project');
         }),
     ).rejects.toThrow('local changes found.');
   });
@@ -82,7 +82,7 @@ describe(`generator - ${generator}`, () => {
         })
         .commitFiles()
         .onEnvironment(async ctx => {
-          await git(ctx.cwd).init().add('.').commit('project', ['--no-verify']).checkoutLocalBranch(UPGRADE_BRANCH);
+          await simpleGit(ctx.cwd).init().add('.').commit('project', ['--no-verify']).checkoutLocalBranch(UPGRADE_BRANCH);
         }),
     ).rejects.toThrow('You are on the upgrade branch, please switch to another branch before upgrading.');
   });

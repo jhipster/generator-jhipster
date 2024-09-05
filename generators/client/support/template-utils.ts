@@ -44,7 +44,7 @@ export const filterRelevantRelationships = relationships => {
  * @param {string} clientFramework the client framework, 'angular', 'vue' or 'react'.
  * @returns typeImports: Map
  */
-export const generateEntityClientImports = (relationships, dto, clientFramework) => {
+export const generateEntityClientImports = (relationships, dto?, clientFramework?) => {
   const typeImports = new Map();
 
   const relevantRelationships = filterRelevantRelationships(relationships);

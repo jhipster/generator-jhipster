@@ -71,6 +71,7 @@ describe('generator - base-application - support - prepareField', () => {
   describe('getEnumValuesWithCustomValues', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error testing invalid arguments
         expect(() => getEnumValuesWithCustomValues()).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
       });
     });

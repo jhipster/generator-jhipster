@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 
 const generatorPath = join(__dirname, 'index.js');
 
-const createClientProject = options =>
+const createClientProject = (options?) =>
   basicHelpers
     .runJHipster('app')
     .withMockedGenerators(['jhipster:liquibase'])
@@ -287,6 +287,7 @@ describe('generator - languages', () => {
             languages: ['fr', 'de'],
           })
           .withOptions({
+            // @ts-expect-error not typed option
             commandName: 'languages',
           })
           .run();
@@ -319,7 +320,14 @@ describe('generator - languages', () => {
           enableTranslation: true,
           nativeLanguage: 'en',
         });
-        await result.create('jhipster:languages').withArguments(['fr', 'de']).withOptions({ baseName: 'jhipster' }).run();
+        await result
+          .create('jhipster:languages')
+          .withArguments(['fr', 'de'])
+          .withOptions({
+            // @ts-expect-error not typed option
+            baseName: 'jhipster',
+          })
+          .run();
       });
       it('creates expected configuration values', () => {
         runResult.assertJsonFileContent('.yo-rc.json', {

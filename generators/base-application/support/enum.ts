@@ -84,7 +84,7 @@ const extractEnumEntries = field => {
  * @return {Object} the enum info.
  */
 
-export const getEnumInfo = (field, clientRootFolder) => {
+export const getEnumInfo = (field, clientRootFolder?) => {
   field.enumInstance = extractEnumInstance(field); // TODO remove side effect
   const enums = extractEnumEntries(field);
   const customValuesState = getCustomValuesState(enums);

@@ -13,6 +13,7 @@ export type JHipsterOption = SetOptional<CliOptionSpec, 'name'> & {
   readonly scope?: 'storage' | 'blueprint' | 'control' | 'generator';
   readonly env?: string;
   readonly choices?: JHispterChoices;
+  readonly commandName?: string;
 };
 
 export type PromptSpec = {
