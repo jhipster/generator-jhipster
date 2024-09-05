@@ -38,7 +38,7 @@ const TRANSLATE_REGEX = [JHI_TRANSLATE_REGEX, TRANSLATE_VALUES_REGEX].join('|');
 export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
 
 function getTranslationValue(getWebappTranslation, key, data?) {
-  return getWebappTranslation(key, data) || undefined;
+  return getWebappTranslation(key, data);
 }
 
 /**
