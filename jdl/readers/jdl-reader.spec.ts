@@ -23,12 +23,9 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { parseFromFiles as originalParseFromContent } from '../readers/jdl-reader.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
-import { getDefaultRuntime } from '../runtime.js';
+import { parseFromContent, parseFromFiles } from '../../test/support/jdl/index.js';
 
-const runtime = getDefaultRuntime();
-const parseFromFiles = (content: string[]) => originalParseFromContent(content, runtime);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

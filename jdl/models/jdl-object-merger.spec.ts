@@ -22,12 +22,12 @@ import { expect } from 'chai';
 import { relationshipTypes } from '../basic-types/index.js';
 import { applicationTypes, fieldTypes, unaryOptions } from '../built-in-options/index.js';
 import JDLObject from '../models/jdl-object.js';
-import { createJDLApplication } from '../models/jdl-application-factory.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
+import { createJDLApplication } from '../../test/support/jdl/index.js';
 
 const { MONOLITH } = applicationTypes;
 

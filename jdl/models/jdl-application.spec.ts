@@ -218,7 +218,7 @@ describe('jdl - JDLApplication', () => {
         );
         application.addEntityNames();
         entityNames = application.getEntityNames();
-      }, runtime);
+      });
 
       it('should not alter the entity names', () => {
         expect(entityNames.length).to.equal(2);
@@ -239,7 +239,7 @@ describe('jdl - JDLApplication', () => {
         );
         application.addEntityNames([]);
         entityNames = application.getEntityNames();
-      }, runtime);
+      });
 
       it('should not alter the entity names', () => {
         expect(entityNames.length).to.equal(2);

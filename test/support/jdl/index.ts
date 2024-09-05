@@ -1,4 +1,4 @@
-import { getDefaultRuntime } from '../../../jdl/runtime';
+import { getDefaultRuntime } from '../../../jdl/runtime.js';
 import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../../../jdl/readers/jdl-reader.js';
 import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import {

@@ -56,7 +56,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the gen
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
-export function createImporterFromFiles(files, configuration: any, definition?: JDLApplicationConfig) {
+export function createImporterFromFiles(files, configuration?: any, definition?: JDLApplicationConfig) {
   if (!files) {
     throw new Error('Files must be passed to create a new JDL importer.');
   }
@@ -81,7 +81,7 @@ export function createImporterFromFiles(files, configuration: any, definition?: 
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
-export function createImporterFromContent(jdlString, configuration: any, definition?: JDLApplicationConfig) {
+export function createImporterFromContent(jdlString, configuration?: any, definition?: JDLApplicationConfig) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
