@@ -16,23 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { TokenType } from 'chevrotain';
 import { CstParser } from 'chevrotain';
-import { tokens as LexerTokens } from './lexer/lexer.js';
 import { NAME } from './lexer/shared-tokens.js';
 
-let instance;
-
 export default class JDLParser extends CstParser {
-  constructor() {
-    super(LexerTokens);
-  }
+  private tokens: Record<string, TokenType>;
 
-  static getParser(): any {
-    if (instance) {
-      return instance;
-    }
-    instance = new JDLParser();
-    return instance;
+  constructor(tokens: Record<string, TokenType>) {
+    super(tokens);
+    this.tokens = tokens;
   }
 
   parse() {
@@ -92,7 +85,7 @@ export default class JDLParser extends CstParser {
           { ALT: () => this.SUBRULE(this.entityDeclaration) },
           { ALT: () => this.SUBRULE(this.relationDeclaration) },
           { ALT: () => this.SUBRULE(this.enumDeclaration) },
-          { ALT: () => this.CONSUME(LexerTokens.JAVADOC) },
+          { ALT: () => this.CONSUME(this.tokens.JAVADOC) },
           { ALT: () => this.SUBRULE(this.useOptionDeclaration) },
           { ALT: () => this.SUBRULE(this.unaryOptionDeclaration) },
           { ALT: () => this.SUBRULE(this.binaryOptionDeclaration) },
@@ -106,7 +99,7 @@ export default class JDLParser extends CstParser {
             // - NAME tokens are very common
             // That is why a more precise lookahead condition is used (The GATE)
             // To avoid confusing errors ("expecting EQUALS but found ...")
-            GATE: () => this.LA(2).tokenType === LexerTokens.EQUALS,
+            GATE: () => this.LA(2).tokenType === this.tokens.EQUALS,
             ALT: () => this.SUBRULE(this.constantDeclaration),
           },
         ]);
@@ -116,24 +109,24 @@ export default class JDLParser extends CstParser {
 
   constantDeclaration(): any {
     this.RULE('constantDeclaration', () => {
-      this.CONSUME(LexerTokens.NAME);
-      this.CONSUME(LexerTokens.EQUALS);
-      this.OR([{ ALT: () => this.CONSUME(LexerTokens.DECIMAL) }, { ALT: () => this.CONSUME(LexerTokens.INTEGER) }]);
+      this.CONSUME(this.tokens.NAME);
+      this.CONSUME(this.tokens.EQUALS);
+      this.OR([{ ALT: () => this.CONSUME(this.tokens.DECIMAL) }, { ALT: () => this.CONSUME(this.tokens.INTEGER) }]);
     });
   }
 
   entityDeclaration(): any {
     this.RULE('entityDeclaration', () => {
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.JAVADOC);
+        this.CONSUME(this.tokens.JAVADOC);
       });
 
       this.MANY(() => {
         this.SUBRULE(this.annotationDeclaration);
       });
 
-      this.CONSUME(LexerTokens.ENTITY);
-      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(this.tokens.ENTITY);
+      this.CONSUME(this.tokens.NAME);
 
       this.OPTION1(() => {
         this.SUBRULE(this.entityTableNameDeclaration);
@@ -147,58 +140,58 @@ export default class JDLParser extends CstParser {
 
   annotationDeclaration(): any {
     this.RULE('annotationDeclaration', () => {
-      this.CONSUME(LexerTokens.AT);
-      this.CONSUME(LexerTokens.NAME, { LABEL: 'option' });
+      this.CONSUME(this.tokens.AT);
+      this.CONSUME(this.tokens.NAME, { LABEL: 'option' });
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.LPAREN);
+        this.CONSUME(this.tokens.LPAREN);
         this.OR({
           IGNORE_AMBIGUITIES: true,
           DEF: [
-            { ALT: () => this.CONSUME(LexerTokens.STRING, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(LexerTokens.INTEGER, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(LexerTokens.DECIMAL, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(LexerTokens.TRUE, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME(LexerTokens.FALSE, { LABEL: 'value' }) },
-            { ALT: () => this.CONSUME2(LexerTokens.NAME, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(this.tokens.STRING, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(this.tokens.INTEGER, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(this.tokens.DECIMAL, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(this.tokens.TRUE, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME(this.tokens.FALSE, { LABEL: 'value' }) },
+            { ALT: () => this.CONSUME2(this.tokens.NAME, { LABEL: 'value' }) },
           ],
         });
-        this.CONSUME(LexerTokens.RPAREN);
+        this.CONSUME(this.tokens.RPAREN);
       });
     });
   }
 
   entityTableNameDeclaration(): any {
     this.RULE('entityTableNameDeclaration', () => {
-      this.CONSUME(LexerTokens.LPAREN);
-      this.CONSUME(LexerTokens.NAME);
-      this.CONSUME(LexerTokens.RPAREN);
+      this.CONSUME(this.tokens.LPAREN);
+      this.CONSUME(this.tokens.NAME);
+      this.CONSUME(this.tokens.RPAREN);
     });
   }
 
   entityBody(): any {
     this.RULE('entityBody', () => {
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.LCURLY);
       this.MANY(() => {
         this.SUBRULE(this.fieldDeclaration);
         this.OPTION(() => {
-          this.CONSUME(LexerTokens.COMMA);
+          this.CONSUME(this.tokens.COMMA);
         });
       });
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
   fieldDeclaration(): any {
     this.RULE('fieldDeclaration', () => {
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.JAVADOC);
+        this.CONSUME(this.tokens.JAVADOC);
       });
 
       this.MANY(() => {
         this.SUBRULE(this.annotationDeclaration);
       });
 
-      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(this.tokens.NAME);
       this.SUBRULE(this.type);
       this.MANY1(() => {
         this.SUBRULE(this.validation);
@@ -212,7 +205,7 @@ export default class JDLParser extends CstParser {
           return prevTok.startLine === nextTok.startLine;
         },
         DEF: () => {
-          this.CONSUME2(LexerTokens.JAVADOC);
+          this.CONSUME2(this.tokens.JAVADOC);
         },
       });
     });
@@ -220,15 +213,15 @@ export default class JDLParser extends CstParser {
 
   type(): any {
     this.RULE('type', () => {
-      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(this.tokens.NAME);
     });
   }
 
   validation(): any {
     this.RULE('validation', () => {
       this.OR([
-        { ALT: () => this.CONSUME(LexerTokens.REQUIRED) },
-        { ALT: () => this.CONSUME(LexerTokens.UNIQUE) },
+        { ALT: () => this.CONSUME(this.tokens.REQUIRED) },
+        { ALT: () => this.CONSUME(this.tokens.UNIQUE) },
         { ALT: () => this.SUBRULE(this.minMaxValidation) },
         { ALT: () => this.SUBRULE(this.pattern) },
       ]);
@@ -238,44 +231,44 @@ export default class JDLParser extends CstParser {
   minMaxValidation(): any {
     this.RULE('minMaxValidation', () => {
       // Note that "MIN_MAX_KEYWORD" is an abstract token and could match 6 different concrete token types
-      this.CONSUME(LexerTokens.MIN_MAX_KEYWORD);
-      this.CONSUME(LexerTokens.LPAREN);
+      this.CONSUME(this.tokens.MIN_MAX_KEYWORD);
+      this.CONSUME(this.tokens.LPAREN);
       this.OR([
-        { ALT: () => this.CONSUME(LexerTokens.DECIMAL) },
-        { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
-        { ALT: () => this.CONSUME(LexerTokens.NAME) },
+        { ALT: () => this.CONSUME(this.tokens.DECIMAL) },
+        { ALT: () => this.CONSUME(this.tokens.INTEGER) },
+        { ALT: () => this.CONSUME(this.tokens.NAME) },
       ]);
-      this.CONSUME(LexerTokens.RPAREN);
+      this.CONSUME(this.tokens.RPAREN);
     });
   }
 
   pattern(): any {
     this.RULE('pattern', () => {
-      this.CONSUME(LexerTokens.PATTERN);
-      this.CONSUME(LexerTokens.LPAREN);
-      this.CONSUME(LexerTokens.REGEX);
-      this.CONSUME(LexerTokens.RPAREN);
+      this.CONSUME(this.tokens.PATTERN);
+      this.CONSUME(this.tokens.LPAREN);
+      this.CONSUME(this.tokens.REGEX);
+      this.CONSUME(this.tokens.RPAREN);
     });
   }
 
   relationDeclaration(): any {
     this.RULE('relationDeclaration', () => {
-      this.CONSUME(LexerTokens.RELATIONSHIP);
+      this.CONSUME(this.tokens.RELATIONSHIP);
       this.SUBRULE(this.relationshipType);
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.LCURLY);
       this.AT_LEAST_ONE(() => {
         this.SUBRULE(this.relationshipBody);
         this.OPTION(() => {
-          this.CONSUME(LexerTokens.COMMA);
+          this.CONSUME(this.tokens.COMMA);
         });
       });
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
   relationshipType(): any {
     this.RULE('relationshipType', () => {
-      this.CONSUME(LexerTokens.RELATIONSHIP_TYPE);
+      this.CONSUME(this.tokens.RELATIONSHIP_TYPE);
     });
   }
 
@@ -285,13 +278,13 @@ export default class JDLParser extends CstParser {
         this.SUBRULE1(this.annotationDeclaration, { LABEL: 'annotationOnSourceSide' });
       });
       this.SUBRULE1(this.relationshipSide, { LABEL: 'from' });
-      this.CONSUME(LexerTokens.TO);
+      this.CONSUME(this.tokens.TO);
       this.MANY2(() => {
         this.SUBRULE2(this.annotationDeclaration, { LABEL: 'annotationOnDestinationSide' });
       });
       this.SUBRULE2(this.relationshipSide, { LABEL: 'to' });
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.WITH);
+        this.CONSUME(this.tokens.WITH);
         this.SUBRULE3(this.relationshipOptions, { LABEL: 'relationshipOptions' });
       });
     });
@@ -300,21 +293,21 @@ export default class JDLParser extends CstParser {
   relationshipSide(): any {
     this.RULE('relationshipSide', () => {
       this.SUBRULE(this.comment);
-      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(this.tokens.NAME);
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.LCURLY);
-        this.CONSUME2(LexerTokens.NAME, { LABEL: 'injectedField' });
+        this.CONSUME(this.tokens.LCURLY);
+        this.CONSUME2(this.tokens.NAME, { LABEL: 'injectedField' });
 
         this.OPTION1(() => {
-          this.CONSUME(LexerTokens.LPAREN);
-          this.CONSUME3(LexerTokens.NAME, { LABEL: 'injectedFieldParam' });
-          this.CONSUME(LexerTokens.RPAREN);
+          this.CONSUME(this.tokens.LPAREN);
+          this.CONSUME3(this.tokens.NAME, { LABEL: 'injectedFieldParam' });
+          this.CONSUME(this.tokens.RPAREN);
         });
 
         this.OPTION2(() => {
-          this.CONSUME(LexerTokens.REQUIRED);
+          this.CONSUME(this.tokens.REQUIRED);
         });
-        this.CONSUME(LexerTokens.RCURLY);
+        this.CONSUME(this.tokens.RCURLY);
       });
     });
   }
@@ -322,7 +315,7 @@ export default class JDLParser extends CstParser {
   relationshipOptions(): any {
     this.RULE('relationshipOptions', () => {
       this.AT_LEAST_ONE_SEP({
-        SEP: LexerTokens.COMMA_WITHOUT_NEWLINE,
+        SEP: this.tokens.COMMA_WITHOUT_NEWLINE,
         DEF: () => {
           this.SUBRULE(this.relationshipOption, { LABEL: 'relationshipOption' });
         },
@@ -332,20 +325,20 @@ export default class JDLParser extends CstParser {
 
   relationshipOption(): any {
     this.RULE('relationshipOption', () => {
-      this.OR([{ ALT: () => this.CONSUME(LexerTokens.BUILT_IN_ENTITY) }]);
+      this.OR([{ ALT: () => this.CONSUME(this.tokens.BUILT_IN_ENTITY) }]);
     });
   }
 
   enumDeclaration(): any {
     this.RULE('enumDeclaration', () => {
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.JAVADOC);
+        this.CONSUME(this.tokens.JAVADOC);
       });
-      this.CONSUME(LexerTokens.ENUM);
-      this.CONSUME(LexerTokens.NAME);
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.ENUM);
+      this.CONSUME(this.tokens.NAME);
+      this.CONSUME(this.tokens.LCURLY);
       this.SUBRULE(this.enumPropList);
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
@@ -354,7 +347,7 @@ export default class JDLParser extends CstParser {
       this.SUBRULE(this.enumProp);
       this.MANY(() => {
         this.OPTION(() => {
-          this.CONSUME(LexerTokens.COMMA);
+          this.CONSUME(this.tokens.COMMA);
         });
         this.SUBRULE1(this.enumProp);
       });
@@ -364,19 +357,19 @@ export default class JDLParser extends CstParser {
   enumProp(): any {
     this.RULE('enumProp', () => {
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.JAVADOC);
+        this.CONSUME(this.tokens.JAVADOC);
       });
-      this.CONSUME(LexerTokens.NAME, { LABEL: 'enumPropKey' });
+      this.CONSUME(this.tokens.NAME, { LABEL: 'enumPropKey' });
       this.OPTION1(() => {
-        this.CONSUME(LexerTokens.LPAREN);
+        this.CONSUME(this.tokens.LPAREN);
         this.OR([
-          { ALT: () => this.CONSUME2(LexerTokens.STRING, { LABEL: 'enumPropValueWithQuotes' }) },
-          { ALT: () => this.CONSUME3(LexerTokens.NAME, { LABEL: 'enumPropValue' }) },
+          { ALT: () => this.CONSUME2(this.tokens.STRING, { LABEL: 'enumPropValueWithQuotes' }) },
+          { ALT: () => this.CONSUME3(this.tokens.NAME, { LABEL: 'enumPropValue' }) },
         ]);
-        this.CONSUME(LexerTokens.RPAREN);
+        this.CONSUME(this.tokens.RPAREN);
       });
       this.OPTION2(() => {
-        this.CONSUME1(LexerTokens.JAVADOC);
+        this.CONSUME1(this.tokens.JAVADOC);
       });
     });
   }
@@ -384,10 +377,10 @@ export default class JDLParser extends CstParser {
   entityList(): any {
     this.RULE('entityList', () => {
       this.commonEntityList();
-      this.CONSUME(LexerTokens.WITH);
+      this.CONSUME(this.tokens.WITH);
       this.OR1([
-        { ALT: () => this.CONSUME2(LexerTokens.NAME, { LABEL: 'method' }) },
-        { ALT: () => this.CONSUME3(LexerTokens.STRING, { LABEL: 'methodPath' }) },
+        { ALT: () => this.CONSUME2(this.tokens.NAME, { LABEL: 'method' }) },
+        { ALT: () => this.CONSUME3(this.tokens.STRING, { LABEL: 'methodPath' }) },
       ]);
     });
   }
@@ -395,38 +388,38 @@ export default class JDLParser extends CstParser {
   commonEntityList(): any {
     this.MANY({
       // the next section may contain [NAME, WITH], LA(2) check is used to resolve this.
-      GATE: () => this.LA(2).tokenType === LexerTokens.COMMA,
+      GATE: () => this.LA(2).tokenType === this.tokens.COMMA,
       DEF: () => {
-        this.CONSUME(LexerTokens.NAME);
-        this.CONSUME(LexerTokens.COMMA);
+        this.CONSUME(this.tokens.NAME);
+        this.CONSUME(this.tokens.COMMA);
       },
     });
-    this.OR([{ ALT: () => this.CONSUME(LexerTokens.STAR) }, { ALT: () => this.CONSUME1(LexerTokens.NAME) }]);
+    this.OR([{ ALT: () => this.CONSUME(this.tokens.STAR) }, { ALT: () => this.CONSUME1(this.tokens.NAME) }]);
   }
 
   exclusion(): any {
     this.RULE('exclusion', () => {
-      this.CONSUME(LexerTokens.EXCEPT);
-      this.CONSUME(LexerTokens.NAME);
+      this.CONSUME(this.tokens.EXCEPT);
+      this.CONSUME(this.tokens.NAME);
       this.MANY(() => {
-        this.CONSUME(LexerTokens.COMMA);
-        this.CONSUME2(LexerTokens.NAME);
+        this.CONSUME(this.tokens.COMMA);
+        this.CONSUME2(this.tokens.NAME);
       });
     });
   }
 
   useOptionDeclaration(): any {
     this.RULE('useOptionDeclaration', () => {
-      this.CONSUME(LexerTokens.USE);
+      this.CONSUME(this.tokens.USE);
       this.MANY({
-        GATE: () => this.LA(2).tokenType === LexerTokens.COMMA,
+        GATE: () => this.LA(2).tokenType === this.tokens.COMMA,
         DEF: () => {
-          this.CONSUME(LexerTokens.NAME);
-          this.CONSUME(LexerTokens.COMMA);
+          this.CONSUME(this.tokens.NAME);
+          this.CONSUME(this.tokens.COMMA);
         },
       });
-      this.CONSUME1(LexerTokens.NAME);
-      this.CONSUME(LexerTokens.FOR);
+      this.CONSUME1(this.tokens.NAME);
+      this.CONSUME(this.tokens.FOR);
       this.SUBRULE(this.filterDef);
       this.OPTION(() => {
         this.SUBRULE(this.exclusion);
@@ -436,7 +429,7 @@ export default class JDLParser extends CstParser {
 
   unaryOptionDeclaration(): any {
     this.RULE('unaryOptionDeclaration', () => {
-      this.CONSUME(LexerTokens.UNARY_OPTION);
+      this.CONSUME(this.tokens.UNARY_OPTION);
       this.SUBRULE(this.filterDef);
       this.OPTION(() => {
         this.SUBRULE(this.exclusion);
@@ -446,7 +439,7 @@ export default class JDLParser extends CstParser {
 
   binaryOptionDeclaration(): any {
     this.RULE('binaryOptionDeclaration', () => {
-      this.CONSUME(LexerTokens.BINARY_OPTION);
+      this.CONSUME(this.tokens.BINARY_OPTION);
       this.SUBRULE(this.entityList);
       this.OPTION(() => {
         this.SUBRULE(this.exclusion);
@@ -461,28 +454,28 @@ export default class JDLParser extends CstParser {
   comment(): any {
     this.RULE('comment', () => {
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.JAVADOC);
+        this.CONSUME(this.tokens.JAVADOC);
       });
     });
   }
 
   deploymentDeclaration(): any {
     this.RULE('deploymentDeclaration', () => {
-      this.CONSUME(LexerTokens.DEPLOYMENT);
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.DEPLOYMENT);
+      this.CONSUME(this.tokens.LCURLY);
       this.MANY(() => {
-        this.OR([{ ALT: () => this.CONSUME(LexerTokens.JAVADOC) }, { ALT: () => this.SUBRULE(this.deploymentConfigDeclaration) }]);
+        this.OR([{ ALT: () => this.CONSUME(this.tokens.JAVADOC) }, { ALT: () => this.SUBRULE(this.deploymentConfigDeclaration) }]);
       });
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
   deploymentConfigDeclaration(): any {
     this.RULE('deploymentConfigDeclaration', () => {
-      this.CONSUME(LexerTokens.DEPLOYMENT_KEY);
+      this.CONSUME(this.tokens.DEPLOYMENT_KEY);
       this.SUBRULE(this.deploymentConfigValue);
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.COMMA);
+        this.CONSUME(this.tokens.COMMA);
       });
     });
   }
@@ -490,21 +483,21 @@ export default class JDLParser extends CstParser {
   deploymentConfigValue(): any {
     this.RULE('deploymentConfigValue', () => {
       this.OR([
-        { ALT: () => this.CONSUME(LexerTokens.BOOLEAN) },
+        { ALT: () => this.CONSUME(this.tokens.BOOLEAN) },
         { ALT: () => this.SUBRULE(this.qualifiedName) },
         { ALT: () => this.SUBRULE(this.list) },
-        { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
-        { ALT: () => this.CONSUME(LexerTokens.STRING) },
+        { ALT: () => this.CONSUME(this.tokens.INTEGER) },
+        { ALT: () => this.CONSUME(this.tokens.STRING) },
       ]);
     });
   }
 
   applicationDeclaration(): any {
     this.RULE('applicationDeclaration', () => {
-      this.CONSUME(LexerTokens.APPLICATION);
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.APPLICATION);
+      this.CONSUME(this.tokens.LCURLY);
       this.SUBRULE(this.applicationSubDeclaration);
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
@@ -525,18 +518,18 @@ export default class JDLParser extends CstParser {
 
   applicationSubNamespaceConfig(): any {
     this.RULE('applicationSubNamespaceConfig', () => {
-      this.CONSUME(LexerTokens.CONFIG);
-      this.CONSUME(LexerTokens.LPAREN);
-      this.CONSUME(LexerTokens.NAME, { LABEL: 'namespace' });
-      this.CONSUME(LexerTokens.RPAREN);
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.CONFIG);
+      this.CONSUME(this.tokens.LPAREN);
+      this.CONSUME(this.tokens.NAME, { LABEL: 'namespace' });
+      this.CONSUME(this.tokens.RPAREN);
+      this.CONSUME(this.tokens.LCURLY);
       this.MANY(() => {
         this.OR([
-          { ALT: () => this.CONSUME(LexerTokens.JAVADOC) },
+          { ALT: () => this.CONSUME(this.tokens.JAVADOC) },
           { ALT: () => this.SUBRULE(this.applicationNamespaceConfigDeclaration) },
         ]);
       });
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
@@ -545,7 +538,7 @@ export default class JDLParser extends CstParser {
       this.CONSUME(NAME);
       this.SUBRULE(this.namespaceConfigValue);
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.COMMA);
+        this.CONSUME(this.tokens.COMMA);
       });
     });
   }
@@ -553,32 +546,32 @@ export default class JDLParser extends CstParser {
   namespaceConfigValue(): any {
     this.RULE('namespaceConfigValue', () => {
       this.OR([
-        { ALT: () => this.CONSUME(LexerTokens.BOOLEAN) },
+        { ALT: () => this.CONSUME(this.tokens.BOOLEAN) },
         { ALT: () => this.SUBRULE(this.qualifiedName) },
         { ALT: () => this.SUBRULE(this.list) },
-        { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
-        { ALT: () => this.CONSUME(LexerTokens.STRING) },
+        { ALT: () => this.CONSUME(this.tokens.INTEGER) },
+        { ALT: () => this.CONSUME(this.tokens.STRING) },
       ]);
     });
   }
 
   applicationSubConfig(): any {
     this.RULE('applicationSubConfig', () => {
-      this.CONSUME(LexerTokens.CONFIG);
-      this.CONSUME(LexerTokens.LCURLY);
+      this.CONSUME(this.tokens.CONFIG);
+      this.CONSUME(this.tokens.LCURLY);
       this.MANY(() => {
-        this.OR([{ ALT: () => this.CONSUME(LexerTokens.JAVADOC) }, { ALT: () => this.SUBRULE(this.applicationConfigDeclaration) }]);
+        this.OR([{ ALT: () => this.CONSUME(this.tokens.JAVADOC) }, { ALT: () => this.SUBRULE(this.applicationConfigDeclaration) }]);
       });
-      this.CONSUME(LexerTokens.RCURLY);
+      this.CONSUME(this.tokens.RCURLY);
     });
   }
 
   applicationConfigDeclaration(): any {
     this.RULE('applicationConfigDeclaration', () => {
-      this.CONSUME(LexerTokens.CONFIG_KEY);
+      this.CONSUME(this.tokens.CONFIG_KEY);
       this.SUBRULE(this.configValue);
       this.OPTION(() => {
-        this.CONSUME(LexerTokens.COMMA);
+        this.CONSUME(this.tokens.COMMA);
       });
     });
   }
@@ -586,12 +579,12 @@ export default class JDLParser extends CstParser {
   configValue(): any {
     this.RULE('configValue', () => {
       this.OR([
-        { ALT: () => this.CONSUME(LexerTokens.BOOLEAN) },
+        { ALT: () => this.CONSUME(this.tokens.BOOLEAN) },
         { ALT: () => this.SUBRULE(this.qualifiedName) },
         { ALT: () => this.SUBRULE(this.quotedList) },
         { ALT: () => this.SUBRULE(this.list) },
-        { ALT: () => this.CONSUME(LexerTokens.INTEGER) },
-        { ALT: () => this.CONSUME(LexerTokens.STRING) },
+        { ALT: () => this.CONSUME(this.tokens.INTEGER) },
+        { ALT: () => this.CONSUME(this.tokens.STRING) },
       ]);
     });
   }
@@ -599,9 +592,9 @@ export default class JDLParser extends CstParser {
   qualifiedName(): any {
     this.RULE('qualifiedName', () => {
       this.AT_LEAST_ONE_SEP({
-        SEP: LexerTokens.DOT,
+        SEP: this.tokens.DOT,
         DEF: () => {
-          this.CONSUME(LexerTokens.NAME);
+          this.CONSUME(this.tokens.NAME);
         },
       });
     });
@@ -609,33 +602,33 @@ export default class JDLParser extends CstParser {
 
   list(): any {
     this.RULE('list', () => {
-      this.CONSUME(LexerTokens.LSQUARE);
+      this.CONSUME(this.tokens.LSQUARE);
       this.MANY_SEP({
-        SEP: LexerTokens.COMMA,
+        SEP: this.tokens.COMMA,
         DEF: () => {
-          this.CONSUME(LexerTokens.NAME);
+          this.CONSUME(this.tokens.NAME);
         },
       });
-      this.CONSUME(LexerTokens.RSQUARE);
+      this.CONSUME(this.tokens.RSQUARE);
     });
   }
 
   quotedList(): any {
     this.RULE('quotedList', () => {
-      this.CONSUME(LexerTokens.LSQUARE);
+      this.CONSUME(this.tokens.LSQUARE);
       this.AT_LEAST_ONE_SEP({
-        SEP: LexerTokens.COMMA,
+        SEP: this.tokens.COMMA,
         DEF: () => {
-          this.CONSUME(LexerTokens.STRING);
+          this.CONSUME(this.tokens.STRING);
         },
       });
-      this.CONSUME(LexerTokens.RSQUARE);
+      this.CONSUME(this.tokens.RSQUARE);
     });
   }
 
   applicationSubEntities(): any {
     this.RULE('applicationSubEntities', () => {
-      this.CONSUME(LexerTokens.ENTITIES);
+      this.CONSUME(this.tokens.ENTITIES);
       this.SUBRULE(this.filterDef);
       this.OPTION(() => {
         this.SUBRULE(this.exclusion);

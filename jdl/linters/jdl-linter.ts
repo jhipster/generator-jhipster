@@ -19,6 +19,7 @@
 
 import { readFile } from '../readers/file-reader.js';
 import * as JDLReader from '../readers/jdl-reader.js';
+import type { JDLRuntime } from '../types/runtime.js';
 import Issues from './issues/issues.js';
 import type { EntityDeclaration } from './entity-linter.js';
 import { checkEntities } from './entity-linter.js';
@@ -36,11 +37,11 @@ export type JDLLinter = {
  * @return {Object} the JDL linters.
  * @throws {Error} if the content isn't passed.
  */
-export function createJDLLinterFromContent(jdlString: string) {
+export function createJDLLinterFromContent(jdlString: string, runtime: JDLRuntime) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL linter.');
   }
-  return makeJDLLinter(jdlString);
+  return makeJDLLinter(jdlString, runtime);
 }
 
 /**
@@ -49,12 +50,12 @@ export function createJDLLinterFromContent(jdlString: string) {
  * @return {Object} the JDL linters.
  * @throws {Error} if the JDL file isn't passed.
  */
-export function createJDLLinterFromFile(file: string): JDLLinter {
+export function createJDLLinterFromFile(file: string, runtime: JDLRuntime): JDLLinter {
   if (!file) {
     throw new Error('A JDL file must be passed to create a new JDL linter.');
   }
   const jdlString = readFile(file);
-  return makeJDLLinter(jdlString);
+  return makeJDLLinter(jdlString, runtime);
 }
 
 type CST = {
@@ -68,8 +69,8 @@ type CST = {
 let cst: CST;
 let issues: Issues;
 
-function makeJDLLinter(content: any) {
-  cst = JDLReader.getCstFromContent(content);
+function makeJDLLinter(content: any, runtime: JDLRuntime) {
+  cst = JDLReader.getCstFromContent(content, runtime);
   issues = new Issues();
 
   return {

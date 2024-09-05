@@ -22,13 +22,11 @@ import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../testing/index.js';
+import { createImporterFromContent, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../test/support/jdl/index.js';
 import { applicationTypes } from './jhipster/index.js';
-import { parseFromContent, parseFromFiles } from './readers/jdl-reader.js';
-import DocumentParser from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import exportToJDL from './exporters/jdl-exporter.js';
 import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import type { ApplicationWithEntities } from './jdl-importer.js';
-import { createImporterFromContent } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
@@ -44,12 +42,12 @@ describe('jdl - integration tests', () => {
     let writtenContent;
 
     beforeEach(() => {
-      originalContent = DocumentParser.parseFromConfigurationObject({
+      originalContent = parseFromConfigurationObject({
         parsedContent: parseFromFiles([path.join(__dirname, '__test-files__', 'big_sample.jdl')]),
         applicationType: MONOLITH,
       });
       exportToJDL(originalContent, 'exported.jdl');
-      writtenContent = DocumentParser.parseFromConfigurationObject({
+      writtenContent = parseFromConfigurationObject({
         parsedContent: parseFromFiles(['exported.jdl']),
         applicationType: MONOLITH,
       });
@@ -78,7 +76,7 @@ entity A
       const expectedJdl = jdl.replace('(true)', '').replace('(foo)', '("foo")');
 
       beforeEach(() => {
-        const jdlObject = DocumentParser.parseFromConfigurationObject({
+        const jdlObject = parseFromConfigurationObject({
           parsedContent: parseFromContent(jdl),
           applicationType: MONOLITH,
         });
@@ -141,7 +139,7 @@ relationship ManyToOne {
         result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
-          jdlObject: DocumentParser.parseFromConfigurationObject({
+          jdlObject: parseFromConfigurationObject({
             parsedContent: parseFromContent(jdl),
             applicationType: MONOLITH,
           }),
@@ -223,7 +221,7 @@ relationship ManyToOne {
 `;
 
       beforeEach(() => {
-        const jdlObject = DocumentParser.parseFromConfigurationObject({
+        const jdlObject = parseFromConfigurationObject({
           parsedContent: parseFromContent(jdl),
           applicationType: MONOLITH,
         });
@@ -310,7 +308,7 @@ relationship ManyToOne {
         result = convertWithoutApplication({
           applicationName,
           databaseType: 'sql',
-          jdlObject: DocumentParser.parseFromConfigurationObject({
+          jdlObject: parseFromConfigurationObject({
             parsedContent: parseFromContent(jdl),
             applicationType: MONOLITH,
           }),

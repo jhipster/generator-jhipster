@@ -27,6 +27,8 @@ import exportJDLObject from '../exporters/jdl-exporter.js';
 import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import type JDLApplication from '../models/jdl-application.js';
+import type { JDLRuntime } from '../types/runtime.js';
+import { getDefaultRuntime } from '../runtime.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
@@ -90,9 +92,10 @@ export function getJDLObjectFromSingleApplication(
   yoRcFileContent: JHipsterYoRcContent,
   entities?: Map<string, JSONEntity>,
   existingJDLObject = new JDLObject(),
+  runtime: JDLRuntime = getDefaultRuntime(),
 ): JDLObject {
   const cleanedYoRcFileContent: PostProcessedJSONRootObject = cleanYoRcFileContent(yoRcFileContent);
-  const jdlApplication: JDLApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent });
+  const jdlApplication: JDLApplication = convertApplicationToJDL({ application: cleanedYoRcFileContent }, runtime);
   if (!entities) {
     existingJDLObject.addApplication(jdlApplication);
     return existingJDLObject;

@@ -34,7 +34,6 @@ import {
   unaryOptions,
   validations,
 } from '../../built-in-options/index.js';
-import createJDLApplication from '../../models/jdl-application-factory.js';
 import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';
@@ -44,6 +43,7 @@ import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 import logger from '../../utils/objects/logger.js';
+import { createJDLApplication } from '../../../test/support/jdl/index.js';
 import { convert } from './jdl-with-applications-to-json-converter.js';
 
 const {

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import type { JDLRuntime } from '../types/runtime.js';
 import createApplicationConfigurationFromObject, {
   createApplicationNamespaceConfigurationFromObject,
 } from './jdl-application-configuration-factory.js';
@@ -32,9 +33,9 @@ export default class JDLApplication {
   entityNames: JDLApplicationEntities;
   options: JDLOptions;
 
-  constructor({ config = {}, entityNames = [], namespaceConfigs = {} }: any = {}) {
-    this.config = createApplicationConfigurationFromObject(config);
-    this.namespaceConfigs = createApplicationNamespaceConfigurationFromObject(namespaceConfigs);
+  constructor({ config = {}, entityNames = [], namespaceConfigs = {} }: any = {}, runtime: JDLRuntime) {
+    this.config = createApplicationConfigurationFromObject(config, runtime);
+    this.namespaceConfigs = createApplicationNamespaceConfigurationFromObject(namespaceConfigs, runtime);
     this.entityNames = new JDLApplicationEntities(entityNames);
     this.options = new JDLOptions();
   }

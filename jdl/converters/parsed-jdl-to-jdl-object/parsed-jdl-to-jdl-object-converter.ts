@@ -25,6 +25,7 @@ import type JDLApplication from '../../models/jdl-application.js';
 import type JDLField from '../../models/jdl-field.js';
 import type JDLValidation from '../../models/jdl-validation.js';
 import type { JDLEntity } from '../../models/index.js';
+import type { JDLRuntime } from '../../types/runtime.js';
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
 import { convertEnums } from './enum-converter.js';
@@ -58,13 +59,13 @@ let applicationsPerEntityName: Map<string, ParsedJDLApplication>;
  * @param {String} configurationObject.databaseType - The application's database type
  * @return the built JDL object.
  */
-export function parseFromConfigurationObject(configurationObject: ParsedJDLRoot): JDLObject {
+export function parseFromConfigurationObject(configurationObject: ParsedJDLRoot, runtime: JDLRuntime): JDLObject {
   parsedContent = configurationObject.parsedContent || configurationObject.document;
   if (!parsedContent) {
     throw new Error('The parsed JDL content must be passed.');
   }
   init(configurationObject);
-  fillApplications();
+  fillApplications(runtime);
   fillDeployments();
   fillEnums();
   fillClassesAndFields();
@@ -80,11 +81,10 @@ function init(passedConfiguration: ParsedJDLRoot) {
   applicationsPerEntityName = new Map();
 }
 
-function fillApplications(): void {
+function fillApplications(runtime: JDLRuntime): void {
   // TODO: Function which expects two arguments is called with three.
 
-  // @ts-expect-error TODO
-  const jdlApplications: JDLApplication[] = convertApplications(parsedContent.applications, configuration, entityNames);
+  const jdlApplications: JDLApplication[] = convertApplications(parsedContent.applications, runtime);
   jdlApplications.forEach((jdlApplication: JDLApplication) => {
     jdlObject.addApplication(jdlApplication);
     fillApplicationsPerEntityName(jdlApplication);

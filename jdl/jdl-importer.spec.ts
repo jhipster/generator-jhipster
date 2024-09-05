@@ -23,8 +23,8 @@ import { readFileSync, rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
+import { createImporterFromContent, createImporterFromFiles } from '../test/support/jdl/index.js';
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from './jhipster/index.js';
-import { createImporterFromContent, createImporterFromFiles } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);

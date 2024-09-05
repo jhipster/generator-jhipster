@@ -33,6 +33,9 @@ import type JDLObject from './models/jdl-object.js';
 import type { ParsedJDLApplications } from './converters/parsed-jdl-to-jdl-object/types.js';
 import type { PostProcessedJDLJSONApplication } from './exporters/types.js';
 import { GENERATOR_NAME } from './exporters/export-utils.js';
+import type { JDLApplicationConfig } from './types/types.js';
+import type { JDLRuntime } from './types/runtime.js';
+import { createRuntime, getDefaultRuntime } from './runtime.js';
 
 const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;
@@ -53,12 +56,13 @@ const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the gen
  * @returns {Object} a JDL importer.
  * @throws {Error} if files aren't passed.
  */
-export function createImporterFromFiles(files, configuration?: any) {
+export function createImporterFromFiles(files, configuration?: any, definition?: JDLApplicationConfig) {
   if (!files) {
     throw new Error('Files must be passed to create a new JDL importer.');
   }
-  const content = parseFiles(files);
-  return makeJDLImporter(content, configuration || {});
+  const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
+  const content = parseFiles(files, runtime);
+  return makeJDLImporter(content, configuration || {}, runtime);
 }
 
 /**
@@ -77,12 +81,13 @@ export function createImporterFromFiles(files, configuration?: any) {
  * @returns {Object} a JDL importer.
  * @throws {Error} if the content isn't passed.
  */
-export function createImporterFromContent(jdlString, configuration?: any) {
+export function createImporterFromContent(jdlString, configuration?: any, definition?: JDLApplicationConfig) {
   if (!jdlString) {
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
-  const content = JDLReader.parseFromContent(jdlString);
-  return makeJDLImporter(content, configuration || {});
+  const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
+  const content = JDLReader.parseFromContent(jdlString, runtime);
+  return makeJDLImporter(content, configuration || {}, runtime);
 }
 
 export type ApplicationWithEntities = { config: any; namespaceConfigs: Record<string, Record<string, any>>; entities: any[] };
@@ -94,7 +99,7 @@ export type ImportState = {
   exportedDeployments: any[];
 };
 
-function makeJDLImporter(content, configuration) {
+function makeJDLImporter(content, configuration, runtime: JDLRuntime) {
   let importState: ImportState = {
     exportedApplications: [],
     exportedApplicationsWithEntities: {},
@@ -112,7 +117,7 @@ function makeJDLImporter(content, configuration) {
      *          - exportedEntities: the exported entities, or an empty list
      */
     import: (logger = console) => {
-      const jdlObject = getJDLObject(content, configuration);
+      const jdlObject = getJDLObject(content, configuration, runtime);
       checkForErrors(jdlObject, configuration, logger);
       if (jdlObject.getApplicationQuantity() === 0 && jdlObject.getEntityQuantity() > 0) {
         importState.exportedEntities = importOnlyEntities(jdlObject, configuration);
@@ -129,11 +134,11 @@ function makeJDLImporter(content, configuration) {
   };
 }
 
-function parseFiles(files: string[]) {
-  return JDLReader.parseFromFiles(files);
+function parseFiles(files: string[], runtime: JDLRuntime) {
+  return JDLReader.parseFromFiles(files, runtime);
 }
 
-function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration) {
+function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration, runtime: JDLRuntime) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
   let databaseType = configuration.databaseType;
@@ -144,12 +149,15 @@ function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration) {
     databaseType = configuration.application[GENERATOR_JHIPSTER].databaseType;
   }
 
-  return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
-    parsedContent: parsedJDLContent,
-    applicationType,
-    applicationName: baseName,
-    databaseType,
-  });
+  return ParsedJDLToJDLObjectConverter.parseFromConfigurationObject(
+    {
+      parsedContent: parsedJDLContent,
+      applicationType,
+      applicationName: baseName,
+      databaseType,
+    },
+    runtime,
+  );
 }
 
 function checkForErrors(jdlObject: JDLObject, configuration, logger = console) {

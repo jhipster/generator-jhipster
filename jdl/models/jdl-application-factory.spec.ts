@@ -19,10 +19,13 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import createJDLApplication from '../models/jdl-application-factory.js';
+import { createJDLApplication } from '../models/jdl-application-factory.js';
 import { applicationTypes } from '../built-in-options/index.js';
+import { getDefaultRuntime } from '../runtime.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
+
+const runtime = getDefaultRuntime();
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
@@ -30,7 +33,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: MICROSERVICE });
+        application = createJDLApplication({ applicationType: MICROSERVICE }, undefined, runtime);
       });
 
       it('should create the app', () => {
@@ -41,7 +44,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: GATEWAY });
+        application = createJDLApplication({ applicationType: GATEWAY }, undefined, runtime);
       });
 
       it('should create the app', () => {
@@ -52,7 +55,7 @@ describe('jdl - JDLApplicationFactory', () => {
       let application;
 
       before(() => {
-        application = createJDLApplication({ applicationType: MONOLITH });
+        application = createJDLApplication({ applicationType: MONOLITH }, undefined, runtime);
       });
 
       it('should create the app', () => {

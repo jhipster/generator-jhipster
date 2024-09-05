@@ -23,8 +23,8 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import * as JDLReader from '../readers/jdl-reader.js';
 import { basicHelpers as helpers } from '../../testing/index.js';
+import { parseFromContent, parseFromFiles } from '../../test/support/jdl/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -39,35 +39,35 @@ describe('jdl - JDLReader', () => {
         it('should fail', () => {
           expect(() => {
             // @ts-expect-error
-            JDLReader.parseFromFiles(null);
+            parseFromFiles(null);
           }).to.throw(/^The files must be passed to be parsed\.$/);
         });
       });
       describe('such as an empty array', () => {
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles([]);
+            parseFromFiles([]);
           }).to.throw(/^The files must be passed to be parsed\.$/);
         });
       });
       describe("such as files without the '.jh' or '.jdl' file extension", () => {
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles(['../../__test-files__/invalid_file.txt']);
+            parseFromFiles(['../../__test-files__/invalid_file.txt']);
           }).to.throw(new RegExp("The passed file '../../__test-files__/invalid_file.txt' must end with '.jh' or '.jdl' to be valid."));
         });
       });
       describe('such as files that do not exist', () => {
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles(['nofile.jh']);
+            parseFromFiles(['nofile.jh']);
           }).to.throw(new RegExp("The passed file 'nofile.jh' must exist and must not be a directory to be read."));
         });
       });
       describe('such as folders', () => {
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles(['../../__test-files__/folder.jdl']);
+            parseFromFiles(['../../__test-files__/folder.jdl']);
           }).to.throw(new RegExp("The passed file '../../__test-files__/folder.jdl' must exist and must not be a directory to be read."));
         });
       });
@@ -84,7 +84,7 @@ describe('jdl - JDLReader', () => {
 
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles([path.join(__dirname, '..', '__test-files__', 'test_file.jdl')]);
+            parseFromFiles([path.join(__dirname, '..', '__test-files__', 'test_file.jdl')]);
           }).to.throw(/^File content must be passed, it is currently empty\.$/);
         });
       });
@@ -95,7 +95,7 @@ describe('jdl - JDLReader', () => {
 
         it('should fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles(['test_file.jdl']);
+            parseFromFiles(['test_file.jdl']);
           }).to.throw(/but found: 'enity'/);
         });
       });
@@ -103,7 +103,7 @@ describe('jdl - JDLReader', () => {
         let content;
 
         beforeEach(() => {
-          content = JDLReader.parseFromFiles([path.join(__dirname, '..', '__test-files__', 'valid_jdl.jdl')]);
+          content = parseFromFiles([path.join(__dirname, '..', '__test-files__', 'valid_jdl.jdl')]);
         });
 
         it('should read it', () => {
@@ -114,7 +114,7 @@ describe('jdl - JDLReader', () => {
         let content;
 
         beforeEach(() => {
-          content = JDLReader.parseFromFiles([
+          content = parseFromFiles([
             path.join(__dirname, '..', '__test-files__', 'valid_jdl.jdl'),
             path.join(__dirname, '..', '__test-files__', 'valid_jdl2.jdl'),
           ]);
@@ -128,7 +128,7 @@ describe('jdl - JDLReader', () => {
         let content;
 
         beforeEach(() => {
-          content = JDLReader.parseFromFiles([path.join(__dirname, '..', '__test-files__', 'complex_jdl.jdl')]);
+          content = parseFromFiles([path.join(__dirname, '..', '__test-files__', 'complex_jdl.jdl')]);
         });
 
         it('should read them', () => {
@@ -138,7 +138,7 @@ describe('jdl - JDLReader', () => {
       describe('when having multiple internal JDL comments', () => {
         it('should ignore them and does not fail', () => {
           expect(() => {
-            JDLReader.parseFromFiles([path.join(__dirname, '..', '__test-files__', 'multiple_jdl_comments.jdl')]);
+            parseFromFiles([path.join(__dirname, '..', '__test-files__', 'multiple_jdl_comments.jdl')]);
           }).not.to.throw();
         });
       });
@@ -148,7 +148,7 @@ describe('jdl - JDLReader', () => {
     describe('when passing an invalid content', () => {
       it('should fail', () => {
         expect(() => {
-          JDLReader.parseFromContent('');
+          parseFromContent('');
         }).to.throw();
       });
     });
@@ -156,7 +156,7 @@ describe('jdl - JDLReader', () => {
       let content;
 
       beforeEach(() => {
-        content = JDLReader.parseFromContent('entity A');
+        content = parseFromContent('entity A');
       });
 
       it('should not fail', () => {
@@ -168,7 +168,7 @@ describe('jdl - JDLReader', () => {
     let parsed;
 
     beforeEach(() => {
-      parsed = JDLReader.parseFromContent(`application {
+      parsed = parseFromContent(`application {
     config {
         baseName toto
     }

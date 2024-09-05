@@ -23,7 +23,7 @@ import { relationshipTypes } from '../basic-types/index.js';
 import { applicationTypes, binaryOptions, unaryOptions } from '../built-in-options/index.js';
 
 import JDLObject from '../models/jdl-object.js';
-import createJDLApplication from '../models/jdl-application-factory.js';
+import { createJDLApplication } from '../../test/support/jdl/index.js';
 import JDLDeployment from '../models/jdl-deployment.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';
@@ -54,7 +54,7 @@ describe('jdl - JDLObject', () => {
 
       before(() => {
         const object = new JDLObject();
-        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
+        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' }, undefined);
         const baseName = originalApplication.getConfigurationOptionValue('baseName');
         object.addApplication(originalApplication);
         addedApplication = object.applications[baseName];
@@ -66,7 +66,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getApplicationQuantity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -94,7 +94,7 @@ describe('jdl - JDLObject', () => {
   });
   describe('getApplication', () => {
     describe('when not passing an application name', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         jdlObject = new JDLObject();
@@ -102,12 +102,13 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return undefined', () => {
+        // @ts-expect-error
         expect(jdlObject.getApplication()).to.be.undefined;
       });
     });
     describe("when passing an application's name", () => {
       describe('that does not exist', () => {
-        let jdlObject;
+        let jdlObject: JDLObject;
 
         before(() => {
           jdlObject = new JDLObject();
@@ -120,7 +121,7 @@ describe('jdl - JDLObject', () => {
       });
 
       describe('that exists', () => {
-        let jdlObject;
+        let jdlObject: JDLObject;
 
         before(() => {
           jdlObject = new JDLObject();
@@ -166,7 +167,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getDeploymentQuantity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -195,16 +196,17 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('forEachApplication', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'A' }));
-      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }));
+      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'A' }, undefined));
+      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }, undefined));
     });
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error testing invalid input
         jdlObject.forEachApplication();
       });
     });
@@ -285,7 +287,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getEntity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -295,6 +297,7 @@ describe('jdl - JDLObject', () => {
     describe('when not passing a name', () => {
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error testing invalid input
           jdlObject.getEntity();
         }).to.throw('An entity name must be passed so as to be retrieved.');
       });
@@ -347,7 +350,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getEntityQuantity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -374,7 +377,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getEntityNames', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -402,7 +405,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('forEachEntity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -412,6 +415,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error testing invalid input
         jdlObject.forEachEntity();
       });
     });
@@ -530,7 +534,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getEnumQuantity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -557,7 +561,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('forEachEnum', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -567,6 +571,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error testing invalid input
         jdlObject.forEachEnum();
       });
     });
@@ -658,7 +663,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getRelationshipQuantity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -688,7 +693,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('forEachRelationship', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -712,6 +717,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error testing invalid input
         jdlObject.forEachRelationship();
       });
     });
@@ -762,7 +768,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getOptionsForName', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -774,6 +780,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
+        // @ts-expect-error testing invalid input
         expect(jdlObject.getOptionsForName()).to.be.empty;
       });
     });
@@ -812,7 +819,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getOptionQuantity', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -839,7 +846,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('forEachOption', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -857,6 +864,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error testing invalid input
         jdlObject.forEachOption();
       });
     });
@@ -881,18 +889,19 @@ describe('jdl - JDLObject', () => {
   });
   describe('hasOption', () => {
     describe('when passing a falsy value', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         jdlObject = new JDLObject();
       });
 
       it('should return false', () => {
+        // @ts-expect-error testing invalid input
         expect(jdlObject.hasOption()).to.be.false;
       });
     });
     describe('when passing an option name', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         jdlObject = new JDLObject();
@@ -916,7 +925,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('isEntityInMicroservice', () => {
-    let jdlObject;
+    let jdlObject: JDLObject;
 
     describe('when an entity is in a microservice', () => {
       describe('because no entity name has been specified', () => {

@@ -17,8 +17,12 @@
  * limitations under the License.
  */
 
-import jhipsterDefinition from '../../generators/app/jdl/application-options.js';
-import type { JDLApplicationOptionType, JDLApplicationOptionTypeValue, JDLApplicationOptionValue } from '../types/types.js';
+import type {
+  JDLApplicationConfig,
+  JDLApplicationOptionType,
+  JDLApplicationOptionTypeValue,
+  JDLApplicationOptionValue,
+} from '../types/types.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -29,6 +33,7 @@ import buildToolTypes from './build-tool-types.js';
 import searchEngineTypes from './search-engine-types.js';
 import testFrameworkTypes from './test-framework-types.js';
 import websocketTypes from './websocket-types.js';
+import { builtInConfigPropsValidations } from './jdl-validator-definition.js';
 
 const { GATEWAY, MONOLITH, MICROSERVICE } = applicationTypes;
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
@@ -228,7 +233,6 @@ export const jhipsterOptionValues: Record<string, JDLApplicationOptionValue> = {
   [optionNames.WITH_ADMIN_UI]: true,
   [optionNames.ENABLE_GRADLE_ENTERPRISE]: false,
   [optionNames.GRADLE_ENTERPRISE_HOST]: '',
-  ...jhipsterDefinition.optionsValues,
 };
 
 export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
@@ -282,7 +286,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.WITH_ADMIN_UI]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.ENABLE_GRADLE_ENTERPRISE]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.GRADLE_ENTERPRISE_HOST]: { type: ApplicationOptionTypes.STRING },
-  ...jhipsterDefinition.optionsTypes,
 };
 
 export const jhipsterQuotedOptionNames: string[] = [
@@ -291,6 +294,14 @@ export const jhipsterQuotedOptionNames: string[] = [
   optionNames.JWT_SECRET_KEY,
   optionNames.GRADLE_ENTERPRISE_HOST,
 ];
+
+export const builtInJDLApplicationConfig: JDLApplicationConfig = {
+  optionsTypes: jhipsterOptionTypes,
+  optionsValues: jhipsterOptionValues,
+  quotedOptionNames: jhipsterQuotedOptionNames,
+  validatorConfig: builtInConfigPropsValidations,
+  tokenConfigs: [],
+};
 
 const OptionNames = optionNames;
 const OptionValues = jhipsterOptionValues;
