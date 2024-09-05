@@ -62,7 +62,7 @@ export default ts.config(
       'import-x/no-named-as-default-member': 'off',
       'import-x/namespace': 'off',
       // import-x is not resolving some modules
-      'import-x/no-unresolved': ['off', { ignore: ['yeoman-environment', 'yeoman-generator'] }],
+      'import-x/no-unresolved': ['error', { ignore: ['yeoman-environment', 'yeoman-generator'] }],
     },
   },
   {
