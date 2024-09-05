@@ -22,7 +22,7 @@ import assert from 'assert/strict';
 import BaseApplicationGenerator from '../base-application/index.js';
 
 import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
-import { mutateData } from '../base/support/config.js';
+import { mutateData } from '../../lib/utils/object.js';
 import { QUEUES } from '../base/priorities.js';
 import files from './files.js';
 import { GRADLE } from './constants.js';

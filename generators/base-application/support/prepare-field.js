@@ -20,7 +20,7 @@ import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es
 import { fieldTypes, validations } from '../../../jdl/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
-import { mutateData } from '../../base/support/config.js';
+import { mutateData } from '../../../lib/utils/object.js';
 import { fieldIsEnum } from './field-utils.js';
 import { prepareProperty } from './prepare-property.js';
 

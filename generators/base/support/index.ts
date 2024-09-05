@@ -18,7 +18,7 @@
  */
 export * from './basename.js';
 export * from './configuration-helpers/options.js';
-export * from './config.js';
+export * from '../../../lib/utils/object.js';
 export * from './contents.js';
 export * from './faker.js';
 export { default as getHipster } from './hipster.js';

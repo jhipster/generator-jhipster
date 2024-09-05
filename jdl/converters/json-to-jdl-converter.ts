@@ -24,14 +24,14 @@ import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 import { readJSONFile } from '../readers/json-file-reader.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
-import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
+import { removeFieldsWithNullishValues } from '../../lib/utils/object.js';
 import type JDLApplication from '../models/jdl-application.js';
 import type { JDLRuntime } from '../types/runtime.js';
 import { getDefaultRuntime } from '../runtime.js';
+import { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
-import { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.js';
 
 export default {
   convertToJDL,

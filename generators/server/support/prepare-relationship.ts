@@ -1,4 +1,4 @@
-import { mutateData } from '../../base/support/config.js';
+import { mutateData } from '../../../lib/utils/object.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 
 export function prepareRelationship({ relationship }: { relationship: any; entity: any }) {

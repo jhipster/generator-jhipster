@@ -21,7 +21,7 @@ import pluralize from 'pluralize';
 
 import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
-import { mutateData } from '../../base/support/config.js';
+import { mutateData } from '../../../lib/utils/object.js';
 import { stringifyApplicationData } from './debug.js';
 import { prepareProperty } from './prepare-property.js';
 

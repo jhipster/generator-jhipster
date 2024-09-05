@@ -3,7 +3,7 @@ import { join } from 'node:path';
 
 import type { InfoFile } from '../generators/info/support/extract-info.js';
 import { GENERATOR_JHIPSTER } from '../generators/generator-constants.js';
-import { mutateData } from '../generators/base/support/config.js';
+import { mutateData } from '../lib/utils/object.js';
 
 const isFile = async (filename: string): Promise<boolean> => {
   try {

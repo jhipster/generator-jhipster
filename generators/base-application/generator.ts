@@ -26,7 +26,7 @@ import type { SpringBootSourceType } from '../server/types.js';
 import type { ClientSourceType } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
-import { mutateData } from '../base/support/config.js';
+import { mutateData } from '../../lib/utils/object.js';
 import {
   GENERATOR_BOOTSTRAP_APPLICATION,
   GENERATOR_BOOTSTRAP_APPLICATION_BASE,
