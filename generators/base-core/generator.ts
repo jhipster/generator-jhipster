@@ -31,6 +31,7 @@ import { simpleGit } from 'simple-git';
 import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import semver, { lt as semverLessThan } from 'semver';
+/*eslint import-x/no-unresolved: [1, { ignore: ['yeoman-generator'] }]*/
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';

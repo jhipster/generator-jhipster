@@ -64,7 +64,7 @@ export default ts.config(
     },
   },
   {
-    files: ['generators/**/*', 'bin/**/*', 'cli/**/*', '**/*.spec.ts', 'testing/**/*', 'test/**/*'],
+    files: ['bin/**/*', '**/*.spec.ts', 'testing/**/*', 'test/**/*'],
     rules: {
       'import-x/no-unresolved': 'off',
     },

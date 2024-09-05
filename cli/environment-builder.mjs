@@ -22,6 +22,7 @@ import path, { dirname, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import chalk from 'chalk';
 import { cloneDeep, mergeWith } from 'lodash-es';
+/*eslint import-x/no-unresolved: [1, { ignore: ['yeoman-environment'] }]*/
 import Environment from 'yeoman-environment';
 import { QueuedAdapter } from '@yeoman/adapter';
 
