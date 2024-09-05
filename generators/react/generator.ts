@@ -325,9 +325,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    *
    * example:
    *
-   * style = '.jhipster {
-     color: #baa186;
-}'
+   * style = '.jhipster {\n     color: #baa186;\n}'
    * comment = 'New JHipster color'
    *
    * * ==========================================================================
