@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { buildToolTypes } from '../../../../jdl/index.js';
+import { buildToolTypes } from '../../../../jdl/jhipster/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
 import { asCommand } from '../../../type-utils.js';
 
