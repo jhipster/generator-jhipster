@@ -102,6 +102,7 @@ describe('generator - client - support - template-utils', () => {
     });
     describe('when passing undefined', () => {
       it('returns an empty string', () => {
+        // @ts-expect-error testing invalid argument
         expect(getEntityParentPathAddition()).to.equal('');
       });
     });
