@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -19,7 +20,7 @@
 import { asWritingTask } from '../../../../base-application/support/index.js';
 import { clientRootTemplatesBlock } from '../../../../client/support/files.js';
 
-export const writeEslintClientRootConfigFile = asWritingTask(async function writingEslintFile({ application }) {
+export const writeEslintClientRootConfigFile: any = asWritingTask(async function writingEslintFile({ application }) {
   await this.writeFiles({
     blocks: [
       clientRootTemplatesBlock({
