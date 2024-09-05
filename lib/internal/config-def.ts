@@ -1,6 +1,6 @@
 import type { JHipsterConfigs } from '../../lib/command/index.js';
 import type CoreGenerator from '../../generators/base-core/index.js';
-import { upperFirstCamelCase } from '../../generators/base/support/string.js';
+import { upperFirstCamelCase } from '../utils/string.js';
 
 export function loadConfig(
   this: CoreGenerator | void,

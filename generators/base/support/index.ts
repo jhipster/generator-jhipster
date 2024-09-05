@@ -29,6 +29,6 @@ export * from './needles.js';
 export * from './path.js';
 export { default as httpsGet } from './remote.js';
 export * from './secret.js';
-export * from './string.js';
+export * from '../../../lib/utils/string.js';
 export * from './timestamp.js';
 export * from './write-files.js';
