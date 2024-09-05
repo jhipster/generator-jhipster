@@ -6,7 +6,7 @@ import { Minimatch } from 'minimatch';
 import { upperFirst } from 'lodash-es';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { createImporterFromContent } from '../../../jdl/jdl-importer.js';
-import { mergeYoRcContent } from '../../../jdl/index.js';
+import { mergeYoRcContent } from '../../../lib/utils/yo-rc.js';
 import jhipsterDefinition from '../../../generators/app/jdl/index.js';
 
 export const importJDLTransform = ({ destinationPath, jdlStorePath }: { destinationPath: string; jdlStorePath: string }) =>

@@ -25,13 +25,13 @@ import { doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 import { readJSONFile } from '../readers/json-file-reader.js';
 import exportJDLObject from '../exporters/jdl-exporter.js';
 import { removeFieldsWithNullishValues } from '../../generators/base/support/config.js';
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
 import type JDLApplication from '../models/jdl-application.js';
 import type { JDLRuntime } from '../types/runtime.js';
 import { getDefaultRuntime } from '../runtime.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
+import { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.js';
 
 export default {
   convertToJDL,
@@ -110,13 +110,13 @@ function cleanYoRcFileContent(yoRcFileContent: JHipsterYoRcContent): PostProcess
   for (const key of Object.keys(yoRcFileContent)) {
     yoRcFileContent[key] = removeFieldsWithNullishValues(yoRcFileContent[key]);
   }
-  delete yoRcFileContent[GENERATOR_JHIPSTER].promptValues;
+  delete yoRcFileContent[YO_RC_CONFIG_KEY].promptValues;
   const result: PostProcessedJSONRootObject = structuredClone(yoRcFileContent) as PostProcessedJSONRootObject;
-  if (yoRcFileContent[GENERATOR_JHIPSTER].blueprints) {
-    result[GENERATOR_JHIPSTER].blueprints = yoRcFileContent[GENERATOR_JHIPSTER].blueprints.map(blueprint => blueprint.name);
+  if (yoRcFileContent[YO_RC_CONFIG_KEY].blueprints) {
+    result[YO_RC_CONFIG_KEY].blueprints = yoRcFileContent[YO_RC_CONFIG_KEY].blueprints.map(blueprint => blueprint.name);
   }
-  if (yoRcFileContent[GENERATOR_JHIPSTER].microfrontends) {
-    result[GENERATOR_JHIPSTER].microfrontends = yoRcFileContent[GENERATOR_JHIPSTER].microfrontends.map(({ baseName }) => baseName);
+  if (yoRcFileContent[YO_RC_CONFIG_KEY].microfrontends) {
+    result[YO_RC_CONFIG_KEY].microfrontends = yoRcFileContent[YO_RC_CONFIG_KEY].microfrontends.map(({ baseName }) => baseName);
   }
   return result;
 }
