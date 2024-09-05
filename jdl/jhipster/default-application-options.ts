@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/index.js';
+import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/message-broker.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
