@@ -7,17 +7,21 @@ import { setModifiedFileState } from 'mem-fs-editor/state';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { getJDLObjectFromSingleApplication } from '../../../jdl/converters/json-to-jdl-converter.js';
 import type { JSONEntity } from '../../../jdl/converters/types.js';
+import { createRuntime } from '../../../jdl/runtime.js';
+import type { JDLApplicationConfig } from '../../../jdl/types/types.js';
 
 export const exportJDLTransform = ({
   destinationPath,
   jdlStorePath,
   throwOnMissingConfig = true,
   keepEntitiesConfig,
+  jdlDefinition,
 }: {
   destinationPath: string;
   jdlStorePath: string;
   throwOnMissingConfig?: boolean;
   keepEntitiesConfig?: boolean;
+  jdlDefinition: JDLApplicationConfig;
 }) =>
   Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
@@ -52,6 +56,8 @@ export const exportJDLTransform = ({
         const jdlObject = getJDLObjectFromSingleApplication(
           { ...contents, [GENERATOR_JHIPSTER]: { ...rest, incrementalChangelog } },
           entitiesMap,
+          undefined,
+          createRuntime(jdlDefinition),
         );
 
         const jdlContents = jdlObject.toString();

@@ -27,8 +27,9 @@ import exportJDLObject from '../exporters/jdl-exporter.js';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.js';
 import type JDLApplication from '../models/jdl-application.js';
 import type { JDLRuntime } from '../types/runtime.js';
-import { getDefaultRuntime } from '../runtime.js';
+import { createRuntime, getDefaultRuntime } from '../runtime.js';
 import { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.js';
+import type { JDLApplicationConfig } from '../types/types.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
@@ -43,18 +44,23 @@ export default {
  * @param directory the directory to find JHipster files.
  * @param output the file where the JDL will be written
  */
-export function convertToJDL(directory = '.', output: string | false = 'app.jdl'): JDLObject | undefined {
+export function convertToJDL(
+  directory = '.',
+  output: string | false = 'app.jdl',
+  definition?: JDLApplicationConfig,
+): JDLObject | undefined {
   let jdlObject: JDLObject;
+  const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
   if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
     const yoRcFileContent: JHipsterYoRcContent = readJSONFile(path.join(directory, '.yo-rc.json'));
     let entities: Map<string, JSONEntity> | undefined;
     if (doesDirectoryExist(path.join(directory, '.jhipster'))) {
       entities = getJSONEntityFiles(directory);
     }
-    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities);
+    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, undefined, runtime);
   } else {
     try {
-      jdlObject = getJDLObjectFromMultipleApplications(directory);
+      jdlObject = getJDLObjectFromMultipleApplications(directory, runtime);
     } catch {
       return undefined;
     }
@@ -70,7 +76,7 @@ export function convertSingleContentToJDL(yoRcFileContent: JHipsterYoRcContent, 
   return getJDLObjectFromSingleApplication(yoRcFileContent, entities).toString();
 }
 
-function getJDLObjectFromMultipleApplications(directory: string): JDLObject {
+function getJDLObjectFromMultipleApplications(directory: string, runtime: JDLRuntime): JDLObject {
   const subDirectories = getSubdirectories(directory);
   if (subDirectories.length === 0) {
     throw new Error('There are no subdirectories.');
@@ -83,7 +89,7 @@ function getJDLObjectFromMultipleApplications(directory: string): JDLObject {
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
       entities = getJSONEntityFiles(applicationDirectory);
     }
-    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, jdlObject);
+    jdlObject = getJDLObjectFromSingleApplication(yoRcFileContent, entities, jdlObject, runtime);
   });
   return jdlObject;
 }
