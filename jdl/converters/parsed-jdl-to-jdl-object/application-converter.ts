@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import createJDLApplication from '../../models/jdl-application-factory.js';
+import { createJDLApplication } from '../../models/jdl-application-factory.js';
 import { applicationOptions as ApplicationOptions } from '../../built-in-options/index.js';
 import type JDLUnaryOption from '../../models/jdl-unary-option.js';
 import type JDLBinaryOption from '../../models/jdl-binary-option.js';

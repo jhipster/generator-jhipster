@@ -34,7 +34,7 @@ import {
   unaryOptions,
   validations,
 } from '../../built-in-options/index.js';
-import createJDLApplication from '../../models/jdl-application-factory.js';
+import { createJDLApplication } from '../../models/jdl-application-factory.js';
 import JDLObject from '../../models/jdl-object.js';
 import { JDLEntity, JDLEnum } from '../../models/index.js';
 import JDLField from '../../models/jdl-field.js';

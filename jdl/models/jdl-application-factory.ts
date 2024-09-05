@@ -25,10 +25,12 @@ import JDLApplication from './jdl-application.js';
  * @param {Object} config - the application configuration.
  * @returns {JDLApplication} the created JDL application.
  */
-export default function createJDLApplication(
+export function createJDLApplication(
   config: any,
   namespaceConfigs: Record<string, Record<string, any>> | undefined,
   runtime: JDLRuntime = getDefaultRuntime(),
 ) {
   return new JDLApplication({ config: { baseName: 'jhipster', ...config }, namespaceConfigs }, runtime);
 }
+
+export default createJDLApplication;

@@ -23,7 +23,7 @@ import { relationshipTypes } from '../basic-types/index.js';
 import { applicationTypes, binaryOptions, unaryOptions } from '../built-in-options/index.js';
 
 import JDLObject from '../models/jdl-object.js';
-import createJDLApplication from '../models/jdl-application-factory.js';
+import { createJDLApplication } from '../models/jdl-application-factory.js';
 import JDLDeployment from '../models/jdl-deployment.js';
 import { JDLEntity, JDLEnum } from '../models/index.js';
 import JDLField from '../models/jdl-field.js';

@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import createJDLApplication from '../models/jdl-application-factory.js';
+import { createJDLApplication } from '../models/jdl-application-factory.js';
 import { applicationTypes } from '../built-in-options/index.js';
 import { getDefaultRuntime } from '../runtime.js';
 

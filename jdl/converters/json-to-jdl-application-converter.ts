@@ -18,7 +18,7 @@
  */
 
 import JDLObject from '../models/jdl-object.js';
-import createJDLApplication from '../models/jdl-application-factory.js';
+import { createJDLApplication } from '../models/jdl-application-factory.js';
 import type { JDLRuntime } from '../types/runtime.js';
 import type { JHipsterYoRcContent, JHipsterYoRcContentWrapper } from './types.js';
 
