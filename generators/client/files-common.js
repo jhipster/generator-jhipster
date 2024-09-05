@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientFrameworkTypes } from '../../jdl/index.js';
+import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.js';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;

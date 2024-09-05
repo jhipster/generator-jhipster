@@ -30,10 +30,10 @@ import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../gene
 import type { ApplicationWithEntities } from '../../jdl/jdl-importer.js';
 import { createImporterFromContent } from '../../jdl/jdl-importer.js';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { mergeYoRcContent } from '../../jdl/index.js';
+import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
 import { normalizeBlueprintName } from '../base/internal/blueprint.js';
 import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
-import jhipsterDefinition from '../../generators/app/jdl/index.js';
+import jdlDefinition from '../app/jdl/index.js';
 import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
 
 /**
@@ -135,7 +135,7 @@ export default class JdlGenerator extends BaseGenerator {
           skipUserManagement: this.options.skipUserManagement,
         };
 
-        const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration, jhipsterDefinition);
+        const importer = createImporterFromContent(this.jdlContents.join('\n'), configuration, jdlDefinition);
 
         const importState = importer.import();
 

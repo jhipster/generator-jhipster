@@ -21,8 +21,9 @@ import chalk from 'chalk';
 import BaseGenerator from '../base/index.js';
 
 import { applicationOptions } from '../../jdl/jhipster/index.js';
-import JSONToJDLConverter from '../../jdl/converters/json-to-jdl-converter.js';
+import { convertToJDL } from '../../jdl/converters/json-to-jdl-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
+import jdlDefinition from '../app/jdl/index.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -50,7 +51,7 @@ export default class extends BaseGenerator {
     return this.asDefaultTaskGroup({
       convertToJDL() {
         try {
-          const jdlObject = JSONToJDLConverter.convertToJDL(this.destinationPath(), false);
+          const jdlObject = convertToJDL(this.destinationPath(), false, jdlDefinition);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();
           }

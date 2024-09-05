@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createJHipsterLogger } from '../../../generators/base/support/logger.js';
+import { createJHipsterLogger } from '../../../lib/utils/logger.js';
 
 const logger = createJHipsterLogger({ namespace: 'jhipster:jdl' });
 

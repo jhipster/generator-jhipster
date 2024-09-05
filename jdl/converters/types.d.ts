@@ -1,5 +1,5 @@
+import type { YO_RC_CONFIG_KEY } from '../../lib/utils/yo-rc.ts';
 import type { RelationshipSide, RelationshipType } from '../basic-types/relationships.js';
-import type { GENERATOR_JHIPSTER } from '../../generators/index.js';
 
 export type JSONField = {
   fieldName: string;
@@ -94,11 +94,11 @@ export type PostProcessedJSONGeneratorJhipsterContent = {
 } & AbstractJSONGeneratorJhipsterContent;
 
 export type PostProcessedJSONRootObject = {
-  [GENERATOR_JHIPSTER]: PostProcessedJSONGeneratorJhipsterContent;
+  [YO_RC_CONFIG_KEY]: PostProcessedJSONGeneratorJhipsterContent;
 };
 
 export type JHipsterYoRcContent = {
-  [GENERATOR_JHIPSTER]: JSONGeneratorJhipsterContent;
+  [YO_RC_CONFIG_KEY]: JSONGeneratorJhipsterContent;
 };
 
 export type JHipsterYoRcContentWrapper = {

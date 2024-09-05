@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { snakeCase, upperFirst } from 'lodash-es';
-import { mutateData } from '../../base/support/config.js';
+import { mutateData } from '../../../lib/utils/object.js';
 
 export const prepareProperty = (property: any) => {
   mutateData(property, {

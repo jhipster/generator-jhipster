@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../testing/index.js';
 
-import { createJHipsterLogger } from '../base/support/logger.js';
+import { createJHipsterLogger } from '../base/support/index.js';
 import Base from './index.js';
 
 const BaseGenerator: any = Base.prototype;

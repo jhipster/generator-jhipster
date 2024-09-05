@@ -19,7 +19,7 @@
 import type { Entity } from '../../base-application/index.js';
 import type { BaseApplication, CommonClientServerApplication } from '../../base-application/types.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
-import { upperFirstCamelCase } from '../../base/support/string.js';
+import { upperFirstCamelCase } from '../../../lib/utils/string.js';
 import { joinCallbacks } from '../../base/support/write-files.js';
 
 export function addRoute({

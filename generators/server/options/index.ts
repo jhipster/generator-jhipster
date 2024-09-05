@@ -19,5 +19,4 @@
 
 export * from './database-migration.js';
 export * from './message-broker.js';
-export * from './feign-client.js';
 export * from './sync-user-with-idp.js';
