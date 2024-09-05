@@ -51,7 +51,7 @@ export const entityServerFiles: WriteFileSection = {
 export const enumFiles: WriteFileSection = {
   enumFiles: [
     javaMainPackageTemplatesBlock({
-      renameTo: (data, filepath) => filepath.replace('_enumName_', data.enumName),
+      renameTo: (data, filepath) => filepath.replace('_enumName_', (data as any).enumName),
       templates: ['_entityPackage_/domain/enumeration/_enumName_.java'],
     }),
   ],

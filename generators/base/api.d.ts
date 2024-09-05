@@ -1,5 +1,7 @@
 import type { BaseFeatures, BaseOptions, CliOptionSpec } from 'yeoman-generator';
 import type CoreGenerator from '../base-core/index.js';
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { Entity } from '../../lib/types/application/entity.js';
 
 type ConfigScope = 'storage' | 'blueprint' | 'control' | 'generator';
 type CliSpecType = CliOptionSpec['type'];
@@ -123,7 +125,7 @@ export type CascatedEditFileCallback<Generator = CoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
 ) => CascatedEditFileCallback<Generator>;
 
-export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
+export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = CoreGenerator> =
   | string
   | ((this: Generator, data: DataType, filePath: string) => string)
   | {
@@ -144,7 +146,7 @@ export type WriteFileTemplate<Generator = CoreGenerator, DataType = any> =
       override?: boolean | ((this: Generator, data: DataType) => boolean);
     };
 
-export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
+export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {
   /** relative path were sources are placed */
   from?: ((this: Generator, data: DataType) => string) | string;
   /** relative path were the files should be written, fallbacks to from/path */
@@ -156,16 +158,19 @@ export type WriteFileBlock<Generator = CoreGenerator, DataType = any> = {
   condition?: (this: Generator, data: DataType) => boolean | undefined;
   /** transforms (files processing) to be applied */
   transform?: boolean | (() => string)[];
-  templates: WriteFileTemplate<Generator, DataType>[];
+  templates: WriteFileTemplate<DataType, Generator>[];
 };
 
-export type WriteFileSection<Generator = CoreGenerator, DataType = any> = Record<string, WriteFileBlock<Generator, DataType>[]>;
+export type WriteFileSection<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = Record<
+  string,
+  WriteFileBlock<DataType, Generator>[]
+>;
 
-export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
+export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback<Generator>[];
   /** context to be used as template data */
-  context?: DataType;
+  context?: any;
   /** config passed to render methods */
   renderOptions?: Record<string, object>;
   /**
@@ -182,15 +187,15 @@ export type WriteFileOptions<Generator = CoreGenerator, DataType = any> = {
   }) => undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string };
 } & (
   | {
-      sections: WriteFileSection<Generator, DataType>;
+      sections: WriteFileSection<DataType, Generator>;
     }
   | {
       /** templates to be written */
-      templates: WriteFileTemplate<Generator, DataType>;
+      templates: WriteFileTemplate<DataType, Generator>;
     }
   | {
       /** blocks to be written */
-      blocks: WriteFileBlock<Generator, DataType>[];
+      blocks: WriteFileBlock<DataType, Generator>[];
     }
 );
 

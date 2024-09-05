@@ -19,10 +19,9 @@
 import { moveToJavaPackageSrcDir } from '../server/support/index.js';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import type { WriteFileSection } from '../base/api.js';
-import type { SpringBootApplication } from '../server/types.js';
 import type Generator from './generator.js';
 
-const files: WriteFileSection<Generator, SpringBootApplication> = {
+const files: WriteFileSection = {
   websocketFiles: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,

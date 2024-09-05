@@ -1,18 +1,5 @@
 {
-  "include": [
-    "./cli",
-    "./jdl",
-    "./testing",
-    "./lib/eslint/recommended.ts",
-    "./generators/index.ts",
-    "./generators/base",
-    "./generators/base-application",
-    "./generators/base-core",
-    "./generators/**/support/**/*",
-    "./generators/**/internal/**/*",
-    "./generators/**/jdl/**/*",
-    "./generators/*/type-export.d.ts"
-  ],
+  "include": ["./cli", "./jdl", "./testing", "./lib", "./generators"],
   "exclude": ["**/*.spec.*", "**/__*/**"],
   "extends": "./tsconfig.json",
   "compilerOptions": {

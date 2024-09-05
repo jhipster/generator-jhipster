@@ -148,9 +148,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
-      postPrepareEntity({ application, entity }) {
-        postPrepareEntity({ application, entity });
-      },
+      postPrepareEntity,
     });
   }
 
@@ -192,7 +190,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
               prepareRelationship(entity, relationship, this, true);
               prepareRelationshipForLiquibase(entity, relationship);
             }
-            postPrepareEntity({ application, entity });
+            postPrepareEntity.call(this, { application, entity } as any);
           }
         }
 

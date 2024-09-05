@@ -21,7 +21,7 @@ import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } f
 import type { WriteFileSection } from '../base/api.js';
 import type Generator from './generator.js';
 
-const files: WriteFileSection<Generator, any> = {
+const files: WriteFileSection = {
   cacheFiles: [
     {
       condition: data => data.buildToolGradle,

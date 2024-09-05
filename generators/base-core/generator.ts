@@ -66,6 +66,7 @@ import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gr
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
+import type { Entity } from '../../lib/types/base/entity.js';
 
 const {
   INITIALIZING,
@@ -139,7 +140,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   relativeDir = relativeDir;
   relative = posixRelative;
 
-  readonly sharedData!: SharedData<CommonClientServerApplication>;
+  readonly sharedData!: SharedData<CommonClientServerApplication<Entity>>;
   readonly logger: Logger;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -807,7 +808,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType = any>(options: WriteFileOptions<this, DataType>): Promise<string[]> {
+  async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');

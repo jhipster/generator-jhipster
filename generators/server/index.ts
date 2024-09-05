@@ -16,18 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import type { BaseApplicationGeneratorDefinition, GenericApplicationDefinition } from '../base-application/tasks.js';
-import type { GenericSourceTypeDefinition } from '../base/tasks.js';
-import type { SpringBootApplication, SpringBootSourceType } from './types.js';
-
 export { default } from './generator.js';
 export { default as command } from './command.js';
-
-// TODO move to ./generator.mts
-export type ApplicationDefinition = GenericApplicationDefinition<SpringBootApplication>;
-
-// TODO move to ./generator.mts
-export type GeneratorDefinition = BaseApplicationGeneratorDefinition<
-  ApplicationDefinition & GenericSourceTypeDefinition<SpringBootSourceType>
->;

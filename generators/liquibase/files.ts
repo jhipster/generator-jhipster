@@ -19,10 +19,8 @@
 import type { WriteFileSection } from '../base/api.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir } from '../server/support/index.js';
-import type { CommonClientServerApplication } from '../base-application/types.js';
-import type LiquibaseGenerator from './generator.js';
 
-export const liquibaseFiles: WriteFileSection<LiquibaseGenerator, CommonClientServerApplication> = {
+export const liquibaseFiles: WriteFileSection = {
   liquibase: [
     {
       condition: ctx => ctx.backendTypeSpringBoot,

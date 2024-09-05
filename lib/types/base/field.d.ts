@@ -17,11 +17,7 @@
  * limitations under the License.
  */
 
-type Field = {
+export type Field = {
   fieldName: string;
   fieldType: string;
-  fieldTypeBlobContent?: string;
-  propertyName: string;
-} & Record<string, any>;
-
-export default Field;
+};

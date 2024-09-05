@@ -3,6 +3,7 @@ import type { AngularApplication } from '../angular/types.js';
 import type { ExportApplicationPropertiesFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
+import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
 import type { Command } from './command.ts';
 
 export type StoredClientProperties = ExportStoragePropertiesFromCommand<Command>;
@@ -26,7 +27,9 @@ export type ClientResources = {
    */
   comment?: string;
 };
+
 export type ClientSourceType = JavaScriptSourceType & {
+  addEntitiesToClient: (arg1: PostWritingEntitiesTaskParam) => void;
   /**
    * Add external resources to root file(index.html).
    */

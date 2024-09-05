@@ -23,13 +23,12 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 
-import { type GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import files from './files.js';
 import { MAVEN } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
 
-export default class MavenGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+export default class MavenGenerator extends BaseApplicationGenerator {
   pomStorage!: PomStorage;
   sortMavenPom!: boolean;
 
@@ -98,7 +97,7 @@ export default class MavenGenerator extends BaseApplicationGenerator<SpringBootG
         source.addMavenProperty = properties => {
           properties = Array.isArray(properties) ? properties : [properties];
           for (const property of properties) {
-            javaProperties[property.property] = property.value!;
+            javaProperties![property.property] = property.value!;
             this.pomStorage.addProperty(property);
           }
         };

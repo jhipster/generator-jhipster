@@ -17,14 +17,6 @@
  * limitations under the License.
  */
 
-type Relationship = {
+export type Relationship = {
   relationshipName: string;
-  propertyName: string;
-  collection: boolean;
-  /**
-   * A persistable relationship means that the relationship will be updated in the database.
-   */
-  persistableRelationship: boolean;
-} & Record<string, any>;
-
-export default Relationship;
+};

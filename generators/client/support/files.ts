@@ -1,7 +1,6 @@
 import type { WriteFileBlock } from '../../base/api.js';
 import type CoreGenerator from '../../base-core/index.js';
 import { CLIENT_MAIN_SRC_DIR, CLIENT_TEST_SRC_DIR } from '../../generator-constants.js';
-import type { CommonClientServerApplication } from '../../base-application/types.js';
 
 export const replaceEntityFilePath = (data: any, filepath: string) =>
   filepath
@@ -11,7 +10,7 @@ export const replaceEntityFilePath = (data: any, filepath: string) =>
 
 const CLIENT_TEMPLATES_SRC_DIR = CLIENT_MAIN_SRC_DIR;
 
-type RelativeWriteFileBlock = WriteFileBlock<CoreGenerator, CommonClientServerApplication & Record<string, any>> & {
+type RelativeWriteFileBlock = WriteFileBlock & {
   relativePath?: string;
 };
 

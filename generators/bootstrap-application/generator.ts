@@ -102,7 +102,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
           entityConfig.name = entityName;
         }
 
-        entityConfig.fields.forEach((field: any) => {
+        entityConfig.fields!.forEach((field: any) => {
           const { fieldName, fieldType, fieldValidateRules } = field;
 
           assert(fieldName, `fieldName is missing in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);

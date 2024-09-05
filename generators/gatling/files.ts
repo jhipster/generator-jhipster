@@ -18,10 +18,9 @@
  */
 import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
 import type { WriteFileSection } from '../base/api.js';
-import type { SpringBootApplication } from '../server/types.js';
 import type Generator from './generator.js';
 
-const gatlingFiles: WriteFileSection<Generator, SpringBootApplication> = {
+const gatlingFiles: WriteFileSection = {
   gatlingFiles: [
     {
       templates: ['README.md.jhi.gatling'],

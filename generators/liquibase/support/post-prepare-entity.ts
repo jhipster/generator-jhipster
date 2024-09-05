@@ -18,24 +18,21 @@
  */
 import { fieldTypes } from '../../../jdl/jhipster/index.js';
 import type { LiquibaseEntity } from '../types.js';
-import type { GeneratorDefinition } from '../../base-application/generator.js';
+import { asPostPreparingEachEntityTask } from '../../base-application/support/task-type-inference.js';
 
 const { CommonDBTypes } = fieldTypes;
 const { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER } = CommonDBTypes;
 
-export default function postPrepareEntity({
-  application,
-  entity,
-}: Pick<GeneratorDefinition['postPreparingEachEntityTaskParam'], 'application' | 'entity'>) {
+export default asPostPreparingEachEntityTask(function postPrepareEntity({ application, entity }) {
   const { relationships, builtIn, name, primaryKey } = entity;
-  if (builtIn && name === 'User') {
+  if (builtIn && name === 'User' && primaryKey) {
     const userIdType = primaryKey.type;
     const idField = primaryKey.fields[0];
     const idFieldName = idField.fieldName ?? 'id';
     const liquibaseFakeData = application.generateUserManagement
       ? [
-          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 1 : idField.generateFakeData() },
-          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 2 : idField.generateFakeData() },
+          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 1 : idField.generateFakeData!() },
+          { [idFieldName]: [TYPE_INTEGER, TYPE_LONG].includes(userIdType) ? 2 : idField.generateFakeData!() },
         ]
       : [];
     (entity as LiquibaseEntity).liquibaseFakeData = liquibaseFakeData;
@@ -43,4 +40,4 @@ export default function postPrepareEntity({
   }
 
   (entity as LiquibaseEntity).anyRelationshipIsOwnerSide = relationships.some(relationship => relationship.ownerSide);
-}
+});

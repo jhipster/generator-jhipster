@@ -214,7 +214,7 @@ export default class BoostrapApplicationServer extends BaseApplicationGenerator 
           return;
         }
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = entity.primaryKey.derivedFields;
+        const derivedFields = primaryKey.derivedFields;
         entity.fields.unshift(...derivedFields);
       },
     });

@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Entity } from '../../base-application/index.js';
-import type { BaseApplication, CommonClientServerApplication } from '../../base-application/types.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
+import type { BaseApplication } from '../../base-application/types.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
 import { upperFirstCamelCase } from '../../../lib/utils/string.js';
 import { joinCallbacks } from '../../base/support/write-files.js';
+import { asPostWritingEntitiesTask } from '../../base-application/support/task-type-inference.js';
 
 export function addRoute({
   needle,
@@ -55,7 +56,7 @@ export function addRoute({
   });
 }
 
-export function addEntitiesRoute({ application, entities }: { application: CommonClientServerApplication; entities: Entity[] }) {
+export const addEntitiesRoute = asPostWritingEntitiesTask(function addEntitiesRoute({ application, entities }: { application; entities }) {
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
@@ -72,7 +73,7 @@ export function addEntitiesRoute({ application, entities }: { application: Commo
       });
     }),
   );
-}
+});
 
 type MenuItem = {
   jhiPrefix: string;

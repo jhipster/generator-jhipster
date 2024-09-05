@@ -3,7 +3,7 @@ import type { GradleSourceType } from '../gradle/types.js';
 import type { MavenSourceType } from '../maven/types.js';
 import type { LiquibaseSourceType } from '../liquibase/types.js';
 import type { SpringCacheSourceType } from '../spring-cache/types.js';
-import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from '../base-application/application-options.js';
+import type { OptionWithDerivedProperties } from '../base-application/application-options.js';
 import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from './support/needles.ts';
@@ -54,6 +54,8 @@ export type LiquibaseApplication = {
   liquibaseDefaultSchemaName: string;
 };
 
+/*
+Deterministic option causes types to be too complex
 type DatabaseTypeSqlApplication = (
   | ReactiveApplication
   | (ImperativeApplication & {
@@ -64,13 +66,27 @@ type DatabaseTypeSqlApplication = (
   prodDatabaseType: string;
   devDatabaseTypeMysql: boolean;
 } & LiquibaseApplication;
-
+ */
+type DatabaseTypeSqlApplication = {
+  enableHibernateCache: boolean;
+} & {
+  devDatabaseType: string;
+  prodDatabaseType: string;
+  devDatabaseTypeMysql: boolean;
+} & LiquibaseApplication;
+/*
+Deterministic option causes types to be too complex
 type DatabaseTypeApplication = DeterministicOptionWithDerivedProperties<
   'databaseType',
   ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j'],
   [DatabaseTypeSqlApplication]
 >;
+*/
+type DatabaseTypeApplication = DatabaseTypeSqlApplication &
+  OptionWithDerivedProperties<'databaseType', ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j']>;
 
+/*
+Deterministic option causes types to be too complex
 type BuildToolApplication = DeterministicOptionWithDerivedProperties<
   'buildTool',
   ['maven', 'gradle'],
@@ -81,12 +97,20 @@ type BuildToolApplication = DeterministicOptionWithDerivedProperties<
     },
   ]
 >;
+*/
+type BuildToolApplication = OptionWithDerivedProperties<'buildTool', ['maven', 'gradle']> & {
+  enableGradleEnterprise: boolean;
+};
 
 type SearchEngine = {
   searchEngine: string;
 };
 
+/*
+Deterministic option causes types to be too complex
 type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | ReactiveApplication;
+*/
+type ApplicationNature = { reactive: boolean } & CacheProviderApplication;
 
 export type SpringBootApplication = JavaApplication &
   ApplicationNature &
