@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 export { default as convertTranslationsSupport } from './convert-translation.js';
-export * from './needles.js';
 export * from './translate-vue.js';
 export { default as translateVueFilesTransform } from './translate-vue.js';
 export { default as updateLanguagesTask } from './update-languages.js';

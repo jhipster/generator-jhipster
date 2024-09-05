@@ -8,7 +8,9 @@
     "./generators/base",
     "./generators/base-application",
     "./generators/base-core",
-    "./generators/*/support",
+    "./generators/**/support/**/*",
+    "./generators/**/internal/**/*",
+    "./generators/**/jdl/**/*",
     "./generators/*/type-export.d.ts"
   ],
   "exclude": ["**/*.spec.*", "**/__*/**"],

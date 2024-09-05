@@ -20,7 +20,7 @@ import type { GeneratorDefinition } from '../base-application/generator.js';
 import { clientApplicationTemplatesBlock } from '../client/support/files.js';
 import type CoreGenerator from '../base-core/index.js';
 import type { WriteFileSection } from '../base/api.js';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
+import { asWritingEntitiesTask } from '../base-application/support/index.js';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
