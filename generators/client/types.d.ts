@@ -15,6 +15,7 @@ export type ClientApplication = ApplicationClientProperties &
   CypressApplication & {
     webappLoginRegExp: string;
     webappEnumerationsDir?: string;
+    clientFrameworkBuiltIn?: boolean;
   };
 
 export type ClientResources = {
