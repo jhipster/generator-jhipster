@@ -25,11 +25,10 @@ import type { ComposeOptions } from 'yeoman-generator';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
-import type { TaskTypes as BaseTaskTypes } from '../../lib/types/base/tasks.js';
+import type { TaskTypes as BaseTaskTypes, GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { packageNameToNamespace } from './support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, normalizeBlueprintName, parseBluePrints } from './internal/index.js';
 import { PRIORITY_NAMES } from './priorities.js';
-import type { GenericTaskGroup } from './tasks.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from './api.js';
 import { LOCAL_BLUEPRINT_PACKAGE_NAMESPACE } from './support/constants.js';
 

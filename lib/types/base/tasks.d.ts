@@ -8,7 +8,7 @@ export type TaskParamWithSource<Source = any> = TaskParamWithControl & {
   source: Source;
 };
 
-type TaskTypes = {
+export type TaskTypes = {
   InitializingTaskParam: TaskParamWithControl;
   PromptingTaskParam: TaskParamWithControl;
   ConfiguringTaskParam: TaskParamWithControl;
@@ -25,4 +25,6 @@ type TaskTypes = {
   EndTaskParam: TaskParamWithControl;
 };
 
-export { TaskTypes };
+type GenericTask<Arg1Type, ThisType> = (this: ThisType, arg1: Arg1Type) => unknown;
+
+export type GenericTaskGroup<ThisType, Arg1Type, N extends string = string> = Record<N, GenericTask<Arg1Type, ThisType>>;

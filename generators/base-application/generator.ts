@@ -21,7 +21,6 @@ import type { ComposeOptions, Storage } from 'yeoman-generator';
 
 import BaseGenerator from '../base/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import type { GenericTaskGroup } from '../base/tasks.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { mutateData } from '../../lib/utils/object.js';
 import {
@@ -33,6 +32,7 @@ import {
 import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
+import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import { getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
