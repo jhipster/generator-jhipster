@@ -237,7 +237,7 @@ export default function prepareRelationship(
     relationship.otherEntityPath = relationship.otherEntityFolderName;
   }
 
-  if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
+  if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
       generator.log.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {

@@ -49,7 +49,7 @@ function convertUnaryOptions(parsedOptions: Record<string, ParsedJDLOption>): JD
   const convertedUnaryOptions: JDLUnaryOption[] = [];
   unaryOptions.forEach((unaryOptionName: string) => {
     const parsedUnaryOption = parsedOptions[unaryOptionName];
-    if (!parsedUnaryOption || !parsedUnaryOption.list || parsedUnaryOption.list.length === 0) {
+    if (!parsedUnaryOption?.list || parsedUnaryOption.list.length === 0) {
       return;
     }
     convertedUnaryOptions.push(

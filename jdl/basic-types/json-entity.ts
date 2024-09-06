@@ -45,7 +45,7 @@ class JSONEntity {
    *        - clientRootFolder
    */
   constructor(args: Partial<JSONEntity>) {
-    if (!args || !args.entityName) {
+    if (!args?.entityName) {
       throw new Error('At least an entity name must be passed.');
     }
     const merged: Partial<JSONEntity> = merge(getDefaults(args.entityName), args);

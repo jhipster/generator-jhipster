@@ -389,7 +389,7 @@ export function getAppFolders(directory, deploymentApplicationType) {
                 deploymentApplicationType === (fileData['generator-jhipster'].applicationType ?? MONOLITH) ||
                 (deploymentApplicationType === MICROSERVICE && fileData['generator-jhipster'].applicationType === GATEWAY))
             ) {
-              appsFolders.push(file.match(/([^/]*)\/*$/)[1]);
+              appsFolders.push(/([^/]*)\/*$/.exec(file)[1]);
             }
           } catch (err) {
             this.log.error(chalk.red(`${yoRcFile}: this .yo-rc.json can't be read`));

@@ -454,7 +454,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
   protected async composeWithBlueprints(subGen?: string, options?: ComposeOptions) {
     if (subGen === undefined) {
       const { namespace } = this.options;
-      if (!namespace || !namespace.startsWith('jhipster:')) {
+      if (!namespace?.startsWith('jhipster:')) {
         throw new Error(`Generator is not blueprintable ${namespace}`);
       }
       subGen = namespace.substring('jhipster:'.length);
@@ -653,7 +653,7 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
    */
   private _findBlueprintVersion(blueprintPkgName) {
     const blueprintPackageJson = this._findBlueprintPackageJson(blueprintPkgName);
-    if (!blueprintPackageJson || !blueprintPackageJson.version) {
+    if (!blueprintPackageJson?.version) {
       this.log.warn(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
       return undefined;
     }

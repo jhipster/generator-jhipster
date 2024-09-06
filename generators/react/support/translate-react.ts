@@ -51,16 +51,16 @@ const replaceTranslationKeysWithText = (
 
     let key = match.groups?.key;
     if (!key && keyPattern) {
-      const keyMatch = target.match(new RegExp(keyPattern));
+      const keyMatch = new RegExp(keyPattern).exec(target);
       key = keyMatch?.groups?.key;
     }
     if (!key) {
       throw new Error(`Translation key not found for ${target}`);
     }
 
-    let interpolate = match.groups && match.groups.interpolate;
+    let interpolate = match.groups?.interpolate;
     if (!interpolate && interpolatePattern) {
-      const interpolateMatch = target.match(new RegExp(interpolatePattern));
+      const interpolateMatch = new RegExp(interpolatePattern).exec(target);
       interpolate = interpolateMatch?.groups?.interpolate;
     }
 
@@ -112,7 +112,7 @@ const replaceTranslationKeysWithText = (
  */
 export const createTranslationReplacer = getWebappTranslation =>
   function replaceReactTranslations(body: string, filePath: string) {
-    if (/\.tsx$/.test(filePath)) {
+    if (filePath.endsWith('.tsx')) {
       body = body.replace(new RegExp(TRANSLATE_IMPORT, 'g'), '');
       body = replaceTranslationKeysWithText(getWebappTranslation, body, `\\{\\s*${TRANSLATE_FUNCTION}\\s*\\}`, { wrapTranslation: '"' });
       body = replaceTranslationKeysWithText(getWebappTranslation, body, TRANSLATE_FUNCTION, { wrapTranslation: '"' });

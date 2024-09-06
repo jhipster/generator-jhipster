@@ -78,7 +78,7 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
       this.log.warn('Relationships on the User entity side will be disregarded');
     }
-    if (userEntityDefinition.fields && userEntityDefinition.fields.some(field => field.fieldName !== 'id')) {
+    if (userEntityDefinition.fields?.some(field => field.fieldName !== 'id')) {
       this.log.warn('Fields on the User entity side (other than id) will be disregarded');
     }
   }
@@ -243,7 +243,7 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
     if (entityDefinition.relationships && entityDefinition.relationships.length > 0) {
       this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
     }
-    if (entityDefinition.fields && entityDefinition.fields.some(field => field.fieldName !== 'name')) {
+    if (entityDefinition.fields?.some(field => field.fieldName !== 'name')) {
       this.log.warn(`Fields on the ${authorityEntityName} entity side (other than name) will be disregarded`);
     }
   }

@@ -972,7 +972,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } catch (error) {
         throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
       }
-      if (!isBinary && transform && transform.length) {
+      if (!isBinary && transform?.length) {
         this.editFile(targetFile, ...transform);
       }
       return targetFile;

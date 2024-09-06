@@ -27,7 +27,7 @@ export const validateJavaApplicationName = (name: string) => {
   if (!/^([\w]*)$/.test(name)) {
     return 'Your base name cannot contain special characters or a blank space';
   }
-  if (/_/.test(name)) {
+  if (name.includes('_')) {
     return 'Your base name cannot contain underscores as this does not meet the URI spec';
   }
   if (name.toLowerCase() === 'application') {

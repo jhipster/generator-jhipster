@@ -380,7 +380,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (languagesToMigrate[nativeLanguage]) {
       this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage];
     }
-    if (languages && languages.some(lang => languagesToMigrate[lang])) {
+    if (languages?.some(lang => languagesToMigrate[lang])) {
       this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang] ?? lang);
     }
   }

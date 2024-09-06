@@ -96,7 +96,7 @@ export function writeEntityFiles() {
     async writeClientFiles({ application, entities }) {
       if (application.skipClient) return;
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
-      if (application.userManagement && application.userManagement.skipClient) {
+      if (application.userManagement?.skipClient) {
         entitiesToWriteTranslationFor.push(application.userManagement);
       }
 

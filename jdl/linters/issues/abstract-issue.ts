@@ -23,7 +23,7 @@ export default class AbstractIssue {
   ruleName: string;
 
   constructor(args: AbstractIssueArgs) {
-    if (!args || !args.ruleName) {
+    if (!args?.ruleName) {
       throw new Error('An issue must at least have a rule name.');
     }
     this.ruleName = args.ruleName;

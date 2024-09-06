@@ -184,7 +184,7 @@ export default function performAdditionalSyntaxChecks(cst, runtime: JDLRuntime) 
       // A Boolean is allowed as a single name as it is a keyword.
       // Other keywords do not need special handling as they do not explicitly appear in the rule
       // of config values
-      if (fqnCstNode.tokenType && fqnCstNode.tokenType.CATEGORIES.includes(this.tokens.BOOLEAN)) {
+      if (fqnCstNode.tokenType?.CATEGORIES.includes(this.tokens.BOOLEAN)) {
         return false;
       }
 
@@ -305,7 +305,7 @@ export default function performAdditionalSyntaxChecks(cst, runtime: JDLRuntime) 
         throw Error(`Got an invalid deployment config property: '${propertyName}'.`);
       }
 
-      if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children && value.children.NAME) {
+      if (this.checkExpectedValueType(validation.type, value) && validation.pattern && value.children?.NAME) {
         value.children.NAME.forEach(nameTok => this.checkNameSyntax(nameTok, validation.pattern, validation.msg));
       } else if (value.image && validation.pattern) {
         this.checkNameSyntax(value, validation.pattern, validation.msg);

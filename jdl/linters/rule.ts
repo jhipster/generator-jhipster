@@ -39,7 +39,7 @@ export default class Rule {
    *               - comment: a possible comment for the rule
    */
   constructor(args: { name: any; level: RuleLevel; comment: any }) {
-    if (!args || !args.name) {
+    if (!args?.name) {
       throw new Error('A rule must at least have a name.');
     }
     const merged = merge(defaults(), args) as any;

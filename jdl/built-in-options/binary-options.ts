@@ -59,7 +59,7 @@ const DefaultValues = {
 };
 
 function getOptionName(optionValue): string | undefined {
-  return optionNames.find(optionName => Values[optionName] && Values[optionName][optionValue]);
+  return optionNames.find(optionName => Values[optionName]?.[optionValue]);
 }
 
 const OptionValues = {

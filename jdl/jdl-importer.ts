@@ -170,7 +170,7 @@ function checkForErrors(jdlObject: JDLObject, configuration, logger = console) {
     let applicationType = configuration.applicationType;
     let databaseType = configuration.databaseType;
     let blueprints = configuration.blueprints;
-    if (application && application[GENERATOR_JHIPSTER]) {
+    if (application?.[GENERATOR_JHIPSTER]) {
       if (applicationType === undefined) {
         applicationType = application[GENERATOR_JHIPSTER].applicationType;
       }
@@ -203,7 +203,7 @@ function importOnlyEntities(jdlObject: JDLObject, configuration) {
   if (!configuration.application && doesFileExist('.yo-rc.json')) {
     application = readJSONFile('.yo-rc.json');
   }
-  if (application && application[GENERATOR_JHIPSTER]) {
+  if (application?.[GENERATOR_JHIPSTER]) {
     if (applicationType === undefined) {
       applicationType = application[GENERATOR_JHIPSTER].applicationType;
     }

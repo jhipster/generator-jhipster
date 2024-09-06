@@ -515,7 +515,7 @@ async function askForField() {
         if (!/^[A-Za-z0-9_]*$/.test(input)) {
           return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
-        if (context.enums && context.enums.includes(input)) {
+        if (context.enums?.includes(input)) {
           context.existingEnum = true;
         } else if (context.enums) {
           context.enums.push(input);
@@ -940,7 +940,7 @@ function logFieldsAndRelationships() {
     this.log.log(chalk.white('Relationships'));
     this.entityConfig.relationships.forEach(relationship => {
       const validationDetails = [];
-      if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
+      if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
       this.log.log(

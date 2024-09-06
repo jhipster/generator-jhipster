@@ -120,7 +120,7 @@ export async function askForIngressDomain() {
   if (!this.options.askAnswered && (this.regenerate || this.config.existed)) return;
   const kubernetesServiceType = this.kubernetesServiceType;
   const istio = this.istio;
-  this.ingressDomain = this.ingressDomain && this.ingressDomain.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
+  this.ingressDomain = this.ingressDomain?.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
 
   const istioIpCommand = "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
   let istioMessage = '';

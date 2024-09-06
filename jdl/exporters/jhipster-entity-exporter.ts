@@ -52,7 +52,7 @@ export default function exportEntities(passedConfiguration: JhipsterJSONJDLExpor
 }
 
 function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
-  if (!passedConfiguration || !passedConfiguration.entities) {
+  if (!passedConfiguration?.entities) {
     throw new Error('Entities have to be passed to be exported.');
   }
   configuration = passedConfiguration;

@@ -26,7 +26,7 @@ import { requireNamespace } from '@yeoman/namespace';
  */
 export function loadBlueprintsFromConfiguration(config) {
   // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-  const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
+  const configuration = config?.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
   // load blueprints from config file
   const blueprints = configuration.blueprints || [];
 
@@ -134,7 +134,7 @@ export function normalizeBlueprintName(blueprint) {
     return ns.with({ unscoped: `generator-jhipster-${ns.unscoped}` }).toString();
     // eslint-disable-next-line no-empty
   } catch {}
-  if (blueprint && blueprint.startsWith('@')) {
+  if (blueprint?.startsWith('@')) {
     return blueprint;
   }
   if (blueprint && !blueprint.startsWith('generator-jhipster')) {

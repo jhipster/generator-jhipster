@@ -130,7 +130,7 @@ function getAllFieldDeclarations(entityDeclarations: EntityDeclaration[]) {
 
 function getFieldDeclarationsFromEntity(entityDeclaration: EntityDeclaration) {
   const entityBody = entityDeclaration.children.entityBody;
-  const entityFields = entityBody && entityBody[0].children.fieldDeclaration;
+  const entityFields = entityBody?.[0].children.fieldDeclaration;
   if (entityBody && entityFields) {
     return entityFields;
   }
