@@ -108,10 +108,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
-  }
-
   get default() {
     return this.asDefaultTaskGroup({
       async queueTranslateTransform({ control, application }) {
