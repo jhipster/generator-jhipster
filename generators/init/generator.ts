@@ -21,10 +21,6 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_GIT } from '../generator-list.js';
 import { files, readme } from './files.js';
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../base-application/types.js').BaseApplication>}
- */
 export default class InitGenerator extends BaseApplicationGenerator {
   generateReadme = true;
 

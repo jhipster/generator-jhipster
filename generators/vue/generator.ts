@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { relative } from 'path';
+import assert from 'node:assert';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { camelCase, startCase } from 'lodash-es';
@@ -109,15 +108,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  get preparingEachEntity() {
-    return this.asPreparingEachEntityTaskGroup({
-      prepareEntityForTemplates({ entity }) {
-        // Can be dropped if tests are moved near implementation
-        entity.relativeToEntityFolderName = relative(entity.entityFolderName, '.');
-      },
-    });
-  }
-
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
@@ -127,6 +117,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
       async queueTranslateTransform({ control, application }) {
         const { enableTranslation, clientSrcDir } = application;
         const { getWebappTranslation } = control;
+
+        assert.ok(getWebappTranslation, 'getWebappTranslation is required');
+
         this.queueTransformStream(
           {
             name: 'translating vue application',
@@ -187,11 +180,11 @@ export default class VueGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addIndexAsset({ source, application }) {
         if (application.microfrontend) return;
-        source.addExternalResourceToRoot({
+        source.addExternalResourceToRoot!({
           resource: '<script>const global = globalThis;</script>',
           comment: 'Workaround https://github.com/axios/axios/issues/5622',
         });
-        source.addExternalResourceToRoot({
+        source.addExternalResourceToRoot!({
           resource: `<script type="module" src="./app/${application.microfrontend ? 'index.ts' : 'main.ts'}"></script>`,
           comment: 'Load vue main',
         });
@@ -263,17 +256,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
    * @param {boolean} readOnly - If the entity is read-only or not
    * @param {string} pageTitle - The translation key or the text for the page title in the browser
    */
-  addEntityToModule(
-    entityInstance = this.entityInstance,
-    entityClass = this.entityClass,
-    entityName = this.entityAngularName,
-    entityFolderName = this.entityFolderName,
-    entityFileName = this.entityFileName,
-    _entityUrl = this.entityUrl,
-    _microserviceName = this.microserviceName,
-    readOnly = this.readOnly,
-    _pageTitle = this.enableTranslation ? `${this.i18nKeyPrefix}.home.title` : this.entityClassPlural,
-  ) {
+  addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, _entityUrl, _microserviceName, readOnly) {
     this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
     this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
     this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);

@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getEnumInfo } from '../base-application/support/index.js';
+import { asWritingEntitiesTask, getEnumInfo } from '../base-application/support/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 /**
@@ -63,7 +63,7 @@ export const enumClientI18nFiles = {
 
 export function writeEntityFiles() {
   return {
-    async writeEnumFiles({ entities, application }) {
+    writeEnumFiles: asWritingEntitiesTask(async function ({ entities, application }) {
       if (application.skipClient) return;
       const languagesToApply = application.enableTranslation ? this.languagesToApply : [...new Set([application.nativeLanguage, 'en'])];
       entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
@@ -91,9 +91,9 @@ export function writeEntityFiles() {
           )
           .flat(),
       );
-    },
+    }),
 
-    async writeClientFiles({ application, entities }) {
+    writeClientFiles: asWritingEntitiesTask(async function ({ application, entities }) {
       if (application.skipClient) return;
       const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
       if (application.userManagement?.skipClient) {
@@ -112,6 +112,6 @@ export function writeEntityFiles() {
           }
         }
       }
-    },
+    }),
   };
 }

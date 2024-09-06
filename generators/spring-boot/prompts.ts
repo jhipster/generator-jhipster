@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -31,6 +30,7 @@ import {
 } from '../../jdl/jhipster/index.js';
 import { MESSAGE_BROKER } from '../server/options/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
+import type CoreGenerator from '../base-core/generator.js';
 
 const { OptionNames } = applicationOptions;
 const { GATEWAY, MONOLITH } = applicationTypes;
@@ -59,7 +59,7 @@ const { GATLING, CUCUMBER } = testFrameworkTypes;
  * @returns {boolean} true if option is in array and is set to 'true'
  */
 const getOptionFromArray = (array, option) => {
-  let optionValue = false;
+  let optionValue: any = false;
   array.forEach(value => {
     if (includes(value, option)) {
       optionValue = value.split(':')[1];
@@ -69,138 +69,140 @@ const getOptionFromArray = (array, option) => {
   return optionValue;
 };
 
-export async function askForServerSideOpts({ control }) {
+export async function askForServerSideOpts(this: CoreGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType } = this.jhipsterConfigWithDefaults;
-  const prompts = [
-    {
-      type: 'list',
-      name: DATABASE_TYPE,
-      message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-      choices: answers => {
-        const opts = [];
-        if (!answers.reactive) {
-          opts.push({
-            value: SQL,
-            name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
-          });
-        } else {
-          opts.push({
-            value: SQL,
-            name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, MSSQL)',
-          });
-        }
-        opts.push({
-          value: MONGODB,
-          name: 'MongoDB',
-        });
-        if (answers.authenticationType !== OAUTH2) {
-          opts.push({
-            value: CASSANDRA,
-            name: 'Cassandra',
-          });
-        }
-        opts.push({
-          value: 'couchbase',
-          name: '[BETA] Couchbase',
-        });
-        opts.push({
-          value: NEO4J,
-          name: '[BETA] Neo4j',
-        });
-        opts.push({
-          value: NO_DATABASE,
-          name: 'No database',
-        });
-        return opts;
-      },
-      default: this.jhipsterConfigWithDefaults.databaseType,
-    },
-    {
-      when: response => response.databaseType === SQL,
-      type: 'list',
-      name: PROD_DATABASE_TYPE,
-      message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-      choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
-      default: this.jhipsterConfigWithDefaults.prodDatabaseType,
-    },
-    {
-      when: response => response.databaseType === SQL,
-      type: 'list',
-      name: DEV_DATABASE_TYPE,
-      message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
-      choices: response =>
-        [SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)].concat([
-          {
-            value: H2_DISK,
-            name: 'H2 with disk-based persistence',
-          },
-          {
-            value: H2_MEMORY,
-            name: 'H2 with in-memory persistence',
-          },
-        ]),
-      default: this.jhipsterConfigWithDefaults.devDatabaseType,
-    },
-    {
-      when: answers => !answers.reactive,
-      type: 'list',
-      name: CACHE_PROVIDER,
-      message: 'Which cache do you want to use? (Spring cache abstraction)',
-      choices: [
-        {
-          value: EHCACHE,
-          name: 'Ehcache (local cache, for a single node)',
-        },
-        {
-          value: CAFFEINE,
-          name: 'Caffeine (local cache, for a single node)',
-        },
-        {
-          value: HAZELCAST,
-          name: 'Hazelcast (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
-        },
-        {
-          value: INFINISPAN,
-          name: 'Infinispan (hybrid cache, for multiple nodes)',
-        },
-        {
-          value: MEMCACHED,
-          name: 'Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
-        },
-        {
-          value: REDIS,
-          name: 'Redis (distributed cache)',
-        },
-        {
-          value: NO_CACHE_PROVIDER,
-          name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
-        },
-      ],
-      default: this.jhipsterConfigWithDefaults.cacheProvider,
-    },
-    {
-      when: answers =>
-        ((answers.cacheProvider !== NO_CACHE_PROVIDER && answers.cacheProvider !== MEMCACHED) || applicationType === GATEWAY) &&
-        answers.databaseType === SQL &&
-        !answers.reactive,
-      type: 'confirm',
-      name: 'enableHibernateCache',
-      message: 'Do you want to use Hibernate 2nd level cache?',
-      default: this.jhipsterConfigWithDefaults.enableHibernateCache,
-    },
-  ];
 
-  await this.prompt(prompts, this.config);
+  await this.prompt(
+    [
+      {
+        type: 'list',
+        name: DATABASE_TYPE,
+        message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
+        choices: answers => {
+          const opts: any[] = [];
+          if (!answers.reactive) {
+            opts.push({
+              value: SQL,
+              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
+            });
+          } else {
+            opts.push({
+              value: SQL,
+              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, MSSQL)',
+            });
+          }
+          opts.push({
+            value: MONGODB,
+            name: 'MongoDB',
+          });
+          if (answers.authenticationType !== OAUTH2) {
+            opts.push({
+              value: CASSANDRA,
+              name: 'Cassandra',
+            });
+          }
+          opts.push({
+            value: 'couchbase',
+            name: '[BETA] Couchbase',
+          });
+          opts.push({
+            value: NEO4J,
+            name: '[BETA] Neo4j',
+          });
+          opts.push({
+            value: NO_DATABASE,
+            name: 'No database',
+          });
+          return opts;
+        },
+        default: this.jhipsterConfigWithDefaults.databaseType,
+      },
+      {
+        when: response => response.databaseType === SQL,
+        type: 'list',
+        name: PROD_DATABASE_TYPE,
+        message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
+        choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
+        default: this.jhipsterConfigWithDefaults.prodDatabaseType,
+      },
+      {
+        when: response => response.databaseType === SQL,
+        type: 'list',
+        name: DEV_DATABASE_TYPE,
+        message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
+        choices: response =>
+          [SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)].concat([
+            {
+              value: H2_DISK,
+              name: 'H2 with disk-based persistence',
+            },
+            {
+              value: H2_MEMORY,
+              name: 'H2 with in-memory persistence',
+            },
+          ]) as any,
+        default: this.jhipsterConfigWithDefaults.devDatabaseType,
+      },
+      {
+        when: answers => !answers.reactive,
+        type: 'list',
+        name: CACHE_PROVIDER,
+        message: 'Which cache do you want to use? (Spring cache abstraction)',
+        choices: [
+          {
+            value: EHCACHE,
+            name: 'Ehcache (local cache, for a single node)',
+          },
+          {
+            value: CAFFEINE,
+            name: 'Caffeine (local cache, for a single node)',
+          },
+          {
+            value: HAZELCAST,
+            name: 'Hazelcast (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)',
+          },
+          {
+            value: INFINISPAN,
+            name: 'Infinispan (hybrid cache, for multiple nodes)',
+          },
+          {
+            value: MEMCACHED,
+            name: 'Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+          },
+          {
+            value: REDIS,
+            name: 'Redis (distributed cache)',
+          },
+          {
+            value: NO_CACHE_PROVIDER,
+            name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
+          },
+        ],
+        default: this.jhipsterConfigWithDefaults.cacheProvider,
+      },
+      {
+        when: answers =>
+          ((answers.cacheProvider !== NO_CACHE_PROVIDER && answers.cacheProvider !== MEMCACHED) || applicationType === GATEWAY) &&
+          answers.databaseType === SQL &&
+          !answers.reactive,
+        type: 'confirm',
+        name: 'enableHibernateCache',
+        message: 'Do you want to use Hibernate 2nd level cache?',
+        default: this.jhipsterConfigWithDefaults.enableHibernateCache,
+      },
+    ],
+    this.config,
+  );
 }
 
-export async function askForOptionalItems({ control }) {
+export async function askForOptionalItems(this: CoreGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
-  const choices = [];
+  const choices: any[] = [];
   const defaultChoice = [];
   if ([SQL, MONGODB, NEO4J].includes(databaseType)) {
     choices.push({
@@ -235,16 +237,14 @@ export async function askForOptionalItems({ control }) {
     value: 'enableSwaggerCodegen:true',
   });
 
-  const PROMPTS = {
-    type: 'checkbox',
-    name: 'serverSideOptions',
-    message: 'Which other technologies would you like to use?',
-    choices,
-    default: defaultChoice,
-  };
-
   if (choices.length > 0) {
-    await this.prompt(PROMPTS).then(answers => {
+    await this.prompt({
+      type: 'checkbox',
+      name: 'serverSideOptions',
+      message: 'Which other technologies would you like to use?',
+      choices,
+      default: defaultChoice,
+    }).then(answers => {
       this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
       this.jhipsterConfig.websocket = getOptionFromArray(answers.serverSideOptions, WEBSOCKET);
       this.jhipsterConfig.searchEngine = getOptionFromArray(answers.serverSideOptions, SEARCH_ENGINE);
@@ -258,7 +258,7 @@ export async function askForOptionalItems({ control }) {
   }
 }
 
-export async function askForServerTestOpts({ control }) {
+export async function askForServerTestOpts(this: CoreGenerator, { control }) {
   if (control.existingProject && this.options.askAnswered !== true) return;
 
   const answers = await this.prompt([

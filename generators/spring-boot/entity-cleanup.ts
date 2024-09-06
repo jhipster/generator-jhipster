@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { ApplicationType } from '../../lib/types/application/application.js';
+import type { Entity } from '../../lib/types/application/entity.js';
 import type CoreGenerator from '../base-core/generator.js';
 
 /**
@@ -28,7 +30,10 @@ import type CoreGenerator from '../base-core/generator.js';
  */
 export function cleanupOldFiles(
   this: CoreGenerator,
-  { application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch }, entity: { entityClass, entityAbsoluteFolder } },
+  {
+    application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
+    entity: { entityClass, entityAbsoluteFolder },
+  }: { application: ApplicationType<Entity>; entity: Entity },
 ) {
   if (this.isJhipsterVersionLessThan('7.6.1')) {
     if (searchEngineElasticsearch) {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -35,8 +34,9 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   javaApplication;
 
   async beforeQueue() {
-    this.sharedData.getControl().existingProject =
-      this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed);
+    this.sharedData.getControl().existingProject = Boolean(
+      this.options.defaults || this.options.applicationWithConfig || (this.jhipsterConfig.baseName !== undefined && this.config.existed),
+    );
 
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -63,7 +63,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       async showPrompts() {
         await this.prompt(
           [
@@ -78,7 +78,7 @@ export default class ProjectNameGenerator extends BaseApplicationGenerator {
           this.config,
         );
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {

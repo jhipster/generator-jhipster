@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type LanguagesGenerator from './generator.js';
 import detectLanguage from './support/detect-language.js';
 import { languagesAsChoices } from './support/languages.js';
 
-export async function askI18n() {
+export async function askI18n(this: LanguagesGenerator) {
   if (!this.askForMoreLanguages) return;
   const nativeLanguage = this.jhipsterConfig.nativeLanguage;
   const answers = await this.prompt(
@@ -47,7 +47,7 @@ export async function askI18n() {
   }
 }
 
-export async function askForLanguages({ control }) {
+export async function askForLanguages(this: LanguagesGenerator, { control }) {
   if (!this.askForMoreLanguages) {
     return;
   }

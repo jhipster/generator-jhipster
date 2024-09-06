@@ -52,6 +52,8 @@ const { GENERATOR_PROJECT_NAME, GENERATOR_INIT } = GENERATOR_LIST;
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
 export default class extends BaseGenerator {
+  application!: any;
+
   async _beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -80,7 +82,7 @@ export default class extends BaseGenerator {
   }
 
   get prompting() {
-    return {
+    return this.asPromptingTaskGroup({
       async prompting() {
         await this.prompt(prompts(this), this.config);
       },
@@ -111,7 +113,7 @@ export default class extends BaseGenerator {
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.PROMPTING]() {
@@ -119,7 +121,7 @@ export default class extends BaseGenerator {
   }
 
   get configuring() {
-    return {
+    return this.asConfiguringTaskGroup({
       requiredConfig() {
         this.config.defaults(requiredConfig());
       },
@@ -131,7 +133,7 @@ export default class extends BaseGenerator {
           });
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.CONFIGURING]() {
@@ -139,13 +141,13 @@ export default class extends BaseGenerator {
   }
 
   get composing() {
-    return {
+    return this.asComposingTaskGroup({
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } });
         initGenerator.generateReadme = false;
       },
-    };
+    });
   }
 
   get [BaseGenerator.COMPOSING]() {
@@ -336,7 +338,7 @@ export default class extends BaseGenerator {
   }
 
   get postInstall() {
-    return {
+    return this.asPostInstallTaskGroup({
       async addSnapshot() {
         const { [LOCAL_BLUEPRINT_OPTION]: localBlueprint } = this.jhipsterConfig;
         const {
@@ -365,7 +367,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
           this.log.warn('Fail to generate snapshots');
         }
       },
-    };
+    });
   }
 
   get [BaseGenerator.POST_INSTALL]() {
@@ -373,7 +375,7 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
   }
 
   get end() {
-    return {
+    return this.asEndTaskGroup({
       end() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
 
@@ -389,7 +391,7 @@ To begin to work:
 - then, come back here, and begin to code!
 `);
       },
-    };
+    });
   }
 
   get [BaseGenerator.END]() {

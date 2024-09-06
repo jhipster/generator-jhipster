@@ -65,6 +65,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   entityTableName: string;
   entityNamePlural: string;
   entityAbsoluteClass: string;
+  entityAbsoluteFolder: string;
 
   dtoClass?: string;
   dtoInstance?: string;

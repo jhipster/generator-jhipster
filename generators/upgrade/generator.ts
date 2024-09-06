@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -50,8 +49,9 @@ export default class UpgradeGenerator extends BaseGenerator {
   actualApplicationBranch;
   silent;
   applyConfig;
-  spawnStdio = 'inherit';
+  spawnStdio: 'inherit' | 'ignore' | 'pipe' | 'overlapped' = 'inherit';
   executable;
+  verbose!: boolean;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -323,7 +323,7 @@ export default class UpgradeGenerator extends BaseGenerator {
     const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERATIVE_OPTIONS };
 
     // We should not reuse sharedData at non interactive runs
-    delete generatorOptions.sharedData;
+    delete (generatorOptions as any).sharedData;
 
     const envBuilder = await this.createEnvBuilder(envOptions);
     const env = envBuilder.getEnvironment();

@@ -25,12 +25,6 @@ import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT } from
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
 
-/**
- * Base class for a generator that can be extended through a blueprint.
- *
- * @class
- * @extends {BaseWorkspacesGenerator}
- */
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   workspaces;
   generateApplications;

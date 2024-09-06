@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -23,6 +22,7 @@ import chalk from 'chalk';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock, moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { databaseTypes, entityOptions } from '../../jdl/jhipster/index.js';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { cleanupOldFiles } from './entity-cleanup.js';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
@@ -196,13 +196,13 @@ export const serverFiles = {
 
 export function writeFiles() {
   return {
-    cleanupOldServerFiles({ application, entities }) {
+    cleanupOldServerFiles: asWritingEntitiesTask(function ({ application, entities }) {
       for (const entity of entities.filter(entity => !entity.skipServer)) {
         cleanupOldFiles.call(this, { application, entity });
       }
-    },
+    }),
 
-    async writeServerFiles({ application, entities }) {
+    writeServerFiles: asWritingEntitiesTask(async function ({ application, entities }) {
       const rootTemplatesPath = application.reactive
         ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
         : ['', '../../server/templates/', '../../java/generators/domain/templates/'];
@@ -221,6 +221,6 @@ export function writeFiles() {
           });
         }
       }
-    },
+    }),
   };
 }

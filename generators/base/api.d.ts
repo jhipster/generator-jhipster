@@ -14,7 +14,9 @@ export type ApplicationWithConfig = {
 export type JHipsterGeneratorOptions = BaseOptions & {
   /* cli options */
   commandName: string;
+  programName: string;
   positionalArguments?: unknown[];
+  createEnvBuilder?: any;
 
   /* yeoman options */
   skipYoResolve?: boolean;
@@ -22,6 +24,7 @@ export type JHipsterGeneratorOptions = BaseOptions & {
   force?: boolean;
 
   /* base options */
+  defaults?: boolean;
   applicationId?: string;
   applicationWithConfig?: ApplicationWithConfig;
   /**
@@ -191,7 +194,7 @@ export type WriteFileOptions<DataType = ApplicationType<Entity>, Generator = Cor
     }
   | {
       /** templates to be written */
-      templates: WriteFileTemplate<DataType, Generator>;
+      templates: WriteFileTemplate<DataType, Generator>[];
     }
   | {
       /** blocks to be written */
