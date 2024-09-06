@@ -18,17 +18,15 @@
  */
 import type { Language } from './support/languages.js';
 
+export type LanguagesSource = {
+  addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
+};
+
 export type I18nApplication = {
+  enableTranslation: boolean;
   enableI18nRTL: boolean;
   nativeLanguage: string;
   nativeLanguageDefinition: Language;
-} & (
-  | {
-      enableTranslation: false;
-    }
-  | {
-      enableTranslation: true;
-      languages: string[];
-      languagesDefinition: readonly Language[];
-    }
-);
+  languages: string[];
+  languagesDefinition: readonly Language[];
+};
