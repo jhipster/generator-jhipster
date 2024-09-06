@@ -32,7 +32,7 @@ const COMPONENT_ATTRIBUTE = 'component="(?<component>[^"]+)"\\s*';
 const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE})+)>(?<translation>[\\s\\S]*?)<\\/Translate>`;
 
 function getTranslationValue(getWebappTranslation, key, data) {
-  return getWebappTranslation(key, data) || undefined;
+  return getWebappTranslation(key, data);
 }
 
 const replaceTranslationKeysWithText = (
