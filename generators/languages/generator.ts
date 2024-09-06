@@ -53,7 +53,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
    * Can be incremental or every language.
    */
   languagesToApply;
-  composedBlueprints!: string[];
+  composedBlueprints!: string[] = [];
   languageCommand;
   writeJavaLanguageFiles;
   regenerateLanguages;
