@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -56,7 +55,7 @@ export default class TemplateFileFs {
     if (templateFile.rootTemplate) {
       templateFile.file = file;
     } else {
-      this.get(templateFile.parentPath).addFragment(templateFile);
+      this.get(templateFile.parentPath!).addFragment(templateFile);
     }
     return templateFile;
   }

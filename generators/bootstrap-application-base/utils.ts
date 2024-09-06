@@ -23,6 +23,7 @@ import { loadRequiredConfigIntoEntity } from '../base-application/support/index.
 import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
+import type BaseApplicationGenerator from '../base-application/generator.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -71,7 +72,7 @@ export const auditableEntityFields = () => [
 
 const authorityEntityName = 'Authority';
 
-export function createUserEntity(customUserData = {}, application) {
+export function createUserEntity(this: BaseApplicationGenerator, customUserData = {}, application) {
   const userEntityDefinition = this.getEntityConfig('User')?.getAll();
   if (userEntityDefinition) {
     if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
@@ -191,7 +192,7 @@ export function createUserEntity(customUserData = {}, application) {
   return user;
 }
 
-export function createUserManagementEntity(customUserManagementData = {}, application) {
+export function createUserManagementEntity(this: BaseApplicationGenerator, customUserManagementData = {}, application) {
   const user = createUserEntity.call(this, {}, application);
   for (const field of user.fields) {
     // Login is used as the id field in rest api.
@@ -236,7 +237,7 @@ export function createUserManagementEntity(customUserManagementData = {}, applic
   return userManagement;
 }
 
-export function createAuthorityEntity(customAuthorityData = {}, application) {
+export function createAuthorityEntity(this: BaseApplicationGenerator, customAuthorityData = {}, application) {
   const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll();
   if (entityDefinition) {
     if (entityDefinition.relationships && entityDefinition.relationships.length > 0) {

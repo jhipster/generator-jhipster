@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
 
@@ -72,7 +72,7 @@ export const couchbaseFiles = {
   ],
 };
 
-export function cleanupCouchbaseFilesTask({ application }) {
+export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbaseFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('7.1.1')) {
     this.removeFile(`${application.javaPackageSrcDir}repository/CustomReactiveCouchbaseRepository.java `);
     this.removeFile(`${application.javaPackageSrcDir}config/DatabaseConfigurationIT.java`);
@@ -93,11 +93,11 @@ export function cleanupCouchbaseFilesTask({ application }) {
     this.removeFile(`${application.srcMainResources}config/couchmove/changelog/V0.1__initial_setup/user__admin.json`);
     this.removeFile(`${application.srcMainResources}config/couchmove/changelog/V0.1__initial_setup/user__user.json`);
   }
-}
+});
 
-export default async function writeCouchbaseFilesTask({ application }) {
+export default asWritingTask(async function writeCouchbaseFilesTask({ application }) {
   await this.writeFiles({
     sections: couchbaseFiles,
     context: application,
   });
-}
+});

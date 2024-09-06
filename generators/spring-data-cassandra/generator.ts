@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -95,7 +94,7 @@ export default class CassandraGenerator extends BaseApplicationGenerator {
           { groupId: 'org.apache.cassandra', artifactId: 'java-driver-mapper-runtime' },
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
           { groupId: 'org.springframework.boot', artifactId: cassandraStarter },
-          { groupId: 'org.lz4', artifactId: 'lz4-java', version: javaDependencies['lz4-java'] },
+          { groupId: 'org.lz4', artifactId: 'lz4-java', version: javaDependencies!['lz4-java'] },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'cassandra' },

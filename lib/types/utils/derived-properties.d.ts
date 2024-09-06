@@ -1,5 +1,9 @@
 import type { Simplify, ValueOf } from 'type-fest';
 
+export type DerivedPropertiesOnlyOf<Property extends string, Choices extends string> = Simplify<{
+  [K in Choices as `${Property}${Capitalize<K>}`]: boolean;
+}>;
+
 /*
  * @example
  * ```ts
@@ -10,7 +14,7 @@ import type { Simplify, ValueOf } from 'type-fest';
 export type DerivedPropertiesOf<Property extends string, Choices extends string> = Simplify<
   {
     [K in Choices as `${Property}${Capitalize<K>}`]: boolean;
-  } & Record<Property, Choices[number] | undefined> &
+  } & Record<Property, Choices | undefined> &
     Record<`${Property}Any`, boolean>
 >;
 

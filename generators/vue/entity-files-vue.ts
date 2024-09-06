@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asPostWritingEntitiesTask, asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
+import { asPostWritingEntitiesTask, asWritingEntitiesTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock } from '../client/support/index.js';
 
 export const entityFiles = {
@@ -78,10 +77,10 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask(async function pos
         readOnly,
         entityClassPlural,
         i18nKeyPrefix,
-        pageTitle = enableTranslation ? `${i18nKeyPrefix}.home.title` : entityClassPlural,
       } = entity;
+      const pageTitle = ((entity as any).pageTitle ?? enableTranslation) ? `${i18nKeyPrefix}.home.title` : entityClassPlural;
 
-      this.addEntityToModule(
+      (this as any).addEntityToModule(
         entityInstance,
         entityClass,
         entityAngularName,
@@ -92,12 +91,17 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask(async function pos
         readOnly,
         pageTitle,
       );
-      this.addEntityToMenu(entity.entityPage, application.enableTranslation, entity.entityTranslationKeyMenu, entity.entityClassHumanized);
+      (this as any).addEntityToMenu(
+        entity.entityPage,
+        application.enableTranslation,
+        entity.entityTranslationKeyMenu,
+        entity.entityClassHumanized,
+      );
     }
   }
 });
 
-export const cleanupEntitiesFiles = asWritingTask(function cleanupEntitiesFiles({ control, application, entities }) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask(function cleanupEntitiesFiles({ control, application, entities }) {
   for (const entity of (control.filterEntitiesForClient ?? (entities => entities))(entities).filter(entity => !entity.builtInUser)) {
     const { entityFolderName, entityFileName } = entity;
     if (this.isJhipsterVersionLessThan('8.0.0-beta.3')) {

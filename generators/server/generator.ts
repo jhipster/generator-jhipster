@@ -336,7 +336,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const databaseType = entityConfig.databaseType ?? application.databaseType;
         // Validate entity json field content
         const fields = entityConfig.fields;
-        fields.forEach(field => {
+        fields!.forEach(field => {
           // Migration from JodaTime to Java Time
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
             field.fieldType = INSTANT;
@@ -378,7 +378,7 @@ Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, s
       configureRelationships({ entityConfig, entityName }) {
         // Validate entity json relationship content
         const relationships = entityConfig.relationships;
-        relationships.forEach(relationship => {
+        relationships!.forEach(relationship => {
           this._validateRelationship(entityName, relationship);
 
           if (relationship.relationshipName === undefined) {

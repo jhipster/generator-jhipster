@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -24,6 +23,12 @@ import ClientReact from './react/needle-api/needle-client-react.js';
 import ClientVue from './client/needle-api/needle-client-vue.js';
 
 export default class NeedleApi {
+  base: Base;
+  client: Client;
+  clientAngular: ClientAngular;
+  clientReact: ClientReact;
+  clientVue: ClientVue;
+
   constructor(generator) {
     this.base = new Base(generator);
     this.client = new Client(generator);

@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
+
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default function cleanupCassandraFilesTask({ application }) {
+export default asWritingTask(function cleanupCassandraFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('4.3.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/cassandra/CustomZonedDateTimeCodec.java`);
   }
@@ -36,4 +37,4 @@ export default function cleanupCassandraFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
-}
+});

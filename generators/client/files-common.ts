@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { clientRootTemplatesBlock, clientSrcTemplatesBlock } from './support/files.js';
 
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -78,8 +79,8 @@ export const files = {
   ],
 };
 
-export async function writeFiles({ application }) {
-  if (![ANGULAR, REACT, VUE].includes(application.clientFramework)) {
+export const writeFiles = asWritingTask(async function writeFiles({ application }) {
+  if (![ANGULAR, REACT, VUE].includes(application.clientFramework!)) {
     return;
   }
 
@@ -87,4 +88,4 @@ export async function writeFiles({ application }) {
     sections: files,
     context: application,
   });
-}
+});

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -27,7 +26,7 @@
  * @param isDecimal - flag indicating whether to check for decimal number or not
  * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
  */
-const filterNumber = (input, isSigned, isDecimal) => {
+const filterNumber = (input: any, isSigned = false, isDecimal = false) => {
   const signed = isSigned ? '(-|+)?' : '';
   const decimal = isDecimal ? '(.[0-9]+)?' : '';
   const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
@@ -42,7 +41,7 @@ const filterNumber = (input, isSigned, isDecimal) => {
  * @param {any} input input
  * @returns {boolean} true if input is number; false otherwise
  */
-const isNumber = input => {
+const isNumber = (input: any): input is number => {
   return !isNaN(filterNumber(input));
 };
 
@@ -51,7 +50,7 @@ const isNumber = input => {
  * @param {any} input input
  * @returns {boolean} true if input is a signed number; false otherwise
  */
-const isSignedNumber = input => {
+const isSignedNumber = (input: any): boolean => {
   return !isNaN(filterNumber(input, true));
 };
 
@@ -60,7 +59,7 @@ const isSignedNumber = input => {
  * @param {any} input input
  * @returns {boolean} true if input is a signed decimal number; false otherwise
  */
-const isSignedDecimalNumber = input => {
+const isSignedDecimalNumber = (input: any): boolean => {
   return !isNaN(filterNumber(input, true, true));
 };
 

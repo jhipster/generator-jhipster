@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable no-console */
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
@@ -236,6 +235,7 @@ export const jhipster7deprecatedProperties = {
     get:
       () =>
       (...args) =>
+        // @ts-expect-error
         getJoinTableName(...args).value,
   },
   getJavaValueGeneratorForType: {
@@ -359,7 +359,7 @@ const getPropertBuilder =
     return undefined;
   };
 
-const createHandler = ({ log } = {}) => {
+const createHandler = ({ log }: { log: (msg: string) => void } = { log: msg => console.log(msg) }) => {
   const getProperty = getPropertBuilder({ log });
   return {
     ...Object.fromEntries(
@@ -404,6 +404,6 @@ const createHandler = ({ log } = {}) => {
   };
 };
 
-export function createJHipster7Context(generator, data, options) {
+export function createJHipster7Context(generator, data, options: { log: (msg: string) => void }) {
   return new Proxy({ generator, data }, createHandler(options));
 }

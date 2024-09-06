@@ -38,6 +38,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   entrypointGenerator;
 
   generateWorkspaces;
+  workspacesConfig!: Record<string, any>;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

@@ -67,7 +67,7 @@ const generateEntityClientFields = (
   dto,
   customDateType = 'dayjs.Dayjs',
   embedded = false,
-  clientFramework = ANGULAR,
+  clientFramework: string = ANGULAR,
 ) => {
   const variablesWithTypes = [];
   if (!embedded && primaryKey) {

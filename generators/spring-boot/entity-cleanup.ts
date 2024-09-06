@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type CoreGenerator from '../base-core/generator.js';
+
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
@@ -25,11 +26,10 @@
  * @param {Object} application
  * @param {Object} entity
  */
-
-export function cleanupOldFiles({
-  application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
-  entity: { entityClass, entityAbsoluteFolder },
-}) {
+export function cleanupOldFiles(
+  this: CoreGenerator,
+  { application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch }, entity: { entityClass, entityAbsoluteFolder } },
+) {
   if (this.isJhipsterVersionLessThan('7.6.1')) {
     if (searchEngineElasticsearch) {
       this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToFieldSortBuilderConverter.java`);

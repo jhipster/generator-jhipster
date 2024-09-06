@@ -177,7 +177,7 @@ export default class UpgradeGenerator extends BaseGenerator {
           // Make sure the node_modules is up to date
           await this.spawnCommand('npm install', { stdio: this.spawnStdio });
 
-          const customCliOptions = [];
+          const customCliOptions: string[] = [];
           if (this.getPackageJsonVersion() === '7.9.4') {
             customCliOptions.push('--with-entities');
           }

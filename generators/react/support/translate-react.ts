@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -35,11 +34,13 @@ function getTranslationValue(getWebappTranslation, key, data) {
   return getWebappTranslation(key, data) || undefined;
 }
 
+type Options = { keyPattern?: string; interpolatePattern?: string; wrapTranslation?: string | string[]; escapeHtml?: boolean };
+
 const replaceTranslationKeysWithText = (
   getWebappTranslation,
-  body,
-  regexp,
-  { keyPattern, interpolatePattern, wrapTranslation, escapeHtml } = {},
+  body: string,
+  regexp: string,
+  { keyPattern, interpolatePattern, wrapTranslation, escapeHtml }: Options = {},
 ) => {
   const matches = body.matchAll(new RegExp(regexp, 'g'));
   if (typeof wrapTranslation === 'string') {
@@ -48,10 +49,10 @@ const replaceTranslationKeysWithText = (
   for (const match of matches) {
     const target = match[0];
 
-    let key = match.groups && match.groups.key;
+    let key = match.groups?.key;
     if (!key && keyPattern) {
       const keyMatch = target.match(new RegExp(keyPattern));
-      key = keyMatch && keyMatch.groups && keyMatch.groups.key;
+      key = keyMatch?.groups?.key;
     }
     if (!key) {
       throw new Error(`Translation key not found for ${target}`);
@@ -60,7 +61,7 @@ const replaceTranslationKeysWithText = (
     let interpolate = match.groups && match.groups.interpolate;
     if (!interpolate && interpolatePattern) {
       const interpolateMatch = target.match(new RegExp(interpolatePattern));
-      interpolate = interpolateMatch && interpolateMatch.groups && interpolateMatch.groups.interpolate;
+      interpolate = interpolateMatch?.groups?.interpolate;
     }
 
     let data;
@@ -68,8 +69,8 @@ const replaceTranslationKeysWithText = (
       const interpolateMatches = interpolate.matchAll(/(?<field>[^{\s:,}]+)(?::\s*(?<value>[^,}]+))?/g);
       data = {};
       for (const interpolateMatch of interpolateMatches) {
-        const field = interpolateMatch.groups.field;
-        let value = interpolateMatch.groups.value;
+        const field = interpolateMatch?.groups?.field;
+        let value: string | number | undefined = interpolateMatch?.groups?.value;
         if (value === undefined) {
           value = key;
         }
@@ -84,7 +85,7 @@ const replaceTranslationKeysWithText = (
           // wrap expression
           value = `{${value}}`;
         }
-        data[field] = value;
+        data[field!] = value;
       }
     }
 
@@ -110,7 +111,7 @@ const replaceTranslationKeysWithText = (
  * @return {import('../../base/api.js').EditFileCallback}
  */
 export const createTranslationReplacer = getWebappTranslation =>
-  function replaceReactTranslations(body, filePath) {
+  function replaceReactTranslations(body: string, filePath: string) {
     if (/\.tsx$/.test(filePath)) {
       body = body.replace(new RegExp(TRANSLATE_IMPORT, 'g'), '');
       body = replaceTranslationKeysWithText(getWebappTranslation, body, `\\{\\s*${TRANSLATE_FUNCTION}\\s*\\}`, { wrapTranslation: '"' });

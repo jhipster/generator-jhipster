@@ -1,5 +1,10 @@
-// @ts-nocheck
 export default class TemplateData {
+  private _templateFile: any;
+  private _defaultData: { fragment?: any; section?: string };
+  private _sections: any;
+  private _defaultFragment: any;
+  private last: any;
+
   constructor(templateFile, defaultData = {}) {
     this._templateFile = templateFile;
     this._defaultData = defaultData;
@@ -32,7 +37,7 @@ export default class TemplateData {
   /**
    * Render fragments using default join and suffix.
    */
-  render(fragmentData = {}, suffix = '\n') {
+  render(fragmentData: { join?: string; section?: string } = {}, suffix = '\n') {
     const { join = '\n' } = fragmentData;
     const renderedFragments = this.renderFragments(fragmentData).filter(fragment => fragment);
     const section = fragmentData.section || this._defaultData.section;
@@ -50,7 +55,7 @@ export default class TemplateData {
   /**
    * Proxy to renderFragments for templates.
    */
-  renderFragments(fragmentData = {}) {
+  renderFragments(fragmentData: { fragment?: any; section?: string } = {}) {
     const fragment = { ...this._defaultData.fragment, ...fragmentData.fragment };
     if (this._defaultData.section && fragmentData.section) {
       // Disable section passed by the parent.

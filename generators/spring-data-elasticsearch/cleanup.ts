@@ -1,4 +1,5 @@
-// @ts-nocheck
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
+
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default function cleanupElasticsearchFilesTask({ application }) {
+export default asWritingTask(function cleanupElasticsearchFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('4.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ElasticSearchConfiguration.java`);
   }
@@ -37,4 +38,4 @@ export default function cleanupElasticsearchFilesTask({ application }) {
       this.removeFile(`${application.javaPackageTestDir}config/ElasticsearchReactiveTestConfiguration.java`);
     }
   }
-}
+});

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -58,7 +57,7 @@ export default class CouchbaseGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory({
+        source.addTestSpringFactory!({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
         });
