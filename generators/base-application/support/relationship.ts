@@ -76,7 +76,7 @@ export const loadEntitiesOtherSide = (entities: JSONEntity[], { application }: {
           if (!application || application.authenticationTypeOauth2) {
             errors.push("oauth2 applications with database and '--sync-user-with-idp' option");
           }
-          if (!application || !application.authenticationTypeOauth2) {
+          if (!application?.authenticationTypeOauth2) {
             errors.push('jwt and session authentication types in monolith or gateway applications with database');
           }
           throw new Error(`Error at entity ${entity.name}: relationships with built-in User entity is supported in ${errors}.`);

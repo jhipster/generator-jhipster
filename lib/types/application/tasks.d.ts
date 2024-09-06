@@ -54,9 +54,9 @@ type LoadingEntitiesTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWit
     /** Entity storage */
     entityStorage: Storage;
     /** Proxy object for the entitystorage */
-    entityConfig: Record<string, any>;
+    entityConfig: BaseEntity;
     /** Initial entity object */
-    entityBootstrap: Record<string, any>;
+    entityBootstrap: Entity;
   }[];
 };
 

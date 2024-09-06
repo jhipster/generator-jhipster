@@ -30,6 +30,7 @@ import {
   validations,
 } from '../../jdl/jhipster/index.js';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
+import type EntityGenerator from './generator.js';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { NO: NO_DATABASE, CASSANDRA, SQL } = databaseTypes;
@@ -75,7 +76,7 @@ const getFieldNameUndercored = fields =>
     }),
   );
 
-function askForMicroserviceJson() {
+function askForMicroserviceJson(this: EntityGenerator) {
   const context = this.entityData;
   if (this.jhipsterConfig.applicationType !== GATEWAY || context.configExisted) {
     return undefined;
@@ -115,7 +116,7 @@ function askForMicroserviceJson() {
   });
 }
 
-function askForUpdate() {
+function askForUpdate(this: EntityGenerator) {
   const context = this.entityData;
   // ask only if running an existing entity without arg option --force or --regenerate
   const isForce = this.options.force || context.regenerate;
@@ -212,7 +213,7 @@ function askForFieldsToRemove() {
   });
 }
 
-function askForRelationships(...args) {
+function askForRelationships(this: EntityGenerator, ...args) {
   const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
@@ -225,7 +226,7 @@ function askForRelationships(...args) {
   return askForRelationship.call(this, ...args);
 }
 
-function askForRelationsToRemove() {
+function askForRelationsToRemove(this: EntityGenerator) {
   const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
@@ -271,7 +272,7 @@ function askForRelationsToRemove() {
   });
 }
 
-function askForFiltering() {
+function askForFiltering(this: EntityGenerator) {
   const context = this.entityData;
   // don't prompt if server is skipped, or the backend is not sql, or no service requested
   if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
@@ -300,7 +301,7 @@ function askForFiltering() {
   });
 }
 
-function askForReadOnly() {
+function askForReadOnly(this: EntityGenerator) {
   const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile) {
@@ -319,7 +320,7 @@ function askForReadOnly() {
   });
 }
 
-function askForDTO() {
+function askForDTO(this: EntityGenerator) {
   const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped or if no service layer
   if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
@@ -348,7 +349,7 @@ function askForDTO() {
   });
 }
 
-function askForService() {
+function askForService(this: EntityGenerator) {
   const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped
   if (context.useConfigurationFile || context.skipServer) {
@@ -381,7 +382,7 @@ function askForService() {
   });
 }
 
-function askForPagination() {
+function askForPagination(this: EntityGenerator) {
   const context = this.entityData;
   // don't prompt if data are imported from a file
   if (context.useConfigurationFile) {
@@ -421,7 +422,7 @@ function askForPagination() {
 /**
  * ask question for a field creation
  */
-async function askForField() {
+async function askForField(this: EntityGenerator) {
   const context = this.entityData;
   this.log.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   const databaseType = context.databaseType;
@@ -515,7 +516,7 @@ async function askForField() {
         if (!/^[A-Za-z0-9_]*$/.test(input)) {
           return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
-        if (context.enums && context.enums.includes(input)) {
+        if (context.enums?.includes(input)) {
           context.existingEnum = true;
         } else if (context.enums) {
           context.enums.push(input);
@@ -736,7 +737,7 @@ async function askForField() {
 /**
  * ask question for a relationship creation
  */
-async function askForRelationship(...args) {
+async function askForRelationship(this: EntityGenerator, ...args) {
   const [{ application }] = args;
   const context = this.entityData;
   const name = context.name;
@@ -889,7 +890,7 @@ async function askForRelationship(...args) {
 /**
  * Show the entity and it's fields and relationships in console
  */
-function logFieldsAndRelationships() {
+function logFieldsAndRelationships(this: EntityGenerator) {
   const context = this.entityData;
   if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
     this.log.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
@@ -940,7 +941,7 @@ function logFieldsAndRelationships() {
     this.log.log(chalk.white('Relationships'));
     this.entityConfig.relationships.forEach(relationship => {
       const validationDetails = [];
-      if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
+      if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
         validationDetails.push(REQUIRED);
       }
       this.log.log(

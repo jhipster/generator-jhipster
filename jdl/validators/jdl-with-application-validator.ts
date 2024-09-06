@@ -71,7 +71,7 @@ export default function createValidator(jdlObject: JDLObject, logger: any = cons
   function checkForNamespaceConfigErrors(jdlApplication: JDLApplication): void {
     jdlApplication.forEachNamespaceConfiguration(config => {
       const blueprints: JDLApplicationConfigurationOption<string[]> | undefined = jdlApplication.config.getOption('blueprints');
-      if (!blueprints || !blueprints.getValue().some(blueprint => blueprint === config.namespace)) {
+      if (!blueprints?.getValue().some(blueprint => blueprint === config.namespace)) {
         throw new Error(`Blueprint namespace config ${config.namespace} requires the blueprint ${config.namespace}`);
       }
     });

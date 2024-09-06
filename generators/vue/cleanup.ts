@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -18,11 +17,13 @@
  * limitations under the License.
  */
 
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
+
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldFilesTask({ application } = {}) {
+export default asWritingTask(function cleanupOldFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.service.ts`);
@@ -107,4 +108,4 @@ export default function cleanupOldFilesTask({ application } = {}) {
     this.removeFile('vite.config.ts');
     this.removeFile('vitest.config.ts');
   }
-}
+});

@@ -23,19 +23,24 @@ import path from 'path';
 import chalk from 'chalk';
 import { upperFirst } from 'lodash-es';
 
+import type { Storage } from 'yeoman-generator';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
 import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
+import type { Entity } from '../../lib/types/application/entity.js';
 import prompts from './prompts.js';
 
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 const { isReservedClassName } = reservedKeywords;
 
 export default class EntityGenerator extends BaseApplicationGenerator {
-  name;
-  application = {};
+  name!: string;
+  application: any = {};
+  entityStorage!: Storage;
+  entityConfig!: Entity;
+  entityData!: { name: string; filename: string; configExisted: any; entityExisted: boolean; configurationFileExists: boolean };
 
   constructor(args, options, features) {
     super(args, options, { unique: 'argument', ...features });
@@ -56,8 +61,8 @@ export default class EntityGenerator extends BaseApplicationGenerator {
     return this.asInitializingTaskGroup({
       parseOptions() {
         const name = upperFirst(this.name).replace('.json', '');
-        this.entityStorage = this.getEntityConfig(name, true);
-        this.entityConfig = this.entityStorage.createProxy();
+        this.entityStorage = this.getEntityConfig(name, true)!;
+        this.entityConfig = this.entityStorage.createProxy() as Entity;
 
         const configExisted = this.entityStorage.existed;
         const filename = path.join(JHIPSTER_CONFIG_DIR, `${name}.json`);
@@ -235,11 +240,11 @@ The entity ${entityName} is being created.
 
   // Public API method used by the getter and also by Blueprints
   get end() {
-    return {
+    return this.asEndTaskGroup({
       end() {
         this.log.log(chalk.bold.green(`Entity ${this.entityData.entityNameCapitalized} generated successfully.`));
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.END]() {

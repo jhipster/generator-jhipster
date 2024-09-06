@@ -20,4 +20,5 @@
 export type Field = {
   fieldName: string;
   fieldType: string;
+  options?: Record<string, any>;
 };

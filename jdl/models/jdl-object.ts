@@ -221,7 +221,7 @@ export default class JDLObject {
   }
 
   addOption(option: AbstractJDLOption): void {
-    if (!option || !option.getType) {
+    if (!option?.getType) {
       throw new Error("Can't add nil option.");
     }
     this.options.addOption(option);

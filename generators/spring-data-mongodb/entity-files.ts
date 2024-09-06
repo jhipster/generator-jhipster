@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
 
 const domainFiles = [
@@ -47,11 +47,11 @@ export const entityFiles = {
 
 export function cleanupMongodbEntityFilesTask() {}
 
-export default async function writeEntityMongodbFiles({ application, entities }) {
+export default asWritingEntitiesTask(async function writeEntityMongodbFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entityFiles,
       context: { ...application, ...entity },
     });
   }
-}
+});

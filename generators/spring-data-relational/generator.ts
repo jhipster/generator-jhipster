@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -18,11 +17,11 @@
  * limitations under the License.
  */
 
+import assert from 'assert';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_LIQUIBASE } from '../generator-list.js';
 import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
 import { databaseTypes } from '../../jdl/jhipster/index.js';
-import type { GeneratorDefinition as SpringBootGeneratorDefinition } from '../server/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
@@ -31,7 +30,7 @@ import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2Mave
 
 const { SQL } = databaseTypes;
 
-export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGeneratorDefinition> {
+export default class SqlGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -61,7 +60,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
         anyApp.devDatabaseExtraOptions = getDBCExtraOption(anyApp.devDatabaseType);
         anyApp.prodDatabaseExtraOptions = getDBCExtraOption(anyApp.prodDatabaseType);
 
-        anyApp.prodDatabaseDriver = getDatabaseDriverForDatabase(application.prodDatabaseType);
+        anyApp.prodDatabaseDriver = getDatabaseDriverForDatabase(application.prodDatabaseType!);
       },
     });
   }
@@ -140,6 +139,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<SpringBootGen
       },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies, packageFolder } = application;
+        assert.ok(javaDependencies, 'javaDependencies is required');
+        assert.ok(packageFolder, 'packageFolder is required');
+
         const { prodDatabaseType, devDatabaseTypeH2Any } = application as any;
         const dbDefinitions = getDatabaseTypeMavenDefinition(prodDatabaseType, {
           inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,

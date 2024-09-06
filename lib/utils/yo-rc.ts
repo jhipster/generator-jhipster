@@ -1,4 +1,4 @@
-export const YO_RC_CONFIG_KEY = 'generator-jhipster' as const;
+export const YO_RC_CONFIG_KEY = 'generator-jhipster';
 
 type YoRcContent = Record<typeof YO_RC_CONFIG_KEY, any>;
 

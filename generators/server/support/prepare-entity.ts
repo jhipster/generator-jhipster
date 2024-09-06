@@ -109,7 +109,7 @@ export function preparePostEntityServerDerivedProperties(entity) {
       entity.uniqueEnums[field.fieldType] = field.fieldType;
     }
   });
-  if (entity.primaryKey && entity.primaryKey.derived) {
+  if (entity.primaryKey?.derived) {
     entity.isUsingMapsId = true;
     entity.mapsIdAssoc = entity.relationships.find(rel => rel.id);
   } else {

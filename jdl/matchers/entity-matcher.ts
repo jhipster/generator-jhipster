@@ -1,3 +1,3 @@
 export default function matchEntity(jdlEntity) {
-  return jdlEntity && jdlEntity.name && jdlEntity.fields;
+  return jdlEntity?.name && jdlEntity.fields;
 }

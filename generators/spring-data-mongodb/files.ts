@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../server/support/index.js';
 
@@ -41,9 +41,9 @@ export const mongoDbFiles = {
   ],
 };
 
-export default async function writeMongodbFilesTask({ application }) {
+export default asWritingTask(async function writeMongodbFilesTask({ application }) {
   await this.writeFiles({
     sections: mongoDbFiles,
     context: application,
   });
-}
+});

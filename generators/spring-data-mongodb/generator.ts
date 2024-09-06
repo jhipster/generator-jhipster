@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -59,7 +58,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory({
+        source.addTestSpringFactory!({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
         });
@@ -67,7 +66,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
         source.addJavaDependencies?.([
-          { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies['mongock-bom'], scope: 'import' },
+          { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies!['mongock-bom'], scope: 'import' },
           { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },
           { groupId: 'org.springframework.boot', artifactId: `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}` },
           { groupId: 'io.mongock', artifactId: reactive ? 'mongodb-reactive-driver' : 'mongodb-springdata-v4-driver' },
@@ -88,7 +87,7 @@ export default class MongoDBGenerator extends BaseApplicationGenerator {
       blockhound({ application, source }) {
         const { reactive } = application;
         if (reactive) {
-          source.addAllowBlockingCallsInside({ classPath: 'com.mongodb.internal.Locks', method: 'checkedWithLock' });
+          source.addAllowBlockingCallsInside!({ classPath: 'com.mongodb.internal.Locks', method: 'checkedWithLock' });
         }
       },
     });

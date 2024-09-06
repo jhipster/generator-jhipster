@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -20,6 +19,7 @@
 import path from 'path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
+import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
@@ -100,7 +100,7 @@ export const generateEntityClientEnumImports = (fields, clientFramework) => {
  * @param {boolean} [wrapped=true] - wrapped values for required types.
  */
 
-export const generateTestEntityId = (primaryKey, index = 0, wrapped = true) => {
+export const generateTestEntityId = (primaryKey: string | PrimaryKey, index: string | number = 0, wrapped = true) => {
   primaryKey = getEntryIfTypeOrTypeAttribute(primaryKey);
   let value;
   if (primaryKey === TYPE_STRING) {

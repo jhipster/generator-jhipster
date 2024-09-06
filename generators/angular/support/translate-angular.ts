@@ -314,7 +314,7 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
     );
   }
   return function replaceAngularTranslations(content, filePath) {
-    if (/\.html$/.test(filePath)) {
+    if (filePath.endsWith('.html')) {
       if (!enableTranslation) {
         content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
         content = replacePlaceholders(getWebappTranslation, content);
@@ -332,7 +332,7 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
       if (/(:?route|module)\.ts$/.test(filePath)) {
         content = replacePageTitles(getWebappTranslation, content);
       }
-      if (/error\.route\.ts$/.test(filePath)) {
+      if (filePath.endsWith('error.route.ts')) {
         content = replaceErrorMessage(getWebappTranslation, content);
       }
     }

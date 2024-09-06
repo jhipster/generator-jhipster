@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -264,11 +263,11 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    * @param {string} pageTitle - The translation key or the text for the page title in the browser
    */
   addEntityToModule(
-    entityInstance = this.entityInstance,
-    entityClass = this.entityClass,
-    entityName = this.entityAngularName,
-    entityFolderName = this.entityFolderName,
-    entityFileName = this.entityFileName,
+    entityInstance,
+    entityClass,
+    entityName,
+    entityFolderName,
+    entityFileName,
     { applicationTypeMicroservice, clientSrcDir },
   ) {
     this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, {

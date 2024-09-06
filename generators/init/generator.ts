@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -21,10 +20,6 @@ import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_GIT } from '../generator-list.js';
 import { files, readme } from './files.js';
 
-/**
- * @class
- * @extends {BaseApplicationGenerator<import('../base-application/types.js').BaseApplication>}
- */
 export default class InitGenerator extends BaseApplicationGenerator {
   generateReadme = true;
 

@@ -29,7 +29,7 @@ export default function formatComment(comment?: string): string | undefined {
     return undefined;
   }
   const parts = comment.trim().split('\n');
-  if (parts.length === 1 && parts[0].indexOf('*') !== 0) {
+  if (parts.length === 1 && !parts[0].startsWith('*')) {
     return parts[0];
   }
   return parts.reduce((previousValue, currentValue) => {

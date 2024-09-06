@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -25,7 +24,8 @@ import { join } from 'path';
  * @param {string} baseName
  * @return {boolean}
  */
-export const baseNameConfigExists = baseName => existsSync(baseName === undefined ? '.yo-rc.json' : join(baseName, '.yo-rc.json'));
+export const baseNameConfigExists = (baseName?: string) =>
+  existsSync(baseName === undefined ? '.yo-rc.json' : join(baseName, '.yo-rc.json'));
 
 /**
  * Check if every application is new.

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import assert from 'assert';
 import path from 'path';
 import debugBuilder from 'debug';
@@ -8,6 +7,19 @@ import TemplateData from './template-data.js';
 
 export default class TemplateFile {
   file;
+  rootTemplate: boolean;
+  basePath?: string;
+  parentPath?: string;
+  filePath?: string;
+
+  private depth: number;
+  private _filename: any;
+  private _extension: any;
+  private _compiled: ejs.TemplateFunction;
+  // eslint-disable-next-line no-use-before-define
+  private _fragments: TemplateFile[];
+  private _fragmentName: string;
+  private _debug: { enabled: boolean } & ((msg: string) => void);
 
   constructor(filename, extension) {
     this._filename = filename;
@@ -44,7 +56,7 @@ export default class TemplateFile {
     }
 
     try {
-      this._compiled = ejs.compile(contents, options);
+      this._compiled = ejs.compile(contents, { ...options, async: false }) as unknown as ejs.TemplateFunction;
     } catch (error) {
       throw new Error(`Error compiling ${this._filename}, with contents:\n${contents}`, { cause: error });
     }
@@ -60,7 +72,7 @@ export default class TemplateFile {
     return this._fragments.map(templateFile => templateFile.render(data));
   }
 
-  render(data = {}) {
+  render(data: any = {}) {
     const fragments = new TemplateData(this, data);
     try {
       const rendered = this._compiled({

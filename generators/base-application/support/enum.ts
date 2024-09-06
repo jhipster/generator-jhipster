@@ -47,7 +47,7 @@ const getEnums = (enums, customValuesState, comments) => {
     return enums.map(enumValue => ({
       name: enumValue,
       value: enumValue,
-      comment: comments && comments[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
+      comment: comments?.[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
     }));
   }
   return enums.map(enumValue => {
@@ -55,7 +55,7 @@ const getEnums = (enums, customValuesState, comments) => {
       return {
         name: enumValue.trim(),
         value: enumValue.trim(),
-        comment: comments && comments[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
+        comment: comments?.[enumValue] && formatDocAsJavaDoc(comments[enumValue], 4),
       };
     }
 
@@ -63,7 +63,7 @@ const getEnums = (enums, customValuesState, comments) => {
     return {
       name: matched![1],
       value: matched![2],
-      comment: comments && comments[matched![1]] && formatDocAsJavaDoc(comments[matched![1]], 4),
+      comment: comments?.[matched![1]] && formatDocAsJavaDoc(comments[matched![1]], 4),
     };
   });
 };

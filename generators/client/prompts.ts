@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,9 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asPromptingTask } from '../base-application/support/task-type-inference.js';
 import { httpsGet } from '../base/support/index.js';
 
-export async function askForClientTheme({ control }) {
+type Choice = { value: string; name: string };
+
+export const askForClientTheme = asPromptingTask(async function askForClientTheme({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
   const config = this.jhipsterConfigWithDefaults;
@@ -30,7 +32,7 @@ export async function askForClientTheme({ control }) {
       when: () => ['angular', 'react', 'vue'].includes(config.clientFramework),
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
       choices: async () => {
-        const bootswatchChoices = await retrieveOnlineBootswatchThemes(this).catch(errorMessage => {
+        const bootswatchChoices = await retrieveOnlineBootswatchThemes().catch(errorMessage => {
           this.log.warn(errorMessage);
           return retrieveLocalBootswatchThemes();
         });
@@ -46,9 +48,9 @@ export async function askForClientTheme({ control }) {
     },
     this.config,
   );
-}
+});
 
-export async function askForClientThemeVariant({ control }) {
+export const askForClientThemeVariant = asPromptingTask(async function askForClientThemeVariant({ control }) {
   if (control.existingProject && !this.options.askAnswered) return;
   if ((this.jhipsterConfig.clientTheme ?? 'none') === 'none') {
     return;
@@ -70,17 +72,17 @@ export async function askForClientThemeVariant({ control }) {
     },
     this.config,
   );
+});
+
+async function retrieveOnlineBootswatchThemes(): Promise<Choice[]> {
+  return _retrieveBootswatchThemes(true);
 }
 
-async function retrieveOnlineBootswatchThemes(generator) {
-  return _retrieveBootswatchThemes(generator, true);
+async function retrieveLocalBootswatchThemes(): Promise<Choice[]> {
+  return _retrieveBootswatchThemes(false);
 }
 
-async function retrieveLocalBootswatchThemes(generator) {
-  return _retrieveBootswatchThemes(generator, false);
-}
-
-async function _retrieveBootswatchThemes(generator, useApi) {
+async function _retrieveBootswatchThemes(useApi): Promise<Choice[]> {
   const errorMessage = 'Could not fetch bootswatch themes from API. Using default ones.';
   if (!useApi) {
     return [

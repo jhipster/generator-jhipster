@@ -67,6 +67,7 @@ import { dockerPlaceholderGenerator } from '../docker/utils.js';
 import { getConfigWithDefaults } from '../../jdl/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type { Entity } from '../../lib/types/base/entity.js';
+import type BaseApplicationGenerator from '../base-application/generator.js';
 
 const {
   INITIALIZING,
@@ -696,8 +697,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Compose with a jhipster generator using default jhipster config.
    * @return {object} the composed generator
    */
-  async composeWithJHipster(generator: string, options?: ComposeOptions) {
-    assert(typeof generator === 'string', 'generator should to be a string');
+  async composeWithJHipster<const G extends string>(gen: G, options?: ComposeOptions<BaseApplicationGenerator>) {
+    assert(typeof gen === 'string', 'generator should to be a string');
+    let generator: string = gen;
     if (!isAbsolute(generator)) {
       const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
       if (await this.env.get(namespace)) {
@@ -729,7 +731,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * Compose with a jhipster generator using default jhipster config, but queue it immediately.
    */
-  async dependsOnJHipster(generator: string, options?: ComposeOptions) {
+  async dependsOnJHipster(generator: string, options?: ComposeOptions<BaseApplicationGenerator>) {
     return this.composeWithJHipster(generator, {
       ...options,
       schedule: false,
@@ -972,7 +974,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       } catch (error) {
         throw new Error(`Error rendering template ${sourceFileFrom} to ${targetFile}: ${error}`, { cause: error });
       }
-      if (!isBinary && transform && transform.length) {
+      if (!isBinary && transform?.length) {
         this.editFile(targetFile, ...transform);
       }
       return targetFile;

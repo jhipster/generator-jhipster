@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { fieldTypes } from '../../../jdl/jhipster/index.js';
+import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import { fieldIsEnum } from '../../base-application/support/index.js';
 
 const {
@@ -36,7 +37,7 @@ const {
  * @param key
  * @returns {*}
  */
-export const getEntryIfTypeOrTypeAttribute = key => {
+export const getEntryIfTypeOrTypeAttribute = (key: string | PrimaryKey) => {
   if (typeof key === 'object') {
     return key.type;
   }

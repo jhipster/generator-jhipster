@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -35,7 +34,7 @@ export function getDockerfileContainers(dockerfileContent) {
     let alias;
     if (instruction.getKeyword() === 'FROM') {
       imageWithTag = instruction.getArgumentsContent();
-      const split = instruction.getArgumentsContent().split(':');
+      const split = instruction.getArgumentsContent()!.split(':');
       image = split[0];
       tag = split[1];
       containers[image] = imageWithTag;
@@ -44,7 +43,7 @@ export function getDockerfileContainers(dockerfileContent) {
         alias = camelCase(image);
       }
     } else if (instruction.getKeyword() === 'LABEL') {
-      const split = instruction.getArgumentsContent().split('=');
+      const split = instruction.getArgumentsContent()!.split('=');
       if (split[0].toUpperCase() === 'ALIAS') {
         alias = camelCase(split[1]);
       }

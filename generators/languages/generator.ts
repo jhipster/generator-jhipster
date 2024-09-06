@@ -44,6 +44,7 @@ const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
  * @extends {BaseApplicationGenerator}
  */
 export default class LanguagesGenerator extends BaseApplicationGenerator {
+  askForMoreLanguages!: boolean;
   translationData;
   supportedLanguages;
   languages;
@@ -52,7 +53,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
    * Can be incremental or every language.
    */
   languagesToApply;
-  composedBlueprints = [];
+  composedBlueprints!: string[] = [];
   languageCommand;
   writeJavaLanguageFiles;
   regenerateLanguages;
@@ -380,7 +381,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
     if (languagesToMigrate[nativeLanguage]) {
       this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage];
     }
-    if (languages && languages.some(lang => languagesToMigrate[lang])) {
+    if (languages?.some(lang => languagesToMigrate[lang])) {
       this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang] ?? lang);
     }
   }

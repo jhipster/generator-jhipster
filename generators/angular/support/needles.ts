@@ -21,7 +21,7 @@ import type { BaseApplication } from '../../base-application/types.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
 import { upperFirstCamelCase } from '../../../lib/utils/string.js';
 import { joinCallbacks } from '../../base/support/write-files.js';
-import { asPostWritingEntitiesTask } from '../../base-application/support/task-type-inference.js';
+import type { PostWritingEntitiesTaskParam } from '../../../lib/types/application/tasks.js';
 
 export function addRoute({
   needle,
@@ -56,7 +56,7 @@ export function addRoute({
   });
 }
 
-export const addEntitiesRoute = asPostWritingEntitiesTask(function addEntitiesRoute({ application, entities }: { application; entities }) {
+export function addEntitiesRoute({ application, entities }: PostWritingEntitiesTaskParam) {
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
@@ -73,7 +73,7 @@ export const addEntitiesRoute = asPostWritingEntitiesTask(function addEntitiesRo
       });
     }),
   );
-});
+}
 
 type MenuItem = {
   jhiPrefix: string;

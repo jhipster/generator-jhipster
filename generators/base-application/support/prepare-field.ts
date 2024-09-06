@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -22,6 +21,7 @@ import { fieldTypes, validations } from '../../../jdl/jhipster/index.js';
 import { getTypescriptType, prepareField as prepareClientFieldForTemplates } from '../../client/support/index.js';
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
+import type CoreGenerator from '../../base-core/generator.js';
 import { fieldIsEnum } from './field-utils.js';
 import { prepareProperty } from './prepare-property.js';
 
@@ -104,7 +104,7 @@ const fakeStringTemplateForFieldName = columnName => {
  * @param {string} type csv, cypress, json-serializable, ts
  * @returns fake value
  */
-function generateFakeDataForField(field, faker, changelogDate, type = 'csv') {
+function generateFakeDataForField(this: CoreGenerator, field, faker, changelogDate, type = 'csv') {
   let data;
   if (field.fakerTemplate) {
     data = faker.faker(field.fakerTemplate);
@@ -264,7 +264,7 @@ export default function prepareField(entityWithConfig, field, generator) {
     prepareServerFieldForTemplates(entityWithConfig, field, generator);
   }
 
-  prepareClientFieldForTemplates(entityWithConfig, field, generator);
+  prepareClientFieldForTemplates(entityWithConfig, field);
   return field;
 }
 
@@ -371,8 +371,8 @@ export function getEnumValuesWithCustomValues(enumValues) {
     }
     const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
     return {
-      name: matched[1],
-      value: matched[2],
+      name: matched![1],
+      value: matched![2],
     };
   });
 }

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { javaMainPackageTemplatesBlock } from '../server/support/index.js';
 
@@ -55,11 +55,11 @@ export const entityFiles = {
 
 export function cleanupCassandraEntityFilesTask() {}
 
-export default async function writeEntityCassandraFiles({ application, entities }) {
+export default asWritingEntitiesTask(async function writeEntityCassandraFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entity.builtIn ? { domainFiles } : entityFiles,
       context: { ...application, ...entity },
     });
   }
-}
+});

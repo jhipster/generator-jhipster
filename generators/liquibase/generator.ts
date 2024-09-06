@@ -489,7 +489,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: gradleLiquibaseVersion });
-        if (application.javaManagedProperties && application.javaManagedProperties['liquibase.version']) {
+        if (application.javaManagedProperties?.['liquibase.version']) {
           source.addGradleProperty?.({ property: 'liquibaseCoreVersion', value: application.javaManagedProperties['liquibase.version'] });
         }
 

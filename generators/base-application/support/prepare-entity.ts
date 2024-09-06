@@ -275,9 +275,9 @@ export default function prepareEntity(entityWithConfig, generator, application) 
 
 export function derivedPrimaryKeyProperties(primaryKey) {
   mutateData(primaryKey, {
-    hasUUID: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === UUID),
-    hasLong: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === LONG),
-    hasInteger: primaryKey.fields && primaryKey.fields.some(field => field.fieldType === INTEGER),
+    hasUUID: primaryKey.fields?.some(field => field.fieldType === UUID),
+    hasLong: primaryKey.fields?.some(field => field.fieldType === LONG),
+    hasInteger: primaryKey.fields?.some(field => field.fieldType === INTEGER),
     typeUUID: primaryKey.type === UUID,
     typeString: primaryKey.type === STRING,
     typeLong: primaryKey.type === LONG,
@@ -604,7 +604,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: any) {
     entity.relationships.some(relationship => !relationship.id && relationship.persistableRelationship);
 
   entity.allReferences
-    .filter(reference => reference.relationship && reference.relationship.relatedField)
+    .filter(reference => reference.relationship?.relatedField)
     .forEach(reference => {
       reference.relatedReference = reference.relationship.relatedField.reference;
     });

@@ -221,7 +221,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
       configureRelationships({ entityName, entityStorage, entityConfig }) {
         // Validate entity json relationship content
-        entityConfig.relationships.forEach((relationship: any) => {
+        entityConfig.relationships!.forEach(relationship => {
           const { otherEntityName, relationshipType } = relationship;
 
           assert(

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -18,11 +17,13 @@
  * limitations under the License.
  */
 
+import { asWritingTask } from '../base-application/support/task-type-inference.js';
+
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default function cleanupOldFilesTask({ application } = {}) {
+export default asWritingTask(function cleanupOldFilesTask({ application }) {
   if (this.isJhipsterVersionLessThan('6.3.0')) {
     this.removeFile('tslint.json');
   }
@@ -75,4 +76,4 @@ export default function cleanupOldFilesTask({ application } = {}) {
   if (this.isJhipsterVersionLessThan('7.9.3')) {
     this.removeFile(`${application.clientSrcDir}app/config/translation-middleware.ts`);
   }
-}
+});

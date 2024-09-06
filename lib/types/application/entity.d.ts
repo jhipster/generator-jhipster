@@ -30,21 +30,24 @@ type AngularEntity = {
   entityAngularReadAuthorities?: string;
 };
 
+export type PrimaryKey<F extends BaseField = Field> = {
+  name: string;
+  fields: F[];
+  derivedFields: F[];
+  type: string;
+  composite: boolean;
+  derived: boolean;
+  javaValueGenerator?: string;
+  javaBuildSpecification?: string;
+};
+
 export interface Entity<F extends BaseField = Field, R extends BaseRelationship = never>
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
     SpringEntity,
     AngularEntity {
   relationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
 
-  primaryKey?: {
-    fields: F[];
-    derivedFields: F[];
-    type: string;
-    composite: boolean;
-    derived: boolean;
-    javaValueGenerator?: string;
-    javaBuildSpecification?: string;
-  };
+  primaryKey?: PrimaryKey<F>;
 
   builtIn?: boolean;
   builtInUser?: boolean;
@@ -62,6 +65,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   entityTableName: string;
   entityNamePlural: string;
   entityAbsoluteClass: string;
+  entityAbsoluteFolder: string;
 
   dtoClass?: string;
   dtoInstance?: string;

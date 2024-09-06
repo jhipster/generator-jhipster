@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -20,7 +19,7 @@
 import { asWriteFilesSection } from '../base-application/support/index.js';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
 
-export const files = asWriteFilesSection({
+export const files = asWriteFilesSection<any>({
   baseFiles: [
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
@@ -94,7 +93,7 @@ export const generatorFiles = {
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       condition(ctx) {
-        return (this.options.force || !ctx.written) && ctx.priorities.find(priority => priority.name === 'writing');
+        return ((this as any).options.force || !ctx.written) && ctx.priorities.find(priority => priority.name === 'writing');
       },
       transform: false,
       templates: [

@@ -18,12 +18,13 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import type CoreGenerator from '../../base-core/generator.js';
 
 /**
  * Check that Docker exists.
  * @this {import('../../base-core/index.js').default}
  */
-export const checkDocker = async function () {
+export const checkDocker = async function (this: CoreGenerator) {
   if (this.abort || this.skipChecks) return;
   const ret = await this.spawnCommand('docker -v', { reject: false, stdio: 'pipe' });
   if (ret.exitCode !== 0) {

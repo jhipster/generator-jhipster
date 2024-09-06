@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -18,7 +17,7 @@
  * limitations under the License.
  */
 
-import { asWritingTask } from '../base-application/support/index.js';
+import { asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 
 export const vueFiles = {
@@ -303,7 +302,7 @@ export const writeFiles = asWritingTask(async function writeFiles({ application 
   });
 });
 
-export const writeEntitiesFiles = asWritingTask(async function writeEntitiesFiles({ application, entities }) {
+export const writeEntitiesFiles = asWritingEntitiesTask(async function writeEntitiesFiles({ application, entities }) {
   entities = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
   await this.writeFiles({
     sections: entitiesFiles,

@@ -67,7 +67,7 @@ const generateEntityClientFields = (
   dto,
   customDateType = 'dayjs.Dayjs',
   embedded = false,
-  clientFramework = ANGULAR,
+  clientFramework: string = ANGULAR,
 ) => {
   const variablesWithTypes = [];
   if (!embedded && primaryKey) {
@@ -106,7 +106,7 @@ const generateEntityClientFields = (
   relevantRelationships.forEach(relationship => {
     let fieldType;
     let fieldName;
-    const nullable = !relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes(REQUIRED);
+    const nullable = !relationship.relationshipValidateRules?.includes(REQUIRED);
     const relationshipType = relationship.relationshipType;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
       fieldType = `I${relationship.otherEntityAngularName}[]`;

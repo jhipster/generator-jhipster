@@ -154,10 +154,11 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = LOGIN_REGEX_JS;
+        application.clientFrameworkBuiltIn = [ANGULAR, VUE, REACT].includes(application.clientFramework);
       },
 
       addExternalResource({ application, source }) {
-        if (![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+        if (!application.clientFrameworkBuiltIn) {
           return;
         }
         source.addExternalResourceToRoot = ({ resource, comment }) =>
@@ -207,7 +208,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
       async writeEnumerationFiles({ control, application, entities }) {
-        if (!application.webappEnumerationsDir || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+        if (!application.webappEnumerationsDir || !application.clientFrameworkBuiltIn) {
           return;
         }
         for (const entity of (control.filterEntitiesAndPropertiesForClient ?? (entities => entities))(entities)) {
@@ -224,7 +225,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
-        if (![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+        if (!application.clientFrameworkBuiltIn) {
           return;
         }
         const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
@@ -243,7 +244,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       microfrontend({ application, source }) {
-        if (!application.microfrontend || ![ANGULAR, VUE, REACT].includes(application.clientFramework)) {
+        if (!application.microfrontend || !application.clientFrameworkBuiltIn) {
           return;
         }
         if (application.clientFrameworkAngular) {

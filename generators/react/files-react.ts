@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -17,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
 import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
 
 export const files = asWriteFilesSection({
@@ -308,11 +307,11 @@ export const files = asWriteFilesSection({
   ],
 });
 
-export async function writeFiles({ application }) {
+export const writeFiles = asWritingTask(async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
 
   await this.writeFiles({
     sections: files,
     context: application,
   });
-}
+});

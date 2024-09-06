@@ -19,4 +19,12 @@
 
 export type Relationship = {
   relationshipName: string;
+  otherEntityName: string;
+  relationshipType: string;
+
+  relationshipSide?: 'left' | 'right';
+  otherEntityRelationshipName?: string;
+  otherEntityField?: string;
+
+  options?: Record<string, any>;
 };

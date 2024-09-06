@@ -39,7 +39,7 @@ export default class JDLDeployment {
   clusteredDbApps?: string[];
 
   constructor(args: ParsedJDLDeployment) {
-    if (!args || !args.deploymentType) {
+    if (!args?.deploymentType) {
       throw new Error('The deploymentType is mandatory to create a deployment.');
     }
     const merged = merge(defaults(args.deploymentType), args);

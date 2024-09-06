@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -22,8 +23,11 @@ import pluralize from 'pluralize';
 import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../jdl/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
-import { stringifyApplicationData } from './debug.js';
+import type CoreGenerator from '../../base-core/generator.js';
+import type { Relationship } from '../../../lib/types/application/relationship.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
 import { prepareProperty } from './prepare-property.js';
+import { stringifyApplicationData } from './debug.js';
 
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -33,12 +37,17 @@ const {
 
 const { MAPSTRUCT } = MapperTypes;
 
-function _defineOnUpdateAndOnDelete(relationship, generator) {
+function _defineOnUpdateAndOnDelete(relationship: Relationship, generator: CoreGenerator) {
   relationship.onDelete = checkAndReturnRelationshipOnValue(relationship.options?.onDelete, generator);
   relationship.onUpdate = checkAndReturnRelationshipOnValue(relationship.options?.onUpdate, generator);
 }
 
-export default function prepareRelationship(entityWithConfig, relationship, generator, ignoreMissingRequiredRelationship) {
+export default function prepareRelationship(
+  entityWithConfig: Entity,
+  relationship: Relationship<Entity>,
+  generator: CoreGenerator,
+  ignoreMissingRequiredRelationship = false,
+) {
   const entityName = entityWithConfig.name;
   const { otherEntityName, relationshipSide, relationshipType, relationshipName } = relationship;
 
@@ -228,7 +237,7 @@ export default function prepareRelationship(entityWithConfig, relationship, gene
     relationship.otherEntityPath = relationship.otherEntityFolderName;
   }
 
-  if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes(REQUIRED)) {
+  if (relationship.relationshipValidateRules?.includes(REQUIRED)) {
     if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
       generator.log.warn(`Error at entity ${entityName}: required relationships to the same entity are not supported.`);
     } else {

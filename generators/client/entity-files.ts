@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -19,8 +18,9 @@
  */
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { getEnumInfo } from '../base-application/support/index.js';
+import type CoreGenerator from '../base-core/generator.js';
 
-export async function addEnumerationFiles({ application, entity }) {
+export async function addEnumerationFiles(this: CoreGenerator, { application, entity }) {
   for (const field of entity.fields) {
     if (field.fieldIsEnum === true) {
       const { enumFileName } = field;

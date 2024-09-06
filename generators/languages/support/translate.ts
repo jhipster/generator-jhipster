@@ -54,7 +54,7 @@ export const replaceTranslationKeysWithText = (
 
     let key = match.groups?.key;
     if (!key && keyPattern) {
-      const keyMatch = target.match(new RegExp(keyPattern));
+      const keyMatch = new RegExp(keyPattern).exec(target);
       key = keyMatch?.groups?.key;
     }
     if (!key) {
@@ -63,7 +63,7 @@ export const replaceTranslationKeysWithText = (
 
     let interpolate = match.groups?.interpolate;
     if (!interpolate && interpolatePattern) {
-      const interpolateMatch = target.match(new RegExp(interpolatePattern));
+      const interpolateMatch = new RegExp(interpolatePattern).exec(target);
       interpolate = interpolateMatch?.groups?.interpolate;
     }
 
