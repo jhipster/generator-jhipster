@@ -33,7 +33,7 @@ import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/
 import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../jdl/jhipster/index.js';
 import { binaryOptions } from '../../../jdl/built-in-options/index.js';
 
-import type { Entity } from '../types/index.js';
+import type { Entity } from '../../../lib/types/application/index.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import { fieldIsEnum } from './field-utils.js';
 import { fieldToReference } from './prepare-field.js';

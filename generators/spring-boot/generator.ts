@@ -397,10 +397,11 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         }
       },
       prepareEntity({ relationship }) {
-        if (relationship.otherEntity.embedded) return;
+        const { primaryKey } = relationship.otherEntity;
+        if (!primaryKey) return;
 
         const { relationshipName, relationshipNameCapitalized } = relationship;
-        const otherEntityPkField = relationship.otherEntity.primaryKey.fields[0];
+        const otherEntityPkField = primaryKey.fields[0];
         mutateData(relationship, {
           propertyJavaFilterName: `${relationshipName}Id`,
           propertyJavaFilterJavaBeanName: `${relationshipNameCapitalized}Id`,

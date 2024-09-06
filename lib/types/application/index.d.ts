@@ -17,6 +17,6 @@
  * limitations under the License.
  */
 
-export type { default as Entity, BaseEntity } from './entity.js';
-export type { default as Field } from './field.js';
-export type { default as Relationship } from './relationship.js';
+export type { Entity } from './entity.js';
+export type { Field } from './field.js';
+export type { Relationship } from './relationship.js';

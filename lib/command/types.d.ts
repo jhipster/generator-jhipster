@@ -1,6 +1,7 @@
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 import type { RequireAtLeastOne, SetOptional, Simplify, TaggedUnion, TupleToUnion, ValueOf } from 'type-fest';
 import type { JHipsterOptionDefinition } from '../../jdl/types/types.js';
+import type { DerivedPropertiesOf, DerivedPropertiesWithInferenceUnion } from '../types/utils/derived-properties.js';
 import type { MergeUnion } from './support/merge-union.js';
 
 type ConfigScope = 'storage' | 'blueprint' | 'control' | 'generator';
@@ -137,20 +138,6 @@ type GetType<C extends ParseableConfig> =
 // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
 type WrapperToPrimitive<T> = T extends Boolean ? boolean : T extends String ? string : T extends Number ? number : T;
 
-/*
- * @example
- * ```ts
- * DerivedPropertiesOf<'clientFramework', 'angular', 'angular', 'no'> =
- * { clientFrameworkAngular: true; clientFrameworkNo: false; clientFramework: 'angular'; clientFrameworkAny: true; }
- * ```
- */
-type DerivedPropertiesOf<P extends string, V extends string, C extends string> = Simplify<
-  {
-    [K in C as `${P}${Capitalize<K>}`]: K extends V ? true : false;
-  } & Record<P, V> &
-    Record<`${P}Any`, V extends 'no' ? false : true>
->;
-
 type GetChoiceValue<Choice extends string | { value: string }> = Choice extends string
   ? Choice
   : Choice extends { value: string }
@@ -167,22 +154,6 @@ type NormalizeChoices<Choices extends readonly [...(string | { value: string })[
 };
 
 /**
- * ```ts
- * type ExplodedConfigChoices = ExplodeConfigChoicesWithInference<['angular', 'no'], 'clientFramework'>;
- * type ExplodedConfigChoices =
- *   | { clientFrameworkAngular: true; clientFrameworkNo: false; clientFramework: 'angular'; clientFrameworkAny: true; }
- *   | { clientFrameworkAngular: false; clientFrameworkNo: true; clientFramework: 'no'; clientFrameworkAny: true; }
- * ```
- */
-type ExplodeConfigChoicesWithInference<Choices extends [...string[]], Property extends string> = ValueOf<{
-  [Index in Exclude<keyof Choices, keyof any[]>]: Choices[Index] extends infer Choice
-    ? Choice extends string
-      ? DerivedPropertiesOf<Property, Choice, Choices[number]>
-      : never
-    : never;
-}>;
-
-/**
  * @example
  * ```ts
  * type ExplodedCommandChoices = ExplodeCommandChoicesWithInference<{ clientFramework: { choices: ['angular', 'no'] }, clientTestFramework: { choices: ['cypress', 'no'] } }>
@@ -196,27 +167,20 @@ type ExplodeConfigChoicesWithInference<Choices extends [...string[]], Property e
  * }
  * ```
  */
-type ExplodeCommandChoicesWithInference<U extends ParseableConfigs> = {
+type DerivedPropertiesWithInferenceUnionFromParseableConfigs<U extends ParseableConfigs> = {
   [K in keyof U]: U[K] extends infer RequiredChoices
     ? RequiredChoices extends { choices: JHispterChoices }
       ? K extends infer StringKey
         ? StringKey extends string
           ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
             ? // @ts-expect-error Mapped typle type is loosy https://github.com/microsoft/TypeScript/issues/27995
-              Simplify<ExplodeConfigChoicesWithInference<NormalizedChoices, StringKey>>
+              Simplify<DerivedPropertiesWithInferenceUnion<NormalizedChoices, StringKey>>
             : never
           : never
         : never
       : never
     : never;
 };
-
-type DerivedPropertiesNoInferenceOf<Property extends string, Choices extends string> = Simplify<
-  {
-    [K in Choices as `${Property}${Capitalize<K>}`]: boolean;
-  } & Record<Property, Choices[number] | undefined> &
-    Record<`${Property}Any`, boolean>
->;
 
 type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
   [K in keyof U]: U[K] extends infer RequiredChoices
@@ -225,7 +189,7 @@ type ExplodeCommandChoicesNoInference<U extends ParseableConfigs> = {
         ? StringKey extends string
           ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
             ? // @ts-expect-error Mapped typle type is loosy https://github.com/microsoft/TypeScript/issues/27995
-              Simplify<DerivedPropertiesNoInferenceOf<StringKey, NormalizedChoices[number]>>
+              Simplify<DerivedPropertiesOf<StringKey, NormalizedChoices[number]>>
             : never
           : never
         : never

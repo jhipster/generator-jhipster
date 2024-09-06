@@ -19,7 +19,10 @@
 import type { CommonClientServerApplication } from '../../base-application/types.js';
 import type BaseGenerator from '../../base/index.js';
 
-export type UpdateClientLanguagesTaskParam = { application: CommonClientServerApplication & { enableTranslation: true }; control?: any };
+export type UpdateClientLanguagesTaskParam = {
+  application: CommonClientServerApplication<any> & { enableTranslation: true };
+  control?: any;
+};
 
 /**
  * Update DayJS Locales.

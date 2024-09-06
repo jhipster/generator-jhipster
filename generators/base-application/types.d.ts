@@ -2,7 +2,7 @@ import type CoreGenerator from '../base-core/generator.ts';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
 import type { SpringBootApplication } from '../server/types.js';
-import type { DeterministicOptionWithDerivedProperties, OptionWithDerivedProperties } from './application-options.js';
+import type { OptionWithDerivedProperties } from './application-options.js';
 
 export type BaseApplication = {
   jhipsterVersion: string;
@@ -59,15 +59,23 @@ type GatewayApplication = MicroservicesArchitectureApplication & {
   microfrontends: string[];
 };
 
+/*
+Deterministic option causes types to be too complex
 type ApplicationType = DeterministicOptionWithDerivedProperties<
   'applicationType',
   ['monolith', 'gateway', 'microservice'],
   [Record<string, never>, GatewayApplication, MicroservicesArchitectureApplication]
 >;
+*/
+type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['monolith', 'gateway', 'microservice']> &
+  GatewayApplication &
+  MicroservicesArchitectureApplication;
 
 /* ApplicationType End */
 
 /* AuthenticationType Start */
+/*
+Deterministic option causes types to be too complex
 type UserManagement =
   | {
       skipUserManagement: true;
@@ -84,8 +92,17 @@ type UserManagement =
       generateBuiltInAuthorityEntity: boolean;
       authority: any;
     };
-
-type JwtApplication = UserManagement & {
+    */
+type UserManagement<Entity> = {
+  skipUserManagement: boolean;
+  generateUserManagement: boolean;
+  generateBuiltInUserEntity?: boolean;
+  generateBuiltInAuthorityEntity: boolean;
+  user: Entity;
+  userManagement: Entity;
+  authority: Entity;
+};
+type JwtApplication = {
   jwtSecretKey: string;
 };
 
@@ -97,15 +114,23 @@ type Oauth2Application = {
   generateUserManagement: false;
 };
 
-type SessionApplication = UserManagement & {
+type SessionApplication = {
   rememberMeKey: string;
 };
 
+/*
+Deterministic option causes types to be too complex
 type AuthenticationType = DeterministicOptionWithDerivedProperties<
   'authenticationType',
   ['jwt', 'oauth2', 'session'],
   [JwtApplication, Oauth2Application, SessionApplication]
 >;
+*/
+type AuthenticationProperties<Entity> = OptionWithDerivedProperties<'authenticationType', ['jwt', 'oauth2', 'session']> &
+  UserManagement<Entity> &
+  JwtApplication &
+  Oauth2Application &
+  SessionApplication;
 
 /* AuthenticationType End */
 
@@ -113,12 +138,12 @@ type QuirksApplication = {
   cypressBootstrapEntities?: boolean;
 };
 
-export type CommonClientServerApplication = BaseApplication &
+export type CommonClientServerApplication<Entity> = BaseApplication &
   QuirksApplication &
-  AuthenticationType &
+  AuthenticationProperties<Entity> &
   SpringBootApplication &
   ClientApplication &
-  ApplicationType & {
+  ApplicationProperties & {
     clientRootDir: string;
     clientSrcDir: string;
     clientTestDir?: string;

@@ -20,7 +20,7 @@ import type { WriteFileSection } from '../../../base/api.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../server/support/index.js';
 
-export const kafkaFiles: WriteFileSection<any, any> = {
+export const kafkaFiles: WriteFileSection = {
   config: [
     {
       condition: data => data.buildToolGradle,

@@ -20,7 +20,7 @@ import type { WriteFileSection } from '../../../base/api.js';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
 import { moveToJavaPackageTestDir } from '../../../java/support/index.js';
 
-export const pulsarFiles: WriteFileSection<any, any> = {
+export const pulsarFiles: WriteFileSection = {
   config: [
     {
       condition: data => data.buildToolGradle,

@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*"],
+  "include": ["./cli", "./generators", "./jdl", "./lib", "./testing"],
   "exclude": ["**/*.spec.*", "**/__*/**", "**/node_modules", "**/.*/"],
   "compilerOptions": {
     /* Language and Environment */
@@ -17,6 +17,7 @@
 
     /* Emit */
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+    "declaration": true,
 
     /* Interop Constraints */
     "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
@@ -28,6 +29,6 @@
     "noImplicitAny": false,
 
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": false /* Skip type checking all .d.ts files. */
   }
 }
