@@ -271,6 +271,7 @@ spring:
 <%_ } _%>
   docker:
     compose:
+      enabled: false
       lifecycle-management: start-only
       file: ./<%- dockerServicesDir %>services.yml
   profiles:
