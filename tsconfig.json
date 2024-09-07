@@ -9,6 +9,7 @@
 
     /* Modules */
     "module": "node16" /* Specify what module code is generated. */,
+    "moduleResolution": "node16",
     "rootDir": "./" /* Specify the root folder within your source files. */,
     "resolveJsonModule": true,
 
