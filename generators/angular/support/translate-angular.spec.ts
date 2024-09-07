@@ -27,7 +27,7 @@ describe('generator - angular - transform', () => {
 
     beforeEach(() => {
       let value = 0;
-      const testImpl = (key, data) => `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`;
+      const testImpl = (key, data) => (key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`);
       replaceAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: false,
@@ -187,6 +187,11 @@ translated-value-global.form.currentpassword.title2-0
 </tag>
 "
 `);
+        });
+
+        it('should replace __jhiTranslateTag__ with empty translated value', () => {
+          const body = `<tag>__jhiTranslateTag__('blank', { "username": "account()!.login" })</tag>`;
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`"<tag></tag>"`);
         });
 
         it('should replace __jhiTranslateTag__ with translation attribute and value', () => {
