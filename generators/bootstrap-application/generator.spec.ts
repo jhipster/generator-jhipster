@@ -22,7 +22,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
-import { fieldTypes } from '../../jdl/jhipster/index.js';
+import { fieldTypes } from '../../lib/jdl/jhipster/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 

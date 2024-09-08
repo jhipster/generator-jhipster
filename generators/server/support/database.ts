@@ -18,7 +18,7 @@
  */
 import crypto from 'crypto';
 
-import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes, fieldTypes } from '../../../lib/jdl/jhipster/index.js';
 import { databaseData } from '../../spring-data-relational/support/index.js';
 import type { ValidationResult } from '../../base/api.js';
 import { hibernateSnakeCase } from './string.js';

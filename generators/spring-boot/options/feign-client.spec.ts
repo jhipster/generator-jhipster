@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import type { ImportState } from '../../../jdl/jdl-importer.js';
-import { createImporterFromContent } from '../../../jdl/jdl-importer.js';
+import type { ImportState } from '../../../lib/jdl/jdl-importer.js';
+import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
 import definition from '../../app/jdl/index.js';
 
 const optionName = 'feignClient';

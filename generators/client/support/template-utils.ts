@@ -18,7 +18,7 @@
  */
 import path from 'path';
 
-import { clientFrameworkTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../../lib/jdl/jhipster/index.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 

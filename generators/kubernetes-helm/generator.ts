@@ -33,7 +33,7 @@ import {
   setupHelmConstants,
   setupKubernetesConstants,
 } from '../kubernetes/kubernetes-base.js';
-import { messageBrokerTypes } from '../../jdl/jhipster/index.js';
+import { messageBrokerTypes } from '../../lib/jdl/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { loadDeploymentConfig, loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
 import { checkDocker } from '../docker/support/index.js';

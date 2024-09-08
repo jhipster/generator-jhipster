@@ -27,7 +27,7 @@ import {
   cacheTypes,
   databaseTypes,
   testFrameworkTypes,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jdl/jhipster/index.js';
 import { MESSAGE_BROKER } from '../server/options/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 import type CoreGenerator from '../base-core/generator.js';

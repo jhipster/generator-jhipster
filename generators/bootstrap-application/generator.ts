@@ -19,7 +19,7 @@
 import assert from 'assert';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { validations } from '../../jdl/jhipster/index.js';
+import { validations } from '../../lib/jdl/jhipster/index.js';
 import {
   derivedPrimaryKeyProperties,
   preparePostEntitiesCommonDerivedProperties,

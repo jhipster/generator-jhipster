@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import { databaseTypes, messageBrokerTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes, messageBrokerTypes } from '../../../lib/jdl/jhipster/index.js';
 import {
   GENERATOR_BOOTSTRAP,
   GENERATOR_JAVA,

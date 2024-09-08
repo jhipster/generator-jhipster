@@ -30,7 +30,7 @@ import {
   runResult,
 } from '../../testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jdl/jhipster/index.js';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';

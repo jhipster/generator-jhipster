@@ -18,7 +18,7 @@
  */
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
+import { PaginationTypes } from '../../lib/jdl/jhipster/entity-options.js';
 import writeCassandraFilesTask from './files.js';
 import cleanupCassandraFilesTask from './cleanup.js';
 import writeCassandraEntityFilesTask, { cleanupCassandraEntityFilesTask } from './entity-files.js';

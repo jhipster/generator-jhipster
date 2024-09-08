@@ -20,7 +20,7 @@ import path, { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { after, before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
-import { clientFrameworkTypes, testFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jdl/jhipster/index.js';
 import { AuthenticationTypeMatrix, extendMatrix, fromMatrix, defaultHelpers as helpers } from '../../testing/index.js';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import { GENERATOR_CYPRESS } from '../generator-list.js';

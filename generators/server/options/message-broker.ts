@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JHipsterOptionDefinition } from '../../../jdl/types/types.js';
+import type { JHipsterOptionDefinition } from '../../../lib/jdl/types/types.js';
 import type { OptionWithDerivedProperties } from '../../base-application/application-options.js';
 
 export const MESSAGE_BROKER = 'messageBroker';

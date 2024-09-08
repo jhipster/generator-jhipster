@@ -8,7 +8,7 @@ import {
   clientFrameworkTypes,
   databaseTypes,
   testFrameworkTypes,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jdl/jhipster/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const { MONOLITH } = applicationTypes;

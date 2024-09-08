@@ -64,7 +64,7 @@ import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { loadConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
-import { getConfigWithDefaults } from '../../jdl/jhipster/index.js';
+import { getConfigWithDefaults } from '../../lib/jdl/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type { Entity } from '../../lib/types/base/entity.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';

@@ -21,7 +21,7 @@ import { beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { formatDateForChangelog } from '../../base/support/index.js';
 import BaseGenerator from '../../base/index.js';
-import { getConfigWithDefaults } from '../../../jdl/jhipster/index.js';
+import { getConfigWithDefaults } from '../../../lib/jdl/jhipster/index.js';
 import prepareFieldForTemplates, { getEnumValuesWithCustomValues } from './prepare-field.js';
 import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.js';
 

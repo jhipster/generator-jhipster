@@ -23,7 +23,7 @@ import {
   APPLICATION_TYPE_MICROSERVICE,
   clientFrameworkTypes,
   testFrameworkTypes,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jdl/jhipster/index.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
 

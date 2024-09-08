@@ -2,7 +2,7 @@ import { before, describe } from 'esmocha';
 import { getGenerator, basicHelpers as helpers } from '../../testing/index.js';
 
 import ClientGenerator from '../../generators/client/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jdl//jhipster/index.js';
 
 const { VUE } = clientFrameworkTypes;
 

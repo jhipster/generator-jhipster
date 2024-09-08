@@ -1,7 +1,7 @@
 import path from 'path';
 import { expect } from 'chai';
 import { describe, it } from 'esmocha';
-import { entityOptions } from '../../../jdl/jhipster/index.js';
+import { entityOptions } from '../../../lib/jdl/jhipster/index.js';
 
 import { generateEntityClientImports, generateTestEntityId, getEntityParentPathAddition } from './template-utils.js';
 

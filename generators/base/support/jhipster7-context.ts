@@ -2,7 +2,7 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
-import { isReservedTableName } from '../../../jdl/jhipster/reserved-keywords.js';
+import { isReservedTableName } from '../../../lib/jdl/jhipster/reserved-keywords.js';
 import {
   getJavaValueGeneratorForType,
   getJoinTableName,
@@ -12,7 +12,7 @@ import {
 } from '../../server/support/index.js';
 import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
-import { fieldTypes } from '../../../jdl/jhipster/index.js';
+import { fieldTypes } from '../../../lib/jdl/jhipster/index.js';
 import { upperFirstCamelCase } from '../../../lib/utils/string.js';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;

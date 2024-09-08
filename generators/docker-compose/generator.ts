@@ -26,7 +26,7 @@ import { defaults } from 'lodash-es';
 
 import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 
-import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.js';
+import { deploymentOptions, monitoringTypes, serviceDiscoveryTypes } from '../../lib/jdl/jhipster/index.js';
 import { GENERATOR_BOOTSTRAP_WORKSPACES } from '../generator-list.js';
 import { convertSecretToBase64, createBase64Secret, createFaker, stringHashCode } from '../base/support/index.js';
 import { checkDocker } from '../base-workspaces/internal/docker-base.js';

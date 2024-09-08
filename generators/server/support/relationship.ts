@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-import type { JSONEntity } from '../../../jdl/converters/types.js';
+import type { JSONEntity } from '../../../lib/jdl/converters/types.js';
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base/api.js';
-import { databaseTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jdl/jhipster/index.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 

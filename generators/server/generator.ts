@@ -48,10 +48,10 @@ import {
   reservedKeywords,
   searchEngineTypes,
   validations,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jdl/jhipster/index.js';
 import { stringifyApplicationData } from '../base-application/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
-import { isReservedPaginationWords } from '../../jdl/jhipster/reserved-keywords.js';
+import { isReservedPaginationWords } from '../../lib/jdl/jhipster/reserved-keywords.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
 import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 import {

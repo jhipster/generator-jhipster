@@ -25,7 +25,7 @@ import {
   monitoringTypes,
   searchEngineTypes,
   serviceDiscoveryTypes,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jdl/jhipster/index.js';
 
 const { ELASTICSEARCH } = searchEngineTypes;
 const { GATEWAY, MONOLITH } = applicationTypes;

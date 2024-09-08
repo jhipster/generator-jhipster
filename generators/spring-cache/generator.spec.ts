@@ -7,7 +7,7 @@ import { fromMatrix, defaultHelpers as helpers, result } from '../../testing/ind
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 
 import { GENERATOR_SPRING_CACHE } from '../generator-list.js';
-import { buildToolTypes, cacheTypes } from '../../jdl/jhipster/index.js';
+import { buildToolTypes, cacheTypes } from '../../lib/jdl/jhipster/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
