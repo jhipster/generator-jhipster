@@ -18,8 +18,8 @@
  */
 
 import fs from 'fs';
-import { convertEntitiesToJDL } from '../converters/json-to-jdl-entity-converter.js';
-import { convertServerOptionsToJDL } from '../converters/json-to-jdl-option-converter.js';
+import { convertEntitiesToJDL } from '../../converters/json-to-jdl-entity-converter.js';
+import { convertServerOptionsToJDL } from '../../converters/json-to-jdl-option-converter.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
 import type JDLObject from '../models/jdl-object.js';

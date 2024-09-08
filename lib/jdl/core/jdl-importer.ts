@@ -18,12 +18,12 @@
  */
 import { uniqBy } from 'lodash-es';
 import { applicationOptions } from '../../jhipster/index.js';
+import ParsedJDLToJDLObjectConverter from '../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import JDLWithoutApplicationToJSONConverter from '../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import { convert } from '../converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
 import * as JDLReader from './readers/jdl-reader.js';
-import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import { readJSONFile } from './readers/json-file-reader.js';
 import { doesFileExist } from './utils/file-utils.js';
-import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
 import { formatApplicationToExport, formatApplicationsToExport } from './exporters/applications/jhipster-application-formatter.js';
 import exportDeployments from './exporters/jhipster-deployment-exporter.js';
 import exportEntities from './exporters/jhipster-entity-exporter.js';

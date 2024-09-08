@@ -23,9 +23,9 @@ import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../../testing/index.js';
 import { applicationTypes } from '../../jhipster/index.js';
+import { convert as convertWithoutApplication } from '../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { createImporterFromContent, parseFromConfigurationObject, parseFromContent, parseFromFiles } from './__test-support__/index.js';
 import exportToJDL from './exporters/jdl-exporter.js';
-import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import type { ApplicationWithEntities } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;

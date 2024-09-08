@@ -1,6 +1,6 @@
 import { getDefaultRuntime } from '../runtime.js';
 import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.js';
-import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import {
   createImporterFromContent as originalCreateImporterFromContent,
   createImporterFromFiles as originalCreateImporterFromFiles,
@@ -11,10 +11,10 @@ import {
   createJDLLinterFromContent as originalCreateJDLLinterFromContent,
   createJDLLinterFromFile as originalCreateJDLLinterFromFile,
 } from '../linters/jdl-linter.js';
-import { convertApplications as originalConvertApplications } from '../converters/parsed-jdl-to-jdl-object/application-converter.js';
+import { convertApplications as originalConvertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.js';
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.js';
-import type { JHipsterYoRcContentAndJDLWrapper } from '../converters/json-to-jdl-application-converter.js';
-import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../converters/json-to-jdl-application-converter.js';
+import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.js';
+import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.js';
 
 const runtime = getDefaultRuntime();
 
