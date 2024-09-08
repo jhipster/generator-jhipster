@@ -41,7 +41,7 @@ import type {
   ParsedJDLEntity,
   ParsedJDLEntityField,
   ParsedJDLRoot,
-} from './types.js';
+} from '../../types/parsed-types.js';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;
