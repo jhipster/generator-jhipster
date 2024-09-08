@@ -24,7 +24,7 @@ import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../testing/index.js';
 import { applicationTypes } from '../jhipster/index.js';
 import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import exportToJDL from './exporters/jdl-exporter.js';
+import exportToJDL from './converters/exporters/jdl-exporter.js';
 import {
   createImporterFromContent,
   getTestFile,

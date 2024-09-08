@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { GENERATOR_NAME } from '../../exporters/export-utils.ts';
+import type { GENERATOR_NAME } from '../../converters/exporters/export-utils.ts';
 import type { JSONEntity } from './json-config.js';
 
 export type JDLJSONApplicationContent = {

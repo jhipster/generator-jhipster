@@ -20,10 +20,10 @@
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import exportEntities from '../exporters/jhipster-entity-exporter.js';
-import { applicationTypes, entityOptions } from '../core/built-in-options/index.js';
+import { applicationTypes, entityOptions } from '../../core/built-in-options/index.js';
 
-import { doesDirectoryExist } from '../core/utils/file-utils.js';
-import { basicHelpers as helpers } from '../../../testing/index.js';
+import { doesDirectoryExist } from '../../core/utils/file-utils.js';
+import { basicHelpers as helpers } from '../../../../testing/index.js';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;
 const { MONOLITH, MICROSERVICE } = applicationTypes;

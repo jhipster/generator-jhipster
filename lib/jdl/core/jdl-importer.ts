@@ -22,9 +22,9 @@ import ParsedJDLToJDLObjectConverter from '../converters/parsed-jdl-to-jdl-objec
 import JDLWithoutApplicationToJSONConverter from '../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { convert } from '../converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
 import { formatApplicationToExport, formatApplicationsToExport } from '../exporters/applications/jhipster-application-formatter.js';
-import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
-import exportEntities from '../exporters/jhipster-entity-exporter.js';
-import { GENERATOR_NAME } from '../exporters/export-utils.js';
+import exportDeployments from '../converters/exporters/jhipster-deployment-exporter.js';
+import exportEntities from '../converters/exporters/jhipster-entity-exporter.js';
+import { GENERATOR_NAME } from '../converters/exporters/export-utils.js';
 import * as JDLReader from './readers/jdl-reader.js';
 import { readJSONFile } from './readers/json-file-reader.js';
 import { doesFileExist } from './utils/file-utils.js';

@@ -18,7 +18,7 @@
  */
 
 import type JDLApplication from '../../core/models/jdl-application.js';
-import { GENERATOR_NAME } from '../export-utils.js';
+import { GENERATOR_NAME } from '../../converters/exporters/export-utils.js';
 import type {
   JDLJSONApplication,
   JDLJSONApplicationContent,

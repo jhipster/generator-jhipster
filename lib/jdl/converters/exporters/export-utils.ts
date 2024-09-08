@@ -18,21 +18,22 @@
  */
 
 import fs from 'fs';
-import type JDLObject from '../core/models/jdl-object.js';
+import { doesFileExist } from '../../core/utils/file-utils.js';
+import type { JHipsterYoRcContent } from '../../core/types/json-config.js';
+import { mergeYoRcContent } from '../../../utils/yo-rc.js';
+
+export const GENERATOR_NAME = 'generator-jhipster';
 
 /**
- * Writes down the given JDL to a file.
- * @param jdl the JDL to write.
- * @param path the path where the file will be written.
- * @returns file contents
+ * This function writes a Yeoman config file in the current folder.
+ * @param config the configuration.
+ * @param yoRcPath the yeoman conf file path
  */
-export default function exportToJDL(jdl: JDLObject, path = 'app.jdl'): string {
-  if (!jdl) {
-    throw new Error('A JDLObject has to be passed to be exported.');
+export function writeConfigFile(config: JHipsterYoRcContent, yoRcPath = '.yo-rc.json') {
+  let newYoRc: JHipsterYoRcContent = { ...config };
+  if (doesFileExist(yoRcPath)) {
+    const yoRc = JSON.parse(fs.readFileSync(yoRcPath, { encoding: 'utf-8' }));
+    newYoRc = mergeYoRcContent(yoRc, config);
   }
-  const fileContents = jdl.toString();
-  if (path) {
-    fs.writeFileSync(path, fileContents);
-  }
-  return fileContents;
+  fs.writeFileSync(yoRcPath, JSON.stringify(newYoRc, null, 2).concat('\n'));
 }
