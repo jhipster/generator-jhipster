@@ -24,6 +24,9 @@ export const matchWrittenFiles = (
   });
 };
 
+/**
+ * Requires a global `it` function to be available.
+ */
 export const matchWrittenConfig = (title: string, resultGetter: () => RunResult, config: any, shouldMatch: boolean) => {
   const testTitle = shouldMatch ? `writes ${title} config` : `doesn't write ${title} config`;
   it(testTitle, () => {
