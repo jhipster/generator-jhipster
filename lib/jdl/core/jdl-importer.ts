@@ -21,7 +21,10 @@ import { applicationOptions } from '../../jhipster/index.js';
 import ParsedJDLToJDLObjectConverter from '../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import JDLWithoutApplicationToJSONConverter from '../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { convert } from '../converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
-import { formatApplicationToExport, formatApplicationsToExport } from '../exporters/applications/jhipster-application-formatter.js';
+import {
+  formatApplicationToExport,
+  formatApplicationsToExport,
+} from '../converters/exporters/applications/jhipster-application-formatter.js';
 import exportDeployments from '../converters/exporters/jhipster-deployment-exporter.js';
 import exportEntities from '../converters/exporters/jhipster-entity-exporter.js';
 import { GENERATOR_NAME } from '../converters/exporters/export-utils.js';

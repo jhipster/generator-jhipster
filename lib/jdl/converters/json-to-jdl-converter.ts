@@ -23,7 +23,6 @@ import JDLObject from '../core/models/jdl-object.js';
 import mergeJDLObjects from '../core/models/jdl-object-merger.js';
 import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.js';
 import { readJSONFile } from '../core/readers/json-file-reader.js';
-import exportJDLObject from './exporters/jdl-exporter.js';
 import { removeFieldsWithNullishValues } from '../../utils/object.js';
 import type JDLApplication from '../core/models/jdl-application.js';
 import type { JDLRuntime } from '../core/types/runtime.js';
@@ -31,6 +30,7 @@ import { createRuntime, getDefaultRuntime } from '../core/runtime.js';
 import { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.js';
 import type { JDLApplicationConfig } from '../core/types/parsing.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from '../core/types/json-config.js';
+import exportJDLObject from './exporters/jdl-exporter.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
 
