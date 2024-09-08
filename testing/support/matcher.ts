@@ -1,7 +1,7 @@
 import type { RunResult } from 'yeoman-test';
 
 declare global {
-  var it: (title: string, fn: () => void) => void;
+  const it: (title: string, fn: () => void) => void;
 }
 
 /**
