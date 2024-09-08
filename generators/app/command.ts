@@ -28,7 +28,7 @@ import {
   GENERATOR_SERVER,
 } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     defaults: {
       description: 'Execute jhipster with default config',
@@ -97,6 +97,6 @@ const command: JHipsterCommandDefinition = {
     GENERATOR_CYPRESS,
     GENERATOR_LANGUAGES,
   ],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;
