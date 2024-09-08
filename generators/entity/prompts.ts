@@ -28,7 +28,7 @@ import {
   fieldTypes,
   reservedKeywords,
   validations,
-} from '../../lib/jdl/jhipster/index.js';
+} from '../../lib/jhipster/index.js';
 import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
 import type EntityGenerator from './generator.js';
 

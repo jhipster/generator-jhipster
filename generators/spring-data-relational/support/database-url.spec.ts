@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'esmocha';
-import { databaseTypes } from '../../../lib/jdl/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.js';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
 
 const { H2_MEMORY, H2_DISK, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;

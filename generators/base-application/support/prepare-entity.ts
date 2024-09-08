@@ -30,7 +30,7 @@ import {
   upperFirstCamelCase,
 } from '../../base/support/index.js';
 import { getEntityParentPathAddition, getTypescriptKeyType } from '../../client/support/index.js';
-import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jdl/jhipster/index.js';
+import { applicationTypes, databaseTypes, entityOptions, fieldTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
 import { binaryOptions } from '../../../lib/jdl/built-in-options/index.js';
 
 import type { Entity } from '../../../lib/types/application/index.js';

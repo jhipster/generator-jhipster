@@ -18,4 +18,4 @@ export {
   deploymentOptions,
   /** @deprecated */
   entityOptions,
-} from '../jhipster/index.js';
+} from '../../jhipster/index.js';

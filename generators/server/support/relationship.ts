@@ -20,7 +20,7 @@
 import type { JSONEntity } from '../../../lib/jdl/converters/types.js';
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base/api.js';
-import { databaseTypes } from '../../../lib/jdl/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 import dockerPrompts from '../base-workspaces/internal/docker-prompts.js';
-import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../lib/jdl/jhipster/index.js';
+import { applicationTypes, databaseTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { defaultKubernetesConfig, ingressDefaultConfig } from './kubernetes-constants.js';
 
 const { MONOLITH } = applicationTypes;

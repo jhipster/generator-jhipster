@@ -22,7 +22,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes, fieldTypes } from '../../lib/jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.js';
 import {
   generateEntityClientImports as formatEntityClientImports,

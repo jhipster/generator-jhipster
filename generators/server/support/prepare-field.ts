@@ -19,7 +19,7 @@
 import assert from 'assert';
 import { snakeCase, upperFirst } from 'lodash-es';
 
-import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jdl/jhipster/index.js';
+import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.js';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
 import { mutateData } from '../../../lib/utils/object.js';
 import { getUXConstraintName } from './database.js';

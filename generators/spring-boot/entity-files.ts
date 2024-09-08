@@ -21,7 +21,7 @@ import * as _ from 'lodash-es';
 import chalk from 'chalk';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock, moveToJavaPackageSrcDir } from '../java/support/index.js';
 import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { databaseTypes, entityOptions } from '../../lib/jdl/jhipster/index.js';
+import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
 import { cleanupOldFiles } from './entity-cleanup.js';
 

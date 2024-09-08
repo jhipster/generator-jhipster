@@ -20,7 +20,7 @@ import chalk from 'chalk';
 
 import BaseGenerator from '../base/index.js';
 
-import { applicationOptions } from '../../lib/jdl/jhipster/index.js';
+import { applicationOptions } from '../../lib/jhipster/index.js';
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import jdlDefinition from '../app/jdl/index.js';

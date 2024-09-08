@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { applicationTypes, authenticationTypes, monitoringTypes } from '../../lib/jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes, monitoringTypes } from '../../lib/jhipster/index.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE } = applicationTypes;

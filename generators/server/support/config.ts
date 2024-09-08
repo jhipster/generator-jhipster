@@ -9,7 +9,7 @@ import {
   searchEngineTypes,
   serviceDiscoveryTypes,
   websocketTypes,
-} from '../../../lib/jdl/jhipster/index.js';
+} from '../../../lib/jhipster/index.js';
 import { prepareSqlApplicationProperties } from '../../spring-data-relational/support/index.js';
 import {
   CLIENT_DIST_DIR,

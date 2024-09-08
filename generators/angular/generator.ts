@@ -23,7 +23,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
-import { clientFrameworkTypes } from '../../lib/jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import {
   generateTypescriptTestEntity as generateTestEntity,
   generateEntityClientEnumImports as getClientEnumImportsFormat,

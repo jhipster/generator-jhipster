@@ -5,7 +5,7 @@ import { snakeCase } from 'lodash-es';
 
 import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../testing/index.js';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { clientFrameworkTypes } from '../../lib/jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import { GENERATOR_ANGULAR } from '../generator-list.js';
 import Generator from './index.js';

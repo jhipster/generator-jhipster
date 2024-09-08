@@ -25,7 +25,7 @@ import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generat
 import { getDefaultAppName } from '../project-name/support/index.js';
 import { packageJson } from '../../lib/index.js';
 
-import { applicationTypes } from '../../lib/jdl/jhipster/index.js';
+import { applicationTypes } from '../../lib/jhipster/index.js';
 import cleanupOldFilesTask from './cleanup.js';
 import { checkNode, loadStoredAppOptions } from './support/index.js';
 

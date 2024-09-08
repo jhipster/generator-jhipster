@@ -29,7 +29,7 @@ import {
   prepareRelationship,
 } from '../base-application/support/index.js';
 import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
-import { fieldTypes } from '../../lib/jdl/jhipster/index.js';
+import { fieldTypes } from '../../lib/jhipster/index.js';
 import type { MavenProperty } from '../maven/types.js';
 import { liquibaseFiles } from './files.js';
 import {

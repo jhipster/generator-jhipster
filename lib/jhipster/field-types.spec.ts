@@ -21,7 +21,7 @@ import { describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import { databaseTypes, fieldTypes, validations } from '../jhipster/index.js';
-import { JDLEnum } from '../models/index.js';
+import { JDLEnum } from '../jdl/models/index.js';
 
 const {
   Validations: { MIN, MAXLENGTH, PATTERN },

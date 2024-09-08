@@ -7,7 +7,7 @@ import type { JDLRuntime } from './types/runtime.js';
 import type { JDLApplicationConfig, JDLValidatorOption } from './types/types.js';
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.js';
 import { buildApplicationTokens } from './parsing/lexer/application-tokens.js';
-import { builtInJDLApplicationConfig } from './jhipster/application-options.js';
+import { builtInJDLApplicationConfig } from '../jhipster/application-options.js';
 
 const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JDLApplicationConfig) => {
   return {

@@ -10,7 +10,7 @@ import {
 } from '../../testing/index.js';
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 
-import { cacheTypes, databaseTypes } from '../../lib/jdl/jhipster/index.js';
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_SERVER } from '../generator-list.js';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;

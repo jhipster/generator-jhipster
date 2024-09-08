@@ -58,7 +58,7 @@ import {
   searchEngineTypes,
   testFrameworkTypes,
   websocketTypes,
-} from '../../lib/jdl/jhipster/index.js';
+} from '../../lib/jhipster/index.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
