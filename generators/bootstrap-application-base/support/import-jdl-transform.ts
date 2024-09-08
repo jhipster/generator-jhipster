@@ -7,7 +7,7 @@ import { upperFirst } from 'lodash-es';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
 import { mergeYoRcContent } from '../../../lib/utils/yo-rc.js';
-import type { JDLApplicationConfig } from '../../../lib/jdl/types/parsing-types.js';
+import type { JDLApplicationConfig } from '../../../lib/jdl/types/parsing.js';
 
 export const importJDLTransform = ({
   destinationPath,

@@ -21,7 +21,7 @@ import path from 'path';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../utils/file-utils.js';
 import DeploymentValidator from '../validators/deployment-validator.js';
 import type JDLDeployment from '../models/jdl-deployment.js';
-import type { JHipsterYoRcContent } from '../types/json-types.js';
+import type { JHipsterYoRcContent } from '../types/json-config.js';
 import { GENERATOR_NAME, writeConfigFile } from './export-utils.js';
 
 /**

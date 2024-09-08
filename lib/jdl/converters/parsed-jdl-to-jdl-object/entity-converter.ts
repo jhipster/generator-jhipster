@@ -21,7 +21,7 @@ import { lowerFirst } from 'lodash-es';
 import { JDLEntity } from '../../models/index.js';
 import { formatComment } from '../../utils/format-utils.js';
 import type JDLField from '../../models/jdl-field.js';
-import type { ParsedJDLEntity } from '../../types/parsed-types.js';
+import type { ParsedJDLEntity } from '../../types/parsed.js';
 
 export default { convertEntities };
 

@@ -21,7 +21,7 @@ import { kebabCase } from 'lodash-es';
 import { relationshipOptions, validations } from '../../built-in-options/index.js';
 import { camelCase, lowerFirst } from '../../utils/string-utils.js';
 import type JDLRelationship from '../../models/jdl-relationship.js';
-import type { JSONRelationship } from '../../types/json-types.js';
+import type { JSONRelationship } from '../../types/json-config.js';
 import type { RelationshipType } from '../../basic-types/relationships.js';
 
 const {

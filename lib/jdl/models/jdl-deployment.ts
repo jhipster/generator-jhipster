@@ -20,7 +20,7 @@ import { isEqual } from 'lodash-es';
 import { applicationOptions, deploymentOptions } from '../built-in-options/index.js';
 import { merge } from '../utils/object-utils.js';
 import { join } from '../utils/set-utils.js';
-import type { ParsedJDLDeployment } from '../types/parsed-types.js';
+import type { ParsedJDLDeployment } from '../types/parsed.js';
 
 const { Options } = deploymentOptions;
 const arrayTypes = ['appsFolders', 'clusteredDbApps'];

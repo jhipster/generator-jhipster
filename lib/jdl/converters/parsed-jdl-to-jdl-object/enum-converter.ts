@@ -19,7 +19,7 @@
 
 import { JDLEnum } from '../../models/index.js';
 import { formatComment } from '../../utils/format-utils.js';
-import type { ParsedJDLEnum } from '../../types/parsed-types.js';
+import type { ParsedJDLEnum } from '../../types/parsed.js';
 
 export default { convertEnums };
 

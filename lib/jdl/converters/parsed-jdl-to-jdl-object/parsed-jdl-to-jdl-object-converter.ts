@@ -26,6 +26,14 @@ import type JDLField from '../../models/jdl-field.js';
 import type JDLValidation from '../../models/jdl-validation.js';
 import type { JDLEntity } from '../../models/index.js';
 import type { JDLRuntime } from '../../types/runtime.js';
+import type {
+  ParsedJDLAnnotation,
+  ParsedJDLApplication,
+  ParsedJDLApplications,
+  ParsedJDLEntity,
+  ParsedJDLEntityField,
+  ParsedJDLRoot,
+} from '../../types/parsed.js';
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
 import { convertEnums } from './enum-converter.js';
@@ -34,14 +42,6 @@ import { convertValidations } from './validation-converter.js';
 import { convertOptions } from './option-converter.js';
 import { convertRelationships } from './relationship-converter.js';
 import { convertDeployments } from './deployment-converter.js';
-import type {
-  ParsedJDLAnnotation,
-  ParsedJDLApplication,
-  ParsedJDLApplications,
-  ParsedJDLEntity,
-  ParsedJDLEntityField,
-  ParsedJDLRoot,
-} from '../../types/parsed-types.js';
 
 let parsedContent: ParsedJDLApplications;
 let configuration: ParsedJDLRoot;

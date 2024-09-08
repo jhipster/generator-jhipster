@@ -20,7 +20,7 @@
 import type { ITokenConfig } from 'chevrotain';
 import { Lexer } from 'chevrotain';
 import { applicationOptions } from '../../built-in-options/index.js';
-import type { JDLTokenConfig } from '../../types/parsing-types.js';
+import type { JDLTokenConfig } from '../../types/parsing.js';
 import createTokenFromConfig from './token-creator.js';
 import { KEYWORD, UNARY_OPTION } from './shared-tokens.js';
 

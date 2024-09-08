@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JDLValidatorOption } from '../jdl/types/parsing-types.js';
+import type { JDLValidatorOption } from '../jdl/types/parsing.js';
 import {
   ALPHABETIC,
   ALPHABETIC_LOWER,

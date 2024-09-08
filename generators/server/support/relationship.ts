@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JSONEntity } from '../../../lib/jdl/types/json-types.js';
+import type { JSONEntity } from '../../../lib/jdl/types/json-config.js';
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base/api.js';
 import { databaseTypes } from '../../../lib/jhipster/index.js';

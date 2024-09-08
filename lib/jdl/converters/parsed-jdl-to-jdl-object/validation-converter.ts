@@ -19,7 +19,7 @@
 
 import JDLValidation from '../../models/jdl-validation.js';
 import { validations } from '../../built-in-options/index.js';
-import type { ParsedJDLValidation } from '../../types/parsed-types.js';
+import type { ParsedJDLValidation } from '../../types/parsed.js';
 
 const {
   Validations: { PATTERN },

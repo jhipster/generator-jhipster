@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JHipsterOptionDefinition } from '../../../lib/jdl/types/parsing-types.js';
+import type { JHipsterOptionDefinition } from '../../../lib/jdl/types/parsing.js';
 
 export const SYNC_USER_WITH_IDP = 'syncUserWithIdp';
 

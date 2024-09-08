@@ -21,7 +21,7 @@ import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 import { binaryOptions, unaryOptions } from '../../built-in-options/index.js';
 import type AbstractJDLOption from '../../models/abstract-jdl-option.js';
-import type { ParsedJDLOption, ParsedJDLUseOption } from '../../types/parsed-types.js';
+import type { ParsedJDLOption, ParsedJDLUseOption } from '../../types/parsed.js';
 
 const { OptionValues, getOptionName } = binaryOptions;
 export default { convertOptions };

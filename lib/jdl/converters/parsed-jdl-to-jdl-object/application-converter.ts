@@ -24,7 +24,7 @@ import type JDLBinaryOption from '../../models/jdl-binary-option.js';
 import type AbstractJDLOption from '../../models/abstract-jdl-option.js';
 import type JDLApplication from '../../models/jdl-application.js';
 import type { JDLRuntime } from '../../types/runtime.js';
-import type { ParsedJDLApplication } from '../../types/parsed-types.js';
+import type { ParsedJDLApplication } from '../../types/parsed.js';
 import { convertOptions } from './option-converter.js';
 
 const {

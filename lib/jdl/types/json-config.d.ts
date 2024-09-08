@@ -53,32 +53,6 @@ export type JSONGeneratorJhipsterContentDeployment = {
 export type AbstractJSONGeneratorJhipsterContent = {
   baseName: string;
   applicationType?: string;
-  entities?: string[];
-  jhipsterVersion?: string;
-  packageName?: string;
-  packageFolder?: string;
-  serverPort?: string;
-  authenticationType?: string;
-  buildTool?: string;
-  cacheProvider?: string;
-  clientPackageManager?: string;
-  creationTimestamp?: number;
-  databaseType?: string;
-  devDatabaseType?: string;
-  enableHibernateCache?: boolean;
-  enableTranslation?: boolean;
-  jhiPrefix?: string;
-  jwtSecretKey?: string;
-  languages?: string[];
-  messageBroker?: string;
-  nativeLanguage?: string;
-  prodDatabaseType?: string;
-  searchEngine?: string;
-  serviceDiscoveryType?: string;
-  skipClient?: boolean;
-  skipUserManagement?: boolean;
-  testFrameworks?: string[];
-  websocket?: string;
 } & JSONGeneratorJhipsterContentDeployment &
   Record<string, any>;
 

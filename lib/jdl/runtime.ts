@@ -5,7 +5,7 @@ import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.js';
 import JDLParser from './parsing/jdl-parser.js';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.js';
 import type { JDLRuntime } from './types/runtime.js';
-import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing-types.js';
+import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.js';
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.js';
 import { buildApplicationTokens } from './parsing/lexer/application-tokens.js';
 

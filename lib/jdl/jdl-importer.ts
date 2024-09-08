@@ -30,10 +30,10 @@ import exportEntities from './exporters/jhipster-entity-exporter.js';
 import createWithApplicationValidator from './validators/jdl-with-application-validator.js';
 import createWithoutApplicationValidator from './validators/jdl-without-application-validator.js';
 import type JDLObject from './models/jdl-object.js';
-import type { ParsedJDLApplications } from './types/parsed-types.js';
+import type { ParsedJDLApplications } from './types/parsed.js';
 import type { PostProcessedJDLJSONApplication } from './exporters/types.js';
 import { GENERATOR_NAME } from './exporters/export-utils.js';
-import type { JDLApplicationConfig } from './types/parsing-types.js';
+import type { JDLApplicationConfig } from './types/parsing.js';
 import type { JDLRuntime } from './types/runtime.js';
 import { createRuntime, getDefaultRuntime } from './runtime.js';
 

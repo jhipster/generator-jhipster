@@ -30,7 +30,7 @@ import { lowerFirst, upperFirst } from '../utils/string-utils.js';
 
 import { binaryOptions, fieldTypes, relationshipOptions, unaryOptions } from '../built-in-options/index.js';
 import { asJdlRelationshipType } from '../basic-types/relationship-types.js';
-import type { JSONEntity, JSONField, JSONRelationship } from '../types/json-types.js';
+import type { JSONEntity, JSONField, JSONRelationship } from '../types/json-config.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;

@@ -18,7 +18,7 @@
  */
 
 import { merge } from '../utils/object-utils.js';
-import type { ParsedJDLEnumValue } from '../types/parsed-types.js';
+import type { ParsedJDLEnumValue } from '../types/parsed.js';
 import JDLEnumValue from './jdl-enum-value.js';
 
 export default class JDLEnum {

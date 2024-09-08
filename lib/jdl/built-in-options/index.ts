@@ -16,6 +16,4 @@ export {
   applicationOptions,
   /** @deprecated */
   deploymentOptions,
-  /** @deprecated */
-  entityOptions,
 } from '../../jhipster/index.js';
