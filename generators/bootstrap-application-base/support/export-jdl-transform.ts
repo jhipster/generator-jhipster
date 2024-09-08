@@ -6,7 +6,7 @@ import { Minimatch } from 'minimatch';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/json-to-jdl-converter.js';
-import type { JSONEntity } from '../../../lib/jdl/converters/types.js';
+import type { JSONEntity } from '../../../lib/jdl/types/json-types.js';
 import { createRuntime } from '../../../lib/jdl/runtime.js';
 import type { JDLApplicationConfig } from '../../../lib/jdl/types/parsing-types.js';
 

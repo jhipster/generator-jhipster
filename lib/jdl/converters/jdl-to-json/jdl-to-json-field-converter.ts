@@ -22,7 +22,7 @@ import { fieldTypes, validations } from '../../built-in-options/index.js';
 import { formatComment } from '../../utils/format-utils.js';
 import { camelCase } from '../../utils/string-utils.js';
 import type JDLObject from '../../models/jdl-object.js';
-import type { JSONField } from '../types.js';
+import type { JSONField } from '../../types/json-types.js';
 import type { JDLEntity } from '../../models/index.js';
 import type JDLField from '../../models/jdl-field.js';
 

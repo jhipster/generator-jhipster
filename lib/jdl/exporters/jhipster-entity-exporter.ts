@@ -22,7 +22,7 @@ import path from 'path';
 import { applicationTypes } from '../built-in-options/index.js';
 import { readJSONFile, toFilePath } from '../readers/json-file-reader.js';
 import { doesFileExist } from '../utils/file-utils.js';
-import type { JSONEntity } from '../converters/types.js';
+import type { JSONEntity } from '../types/json-types.js';
 import type { JhipsterJSONJDLExporterWrapper } from './types.js';
 
 let configuration: any = {};

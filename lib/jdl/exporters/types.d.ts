@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JSONEntity } from '../converters/types.js';
+import type { JSONEntity } from '../types/json-types.js';
 import type { GENERATOR_NAME } from './export-utils.js';
 
 export type JDLJSONApplicationContent = {
