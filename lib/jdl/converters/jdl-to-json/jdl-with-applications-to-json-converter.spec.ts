@@ -43,7 +43,7 @@ import JDLUnaryOption from '../../models/jdl-unary-option.js';
 import JDLBinaryOption from '../../models/jdl-binary-option.js';
 
 import logger from '../../utils/objects/logger.js';
-import { createJDLApplication } from '../../../../test/support/jdl/index.js';
+import { createJDLApplication } from '../.././__test-support__/index.js';
 import { convert } from './jdl-with-applications-to-json-converter.js';
 
 const {

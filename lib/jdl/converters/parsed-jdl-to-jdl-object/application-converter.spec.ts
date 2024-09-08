@@ -20,7 +20,7 @@
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { applicationTypes } from '../../built-in-options/index.js';
-import { convertApplications, createJDLApplication } from '../../../../test/support/jdl/index.js';
+import { convertApplications, createJDLApplication } from '../.././__test-support__/index.js';
 
 const { MONOLITH } = applicationTypes;
 

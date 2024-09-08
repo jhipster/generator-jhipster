@@ -27,7 +27,7 @@ import JDLField from '../models/jdl-field.js';
 import JDLRelationship from '../models/jdl-relationship.js';
 import JDLUnaryOption from '../models/jdl-unary-option.js';
 import mergeJDLObjects from '../models/jdl-object-merger.js';
-import { createJDLApplication } from '../../../test/support/jdl/index.js';
+import { createJDLApplication } from '.././__test-support__/index.js';
 
 const { MONOLITH } = applicationTypes;
 

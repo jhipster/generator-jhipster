@@ -1,23 +1,20 @@
-import { getDefaultRuntime } from '../../../lib/jdl//runtime.js';
-import {
-  parseFromContent as originalParseFromContent,
-  parseFromFiles as originalParseFromFiles,
-} from '../../../lib/jdl//readers/jdl-reader.js';
-import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../../lib/jdl//converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import { getDefaultRuntime } from '../runtime.js';
+import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.js';
+import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import {
   createImporterFromContent as originalCreateImporterFromContent,
   createImporterFromFiles as originalCreateImporterFromFiles,
-} from '../../../lib/jdl//jdl-importer.js';
-import type { ParsedJDLApplication, ParsedJDLRoot } from '../../../lib/jdl//converters/parsed-jdl-to-jdl-object/types.js';
+} from '../jdl-importer.js';
+import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.js';
 import definition from '../../../generators/app/jdl/index.js';
 import {
   createJDLLinterFromContent as originalCreateJDLLinterFromContent,
   createJDLLinterFromFile as originalCreateJDLLinterFromFile,
-} from '../../../lib/jdl//linters/jdl-linter.js';
-import { convertApplications as originalConvertApplications } from '../../../lib/jdl//converters/parsed-jdl-to-jdl-object/application-converter.js';
-import { createJDLApplication as originalCreateJDLApplication } from '../../../lib/jdl//models/jdl-application-factory.js';
-import type { JHipsterYoRcContentAndJDLWrapper } from '../../../lib/jdl//converters/json-to-jdl-application-converter.js';
-import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../../lib/jdl//converters/json-to-jdl-application-converter.js';
+} from '../linters/jdl-linter.js';
+import { convertApplications as originalConvertApplications } from '../converters/parsed-jdl-to-jdl-object/application-converter.js';
+import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.js';
+import type { JHipsterYoRcContentAndJDLWrapper } from '../converters/json-to-jdl-application-converter.js';
+import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../converters/json-to-jdl-application-converter.js';
 
 const runtime = getDefaultRuntime();
 

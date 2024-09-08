@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { basicHelpers as helpers } from '../../../testing/index.js';
-import { parseFromContent, parseFromFiles } from '../../../test/support/jdl/index.js';
+import { parseFromContent, parseFromFiles } from '.././__test-support__/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

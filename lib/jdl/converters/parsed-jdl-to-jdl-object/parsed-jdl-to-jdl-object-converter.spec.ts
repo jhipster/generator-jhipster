@@ -36,7 +36,7 @@ import {
   unaryOptions,
   validations,
 } from '../../built-in-options/index.js';
-import { parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../../../test/support/jdl/index.js';
+import { parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../.././__test-support__/index.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { OptionNames } = applicationOptions;
