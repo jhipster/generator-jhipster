@@ -19,40 +19,37 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLField from '../models/jdl-field.js';
-import FieldValidator from '../validators/field-validator.js';
+import { JDLEntity } from '../../core/models/index.js';
+import EntityValidator from '../validators/entity-validator.js';
 
-describe('jdl - FieldValidator', () => {
+describe('jdl - EntityValidator', () => {
   let validator;
 
   before(() => {
-    validator = new FieldValidator();
+    validator = new EntityValidator();
   });
 
   describe('validate', () => {
-    describe('when not passing anything', () => {
+    describe('when not passing an entity', () => {
       it('should fail', () => {
-        expect(() => validator.validate()).to.throw(/^No field\.$/);
+        expect(() => validator.validate()).to.throw(/^No entity\.$/);
       });
     });
-    describe('when passing a field', () => {
-      describe('with all its required attributes', () => {
-        let field;
-
-        before(() => {
-          field = new JDLField({
-            name: 'a',
-            type: 'String',
-          });
-        });
-
+    describe('when passing an entity', () => {
+      describe('with every required attribute', () => {
         it('should not fail', () => {
-          expect(() => validator.validate(field)).not.to.throw();
+          expect(() =>
+            validator.validate(
+              new JDLEntity({
+                name: 'A',
+              }),
+            ),
+          ).not.to.throw();
         });
       });
-      describe('when not passing any attribute', () => {
+      describe('without any attribute', () => {
         it('should fail', () => {
-          expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
+          expect(() => validator.validate({})).to.throw(/^The entity attribute name was not found\.$/);
         });
       });
     });

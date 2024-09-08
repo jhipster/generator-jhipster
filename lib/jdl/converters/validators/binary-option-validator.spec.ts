@@ -19,32 +19,37 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLUnaryOption from '../models/jdl-unary-option.js';
-import UnaryOptionValidator from '../validators/unary-option-validator.js';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
+import BinaryOptionValidator from '../validators/binary-option-validator.js';
 
-describe('jdl - UnaryOptionValidator', () => {
+describe('jdl - BinaryOptionValidator', () => {
   let validator;
 
   before(() => {
-    validator = new UnaryOptionValidator();
+    validator = new BinaryOptionValidator();
   });
 
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        expect(() => validator.validate()).to.throw(/^No unary option\.$/);
+        expect(() => validator.validate()).to.throw(/^No binary option\.$/);
       });
     });
-    describe('when passing an unary option', () => {
+    it('should fail', () => {
+      expect(() => validator.validate({})).to.throw(
+        /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
+      );
+    });
+    describe('when passing a binary option', () => {
       describe('with all its required attributes', () => {
         it('should not fail', () => {
-          expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
+          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
         });
       });
-      describe('without any of its required attributes', () => {
+      describe('with an invalid value', () => {
         it('should fail', () => {
-          expect(() => validator.validate({})).to.throw(
-            /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/,
+          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
+            /^The 'dto' option is not valid for value 'toto'\.$/,
           );
         });
       });

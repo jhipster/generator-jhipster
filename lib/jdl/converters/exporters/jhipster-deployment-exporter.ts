@@ -19,7 +19,7 @@
 
 import path from 'path';
 import { createFolderIfItDoesNotExist, doesFileExist } from '../../core/utils/file-utils.js';
-import DeploymentValidator from '../../core/validators/deployment-validator.js';
+import DeploymentValidator from '../validators/deployment-validator.js';
 import type JDLDeployment from '../../core/models/jdl-deployment.js';
 import type { JHipsterYoRcContent } from '../../core/types/json-config.js';
 import { GENERATOR_NAME, writeConfigFile } from './export-utils.js';

@@ -32,7 +32,7 @@ import {
   parseFromContent,
   parseFromFiles,
 } from './core/__test-support__/index.js';
-import type { ApplicationWithEntities } from './core/jdl-importer.js';
+import type { ApplicationWithEntities } from './jdl-importer.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);

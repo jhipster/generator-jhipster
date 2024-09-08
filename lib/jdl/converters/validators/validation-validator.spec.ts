@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLValidation from '../models/jdl-validation.js';
+import JDLValidation from '../../core/models/jdl-validation.js';
 import ValidationValidator from '../validators/validation-validator.js';
 
 describe('jdl - ValidationValidator', () => {

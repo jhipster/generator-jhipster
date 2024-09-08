@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import { applicationTypes, deploymentOptions } from '../built-in-options/index.js';
-import type JDLDeployment from '../models/jdl-deployment.js';
+import { applicationTypes, deploymentOptions } from '../../core/built-in-options/index.js';
+import type JDLDeployment from '../../core/models/jdl-deployment.js';
 import Validator from './validator.js';
 
 const { Options } = deploymentOptions;

@@ -17,22 +17,27 @@
  * limitations under the License.
  */
 
-import BinaryOptions from '../built-in-options/binary-options.js';
-import OptionValidator from './option-validator.js';
+import { reservedKeywords } from '../../core/built-in-options/index.js';
+import type { ValidatorOptions } from './validator.js';
+import Validator from './validator.js';
 
-export default class BinaryOptionValidator extends OptionValidator {
+const { isReservedClassName } = reservedKeywords;
+
+export default class EntityValidator extends Validator {
   constructor() {
-    super('binary', 'value');
+    super('entity', ['name']);
   }
 
-  validate(jdlOption) {
-    super.validate(jdlOption);
-    checkForInvalidValue(jdlOption);
+  validate(jdlEntity, options: ValidatorOptions = {}) {
+    super.validate(jdlEntity);
+    if (options.checkReservedKeywords) {
+      checkForReservedClassName(jdlEntity);
+    }
   }
 }
 
-function checkForInvalidValue(jdlOption) {
-  if (!!jdlOption.value && !BinaryOptions.exists(jdlOption.name, jdlOption.value)) {
-    throw new Error(`The '${jdlOption.name}' option is not valid for value '${jdlOption.value}'.`);
+function checkForReservedClassName(jdlEntity) {
+  if (isReservedClassName(jdlEntity.name)) {
+    throw new Error(`The name '${jdlEntity.name}' is a reserved keyword and can not be used as an entity class name.`);
   }
 }

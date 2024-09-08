@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { validations } from '../built-in-options/index.js';
+import { validations } from '../../core/built-in-options/index.js';
 import Validator from './validator.js';
 
 const {

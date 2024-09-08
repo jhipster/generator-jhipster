@@ -19,14 +19,14 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLObject from '../models/jdl-object.js';
-import { JDLEntity } from '../models/index.js';
-import JDLField from '../models/jdl-field.js';
-import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { relationshipTypes } from '../basic-types/index.js';
-import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, validations } from '../built-in-options/index.js';
+import JDLObject from '../../core/models/jdl-object.js';
+import { JDLEntity } from '../../core/models/index.js';
+import JDLField from '../../core/models/jdl-field.js';
+import JDLValidation from '../../core/models/jdl-validation.js';
+import JDLRelationship from '../../core/models/jdl-relationship.js';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
+import { relationshipTypes } from '../../core/basic-types/index.js';
+import { applicationTypes, binaryOptions, databaseTypes, fieldTypes, validations } from '../../core/built-in-options/index.js';
 import createValidator from '../validators/jdl-without-application-validator.js';
 
 const { GATEWAY } = applicationTypes;

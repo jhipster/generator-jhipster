@@ -19,37 +19,32 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
-import BinaryOptionValidator from '../validators/binary-option-validator.js';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
+import UnaryOptionValidator from '../validators/unary-option-validator.js';
 
-describe('jdl - BinaryOptionValidator', () => {
+describe('jdl - UnaryOptionValidator', () => {
   let validator;
 
   before(() => {
-    validator = new BinaryOptionValidator();
+    validator = new UnaryOptionValidator();
   });
 
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
-        expect(() => validator.validate()).to.throw(/^No binary option\.$/);
+        expect(() => validator.validate()).to.throw(/^No unary option\.$/);
       });
     });
-    it('should fail', () => {
-      expect(() => validator.validate({})).to.throw(
-        /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
-      );
-    });
-    describe('when passing a binary option', () => {
+    describe('when passing an unary option', () => {
       describe('with all its required attributes', () => {
         it('should not fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
+          expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
         });
       });
-      describe('with an invalid value', () => {
+      describe('without any of its required attributes', () => {
         it('should fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
-            /^The 'dto' option is not valid for value 'toto'\.$/,
+          expect(() => validator.validate({})).to.throw(
+            /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/,
           );
         });
       });

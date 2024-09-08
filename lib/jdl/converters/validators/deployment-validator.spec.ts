@@ -19,7 +19,7 @@
 
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
-import { applicationTypes, deploymentOptions } from '../built-in-options/index.js';
+import { applicationTypes, deploymentOptions } from '../../core/built-in-options/index.js';
 
 import DeploymentValidator from '../validators/deployment-validator.js';
 
