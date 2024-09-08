@@ -20,14 +20,14 @@
 import fs from 'fs';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
-import JDLObject from '../models/jdl-object.js';
-import { JDLEntity } from '../models/index.js';
+import JDLObject from '../core/models/jdl-object.js';
+import { JDLEntity } from '../core/models/index.js';
 import exportToJDL from '../exporters/jdl-exporter.js';
-import JDLApplication from '../models/jdl-application.js';
-import type { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
-import { applicationOptions } from '../built-in-options/index.js';
-import { basicHelpers as helpers } from '../../../../testing/index.js';
-import { getDefaultRuntime } from '../runtime.js';
+import JDLApplication from '../core/models/jdl-application.js';
+import type { JDLJSONApplicationConfiguration } from '../core/parsing/jdl-parsing-types.js';
+import { applicationOptions } from '../core/built-in-options/index.js';
+import { basicHelpers as helpers } from '../../../testing/index.js';
+import { getDefaultRuntime } from '../core/runtime.js';
 
 const {
   OptionNames: { CLIENT_FRAMEWORK },

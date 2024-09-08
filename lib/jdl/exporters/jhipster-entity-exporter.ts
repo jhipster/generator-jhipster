@@ -19,11 +19,11 @@
 
 import path from 'path';
 
-import { applicationTypes } from '../built-in-options/index.js';
-import { readJSONFile, toFilePath } from '../readers/json-file-reader.js';
-import { doesFileExist } from '../utils/file-utils.js';
-import type { JSONEntity } from '../types/json-config.js';
-import type { JhipsterJSONJDLExporterWrapper } from '../types/exporter.js';
+import { applicationTypes } from '../core/built-in-options/index.js';
+import { readJSONFile, toFilePath } from '../core/readers/json-file-reader.js';
+import { doesFileExist } from '../core/utils/file-utils.js';
+import type { JSONEntity } from '../core/types/json-config.js';
+import type { JhipsterJSONJDLExporterWrapper } from '../core/types/exporter.js';
 
 let configuration: any = {};
 
