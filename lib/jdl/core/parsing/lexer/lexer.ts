@@ -24,13 +24,15 @@ import { relationshipOptions } from '../../built-in-options/index.js';
 import { BINARY_OPTION, NAME, UNARY_OPTION } from './shared-tokens.js';
 
 import ValidationTokens from './validation-tokens.js';
-import DeploymentTokens from './deployment-tokens.js';
 import RelationshipTypeTokens from './relationship-type-tokens.js';
 import OptionTokens from './option-tokens.js';
 
 import createTokenFromConfigCreator from './token-creator.js';
 
-export const buildTokens = (applicationTokens: { categoryToken: TokenType; tokens: TokenType[] }) => {
+type TokenParam = { categoryToken: TokenType; tokens: TokenType[] };
+
+export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentTokens: TokenParam }) => {
+  const { applicationTokens, deploymentTokens } = tokens;
   const _tokens: Record<string, TokenType> = {};
 
   const { BUILT_IN_ENTITY } = relationshipOptions;
@@ -51,7 +53,7 @@ export const buildTokens = (applicationTokens: { categoryToken: TokenType; token
   const CONFIG_KEY = applicationTokens.categoryToken;
 
   // Category For the Application deployment key names
-  const DEPLOYMENT_KEY = DeploymentTokens.categoryToken;
+  const DEPLOYMENT_KEY = deploymentTokens.categoryToken;
 
   createTokenFromConfig({
     name: 'WHITESPACE',
@@ -92,7 +94,7 @@ export const buildTokens = (applicationTokens: { categoryToken: TokenType; token
     categories: [CONFIG_KEY, DEPLOYMENT_KEY],
   });
 
-  DeploymentTokens.tokens.forEach(token => {
+  deploymentTokens.tokens.forEach(token => {
     _tokens[token.name] = token;
   });
 

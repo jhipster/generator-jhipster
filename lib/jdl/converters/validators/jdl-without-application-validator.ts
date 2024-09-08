@@ -17,14 +17,8 @@
  * limitations under the License.
  */
 
-import {
-  applicationTypes,
-  binaryOptions,
-  databaseTypes,
-  fieldTypes,
-  relationshipOptions,
-  reservedKeywords,
-} from '../../core/built-in-options/index.js';
+import { binaryOptions, relationshipOptions } from '../../core/built-in-options/index.js';
+import { applicationTypes, databaseTypes, fieldTypes, reservedKeywords } from '../../../jhipster/index.js';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type JDLRelationship from '../../core/models/jdl-relationship.js';
 import type JDLField from '../../core/models/jdl-field.js';

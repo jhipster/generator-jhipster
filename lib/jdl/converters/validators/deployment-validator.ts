@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { applicationTypes, deploymentOptions } from '../../core/built-in-options/index.js';
+import { applicationTypes, deploymentOptions } from '../../../jhipster/index.js';
 import type JDLDeployment from '../../core/models/jdl-deployment.js';
 import Validator from './validator.js';
 

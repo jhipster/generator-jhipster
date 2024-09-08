@@ -18,13 +18,14 @@
  */
 import { capitalize } from 'lodash-es';
 
-import { fieldTypes, validations } from '../../core/built-in-options/index.js';
+import { validations } from '../../core/built-in-options/index.js';
 import { formatComment } from '../../core/utils/format-utils.js';
 import { camelCase } from '../../core/utils/string-utils.js';
 import type JDLObject from '../../core/models/jdl-object.js';
 import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';
 import type JDLField from '../../core/models/jdl-field.js';
+import { fieldTypes } from '../../../jhipster/index.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },

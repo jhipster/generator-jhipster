@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import matchEntity from '../../core/matchers/entity-matcher.js';
@@ -31,18 +29,15 @@ import {
   applicationOptions,
   applicationTypes,
   binaryOptions,
-  entityOptions,
   fieldTypes,
   unaryOptions,
   validations,
 } from '../../core/built-in-options/index.js';
 import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.js';
+import { entityOptions } from '../../../jhipster/index.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { OptionNames } = applicationOptions;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const { MapperTypes, ServiceTypes, PaginationTypes } = entityOptions;
 
@@ -530,11 +525,6 @@ JDLApplication {
         "name": "languages",
         "quoted": false,
         "value": Set {},
-      },
-      "packageFolder": StringJDLApplicationConfigurationOption {
-        "name": "packageFolder",
-        "quoted": false,
-        "value": "com/mathieu/sample",
       },
       "packageName": StringJDLApplicationConfigurationOption {
         "name": "packageName",

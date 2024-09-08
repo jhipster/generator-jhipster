@@ -19,7 +19,7 @@
 import { lowerFirst } from 'lodash-es';
 import JDLObject from '../../core/models/jdl-object.js';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import { applicationTypes, binaryOptions } from '../../core/built-in-options/index.js';
+import { binaryOptions } from '../../core/built-in-options/index.js';
 
 import type JDLApplication from '../../core/models/jdl-application.js';
 import type JDLField from '../../core/models/jdl-field.js';
@@ -34,6 +34,7 @@ import type {
   ParsedJDLEntityField,
   ParsedJDLRoot,
 } from '../../core/types/parsed.js';
+import { applicationTypes } from '../../../jhipster/index.js';
 import { convertApplications } from './application-converter.js';
 import { convertEntities } from './entity-converter.js';
 import { convertEnums } from './enum-converter.js';

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { reservedKeywords } from '../../core/built-in-options/index.js';
+import { reservedKeywords } from '../../../jhipster/index.js';
 import type { ValidatorOptions } from './validator.js';
 import Validator from './validator.js';
 

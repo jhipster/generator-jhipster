@@ -18,14 +18,14 @@
  */
 
 import { Lexer } from 'chevrotain';
-import createTokenFromConfig from './token-creator.js';
+import createTokenFromConfig from '../../parsing/lexer/token-creator.js';
 
 const deploymentCategoryToken = createTokenFromConfig({
   name: 'DEPLOYMENT_KEY',
   pattern: Lexer.NA,
 });
 
-const deploymentTokens = [
+const _deploymentTokens = [
   { name: 'APPS_FOLDERS', pattern: 'appsFolders' },
   { name: 'CLUSTERED_DB_APPS', pattern: 'clusteredDbApps' },
   { name: 'DEPLOYMENT_TYPE', pattern: 'deploymentType' },
@@ -48,7 +48,7 @@ const deploymentTokens = [
   return createTokenFromConfig(tokenConfig);
 });
 
-export default {
+export const deploymentTokens = {
   categoryToken: deploymentCategoryToken,
-  tokens: [deploymentCategoryToken, ...deploymentTokens],
+  tokens: [deploymentCategoryToken, ..._deploymentTokens],
 };

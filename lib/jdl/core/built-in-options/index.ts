@@ -7,8 +7,6 @@ export {
   /** @deprecated */
   fieldTypes,
   /** @deprecated */
-  reservedKeywords,
-  /** @deprecated */
   applicationTypes,
   /** @deprecated */
   databaseTypes,
@@ -16,6 +14,4 @@ export {
   applicationOptions,
   /** @deprecated */
   deploymentOptions,
-  /** @deprecated */
-  entityOptions,
 } from '../../../jhipster/index.js';

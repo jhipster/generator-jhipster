@@ -18,17 +18,14 @@
  */
 import deduplicate from '../utils/array-utils.js';
 
-import { applicationOptions, relationshipOptions, validations } from '../built-in-options/index.js';
+import { relationshipOptions, validations } from '../built-in-options/index.js';
 import logger from '../utils/objects/logger.js';
 import type { JDLRuntime } from '../types/runtime.js';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
-const { OptionNames } = applicationOptions;
 const {
   Validations: { PATTERN, REQUIRED, UNIQUE },
 } = validations;
-
-const { PACKAGE_NAME } = OptionNames;
 
 export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
   const BaseJDLCSTVisitor = runtime.parser.getBaseCstVisitorConstructor();
@@ -607,10 +604,6 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
         const configProps = context.applicationConfigDeclaration.map(this.visit, this);
         configProps.forEach(configProp => {
           config[configProp.key] = configProp.value;
-
-          if (configProp.key === PACKAGE_NAME && !config.packageFolder) {
-            config.packageFolder = configProp.value.replace(/[.]/g, '/');
-          }
         });
       }
 

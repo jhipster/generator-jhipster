@@ -7,7 +7,8 @@ import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-syst
 import type { JDLRuntime } from './types/runtime.js';
 import type { JDLApplicationConfig, JDLValidatorOption } from './types/parsing.js';
 import JDLApplicationDefinition from './built-in-options/jdl-application-definition.js';
-import { buildApplicationTokens } from './parsing/lexer/application-tokens.js';
+import { buildApplicationTokens } from './built-in-options/tokens/application-tokens.js';
+import { deploymentTokens } from './built-in-options/tokens/deployment-tokens.js';
 
 const mergeDefinition = (definition: JDLApplicationConfig, defaultDefinition: JDLApplicationConfig) => {
   return {
@@ -45,7 +46,7 @@ export const createRuntime = (definition: JDLApplicationConfig): JDLRuntime => {
     get tokens() {
       if (!tokens) {
         const applicationTokens = buildApplicationTokens(newDefinition.tokenConfigs);
-        tokens = buildTokens(applicationTokens);
+        tokens = buildTokens({ applicationTokens, deploymentTokens });
 
         checkConfigKeys(tokens, Object.keys(propertyValidations));
       }
