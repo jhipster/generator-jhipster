@@ -23,7 +23,7 @@ import { readFileSync, rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
-import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../jhipster/index.js';
+import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../../jhipster/index.js';
 import { createImporterFromContent, createImporterFromFiles } from './__test-support__/index.js';
 
 const { MONOLITH } = applicationTypes;

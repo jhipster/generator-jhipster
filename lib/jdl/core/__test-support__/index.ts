@@ -6,7 +6,7 @@ import {
   createImporterFromFiles as originalCreateImporterFromFiles,
 } from '../jdl-importer.js';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.js';
-import definition from '../../../generators/app/jdl/index.js';
+import definition from '../../../../generators/app/jdl/index.js';
 import {
   createJDLLinterFromContent as originalCreateJDLLinterFromContent,
   createJDLLinterFromFile as originalCreateJDLLinterFromFile,

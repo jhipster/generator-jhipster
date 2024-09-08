@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { uniqBy } from 'lodash-es';
-import { applicationOptions } from '../jhipster/index.js';
+import { applicationOptions } from '../../jhipster/index.js';
 import * as JDLReader from './readers/jdl-reader.js';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import { readJSONFile } from './readers/json-file-reader.js';

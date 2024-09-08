@@ -1,7 +1,7 @@
-import type { Entity } from '../../types/base/entity.js';
-import type { Field } from '../../types/base/field.js';
-import type { Relationship } from '../../types/base/relationship.js';
-import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
+import type { Entity } from '../../../types/base/entity.js';
+import type { Field } from '../../../types/base/field.js';
+import type { Relationship } from '../../../types/base/relationship.js';
+import type { YO_RC_CONFIG_KEY } from '../../../utils/yo-rc.ts';
 
 export type JSONField = Field & Record<string, any>;
 

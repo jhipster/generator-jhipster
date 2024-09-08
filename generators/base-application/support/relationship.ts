@@ -19,7 +19,7 @@
 
 import { lowerFirst, upperFirst } from 'lodash-es';
 
-import type { JSONEntity } from '../../../lib/jdl/types/json-config.js';
+import type { JSONEntity } from '../../../lib/jdl/core/types/json-config.js';
 import type { ValidationResult } from '../../base/api.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';

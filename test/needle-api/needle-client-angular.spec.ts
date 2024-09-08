@@ -1,6 +1,6 @@
 import { before, describe, it } from 'esmocha';
 import { getGenerator, basicHelpers as helpers, result as runResult } from '../../testing/index.js';
-import { clientFrameworkTypes } from '../../lib/jdl//jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jdl/core//jhipster/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';

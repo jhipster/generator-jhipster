@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { convertSingleContentToJDL, convertToJDL } from '../converters/json-to-jdl-converter.js';
-import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../testing/index.js';
+import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../../testing/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

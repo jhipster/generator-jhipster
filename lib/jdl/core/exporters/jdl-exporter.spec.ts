@@ -26,7 +26,7 @@ import exportToJDL from '../exporters/jdl-exporter.js';
 import JDLApplication from '../models/jdl-application.js';
 import type { JDLJSONApplicationConfiguration } from '../parsing/jdl-parsing-types.js';
 import { applicationOptions } from '../built-in-options/index.js';
-import { basicHelpers as helpers } from '../../../testing/index.js';
+import { basicHelpers as helpers } from '../../../../testing/index.js';
 import { getDefaultRuntime } from '../runtime.js';
 
 const {

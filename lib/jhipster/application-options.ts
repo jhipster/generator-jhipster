@@ -22,7 +22,7 @@ import type {
   JDLApplicationOptionType,
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
-} from '../jdl/types/parsing.js';
+} from '../jdl/core/types/parsing.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';

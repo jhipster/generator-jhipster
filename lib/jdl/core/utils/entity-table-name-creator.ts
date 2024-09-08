@@ -18,7 +18,7 @@
  */
 
 import { snakeCase } from 'lodash-es';
-import { hibernateSnakeCase } from '../../../generators/server/support/string.js';
+import { hibernateSnakeCase } from '../../../../generators/server/support/string.js';
 
 /**
  * @deprecated TODO v9 drop this function and don't calculate entityTableName.

@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import type { ImportState } from '../../../lib/jdl/jdl-importer.js';
-import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
+import type { ImportState } from '../../../lib/jdl/core/jdl-importer.js';
+import { createImporterFromContent } from '../../../lib/jdl/core/jdl-importer.js';
 import definition from '../../app/jdl/index.js';
 import optionDefinition from './database-migration.js';
 import { DATABASE_MIGRATION as optionName } from './index.js';

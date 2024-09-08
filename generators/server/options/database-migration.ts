@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JHipsterOptionDefinition } from '../../../lib/jdl/types/parsing.js';
+import type { JHipsterOptionDefinition } from '../../../lib/jdl/core/types/parsing.js';
 
 export const DATABASE_MIGRATION = 'databaseMigration';
 export const DATABASE_MIGRATION_LIQUIBASE = 'liquibase';

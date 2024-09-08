@@ -1,4 +1,4 @@
-import type { JHipsterOptionDefinition } from '../../../../../lib/jdl/types/parsing.js';
+import type { JHipsterOptionDefinition } from '../../../../../lib/jdl/core/types/parsing.js';
 
 export const jdlRoutesOptions: JHipsterOptionDefinition = {
   name: 'routes',

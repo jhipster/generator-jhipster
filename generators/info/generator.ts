@@ -22,8 +22,8 @@
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
-import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
+import JSONToJDLEntityConverter from '../../lib/jdl/core/converters/json-to-jdl-entity-converter.js';
+import JSONToJDLOptionConverter from '../../lib/jdl/core/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';

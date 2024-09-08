@@ -23,6 +23,7 @@ import { fileURLToPath } from 'url';
 import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
+import { getPackageRoot } from '../../../index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -93,7 +94,7 @@ describe('jdl - FileUtils', () => {
     describe('when passing a file that exists', () => {
       it('should fail', () => {
         expect(() => {
-          createFolderIfItDoesNotExist(path.join(__dirname, '..', '..', '..', 'package.json'));
+          createFolderIfItDoesNotExist(path.join(getPackageRoot(), 'package.json'));
         }).to.throw(/^The directory to create '.*?package\.json' is a file\.$/);
       });
     });
