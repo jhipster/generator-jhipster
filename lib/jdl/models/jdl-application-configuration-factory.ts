@@ -18,7 +18,7 @@
  */
 
 import logger from '../utils/objects/logger.js';
-import type { JDLApplicationOptionTypeValue } from '../types/types.js';
+import type { JDLApplicationOptionTypeValue } from '../types/parsing-types.js';
 import type { JDLRuntime } from '../types/runtime.js';
 import JDLApplicationConfiguration from './jdl-application-configuration.js';
 import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.js';

@@ -13,7 +13,7 @@ import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '
 import BaseGenerator from '../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
-import type { JSONEntity } from '../jdl/converters/types.js';
+import type { JSONEntity } from '../lib/jdl/converters/types.js';
 import type CoreGenerator from '../generators/base-core/generator.js';
 import getGenerator from './get-generator.js';
 

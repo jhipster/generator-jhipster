@@ -1,4 +1,4 @@
-import type { JHipsterOptionDefinition } from '../../jdl/types/types.js';
+import type { JHipsterOptionDefinition } from '../jdl/types/parsing-types.js';
 import type { ConfigSpec, JHipsterArguments, JHipsterConfigs, JHipsterOption } from './types.js';
 
 export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined): JHipsterArguments => {

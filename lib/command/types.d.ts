@@ -1,6 +1,6 @@
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 import type { RequireAtLeastOne, SetOptional, Simplify, TaggedUnion, TupleToUnion, ValueOf } from 'type-fest';
-import type { JHipsterOptionDefinition } from '../../jdl/types/types.js';
+import type { JHipsterOptionDefinition } from '../jdl/types/parsing-types.js';
 import type { DerivedPropertiesOf, DerivedPropertiesWithInferenceUnion } from '../types/utils/derived-properties.js';
 import type { MergeUnion } from './support/merge-union.js';
 

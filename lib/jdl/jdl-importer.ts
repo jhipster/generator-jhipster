@@ -33,7 +33,7 @@ import type JDLObject from './models/jdl-object.js';
 import type { ParsedJDLApplications } from './converters/parsed-jdl-to-jdl-object/types.js';
 import type { PostProcessedJDLJSONApplication } from './exporters/types.js';
 import { GENERATOR_NAME } from './exporters/export-utils.js';
-import type { JDLApplicationConfig } from './types/types.js';
+import type { JDLApplicationConfig } from './types/parsing-types.js';
 import type { JDLRuntime } from './types/runtime.js';
 import { createRuntime, getDefaultRuntime } from './runtime.js';
 

@@ -29,7 +29,7 @@ import type JDLApplication from '../models/jdl-application.js';
 import type { JDLRuntime } from '../types/runtime.js';
 import { createRuntime, getDefaultRuntime } from '../runtime.js';
 import { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.js';
-import type { JDLApplicationConfig } from '../types/types.js';
+import type { JDLApplicationConfig } from '../types/parsing-types.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from './types.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
