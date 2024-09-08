@@ -135,8 +135,6 @@ const command = {
     },
   },
   import: [GENERATOR_COMMON],
-} as const;
+} as const satisfies JHipsterCommandDefinition;
 
-export type Command = typeof command;
-
-export default command as JHipsterCommandDefinition;
+export default command;

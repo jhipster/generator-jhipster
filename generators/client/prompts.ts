@@ -29,7 +29,7 @@ export const askForClientTheme = asPromptingTask(async function askForClientThem
     {
       type: 'list',
       name: 'clientTheme',
-      when: () => ['angular', 'react', 'vue'].includes(config.clientFramework),
+      when: () => ['angular', 'react', 'vue'].includes(config.clientFramework!),
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
       choices: async () => {
         const bootswatchChoices = await retrieveOnlineBootswatchThemes().catch(errorMessage => {

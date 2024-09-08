@@ -68,6 +68,7 @@ import { getConfigWithDefaults } from '../../jdl/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
 import type { Entity } from '../../lib/types/base/entity.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 
 const {
   INITIALIZING,
@@ -246,7 +247,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults() {
+  get jhipsterConfigWithDefaults(): Readonly<ApplicationConfiguration & Record<string, any>> {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,

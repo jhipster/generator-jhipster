@@ -25,7 +25,7 @@ import { applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     fakeKeytool: {
       description: 'Add a fake certificate store file for test purposes',
@@ -46,6 +46,7 @@ const command: JHipsterCommandDefinition = {
         type: 'confirm',
         message: 'Do you want to make it reactive with Spring WebFlux?',
       }),
+      scope: 'storage',
     },
     serverPort: {
       prompt: gen => ({
@@ -61,6 +62,7 @@ const command: JHipsterCommandDefinition = {
           gen.jhipsterConfig.serverPort = 8080 + gen.jhipsterConfig.applicationIndex;
         }
       },
+      scope: 'storage',
     },
     serviceDiscoveryType: {
       cli: {
@@ -78,6 +80,7 @@ const command: JHipsterCommandDefinition = {
         { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
         { value: 'no', name: 'No service discovery' },
       ],
+      scope: 'storage',
     },
     authenticationType: {
       cli: {
@@ -112,6 +115,7 @@ const command: JHipsterCommandDefinition = {
           gen.jhipsterConfig.jwtSecretKey = createBase64Secret(64, gen.options.reproducibleTests);
         }
       },
+      scope: 'storage',
     },
     feignClient: {
       description: 'Generate a feign client',
@@ -130,6 +134,7 @@ const command: JHipsterCommandDefinition = {
         tokenType: 'BOOLEAN',
       },
       default: false,
+      scope: 'storage',
     },
     syncUserWithIdp: {
       description: 'Allow relationships with User for oauth2 applications',
@@ -150,6 +155,7 @@ const command: JHipsterCommandDefinition = {
           throw new Error('syncUserWithIdp is only supported with authenticationType oauth2');
         }
       },
+      scope: 'storage',
     },
     defaultPackaging: {
       description: 'Default packaging for the application',
@@ -168,6 +174,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

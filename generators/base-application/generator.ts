@@ -33,6 +33,7 @@ import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 import { getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
@@ -92,6 +93,8 @@ export default class BaseApplicationGenerator<
   static WRITING_ENTITIES = asPriority(WRITING_ENTITIES);
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
+
+  declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
