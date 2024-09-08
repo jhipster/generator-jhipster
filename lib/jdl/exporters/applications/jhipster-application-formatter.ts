@@ -19,7 +19,12 @@
 
 import type JDLApplication from '../../models/jdl-application.js';
 import { GENERATOR_NAME } from '../export-utils.js';
-import type { JDLJSONApplication, JDLJSONApplicationContent, PostProcessedJDLJSONApplication, RawJDLJSONApplication } from '../types.js';
+import type {
+  JDLJSONApplication,
+  JDLJSONApplicationContent,
+  PostProcessedJDLJSONApplication,
+  RawJDLJSONApplication,
+} from '../../types/exporter.js';
 import type JDLApplicationConfigurationOption from '../../models/jdl-application-configuration-option.js';
 import type JDLApplicationConfiguration from '../../models/jdl-application-configuration.js';
 

@@ -23,7 +23,7 @@ import { applicationTypes } from '../built-in-options/index.js';
 import { readJSONFile, toFilePath } from '../readers/json-file-reader.js';
 import { doesFileExist } from '../utils/file-utils.js';
 import type { JSONEntity } from '../types/json-config.js';
-import type { JhipsterJSONJDLExporterWrapper } from './types.js';
+import type { JhipsterJSONJDLExporterWrapper } from '../types/exporter.js';
 
 let configuration: any = {};
 
