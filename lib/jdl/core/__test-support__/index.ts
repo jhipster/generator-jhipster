@@ -6,7 +6,7 @@ import { parseFromConfigurationObject as originalParseFromConfigurationObject } 
 import {
   createImporterFromContent as originalCreateImporterFromContent,
   createImporterFromFiles as originalCreateImporterFromFiles,
-} from '../jdl-importer.js';
+} from '../../jdl-importer.js';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.js';
 import definition from '../../../../generators/app/jdl/index.js';
 import {

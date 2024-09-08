@@ -17,28 +17,28 @@
  * limitations under the License.
  */
 import { uniqBy } from 'lodash-es';
-import { applicationOptions } from '../../jhipster/index.js';
-import ParsedJDLToJDLObjectConverter from '../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
-import JDLWithoutApplicationToJSONConverter from '../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import { convert } from '../converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
+import { applicationOptions } from '../jhipster/index.js';
+import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
+import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
+import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
 import {
   formatApplicationToExport,
   formatApplicationsToExport,
-} from '../converters/exporters/applications/jhipster-application-formatter.js';
-import exportDeployments from '../converters/exporters/jhipster-deployment-exporter.js';
-import exportEntities from '../converters/exporters/jhipster-entity-exporter.js';
-import { GENERATOR_NAME } from '../converters/exporters/export-utils.js';
-import * as JDLReader from './readers/jdl-reader.js';
-import { readJSONFile } from './readers/json-file-reader.js';
-import { doesFileExist } from './utils/file-utils.js';
-import createWithApplicationValidator from './validators/jdl-with-application-validator.js';
-import createWithoutApplicationValidator from './validators/jdl-without-application-validator.js';
-import type JDLObject from './models/jdl-object.js';
-import type { ParsedJDLApplications } from './types/parsed.js';
-import type { PostProcessedJDLJSONApplication } from './types/exporter.js';
-import type { JDLApplicationConfig } from './types/parsing.js';
-import type { JDLRuntime } from './types/runtime.js';
-import { createRuntime, getDefaultRuntime } from './runtime.js';
+} from './converters/exporters/applications/jhipster-application-formatter.js';
+import exportDeployments from './converters/exporters/jhipster-deployment-exporter.js';
+import exportEntities from './converters/exporters/jhipster-entity-exporter.js';
+import { GENERATOR_NAME } from './converters/exporters/export-utils.js';
+import * as JDLReader from './core/readers/jdl-reader.js';
+import { readJSONFile } from './core/readers/json-file-reader.js';
+import { doesFileExist } from './core/utils/file-utils.js';
+import createWithApplicationValidator from './core/validators/jdl-with-application-validator.js';
+import createWithoutApplicationValidator from './core/validators/jdl-without-application-validator.js';
+import type JDLObject from './core/models/jdl-object.js';
+import type { ParsedJDLApplications } from './core/types/parsed.js';
+import type { PostProcessedJDLJSONApplication } from './core/types/exporter.js';
+import type { JDLApplicationConfig } from './core/types/parsing.js';
+import type { JDLRuntime } from './core/types/runtime.js';
+import { createRuntime, getDefaultRuntime } from './core/runtime.js';
 
 const { OptionNames } = applicationOptions;
 const { APPLICATION_TYPE, BASE_NAME } = OptionNames;

@@ -17,18 +17,15 @@
  * limitations under the License.
  */
 
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import path from 'path';
 import { readFileSync, rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
-import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../../jhipster/index.js';
-import { createImporterFromContent, createImporterFromFiles, getTestFile } from './__test-support__/index.js';
+import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../jhipster/index.js';
+import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.js';
 
 const { MONOLITH } = applicationTypes;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const { NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
 
