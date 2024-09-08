@@ -18,7 +18,7 @@
  */
 
 import { upperFirst } from 'lodash-es';
-import type { JSONEntity } from '../../../lib/jdl/types/json-config.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
 
-export const findEntityInEntities = (entityName: string, entities: JSONEntity[]) =>
+export const findEntityInEntities = (entityName: string, entities: Entity[]): Entity | undefined =>
   entities.find(entity => upperFirst(entity.name) === upperFirst(entityName));

@@ -1,68 +1,40 @@
+import type { Entity } from '../../types/base/entity.js';
+import type { Field } from '../../types/base/field.js';
+import type { Relationship } from '../../types/base/relationship.js';
 import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
-import type { RelationshipSide, RelationshipType } from '../basic-types/relationships.js';
 
-export type JSONField = {
-  fieldName: string;
-  fieldType: string;
-  documentation?: string;
-  options?: Record<string, boolean | string | number>;
-  fieldValidateRules?: string[];
-} & Record<string, any>;
+export type JSONField = Field & Record<string, any>;
 
-export type JSONBlobField = {
-  fieldTypeBlobContent: 'image' | 'any' | 'text';
-} & JSONField;
+export type JSONRelationship = Relationship & Record<string, any>;
 
-export type JSONFieldEnum = JSONField & {
-  fieldValues: string;
-  fieldTypeDocumentation?: string;
-  fieldValuesJavadocs?: Record<string, string>;
-};
+export type JSONEntity = Entity<JSONField, JSONRelationship> & Record<string, any>;
 
-export type JSONFieldBlob = JSONField & {
-  fieldTypeBlobContent: string;
-};
-
-export type JSONRelationship = {
-  relationshipSide?: RelationshipSide;
-  relationshipName: string;
-  relationshipType: RelationshipType;
-  otherEntityName: string;
-  options?: Record<string, boolean | string | number>;
-} & Record<string, any>;
-
-export type JSONEntity = {
-  documentation?: string;
-  fields?: JSONField[];
-  relationships?: JSONRelationship[];
-} & Record<string, any>;
-
-export type JSONBlueprint = {
+type JSONBlueprint = {
   name: string;
   version?: string;
 } & Record<string, any>;
 
-export type JSONMicrofrontend = {
+type JSONMicrofrontend = {
   baseName: string;
 };
-export type JSONGeneratorJhipsterContentDeployment = {
+type JSONGeneratorJhipsterContentDeployment = {
   appsFolders?: string[];
   clusteredDbApps?: string[];
 };
 
-export type AbstractJSONGeneratorJhipsterContent = {
+type AbstractJSONGeneratorJhipsterContent = {
   baseName: string;
   applicationType?: string;
 } & JSONGeneratorJhipsterContentDeployment &
   Record<string, any>;
 
-export type JSONGeneratorJhipsterContent = {
+type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
   microfrontends?: JSONMicrofrontend[] | null;
 } & AbstractJSONGeneratorJhipsterContent;
 
-export type PostProcessedJSONGeneratorJhipsterContent = {
+type PostProcessedJSONGeneratorJhipsterContent = {
   blueprints?: string[];
   microfrontends?: string[];
 } & AbstractJSONGeneratorJhipsterContent;

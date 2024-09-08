@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 
-import type { JSONEntity } from '../../../lib/jdl/types/json-config.js';
 import { addOtherRelationship } from '../../base-application/support/index.js';
 import type { ValidationResult } from '../../base/api.js';
 import { databaseTypes } from '../../../lib/jhipster/index.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
+import type { Relationship } from '../../base-application/index.js';
 
 const { NO: NO_DATABASE, SQL, NEO4J } = databaseTypes;
 
-export const addEntitiesOtherRelationships = (entities: JSONEntity[]): ValidationResult => {
+export const addEntitiesOtherRelationships = (entities: Entity[]): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities.filter(entity => !entity.builtIn)) {
     for (const relationship of entity.relationships ?? []) {
@@ -42,7 +43,7 @@ export const addEntitiesOtherRelationships = (entities: JSONEntity[]): Validatio
             `Ignoring '${entity.name}' definitions as it is using a built-in Entity '${relationship.otherEntityName}': 'otherEntityRelationshipName' is set with value '${relationship.otherEntityRelationshipName}' at relationship '${relationship.relationshipName}' but no back-reference was found`,
           );
         } else {
-          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+          relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship) as Relationship;
         }
       }
     }

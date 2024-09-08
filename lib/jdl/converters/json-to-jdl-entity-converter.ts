@@ -104,13 +104,13 @@ function convertJSONToJDLField(field: JSONField): JDLField {
     comment: field.documentation,
   });
   if (jdlField.type === BYTES) {
-    jdlField.type = getTypeForBlob(field.fieldTypeBlobContent);
+    jdlField.type = getTypeForBlob(field.fieldTypeBlobContent!);
   }
   addValidations(jdlField, field);
   return jdlField;
 }
 
-function getTypeForBlob(blobContentType: string): string {
+function getTypeForBlob(blobContentType: any): string {
   if ([ANY, IMAGE, TEXT].includes(blobContentType)) {
     return CommonDBTypes[`${blobContentType.toUpperCase()}_BLOB`];
   }
@@ -250,7 +250,7 @@ function getDestinationEntitySideAttributes(
   const foundDestinationSideEntity = destinationEntityRelationships?.find(destinationEntityFromRelationship => {
     return isEntityTheDestinationSideEntity(
       upperFirst(destinationEntityFromRelationship.otherEntityName),
-      destinationEntityFromRelationship.otherEntityRelationshipName,
+      destinationEntityFromRelationship.otherEntityRelationshipName!,
     );
   });
   if (!foundDestinationSideEntity) {

@@ -10,7 +10,6 @@ export interface Field extends BaseField {
   skipClient?: boolean;
   skipServer?: boolean;
 
-  fieldTypeBlobContent?: string;
   blobContentTypeText?: string;
 
   filterableField?: boolean;

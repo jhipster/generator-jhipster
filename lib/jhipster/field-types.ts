@@ -58,7 +58,7 @@ export const BlobTypes = {
   IMAGE: 'image',
   ANY: 'any',
   TEXT: 'text',
-};
+} as const;
 
 const CommonDBValidations = {
   String: new Set([REQUIRED, UNIQUE, MINLENGTH, MAXLENGTH, PATTERN]),
