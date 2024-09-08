@@ -79,8 +79,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
           this.packageJson.merge({ type: packageJsonType });
         }
         if (packageJsonNodeEngine) {
+          const packageJsonEngines: any = this.packageJson.get('engines') ?? {};
           this.packageJson.set('engines', {
-            ...(this.packageJson.get('engines') ?? {}),
+            ...packageJsonEngines,
             node: typeof packageJsonNodeEngine === 'string' ? packageJsonNodeEngine : packageJson.engines.node,
           });
         }
