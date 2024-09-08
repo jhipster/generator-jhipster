@@ -23,7 +23,7 @@ import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
 import sortKeys from 'sort-keys';
 
-import { applicationTypes, authenticationTypes } from '../lib/jdl/core//jhipster/index.js';
+import { applicationTypes, authenticationTypes } from '../lib/jhipster/index.js';
 import { formatDateForChangelog } from '../generators/base/support/index.js';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
