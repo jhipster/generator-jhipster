@@ -18,11 +18,12 @@
  */
 
 import fs from 'fs';
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
+import { getTestFile } from '../core/__test-support__/index.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -244,12 +245,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           [
             'TestEntity',
             JSON.parse(
-              fs
-                .readFileSync(
-                  path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'),
-                  'utf-8',
-                )
-                .toString(),
+              fs.readFileSync(getTestFile('json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'), 'utf-8').toString(),
             ),
           ],
         ]);
@@ -267,12 +263,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           [
             'TestEntity',
             JSON.parse(
-              fs
-                .readFileSync(
-                  path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'with_authority', '.jhipster', 'TestEntity.json'),
-                  'utf-8',
-                )
-                .toString(),
+              fs.readFileSync(getTestFile('json_to_jdl_converter', 'with_authority', '.jhipster', 'TestEntity.json'), 'utf-8').toString(),
             ),
           ],
         ]);
@@ -286,7 +277,5 @@ describe('jdl - JSONToJDLEntityConverter', () => {
 });
 
 function readJsonEntity(entityName) {
-  return JSON.parse(
-    fs.readFileSync(path.join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString(),
-  );
+  return JSON.parse(fs.readFileSync(getTestFile('jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString());
 }

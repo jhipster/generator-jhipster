@@ -18,12 +18,12 @@
  */
 
 import { writeFileSync } from 'fs';
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../../../testing/index.js';
-import { createJDLLinterFromContent, createJDLLinterFromFile } from '.././__test-support__/index.js';
+import { createJDLLinterFromContent, createJDLLinterFromFile, getTestFile } from '.././__test-support__/index.js';
 import type { JDLLinter } from './jdl-linter.js';
 import type Issues from './issues/issues.js';
 import type EnumIssue from './issues/enum-issue.js';
@@ -76,7 +76,7 @@ describe('jdl - JDLLinter', () => {
       let reportedIssues: Issues;
 
       beforeEach(() => {
-        linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'useless_entity_curly_braces.jdl'));
+        linter = createJDLLinterFromFile(getTestFile('lint', 'useless_entity_curly_braces.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issue = issues.entities[0];
@@ -95,7 +95,7 @@ describe('jdl - JDLLinter', () => {
       let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
 
       beforeEach(() => {
-        linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'useless_table_names.jdl'));
+        linter = createJDLLinterFromFile(getTestFile('lint', 'useless_table_names.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issueForB = issues.entities[0];
@@ -118,7 +118,7 @@ describe('jdl - JDLLinter', () => {
         let issueForB: { ruleName: any };
 
         beforeEach(() => {
-          linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'duplicate_entities.jdl'));
+          linter = createJDLLinterFromFile(getTestFile('lint', 'duplicate_entities.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
           issueForA = issues.entities[0];
@@ -138,7 +138,7 @@ describe('jdl - JDLLinter', () => {
         let issueForBb: { ruleName: any };
 
         beforeEach(() => {
-          linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'duplicate_fields.jdl'));
+          linter = createJDLLinterFromFile(getTestFile('lint', 'duplicate_fields.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
           issueForAa = issues.fields[0];
@@ -157,7 +157,7 @@ describe('jdl - JDLLinter', () => {
         let issueForA: { ruleName: any };
 
         beforeEach(() => {
-          linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'duplicate_enums.jdl'));
+          linter = createJDLLinterFromFile(getTestFile('lint', 'duplicate_enums.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
           issueForA = issues.enums[0];
@@ -176,7 +176,7 @@ describe('jdl - JDLLinter', () => {
       let issueFor3: EnumIssue;
 
       beforeEach(() => {
-        linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'unused_enums.jdl'));
+        linter = createJDLLinterFromFile(getTestFile('lint', 'unused_enums.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issueFor2 = issues.enums[0];
@@ -197,7 +197,7 @@ describe('jdl - JDLLinter', () => {
       let issueForAToC: relationshipIssue;
 
       beforeEach(() => {
-        linter = createJDLLinterFromFile(path.join(__dirname, '..', '__test-files__', 'lint', 'ungrouped_relationships.jdl'));
+        linter = createJDLLinterFromFile(getTestFile('lint', 'ungrouped_relationships.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issueForAToB = issues.relationships[0];

@@ -23,6 +23,7 @@ import { fileURLToPath } from 'url';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../testing/index.js';
+import { getTestFile } from '../core/__test-support__/index.js';
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -119,7 +120,7 @@ describe('jdl - JSONToJDLConverter', () => {
 
       describe('with entities', () => {
         beforeEach(() => {
-          const dir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'app_with_entities');
+          const dir = getTestFile('json_to_jdl_converter', 'app_with_entities');
           convertToJDL(dir);
           jdlFileContent = fs.readFileSync(path.join(dir, 'app.jdl'), 'utf-8');
         });
@@ -238,7 +239,7 @@ describe('jdl - JSONToJDLConverter', () => {
         let jdlFileContent;
 
         beforeEach(() => {
-          rootDir = path.join(__dirname, '..', '__test-files__', 'json_to_jdl_converter', 'multi_apps');
+          rootDir = getTestFile('json_to_jdl_converter', 'multi_apps');
           jdlFilename = 'app.jdl';
           convertToJDL(rootDir);
           jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');

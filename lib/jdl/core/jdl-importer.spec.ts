@@ -24,7 +24,7 @@ import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../../jhipster/index.js';
-import { createImporterFromContent, createImporterFromFiles } from './__test-support__/index.js';
+import { createImporterFromContent, createImporterFromFiles, getTestFile } from './__test-support__/index.js';
 
 const { MONOLITH } = applicationTypes;
 const __filename = fileURLToPath(import.meta.url);
@@ -68,7 +68,7 @@ relationship OneToMany {
       let returned;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'big_sample.jdl')], {
+        const importer = createImporterFromFiles([getTestFile('big_sample.jdl')], {
           applicationName: 'MyApp',
           applicationType: MONOLITH,
           databaseType: databaseTypes.SQL,
@@ -103,7 +103,7 @@ relationship OneToOne {
 }
 `,
           {
-            application: JSON.parse(readFileSync(path.join(__dirname, '__test-files__', 'jhipster_app', '.yo-rc.json'), 'utf-8')),
+            application: JSON.parse(readFileSync(getTestFile('jhipster_app', '.yo-rc.json'), 'utf-8')),
           },
         );
       });
@@ -116,7 +116,7 @@ relationship OneToOne {
       let returned;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'application_with_entities.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('application_with_entities.jdl')]);
         returned = importer.import();
       });
 
@@ -141,7 +141,7 @@ relationship OneToOne {
       const APPLICATION_NAMES = ['app1', 'app2'];
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'applications_with_and_without_entities.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('applications_with_and_without_entities.jdl')]);
         returned = importer.import();
       });
 
@@ -208,7 +208,7 @@ relationship OneToOne {
       let returned;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'application_with_entity_dto_suffixes.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('application_with_entity_dto_suffixes.jdl')]);
         returned = importer.import();
       });
 
@@ -232,7 +232,7 @@ relationship OneToOne {
       let contents: any;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'applications2.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('applications2.jdl')]);
         contents = importer.import();
       });
 
@@ -243,10 +243,7 @@ relationship OneToOne {
     describe('when parsing multiple JDL files with applications and entities', () => {
       let importState;
       before(() => {
-        const importer = createImporterFromFiles([
-          path.join(__dirname, '__test-files__', 'integration', 'file1.jdl'),
-          path.join(__dirname, '__test-files__', 'integration', 'file2.jdl'),
-        ]);
+        const importer = createImporterFromFiles([getTestFile('integration', 'file1.jdl'), getTestFile('integration', 'file2.jdl')]);
         importState = importer.import();
       });
 
@@ -272,7 +269,7 @@ relationship OneToOne {
       let importer;
 
       before(() => {
-        importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'simple.jdl')], {
+        importer = createImporterFromFiles([getTestFile('simple.jdl')], {
           applicationName: 'MyApp',
           applicationType: MONOLITH,
           databaseType: databaseTypes.NO,
@@ -287,7 +284,7 @@ relationship OneToOne {
       let returned;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'annotations.jdl')], {
+        const importer = createImporterFromFiles([getTestFile('annotations.jdl')], {
           applicationName: 'toto',
           databaseType: databaseTypes.SQL,
         });
@@ -315,7 +312,7 @@ relationship OneToOne {
       let returned;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'regex_validation.jdl')], {
+        const importer = createImporterFromFiles([getTestFile('regex_validation.jdl')], {
           applicationName: 'MyApp',
           applicationType: MONOLITH,
           databaseType: databaseTypes.SQL,
@@ -331,7 +328,7 @@ relationship OneToOne {
       let returned;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'pattern_validation_with_quote.jdl')], {
+        const importer = createImporterFromFiles([getTestFile('pattern_validation_with_quote.jdl')], {
           applicationName: 'MyApp',
           applicationType: MONOLITH,
           databaseType: databaseTypes.SQL,
@@ -347,7 +344,7 @@ relationship OneToOne {
       let importState: any;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'applications3.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('applications3.jdl')]);
         importState = importer.import();
       });
 
@@ -360,7 +357,7 @@ relationship OneToOne {
       const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes'];
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'deployments.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('deployments.jdl')]);
         importer.import();
         DEPLOYMENT_NAMES.forEach(name => {
           contents.push(JSON.parse(readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
@@ -381,7 +378,7 @@ relationship OneToOne {
       let importState;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'enum_with_values.jdl')], {
+        const importer = createImporterFromFiles([getTestFile('enum_with_values.jdl')], {
           applicationName: 'toto',
           applicationType: 'monolith',
           databaseType: 'sql',
@@ -473,7 +470,7 @@ ${entities}`,
       let parameter;
 
       before(() => {
-        const importer = createImporterFromFiles([path.join(__dirname, '__test-files__', 'application_with_blueprints.jdl')]);
+        const importer = createImporterFromFiles([getTestFile('application_with_blueprints.jdl')]);
         const logger = {
           warn: callParameter => {
             parameter = callParameter;

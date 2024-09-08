@@ -24,6 +24,7 @@ import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from '../utils/file-utils.js';
 import { getPackageRoot } from '../../../index.js';
+import { getTestFile } from '../__test-support__/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -44,7 +45,7 @@ describe('jdl - FileUtils', () => {
       });
       describe('with a valid file path', () => {
         it('should return true', () => {
-          expect(doesFileExist(path.join(__dirname, '..', '__test-files__', 'MyEntity.json'))).to.be.true;
+          expect(doesFileExist(getTestFile('MyEntity.json'))).to.be.true;
         });
       });
     });

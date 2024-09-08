@@ -17,14 +17,20 @@
  * limitations under the License.
  */
 
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../../testing/index.js';
 import { applicationTypes } from '../../jhipster/index.js';
 import { convert as convertWithoutApplication } from '../converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import { createImporterFromContent, parseFromConfigurationObject, parseFromContent, parseFromFiles } from './__test-support__/index.js';
+import {
+  createImporterFromContent,
+  getTestFile,
+  parseFromConfigurationObject,
+  parseFromContent,
+  parseFromFiles,
+} from './__test-support__/index.js';
 import exportToJDL from './exporters/jdl-exporter.js';
 import type { ApplicationWithEntities } from './jdl-importer.js';
 
@@ -43,7 +49,7 @@ describe('jdl - integration tests', () => {
 
     beforeEach(() => {
       originalContent = parseFromConfigurationObject({
-        parsedContent: parseFromFiles([path.join(__dirname, '__test-files__', 'big_sample.jdl')]),
+        parsedContent: parseFromFiles([getTestFile('big_sample.jdl')]),
         applicationType: MONOLITH,
       });
       exportToJDL(originalContent, 'exported.jdl');

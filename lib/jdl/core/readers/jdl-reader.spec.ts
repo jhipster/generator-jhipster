@@ -18,13 +18,13 @@
  */
 
 import fs from 'fs';
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 
 import { fileURLToPath } from 'url';
 import { after, beforeEach, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { basicHelpers as helpers } from '../../../../testing/index.js';
-import { parseFromContent, parseFromFiles } from '.././__test-support__/index.js';
+import { getTestFile, parseFromContent, parseFromFiles } from '.././__test-support__/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -75,16 +75,16 @@ describe('jdl - JDLReader', () => {
     describe('when passing valid arguments', () => {
       describe('when passing an empty file', () => {
         beforeEach(() => {
-          fs.writeFileSync(path.join(__dirname, '..', '__test-files__', 'test_file.jdl'), '');
+          fs.writeFileSync(getTestFile('test_file.jdl'), '');
         });
 
         after(() => {
-          fs.unlinkSync(path.join(__dirname, '..', '__test-files__', 'test_file.jdl'));
+          fs.unlinkSync(getTestFile('test_file.jdl'));
         });
 
         it('should fail', () => {
           expect(() => {
-            parseFromFiles([path.join(__dirname, '..', '__test-files__', 'test_file.jdl')]);
+            parseFromFiles([getTestFile('test_file.jdl')]);
           }).to.throw(/^File content must be passed, it is currently empty\.$/);
         });
       });
@@ -103,7 +103,7 @@ describe('jdl - JDLReader', () => {
         let content;
 
         beforeEach(() => {
-          content = parseFromFiles([path.join(__dirname, '..', '__test-files__', 'valid_jdl.jdl')]);
+          content = parseFromFiles([getTestFile('valid_jdl.jdl')]);
         });
 
         it('should read it', () => {
@@ -114,10 +114,7 @@ describe('jdl - JDLReader', () => {
         let content;
 
         beforeEach(() => {
-          content = parseFromFiles([
-            path.join(__dirname, '..', '__test-files__', 'valid_jdl.jdl'),
-            path.join(__dirname, '..', '__test-files__', 'valid_jdl2.jdl'),
-          ]);
+          content = parseFromFiles([getTestFile('valid_jdl.jdl'), getTestFile('valid_jdl2.jdl')]);
         });
 
         it('should read them', () => {
@@ -128,7 +125,7 @@ describe('jdl - JDLReader', () => {
         let content;
 
         beforeEach(() => {
-          content = parseFromFiles([path.join(__dirname, '..', '__test-files__', 'complex_jdl.jdl')]);
+          content = parseFromFiles([getTestFile('complex_jdl.jdl')]);
         });
 
         it('should read them', () => {
@@ -138,7 +135,7 @@ describe('jdl - JDLReader', () => {
       describe('when having multiple internal JDL comments', () => {
         it('should ignore them and does not fail', () => {
           expect(() => {
-            parseFromFiles([path.join(__dirname, '..', '__test-files__', 'multiple_jdl_comments.jdl')]);
+            parseFromFiles([getTestFile('multiple_jdl_comments.jdl')]);
           }).not.to.throw();
         });
       });

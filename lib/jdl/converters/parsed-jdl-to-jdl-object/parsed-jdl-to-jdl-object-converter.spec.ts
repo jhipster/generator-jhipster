@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
@@ -36,7 +36,7 @@ import {
   unaryOptions,
   validations,
 } from '../../core/built-in-options/index.js';
-import { parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.js';
+import { getTestFile, parseFromConfigurationObject, parseFromContent, parseFromFiles } from '../../core/__test-support__/index.js';
 
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 const { OptionNames } = applicationOptions;
@@ -73,7 +73,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'complex_jdl.jdl')]);
+          const input = parseFromFiles([getTestFile('complex_jdl.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -213,7 +213,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let input;
 
         before(() => {
-          input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'invalid_field_type.jdl')]);
+          input = parseFromFiles([getTestFile('invalid_field_type.jdl')]);
         });
 
         it('should not check for field types', () => {
@@ -228,7 +228,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let relationship;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'required_relationships.jdl')]);
+          const input = parseFromFiles([getTestFile('required_relationships.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -244,7 +244,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'id_field.jdl')]);
+          const input = parseFromFiles([getTestFile('id_field.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -270,7 +270,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'user_entity_to_relationship.jdl')]);
+          const input = parseFromFiles([getTestFile('user_entity_to_relationship.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -285,7 +285,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'authority_entity_to_relationship.jdl')]);
+          const input = parseFromFiles([getTestFile('authority_entity_to_relationship.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -300,7 +300,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let input;
 
         before(() => {
-          input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'invalid_option.jdl')]);
+          input = parseFromFiles([getTestFile('invalid_option.jdl')]);
         });
 
         it('should not fail', () => {
@@ -314,7 +314,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let enumField;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'enum.jdl')]);
+          const input = parseFromFiles([getTestFile('enum.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -344,7 +344,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'fluent_methods.jdl')]);
+          input = parseFromFiles([getTestFile('fluent_methods.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -363,7 +363,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'following_comments.jdl')]);
+          const input = parseFromFiles([getTestFile('following_comments.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -391,7 +391,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let options;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'complex_jdl_2.jdl')]);
+          const input = parseFromFiles([getTestFile('complex_jdl_2.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -427,7 +427,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'field_comments.jdl')]);
+          const input = parseFromFiles([getTestFile('field_comments.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -444,7 +444,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'constants.jdl')]);
+          const input = parseFromFiles([getTestFile('constants.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -487,7 +487,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let input;
 
         before(() => {
-          input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'cassandra_jdl.jdl')]);
+          input = parseFromFiles([getTestFile('cassandra_jdl.jdl')]);
         });
 
         it('should fail', () => {
@@ -504,7 +504,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         let parsedConfig;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'application.jdl')]);
+          const input = parseFromFiles([getTestFile('application.jdl')]);
           const jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -559,7 +559,7 @@ JDLApplication {
         let deployment;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'deployments.jdl')]);
+          const input = parseFromFiles([getTestFile('deployments.jdl')]);
           const jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -593,7 +593,7 @@ JDLDeployment {
         let filterOption;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'filtering_without_service.jdl')]);
+          const input = parseFromFiles([getTestFile('filtering_without_service.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -611,7 +611,7 @@ JDLDeployment {
           let clientRootFolderOption;
 
           before(() => {
-            const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'simple_microservice_setup.jdl')]);
+            const input = parseFromFiles([getTestFile('simple_microservice_setup.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
               applicationType: MICROSERVICE,
@@ -629,7 +629,7 @@ JDLDeployment {
           let clientRootFolderOption;
 
           before(() => {
-            const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'client_root_folder.jdl')]);
+            const input = parseFromFiles([getTestFile('client_root_folder.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
               applicationType: MONOLITH,
@@ -650,7 +650,7 @@ JDLDeployment {
           let microserviceOption;
 
           before(() => {
-            const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'no_microservice.jdl')]);
+            const input = parseFromFiles([getTestFile('no_microservice.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
               applicationType: MICROSERVICE,
@@ -669,7 +669,7 @@ JDLDeployment {
           let microserviceOption;
 
           before(() => {
-            const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'simple_microservice_setup.jdl')]);
+            const input = parseFromFiles([getTestFile('simple_microservice_setup.jdl')]);
             jdlObject = parseFromConfigurationObject({
               parsedContent: input,
               applicationType: MICROSERVICE,
@@ -688,7 +688,7 @@ JDLDeployment {
         let entityNames;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'application_with_entities.jdl')]);
+          const input = parseFromFiles([getTestFile('application_with_entities.jdl')]);
           const jdlObject = parseFromConfigurationObject({
             parsedContent: input,
           });
@@ -710,7 +710,7 @@ JDLDeployment {
         let relationshipManyToMany;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'no_injected_field.jdl')]);
+          const input = parseFromFiles([getTestFile('no_injected_field.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,
@@ -739,7 +739,7 @@ JDLDeployment {
           let relationshipAnnotationOnDestination;
 
           before(() => {
-            const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'annotations.jdl')]);
+            const input = parseFromFiles([getTestFile('annotations.jdl')]);
             const jdlObject = parseFromConfigurationObject({
               parsedContent: input,
               applicationType: MONOLITH,
@@ -800,7 +800,7 @@ JDLDeployment {
           let relationshipAnnotationOnDestination;
 
           before(() => {
-            const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'capitalized_annotations.jdl')]);
+            const input = parseFromFiles([getTestFile('capitalized_annotations.jdl')]);
             const jdlObject = parseFromConfigurationObject({
               parsedContent: input,
               applicationType: MONOLITH,
@@ -859,7 +859,7 @@ JDLDeployment {
         let entityC;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'annotations_and_options.jdl')]);
+          const input = parseFromFiles([getTestFile('annotations_and_options.jdl')]);
           const jdlObject = parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,
@@ -901,7 +901,7 @@ JDLDeployment {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'pattern_validation_with_quote.jdl')]);
+          const input = parseFromFiles([getTestFile('pattern_validation_with_quote.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,
@@ -916,7 +916,7 @@ JDLDeployment {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'unique.jdl')]);
+          const input = parseFromFiles([getTestFile('unique.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,
@@ -932,7 +932,7 @@ JDLDeployment {
         let jdlObject;
 
         before(() => {
-          const input = parseFromFiles([path.join(__dirname, '..', '..', '__test-files__', 'relationship_built_in_entity.jdl')]);
+          const input = parseFromFiles([getTestFile('relationship_built_in_entity.jdl')]);
           jdlObject = parseFromConfigurationObject({
             parsedContent: input,
             applicationType: MONOLITH,

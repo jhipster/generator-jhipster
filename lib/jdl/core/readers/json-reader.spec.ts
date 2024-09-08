@@ -18,13 +18,14 @@
  */
 
 import { renameSync } from 'fs';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
 import parseFromDir from '../readers/json-reader.js';
 import { unaryOptions } from '../built-in-options/index.js';
+import { getTestFile } from '../__test-support__/index.js';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 
@@ -67,15 +68,15 @@ describe('jdl - JSONReader', () => {
 
         before(() => {
           renameSync(
-            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
-            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
+            getTestFile('jhipster_app', '.jhipster', 'InvalidBlobType.json'),
+            getTestFile('jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
           );
-          content = parseFromDir(join(__dirname, '..', '__test-files__', 'jhipster_app'));
+          content = parseFromDir(getTestFile('jhipster_app'));
         });
         after(() => {
           renameSync(
-            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
-            join(__dirname, '..', '__test-files__', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
+            getTestFile('jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
+            getTestFile('jhipster_app', '.jhipster', 'InvalidBlobType.json'),
           );
         });
 
