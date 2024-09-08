@@ -1,5 +1,12 @@
 import type { RunResult } from 'yeoman-test';
 
+declare global {
+  var it: (title: string, fn: () => void) => void;
+}
+
+/**
+ * Requires a global `it` function to be available.
+ */
 export const matchWrittenFiles = (
   title: string,
   resultGetter: () => RunResult,
