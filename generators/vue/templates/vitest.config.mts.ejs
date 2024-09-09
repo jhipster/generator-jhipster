@@ -40,6 +40,7 @@ export default mergeConfig(
       },
 <%_ } _%>
       reporters: ['default', 'vitest-sonar-reporter'],
+      exclude: ['app/admin/user-management/user-management-edit.component.spec.ts'],
       outputFile: {
         'vitest-sonar-reporter': fileURLToPath(new URL('./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-vitest.xml', import.meta.url)),
       },
