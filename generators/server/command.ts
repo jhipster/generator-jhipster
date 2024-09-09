@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../jdl/jhipster/index.js';
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/jhipster/index.js';
 
 const command: JHipsterCommandDefinition = {
   options: {

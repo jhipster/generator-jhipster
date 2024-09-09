@@ -20,11 +20,11 @@
 export type Relationship = {
   relationshipName: string;
   otherEntityName: string;
-  relationshipType: string;
+  relationshipType: 'one-to-one' | 'one-to-many' | 'many-to-one' | 'many-to-many';
 
   relationshipSide?: 'left' | 'right';
   otherEntityRelationshipName?: string;
   otherEntityField?: string;
 
-  options?: Record<string, any>;
+  options?: Record<string, boolean | string | number>;
 };

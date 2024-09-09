@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-import { clientFrameworkTypes, fieldTypes, validations } from '../../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.js';
 import getTypescriptKeyType from './types-utils.js';
 
 import { filterRelevantRelationships } from './template-utils.js';

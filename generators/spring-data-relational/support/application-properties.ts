@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { databaseTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../../lib/jhipster/index.js';
 import { getDatabaseData } from './database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
 

@@ -23,7 +23,7 @@ import { snakeCase } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import { defaultHelpers as helpers, result } from '../../testing/index.js';
-import { testFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { testFrameworkTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_CLIENT } from '../generator-list.js';
 import Generator from './index.js';
 

@@ -1,4 +1,4 @@
-import { applicationTypes, authenticationTypes } from '../../jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;

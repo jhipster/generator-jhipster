@@ -22,12 +22,12 @@
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import JSONToJDLEntityConverter from '../../jdl/converters/json-to-jdl-entity-converter.js';
-import JSONToJDLOptionConverter from '../../jdl/converters/json-to-jdl-option-converter.js';
+import JSONToJDLEntityConverter from '../../lib/jdl/converters/json-to-jdl-entity-converter.js';
+import JSONToJDLOptionConverter from '../../lib/jdl/converters/json-to-jdl-option-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
 import { YO_RC_FILE } from '../generator-constants.js';
-import type { JSONEntity } from '../../jdl/converters/types.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
+import type { Entity } from '../../lib/types/base/entity.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
@@ -140,7 +140,7 @@ export default class InfoGenerator extends BaseApplicationGenerator {
    */
   generateJDLFromEntities() {
     let jdlObject;
-    const entities = new Map<string, JSONEntity>();
+    const entities = new Map<string, Entity>();
     try {
       this.getExistingEntities().forEach(entity => {
         entities.set(entity.name, entity.definition);

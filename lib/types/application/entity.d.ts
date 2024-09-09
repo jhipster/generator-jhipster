@@ -46,6 +46,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
     SpringEntity,
     AngularEntity {
   relationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
+  otherRelationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
 
   primaryKey?: PrimaryKey<F>;
 

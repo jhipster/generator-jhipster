@@ -19,18 +19,16 @@
 
 import { lowerFirst, upperFirst } from 'lodash-es';
 
-import type { JSONEntity, JSONRelationship } from '../../../jdl/converters/types.js';
+import type { JSONEntity } from '../../../lib/jdl/core/types/json-config.js';
 import type { ValidationResult } from '../../base/api.js';
-import { stringifyApplicationData } from './debug.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
+import type { Relationship } from '../../../lib/types/application/relationship.js';
 import { findEntityInEntities } from './entity.js';
+import { stringifyApplicationData } from './debug.js';
 
 export const otherRelationshipType = relationshipType => relationshipType.split('-').reverse().join('-');
 
-export const findOtherRelationshipInRelationships = (
-  entityName: string,
-  relationship: JSONRelationship,
-  inRelationships: JSONRelationship[],
-) => {
+export const findOtherRelationshipInRelationships = (entityName: string, relationship: Relationship, inRelationships: Relationship[]) => {
   return inRelationships.find(otherRelationship => {
     if (upperFirst(otherRelationship.otherEntityName) !== entityName) {
       return false;
@@ -47,7 +45,7 @@ export const findOtherRelationshipInRelationships = (
   });
 };
 
-export const loadEntitiesAnnotations = (entities: JSONEntity[]) => {
+export const loadEntitiesAnnotations = (entities: Entity[]) => {
   for (const entity of entities) {
     // Load field annotations
     for (const field of entity.fields ?? []) {
@@ -65,7 +63,7 @@ export const loadEntitiesAnnotations = (entities: JSONEntity[]) => {
   }
 };
 
-export const loadEntitiesOtherSide = (entities: JSONEntity[], { application }: { application?: any } = {}): ValidationResult => {
+export const loadEntitiesOtherSide = (entities: Entity[], { application }: { application?: any } = {}): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {
@@ -89,7 +87,7 @@ export const loadEntitiesOtherSide = (entities: JSONEntity[], { application }: {
       relationship.otherEntity = otherEntity;
       const otherRelationship = findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? []);
       if (otherRelationship) {
-        relationship.otherRelationship = otherRelationship;
+        relationship.otherRelationship = otherRelationship as Relationship;
         otherRelationship.otherEntityRelationshipName = otherRelationship.otherEntityRelationshipName ?? relationship.relationshipName;
         relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? otherRelationship.relationshipName;
         if (
@@ -115,17 +113,17 @@ export const loadEntitiesOtherSide = (entities: JSONEntity[], { application }: {
   return result;
 };
 
-export const addOtherRelationship = (entity: JSONEntity, otherEntity: JSONEntity, relationship: JSONRelationship) => {
+export const addOtherRelationship = (entity: JSONEntity, otherEntity: JSONEntity, relationship: Relationship): Relationship => {
   relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
-  const otherRelationship: JSONRelationship = {
-    otherEntity: entity,
+  const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
-    ownerSide: !relationship.ownerSide,
     otherEntityRelationshipName: relationship.relationshipName,
     relationshipName: relationship.otherEntityRelationshipName as string,
     relationshipType: otherRelationshipType(relationship.relationshipType),
+    otherEntity: entity,
+    ownerSide: !relationship.ownerSide,
     otherRelationship: relationship,
-  };
+  } as Relationship;
   otherEntity.relationships = otherEntity.relationships ?? [];
   otherEntity.relationships.push(otherRelationship);
   return otherRelationship;

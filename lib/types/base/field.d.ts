@@ -17,8 +17,21 @@
  * limitations under the License.
  */
 
-export type Field = {
-  fieldName: string;
-  fieldType: string;
-  options?: Record<string, any>;
+type FieldEnum = {
+  fieldValues: string;
+  fieldTypeDocumentation?: string;
+  fieldValuesJavadocs?: Record<string, string>;
 };
+
+type FieldBlob = {
+  fieldTypeBlobContent: 'image' | 'any' | 'text';
+};
+
+export type Field = Partial<FieldEnum> &
+  Partial<FieldBlob> & {
+    fieldName: string;
+    fieldType: string;
+    documentation?: string;
+    options?: Record<string, boolean | string | number>;
+    fieldValidateRules?: string[];
+  };

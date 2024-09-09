@@ -39,7 +39,7 @@ import {
   KUBERNETES_RBAC_API_VERSION,
   KUBERNETES_STATEFULSET_API_VERSION,
 } from '../generator-constants.js';
-import { applicationTypes, kubernetesPlatformTypes } from '../../jdl/jhipster/index.js';
+import { applicationTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { defaultKubernetesConfig } from './kubernetes-constants.js';
 
 const { MICROSERVICE } = applicationTypes;

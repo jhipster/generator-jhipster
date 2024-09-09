@@ -31,7 +31,7 @@ import {
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from '../server/index.js';
 
-import { databaseTypes } from '../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../lib/jhipster/index.js';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,
