@@ -58,7 +58,7 @@ jobs:
           git add .
         working-directory: generators/spring-boot/resources
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: spring-boot/v${{ inputs.springBootVersion }}
