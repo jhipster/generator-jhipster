@@ -10,6 +10,7 @@ export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined
         name,
         {
           description: def.description,
+          scope: def.scope,
           ...def.argument,
         },
       ]),

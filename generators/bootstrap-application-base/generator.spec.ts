@@ -105,7 +105,7 @@ describe(`generator - ${generator}`, () => {
         const lastLiquibaseTimestamp = new Date(Date.parse('2030-01-01'));
         await helpers
           .run(generatorPath)
-          .withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime(), creationTimestamp: null })
+          .withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime(), creationTimestamp: undefined })
           .withOptions({ reproducible: false });
         firstChangelogDate = runResult.generator.dateFormatForLiquibase();
         secondChangelogDate = runResult.generator.dateFormatForLiquibase();

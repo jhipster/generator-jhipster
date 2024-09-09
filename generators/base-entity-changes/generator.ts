@@ -53,11 +53,10 @@ type TaskTypes<E, A> = ApplicationTaskTypes<E, A> & {
 /**
  * This is the base class for a generator for every generator.
  */
-export default abstract class GeneratorBaseEntityChanges<E = Entity, A = ApplicationType<E>> extends GeneratorBaseApplication<
-  E,
-  A,
-  TaskTypes<E, A>
-> {
+export default abstract class GeneratorBaseEntityChanges<
+  E extends Entity = Entity,
+  A extends ApplicationType<E> = ApplicationType<E>,
+> extends GeneratorBaseApplication<E, A, TaskTypes<E, A>> {
   recreateInitialChangelog!: boolean;
   private entityChanges!: any[];
 

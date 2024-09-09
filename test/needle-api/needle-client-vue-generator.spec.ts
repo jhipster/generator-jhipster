@@ -18,7 +18,7 @@ const mockBlueprintSubGen: any = class extends VueGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
+    return this.asPostWritingTaskGroup({
       addCustomMethods() {
         this.addEntityToMenu('routerName', false);
       },
@@ -33,8 +33,7 @@ const mockBlueprintSubGen: any = class extends VueGenerator {
           'microserviceName',
         );
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
@@ -46,7 +45,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:vue' }]])
       .withAnswers({

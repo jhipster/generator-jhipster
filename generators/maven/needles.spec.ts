@@ -122,8 +122,10 @@ describe('generator - maven - needles', () => {
     before(async () => {
       await helpers
         .runJHipster(GENERATOR_MAVEN)
+        .withOptions({
+          blueprint: ['myblueprint'],
+        })
         .withJHipsterConfig({
-          blueprint: 'myblueprint',
           clientFramework: 'no',
         })
         .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);
@@ -247,10 +249,10 @@ describe('generator - maven - needles', () => {
       await helpers
         .runJHipster(GENERATOR_MAVEN)
         .withJHipsterConfig({
-          blueprint: 'myblueprint',
           clientFramework: 'no',
         })
         .withOptions({
+          blueprint: ['myblueprint'],
           profile: 'prod',
         })
         .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:maven' }]]);

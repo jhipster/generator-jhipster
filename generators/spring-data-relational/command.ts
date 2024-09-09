@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     devDatabaseType: {
       description: 'Development database',
@@ -26,6 +26,16 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+  configs: {
+    prodDatabaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
+      scope: 'storage',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

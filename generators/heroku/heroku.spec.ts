@@ -222,7 +222,7 @@ describe('generator - Heroku', () => {
           .returns(createSpawnCommandReturn({ stdout: `{"app":{"name":"${existingHerokuAppName}"}, "dynos":[]}` }));
         await helpers
           .createJHipster(GENERATOR_HEROKU)
-          .withJHipsterConfig({ herokuAppName: 'jhipster-existing', herokuDeployType: 'git' })
+          .withJHipsterConfig<any>({ herokuAppName: 'jhipster-existing', herokuDeployType: 'git' })
           .withOptions({ skipBuild: true })
           .withSpawnMock(stub)
           .run();

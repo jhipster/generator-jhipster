@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Entity } from '../../../lib/types/application/entity.js';
-import type { BaseApplication } from '../../base-application/types.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
 import { upperFirstCamelCase } from '../../../lib/utils/string.js';
 import { joinCallbacks } from '../../base/support/write-files.js';
@@ -56,7 +54,7 @@ export function addRoute({
   });
 }
 
-export function addEntitiesRoute({ application, entities }: PostWritingEntitiesTaskParam) {
+export function addEntitiesRoute({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
   const { enableTranslation } = application;
   return joinCallbacks(
     ...entities.map(entity => {
@@ -128,7 +126,7 @@ export const addIconImport = ({ icon }: { icon: string }) => {
   });
 };
 
-export function addToEntitiesMenu({ application, entities }: { application: BaseApplication; entities: Entity[] }) {
+export function addToEntitiesMenu({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
   const { enableTranslation, jhiPrefix } = application;
   return joinCallbacks(
     ...entities.map(entity => {

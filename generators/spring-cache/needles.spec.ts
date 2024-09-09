@@ -33,7 +33,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .runJHipster(GENERATOR_SPRING_CACHE)
         .withOptions({
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         })
         .withJHipsterConfig({
           cacheProvider: 'ehcache',
@@ -68,7 +68,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .runJHipster(GENERATOR_SPRING_CACHE)
         .withOptions({
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         })
         .withJHipsterConfig({
           cacheProvider: 'caffeine',
@@ -103,7 +103,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
       await helpers
         .runJHipster(GENERATOR_SPRING_CACHE)
         .withOptions({
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         })
         .withJHipsterConfig({
           cacheProvider: 'redis',

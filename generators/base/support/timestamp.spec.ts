@@ -28,6 +28,7 @@ describe('generator - base - support - timestamp', () => {
     });
     describe('when passing a number', () => {
       it('throws', () => {
+        // @ts-expect-error invalid argument
         expect(() => parseChangelog(123)).toThrow(/^changelogDate 123 must be a string\.$/);
       });
     });

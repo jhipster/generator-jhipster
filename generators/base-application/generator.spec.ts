@@ -157,7 +157,7 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator).withJHipsterConfig({}, [
+      await helpers.run(CustomGenerator as any).withJHipsterConfig({}, [
         {
           name: 'One',
           fields: [{ fieldName: 'id', fieldType: 'Long' }],
@@ -396,7 +396,7 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       await helpers
-        .run(CustomGenerator)
+        .run(CustomGenerator as any)
         .withJHipsterConfig({}, [
           {
             name: 'One',

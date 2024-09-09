@@ -24,7 +24,7 @@ export default ts.config(
     extends: [...ts.configs.recommended, ...ts.configs.stylistic],
     languageOptions: {
       parserOptions: {
-        project: ['./tsconfig.spec.json', './tsconfig.eslint.json'],
+        project: ['./tsconfig.spec.json'],
       },
     },
     rules: {

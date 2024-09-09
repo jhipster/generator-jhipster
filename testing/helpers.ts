@@ -6,6 +6,7 @@ import { RunContext, YeomanTest, result } from 'yeoman-test';
 import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
+import type { EmptyObject } from 'type-fest';
 import EnvironmentBuilder from '../cli/environment-builder.mjs';
 import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
 import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
@@ -15,6 +16,7 @@ import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../lib/index.js';
 import type { JSONEntity } from '../lib/jdl/core/types/json-config.js';
 import type CoreGenerator from '../generators/base-core/generator.js';
+import type { ApplicationConfiguration } from '../lib/types/application/yo-rc.js';
 import getGenerator from './get-generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;
@@ -138,7 +140,10 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     return super.withOptions(options as any);
   }
 
-  withJHipsterConfig(configuration?: Record<string, unknown>, entities?: BaseEntity[]): this {
+  withJHipsterConfig<Config extends EmptyObject>(
+    configuration?: Readonly<Partial<Config & ApplicationConfiguration>>,
+    entities?: BaseEntity[],
+  ): this {
     return this.withFiles(
       createFiles('', { baseName: 'jhipster', creationTimestamp: parseCreationTimestamp('2020-01-01'), ...configuration }, entities),
     );

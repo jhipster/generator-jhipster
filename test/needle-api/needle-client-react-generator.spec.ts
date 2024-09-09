@@ -19,9 +19,9 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
+    return this.asPostWritingTaskGroup({
       addEntityToMenuStep() {
-        this.addEntityToMenu('routerName', false, false);
+        this.addEntityToMenu('routerName', false);
       },
       addEntityToModuleStep({ application }) {
         const { applicationTypeMicroservice, clientSrcDir } = application;
@@ -30,8 +30,7 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
           clientSrcDir,
         });
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
@@ -45,7 +44,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         ignoreNeedlesError: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])

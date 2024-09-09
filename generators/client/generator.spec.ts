@@ -142,12 +142,11 @@ describe(`generator - ${generator}`, () => {
       'jhipster:react',
       'jhipster:vue',
     ];
-    const options = { applicationType: 'microservice' };
     before(async () => {
       await helpers
         .run(generatorFile)
         .withControl({ getWebappTranslation: () => 'translations' })
-        .withJHipsterConfig(options)
+        .withJHipsterConfig({ applicationType: 'microservice' })
         .withSkipWritingPriorities()
         .withMockedGenerators(mockedComposedGenerators);
     });

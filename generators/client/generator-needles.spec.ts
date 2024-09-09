@@ -25,7 +25,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
     return helpers
       .create(getGenerator('client'))
       .withOptions({
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
       .withJHipsterConfig({
         buildTool: 'maven',

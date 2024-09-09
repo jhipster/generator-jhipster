@@ -39,10 +39,10 @@ describe('generator - liquibase - needles', () => {
 `,
       })
       .withJHipsterConfig({
-        blueprint: 'myblueprint',
         clientFramework: 'no',
       })
       .withOptions({
+        blueprint: ['myblueprint'],
         skipPriorities: ['writing'],
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:liquibase' }]]);

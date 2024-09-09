@@ -27,12 +27,12 @@ import { createNeedleCallback } from '../../base/support/needles.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 export default class extends needleClientBase {
-  addGlobalSCSSStyle(style, comment) {
+  addGlobalSCSSStyle(style, comment?) {
     const filePath = `${this.clientSrcDir}content/scss/global.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
   }
 
-  addVendorSCSSStyle(style, comment) {
+  addVendorSCSSStyle(style, comment?) {
     const filePath = `${this.clientSrcDir}content/scss/vendor.scss`;
     super.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-vendor');
   }
