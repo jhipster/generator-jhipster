@@ -36,4 +36,4 @@ build/
 nbbuild/
 nbdist/
 .nb-gradle/
-
+generators/**/package-lock.json
