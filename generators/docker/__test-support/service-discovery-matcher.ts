@@ -1,3 +1,4 @@
+import { it } from 'esmocha';
 import type { RunResult } from 'yeoman-test';
 
 import { JAVA_DOCKER_DIR } from '../../generator-constants.js';
@@ -32,11 +33,11 @@ const desiredConsulConfig = {
 };
 
 export const matchEureka = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenFiles('eureka', resultGetter, expectedEurekaFiles, shouldMatch);
-  matchWrittenConfig('eureka', resultGetter, desiredEurekaConfig, shouldMatch);
+  it(...matchWrittenFiles('eureka', expectedEurekaFiles, shouldMatch, resultGetter()));
+  it(...matchWrittenConfig('eureka', desiredEurekaConfig, shouldMatch, resultGetter()));
 };
 
 export const matchConsul = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenFiles('consul', resultGetter, expectedConsulFiles, shouldMatch);
-  matchWrittenConfig('consul', resultGetter, desiredConsulConfig, shouldMatch);
+  it(...matchWrittenFiles('consul', expectedConsulFiles, shouldMatch, resultGetter()));
+  it(...matchWrittenConfig('consul', desiredConsulConfig, shouldMatch, resultGetter()));
 };

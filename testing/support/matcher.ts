@@ -1,39 +1,40 @@
-import type { RunResult } from 'yeoman-test';
-
-declare global {
-  const it: (title: string, fn: () => void) => void;
-}
+import { result } from 'yeoman-test';
 
 /**
  * Requires a global `it` function to be available.
+ *
+ * @example
+ * it(..matchWrittenFiles('eureka', () => ['file'], true));
  */
 export const matchWrittenFiles = (
   title: string,
-  resultGetter: () => RunResult,
   expectedFilesGetter: () => string[],
   shouldMatch: boolean,
-) => {
-  const testTitle = shouldMatch ? `writes ${title} files` : `doesn't write ${title} files`;
-  it(testTitle, () => {
-    const expectedFiles = expectedFilesGetter();
+  runResult = result,
+): [string, () => void] => [
+  shouldMatch ? `writes ${title} files` : `doesn't write ${title} files`,
+  () => {
     if (shouldMatch) {
-      resultGetter().assertFile(expectedFiles);
+      runResult.assertFile(expectedFilesGetter());
     } else {
-      resultGetter().assertNoFile(expectedFiles);
+      runResult.assertNoFile(expectedFilesGetter());
     }
-  });
-};
+  },
+];
 
 /**
  * Requires a global `it` function to be available.
+ *
+ * @example
+ * it(..matchWrittenFiles('eureka', { 'generator-jhipster': { config: true } }, true));
  */
-export const matchWrittenConfig = (title: string, resultGetter: () => RunResult, config: any, shouldMatch: boolean) => {
-  const testTitle = shouldMatch ? `writes ${title} config` : `doesn't write ${title} config`;
-  it(testTitle, () => {
+export const matchWrittenConfig = (title: string, config: any, shouldMatch: boolean, runResult = result): [string, () => void] => [
+  shouldMatch ? `writes ${title} config` : `doesn't write ${title} config`,
+  () => {
     if (shouldMatch) {
-      resultGetter().assertJsonFileContent('.yo-rc.json', config);
+      runResult.assertJsonFileContent('.yo-rc.json', config);
     } else {
-      resultGetter().assertNoJsonFileContent('.yo-rc.json', config);
+      runResult.assertNoJsonFileContent('.yo-rc.json', config);
     }
-  });
-};
+  },
+];
