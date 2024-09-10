@@ -1,5 +1,4 @@
 import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import { merge, set, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
@@ -43,7 +42,7 @@ const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
-const generatorsDir = join(fileURLToPath(import.meta.url), '../../generators');
+const generatorsDir = join(getPackageRoot(), 'generators');
 const allGenerators = [
   ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
   ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
