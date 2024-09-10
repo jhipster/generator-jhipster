@@ -6,7 +6,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { execaCommandSync } from 'execa';
 import { packageJson } from '../../lib/index.js';
 import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.js';
-import { getGenerator, basicHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { getGenerator, basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
 

@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { dryRunHelpers as helpers } from '../../testing/index.js';
+import { dryRunHelpers as helpers } from '../../lib/testing/index.js';
 
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { GENERATOR_SPRING_DATA_CASSANDRA } from '../generator-list.js';

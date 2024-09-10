@@ -23,7 +23,7 @@ import { snakeCase } from 'lodash-es';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { skipPrettierHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import Generator from './generator.js';
 
 const __filename = fileURLToPath(import.meta.url);

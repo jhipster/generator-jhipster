@@ -1,7 +1,7 @@
 import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import Generator from '../server/index.js';
 

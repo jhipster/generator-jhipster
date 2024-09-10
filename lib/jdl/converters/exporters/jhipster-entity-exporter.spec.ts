@@ -23,7 +23,7 @@ import exportEntities from '../exporters/jhipster-entity-exporter.js';
 import { applicationTypes } from '../../core/built-in-options/index.js';
 
 import { doesDirectoryExist } from '../../core/utils/file-utils.js';
-import { basicHelpers as helpers } from '../../../../testing/index.js';
+import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
 import { entityOptions } from '../../../jhipster/index.js';
 
 const { MapperTypes, PaginationTypes, ServiceTypes } = entityOptions;

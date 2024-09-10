@@ -20,7 +20,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { GENERATOR_MAVEN } from '../generator-list.js';
 import MavenGenerator from './generator.js';
 

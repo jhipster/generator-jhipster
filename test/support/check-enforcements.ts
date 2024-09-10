@@ -20,7 +20,7 @@ import assert from 'assert';
 import { opendirSync, readFileSync, writeFileSync } from 'fs';
 import path, { basename } from 'path';
 import { before, describe, it } from 'mocha';
-import { getGeneratorFolder } from '../../testing/get-generator.js';
+import { getGeneratorFolder } from '../../lib/testing/get-generator.js';
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

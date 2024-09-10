@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { getGenerator, dryRunHelpers as helpers } from '../../testing/index.js';
+import { getGenerator, dryRunHelpers as helpers } from '../../lib/testing/index.js';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.js';
 
 const expectedFiles = {

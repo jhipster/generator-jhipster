@@ -7,7 +7,7 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { filterBasicServerGenerators } from '../server/__test-support/index.js';
 
 import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.js';

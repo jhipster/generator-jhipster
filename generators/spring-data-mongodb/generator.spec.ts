@@ -27,7 +27,7 @@ import {
   entitiesSimple as entities,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from '../server/index.js';
 

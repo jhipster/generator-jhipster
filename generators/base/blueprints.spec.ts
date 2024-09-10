@@ -3,7 +3,7 @@ import { mock } from 'node:test';
 import { before, describe, expect, it } from 'esmocha';
 import type { RunResult } from 'yeoman-test';
 
-import { basicHelpers as helpers } from '../../testing/index.js';
+import { basicHelpers as helpers } from '../../lib/testing/index.js';
 import { packageJson } from '../../lib/index.js';
 import BaseGenerator from './index.js';
 

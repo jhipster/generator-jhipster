@@ -74,8 +74,8 @@
       "default": "./dist/lib/jdl/index.js"
     },
     "./testing": {
-      "types": "./dist/testing/index.d.ts",
-      "default": "./dist/testing/index.js"
+      "types": "./dist/lib/testing/index.d.ts",
+      "default": "./dist/lib/testing/index.js"
     }
   },
   "main": "./dist/generators/index.js",

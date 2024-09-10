@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../../lib/testing/index.js';
 import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
 import { insertContentIntoApplicationProperties } from './needles.js';
 

@@ -22,7 +22,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);

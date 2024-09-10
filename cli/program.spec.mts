@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import { describe, it, beforeEach } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../testing/index.js';
+import { defaultHelpers as helpers } from '../lib/testing/index.js';
 import { createProgram } from './program.mjs';
 
 describe('cli - program', () => {

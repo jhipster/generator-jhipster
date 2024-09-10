@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 

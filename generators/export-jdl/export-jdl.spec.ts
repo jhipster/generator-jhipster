@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.js';
 
 const files = {

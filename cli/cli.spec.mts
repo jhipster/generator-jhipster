@@ -10,7 +10,7 @@ import type FullEnvironment from 'yeoman-environment';
 import { coerce } from 'semver';
 import quibble from 'quibble';
 
-import { defaultHelpers as helpers, createBlueprintFiles } from '../testing/index.js';
+import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
 import { createProgram } from './program.mjs';
 

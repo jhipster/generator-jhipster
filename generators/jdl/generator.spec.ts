@@ -24,7 +24,7 @@ import type { SinonSpy } from 'sinon';
 
 import type { RunResult } from 'yeoman-test';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import * as GENERATORS from '../generator-list.js';
 import { GENERATOR_JDL } from '../generator-list.js';
 import Generator from './index.js';
