@@ -5,6 +5,7 @@ import { packageJson } from '../../lib/index.js';
 import { promptSamplesFolder } from '../support.mjs';
 import { GENERATOR_APP, GENERATOR_INFO, GENERATOR_JDL } from '../../generators/generator-list.js';
 import { entitiesByType, generateSample } from './support/index.js';
+import assert from 'assert';
 
 export default class extends BaseGenerator {
   sampleName;
@@ -65,11 +66,12 @@ export default class extends BaseGenerator {
           destProjectFolder: this.projectFolder,
           fork: false,
         });
+        assert.ok(sample, `Sample ${this.sampleName} not found`);
 
         // Cleanup mem-fs files. Reload them from disk.
         await this.pipeline(
           { refresh: true, pendingFiles: false },
-          transform(() => {}),
+          transform(() => undefined),
         );
 
         let generatorOptions = {
@@ -124,7 +126,7 @@ export default class extends BaseGenerator {
             generatorOptions: {
               samplePath: this.sampleName,
             },
-          });
+          } as any);
         }
       },
       async info() {

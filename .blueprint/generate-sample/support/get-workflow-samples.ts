@@ -7,7 +7,7 @@ export const DAILY_PREFIX = 'daily-';
 
 export const isDaily = workflow => workflow.startsWith(DAILY_PREFIX);
 
-export const getWorkflowSamples = (workflows = WORKFLOW_NAMES) =>
+export const getWorkflowSamples = (workflows: string[] = WORKFLOW_NAMES) =>
   Object.fromEntries(
     workflows.map(workflow => [
       workflow,
@@ -27,7 +27,7 @@ export const getWorkflowSamples = (workflows = WORKFLOW_NAMES) =>
     ]),
   );
 
-export default workflows =>
+export default (workflows?: string[]) =>
   Object.fromEntries(
     Object.values(getWorkflowSamples(workflows))
       .map(workflowSamples => Object.entries(workflowSamples))
