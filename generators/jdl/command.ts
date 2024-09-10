@@ -1,7 +1,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_WORKSPACES } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   arguments: {
     jdlFiles: {
       type: Array,
@@ -52,6 +52,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_WORKSPACES],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;
