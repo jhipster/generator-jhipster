@@ -7,16 +7,16 @@ import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import type { EmptyObject } from 'type-fest';
-import EnvironmentBuilder from '../cli/environment-builder.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
-import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
-import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../generators/base/support/index.js';
-import BaseGenerator from '../generators/base/index.js';
-import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
-import { getPackageRoot, isDistFolder } from '../lib/index.js';
-import type { JSONEntity } from '../lib/jdl/core/types/json-config.js';
-import type CoreGenerator from '../generators/base-core/generator.js';
-import type { ApplicationConfiguration } from '../lib/types/application/yo-rc.js';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
+import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
+import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../../generators/base/support/index.js';
+import BaseGenerator from '../../generators/base/index.js';
+import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
+import { getPackageRoot, isDistFolder } from '../index.js';
+import type { JSONEntity } from '../jdl/core/types/json-config.js';
+import type CoreGenerator from '../../generators/base-core/generator.js';
+import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import getGenerator from './get-generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;
