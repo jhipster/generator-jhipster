@@ -19,14 +19,13 @@ const mockBlueprintSubGen: any = class extends ReactGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
+    return this.asPostWritingTaskGroup({
       addAppCssStep() {
         // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
         this.addAppSCSSStyle('@import without-comment');
         this.addAppSCSSStyle('@import with-comment', 'my comment');
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
@@ -38,7 +37,7 @@ describe('needle API React: JHipster react generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         ignoreNeedlesError: true,
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])

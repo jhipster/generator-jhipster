@@ -140,7 +140,7 @@ export default class HerokuGenerator extends BaseGenerator {
                 type: 'input',
                 name: 'herokuAppName',
                 message: 'Name to deploy as:',
-                default: this.baseName,
+                default: this.jhipsterConfigWithDefaults.baseName,
               },
             ],
             this.config,

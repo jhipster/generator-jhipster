@@ -358,21 +358,20 @@ const applicationConfig = {
   buildTool: 'gradle',
   rememberMeKey: '5f1100e7eae25e2abe32d7b2031ac1f2acc778d8',
   applicationType: 'monolith',
-  testFrameworks: [],
   jhiPrefix: 'jhi',
   enableTranslation: true,
   nativeLanguage: 'en',
   languages: ['en'],
   skipClient: true,
   skipServer: true,
-};
+} as const;
 
 describe('generator - export-jdl', () => {
   describe('exports entities to a JDL file without argument', () => {
     let runResult;
 
     before(async () => {
-      runResult = await helpers.runJHipster(GENERATOR_EXPORT_JDL).withJHipsterConfig(applicationConfig).withFiles(files).commitFiles();
+      runResult = await helpers.runJHipster(GENERATOR_EXPORT_JDL).withJHipsterConfig<any>(applicationConfig).withFiles(files).commitFiles();
     });
 
     it('should match snapshot', () => {
@@ -389,7 +388,7 @@ describe('generator - export-jdl', () => {
     before(async () => {
       runResult = await helpers
         .runJHipster(GENERATOR_EXPORT_JDL)
-        .withJHipsterConfig(applicationConfig)
+        .withJHipsterConfig<any>(applicationConfig)
         .withFiles(files)
         .commitFiles()
         .withArguments('custom-app.jdl');

@@ -172,6 +172,14 @@ const command = {
         }
       },
     },
+    databaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
+      scope: 'storage',
+    },
   },
   import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
 } as const satisfies JHipsterCommandDefinition;

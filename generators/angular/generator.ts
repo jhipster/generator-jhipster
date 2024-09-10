@@ -336,7 +336,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * }
    *
    */
-  addVendorSCSSStyle(style, comment) {
+  addVendorSCSSStyle(style, comment?) {
     this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
   }
 
@@ -392,7 +392,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
   }
 
-  addEntitiesToMenu({ application, entities }: PostWritingEntitiesTaskParam) {
+  addEntitiesToMenu({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
     const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
     const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
     const editCallback = addToEntitiesMenu({ application, entities });
@@ -400,7 +400,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
     this.editFile(filePath, { ignoreNonExisting }, editCallback);
   }
 
-  addEntitiesToModule(param: PostWritingEntitiesTaskParam) {
+  addEntitiesToModule(param: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
     const filePath = `${param.application.clientSrcDir}app/entities/entity.routes.ts`;
     const ignoreNonExisting = chalk.yellow(`Route(s) not added to ${filePath}.`);
     const addRouteCallback = addEntitiesRoute(param);
@@ -427,7 +427,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * }
    *
    */
-  addMainSCSSStyle(style, comment) {
+  addMainSCSSStyle(style, comment?) {
     this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
   }
 
@@ -504,7 +504,7 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    * @param {string} clientFramework - The name of the client framework
    * @param {string} translationKeyMenu - i18n key for entry in the menu
    */
-  addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = camelCase(routerName)) {
+  addElementToMenu(routerName, iconName, enableTranslation, _clientFramework?, translationKeyMenu = camelCase(routerName)) {
     this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }

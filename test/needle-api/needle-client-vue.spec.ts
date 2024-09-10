@@ -25,7 +25,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
       .withMockedGenerators(['jhipster:languages'])
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]])

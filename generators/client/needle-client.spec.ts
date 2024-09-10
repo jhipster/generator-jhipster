@@ -35,7 +35,7 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
         skipServer: true,
       })
       .withOptions({
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]]);
   });

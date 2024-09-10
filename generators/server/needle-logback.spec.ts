@@ -26,8 +26,10 @@ describe('generators - server - needle - logback', () => {
   before(async () => {
     await helpers
       .runJHipster(GENERATOR_SERVER)
+      .withOptions({
+        blueprint: ['myblueprint'],
+      })
       .withJHipsterConfig({
-        blueprint: 'myblueprint',
         clientFramework: 'no',
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:server' }]]);

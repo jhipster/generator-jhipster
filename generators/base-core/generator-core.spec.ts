@@ -18,7 +18,7 @@ describe('generator - base-core', () => {
     let Dummy;
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      Dummy = helpers.createDummyGenerator(Base);
+      Dummy = helpers.createDummyGenerator(Base as any);
     });
 
     it('no argument', async () => {
@@ -77,7 +77,8 @@ describe('generator - base-core', () => {
         },
       });
       jestExpect(base.first).toBe('bar');
-      jestExpect(base.jdlFiles).toMatchObject(['foo']);
+      jestExpect(base.jdlFiles).toHaveLength(1);
+      jestExpect(base.jdlFiles[0]).toMatch('foo');
     });
     it('vararg arguments using positionalArguments', async () => {
       const base = new Dummy({ positionalArguments: ['bar', ['foo']], sharedData: {}, env: await helpers.createTestEnv() });
@@ -90,7 +91,8 @@ describe('generator - base-core', () => {
         },
       });
       jestExpect(base.first).toBe('bar');
-      jestExpect(base.jdlFiles).toMatchObject(['foo']);
+      jestExpect(base.jdlFiles).toHaveLength(1);
+      jestExpect(base.jdlFiles[0]).toBe('foo');
     });
   });
 });

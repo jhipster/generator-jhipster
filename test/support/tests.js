@@ -277,7 +277,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .withMockedJHipsterGenerators({ filter: () => true })
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withJHipsterConfig()
-        .withOptions({ blueprint: 'foo' })
+        .withOptions({ blueprint: ['foo'] })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });
@@ -327,7 +327,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
             : undefined,
         )
         .commitFiles()
-        .withOptions({ blueprint: 'foo-sbs' })
+        .withOptions({ blueprint: ['foo-sbs'] })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });

@@ -22,6 +22,7 @@ import chalk from 'chalk';
 import semver from 'semver';
 
 import type { ComposeOptions } from 'yeoman-generator';
+import { union } from 'lodash-es';
 import { packageJson } from '../../lib/index.js';
 import CoreGenerator from '../base-core/index.js';
 import { loadStoredAppOptions } from '../app/support/index.js';
@@ -539,12 +540,10 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
   private async _configureBlueprints() {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
-    const blueprint = this.options.blueprint;
+    const { blueprint } = this.options;
     if (blueprint) {
       this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
-      if (!argvBlueprints.split(',').includes(blueprint)) {
-        argvBlueprints = `${blueprint},${argvBlueprints}`;
-      }
+      argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
     }
     const blueprints = mergeBlueprints(parseBluePrints(argvBlueprints), loadBlueprintsFromConfiguration(this.config));
 

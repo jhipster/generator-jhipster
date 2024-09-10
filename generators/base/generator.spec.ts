@@ -81,7 +81,7 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator).withOptions({
+      await helpers.run(CustomGenerator as any).withOptions({
         skipPriorities: ['prompting', 'writing', 'postWriting'],
       });
     });

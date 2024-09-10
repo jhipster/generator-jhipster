@@ -37,7 +37,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })

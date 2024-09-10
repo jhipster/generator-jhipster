@@ -16,7 +16,7 @@ const mockAngularBlueprintSubGen = class extends AngularGenerator {
       addToMenuStep() {
         this.addElementToAdminMenu('routerName2', 'iconName2', true);
       },
-      addToModuleStep({ application, source }) {
+      addToModuleStep({ source, application }) {
         source.addEntitiesToClient({
           application,
           entities: [
@@ -47,7 +47,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
         skipServer: true,
       })
       .withOptions({
-        blueprint: 'myblueprint2',
+        blueprint: ['myblueprint2'],
       })
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]]);
   });
@@ -99,7 +99,8 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
       .create('jhipster:angular')
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
       .withOptions({
-        blueprint: 'myblueprint2',
+        // @ts-expect-error TODO
+        blueprint: ['myblueprint2'],
         force: false,
       });
   });

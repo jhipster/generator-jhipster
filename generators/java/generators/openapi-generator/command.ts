@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asCommand } from '../../../type-utils.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
 
 const command = {
   configs: {
@@ -30,8 +30,8 @@ const command = {
     },
   },
   import: [],
-} as const;
+} as const satisfies JHipsterCommandDefinition;
 
 export type Command = typeof command;
 
-export default asCommand(command);
+export default command;

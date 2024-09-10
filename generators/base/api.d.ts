@@ -1,77 +1,59 @@
-import type { BaseFeatures, BaseOptions, CliOptionSpec } from 'yeoman-generator';
+import type { BaseFeatures, BaseOptions } from 'yeoman-generator';
 import type CoreGenerator from '../base-core/index.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
-
-type ConfigScope = 'storage' | 'blueprint' | 'control' | 'generator';
-type CliSpecType = CliOptionSpec['type'];
+import type { ApplicationOptions } from '../../lib/types/application/options.js';
 
 export type ApplicationWithConfig = {
   config: Record<string, string | boolean | number | string[]>;
   entities: Record<string, unknown>;
 };
 
-export type JHipsterGeneratorOptions = BaseOptions & {
-  /* cli options */
-  commandName: string;
-  programName: string;
-  positionalArguments?: unknown[];
-  createEnvBuilder?: any;
+export type JHipsterGeneratorOptions = BaseOptions &
+  ApplicationOptions & {
+    /* cli options */
+    commandName: string;
+    programName: string;
+    positionalArguments?: unknown[];
+    createEnvBuilder?: any;
 
-  /* yeoman options */
-  skipYoResolve?: boolean;
-  sharedData: any;
-  force?: boolean;
+    /* yeoman options */
+    skipYoResolve?: boolean;
+    sharedData: any;
+    force?: boolean;
 
-  /* base options */
-  defaults?: boolean;
-  applicationId?: string;
-  applicationWithConfig?: ApplicationWithConfig;
-  /**
-   * @deprecated
-   */
-  applicationWithEntities?: any;
-  creationTimestamp?: string;
-  ignoreErrors?: boolean;
-  ignoreNeedlesError?: boolean;
-  reproducible?: boolean;
-  reproducibleTests?: boolean;
-  skipPriorities?: string[];
-  skipWriting?: boolean;
-  entities?: string[];
-  disableBlueprints?: boolean;
+    /* base options */
+    applicationId?: string;
+    applicationWithConfig?: ApplicationWithConfig;
+    /**
+     * @deprecated
+     */
+    applicationWithEntities?: any;
+    reproducibleTests?: boolean;
+    skipPriorities?: string[];
+    skipWriting?: boolean;
+    entities?: string[];
 
-  /* Init based application */
-  fromInit?: boolean;
+    jhipsterContext?: any;
+    composeWithLocalBlueprint?: boolean;
 
-  /* blueprint options */
-  blueprints?: string;
-  blueprint?: any;
-  jhipsterContext?: any;
-  composeWithLocalBlueprint?: boolean;
+    /* generate-blueprint options */
+    localBlueprint?: boolean;
 
-  /* generate-blueprint options */
-  localBlueprint?: boolean;
+    /* jdl generator options */
+    jdlFile?: string;
 
-  /* jdl generator options */
-  jdlFile?: string;
+    /* application options */
+    db?: string;
 
-  /* application options */
-  baseName?: string;
-  db?: string;
-  applicationType?: string;
-  skipUserManagement?: boolean;
-  skipDbChangelog?: boolean;
-  recreateInitialChangelog?: boolean;
-
-  /* workspaces options */
-  generateApplications?: boolean;
-  generateWorkspaces?: boolean;
-  generateWith?: string;
-  monorepository?: boolean;
-  workspaces?: boolean;
-  workspacesFolders?: string[];
-};
+    /* workspaces options */
+    generateApplications?: boolean;
+    generateWorkspaces?: boolean;
+    generateWith?: string;
+    monorepository?: boolean;
+    workspaces?: boolean;
+    workspacesFolders?: string[];
+  };
 
 export type JHipsterGeneratorFeatures = BaseFeatures & {
   priorityArgs?: boolean;
@@ -119,6 +101,8 @@ export type JHipsterGeneratorFeatures = BaseFeatures & {
    */
   queueCommandTasks?: boolean;
 };
+
+export type NeedleCallback = (content: string) => string;
 
 export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, content: string, filePath: string) => string;
 

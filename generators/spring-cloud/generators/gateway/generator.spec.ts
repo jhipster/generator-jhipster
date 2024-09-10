@@ -62,7 +62,7 @@ describe(`generator - ${generator}`, () => {
         .withMockedJHipsterGenerators()
         .withMockedSource()
         .withSharedApplication({})
-        .withJHipsterConfig({ serviceDiscovery: 'consul' });
+        .withJHipsterConfig({ serviceDiscoveryType: 'consul' });
     });
 
     it('should match files snapshot', () => {

@@ -35,6 +35,7 @@ import type { Entity } from '../../lib/types/application/entity.js';
 import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
 import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type SharedData from '../base/shared-data.js';
 import { getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
@@ -75,8 +76,8 @@ const asPriority = BaseGenerator.asPriority;
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  E = Entity,
-  A = ApplicationType<E>,
+  E extends Entity = Entity,
+  A extends ApplicationType<E> = ApplicationType<E>,
   TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes<E, A>,
 > extends BaseGenerator<TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
@@ -96,6 +97,7 @@ export default class BaseApplicationGenerator<
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
+  declare sharedData: SharedData<A>;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);

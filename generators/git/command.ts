@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     skipGit: {
       description: 'Skip git repository initialization',
@@ -42,6 +42,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

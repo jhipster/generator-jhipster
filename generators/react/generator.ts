@@ -335,7 +335,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    * }
    *
    */
-  addAppSCSSStyle(style, comment) {
+  addAppSCSSStyle(style, comment?) {
     this.needleApi.clientReact.addAppSCSSStyle(style, comment);
   }
 
