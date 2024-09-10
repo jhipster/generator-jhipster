@@ -406,7 +406,9 @@ export default class EnvironmentBuilder {
     for (const [blueprint, packagePath] of blueprintPackagePaths) {
       let blueprintCommand;
       const blueprintCommandFile = `${packagePath}/cli/commands`;
-      const blueprintCommandExtension = ['.js', '.cjs', '.mjs'].find(extension => existsSync(`${blueprintCommandFile}${extension}`));
+      const blueprintCommandExtension = ['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts'].find(extension =>
+        existsSync(`${blueprintCommandFile}${extension}`),
+      );
       if (blueprintCommandExtension) {
         const blueprintCommandsUrl = pathToFileURL(resolve(`${blueprintCommandFile}${blueprintCommandExtension}`));
         try {
