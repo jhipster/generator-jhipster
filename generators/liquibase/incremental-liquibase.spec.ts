@@ -1,13 +1,8 @@
 import path, { basename, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { after, before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { createImporterFromContent } from '../../lib/jdl/jdl-importer.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const incrementalFiles = [
   `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
@@ -18,7 +13,12 @@ const baseName = 'JhipsterApp';
 
 const jdlApplication = `
 application {
-    config { baseName ${baseName} }
+    config {
+      baseName ${baseName}
+      creationTimestamp ${new Date('2020-01-01').getTime()}
+      incrementalChangelog true
+      skipClient true
+    }
     entities *
 }`;
 
@@ -165,25 +165,23 @@ relationship ManyToMany {
   One to Another
 }`;
 
-const generatorPath = join(__dirname, '../server/index.js');
-const mockedGenerators = ['jhipster:common'];
+const exceptMockedGenerators = [
+  'jdl',
+  'app',
+  'server',
+  'spring-boot',
+  'java:bootstrap',
+  'java:domain',
+  'liquibase',
+  'spring-data-relational',
+];
 
 describe('generator - app - --incremental-changelog', function () {
   this.timeout(45000);
-  const options = {
-    creationTimestamp: '2020-01-01',
-  };
-  const config = {
-    incrementalChangelog: true,
-    skipClient: true,
-    force: true,
-  };
   describe('when creating a new application', () => {
     before(async () => {
-      await helpers.run(generatorPath).withJHipsterConfig(config).withOptions(options).withMockedGenerators(mockedGenerators);
+      await helpers.runJHipster('server').withMockedJHipsterGenerators({ except: exceptMockedGenerators });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -198,9 +196,9 @@ describe('generator - app - --incremental-changelog', function () {
     describe('with default options', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
-          .withJHipsterConfig(config)
-          .withOptions(options)
+          .runJHipster('server')
+          .withJHipsterConfig({ incrementalChangelog: true })
+          .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
               filePath = join(cwd, filePath);
@@ -212,8 +210,6 @@ describe('generator - app - --incremental-changelog', function () {
             });
           });
       });
-
-      after(() => runResult.cleanup());
 
       it('should create application', () => {
         runResult.assertFile(['.yo-rc.json']);
@@ -233,9 +229,10 @@ describe('generator - app - --incremental-changelog', function () {
     describe('with --recreate-initial-changelog', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
-          .withJHipsterConfig(config)
-          .withOptions({ ...options, recreateInitialChangelog: true })
+          .runJHipster('server')
+          .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+          .withJHipsterConfig({ incrementalChangelog: true })
+          .withOptions({ recreateInitialChangelog: true })
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
               filePath = join(cwd, filePath);
@@ -247,8 +244,6 @@ describe('generator - app - --incremental-changelog', function () {
             });
           });
       });
-
-      after(() => runResult.cleanup());
 
       it('should create application', () => {
         runResult.assertFile(['.yo-rc.json']);
@@ -268,31 +263,12 @@ describe('generator - app - --incremental-changelog', function () {
 
   describe('regenerating the application', () => {
     before(async () => {
-      const initialState = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
-      await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-      const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
-        .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
-          creationTimestamp: '2020-01-02',
-        })
-        .run();
+      await helpers.runJDL(jdlApplicationWithRelationshipToUser).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await runResult.create('jhipster:jdl').withOptions({
+        inline: jdlApplicationWithRelationshipToUser,
+        creationTimestamp: '2020-01-02',
+      });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -328,50 +304,28 @@ describe('generator - app - --incremental-changelog', function () {
 
   describe('when adding a field without constraints', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(
-        `
+      await helpers.runJDL(`
 ${jdlApplication}
 entity Customer {
     original String
 }
-`,
-        {
-          ...options,
-          creationTimestampConfig: options.creationTimestamp,
-        },
-      ).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(1);
-      await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
+`);
 
-      const state = createImporterFromContent(
-        `
+      await helpers
+        .runJDLInApplication(
+          `
 ${jdlApplication}
 entity Customer {
     original String
     foo String
 }
 `,
-        {
-          ...options,
-        },
-      ).import();
-      await runResult
-        .create(generatorPath)
+        )
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities.JhipsterApp,
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -410,51 +364,28 @@ entity Customer {
 
   describe('when adding a field with constraints', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(
-        `
+      await helpers.runJDL(`
 ${jdlApplication}
 entity Customer {
     original String
 }
-`,
-        {
-          ...options,
-          creationTimestampConfig: options.creationTimestamp,
-        },
-      ).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(1);
-      await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
+`);
 
-      const regenerateState = createImporterFromContent(
-        `
+      await helpers
+        .runJDLInApplication(
+          `
 ${jdlApplication}
 entity Customer {
   original String
   foo String required
 }
 `,
-        {
-          ...options,
-        },
-      ).import();
-
-      await runResult
-        .create(generatorPath)
+        )
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: regenerateState.exportedApplicationsWithEntities.JhipsterApp,
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -493,50 +424,28 @@ entity Customer {
 
   describe('when removing a field without constraints', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(
-        `
+      await helpers.runJDL(`
 ${jdlApplication}
 entity Customer {
     original String
     foo String
 }
-`,
-        {
-          ...options,
-          creationTimestampConfig: options.creationTimestamp,
-        },
-      ).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(1);
-      await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
+`);
 
-      const state = createImporterFromContent(
-        `
+      await helpers
+        .runJDLInApplication(
+          `
 ${jdlApplication}
 entity Customer {
     original String
 }
 `,
-        {
-          ...options,
-        },
-      ).import();
-      await runResult
-        .create(generatorPath)
+        )
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -575,50 +484,28 @@ entity Customer {
 
   describe('when removing a field with constraints', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(
-        `
+      await helpers.runJDL(`
 ${jdlApplication}
 entity Customer {
     original String
     foo String required
 }
-`,
-        {
-          ...options,
-          creationTimestampConfig: options.creationTimestamp,
-        },
-      ).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(1);
-      await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
+`);
 
-      const state = createImporterFromContent(
-        `
+      await helpers
+        .runJDLInApplication(
+          `
 ${jdlApplication}
 entity Customer {
     original String
 }
 `,
-        {
-          ...options,
-        },
-      ).import();
-      await runResult
-        .create(generatorPath)
+        )
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -657,33 +544,15 @@ entity Customer {
 
   describe('when adding a relationship', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntitiesAndRelationship)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -722,33 +591,15 @@ entity Customer {
 
   describe('when adding a many-to-many relationship', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntitiesAndAddedNewMnyToManyRelationship, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntitiesAndAddedNewMnyToManyRelationship)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -800,33 +651,15 @@ entity Customer {
 
   describe('when adding a relationship with on handlers', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -874,45 +707,22 @@ entity Customer {
   });
   describe('when modifying a relationship with on handlers, only at these handlers', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
 
-      const thirdState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlers, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+      await helpers
+        .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlers)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: thirdState.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-03',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -995,45 +805,22 @@ entity Customer {
 
   describe('when modifying an existing relationship', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
 
-      const thirdState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlersAndChangedNaming, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+      await helpers
+        .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlersAndChangedNaming)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: thirdState.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-03',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1126,21 +913,10 @@ entity Customer {
 
   describe('when initially creating an application with entities with relationships having on handlers', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
+        .runJDL(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1187,33 +963,15 @@ entity Customer {
 
   describe('when removing a relationship', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntitiesAndRelationship).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntities)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1255,33 +1013,15 @@ entity Customer {
 
   describe('when modifying fields and relationships at the same time in different entities', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntities, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithChangedEntitiesAndRelationship, {
-        ...options,
-      }).import();
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithChangedEntitiesAndRelationship)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1350,21 +1090,8 @@ entity Customer {
 
   describe('when creating entities with default values', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntitiesWithDefaultValues, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
-      await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
+      await helpers.runJHipster('jdl').withOptions({ inline: jdlApplicationWithEntitiesWithDefaultValues });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1405,34 +1132,15 @@ entity Customer {
 
   describe('when modifying default values, fields with default values and relationships', () => {
     before(async () => {
-      const baseName = 'JhipsterApp';
-      const initialState = createImporterFromContent(jdlApplicationWithEntitiesWithDefaultValues, {
-        ...options,
-        creationTimestampConfig: options.creationTimestamp,
-      }).import();
-      const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-      expect(applicationWithEntities).toBeTruthy();
-      expect(applicationWithEntities.entities.length).toBe(2);
+      await helpers.runJDL(jdlApplicationWithEntitiesWithDefaultValues).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+
       await helpers
-        .run(generatorPath)
-        .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities });
-
-      const state = createImporterFromContent(jdlApplicationWithEntitiesWithChangedDefaultValuesAndNewRelationship, {
-        ...options,
-      }).import();
-
-      await runResult
-        .create(generatorPath)
+        .runJDLInApplication(jdlApplicationWithEntitiesWithChangedDefaultValuesAndNewRelationship)
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
-          ...options,
-          applicationWithEntities: state.exportedApplicationsWithEntities[baseName],
           creationTimestamp: '2020-01-02',
-        })
-        .run();
+        });
     });
-
-    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1484,18 +1192,7 @@ entity Customer {
     ].forEach(eachEntityConfig => {
       describe(`testing ${eachEntityConfig.bytesFields ? 'with' : 'without'} byte fields`, () => {
         before(async () => {
-          const baseName = 'JhipsterApp';
-          const initialState = createImporterFromContent(eachEntityConfig.entity, {
-            ...options,
-            creationTimestampConfig: options.creationTimestamp,
-          }).import();
-          const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
-          expect(applicationWithEntities).toBeTruthy();
-          expect(applicationWithEntities.entities.length).toBe(1);
-          await helpers
-            .run(generatorPath)
-            .withJHipsterConfig(config)
-            .withOptions({ ...options, applicationWithEntities });
+          await helpers.runJDL(eachEntityConfig.entity).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
         });
 
         it('should create entity config file', () => {

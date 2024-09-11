@@ -356,6 +356,32 @@ class JHipsterTest extends YeomanTest {
     return this.run(getGenerator(jhipsterGenerator), settings, envOptions);
   }
 
+  /**
+   * Run a generator in current application context.
+   */
+  runJHipsterInApplication(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings | undefined,
+    envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext {
+    return runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext;
+  }
+
+  runJDL(jdl: string, settings?: RunContextSettings | undefined, envOptions?: BaseEnvironmentOptions | undefined): JHipsterRunContext {
+    return this.runJHipster('jdl', settings, envOptions).withOptions({ inline: jdl });
+  }
+
+  /**
+   * Run the JDL generator in current application context.
+   */
+  runJDLInApplication(
+    jdl: string,
+    settings?: RunContextSettings | undefined,
+    envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext {
+    return this.runJHipsterInApplication('jdl', settings, envOptions).withOptions({ inline: jdl });
+  }
+
   runTestBlueprintGenerator() {
     const blueprintNS = 'jhipster:test-blueprint';
     class BlueprintedGenerator extends BaseGenerator {

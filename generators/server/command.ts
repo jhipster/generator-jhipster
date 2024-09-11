@@ -28,11 +28,6 @@ const command = {
       type: String,
       scope: 'none',
     },
-    incrementalChangelog: {
-      description: 'Creates incremental database changelogs',
-      type: Boolean,
-      scope: 'storage',
-    },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
       type: Boolean,

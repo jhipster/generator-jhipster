@@ -22,7 +22,8 @@ import databaseMigrationOption from '../options/database-migration.js';
 import messageBrokerOption from '../options/message-broker.js';
 import { syncUserWithIdpDefinition } from '../options/index.js';
 import { jdlRoutesOptions } from '../../spring-cloud/generators/gateway/jdl/jdl-routes-option.js';
-import command from '../../spring-boot/command.js';
+import { default as liquibaseCommand } from '../../liquibase/command.js';
+import { default as springBootCommand } from '../../spring-boot/command.js';
 import { extractJdlDefinitionFromCommandConfig } from '../../../lib/command/index.js';
 
 const jdlOptions: JHipsterOptionDefinition[] = [
@@ -30,7 +31,8 @@ const jdlOptions: JHipsterOptionDefinition[] = [
   messageBrokerOption,
   syncUserWithIdpDefinition,
   jdlRoutesOptions,
-  ...extractJdlDefinitionFromCommandConfig(command.configs),
+  ...extractJdlDefinitionFromCommandConfig(springBootCommand.configs),
+  ...extractJdlDefinitionFromCommandConfig(liquibaseCommand.configs),
 ];
 
 const applicationConfig: JDLApplicationConfig = {
