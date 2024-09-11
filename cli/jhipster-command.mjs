@@ -23,6 +23,9 @@ import { kebabCase } from 'lodash-es';
 import { convertConfigToOption } from '../lib/command/index.js';
 
 export default class JHipsterCommand extends Command {
+  configs = {};
+  blueprintConfigs = {};
+
   createCommand(name) {
     return new JHipsterCommand(name);
   }
@@ -177,6 +180,7 @@ export default class JHipsterCommand extends Command {
   }
 
   addJHipsterConfigs(configs = {}, blueprintOptionDescription) {
+    Object.assign(blueprintOptionDescription ? this.blueprintConfigs : this.configs, configs);
     Object.entries(configs).forEach(([name, config]) => {
       const option = convertConfigToOption(name, config);
       if (option) {

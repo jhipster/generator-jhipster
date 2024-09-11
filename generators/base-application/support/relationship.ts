@@ -19,7 +19,6 @@
 
 import { lowerFirst, upperFirst } from 'lodash-es';
 
-import type { JSONEntity } from '../../../lib/jdl/core/types/json-config.js';
 import type { ValidationResult } from '../../base/api.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import type { Relationship } from '../../../lib/types/application/relationship.js';
@@ -113,7 +112,7 @@ export const loadEntitiesOtherSide = (entities: Entity[], { application }: { app
   return result;
 };
 
-export const addOtherRelationship = (entity: JSONEntity, otherEntity: JSONEntity, relationship: Relationship): Relationship => {
+export const addOtherRelationship = (entity: Entity, otherEntity: Entity, relationship: Relationship): Relationship => {
   relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
@@ -123,7 +122,7 @@ export const addOtherRelationship = (entity: JSONEntity, otherEntity: JSONEntity
     otherEntity: entity,
     ownerSide: !relationship.ownerSide,
     otherRelationship: relationship,
-  } as Relationship;
+  } as any;
   otherEntity.relationships = otherEntity.relationships ?? [];
   otherEntity.relationships.push(otherRelationship);
   return otherRelationship;

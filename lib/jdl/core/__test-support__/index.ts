@@ -8,12 +8,12 @@ import {
   createImporterFromFiles as originalCreateImporterFromFiles,
 } from '../../jdl-importer.js';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.js';
-import definition from '../../../../generators/app/jdl/index.js';
 import { createJDLLinterFromContent as originalCreateJDLLinterFromContent } from '../linters/jdl-linter.js';
 import { convertApplications as originalConvertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.js';
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.js';
 import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.js';
 import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.js';
+import { getDefaultJDLApplicationConfig } from '../../../command/jdl.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,9 +21,9 @@ const __dirname = dirname(__filename);
 const runtime = getDefaultRuntime();
 
 export const createImporterFromContent = (content: any, configuration?: any) =>
-  originalCreateImporterFromContent(content, configuration, definition);
+  originalCreateImporterFromContent(content, configuration, getDefaultJDLApplicationConfig());
 export const createImporterFromFiles = (files: any, configuration?: any) =>
-  originalCreateImporterFromFiles(files, configuration, definition);
+  originalCreateImporterFromFiles(files, configuration, getDefaultJDLApplicationConfig());
 
 export const parseFromConfigurationObject = (configuration: ParsedJDLRoot) => originalParseFromConfigurationObject(configuration, runtime);
 export const parseFromFiles = (files: string[]) => originalParseFromFiles(files, runtime);

@@ -182,7 +182,7 @@ async function askForApps() {
 
   const props = await this.prompt(prompts);
   this.appsFolders = this.jhipsterConfig.appsFolders = props.chosenApps;
-  loadConfigs.call(this);
+  await loadConfigs.call(this);
 }
 
 /**

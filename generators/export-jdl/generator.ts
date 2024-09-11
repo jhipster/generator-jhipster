@@ -23,7 +23,6 @@ import BaseGenerator from '../base/index.js';
 import { applicationOptions } from '../../lib/jhipster/index.js';
 import { convertToJDL } from '../../lib/jdl/converters/json-to-jdl-converter.js';
 import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../base/api.js';
-import jdlDefinition from '../app/jdl/index.js';
 
 const { OptionNames } = applicationOptions;
 
@@ -51,7 +50,7 @@ export default class extends BaseGenerator {
     return this.asDefaultTaskGroup({
       convertToJDL() {
         try {
-          const jdlObject = convertToJDL(this.destinationPath(), false, jdlDefinition);
+          const jdlObject = convertToJDL(this.destinationPath(), false, this.options.jdlDefinition);
           if (jdlObject) {
             this.jdlContent = jdlObject.toString();
           }

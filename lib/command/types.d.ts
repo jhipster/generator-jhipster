@@ -31,7 +31,7 @@ export type PromptSpec = {
 
 type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: CommandConfigScope };
 
-export type ConfigSpec<Generator> = {
+export type ConfigSpec<ConfigContext> = {
   readonly description?: string;
   readonly choices?: JHispterChoices;
 
@@ -39,7 +39,7 @@ export type ConfigSpec<Generator> = {
   readonly argument?: JHipsterArgumentConfig;
   readonly prompt?:
     | PromptSpec
-    | ((gen: Generator & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<Generator>) => PromptSpec);
+    | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
   readonly jdl?: Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>;
   readonly storage?: {
     readonly type?: typeof Boolean | typeof String | typeof Number | typeof Array;
@@ -58,26 +58,26 @@ export type ConfigSpec<Generator> = {
     | boolean
     | number
     | readonly string[]
-    | ((this: Generator | void, ctx: any) => string | boolean | number | readonly string[]);
+    | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
   /**
    * Configure the generator according to the selected configuration.
    */
-  readonly configure?: (gen: Generator) => void;
+  readonly configure?: (gen: ConfigContext) => void;
 };
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
-export type JHipsterConfigs<Generator = any> = Record<
+export type JHipsterConfigs<ConfigContext = any> = Record<
   string,
-  RequireAtLeastOne<ConfigSpec<Generator>, 'argument' | 'cli' | 'prompt' | 'storage'>
+  RequireAtLeastOne<ConfigSpec<ConfigContext>, 'argument' | 'cli' | 'prompt' | 'storage'>
 >;
 
-export type JHipsterCommandDefinition<Generator = any> = {
+export type JHipsterCommandDefinition<ConfigContext = any> = {
   readonly arguments?: JHipsterArguments;
   readonly options?: JHipsterOptions;
-  readonly configs?: JHipsterConfigs<Generator>;
+  readonly configs?: JHipsterConfigs<ConfigContext>;
   /**
    * Import options from a generator.
    * @example ['server', 'jhipster-blueprint:server']

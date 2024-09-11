@@ -18,18 +18,23 @@
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     routes: {
       description: 'Manually configured gateway routes',
       cli: {
-        type: String,
+        type: Array,
         hide: true,
+      },
+      jdl: {
+        tokenType: 'quotedList',
+        type: 'quotedList',
+        tokenValuePattern: /^"[A-Za-z][A-Za-z0-9_]*(?::[A-Za-z][A-Za-z0-9_]+(?::[0-9]+)?)?"$/,
       },
       scope: 'storage',
     },
   },
   import: [],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

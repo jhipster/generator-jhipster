@@ -26,6 +26,8 @@ import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 import { loadDeploymentConfig } from '../../base-workspaces/internal/index.js';
 import { loadDerivedAppConfig } from '../../app/support/index.js';
 import { loadDerivedPlatformConfig, loadDerivedServerConfig } from '../../server/support/index.js';
+import { loadCommandConfigsIntoApplication } from '../../../lib/command/load.js';
+import { lookupCommandsConfigs } from '../../../lib/command/lookup-commands-configs.js';
 
 const { MAVEN } = buildToolTypes;
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
@@ -81,7 +83,7 @@ export function configureImageNames() {
 /**
  * Load config from this.appFolders
  */
-export function loadConfigs() {
+export async function loadConfigs() {
   this.appConfigs = [];
   this.gatewayNb = 0;
   this.monolithicNb = 0;
@@ -92,13 +94,19 @@ export function loadConfigs() {
 
   // Loading configs
   this.log.debug(`Apps folders: ${this.appsFolders}`);
-  this.appsFolders.forEach((appFolder, index) => {
+  for (const [index, appFolder] of this.appsFolders.entries()) {
     const path = this.destinationPath(`${this.directoryPath + appFolder}`);
     this.log.debug(chalk.red.bold(`App folder ${path}`));
     if (this.fs.exists(`${path}/.yo-rc.json`)) {
       const config = getConfigWithDefaults(removeFieldsWithNullishValues(getJhipsterConfig(`${path}/.yo-rc.json`).getAll()));
       config.composePort = serverPort + index;
       this.log.debug(chalk.red.bold(`${config.baseName} has compose port ${config.composePort} and appIndex ${config.applicationIndex}`));
+
+      loadCommandConfigsIntoApplication({
+        source: config,
+        application: config,
+        commandsConfigs: this.options.commandsConfigs ?? (await lookupCommandsConfigs()),
+      });
 
       loadDerivedAppConfig({ application: config });
       loadDerivedPlatformConfig({ application: config });
@@ -118,7 +126,7 @@ export function loadConfigs() {
     } else {
       throw new Error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
     }
-  });
+  }
 }
 
 export function setClusteredApps() {
@@ -129,7 +137,7 @@ export function setClusteredApps() {
   }
 }
 
-export function loadFromYoRc() {
+export async function loadFromYoRc() {
   loadDeploymentConfig.call(this);
 
   this.useKafka = false;
@@ -137,7 +145,7 @@ export function loadFromYoRc() {
   this.useMemcached = false;
   this.useRedis = false;
 
-  loadConfigs.call(this);
+  await loadConfigs.call(this);
   if (this.microserviceNb > 0 || this.gatewayNb > 0) {
     this.deploymentApplicationType = MICROSERVICE;
   } else {

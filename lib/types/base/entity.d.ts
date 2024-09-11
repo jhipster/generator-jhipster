@@ -18,4 +18,6 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
   embedded?: boolean;
   skipClient?: boolean;
   skipServer?: boolean;
+
+  microserviceName?: string;
 };

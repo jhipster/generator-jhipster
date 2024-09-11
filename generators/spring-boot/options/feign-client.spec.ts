@@ -1,7 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
 import type { ImportState } from '../../../lib/jdl/jdl-importer.js';
 import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
-import definition from '../../app/jdl/index.js';
 
 const optionName = 'feignClient';
 
@@ -11,7 +10,7 @@ describe(`generators - server - jdl - ${optionName}`, () => {
       let state: ImportState;
 
       before(() => {
-        const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`, undefined, definition);
+        const importer = createImporterFromContent(`application { config { ${optionName} ${optionValue} } }`, undefined);
         state = importer.import();
       });
 

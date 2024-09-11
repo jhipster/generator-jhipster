@@ -28,7 +28,6 @@ import {
   databaseTypes,
   testFrameworkTypes,
 } from '../../lib/jhipster/index.js';
-import { MESSAGE_BROKER } from '../server/options/index.js';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.js';
 import type CoreGenerator from '../base-core/generator.js';
 
@@ -248,7 +247,7 @@ export async function askForOptionalItems(this: CoreGenerator, { control }) {
       this.jhipsterConfig.serverSideOptions = answers.serverSideOptions;
       this.jhipsterConfig.websocket = getOptionFromArray(answers.serverSideOptions, WEBSOCKET);
       this.jhipsterConfig.searchEngine = getOptionFromArray(answers.serverSideOptions, SEARCH_ENGINE);
-      this.jhipsterConfig.messageBroker = getOptionFromArray(answers.serverSideOptions, MESSAGE_BROKER);
+      this.jhipsterConfig.messageBroker = getOptionFromArray(answers.serverSideOptions, 'messageBroker');
       this.jhipsterConfig.enableSwaggerCodegen = getOptionFromArray(answers.serverSideOptions, ENABLE_SWAGGER_CODEGEN);
       // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
       if (!this.jhipsterConfig.serviceDiscoveryType) {

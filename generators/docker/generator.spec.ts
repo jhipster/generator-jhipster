@@ -32,7 +32,6 @@ import {
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
 
 import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
 import Generator from './index.js';
@@ -67,7 +66,7 @@ matrix = extendMatrix(matrix, {
   searchEngine: [NO_SEARCH_ENGINE, ELASTICSEARCH],
   serviceDiscoveryType: [NO_SERVICE_DISCOVERY, EUREKA, CONSUL],
   enableSwaggerCodegen: [false, true],
-  messageBroker: [MESSAGE_BROKER_NO, MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_PULSAR],
+  messageBroker: ['no', 'kafka', 'pulsar'],
 });
 
 matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {

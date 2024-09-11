@@ -1,7 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
 import type { ImportState } from '../../lib/jdl/jdl-importer.js';
 import { createImporterFromContent } from '../../lib/jdl/jdl-importer.js';
-import definition from '../app/jdl/index.js';
 
 describe(`generators - server - jdl - incrementalChangelog`, () => {
   [true, false].forEach(optionValue => {
@@ -9,7 +8,7 @@ describe(`generators - server - jdl - incrementalChangelog`, () => {
       let state: ImportState;
 
       before(() => {
-        const importer = createImporterFromContent(`application { config { incrementalChangelog ${optionValue} } }`, undefined, definition);
+        const importer = createImporterFromContent(`application { config { incrementalChangelog ${optionValue} } }`);
         state = importer.import();
       });
 

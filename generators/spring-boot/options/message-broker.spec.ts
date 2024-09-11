@@ -1,22 +1,20 @@
 import { before, describe, expect, it } from 'esmocha';
 import type { ImportState } from '../../../lib/jdl/jdl-importer.js';
 import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.js';
-import definition from '../../app/jdl/index.js';
-import optionDefinition from './message-broker.js';
-import { MESSAGE_BROKER } from './index.js';
+import command from '../command.js';
 
 describe('generators - server - jdl - messageBroker', () => {
-  optionDefinition.knownChoices!.forEach(optionValue => {
+  command.configs.messageBroker.choices!.forEach(optionValue => {
     describe(`with ${optionValue} value`, () => {
       let state: ImportState;
 
       before(() => {
-        const importer = createImporterFromContent(`application { config { ${MESSAGE_BROKER} ${optionValue} } }`, undefined, definition);
+        const importer = createImporterFromContent(`application { config { messageBroker ${optionValue} } }`);
         state = importer.import();
       });
 
       it('should set expected value', () => {
-        expect(state.exportedApplicationsWithEntities.jhipster.config[MESSAGE_BROKER]).toBe(optionValue);
+        expect(state.exportedApplicationsWithEntities.jhipster.config.messageBroker).toBe(optionValue);
       });
     });
   });

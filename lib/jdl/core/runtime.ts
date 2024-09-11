@@ -1,6 +1,6 @@
 import type { Lexer, TokenType } from 'chevrotain';
-import jhipsterDefinition from '../../../generators/app/jdl/index.js';
 import { builtInJDLApplicationConfig } from '../../jhipster/application-options.js';
+import { getDefaultJDLApplicationConfig } from '../../command/jdl.js';
 import { buildTokens, createJDLLexer } from './parsing/lexer/lexer.js';
 import JDLParser from './parsing/jdl-parser.js';
 import { checkConfigKeys, checkTokens } from './parsing/self-checks/parsing-system-checker.js';
@@ -74,9 +74,9 @@ export const createRuntime = (definition: JDLApplicationConfig): JDLRuntime => {
 };
 
 let defaultRuntime: JDLRuntime;
-export const getDefaultRuntime = () => {
+export const getDefaultRuntime = (): JDLRuntime => {
   if (!defaultRuntime) {
-    defaultRuntime = createRuntime(jhipsterDefinition);
+    defaultRuntime = createRuntime(getDefaultJDLApplicationConfig());
   }
 
   return defaultRuntime;

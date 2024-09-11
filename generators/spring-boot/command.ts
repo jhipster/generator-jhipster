@@ -25,6 +25,8 @@ import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
 
+const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
+
 const command = {
   options: {
     fakeKeytool: {
@@ -146,6 +148,10 @@ const command = {
         message: 'Do you want to allow relationships with User entity?',
         when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
       }),
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       configure: gen => {
         if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
           if (gen.isJhipsterVersionLessThan('8.1.1')) {
@@ -180,8 +186,34 @@ const command = {
       choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
       scope: 'storage',
     },
+    messageBroker: {
+      description: 'message broker',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['kafka', 'pulsar', 'no'],
+      scope: 'storage',
+    },
+    databaseMigration: {
+      description: 'Database migration',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['liquibase'],
+      scope: 'storage',
+    },
   },
-  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL],
+  import: [GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL, 'jhipster:spring-cloud:gateway'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

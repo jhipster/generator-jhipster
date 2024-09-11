@@ -24,7 +24,8 @@ export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs =
       ...(def.jdl as Omit<JHipsterOptionDefinition, 'name' | 'knownValues'>),
       name,
       knownValues: def.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)),
-    }));
+    }))
+    .sort((a, b) => (b.name.startsWith(a.name) ? 1 : a.name.localeCompare(b.name)));
 
 export const convertConfigToOption = (name: string, config?: ConfigSpec<any>): JHipsterOption | undefined => {
   if (!config?.cli?.type) return undefined;
