@@ -9,10 +9,7 @@ import {
 } from '../../jdl-importer.js';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.js';
 import definition from '../../../../generators/app/jdl/index.js';
-import {
-  createJDLLinterFromContent as originalCreateJDLLinterFromContent,
-  createJDLLinterFromFile as originalCreateJDLLinterFromFile,
-} from '../linters/jdl-linter.js';
+import { createJDLLinterFromContent as originalCreateJDLLinterFromContent } from '../linters/jdl-linter.js';
 import { convertApplications as originalConvertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.js';
 import { createJDLApplication as originalCreateJDLApplication } from '../models/jdl-application-factory.js';
 import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.js';
@@ -33,7 +30,6 @@ export const parseFromFiles = (files: string[]) => originalParseFromFiles(files,
 export const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
 
 export const createJDLLinterFromContent = (content: string) => originalCreateJDLLinterFromContent(content, runtime);
-export const createJDLLinterFromFile = (file: string) => originalCreateJDLLinterFromFile(file, runtime);
 
 export const convertApplications = (applications: ParsedJDLApplication[]) => originalConvertApplications(applications, runtime);
 export const createJDLApplication = (config: any, namespaceConfigs?: Record<string, Record<string, any>> | undefined) =>

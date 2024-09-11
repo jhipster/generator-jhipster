@@ -17,13 +17,10 @@
  * limitations under the License.
  */
 
-import path from 'path';
-
-import { readJSONFile, toFilePath } from '../../core/readers/json-file-reader.js';
-import { doesFileExist } from '../../core/utils/file-utils.js';
 import type { JSONEntity } from '../../core/types/json-config.js';
 import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.js';
 import applicationTypes from '../../../jhipster/application-types.js';
+import { readEntityFile } from '../../../utils/yo-rc.js';
 
 let configuration: any = {};
 
@@ -62,21 +59,22 @@ function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
  * Writes entities in a sub folder.
  * @param subFolder the folder (to create) in which the JHipster entity folder will be.
  */
-function updateEntities(subFolder: string): JSONEntity[] {
+function updateEntities(applicationPath: string): JSONEntity[] {
   return configuration.entities.map((entity: JSONEntity) => {
-    const filePath = path.join(subFolder, toFilePath(entity.name));
-    return updateEntityToGenerateWithExistingOne(filePath, entity);
+    return updateEntityToGenerateWithExistingOne(applicationPath, entity);
   });
 }
 
-function updateEntityToGenerateWithExistingOne(filePath: string, entity: JSONEntity): JSONEntity {
-  if (doesFileExist(filePath)) {
-    const fileOnDisk = readJSONFile(filePath);
+function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: JSONEntity): JSONEntity {
+  try {
+    const fileOnDisk = readEntityFile<JSONEntity>(applicationPath, entity.name);
     if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
       entity.annotations = entity.annotations || {};
       entity.annotations.changelogDate = fileOnDisk.annotations.changelogDate;
       return { ...fileOnDisk, ...entity };
     }
+  } catch {
+    // New entity
   }
   return entity;
 }

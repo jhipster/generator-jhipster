@@ -215,7 +215,7 @@ type PrepareConfigsWithType<U extends ParseableConfigs> = Simplify<{
     ? TupleToUnion<NormalizeChoices<U[K]['choices']>>
     : WrapperToPrimitive<ConstructorReturn<GetType<U[K]>>> extends infer T
       ? T extends undefined
-        ? string
+        ? unknown
         : T
       : never;
 }>;

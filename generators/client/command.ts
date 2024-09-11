@@ -81,7 +81,7 @@ const command = {
     microfrontends: {
       description: 'Microfrontends to load',
       cli: {
-        type: String,
+        type: (val: string) => promptValueToMicrofrontends(val),
       },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => {

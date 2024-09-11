@@ -24,7 +24,7 @@ import mergeJDLObjects from '../models/jdl-object-merger.js';
 import { doesDirectoryExist } from '../utils/file-utils.js';
 import type JDLObject from '../models/jdl-object.js';
 import type { JSONEntity } from '../types/json-config.js';
-import { readJSONFile } from './json-file-reader.js';
+import { readEntityFile, readYoRcFile } from '../../../utils/yo-rc.js';
 
 /* Parse the given jhipster app dir and return a JDLObject */
 export default function parseFromDir(dir: string): JDLObject {
@@ -44,13 +44,13 @@ export default function parseFromDir(dir: string): JDLObject {
     if (file.endsWith('.json')) {
       const entityName = file.slice(0, file.length - 5);
       try {
-        entities.set(entityName, readJSONFile(`${entityDir}/${file}`));
+        entities.set(entityName, readEntityFile(dir, entityName));
       } catch {
         // Not an entity file, not adding
       }
     }
   });
-  const applicationOptions = readJSONFile(`${dir}/.yo-rc.json`)['generator-jhipster'];
+  const applicationOptions = readYoRcFile(dir)['generator-jhipster'];
 
   // @ts-expect-error TODO
   const jdlObject = convertServerOptionsToJDL(applicationOptions);

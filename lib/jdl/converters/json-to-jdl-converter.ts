@@ -22,12 +22,11 @@ import fs from 'fs';
 import JDLObject from '../core/models/jdl-object.js';
 import mergeJDLObjects from '../core/models/jdl-object-merger.js';
 import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.js';
-import { readJSONFile } from '../core/readers/json-file-reader.js';
 import { removeFieldsWithNullishValues } from '../../utils/object.js';
 import type JDLApplication from '../core/models/jdl-application.js';
 import type { JDLRuntime } from '../core/types/runtime.js';
 import { createRuntime, getDefaultRuntime } from '../core/runtime.js';
-import { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.js';
+import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.js';
 import type { JDLApplicationConfig } from '../core/types/parsing.js';
 import type { JHipsterYoRcContent, JSONEntity, PostProcessedJSONRootObject } from '../core/types/json-config.js';
 import exportJDLObject from './exporters/jdl-exporter.js';
@@ -52,7 +51,7 @@ export function convertToJDL(
   let jdlObject: JDLObject;
   const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
   if (doesFileExist(path.join(directory, '.yo-rc.json'))) {
-    const yoRcFileContent: JHipsterYoRcContent = readJSONFile(path.join(directory, '.yo-rc.json'));
+    const yoRcFileContent: JHipsterYoRcContent = readYoRcFile(directory);
     let entities: Map<string, JSONEntity> | undefined;
     if (doesDirectoryExist(path.join(directory, '.jhipster'))) {
       entities = getJSONEntityFiles(directory);
@@ -84,7 +83,7 @@ function getJDLObjectFromMultipleApplications(directory: string, runtime: JDLRun
   let jdlObject = new JDLObject();
   subDirectories.forEach(subDirectory => {
     const applicationDirectory = path.join(directory, subDirectory);
-    const yoRcFileContent: JHipsterYoRcContent = readJSONFile(path.join(applicationDirectory, '.yo-rc.json'));
+    const yoRcFileContent: JHipsterYoRcContent = readYoRcFile(applicationDirectory);
     let entities = new Map<string, JSONEntity>();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {
       entities = getJSONEntityFiles(applicationDirectory);
@@ -131,9 +130,10 @@ function getJSONEntityFiles(applicationDirectory: string): Map<string, JSONEntit
   const entities = new Map<string, JSONEntity>();
   fs.readdirSync(path.join(applicationDirectory, '.jhipster')).forEach(file => {
     const entityName = file.slice(0, file.indexOf('.json'));
-    const jsonFilePath = path.join(applicationDirectory, '.jhipster', file);
-    if (fs.statSync(jsonFilePath).isFile() && file.endsWith('.json')) {
-      entities.set(entityName, readJSONFile(jsonFilePath));
+    try {
+      entities.set(entityName, readEntityFile(applicationDirectory, entityName));
+    } catch {
+      // Not an entity file, not adding
     }
   });
   return entities;

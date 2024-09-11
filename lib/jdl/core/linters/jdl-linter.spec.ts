@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
-import { createJDLLinterFromContent, createJDLLinterFromFile, getTestFile } from '.././__test-support__/index.js';
+import { createJDLLinterFromContent, getTestFile } from '.././__test-support__/index.js';
 import type { JDLLinter } from './jdl-linter.js';
 import type Issues from './issues/issues.js';
 import type EnumIssue from './issues/enum-issue.js';
@@ -31,6 +31,20 @@ import type relationshipIssue from './issues/relationship-issue.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+/**
+ * Creates a new JDL linters from a JDL file.
+ * @param file - the JDL file.
+ * @return {Object} the JDL linters.
+ * @throws {Error} if the JDL file isn't passed.
+ */
+export function createJDLLinterFromFile(file: string): JDLLinter {
+  if (!file) {
+    throw new Error('A JDL file must be passed to create a new JDL linter.');
+  }
+  const jdlString = readFileSync(file, 'utf-8');
+  return createJDLLinterFromContent(jdlString);
+}
 
 describe('jdl - JDLLinter', () => {
   beforeEach(async () => {

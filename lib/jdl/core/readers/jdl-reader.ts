@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
+import { readFileSync } from 'fs';
 import logger from '../utils/objects/logger.js';
 
 import * as parser from '../parsing/api.js';
 import performJDLPostParsingTasks from '../parsing/jdl-post-parsing-tasks.js';
 import type { JDLRuntime } from '../types/runtime.js';
-import { readFile, readFiles } from './file-reader.js';
 
 /**
  * Parses the given files and returns the resulting intermediate object.
@@ -59,8 +59,12 @@ function checkFiles(files: string[]) {
   }
 }
 
-function getFilesContent(files: string[]) {
-  return files.length === 1 ? readFile(files[0]) : aggregateFiles(files);
+function getFilesContent(files: string[]): string {
+  try {
+    return files.length === 1 ? readFileSync(files[0], 'utf-8') : aggregateFiles(files);
+  } catch (error) {
+    throw new Error(`The passed file '${files[0]}' must exist and must not be a directory to be read.`, { cause: error });
+  }
 }
 
 function checkAllTheFilesAreJDLFiles(files) {
@@ -128,6 +132,6 @@ export function checkFileIsJDLFile(file: string): void {
   }
 }
 
-function aggregateFiles(files: string[]) {
-  return readFiles(files).join('\n');
+function aggregateFiles(files: string[]): string {
+  return files.map(file => readFileSync(file, 'utf-8')).join('\n');
 }

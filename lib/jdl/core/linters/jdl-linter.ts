@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { readFile } from '../readers/file-reader.js';
-import * as JDLReader from '../readers/jdl-reader.js';
 import type { JDLRuntime } from '../types/runtime.js';
+import { getCstFromContent } from '../readers/jdl-reader.js';
 import Issues from './issues/issues.js';
 import type { EntityDeclaration } from './entity-linter.js';
 import { checkEntities } from './entity-linter.js';
@@ -44,20 +43,6 @@ export function createJDLLinterFromContent(jdlString: string, runtime: JDLRuntim
   return makeJDLLinter(jdlString, runtime);
 }
 
-/**
- * Creates a new JDL linters from a JDL file.
- * @param file - the JDL file.
- * @return {Object} the JDL linters.
- * @throws {Error} if the JDL file isn't passed.
- */
-export function createJDLLinterFromFile(file: string, runtime: JDLRuntime): JDLLinter {
-  if (!file) {
-    throw new Error('A JDL file must be passed to create a new JDL linter.');
-  }
-  const jdlString = readFile(file);
-  return makeJDLLinter(jdlString, runtime);
-}
-
 type CST = {
   children: {
     entityDeclaration: EntityDeclaration[];
@@ -70,7 +55,7 @@ let cst: CST;
 let issues: Issues;
 
 function makeJDLLinter(content: any, runtime: JDLRuntime) {
-  cst = JDLReader.getCstFromContent(content, runtime);
+  cst = getCstFromContent(content, runtime);
   issues = new Issues();
 
   return {
