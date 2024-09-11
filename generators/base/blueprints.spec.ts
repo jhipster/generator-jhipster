@@ -31,7 +31,7 @@ describe('generator - base - with blueprint', () => {
     });
 
     it('creates expected default files for server and angular', () => {
-      expect(runResult.mockedGenerators['jhipster-myblueprint:test-blueprint'].called);
+      runResult.assertGeneratorComposed('jhipster-myblueprint:test-blueprint');
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
@@ -202,7 +202,7 @@ describe('generator - base - with scoped blueprint', () => {
     });
 
     it('should compose with blueprint', () => {
-      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called).toBe(true);
+      runResult.assertGeneratorComposed('@jhipster/jhipster-scoped-blueprint:test-blueprint');
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
@@ -229,7 +229,7 @@ describe('generator - base - with blueprints disabled', () => {
     });
 
     it('should compose with blueprint', () => {
-      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called).toBeFalsy;
+      runResult.assertGeneratorNotComposed('@jhipster/jhipster-scoped-blueprint:test-blueprint');
     });
   });
 });
@@ -271,8 +271,8 @@ describe('generator - base - with multiple blueprints', () => {
         });
     });
     it('should compose with blueprints once', () => {
-      expect(runResult.mockedGenerators['jhipster-blueprint1:test-blueprint'].calledOnce);
-      expect(runResult.mockedGenerators['jhipster-blueprint2:test-blueprint'].calledOnce);
+      runResult.assertGeneratorComposedOnce('jhipster-blueprint1:test-blueprint');
+      runResult.assertGeneratorComposedOnce('jhipster-blueprint2:test-blueprint');
     });
   });
 });

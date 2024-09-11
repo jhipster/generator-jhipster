@@ -57,10 +57,10 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with maven generator', () => {
-        expect(runResult.mockedGenerators['jhipster:maven'].calledOnce).toBe(true);
+        runResult.assertGeneratorComposedOnce('jhipster:maven');
       });
       it('should not compose with others buildTool generators', () => {
-        expect(runResult.mockedGenerators['jhipster:gradle'].notCalled).toBe(true);
+        runResult.assertGeneratorNotComposed('jhipster:gradle');
       });
     });
     describe('gradle', () => {
@@ -76,10 +76,10 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with gradle generator', () => {
-        expect(runResult.mockedGenerators['jhipster:gradle'].called).toBe(true);
+        runResult.assertGeneratorComposedOnce('jhipster:gradle');
       });
       it('should not compose with others buildTool generators', () => {
-        expect(runResult.mockedGenerators['jhipster:maven'].notCalled).toBe(true);
+        runResult.assertGeneratorNotComposed('jhipster:maven');
       });
     });
   });

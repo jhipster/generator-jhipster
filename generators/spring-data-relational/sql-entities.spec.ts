@@ -80,13 +80,13 @@ describe(`generator - ${databaseType} - entities`, () => {
       });
 
       it('should compose with jhipster:common', () => {
-        expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
-        expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
+        expect(runResult.getGeneratorComposeCount('jhipster:languages')).toBe(enableTranslation ? 1 : 0);
       });
       it('should compose with jhipster:liquibase', () => {
-        expect(runResult.mockedGenerators['jhipster:liquibase'].callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('jhipster:liquibase');
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

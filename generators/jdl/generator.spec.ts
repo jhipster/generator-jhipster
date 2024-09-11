@@ -89,13 +89,11 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
 
       it('should compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
         expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
@@ -116,13 +114,11 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
 
       it('should compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
         expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
@@ -145,12 +141,10 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
         expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
       });
       it('should write expected files', () => {
@@ -209,12 +203,10 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce(MOCKED_APP);
         expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
       });
       it('should write expected files', () => {
@@ -249,16 +241,13 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
       it('should compose with workspaces', () => {
-        const mock = runResult.mockedGenerators[MOCKED_WORKSPACES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
         expect(mock.lastCall.args).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['jhipster', 'jhipster2'], generateApplications: expect.any(Function) }),
@@ -285,12 +274,10 @@ describe(`generator - ${generator}`, () => {
         expect(mock.lastCall.args).toStrictEqual([['Bar'], expect.any(Object)]);
       });
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
       it('should not compose with workspaces', () => {
-        const mock = runResult.mockedGenerators[MOCKED_WORKSPACES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_WORKSPACES);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -443,16 +430,13 @@ entity Bar
       });
 
       it('should not compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_ENTITIES);
       });
       it('should not compose with app', () => {
-        const mock = runResult.mockedGenerators[MOCKED_APP] as SinonSpy;
-        expect(mock.callCount).toBe(0);
+        runResult.assertGeneratorNotComposed(MOCKED_APP);
       });
       it('should compose with workspaces', () => {
-        const mock = runResult.mockedGenerators[MOCKED_WORKSPACES] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
         expect(mock.lastCall.args).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['gatewayApp', 'jhipster'], generateApplications: expect.any(Function) }),
@@ -501,8 +485,7 @@ application { config { baseName gatewayApp applicationType gateway } }
       });
 
       it('should generate expected config', () => {
-        const mock = runResult.mockedGenerators['foo:bar'] as SinonSpy;
-        expect(mock.callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('foo:bar');
       });
     });
   });

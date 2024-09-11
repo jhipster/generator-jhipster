@@ -286,7 +286,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       result.cleanup();
     });
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
-      expect(result.mockedGenerators[`jhipster-foo:${generatorName}`].callCount).toBe(1);
+      expect(result.getGeneratorComposeCount(`jhipster-foo:${generatorName}`)).toBe(1);
     });
     it('should not call any priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(0);
@@ -347,7 +347,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
       result.cleanup();
     });
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
-      expect(result.mockedGenerators[`jhipster-foo-sbs:${generatorName}`].callCount).toBe(1);
+      expect(result.assertGeneratorComposedOnce(`jhipster-foo-sbs:${generatorName}`));
     });
     it('should call every priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
