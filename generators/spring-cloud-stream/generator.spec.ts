@@ -18,7 +18,7 @@
  */
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { after, before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
@@ -52,8 +52,6 @@ describe(`generator - ${generator}`, () => {
       before(async () => {
         runResult = await helpers.run(generatorFile).withJHipsterConfig(config);
       });
-
-      after(() => runResult.cleanup());
 
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
