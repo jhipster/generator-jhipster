@@ -287,7 +287,6 @@ describe('generator - languages', () => {
             languages: ['fr', 'de'],
           })
           .withOptions({
-            // @ts-expect-error not typed option
             commandName: 'languages',
           })
           .run();
@@ -324,7 +323,6 @@ describe('generator - languages', () => {
           .create('jhipster:languages')
           .withArguments(['fr', 'de'])
           .withOptions({
-            // @ts-expect-error not typed option
             baseName: 'jhipster',
           })
           .run();

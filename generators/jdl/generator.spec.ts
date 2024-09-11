@@ -20,7 +20,6 @@ import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
-import type { SinonSpy } from 'sinon';
 
 import type { RunResult } from 'yeoman-test';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
@@ -94,7 +93,8 @@ describe(`generator - ${generator}`, () => {
 
       it('should compose with entities', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
-        expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should write expected files', () => {
@@ -119,7 +119,8 @@ describe(`generator - ${generator}`, () => {
 
       it('should compose with entities', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
-        expect(mock.lastCall.args).toStrictEqual([['Foo'], expect.any(Object)]);
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should write expected files', () => {
@@ -145,7 +146,10 @@ describe(`generator - ${generator}`, () => {
       });
       it('should compose with app', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_APP);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
+        expect(runResult.getGeneratorMock(MOCKED_APP).calls[0].arguments).toStrictEqual([
+          [],
+          expect.not.objectContaining({ applicationWithEntities: expect.any(Object) }),
+        ]);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -207,7 +211,11 @@ describe(`generator - ${generator}`, () => {
       });
       it('should compose with app', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_APP);
-        expect(mock.lastCall.args).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
+        const calls = runResult.getGeneratorMock(MOCKED_APP).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([
+          [],
+          expect.not.objectContaining({ applicationWithEntities: expect.any(Object) }),
+        ]);
       });
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -248,7 +256,8 @@ describe(`generator - ${generator}`, () => {
       });
       it('should compose with workspaces', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
-        expect(mock.lastCall.args).toStrictEqual([
+        const calls = runResult.getGeneratorMock(MOCKED_WORKSPACES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['jhipster', 'jhipster2'], generateApplications: expect.any(Function) }),
         ]);
@@ -269,9 +278,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with entities', () => {
-        const mock = runResult.mockedGenerators[MOCKED_ENTITIES] as SinonSpy;
-        expect(mock.callCount).toBe(2);
-        expect(mock.lastCall.args).toStrictEqual([['Bar'], expect.any(Object)]);
+        expect(runResult.getGeneratorComposeCount(MOCKED_ENTITIES)).toBe(2);
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls[calls.length - 1].arguments).toStrictEqual([['Bar'], expect.any(Object)]);
       });
       it('should not compose with app', () => {
         runResult.assertGeneratorNotComposed(MOCKED_APP);
@@ -437,7 +446,7 @@ entity Bar
       });
       it('should compose with workspaces', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
-        expect(mock.lastCall.args).toStrictEqual([
+        expect(runResult.getGeneratorMock(MOCKED_WORKSPACES).calls[0].arguments).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['gatewayApp', 'jhipster'], generateApplications: expect.any(Function) }),
         ]);

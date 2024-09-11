@@ -137,7 +137,7 @@ describe(`generator - ${generator}`, () => {
         .runJHipster(generator)
         .withJHipsterConfig()
         .withSpawnMock({
-          registerSinonDefaults: false,
+          registerNodeMockDefaults: false,
           stub: fn(),
         })
         .withFiles({
@@ -165,7 +165,7 @@ describe(`generator - ${generator}`, () => {
         .runJHipster(generator)
         .withJHipsterConfig()
         .withSpawnMock({
-          registerSinonDefaults: false,
+          registerNodeMockDefaults: false,
           stub: fn(),
         })
         .withFiles({
