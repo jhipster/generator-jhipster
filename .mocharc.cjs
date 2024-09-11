@@ -18,4 +18,5 @@ module.exports = {
   // `loader` options is passed to forks, but `require` is not.
   // Use node-option instead (it overrides loader option)
   parallel: true,
+  require: ['yeoman-test/mocha-cleanup'],
 };
