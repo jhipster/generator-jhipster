@@ -21,7 +21,15 @@ export const generateSample = async (
     jdlEntity: passedJdlEntity,
     jdlSamples: passedJdlSamples,
     fork = true,
-  } = {},
+  }: {
+    destProjectFolder: string;
+    environment?: string;
+    war?: boolean;
+    entity?: string;
+    jdlEntity?: string;
+    jdlSamples?: string;
+    fork?: boolean;
+  },
 ) => {
   if (!sampleName) {
     throw new Error('Sample name is required');

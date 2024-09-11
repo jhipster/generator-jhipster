@@ -1,7 +1,7 @@
 import { before, describe, it } from 'esmocha';
 import ClientGenerator from '../../generators/client/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { getGenerator, dryRunHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { getGenerator, dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 const mockBlueprintSubGen: any = class extends ClientGenerator {
   constructor(args, opts, features) {

@@ -24,7 +24,7 @@ import { expect } from 'chai';
 import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
 import JDLDeployment from '../../core/models/jdl-deployment.js';
 import { deploymentOptions } from '../../core/built-in-options/index.js';
-import { basicHelpers as helpers } from '../../../../testing/index.js';
+import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },

@@ -13,7 +13,7 @@ export default class extends BaseGenerator {
       async generateVscodeLaunch() {
         const vscodeLaunch = join(getPackageRoot(), '.vscode/launch.json');
 
-        const baseFile = {
+        const baseFile: { version: string; inputs: any[]; configurations: any } = {
           version: '0.2.0',
           inputs: [],
           configurations: [

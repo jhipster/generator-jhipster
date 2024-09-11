@@ -22,7 +22,7 @@ import { after, before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../testing/index.js';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { messageBrokerTypes } from '../../lib/jhipster/index.js';
 import Generator from './index.js';
 

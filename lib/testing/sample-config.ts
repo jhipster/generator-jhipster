@@ -1,9 +1,9 @@
 import { lstat, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import type { InfoFile } from '../generators/info/support/extract-info.js';
-import { GENERATOR_JHIPSTER } from '../generators/generator-constants.js';
-import { mutateData } from '../lib/utils/object.js';
+import type { InfoFile } from '../../generators/info/support/extract-info.js';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
+import { mutateData } from '../utils/object.js';
 
 const isFile = async (filename: string): Promise<boolean> => {
   try {

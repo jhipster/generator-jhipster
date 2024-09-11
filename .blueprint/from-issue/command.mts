@@ -18,7 +18,7 @@
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_APP, GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
-import { parseIssue } from '../../testing/github.js';
+import { parseIssue } from '../../lib/testing/github.js';
 
 const command: JHipsterCommandDefinition = {
   configs: {

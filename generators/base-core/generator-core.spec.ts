@@ -1,5 +1,5 @@
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
-import { basicHelpers as helpers } from '../../testing/index.js';
+import { basicHelpers as helpers } from '../../lib/testing/index.js';
 
 import { createJHipsterLogger } from '../base/support/index.js';
 import Base from './index.js';

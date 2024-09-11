@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const allMockedComposedGenerators = [

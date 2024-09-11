@@ -23,7 +23,7 @@ import { snakeCase } from 'lodash-es';
 import { simpleGit } from 'simple-git';
 
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { basicHelpers as helpers, result } from '../../testing/index.js';
+import { basicHelpers as helpers, result } from '../../lib/testing/index.js';
 import { UPGRADE_BRANCH } from './support/index.js';
 import Generator from './index.js';
 

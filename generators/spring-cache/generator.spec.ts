@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { fromMatrix, defaultHelpers as helpers, result } from '../../testing/index.js';
+import { fromMatrix, defaultHelpers as helpers, result } from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 
 import { GENERATOR_SPRING_CACHE } from '../generator-list.js';

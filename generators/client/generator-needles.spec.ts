@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, basicHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { getGenerator, basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import ClientGenerator from './index.js';

@@ -1,5 +1,4 @@
 import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import { merge, set, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
@@ -7,16 +6,16 @@ import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
 import type { EmptyObject } from 'type-fest';
-import EnvironmentBuilder from '../cli/environment-builder.mjs';
-import { JHIPSTER_CONFIG_DIR } from '../generators/generator-constants.js';
-import { GENERATOR_WORKSPACES } from '../generators/generator-list.js';
-import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../generators/base/support/index.js';
-import BaseGenerator from '../generators/base/index.js';
-import type { JHipsterGeneratorOptions } from '../generators/base/api.js';
-import { getPackageRoot, isDistFolder } from '../lib/index.js';
-import type { JSONEntity } from '../lib/jdl/core/types/json-config.js';
-import type CoreGenerator from '../generators/base-core/generator.js';
-import type { ApplicationConfiguration } from '../lib/types/application/yo-rc.js';
+import EnvironmentBuilder from '../../cli/environment-builder.mjs';
+import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
+import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
+import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../../generators/base/support/index.js';
+import BaseGenerator from '../../generators/base/index.js';
+import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
+import { getPackageRoot, isDistFolder } from '../index.js';
+import type { JSONEntity } from '../jdl/core/types/json-config.js';
+import type CoreGenerator from '../../generators/base-core/generator.js';
+import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import getGenerator from './get-generator.js';
 
 type BaseEntity = { name: string } & JSONEntity;
@@ -43,7 +42,7 @@ const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
-const generatorsDir = join(fileURLToPath(import.meta.url), '../../generators');
+const generatorsDir = join(getPackageRoot(), 'generators');
 const allGenerators = [
   ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
   ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),

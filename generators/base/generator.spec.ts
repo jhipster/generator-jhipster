@@ -22,7 +22,7 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.js';
 import BaseGenerator from './index.js';
 

@@ -1,12 +1,9 @@
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { resolve } from 'path';
 import { existsSync } from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { getPackageRoot } from '../index.js';
 
 export const getGeneratorFolder = (generatorName: string) => {
-  return resolve(__dirname, '../generators', generatorName.split(':').join('/generators/'));
+  return resolve(getPackageRoot(), 'generators', generatorName.split(':').join('/generators/'));
 };
 
 const getGenerator = (generatorName: string) => {

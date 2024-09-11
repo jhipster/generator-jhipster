@@ -22,7 +22,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { expect } from 'chai';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
-import { basicHelpers as helpers } from '../../../../testing/index.js';
+import { basicHelpers as helpers } from '../../../../lib/testing/index.js';
 import { createJDLLinterFromContent, createJDLLinterFromFile, getTestFile } from '.././__test-support__/index.js';
 import type { JDLLinter } from './jdl-linter.js';
 import type Issues from './issues/issues.js';
