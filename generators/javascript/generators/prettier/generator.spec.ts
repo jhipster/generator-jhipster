@@ -52,7 +52,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toMatchSnapshot();
+        expect(result.getComposedGenerators()).toMatchSnapshot();
       });
     });
   });

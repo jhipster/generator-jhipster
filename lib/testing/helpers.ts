@@ -326,7 +326,7 @@ plugins {
       runResult.sourceCallsArg = sourceCallsArg;
     }
 
-    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.called);
+    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.mock.callCount() > 0);
 
     return runResult as any;
   }

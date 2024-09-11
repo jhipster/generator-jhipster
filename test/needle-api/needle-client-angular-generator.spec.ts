@@ -99,7 +99,6 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
       .create('jhipster:angular')
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
       .withOptions({
-        // @ts-expect-error TODO
         blueprint: ['myblueprint2'],
         force: false,
       });

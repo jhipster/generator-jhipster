@@ -62,7 +62,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
+        expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",
   "jhipster:javascript:bootstrap",

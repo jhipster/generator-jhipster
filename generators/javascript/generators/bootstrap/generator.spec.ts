@@ -57,7 +57,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toHaveLength(0);
+        expect(result.getComposedGenerators()).toHaveLength(2);
       });
     });
   }
