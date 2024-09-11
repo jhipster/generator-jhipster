@@ -179,9 +179,8 @@ describe('generator - app - --incremental-changelog', function () {
     force: true,
   };
   describe('when creating a new application', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers.run(generatorPath).withJHipsterConfig(config).withOptions(options).withMockedGenerators(mockedGenerators);
+      await helpers.run(generatorPath).withJHipsterConfig(config).withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
     after(() => runResult.cleanup());
@@ -197,10 +196,9 @@ describe('generator - app - --incremental-changelog', function () {
 
   describe('when incremental liquibase files exists', () => {
     describe('with default options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
-          .create(generatorPath)
+        await helpers
+          .run(generatorPath)
           .withJHipsterConfig(config)
           .withOptions(options)
           .doInDir(cwd => {
@@ -212,8 +210,7 @@ describe('generator - app - --incremental-changelog', function () {
               }
               writeFileSync(filePath, basename(filePath));
             });
-          })
-          .run();
+          });
       });
 
       after(() => runResult.cleanup());
@@ -234,10 +231,9 @@ describe('generator - app - --incremental-changelog', function () {
     });
 
     describe('with --recreate-initial-changelog', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
-          .create(generatorPath)
+        await helpers
+          .run(generatorPath)
           .withJHipsterConfig(config)
           .withOptions({ ...options, recreateInitialChangelog: true })
           .doInDir(cwd => {
@@ -249,8 +245,7 @@ describe('generator - app - --incremental-changelog', function () {
               }
               writeFileSync(filePath, basename(filePath));
             });
-          })
-          .run();
+          });
       });
 
       after(() => runResult.cleanup());
@@ -272,7 +267,6 @@ describe('generator - app - --incremental-changelog', function () {
   });
 
   describe('regenerating the application', () => {
-    let runResult;
     before(async () => {
       const initialState = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
         ...options,
@@ -281,15 +275,14 @@ describe('generator - app - --incremental-changelog', function () {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
       const state = createImporterFromContent(jdlApplicationWithRelationshipToUser, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -334,7 +327,6 @@ describe('generator - app - --incremental-changelog', function () {
   });
 
   describe('when adding a field without constraints', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(
@@ -352,11 +344,10 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(1);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(
         `
@@ -370,7 +361,7 @@ entity Customer {
           ...options,
         },
       ).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -418,7 +409,6 @@ entity Customer {
   });
 
   describe('when adding a field with constraints', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(
@@ -436,11 +426,10 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(1);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const regenerateState = createImporterFromContent(
         `
@@ -455,7 +444,7 @@ entity Customer {
         },
       ).import();
 
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -503,7 +492,6 @@ entity Customer {
   });
 
   describe('when removing a field without constraints', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(
@@ -522,11 +510,10 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(1);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(
         `
@@ -539,7 +526,7 @@ entity Customer {
           ...options,
         },
       ).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -587,7 +574,6 @@ entity Customer {
   });
 
   describe('when removing a field with constraints', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(
@@ -606,11 +592,10 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(1);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(
         `
@@ -623,7 +608,7 @@ entity Customer {
           ...options,
         },
       ).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -671,7 +656,6 @@ entity Customer {
   });
 
   describe('when adding a relationship', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
@@ -681,16 +665,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -738,7 +721,6 @@ entity Customer {
   });
 
   describe('when adding a many-to-many relationship', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
@@ -748,16 +730,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndAddedNewMnyToManyRelationship, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -818,7 +799,6 @@ entity Customer {
   });
 
   describe('when adding a relationship with on handlers', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
@@ -828,16 +808,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -894,7 +873,6 @@ entity Customer {
     });
   });
   describe('when modifying a relationship with on handlers, only at these handlers', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
@@ -904,16 +882,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -925,7 +902,7 @@ entity Customer {
       const thirdState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlers, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -1017,7 +994,6 @@ entity Customer {
   });
 
   describe('when modifying an existing relationship', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
@@ -1027,16 +1003,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -1048,7 +1023,7 @@ entity Customer {
       const thirdState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlersAndChangedNaming, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -1150,7 +1125,6 @@ entity Customer {
   });
 
   describe('when initially creating an application with entities with relationships having on handlers', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers, {
@@ -1160,11 +1134,10 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
     });
 
     after(() => runResult.cleanup());
@@ -1213,7 +1186,6 @@ entity Customer {
   });
 
   describe('when removing a relationship', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntitiesAndRelationship, {
@@ -1223,16 +1195,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntities, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -1283,7 +1254,6 @@ entity Customer {
   });
 
   describe('when modifying fields and relationships at the same time in different entities', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntities, {
@@ -1293,16 +1263,15 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithChangedEntitiesAndRelationship, {
         ...options,
       }).import();
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -1380,7 +1349,6 @@ entity Customer {
   });
 
   describe('when creating entities with default values', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntitiesWithDefaultValues, {
@@ -1390,11 +1358,10 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
     });
 
     after(() => runResult.cleanup());
@@ -1437,7 +1404,6 @@ entity Customer {
   });
 
   describe('when modifying default values, fields with default values and relationships', () => {
-    let runResult;
     before(async () => {
       const baseName = 'JhipsterApp';
       const initialState = createImporterFromContent(jdlApplicationWithEntitiesWithDefaultValues, {
@@ -1447,17 +1413,16 @@ entity Customer {
       const applicationWithEntities = initialState.exportedApplicationsWithEntities[baseName];
       expect(applicationWithEntities).toBeTruthy();
       expect(applicationWithEntities.entities.length).toBe(2);
-      runResult = await helpers
-        .create(generatorPath)
+      await helpers
+        .run(generatorPath)
         .withJHipsterConfig(config)
-        .withOptions({ ...options, applicationWithEntities })
-        .run();
+        .withOptions({ ...options, applicationWithEntities });
 
       const state = createImporterFromContent(jdlApplicationWithEntitiesWithChangedDefaultValuesAndNewRelationship, {
         ...options,
       }).import();
 
-      runResult = await runResult
+      await runResult
         .create(generatorPath)
         .withOptions({
           ...options,
@@ -1528,10 +1493,9 @@ entity Customer {
           expect(applicationWithEntities).toBeTruthy();
           expect(applicationWithEntities.entities.length).toBe(1);
           await helpers
-            .create(generatorPath)
+            .run(generatorPath)
             .withJHipsterConfig(config)
-            .withOptions({ ...options, applicationWithEntities })
-            .run();
+            .withOptions({ ...options, applicationWithEntities });
         });
 
         it('should create entity config file', () => {
