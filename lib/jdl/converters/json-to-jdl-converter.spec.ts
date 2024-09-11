@@ -18,16 +18,12 @@
  */
 
 import fs, { readFileSync } from 'fs';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import path from 'path';
 import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../lib/testing/index.js';
 import { getTestFile } from '../core/__test-support__/index.js';
 import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 describe('jdl - JSONToJDLConverter', () => {
   beforeEach(async () => {
