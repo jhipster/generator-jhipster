@@ -1,7 +1,7 @@
+import type { ApplicationConfiguration, YoRcContent } from '../../../types/application/yo-rc.js';
 import type { Entity } from '../../../types/base/entity.js';
 import type { Field } from '../../../types/base/field.js';
 import type { Relationship } from '../../../types/base/relationship.js';
-import type { YO_RC_CONFIG_KEY } from '../../../utils/yo-rc.ts';
 
 export type JSONField = Field & Record<string, any>;
 
@@ -22,11 +22,7 @@ type JSONGeneratorJhipsterContentDeployment = {
   clusteredDbApps?: string[];
 };
 
-type AbstractJSONGeneratorJhipsterContent = {
-  baseName: string;
-  applicationType?: string;
-} & JSONGeneratorJhipsterContentDeployment &
-  Record<string, any>;
+type AbstractJSONGeneratorJhipsterContent = ApplicationConfiguration & JSONGeneratorJhipsterContentDeployment & Record<string, any>;
 
 type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
@@ -39,13 +35,14 @@ type PostProcessedJSONGeneratorJhipsterContent = {
   microfrontends?: string[];
 } & AbstractJSONGeneratorJhipsterContent;
 
-export type PostProcessedJSONRootObject = {
-  [YO_RC_CONFIG_KEY]: PostProcessedJSONGeneratorJhipsterContent;
-};
+export type PostProcessedJSONRootObject = YoRcContent<
+  Omit<PostProcessedJSONGeneratorJhipsterContent, 'blueprints' | 'microfrontends'> & {
+    blueprints?: string[];
+    microfrontends?: string[];
+  }
+>;
 
-export type JHipsterYoRcContent = {
-  [YO_RC_CONFIG_KEY]: JSONGeneratorJhipsterContent;
-};
+export type JHipsterYoRcContent = YoRcContent<JSONGeneratorJhipsterContent>;
 
 export type JHipsterYoRcContentWrapper = {
   application?: PostProcessedJSONRootObject | JHipsterYoRcContent;

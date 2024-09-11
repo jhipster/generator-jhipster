@@ -18,6 +18,7 @@
  */
 import { uniqBy } from 'lodash-es';
 import { applicationOptions } from '../jhipster/index.js';
+import { readCurrentPathYoRcFile } from '../utils/yo-rc.js';
 import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
 import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
 import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
@@ -28,9 +29,7 @@ import {
 import exportDeployments from './converters/exporters/jhipster-deployment-exporter.js';
 import exportEntities from './converters/exporters/jhipster-entity-exporter.js';
 import { GENERATOR_NAME } from './converters/exporters/export-utils.js';
-import * as JDLReader from './core/readers/jdl-reader.js';
-import { readJSONFile } from './core/readers/json-file-reader.js';
-import { doesFileExist } from './core/utils/file-utils.js';
+import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.js';
 import createWithApplicationValidator from './converters/validators/jdl-with-application-validator.js';
 import createWithoutApplicationValidator from './converters/validators/jdl-without-application-validator.js';
 import type JDLObject from './core/models/jdl-object.js';
@@ -64,7 +63,7 @@ export function createImporterFromFiles(files, configuration?: any, definition?:
     throw new Error('Files must be passed to create a new JDL importer.');
   }
   const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
-  const content = parseFiles(files, runtime);
+  const content = parseFromFiles(files, runtime);
   return makeJDLImporter(content, configuration || {}, runtime);
 }
 
@@ -89,7 +88,7 @@ export function createImporterFromContent(jdlString, configuration?: any, defini
     throw new Error('A JDL content must be passed to create a new JDL importer.');
   }
   const runtime = definition ? createRuntime(definition) : getDefaultRuntime();
-  const content = JDLReader.parseFromContent(jdlString, runtime);
+  const content = parseFromContent(jdlString, runtime);
   return makeJDLImporter(content, configuration || {}, runtime);
 }
 
@@ -137,10 +136,6 @@ function makeJDLImporter(content, configuration, runtime: JDLRuntime) {
   };
 }
 
-function parseFiles(files: string[], runtime: JDLRuntime) {
-  return JDLReader.parseFromFiles(files, runtime);
-}
-
 function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration, runtime: JDLRuntime) {
   let baseName = configuration.applicationName;
   let applicationType = configuration.applicationType;
@@ -167,8 +162,8 @@ function checkForErrors(jdlObject: JDLObject, configuration, logger = console) {
   let validator;
   if (jdlObject.getApplicationQuantity() === 0) {
     let application = configuration.application;
-    if (!application && doesFileExist('.yo-rc.json')) {
-      application = readJSONFile('.yo-rc.json');
+    if (!application) {
+      application = readCurrentPathYoRcFile();
     }
     let applicationType = configuration.applicationType;
     let databaseType = configuration.databaseType;
@@ -203,8 +198,8 @@ function importOnlyEntities(jdlObject: JDLObject, configuration) {
   let { applicationName, applicationType, databaseType } = configuration;
 
   let application = configuration.application;
-  if (!configuration.application && doesFileExist('.yo-rc.json')) {
-    application = readJSONFile('.yo-rc.json');
+  if (!application) {
+    application = readCurrentPathYoRcFile();
   }
   if (application?.[GENERATOR_JHIPSTER]) {
     if (applicationType === undefined) {

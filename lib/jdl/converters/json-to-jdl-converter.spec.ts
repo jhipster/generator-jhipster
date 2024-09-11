@@ -417,8 +417,6 @@ describe('jdl - JSONToJDLConverter', () => {
         convertSingleContentToJDL({
           'generator-jhipster': {
             baseName: 'x',
-            blueprints: null,
-            microfrontends: undefined,
           },
         });
       });

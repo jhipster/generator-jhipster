@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { readFile } from '../readers/file-reader.js';
-import * as JDLReader from '../readers/jdl-reader.js';
 import type { JDLRuntime } from '../types/runtime.js';
+import { getCstFromContent } from '../readers/jdl-reader.js';
 import Issues from './issues/issues.js';
 import type { EntityDeclaration } from './entity-linter.js';
 import { checkEntities } from './entity-linter.js';
@@ -56,7 +55,7 @@ let cst: CST;
 let issues: Issues;
 
 function makeJDLLinter(content: any, runtime: JDLRuntime) {
-  cst = JDLReader.getCstFromContent(content, runtime);
+  cst = getCstFromContent(content, runtime);
   issues = new Issues();
 
   return {

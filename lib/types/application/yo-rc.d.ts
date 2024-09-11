@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import type { Simplify } from 'type-fest';
 import type { ExportStoragePropertiesFromCommand } from '../../command/types.js';
+import type { YO_RC_CONFIG_KEY } from '../../utils/yo-rc.ts';
 
 export type ApplicationConfiguration = Simplify<
   {
-    jhipsterVersion: string;
+    jhipsterVersion?: string;
     baseName: string;
-    creationTimestamp: number;
+    creationTimestamp?: number;
     lastLiquibaseTimestamp?: number;
     blueprints?: { name: string }[];
     testFrameworks?: string[];
@@ -23,3 +24,5 @@ export type ApplicationConfiguration = Simplify<
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/spring-boot/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/spring-data-relational/command.js').default>
 >;
+
+export type YoRcContent<Content = ApplicationConfiguration> = Record<typeof YO_RC_CONFIG_KEY, Content>;

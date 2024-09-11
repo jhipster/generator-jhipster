@@ -18,11 +18,12 @@
  */
 
 import path from 'path';
-import { readFileSync, rmSync } from 'fs';
+import { rmSync } from 'fs';
 import { after, before, describe, it, expect as jestExpect } from 'esmocha';
 import { expect } from 'chai';
 
 import { applicationTypes, clientFrameworkTypes, databaseTypes } from '../jhipster/index.js';
+import { readYoRcFile } from '../utils/yo-rc.js';
 import { createImporterFromContent, createImporterFromFiles, getTestFile } from './core/__test-support__/index.js';
 
 const { MONOLITH } = applicationTypes;
@@ -100,7 +101,7 @@ relationship OneToOne {
 }
 `,
           {
-            application: JSON.parse(readFileSync(getTestFile('jhipster_app', '.yo-rc.json'), 'utf-8')),
+            application: readYoRcFile(getTestFile('jhipster_app')),
           },
         );
       });
@@ -357,7 +358,7 @@ relationship OneToOne {
         const importer = createImporterFromFiles([getTestFile('deployments.jdl')]);
         importer.import();
         DEPLOYMENT_NAMES.forEach(name => {
-          contents.push(JSON.parse(readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
+          contents.push(readYoRcFile(path.join(name)));
         });
       });
 

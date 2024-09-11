@@ -23,9 +23,9 @@ import { fileURLToPath } from 'url';
 import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
-import parseFromDir from '../readers/json-reader.js';
 import { unaryOptions } from '../built-in-options/index.js';
 import { getTestFile } from '../__test-support__/index.js';
+import parseFromDir from './json-reader.js';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
 

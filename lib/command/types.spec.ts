@@ -30,6 +30,12 @@ type TestCommand = {
       choices: ['foo', 'no'];
       scope: 'storage';
     };
+    unknownType: {
+      cli: {
+        type: () => any;
+      };
+      scope: 'storage';
+    };
   };
 };
 
@@ -64,6 +70,14 @@ const _choiceType = {
 const _choiceTypeError = {
   // @ts-expect-error invalid value
   choiceType: 'bar',
+} satisfies StorageProperties;
+
+const _unknownType = {
+  unknownType: true,
+} satisfies StorageProperties;
+
+const _unknownType2 = {
+  unknownType: 'string',
 } satisfies StorageProperties;
 
 type ApplicationProperties = ExportApplicationPropertiesFromCommand<TestCommand>;

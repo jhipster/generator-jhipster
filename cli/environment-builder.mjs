@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import assert from 'assert';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync } from 'fs';
 import path, { dirname, resolve } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import chalk from 'chalk';
@@ -27,6 +27,7 @@ import { QueuedAdapter } from '@yeoman/adapter';
 
 import { createJHipsterLogger, packageNameToNamespace } from '../generators/base/support/index.js';
 import { loadBlueprintsFromConfiguration, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.js';
+import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.js';
 import { CLI_NAME, logger } from './utils.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,13 +40,6 @@ const defaultLookupOptions = {
   lookups: ['generators', 'generators/*/generators'],
   customizeNamespace: ns => ns?.replaceAll(':generators:', ':'),
 };
-
-function loadYoRc(filePath = '.yo-rc.json') {
-  if (!existsSync(filePath)) {
-    return undefined;
-  }
-  return JSON.parse(readFileSync(filePath, { encoding: 'utf-8' }));
-}
 
 const createEnvironment = (options = {}) => {
   options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
@@ -333,8 +327,8 @@ export default class EnvironmentBuilder {
    * @returns {Blueprint[]}
    */
   _getBlueprintsFromYoRc() {
-    const yoRc = loadYoRc();
-    if (!yoRc || !yoRc['generator-jhipster']) {
+    const yoRc = readCurrentPathYoRcFile();
+    if (!yoRc?.['generator-jhipster']) {
       return [];
     }
     return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
