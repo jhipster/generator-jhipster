@@ -33,7 +33,6 @@ export const parseFromFiles = (files: string[]) => originalParseFromFiles(files,
 export const parseFromContent = (content: string) => originalParseFromContent(content, runtime);
 
 export const createJDLLinterFromContent = (content: string) => originalCreateJDLLinterFromContent(content, runtime);
-export const createJDLLinterFromFile = (file: string) => originalCreateJDLLinterFromFile(file, runtime);
 
 export const convertApplications = (applications: ParsedJDLApplication[]) => originalConvertApplications(applications, runtime);
 export const createJDLApplication = (config: any, namespaceConfigs?: Record<string, Record<string, any>> | undefined) =>

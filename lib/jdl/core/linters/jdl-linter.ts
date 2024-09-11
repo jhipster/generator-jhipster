@@ -44,20 +44,6 @@ export function createJDLLinterFromContent(jdlString: string, runtime: JDLRuntim
   return makeJDLLinter(jdlString, runtime);
 }
 
-/**
- * Creates a new JDL linters from a JDL file.
- * @param file - the JDL file.
- * @return {Object} the JDL linters.
- * @throws {Error} if the JDL file isn't passed.
- */
-export function createJDLLinterFromFile(file: string, runtime: JDLRuntime): JDLLinter {
-  if (!file) {
-    throw new Error('A JDL file must be passed to create a new JDL linter.');
-  }
-  const jdlString = readFile(file);
-  return makeJDLLinter(jdlString, runtime);
-}
-
 type CST = {
   children: {
     entityDeclaration: EntityDeclaration[];
