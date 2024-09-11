@@ -31,7 +31,6 @@ Options:
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
-  --incremental-changelog                  Creates incremental database changelogs
   --skip-user-management                   Skip the user management module during app generation
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
@@ -56,6 +55,7 @@ Options:
   --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
   --enable-gradle-enterprise               Enable Gradle Enterprise integration
   --gradle-enterprise-host <value>         Gradle Enterprise Host
+  --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
@@ -173,6 +173,7 @@ exports[`generator - app jdlStore with incremental changelog application and ent
     "contents": "application {
   config {
     baseName jhipster
+    incrementalChangelog true
     skipClient true
     skipServer true
   }
