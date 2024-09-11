@@ -10,7 +10,7 @@ type GitHubMatrix = {
 };
 
 type GitHubMatrixOutput = {
-  includes: GitHubMatrix[];
+  include: GitHubMatrix[];
 };
 
 export const defaultEnvironment = {
@@ -29,7 +29,7 @@ export const defaultEnvironmentMatrix = {
 
 export const convertToGitHubMatrix = (matrix: Record<string, any>): GitHubMatrixOutput => {
   return {
-    includes: Object.entries(matrix).map(([key, value]) => ({
+    include: Object.entries(matrix).map(([key, value]) => ({
       'job-name': key,
       ...defaultEnvironment,
       ...value,
