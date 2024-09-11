@@ -42,7 +42,7 @@ jobs:
           node-version: '20'
       - run: npm ci --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix
+        run: bin/jhipster.cjs github-build-matrix testcontainers
   applications:
     name: ${{ matrix.job-name }}
     needs: build-matrix

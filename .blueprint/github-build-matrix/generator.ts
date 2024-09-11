@@ -7,7 +7,7 @@ export default class extends BaseGenerator {
   workflow;
 
   constructor(args, opts, features) {
-    super(args, opts, { ...features, jhipsterBootstrap: true });
+    super(args, opts, { queueCommandTasks: true, ...features, jhipsterBootstrap: false });
   }
 
   get [BaseGenerator.WRITING]() {
