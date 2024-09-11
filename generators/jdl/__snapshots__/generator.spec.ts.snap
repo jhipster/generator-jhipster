@@ -194,7 +194,6 @@ Options:
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
-  --incremental-changelog                  Creates incremental database changelogs
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
   --enable-swagger-codegen                 API first development using OpenAPI-generator
@@ -218,6 +217,7 @@ Options:
   --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
   --enable-gradle-enterprise               Enable Gradle Enterprise integration
   --gradle-enterprise-host <value>         Gradle Enterprise Host
+  --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support

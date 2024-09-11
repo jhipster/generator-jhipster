@@ -18,16 +18,11 @@
  */
 
 import fs from 'fs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
 import { getTestFile } from '../core/__test-support__/index.js';
 import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 

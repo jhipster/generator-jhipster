@@ -18,8 +18,6 @@
  */
 
 import { renameSync } from 'fs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { after, before, describe, it } from 'esmocha';
 import { expect } from 'chai';
 
@@ -28,9 +26,6 @@ import { getTestFile } from '../__test-support__/index.js';
 import parseFromDir from './json-reader.js';
 
 const { SKIP_CLIENT, SKIP_SERVER } = unaryOptions;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 describe('jdl - JSONReader', () => {
   describe('parseFromDir', () => {
