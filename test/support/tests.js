@@ -21,6 +21,7 @@ const {
 } = PRIORITY_NAMES;
 
 export const getCommandHelpOutput = async command => {
+  await helpers.prepareTemporaryDir();
   const program = await buildJHipster();
   const cmd = command ? program.commands.find(cmd => cmd.name() === command) : program;
   if (!cmd) {
