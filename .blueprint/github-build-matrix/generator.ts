@@ -1,5 +1,5 @@
 import BaseGenerator from '../../generators/base/index.js';
-import { setGithubTaskOutput } from '../../testing/index.js';
+import { setGithubTaskOutput } from '../../lib/testing/index.js';
 import { convertToGitHubMatrix } from './support/github-ci-matrix.js';
 import { testcontainersMatrix } from './support/testcontainers.js';
 

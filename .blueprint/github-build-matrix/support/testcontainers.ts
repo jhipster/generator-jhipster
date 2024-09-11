@@ -1,4 +1,4 @@
-import { extendMatrix, fromMatrix } from '../../../testing/index.js';
+import { extendMatrix, fromMatrix } from '../../../lib/testing/index.js';
 import { convertToCliArgs } from './cli-args.js';
 
 export const testcontainersMatrix = Object.fromEntries(
