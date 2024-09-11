@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { fieldTypes } from '../../../jdl/jhipster/index.js';
+import { fieldTypes } from '../../../lib/jhipster/index.js';
 
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;

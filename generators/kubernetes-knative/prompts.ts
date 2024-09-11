@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 import k8sPrompts from '../kubernetes/prompts.js';
-import { kubernetesPlatformTypes } from '../../jdl/jhipster/index.js';
+import { kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
 import { generatorDefaultConfig } from '../kubernetes/kubernetes-constants.js';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;

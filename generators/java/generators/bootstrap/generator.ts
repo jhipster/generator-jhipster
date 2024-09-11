@@ -61,7 +61,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     return this.asConfiguringTaskGroup({
       checkConfig() {
         const { packageName } = this.jhipsterConfigWithDefaults;
-        const reservedKeywork = packageName.split('.').find(isReservedJavaKeyword);
+        const reservedKeywork = packageName!.split('.').find(isReservedJavaKeyword);
         if (reservedKeywork) {
           throw new Error(`The package name "${packageName}" contains a reserved Java keyword "${reservedKeywork}".`);
         }

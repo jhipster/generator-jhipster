@@ -1,4 +1,4 @@
-import { fieldTypes } from '../../../jdl/jhipster/index.js';
+import { fieldTypes } from '../../../lib/jhipster/index.js';
 
 const {
   STRING: TYPE_STRING,

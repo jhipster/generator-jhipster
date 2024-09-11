@@ -21,7 +21,7 @@ import gitCommand from '../../../git/command.js';
 
 const { monorepository } = gitCommand.configs!;
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     fromInit: {
       description: 'Generate prettier config using init defaults',
@@ -60,6 +60,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

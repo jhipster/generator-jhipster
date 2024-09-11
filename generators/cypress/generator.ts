@@ -19,7 +19,7 @@
 
 import { createFaker, stringHashCode } from '../base/support/index.js';
 import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { generateTestEntity as entityWithFakeValues } from '../client/support/index.js';

@@ -20,7 +20,7 @@ import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../testing/index.js';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
 import { GENERATOR_INIT } from '../generator-list.js';
 import { defaultConfig, requiredConfig } from './config.js';
 
@@ -62,7 +62,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should compose with generators', () => {
-        expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
+        expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",
   "jhipster:javascript:bootstrap",

@@ -1,8 +1,8 @@
 import { before, describe } from 'esmocha';
-import { getGenerator, basicHelpers as helpers } from '../../testing/index.js';
+import { getGenerator, basicHelpers as helpers } from '../../lib/testing/index.js';
 
 import ClientGenerator from '../../generators/client/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 
 const { VUE } = clientFrameworkTypes;
 
@@ -25,7 +25,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
       })
       .withMockedGenerators(['jhipster:languages'])
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]])

@@ -3,6 +3,7 @@
 exports[`generator - javascript:prettier fromInit(false) should compose with generators 1`] = `
 [
   "jhipster:javascript:bootstrap",
+  "jhipster:project-name",
 ]
 `;
 
@@ -93,6 +94,7 @@ plugins:
 exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(false) should compose with generators 1`] = `
 [
   "jhipster:javascript:bootstrap",
+  "jhipster:project-name",
 ]
 `;
 
@@ -136,6 +138,7 @@ plugins:
 exports[`generator - javascript:prettier monorepository(true)-monorepositoryRoot(true) should compose with generators 1`] = `
 [
   "jhipster:javascript:bootstrap",
+  "jhipster:project-name",
 ]
 `;
 

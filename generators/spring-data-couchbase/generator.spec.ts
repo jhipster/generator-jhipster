@@ -28,10 +28,10 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 
-import { databaseTypes } from '../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../lib/jhipster/index.js';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,

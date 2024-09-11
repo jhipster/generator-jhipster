@@ -1,7 +1,7 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, basicHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { getGenerator, basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';
 import ReactGenerator from '../../generators/react/index.js';
 
@@ -19,14 +19,13 @@ const mockBlueprintSubGen: any = class extends ReactGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
+    return this.asPostWritingTaskGroup({
       addAppCssStep() {
         // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
         this.addAppSCSSStyle('@import without-comment');
         this.addAppSCSSStyle('@import with-comment', 'my comment');
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
@@ -38,7 +37,7 @@ describe('needle API React: JHipster react generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         ignoreNeedlesError: true,
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])

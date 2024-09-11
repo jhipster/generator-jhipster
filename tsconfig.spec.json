@@ -1,12 +1,6 @@
 {
   "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*", "test/**/*", ".blueprint/**/*"],
-  "exclude": [
-    "generators/base-application/generator.spec.*",
-    "generators/base-core/generator-core.spec.*",
-    "generators/base/**/*.spec.*",
-    "generators/server/support/needles.spec.ts",
-    "test/needle-api/**"
-  ],
+  "exclude": [],
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,

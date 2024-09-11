@@ -45,7 +45,7 @@ export function loadBlueprintsFromConfiguration(config) {
  * no processing is performed and it is returned as is.
  * @returns {Array} an array that contains the info for each blueprint
  */
-export function parseBluePrints(blueprints) {
+export function parseBluePrints(blueprints?: string | { name: string; version: string }[]) {
   if (Array.isArray(blueprints)) {
     return blueprints;
   }

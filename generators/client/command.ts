@@ -23,7 +23,7 @@ import {
   APPLICATION_TYPE_MICROSERVICE,
   clientFrameworkTypes,
   testFrameworkTypes,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jhipster/index.js';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_COMMON } from '../generator-list.js';
 
@@ -81,7 +81,7 @@ const command = {
     microfrontends: {
       description: 'Microfrontends to load',
       cli: {
-        type: String,
+        type: (val: string) => promptValueToMicrofrontends(val),
       },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => {
@@ -135,8 +135,6 @@ const command = {
     },
   },
   import: [GENERATOR_COMMON],
-} as const;
+} as const satisfies JHipsterCommandDefinition;
 
-export type Command = typeof command;
-
-export default command as JHipsterCommandDefinition;
+export default command;

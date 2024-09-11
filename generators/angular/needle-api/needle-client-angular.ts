@@ -22,17 +22,17 @@ import { startCase } from 'lodash-es';
 import needleClientBase from '../../client/needle-api/needle-client.js';
 import { LINE_LENGTH } from '../../generator-constants.js';
 import { stripMargin, upperFirstCamelCase } from '../../base/support/index.js';
-import { clientFrameworkTypes } from '../../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../../lib/jhipster/index.js';
 import { createNeedleCallback } from '../../base/support/needles.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 export default class extends needleClientBase {
-  addGlobalSCSSStyle(style, comment) {
+  addGlobalSCSSStyle(style, comment?) {
     const filePath = `${this.clientSrcDir}content/scss/global.scss`;
     this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
   }
 
-  addVendorSCSSStyle(style, comment) {
+  addVendorSCSSStyle(style, comment?) {
     const filePath = `${this.clientSrcDir}content/scss/vendor.scss`;
     super.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-vendor');
   }

@@ -26,7 +26,7 @@ import { upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { applicationTypes, reservedKeywords } from '../../jdl/jhipster/index.js';
+import { applicationTypes, reservedKeywords } from '../../lib/jhipster/index.js';
 import { GENERATOR_ENTITIES } from '../generator-list.js';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
 import type { Entity } from '../../lib/types/application/entity.js';

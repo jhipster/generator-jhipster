@@ -1,7 +1,7 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { getGenerator, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import ReactGenerator from '../../generators/react/index.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';
 
@@ -19,9 +19,9 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    const customPhaseSteps = {
+    return this.asPostWritingTaskGroup({
       addEntityToMenuStep() {
-        this.addEntityToMenu('routerName', false, false);
+        this.addEntityToMenu('routerName', false);
       },
       addEntityToModuleStep({ application }) {
         const { applicationTypeMicroservice, clientSrcDir } = application;
@@ -30,8 +30,7 @@ const mockReactBlueprintSubGen: any = class extends ReactGenerator {
           clientSrcDir,
         });
       },
-    };
-    return { ...customPhaseSteps };
+    });
   }
 };
 
@@ -45,7 +44,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         build: 'maven',
         auth: 'jwt',
         db: 'mysql',
-        blueprint: 'myblueprint',
+        blueprint: ['myblueprint'],
         ignoreNeedlesError: true,
       })
       .withGenerators([[mockReactBlueprintSubGen, { namespace: 'jhipster-myblueprint:react' }]])

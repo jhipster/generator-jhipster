@@ -28,7 +28,7 @@ import {
   SERVER_MAIN_RES_DIR,
   TEST_DIR,
 } from '../generator-constants.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
 import { loadStoredAppOptions } from '../app/support/index.js';

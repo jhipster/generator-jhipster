@@ -1,12 +1,12 @@
-import { before, describe, esmocha, expect, it } from 'esmocha';
+import type { Mock } from 'node:test';
+import { mock } from 'node:test';
+import { before, describe, expect, it } from 'esmocha';
 import type { RunResult } from 'yeoman-test';
-import { toHaveBeenCalledAfter } from 'jest-extended';
 
-import { basicHelpers as helpers } from '../../testing/index.js';
+import { basicHelpers as helpers } from '../../lib/testing/index.js';
 import { packageJson } from '../../lib/index.js';
 import BaseGenerator from './index.js';
 
-expect.extend({ toHaveBeenCalledAfter });
 const jhipsterVersion = packageJson.version;
 
 describe('generator - base - with blueprint', () => {
@@ -26,12 +26,12 @@ describe('generator - base - with blueprint', () => {
         .withJHipsterConfig()
         .withOptions({
           skipChecks: false,
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         });
     });
 
     it('creates expected default files for server and angular', () => {
-      expect(runResult.mockedGenerators['jhipster-myblueprint:test-blueprint'].called);
+      runResult.assertGeneratorComposed('jhipster-myblueprint:test-blueprint');
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
@@ -58,7 +58,7 @@ describe('generator - base - with blueprint', () => {
           .withJHipsterConfig()
           .withOptions({
             skipChecks: false,
-            blueprint: 'myblueprint',
+            blueprint: ['myblueprint'],
           }),
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
@@ -78,7 +78,7 @@ describe('generator - base - with blueprint', () => {
         .withJHipsterConfig()
         .withOptions({
           skipChecks: false,
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         }));
   });
 
@@ -96,7 +96,7 @@ describe('generator - base - with blueprint', () => {
         })
         .withOptions({
           skipChecks: false,
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         });
     });
 
@@ -123,7 +123,7 @@ describe('generator - base - with blueprint', () => {
           .withJHipsterConfig()
           .withOptions({
             skipChecks: false,
-            blueprint: 'myblueprint',
+            blueprint: ['myblueprint'],
           }),
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
@@ -148,7 +148,7 @@ describe('generator - base - with blueprint', () => {
         })
         .withOptions({
           skipChecks: false,
-          blueprint: 'myblueprint',
+          blueprint: ['myblueprint'],
         });
     });
 
@@ -181,7 +181,7 @@ describe('generator - base - with blueprint', () => {
           .withJHipsterConfig()
           .withOptions({
             skipChecks: false,
-            blueprint: 'myblueprint',
+            blueprint: ['myblueprint'],
           }),
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
@@ -202,7 +202,7 @@ describe('generator - base - with scoped blueprint', () => {
     });
 
     it('should compose with blueprint', () => {
-      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called).toBe(true);
+      runResult.assertGeneratorComposed('@jhipster/jhipster-scoped-blueprint:test-blueprint');
     });
 
     it('blueprint version is saved in .yo-rc.json', () => {
@@ -229,7 +229,7 @@ describe('generator - base - with blueprints disabled', () => {
     });
 
     it('should compose with blueprint', () => {
-      expect(runResult.mockedGenerators['@jhipster/jhipster-scoped-blueprint:test-blueprint'].called).toBeFalsy;
+      runResult.assertGeneratorNotComposed('@jhipster/jhipster-scoped-blueprint:test-blueprint');
     });
   });
 });
@@ -247,7 +247,7 @@ describe('generator - base - with blueprint with constructor error', () => {
       await expect(
         helpers
           .runTestBlueprintGenerator()
-          .withGenerators([[BlueprintBlueprintedGenerator, 'jhipster-throwing-constructor:test-blueprint']])
+          .withGenerators([[BlueprintBlueprintedGenerator, { namespace: 'jhipster-throwing-constructor:test-blueprint' }]])
           .withJHipsterConfig()
           .withOptions({
             blueprints: 'generator-jhipster-throwing-constructor',
@@ -271,8 +271,8 @@ describe('generator - base - with multiple blueprints', () => {
         });
     });
     it('should compose with blueprints once', () => {
-      expect(runResult.mockedGenerators['jhipster-blueprint1:test-blueprint'].calledOnce);
-      expect(runResult.mockedGenerators['jhipster-blueprint2:test-blueprint'].calledOnce);
+      runResult.assertGeneratorComposedOnce('jhipster-blueprint1:test-blueprint');
+      runResult.assertGeneratorComposedOnce('jhipster-blueprint2:test-blueprint');
     });
   });
 });
@@ -343,10 +343,11 @@ describe('generator - base-blueprint', () => {
     'end',
   ];
 
-  const createPrioritiesFakes = (): Record<string, esmocha.Mock> => {
-    const mockedPriorities: Record<string, esmocha.Mock> = {};
+  const createPrioritiesFakes = (): Record<string, Mock<() => number>> => {
+    const mockedPriorities: Record<string, Mock<() => number>> = {};
+    let callOrder = 0;
     priorities.forEach(priority => {
-      mockedPriorities[priority] = esmocha.fn();
+      mockedPriorities[priority] = mock.fn(() => callOrder++);
     });
     return mockedPriorities;
   };
@@ -493,7 +494,7 @@ describe('generator - base-blueprint', () => {
 
   describe('priorities', () => {
     describe('when every priority has been implemented', () => {
-      let mockedPriorities: Record<string, esmocha.Mock>;
+      let mockedPriorities: Record<string, Mock<() => number>>;
       let mockBlueprintSubGen;
       before(() => {
         mockedPriorities = createPrioritiesFakes();
@@ -503,19 +504,19 @@ describe('generator - base-blueprint', () => {
 
       priorities.forEach((priority, idx) => {
         it(`should execute ${priority} once`, () => {
-          expect(mockedPriorities[priority]).toBeCalledTimes(1);
+          expect(mockedPriorities[priority].mock.callCount()).toBe(1);
         });
         if (idx > 0) {
           const priorityBefore = priorities[idx - 1];
           it(`should execute ${priority} after ${priorityBefore} `, () => {
-            expect(mockedPriorities[priority]).toHaveBeenCalledAfter(mockedPriorities[priorityBefore]);
+            expect(mockedPriorities[priority].mock.calls[0].result).toBeGreaterThan(mockedPriorities[priorityBefore].mock.calls[0].result!);
           });
         }
       });
     });
 
     describe('when custom priorities are missing and the blueprint is sbs', () => {
-      let mockedPriorities;
+      let mockedPriorities: Record<string, Mock<() => number>>;
       let mockBlueprintSubGen;
       before(() => {
         mockedPriorities = createPrioritiesFakes();
@@ -559,11 +560,11 @@ describe('generator - base-blueprint', () => {
       priorities.forEach(priority => {
         if (['composing', 'loading', 'preparing', 'postWriting'].includes(priority)) {
           it(`should not execute ${priority}`, () => {
-            expect(mockedPriorities[priority]).not.toBeCalled();
+            expect(mockedPriorities[priority].mock.callCount()).toBe(0);
           });
         } else {
           it(`should execute ${priority} once`, () => {
-            expect(mockedPriorities[priority]).toBeCalledTimes(1);
+            expect(mockedPriorities[priority].mock.callCount()).toBe(1);
           });
         }
       });

@@ -12,6 +12,7 @@ export interface Relationship<E extends Entity = Entity> extends BaseRelationshi
   relationshipNameCapitalized: string;
 
   otherEntity: E;
+  otherRelationship: Relationship<Omit<Entity, 'relationships'>>;
 
   collection: boolean;
   skipClient?: boolean;

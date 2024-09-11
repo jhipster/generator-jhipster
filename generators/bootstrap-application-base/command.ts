@@ -19,7 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { parseCreationTimestamp } from '../base/support/timestamp.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {
     baseName: {
       description: 'Application base name',
@@ -46,6 +46,6 @@ const command: JHipsterCommandDefinition = {
       scope: 'storage',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

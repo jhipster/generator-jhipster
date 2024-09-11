@@ -57,7 +57,7 @@ export default class extends needleClientBase {
     );
   }
 
-  addEntityToRouterImport(entityName: string, fileName: string, folderName: string, readOnly: string) {
+  addEntityToRouterImport(entityName: string, fileName: string, folderName: string, readOnly?: string) {
     const ignoreNonExisting =
       this.generator.sharedData.getControl().ignoreNeedlesError &&
       `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities import.\n')}`;
@@ -97,7 +97,7 @@ export default class extends needleClientBase {
     );
   }
 
-  addEntityToRouter(entityInstance: string, entityName: string, entityFileName: string, readOnly: boolean) {
+  addEntityToRouter(entityInstance: string, entityName: string, entityFileName: string, readOnly?: boolean) {
     const ignoreNonExisting =
       this.generator.sharedData.getControl().ignoreNeedlesError &&
       `${chalk.yellow('Reference to entity ') + entityName} ${chalk.yellow('not added to router entities.\n')}`;

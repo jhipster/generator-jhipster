@@ -31,7 +31,6 @@ Options:
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
-  --incremental-changelog                  Creates incremental database changelogs
   --skip-user-management                   Skip the user management module during app generation
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --cache-provider <value>                 Cache provider
@@ -56,6 +55,7 @@ Options:
   --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
   --enable-gradle-enterprise               Enable Gradle Enterprise integration
   --gradle-enterprise-host <value>         Gradle Enterprise Host
+  --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
@@ -173,6 +173,7 @@ exports[`generator - app jdlStore with incremental changelog application and ent
     "contents": "application {
   config {
     baseName jhipster
+    incrementalChangelog true
     skipClient true
     skipServer true
   }
@@ -453,7 +454,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "eslintConfigFile": "eslint.config.mjs",
   "fakerSeed": undefined,
   "feignClient": false,
-  "fromInit": undefined,
   "frontendAppName": "jhipsterApp",
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
@@ -595,7 +595,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "microfrontend": false,
   "microfrontends": undefined,
   "monorepository": undefined,
-  "monorepositoryRoot": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
     "angularLocale": "en",
@@ -726,7 +725,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "packageJsonType": "commonjs",
   "packageName": "com.mycompany.myapp",
   "pages": [],
-  "prettierConfigFile": ".prettierrc",
   "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss",
   "prettierFolders": ",**/",
   "prettierJava": undefined,
@@ -779,7 +777,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
-  "sortMavenPom": true,
   "springBootDependencies": Any<Object>,
   "srcMainDir": "src/main/",
   "srcMainJava": "src/main/java/",
@@ -1073,7 +1070,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "eslintConfigFile": "eslint.config.mjs",
   "fakerSeed": undefined,
   "feignClient": false,
-  "fromInit": undefined,
   "frontendAppName": "jhipsterApp",
   "gatewayRoutes": [],
   "gatewayServerPort": undefined,
@@ -1209,7 +1205,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "microfrontend": undefined,
   "microfrontends": undefined,
   "monorepository": undefined,
-  "monorepositoryRoot": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
     "angularLocale": "en",
@@ -1340,7 +1335,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "packageJsonType": "commonjs",
   "packageName": "com.mycompany.myapp",
   "pages": [],
-  "prettierConfigFile": ".prettierrc",
   "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss",
   "prettierFolders": ",**/",
   "prettierJava": undefined,
@@ -1395,7 +1389,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
-  "sortMavenPom": true,
   "springBootDependencies": Any<Object>,
   "srcMainDir": "src/main/",
   "srcMainJava": "src/main/java/",
@@ -1686,7 +1679,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "entitySuffix": "",
   "fakerSeed": undefined,
   "feignClient": false,
-  "fromInit": undefined,
   "frontendAppName": "jhipsterApp",
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
@@ -1828,7 +1820,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "microfrontend": false,
   "microfrontends": undefined,
   "monorepository": undefined,
-  "monorepositoryRoot": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
     "angularLocale": "en",
@@ -1900,7 +1891,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "packageJsonType": "commonjs",
   "packageName": "com.mycompany.myapp",
   "pages": [],
-  "prettierConfigFile": ".prettierrc",
   "prettierExtensions": "md,json,yml,js,cjs,mjs,ts,cts,mts,java",
   "prettierFolders": ",**/",
   "prettierJava": undefined,
@@ -1953,7 +1943,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": true,
-  "sortMavenPom": true,
   "springBootDependencies": Any<Object>,
   "srcMainDir": "src/main/",
   "srcMainJava": "src/main/java/",

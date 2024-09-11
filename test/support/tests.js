@@ -1,9 +1,9 @@
 import { existsSync } from 'fs';
 import sinon from 'sinon';
-import { after, before, describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import { buildJHipster } from '../../cli/index.mjs';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import { getGenerator, skipPrettierHelpers as helpers } from '../../testing/index.js';
+import { getGenerator, skipPrettierHelpers as helpers } from '../../lib/testing/index.js';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
 
@@ -21,6 +21,7 @@ const {
 } = PRIORITY_NAMES;
 
 export const getCommandHelpOutput = async command => {
+  await helpers.prepareTemporaryDir();
   const program = await buildJHipster();
   const cmd = command ? program.commands.find(cmd => cmd.name() === command) : program;
   if (!cmd) {
@@ -40,9 +41,7 @@ export const testOptions = data => {
       .withOptions({ ...customOptions })
       .run();
   });
-  after(() => {
-    runResult.cleanup();
-  });
+
   it('should write options to .yo-rc.json', () => {
     runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customOptions });
   });
@@ -70,9 +69,6 @@ export const basicTests = data => {
         })
         .run();
     });
-    after(() => {
-      runResult.cleanup();
-    });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
     });
@@ -84,9 +80,6 @@ export const basicTests = data => {
     let runResult;
     before(async () => {
       runResult = await contextBuilder().withOptions({ defaults: true, skipPriorities: skipWritingPriorities }).run();
-    });
-    after(() => {
-      runResult.cleanup();
     });
     it('should write default config to .yo-rc.json', () => {
       runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -104,9 +97,6 @@ export const basicTests = data => {
           .withAnswers(customPrompts)
           .run();
       });
-      after(() => {
-        runResult.cleanup();
-      });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
@@ -120,9 +110,6 @@ export const basicTests = data => {
           .withOptions({ defaults: true, skipPriorities: skipWritingPriorities })
           .withAnswers(customPrompts)
           .run();
-      });
-      after(() => {
-        runResult.cleanup();
       });
       it('should not show prompts and write default config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -138,9 +125,6 @@ export const basicTests = data => {
           .withOptions({ skipPrompts: true, skipPriorities: skipWritingPriorities })
           .withAnswers(customPrompts)
           .run();
-      });
-      after(() => {
-        runResult.cleanup();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: requiredConfig });
@@ -158,9 +142,6 @@ export const basicTests = data => {
           .withOptions({ skipPriorities: skipWritingPriorities })
           .withAnswers(customPrompts)
           .run();
-      });
-      after(() => {
-        runResult.cleanup();
       });
       it('should not show prompts and write required config to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...requiredConfig, ...existing } });
@@ -181,9 +162,6 @@ export const basicTests = data => {
           .withAnswers(customPrompts)
           .run();
       });
-      after(() => {
-        runResult.cleanup();
-      });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: customPrompts });
       });
@@ -203,9 +181,6 @@ export const basicTests = data => {
           })
           .withAnswers(customPrompts)
           .run();
-      });
-      after(() => {
-        runResult.cleanup();
       });
       it('should show prompts and write prompt values to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { [GENERATOR_JHIPSTER]: { ...customPrompts, ...existingConfig } });
@@ -277,16 +252,13 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         .withMockedJHipsterGenerators({ filter: () => true })
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withJHipsterConfig()
-        .withOptions({ blueprint: 'foo' })
+        .withOptions({ blueprint: ['foo'] })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });
     });
-    after(() => {
-      result.cleanup();
-    });
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
-      expect(result.mockedGenerators[`jhipster-foo:${generatorName}`].callCount).toBe(1);
+      expect(result.getGeneratorComposeCount(`jhipster-foo:${generatorName}`)).toBe(1);
     });
     it('should not call any priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(0);
@@ -327,7 +299,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
             : undefined,
         )
         .commitFiles()
-        .withOptions({ blueprint: 'foo-sbs' })
+        .withOptions({ blueprint: ['foo-sbs'] })
         .onGenerator(generator => {
           spy = addSpies(generator);
         });
@@ -343,11 +315,8 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
 
       result = await context;
     });
-    after(() => {
-      result.cleanup();
-    });
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
-      expect(result.mockedGenerators[`jhipster-foo-sbs:${generatorName}`].callCount).toBe(1);
+      expect(result.assertGeneratorComposedOnce(`jhipster-foo-sbs:${generatorName}`));
     });
     it('should call every priority', () => {
       expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);

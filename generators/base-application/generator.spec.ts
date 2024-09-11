@@ -22,7 +22,7 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 
@@ -157,7 +157,7 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator).withJHipsterConfig({}, [
+      await helpers.run(CustomGenerator as any).withJHipsterConfig({}, [
         {
           name: 'One',
           fields: [{ fieldName: 'id', fieldType: 'Long' }],
@@ -396,7 +396,7 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       await helpers
-        .run(CustomGenerator)
+        .run(CustomGenerator as any)
         .withJHipsterConfig({}, [
           {
             name: 'One',

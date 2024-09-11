@@ -21,7 +21,7 @@
 import chalk from 'chalk';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { createPomStorage } from '../maven/support/pom-store.js';
 import { loadConfig, loadDerivedConfig } from '../../lib/internal/config-def.js';
 import command from './command.js';
@@ -30,6 +30,7 @@ const { REACT } = clientFrameworkTypes;
 
 export default class CiCdGenerator extends BaseApplicationGenerator {
   insideDocker;
+  context = {};
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -57,8 +58,8 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
-      loadSharedConfig({ application }) {
-        loadConfig.call(this, command.configs, { application });
+      loadSharedConfig() {
+        loadConfig.call(this, command.configs, { application: this.context });
       },
     });
   }
@@ -69,19 +70,19 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      setTemplateConstants({ application }) {
-        loadDerivedConfig(command.configs, { application });
+      setTemplateConstants() {
+        loadDerivedConfig(command.configs, { application: this.context });
 
-        if (application.ciCdIntegrations === undefined) {
-          application.ciCdIntegrations = [];
+        if (this.context.ciCdIntegrations === undefined) {
+          this.context.ciCdIntegrations = [];
         }
-        application.gitLabIndent = application.sendBuildToGitlab ? '    ' : '';
-        application.indent = application.insideDocker ? '    ' : '';
-        application.indent += application.gitLabIndent;
-        if (application.clientFramework === REACT) {
-          application.frontTestCommand = 'test-ci';
+        this.context.gitLabIndent = this.context.sendBuildToGitlab ? '    ' : '';
+        this.context.indent = this.context.insideDocker ? '    ' : '';
+        this.context.indent += this.context.gitLabIndent;
+        if (this.context.clientFramework === REACT) {
+          this.context.frontTestCommand = 'test-ci';
         } else {
-          application.frontTestCommand = 'test';
+          this.context.frontTestCommand = 'test';
         }
       },
     });
@@ -89,6 +90,18 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get default() {
+    return this.asDefaultTaskGroup({
+      loadContext({ application }) {
+        Object.assign(application, this.context);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.DEFAULT]() {
+    return this.delegateTasksToBlueprint(() => this.default);
   }
 
   // Public API method used by the getter and also by Blueprints
@@ -106,11 +119,11 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
                 },
                 {
                   sourceFile: 'jenkins/jenkins.yml',
-                  destinationFile: `${application.dockerServicesDir}jenkins.yml`,
+                  destinationFile: ctx => `${ctx.dockerServicesDir}jenkins.yml`,
                 },
                 {
                   sourceFile: 'jenkins/idea.gdsl',
-                  destinationFile: `${application.srcMainResources}idea.gdsl`,
+                  destinationFile: ctx => `${ctx.srcMainResources}idea.gdsl`,
                 },
               ],
             },
@@ -138,7 +151,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
           context: application,
         });
 
-        if (application.ciCdIntegrations.includes('publishDocker')) {
+        if (application.ciCdIntegrations?.includes('publishDocker')) {
           this.writeFile('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
         }
       },
@@ -153,7 +166,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       postWriting({ application }) {
-        if (application.ciCdIntegrations.includes('deploy')) {
+        if (application.ciCdIntegrations?.includes('deploy')) {
           if (application.buildToolMaven) {
             createPomStorage(this, { sortFile: false }).addDistributionManagement({
               releasesId: application.artifactoryReleasesId,

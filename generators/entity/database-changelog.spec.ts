@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers, runResult } from '../../testing/index.js';
+import { getGenerator, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/generator.js';
 

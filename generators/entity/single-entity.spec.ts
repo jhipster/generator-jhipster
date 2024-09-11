@@ -1,5 +1,5 @@
-import { after, before, describe, expect, it } from 'esmocha';
-import { skipPrettierHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { before, describe, expect, it } from 'esmocha';
+import { skipPrettierHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
 import BaseApplicationGenerator from '../base-application/generator.js';
 import { GENERATOR_ENTITY } from '../generator-list.js';
@@ -61,8 +61,6 @@ describe('generator - entity --single-entity', () => {
           .withArguments(['Foo'])
           .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true });
       });
-
-      after(() => runResult.cleanup());
 
       it('should create files for entity Foo', () => {
         runResult.assertFile([

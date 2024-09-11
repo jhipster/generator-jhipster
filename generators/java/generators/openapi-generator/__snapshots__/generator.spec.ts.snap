@@ -65,7 +65,9 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(fal
 
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
 [
+  "jhipster:bootstrap",
   "jhipster:java:build-tool",
+  "jhipster:project-name",
 ]
 `;
 
@@ -163,7 +165,9 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(tru
 
 exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
+  "jhipster:bootstrap",
   "jhipster:java:build-tool",
+  "jhipster:project-name",
 ]
 `;
 
@@ -249,7 +253,9 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(fals
 
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
 [
+  "jhipster:bootstrap",
   "jhipster:java:build-tool",
+  "jhipster:project-name",
 ]
 `;
 
@@ -332,7 +338,9 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true
 
 exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
+  "jhipster:bootstrap",
   "jhipster:java:build-tool",
+  "jhipster:project-name",
 ]
 `;
 

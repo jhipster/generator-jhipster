@@ -22,7 +22,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes, fieldTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.js';
 import {
   generateEntityClientImports as formatEntityClientImports,
@@ -252,7 +252,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
    * @param {boolean} readOnly - If the entity is read-only or not
    * @param {string} pageTitle - The translation key or the text for the page title in the browser
    */
-  addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, _entityUrl, _microserviceName, readOnly) {
+  addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName, _entityUrl, _microserviceName, readOnly?) {
     this.needleApi.clientVue.addEntityToRouterImport(entityName, entityFileName, entityFolderName, readOnly);
     this.needleApi.clientVue.addEntityToRouter(entityInstance, entityName, entityFileName, readOnly);
     this.needleApi.clientVue.addEntityServiceToEntitiesComponentImport(entityName, entityClass, entityFileName, entityFolderName);

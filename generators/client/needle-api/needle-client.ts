@@ -19,7 +19,7 @@
 import needleBase from '../../needle-base.js';
 
 export default class extends needleBase {
-  addStyle(style: string, comment: string, filePath: string, needle: string) {
+  addStyle(style: string, comment: string | undefined, filePath: string, needle: string) {
     const content = this._mergeStyleAndComment(style, comment);
 
     this.addBlockContentToFile(
@@ -28,7 +28,7 @@ export default class extends needleBase {
     );
   }
 
-  _mergeStyleAndComment(style: string, comment: string) {
+  _mergeStyleAndComment(style: string, comment?: string) {
     let styleBlock = '';
 
     if (comment) {

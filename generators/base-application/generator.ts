@@ -32,7 +32,10 @@ import {
 import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
+import type { Entity as BaseEntity } from '../../lib/types/base/entity.js';
 import type { GenericTaskGroup } from '../../lib/types/base/tasks.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
+import type SharedData from '../base/shared-data.js';
 import { getEntitiesFromDir } from './support/index.js';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
 
@@ -73,8 +76,8 @@ const asPriority = BaseGenerator.asPriority;
  * This is the base class for a generator that generates entities.
  */
 export default class BaseApplicationGenerator<
-  E = Entity,
-  A = ApplicationType<E>,
+  E extends Entity = Entity,
+  A extends ApplicationType<E> = ApplicationType<E>,
   TaskTypes extends DefaultTaskTypes<any, any> = DefaultTaskTypes<E, A>,
 > extends BaseGenerator<TaskTypes> {
   static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
@@ -92,6 +95,9 @@ export default class BaseApplicationGenerator<
   static WRITING_ENTITIES = asPriority(WRITING_ENTITIES);
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
+
+  declare jhipsterConfig: ApplicationConfiguration & Record<string, any>;
+  declare sharedData: SharedData<A>;
 
   constructor(args: string | string[], options: JHipsterGeneratorOptions, features: JHipsterGeneratorFeatures) {
     super(args, options, features);
@@ -182,16 +188,16 @@ export default class BaseApplicationGenerator<
   /**
    * get sorted list of entities according to changelog date (i.e. the order in which they were added)
    */
-  getExistingEntities(): { name: string; definition: Record<string, any> }[] {
+  getExistingEntities(): { name: string; definition: BaseEntity }[] {
     function isBefore(e1, e2) {
       return (e1.definition.annotations?.changelogDate ?? 0) - (e2.definition.annotations?.changelogDate ?? 0);
     }
 
     const configDir = this.getEntitiesConfigPath();
 
-    const entities: { name: string; definition: Record<string, any> }[] = [];
+    const entities: { name: string; definition: BaseEntity }[] = [];
     for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
-      const definition = this.getEntityConfig(entityName)?.getAll();
+      const definition: BaseEntity = this.getEntityConfig(entityName)?.getAll() as BaseEntity;
       if (definition) {
         entities.push({ name: entityName, definition });
       }

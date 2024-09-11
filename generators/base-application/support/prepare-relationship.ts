@@ -20,7 +20,7 @@
 import { lowerFirst, startCase, upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../jdl/jhipster/index.js';
+import { checkAndReturnRelationshipOnValue, databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
 import { getJoinTableName, hibernateSnakeCase } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
 import type CoreGenerator from '../../base-core/generator.js';

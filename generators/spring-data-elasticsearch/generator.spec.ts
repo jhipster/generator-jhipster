@@ -28,9 +28,9 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../jdl/jhipster/index.js';
+import { applicationTypes, authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.js';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
 import Generator from './generator.js';
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
@@ -95,10 +95,10 @@ describe('generator - elasticsearch', () => {
       });
 
       it('should compose with jhipster:common', () => {
-        expect(runResult.mockedGenerators['jhipster:common'].callCount).toBe(1);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
-        expect(runResult.mockedGenerators['jhipster:languages'].callCount).toBe(enableTranslation ? 1 : 0);
+        expect(runResult.getGeneratorComposeCount('jhipster:languages')).toBe(enableTranslation ? 1 : 0);
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();

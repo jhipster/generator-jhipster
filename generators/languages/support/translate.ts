@@ -24,10 +24,6 @@ export const escapeHtmlTranslationValue = (translation: string) =>
 
 export const escapeTsTranslationValue = (translation: string) => translation.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
 
-function getTranslationValue(getWebappTranslation, key, data) {
-  return getWebappTranslation(key, data) || undefined;
-}
-
 export type TranslationReplaceOptions = {
   keyPattern?: string;
   interpolatePattern?: string;
@@ -77,7 +73,7 @@ export const replaceTranslationKeysWithText = (
       }
     }
 
-    const translation = getTranslationValue(getWebappTranslation, key, data);
+    const translation = getWebappTranslation(key, data);
 
     let replacement = translation;
     if (!replacement) {

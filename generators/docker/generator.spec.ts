@@ -28,10 +28,10 @@ import {
   extendMatrix,
   defaultHelpers as helpers,
   runResult,
-} from '../../testing/index.js';
+} from '../../lib/testing/index.js';
 import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
 
-import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../jdl/jhipster/index.js';
+import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
 import { MESSAGE_BROKER_KAFKA, MESSAGE_BROKER_NO, MESSAGE_BROKER_PULSAR } from '../server/options/message-broker.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';

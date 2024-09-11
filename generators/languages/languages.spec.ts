@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { before, describe, it } from 'esmocha';
-import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../testing/index.js';
+import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { supportedLanguages } from './support/index.js';
@@ -287,7 +287,6 @@ describe('generator - languages', () => {
             languages: ['fr', 'de'],
           })
           .withOptions({
-            // @ts-expect-error not typed option
             commandName: 'languages',
           })
           .run();
@@ -324,7 +323,6 @@ describe('generator - languages', () => {
           .create('jhipster:languages')
           .withArguments(['fr', 'de'])
           .withOptions({
-            // @ts-expect-error not typed option
             baseName: 'jhipster',
           })
           .run();

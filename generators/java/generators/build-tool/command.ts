@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { buildToolTypes } from '../../../../jdl/jhipster/index.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/types.js';
+import { buildToolTypes } from '../../../../lib/jhipster/index.js';
 import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
-import { asCommand } from '../../../type-utils.js';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -44,8 +44,6 @@ const command = {
     },
   },
   import: [GENERATOR_GRADLE, GENERATOR_MAVEN],
-} as const;
+} as const satisfies JHipsterCommandDefinition;
 
-export type Command = typeof command;
-
-export default asCommand(command);
+export default command;

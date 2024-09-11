@@ -22,7 +22,7 @@ import { camelCase, startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
-import { clientFrameworkTypes, fieldTypes } from '../../jdl/jhipster/index.js';
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import {
   generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
@@ -335,7 +335,7 @@ export default class ReactGenerator extends BaseApplicationGenerator {
    * }
    *
    */
-  addAppSCSSStyle(style, comment) {
+  addAppSCSSStyle(style, comment?) {
     this.needleApi.clientReact.addAppSCSSStyle(style, comment);
   }
 

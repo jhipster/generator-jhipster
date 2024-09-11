@@ -1,7 +1,6 @@
-import assert from 'assert';
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const allMockedComposedGenerators = [
@@ -25,35 +24,28 @@ describe('generator - app - composing', () => {
       });
 
       it('should compose with bootstrap generator', () => {
-        assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
+        runResult.assertGeneratorComposed('jhipster:bootstrap');
       });
       it('should compose with common generator', () => {
-        const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
-        assert(CommonGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should compose with server generator', () => {
-        const ServerGenerator = runResult.mockedGenerators['jhipster:server'];
-        assert(ServerGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:server');
       });
       it('should compose with client generator', () => {
-        const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
-        assert(ClientGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:client');
       });
       it('should not compose with languages generator', () => {
-        const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-        assert.equal(LanguagesGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:languages');
       });
       it('should not compose with entities generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:entities'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:entities');
       });
       it('should not compose with entity generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:entity'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:entity');
       });
       it('should not compose with database-changelog generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:database-changelog');
       });
     });
 
@@ -69,36 +61,28 @@ describe('generator - app - composing', () => {
       });
 
       it('should compose with bootstrap generator', () => {
-        const BootstrapGenerator = runResult.mockedGenerators['jhipster:bootstrap'];
-        assert(BootstrapGenerator.called);
+        runResult.assertGeneratorComposed('jhipster:bootstrap');
       });
       it('should compose with common generator', () => {
-        const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
-        assert(CommonGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should compose with server generator', () => {
-        const ServerGenerator = runResult.mockedGenerators['jhipster:server'];
-        assert(ServerGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:server');
       });
       it('should not compose with client generator', () => {
-        const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
-        assert.equal(ClientGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:client');
       });
       it('should not compose with languages generator', () => {
-        const LanguagesGenerator = runResult.mockedGenerators['jhipster:languages'];
-        assert.equal(LanguagesGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:languages');
       });
       it('should not compose with entities generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:entities'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:entities');
       });
       it('should not compose with entity generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:entity'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:entity');
       });
       it('should not compose with database-changelog generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:database-changelog');
       });
     });
 
@@ -114,31 +98,25 @@ describe('generator - app - composing', () => {
       });
 
       it('should compose with bootstrap generator', () => {
-        assert(runResult.mockedGenerators['jhipster:bootstrap'].called);
+        runResult.assertGeneratorComposed('jhipster:bootstrap');
       });
       it('should compose with common generator', () => {
-        const CommonGenerator = runResult.mockedGenerators['jhipster:common'];
-        assert(CommonGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:common');
       });
       it('should not compose with server generator', () => {
-        const ServerGenerator = runResult.mockedGenerators['jhipster:server'];
-        assert(ServerGenerator.callCount === 0);
+        runResult.assertGeneratorNotComposed('jhipster:server');
       });
       it('should compose with client generator', () => {
-        const ClientGenerator = runResult.mockedGenerators['jhipster:client'];
-        assert(ClientGenerator.calledOnce);
+        runResult.assertGeneratorComposedOnce('jhipster:client');
       });
       it('should not compose with entities generator', () => {
-        const EntityGenerator = runResult.mockedGenerators['jhipster:entities'];
-        assert.equal(EntityGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:entities');
       });
       it('should not compose with entity generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:entity'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:entity');
       });
       it('should not compose with database-changelog generator', () => {
-        const MockedGenerator = runResult.mockedGenerators['jhipster:database-changelog'];
-        assert.equal(MockedGenerator.callCount, 0);
+        runResult.assertGeneratorNotComposed('jhipster:database-changelog');
       });
     });
   });

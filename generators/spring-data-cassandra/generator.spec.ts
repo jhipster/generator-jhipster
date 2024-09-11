@@ -21,11 +21,11 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { buildServerSamples, entitiesSimple as entities, defaultHelpers as helpers, runResult } from '../../testing/index.js';
+import { buildServerSamples, entitiesSimple as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import Generator from '../server/index.js';
 
-import { databaseTypes } from '../../jdl/jhipster/index.js';
+import { databaseTypes } from '../../lib/jhipster/index.js';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,

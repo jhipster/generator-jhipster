@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { databaseTypes, fieldTypes } from '../../../jdl/jhipster/index.js';
+import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import { mutateData } from '../../base/support/index.js';
 
 const { MYSQL, MARIADB } = databaseTypes;

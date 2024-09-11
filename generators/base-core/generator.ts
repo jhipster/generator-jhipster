@@ -56,7 +56,7 @@ import {
   convertConfigToOption,
 } from '../../lib/command/index.js';
 import { packageJson } from '../../lib/index.js';
-import type { BaseApplication, CommonClientServerApplication } from '../base-application/types.js';
+import type { BaseApplication } from '../base-application/types.js';
 import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
 import NeedleApi from '../needle-api.js';
 import command from '../base/command.js';
@@ -64,10 +64,10 @@ import { GENERATOR_JHIPSTER, YO_RC_FILE } from '../generator-constants.js';
 import { loadConfig } from '../../lib/internal/index.js';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
 import { dockerPlaceholderGenerator } from '../docker/utils.js';
-import { getConfigWithDefaults } from '../../jdl/jhipster/index.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/index.js';
 import { extractArgumentsFromConfigs } from '../../lib/command/index.js';
-import type { Entity } from '../../lib/types/base/entity.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
+import type { ApplicationConfiguration } from '../../lib/types/application/yo-rc.js';
 
 const {
   INITIALIZING,
@@ -132,6 +132,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
 
   static END = asPriority(END);
 
+  context?: Record<string, any>;
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
   ignoreNeedlesError?: boolean;
@@ -141,7 +142,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   relativeDir = relativeDir;
   relative = posixRelative;
 
-  readonly sharedData!: SharedData<CommonClientServerApplication<Entity>>;
+  readonly sharedData!: SharedData<any>;
   readonly logger: Logger;
   jhipsterConfig!: Record<string, any>;
   /**
@@ -246,7 +247,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
   /**
    * JHipster config with default values fallback
    */
-  get jhipsterConfigWithDefaults() {
+  get jhipsterConfigWithDefaults(): Readonly<ApplicationConfiguration & Record<string, any>> {
     const configWithDefaults = getConfigWithDefaults(removeFieldsWithNullishValues(this.config.getAll()));
     defaults(configWithDefaults, {
       skipFakeData: false,
@@ -543,7 +544,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             this.sharedData.getControl()[optionName] = optionValue;
           } else if (optionDesc.scope === 'generator') {
             this[optionName] = optionValue;
-          } else {
+          } else if (optionDesc.scope === 'context') {
+            this.context![optionName] = optionValue;
+          } else if (optionDesc.scope !== 'none') {
             throw new Error(`Scope ${optionDesc.scope} not supported`);
           }
         } else if (optionDesc.default && optionDesc.scope === 'generator' && this[optionName] === undefined) {
@@ -573,8 +576,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         }
         if (argument !== undefined) {
           const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument);
-          if ((argumentDef.scope ?? 'generator') === 'generator') {
+          if (argumentDef.scope === undefined || argumentDef.scope === 'generator') {
             this[argumentName] = convertedValue;
+          } else if (argumentDef.scope === 'context') {
+            this.context![argumentName] = convertedValue;
           } else if (argumentDef.scope === 'storage') {
             this.config.set(argumentName, convertedValue);
           } else if (argumentDef.scope === 'blueprint') {
@@ -611,6 +616,11 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           storage = {
             getPath: path => get(this, path),
             setPath: (path, value) => set(this, path, value),
+          };
+        } else if (def.scope === 'context') {
+          storage = {
+            getPath: path => get(this.context, path),
+            setPath: (path, value) => set(this.context!, path, value),
           };
         }
         return {

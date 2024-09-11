@@ -20,8 +20,8 @@
 import assert from 'assert';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_LIQUIBASE } from '../generator-list.js';
-import { isReservedTableName } from '../../jdl/jhipster/reserved-keywords.js';
-import { databaseTypes } from '../../jdl/jhipster/index.js';
+import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.js';
+import { databaseTypes } from '../../lib/jhipster/index.js';
 import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';

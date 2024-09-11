@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 import { defaults } from 'lodash-es';
-import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../jdl/jhipster/index.js';
+import { Validations, authenticationTypes, databaseTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import { loadRequiredConfigIntoEntity } from '../base-application/support/index.js';
-import { PaginationTypes } from '../../jdl/jhipster/entity-options.js';
+import { PaginationTypes } from '../../lib/jhipster/entity-options.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';

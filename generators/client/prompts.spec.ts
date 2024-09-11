@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers } from '../../testing/index.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.js';
 import {
   applicationTypes,
   authenticationTypes,
@@ -8,7 +8,7 @@ import {
   clientFrameworkTypes,
   databaseTypes,
   testFrameworkTypes,
-} from '../../jdl/jhipster/index.js';
+} from '../../lib/jhipster/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const { MONOLITH } = applicationTypes;
