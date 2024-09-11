@@ -1,7 +1,7 @@
 import path, { basename, join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import { before, describe, expect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 import { createImporterFromContent } from '../../lib/jdl/jdl-importer.js';
@@ -184,6 +184,8 @@ describe('generator - app - --incremental-changelog', function () {
       runResult = await helpers.run(generatorPath).withJHipsterConfig(config).withOptions(options).withMockedGenerators(mockedGenerators);
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -213,6 +215,8 @@ describe('generator - app - --incremental-changelog', function () {
           })
           .run();
       });
+
+      after(() => runResult.cleanup());
 
       it('should create application', () => {
         runResult.assertFile(['.yo-rc.json']);
@@ -248,6 +252,8 @@ describe('generator - app - --incremental-changelog', function () {
           })
           .run();
       });
+
+      after(() => runResult.cleanup());
 
       it('should create application', () => {
         runResult.assertFile(['.yo-rc.json']);
@@ -292,6 +298,8 @@ describe('generator - app - --incremental-changelog', function () {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -371,6 +379,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -455,6 +465,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -536,6 +548,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -619,6 +633,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -684,6 +700,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -748,6 +766,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -826,6 +846,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -912,6 +934,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1034,6 +1058,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -1141,6 +1167,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -1214,6 +1242,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -1281,6 +1311,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
@@ -1365,6 +1397,8 @@ entity Customer {
         .run();
     });
 
+    after(() => runResult.cleanup());
+
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
     });
@@ -1432,6 +1466,8 @@ entity Customer {
         })
         .run();
     });
+
+    after(() => runResult.cleanup());
 
     it('should create application', () => {
       runResult.assertFile(['.yo-rc.json']);
