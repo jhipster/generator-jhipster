@@ -11,6 +11,7 @@ export type ApplicationConfiguration = Simplify<
     lastLiquibaseTimestamp?: number;
     blueprints?: { name: string }[];
     testFrameworks?: string[];
+    microfrontends?: { baseName: string }[];
   } & ExportStoragePropertiesFromCommand<typeof import('../../../generators/app/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/base/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/bootstrap-application-base/command.js').default> &

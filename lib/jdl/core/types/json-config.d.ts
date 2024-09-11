@@ -14,9 +14,6 @@ type JSONBlueprint = {
   version?: string;
 } & Record<string, any>;
 
-type JSONMicrofrontend = {
-  baseName: string;
-};
 type JSONGeneratorJhipsterContentDeployment = {
   appsFolders?: string[];
   clusteredDbApps?: string[];
@@ -27,7 +24,6 @@ type AbstractJSONGeneratorJhipsterContent = ApplicationConfiguration & JSONGener
 type JSONGeneratorJhipsterContent = {
   promptValues?: Partial<JSONGeneratorJhipsterContent>;
   blueprints?: JSONBlueprint[] | null;
-  microfrontends?: JSONMicrofrontend[] | null;
 } & AbstractJSONGeneratorJhipsterContent;
 
 type PostProcessedJSONGeneratorJhipsterContent = {
