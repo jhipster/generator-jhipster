@@ -11,12 +11,10 @@ export const testcontainersMatrix = Object.fromEntries(
           reactive: [false, true],
         }),
         ...extendMatrix(
-          fromMatrix(
-            {
-              prodDatabaseType: ['postgresql', 'mysql', 'mariadb'],
-              reactive: [false, true],
-            }
-          ),
+          fromMatrix({
+            prodDatabaseType: ['postgresql', 'mysql', 'mariadb'],
+            reactive: [false, true],
+          }),
           { cacheProvider: ['no', 'redis', 'memcached'] },
         ),
       },
