@@ -29,3 +29,5 @@ services:
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
     volumes:
       - ../resources/config/cql:/cql:ro
+    labels:
+      org.springframework.boot.ignore: true
