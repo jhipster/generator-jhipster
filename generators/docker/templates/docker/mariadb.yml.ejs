@@ -28,6 +28,7 @@ services:
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_DATABASE=<%= baseName.toLowerCase() %>
+      - MARIADB_PASSWORD=<%- prodDatabasePassword %>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
