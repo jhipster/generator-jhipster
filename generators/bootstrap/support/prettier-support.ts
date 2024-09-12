@@ -53,13 +53,20 @@ export class PrettierPool extends Piscina {
 
 export const createPrettierTransform = async function (
   this: CoreGenerator,
-  options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string } = {},
+  options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string; skipForks?: boolean } = {},
 ) {
-  const pool = new PrettierPool();
-
-  const { ignoreErrors = false, extensions = '*', ...workerOptions } = options;
+  const { ignoreErrors = false, extensions = '*', skipForks, ...workerOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
+
+  let applyPrettier;
+  const pool = skipForks ? undefined : new PrettierPool();
+  if (skipForks) {
+    const { default: applyPrettierWorker } = await import('./prettier-worker.js');
+    applyPrettier = applyPrettierWorker;
+  } else {
+    applyPrettier = data => pool!.apply(data);
+  }
 
   return passthrough(
     async (file: VinylMemFsEditorFile) => {
@@ -69,7 +76,7 @@ export const createPrettierTransform = async function (
       if (!file.contents) {
         throw new Error(`File content doesn't exist for ${file.relative}`);
       }
-      const { result, errorMessage } = await pool.apply({
+      const { result, errorMessage } = await applyPrettier({
         relativeFilePath: file.relative,
         filePath: file.path,
         fileContents: file.contents.toString('utf8'),
@@ -86,7 +93,7 @@ export const createPrettierTransform = async function (
       }
     },
     () => {
-      pool.destroy();
+      pool?.destroy();
     },
   );
 };
