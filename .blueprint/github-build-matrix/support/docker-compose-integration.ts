@@ -14,10 +14,15 @@ export const dockerComposeMatrix = Object.fromEntries(
         ...extendMatrix(
           fromMatrix({
             prodDatabaseType: ['postgresql', 'mysql', 'mariadb'],
-            reactive: [false, true],
+            reactive: [false],
           }),
           { cacheProvider: ['no', 'redis', 'memcached'] },
         ),
+        ...fromMatrix({
+          // Don't include reactive MariaDB for now, as it's using MySQL driver.
+          prodDatabaseType: ['postgresql', 'mysql'],
+          reactive: [true],
+        }),
       },
       {
         buildTool: ['maven', 'gradle'],
