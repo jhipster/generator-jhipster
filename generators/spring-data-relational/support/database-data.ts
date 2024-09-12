@@ -113,7 +113,6 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     port: ':3306/',
     extraOptions: '?useLegacyDatetimeCode=false',
     defaultUsername: 'root',
-    defaultPassword: 'mariadb',
 
     constraintNameMaxLength: 64,
     tableNameMaxLength: 64,
@@ -152,7 +151,6 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.postgresql.Driver',
     hibernateDialect: 'org.hibernate.dialect.PostgreSQLDialect',
     port: ':5432/',
-    defaultPassword: 'postgresql',
 
     constraintNameMaxLength: 63,
     tableNameMaxLength: 63,
