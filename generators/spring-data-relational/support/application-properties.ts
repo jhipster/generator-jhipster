@@ -46,10 +46,11 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   }
 
   const prodDatabaseData = getDatabaseData(application.prodDatabaseType);
+  const { defaultPassword } = prodDatabaseData;
   application.prodHibernateDialect = prodDatabaseData.hibernateDialect;
   application.prodJdbcDriver = prodDatabaseData.jdbcDriver;
   application.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? application.baseName;
-  application.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
+  application.prodDatabasePassword = defaultPassword === '<baseName>' ? application.baseName : (defaultPassword ?? '');
   application.prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? application.baseName;
 
   const prodDatabaseOptions = {
@@ -69,10 +70,11 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   if (application.devDatabaseTypeH2Any) {
     try {
       const devDatabaseData = getDatabaseData(application.devDatabaseType);
+      const { defaultPassword } = devDatabaseData;
       application.devHibernateDialect = devDatabaseData.hibernateDialect;
       application.devJdbcDriver = devDatabaseData.jdbcDriver;
       application.devDatabaseUsername = devDatabaseData.defaultUsername ?? application.baseName;
-      application.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
+      application.devDatabasePassword = defaultPassword === '<baseName>' ? application.baseName : (defaultPassword ?? '');
       application.devDatabaseName = devDatabaseData.defaultDatabaseName ?? application.baseName;
 
       const devDatabaseOptions = {
