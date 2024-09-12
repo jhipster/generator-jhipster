@@ -73,8 +73,13 @@ jobs:
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - run: npm ci --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
+      - uses: jhipster/actions/build-jhipster-bom@v0
+        with:
+          jhipster-bom-ref: main
       - name: Generate project
         run: jhipster.cjs --defaults --client-test-frameworks cypress --default-environment ${{ matrix.default-environment }} ${{ matrix.args }}
+        env:
+          JHIPSTER_DEPENDENCIES_VERSION: 0.0.0-CICD
       - run: jhipster.cjs info
       - run: ./npmw run e2e:devserver
         id: e2e
