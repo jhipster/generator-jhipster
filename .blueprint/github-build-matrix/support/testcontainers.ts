@@ -13,7 +13,7 @@ export const testcontainersMatrix = Object.fromEntries(
       {
         searchEngine: ['no', 'elasticsearch'],
         auth: ['jwt', 'oauth2'],
-        serviceDiscovery: ['no', 'eureka', 'consul'],
+        serviceDiscoveryType: ['no', 'eureka', 'consul'],
         messageBroker: ['no', 'kafka', 'pulsar'],
       },
     ),
