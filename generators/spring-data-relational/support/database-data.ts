@@ -188,8 +188,6 @@ export function getDatabaseData(databaseType: string) {
   if (databaseData[databaseType] === undefined) {
     throw new Error(`Database data not found for database ${databaseType}`);
   }
-  if (databaseData[databaseType].defaultPassword === '<baseName>') {
-  }
   return databaseData[databaseType];
 }
 
