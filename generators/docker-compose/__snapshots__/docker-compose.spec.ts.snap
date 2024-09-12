@@ -123,7 +123,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -315,7 +315,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -569,7 +569,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -610,7 +610,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -651,7 +651,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -739,9 +738,8 @@ jhipster:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
-      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
-      - MARIADB_PASSWORD=mariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -955,7 +953,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1001,7 +999,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1047,7 +1045,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1148,9 +1145,8 @@ jhipster:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
-      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
-      - MARIADB_PASSWORD=mariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1385,7 +1381,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1426,7 +1422,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1467,7 +1463,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1722,7 +1717,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1763,7 +1758,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -1804,7 +1799,6 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1895,9 +1889,8 @@ jhipster:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
-      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
-      - MARIADB_PASSWORD=mariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2050,7 +2043,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2091,7 +2084,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2244,7 +2237,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2285,7 +2278,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2463,7 +2456,7 @@ management:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2504,7 +2497,7 @@ management:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2746,7 +2739,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2787,7 +2780,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -2907,7 +2900,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=samplemysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -3040,7 +3033,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -3175,7 +3168,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
@@ -3308,7 +3301,7 @@ jhipster:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
-      - MYSQL_PASSWORD=mysql
+      - MYSQL_PASSWORD=
     command: mysqld --lower_case_table_names=1 --skip-mysqlx --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
       test:
