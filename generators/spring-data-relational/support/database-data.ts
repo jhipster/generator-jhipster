@@ -151,6 +151,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.postgresql.Driver',
     hibernateDialect: 'org.hibernate.dialect.PostgreSQLDialect',
     port: ':5432/',
+    defaultPassword: 'postgresql',
 
     constraintNameMaxLength: 63,
     tableNameMaxLength: 63,
