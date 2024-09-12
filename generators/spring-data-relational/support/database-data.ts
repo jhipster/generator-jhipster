@@ -132,7 +132,6 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     port: ':3306/',
     extraOptions: '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true',
     defaultUsername: 'root',
-    defaultPassword: 'mysql',
   },
   [ORACLE]: {
     name: 'Oracle',
