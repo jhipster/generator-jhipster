@@ -54,6 +54,8 @@ export default class BootstrapGenerator extends BaseGenerator {
 
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
+  skipEslint?: boolean;
+  skipForks?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
@@ -202,15 +204,20 @@ export default class BootstrapGenerator extends BaseGenerator {
     const prettierTransforms: FileTransform<MemFsEditorFile>[] = [];
     if (!this.skipPrettier) {
       const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
+      if (!this.skipEslint) {
+        prettierTransforms.push(
+          createESLintTransform.call(this, { ignoreErrors }),
+          createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
+        );
+      }
       prettierTransforms.push(
-        createESLintTransform.call(this, { ignoreErrors }),
-        createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
         await createPrettierTransform.call(this, {
           ignoreErrors,
           prettierPackageJson: true,
           prettierJava: !this.jhipsterConfig.skipServer,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
+          skipForks: this.skipForks,
         }),
       );
     }

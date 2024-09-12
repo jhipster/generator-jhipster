@@ -487,6 +487,8 @@ const commonTestOptions = {
   useVersionPlaceholders: true,
   fakeKeytool: true,
   skipGit: true,
+  skipEslint: true,
+  skipForks: true,
 };
 
 export const basicHelpers = createTestHelpers({ generatorOptions: { ...commonTestOptions } });
