@@ -44,13 +44,11 @@ jobs:
           node-version: '20'
       - run: npm ci --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix testcontainers
+        run: bin/jhipster.cjs github-build-matrix docker-compose-integration
   applications:
     name: ${{ matrix.job-name }}
     needs: build-matrix
     runs-on: ${{ matrix.os }}
-    if: >-
-      contains(github.event.pull_request.labels.*.name, 'pr: docker-compose integration')
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
@@ -81,11 +79,13 @@ jobs:
         with:
           jhipster-bom-ref: main
       - name: Generate project
-        run: jhipster.cjs --defaults --client-test-frameworks cypress --default-environment ${{ matrix.default-environment }} ${{ matrix.args }}
+        run: jhipster.cjs ${{ matrix.args }} --defaults
         env:
+          JHI_PROFILE: ${{ matrix.default-environment }}
           JHIPSTER_DEPENDENCIES_VERSION: 0.0.0-CICD
+          JHI_JDL: ${{ matrix.jdl }}
       - run: jhipster.cjs info
-      - run: npm run ci:e2e:dev
+      - run: ${{ matrix.cmd-e2e }}
         id: e2e
       - name: Upload cypress screenshots
         uses: actions/upload-artifact@v4
@@ -98,9 +98,7 @@ jobs:
       contents: none
     runs-on: ubuntu-latest
     needs: [applications]
-    if: >-
-      always() &&
-      contains(github.event.pull_request.labels.*.name, 'pr: docker-compose integration')
+    if: always()
     steps:
       - run: |
           echo '${{ toJSON(needs) }}'

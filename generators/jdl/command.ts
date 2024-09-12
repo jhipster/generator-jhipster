@@ -44,6 +44,7 @@ const command = {
       description: 'Pass JDL content inline. Argument can be skipped when passing this',
       type: String,
       scope: 'generator',
+      env: 'JHI_JDL',
     },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
