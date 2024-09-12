@@ -589,7 +589,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
               },
             ],
           });
-          source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
+          source.addMavenDependency!({ ...dockerComposeArtifact, optional: true });
         }
       },
     });
