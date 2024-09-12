@@ -361,6 +361,8 @@ jhipster:
       dockerfile: cassandra/Cassandra-Migration.Dockerfile
     volumes:
       - 05-cassandra/src/main/resources/config/cql:/cql:ro
+    labels:
+      org.springframework.boot.ignore: true
   mscassandra-cassandra:
     image: cassandra-placeholder
     container_name: mscassandra-cassandra
@@ -651,6 +653,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -738,6 +741,7 @@ jhipster:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
@@ -1045,6 +1049,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1145,6 +1150,7 @@ jhipster:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
@@ -1463,6 +1469,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1799,6 +1806,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
+      - POSTGRES_PASSWORD=postgresql
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1889,6 +1897,7 @@ jhipster:
     volumes:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
