@@ -7,8 +7,7 @@ export const testcontainersMatrix = Object.fromEntries(
     extendMatrix(
       {
         ...fromMatrix({
-          // cassandra is failing, may be related to cassandra loader.
-          databaseType: ['mongodb', 'neo4j'],
+          databaseType: ['cassandra', 'mongodb', 'neo4j'],
           reactive: [false, true],
         }),
         ...extendMatrix(
