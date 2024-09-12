@@ -4,7 +4,7 @@ export const convertOptionsToJDL = (opts: Record<string, any>): string => {
     testFrameworks [cypress]
 ${Object.entries(opts)
   .map(([key, value]) => `    ${key} ${value}`)
-  .join('\n')}}
+  .join('\n')}
   }
 }`;
 };
