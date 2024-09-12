@@ -5,16 +5,26 @@ export const testcontainersMatrix = Object.fromEntries(
   Object.entries(
     extendMatrix(
       {
-        ...fromMatrix({ reactive: [false, true], databaseType: ['cassandra', 'mongodb', 'neo4j'] }),
-        ...extendMatrix(fromMatrix({ reactive: [false, true], prodDatabaseType: ['postgresql', 'mysql', 'mariadb'] }), {
-          cacheProvider: ['no', 'redis', 'memcached'],
+        ...fromMatrix({
+          databaseType: ['cassandra', 'mongodb', 'neo4j'],
+          reactive: [false, true],
         }),
+        ...extendMatrix(
+          fromMatrix(
+            {
+              prodDatabaseType: ['postgresql', 'mysql', 'mariadb'],
+              reactive: [false, true],
+            }
+          ),
+          { cacheProvider: ['no', 'redis', 'memcached'] },
+        ),
       },
       {
+        build: ['maven', 'gradle'],
         searchEngine: ['no', 'elasticsearch'],
         auth: ['jwt', 'oauth2'],
         serviceDiscoveryType: ['no', 'eureka', 'consul'],
-        messageBroker: ['no', 'kafka', 'pulsar'],
+        messageBroker: ['no', 'kafka'],
       },
     ),
   ).map(([key, value]) => [key, { args: convertToCliArgs(value) }]),
