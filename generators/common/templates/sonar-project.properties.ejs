@@ -40,6 +40,9 @@ sonar.exclusions=<%= clientSrcDir %>content/**/*.*, <%= clientSrcDir %>i18n/*.js
 <%_ if (!skipServer) { _%>
 
 sonar.issue.ignore.multicriteria=\
+<%_ if (backendTypeSpringBoot) { _%>
+  S6437,\
+<%_ } _%>
 <%_ if (cacheProviderAny) { _%>
   S1192,\
 <%_ } _%>
