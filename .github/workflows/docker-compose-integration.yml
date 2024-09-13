@@ -81,8 +81,9 @@ jobs:
       - name: Generate project
         run: jhipster.cjs ${{ matrix.args }} --defaults
         env:
-          JHI_PROFILE: ${{ matrix.default-environment }}
           JHIPSTER_DEPENDENCIES_VERSION: 0.0.0-CICD
+          JHI_SKIP_JHIPSTER_DEPENDENCIES: true
+          JHI_PROFILE: ${{ matrix.default-environment }}
           JHI_JDL: ${{ matrix.jdl }}
       - run: jhipster.cjs info
       - run: ${{ matrix.cmd-e2e }}

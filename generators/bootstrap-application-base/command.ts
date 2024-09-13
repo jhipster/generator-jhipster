@@ -29,6 +29,7 @@ const command = {
     skipJhipsterDependencies: {
       description: "Don't write jhipster dependencies to package.json.",
       type: Boolean,
+      env: 'JHI_SKIP_JHIPSTER_DEPENDENCIES',
       scope: 'storage',
     },
     creationTimestamp: {
