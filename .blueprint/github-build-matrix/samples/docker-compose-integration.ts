@@ -26,7 +26,7 @@ export const dockerComposeMatrix = Object.fromEntries(
         buildTool: ['maven', 'gradle'],
         searchEngine: ['no', 'elasticsearch'],
         authenticationType: ['jwt', 'oauth2'],
-        serviceDiscoveryType: ['no', 'eureka', 'consul'],
+        // serviceDiscoveryType: ['no', 'eureka', 'consul'],
         messageBroker: ['no', 'kafka'],
       },
     ),
