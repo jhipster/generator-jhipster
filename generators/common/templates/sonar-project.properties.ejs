@@ -57,7 +57,7 @@ sonar.issue.ignore.multicriteria=\
 
 <%_ if (backendTypeSpringBoot) { _%>
 # Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes
-sonar.issue.ignore.multicriteria.S6437.resourceKey=src/main/resources/config/application*.yml
+sonar.issue.ignore.multicriteria.S6437.resourceKey=<%= srcMainResources %>config/*
 sonar.issue.ignore.multicriteria.S6437.ruleKey=java:S6437
 <%_ } _%>
 <%_ if (gatlingTests) { _%>
