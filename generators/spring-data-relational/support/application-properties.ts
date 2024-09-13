@@ -18,6 +18,7 @@
  */
 
 import { databaseTypes } from '../../../lib/jhipster/index.js';
+import { createSafeSecret } from '../../base/support/secret.js';
 import { getDatabaseData } from './database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
 
@@ -46,11 +47,13 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   }
 
   const prodDatabaseData = getDatabaseData(application.prodDatabaseType);
-  const { defaultPassword } = prodDatabaseData;
   application.prodHibernateDialect = prodDatabaseData.hibernateDialect;
   application.prodJdbcDriver = prodDatabaseData.jdbcDriver;
   application.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? application.baseName;
-  application.prodDatabasePassword = defaultPassword === '<baseName>' ? application.baseName : (defaultPassword ?? '');
+  application.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
+  if (application.sonarRecomendations && application.prodDatabasePassword) {
+    application.prodDatabasePassword = createSafeSecret(application.creationTimestamp, application.prodDatabasePassword);
+  }
   application.prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? application.baseName;
 
   const prodDatabaseOptions = {
@@ -70,11 +73,13 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   if (application.devDatabaseTypeH2Any) {
     try {
       const devDatabaseData = getDatabaseData(application.devDatabaseType);
-      const { defaultPassword } = devDatabaseData;
       application.devHibernateDialect = devDatabaseData.hibernateDialect;
       application.devJdbcDriver = devDatabaseData.jdbcDriver;
       application.devDatabaseUsername = devDatabaseData.defaultUsername ?? application.baseName;
-      application.devDatabasePassword = defaultPassword === '<baseName>' ? application.baseName : (defaultPassword ?? '');
+      application.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
+      if (application.sonarRecomendations && application.devDatabasePassword) {
+        application.devDatabasePassword = createSafeSecret(application.creationTimestamp, application.devDatabasePassword);
+      }
       application.devDatabaseName = devDatabaseData.defaultDatabaseName ?? application.baseName;
 
       const devDatabaseOptions = {

@@ -67,6 +67,16 @@ const command = {
       scope: 'generator',
     },
   },
+  configs: {
+    sonarRecommendations: {
+      description: 'Apply SonarQube recommendations like strong passwords',
+      cli: {
+        type: Boolean,
+        env: 'JHI_SONAR_RECOMMENDATIONS',
+      },
+      scope: 'storage',
+    },
+  },
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

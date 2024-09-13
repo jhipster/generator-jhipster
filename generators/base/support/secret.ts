@@ -52,3 +52,10 @@ export function createBase64Secret(len?: number | boolean, reproducible = false)
   }
   return Buffer.from(createSecret(len)).toString('base64');
 }
+
+/**
+ * Create a strong secret from a timestamp and a base name
+ */
+export function createSafeSecret(timestamp: number, baseName: string) {
+  return Buffer.from(`${timestamp}-${baseName}`).toString('base64');
+}
