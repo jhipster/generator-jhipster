@@ -18,7 +18,6 @@
  */
 
 import { databaseTypes } from '../../../lib/jhipster/index.js';
-import { createSafeSecret } from '../../base/support/secret.js';
 import { getDatabaseData } from './database-data.js';
 import { getJdbcUrl, getR2dbcUrl } from './database-url.js';
 
