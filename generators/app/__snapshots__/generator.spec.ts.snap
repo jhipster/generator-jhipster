@@ -27,6 +27,7 @@ Options:
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
+  --sonar-recommendations                  Apply SonarQube recommendations like strong passwords (env: JHI_SONAR_RECOMMENDATIONS)
   --prettier-tab-width <value>             Default tab width for prettier
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
@@ -777,6 +778,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
+  "sonarRecommendations": undefined,
   "springBootDependencies": Any<Object>,
   "srcMainDir": "src/main/",
   "srcMainJava": "src/main/java/",
@@ -1389,6 +1391,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
+  "sonarRecommendations": undefined,
   "springBootDependencies": Any<Object>,
   "srcMainDir": "src/main/",
   "srcMainJava": "src/main/java/",
@@ -1943,6 +1946,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": true,
+  "sonarRecommendations": undefined,
   "springBootDependencies": Any<Object>,
   "srcMainDir": "src/main/",
   "srcMainJava": "src/main/java/",

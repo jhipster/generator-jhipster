@@ -191,6 +191,7 @@ Options:
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
+  --sonar-recommendations                  Apply SonarQube recommendations like strong passwords (env: JHI_SONAR_RECOMMENDATIONS)
   --prettier-tab-width <value>             Default tab width for prettier
   --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
