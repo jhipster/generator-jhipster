@@ -64,4 +64,8 @@ spring:
     compose:
       enabled: true
       lifecycle-management: start-only
+<%_ if (applicationTypeMicroservice) { _%>
+      file: <%- dockerServicesDir %><%- databaseTypeSql ? prodDatabaseType : databaseType %>.yml
+<%_ } else { _%>
       file: <%- dockerServicesDir %>services.yml
+<%_ } _%>
