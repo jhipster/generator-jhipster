@@ -573,6 +573,8 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         }
       },
       addSpringBootCompose({ application, source }) {
+        source.addLogbackMainLog!({ name: 'org.springframework.boot.docker', level: 'INFO' });
+
         const dockerComposeArtifact = { groupId: 'org.springframework.boot', artifactId: 'spring-boot-docker-compose' };
         if (application.buildToolGradle) {
           source.addGradleDependency!({ ...dockerComposeArtifact, scope: 'developmentOnly' });
