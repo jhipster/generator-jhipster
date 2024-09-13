@@ -28,6 +28,8 @@ services:
       - 127.0.0.1:8500:8500
       - 127.0.0.1:8600:8600
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+    labels:
+      org.springframework.boot.ignore: true
 
   consul-config-loader:
     image: <%- dockerContainers.consulConfigLoader %>
