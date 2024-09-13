@@ -51,9 +51,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.prodJdbcDriver = prodDatabaseData.jdbcDriver;
   application.prodDatabaseUsername = prodDatabaseData.defaultUsername ?? application.baseName;
   application.prodDatabasePassword = prodDatabaseData.defaultPassword ?? '';
-  if (application.sonarRecommendations && application.prodDatabasePassword) {
-    application.prodDatabasePassword = createSafeSecret(application.creationTimestamp, application.prodDatabasePassword);
-  }
   application.prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? application.baseName;
 
   const prodDatabaseOptions = {
@@ -77,9 +74,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       application.devJdbcDriver = devDatabaseData.jdbcDriver;
       application.devDatabaseUsername = devDatabaseData.defaultUsername ?? application.baseName;
       application.devDatabasePassword = devDatabaseData.defaultPassword ?? '';
-      if (application.sonarRecommendations && application.devDatabasePassword) {
-        application.devDatabasePassword = createSafeSecret(application.creationTimestamp, application.devDatabasePassword);
-      }
       application.devDatabaseName = devDatabaseData.defaultDatabaseName ?? application.baseName;
 
       const devDatabaseOptions = {
