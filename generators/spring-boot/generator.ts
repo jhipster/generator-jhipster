@@ -146,8 +146,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
           searchEngine,
           websocket,
           cacheProvider,
-          skipClient,
-          clientFramework,
           testFrameworks,
           feignClient,
           enableSwaggerCodegen,
@@ -156,10 +154,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_DOCKER);
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
-
-        if (!skipClient && clientFramework !== 'no') {
-          await this.composeWithJHipster('jhipster:java:node');
-        }
 
         if (enableSwaggerCodegen) {
           await this.composeWithJHipster('jhipster:java:openapi-generator');
@@ -212,6 +206,13 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get composingComponent() {
     return this.asComposingComponentTaskGroup({
+      async composing() {
+        const { clientFramework, skipClient } = this.jhipsterConfigWithDefaults;
+        if (!skipClient && clientFramework !== 'no') {
+          // When using prompts, clientFramework will only be known after composing priority.
+          await this.composeWithJHipster('jhipster:java:node');
+        }
+      },
       async composeLanguages() {
         if (this.jhipsterConfigWithDefaults.enableTranslation) {
           await this.composeWithJHipster(GENERATOR_LANGUAGES);
