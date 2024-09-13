@@ -3,7 +3,7 @@ import { convertOptionsToJDL } from '../support/jdl.js';
 
 // Supported containers: https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot-docker-compose/src/main/java/org/springframework/boot/docker/compose/service/connection
 export const dockerComposeMatrix = Object.fromEntries(
-  Object.entries(
+  [...Object.entries(
     extendMatrix(
       {
         ...fromMatrix({
@@ -30,7 +30,9 @@ export const dockerComposeMatrix = Object.fromEntries(
         messageBroker: ['no', 'kafka'],
       },
     ),
-  ).map(([key, value]) => [
+  ),
+     ['h2', { devDatabaseType: 'h2Disk' }],
+  ].map(([key, value]) => [
     key,
     {
       'cmd-e2e': 'npm run ci:e2e:dev',
