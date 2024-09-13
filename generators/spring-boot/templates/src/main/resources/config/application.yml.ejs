@@ -273,7 +273,7 @@ spring:
     compose:
       enabled: true
       lifecycle-management: start-only
-      file: ./<%- dockerServicesDir %>services.yml
+      file: <%- dockerServicesDir %>services.yml
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
