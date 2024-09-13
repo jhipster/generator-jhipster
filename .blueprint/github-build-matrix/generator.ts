@@ -1,7 +1,7 @@
 import BaseGenerator from '../../generators/base/index.js';
 import { setGithubTaskOutput } from '../../lib/testing/index.js';
 import { convertToGitHubMatrix } from './support/github-ci-matrix.js';
-import { dockerComposeMatrix } from './support/docker-compose-integration.js';
+import { dockerComposeMatrix } from './samples/docker-compose-integration.js';
 
 export default class extends BaseGenerator {
   workflow;
