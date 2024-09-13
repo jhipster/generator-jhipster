@@ -349,7 +349,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           if (field.fieldType === BYTE_BUFFER) {
             this.log.warn(
-              `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)} 
+              `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}
 Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`,
             );
             field.fieldValidate = false;
