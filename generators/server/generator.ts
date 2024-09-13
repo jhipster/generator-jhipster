@@ -522,7 +522,7 @@ Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, s
       },
       packageJsonE2eScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw';
+        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw -ntp';
 
         const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         const applicationEndpoint = application.applicationTypeMicroservice
