@@ -311,16 +311,16 @@
         <defaultGoal>spring-boot:run</defaultGoal>
         <resources>
             <resource>
-                <directory>${basedir}/<%- srcMainResources %>config</directory>
+                <directory>${basedir}/<%- srcMainResources %></directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>**/*.yml</include>
+                    <include>config/**/*.yml</include>
                 </includes>
             </resource>
             <resource>
-                <directory>${basedir}/<%- srcMainResources %>config</directory>
+                <directory>${basedir}/<%- srcMainResources %></directory>
                 <excludes>
-                    <exclude>**/*.yml</exclude>
+                    <exclude>config/**/*.yml</exclude>
                 </excludes>
             </resource>
         </resources>
