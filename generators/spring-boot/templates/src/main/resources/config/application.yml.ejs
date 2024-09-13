@@ -271,12 +271,7 @@ spring:
 <%_ } _%>
   docker:
     compose:
-      # Supported containers: https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot-docker-compose/src/main/java/org/springframework/boot/docker/compose/service/connection
-<%_ if (serviceDiscoveryAny || messageBrokerKafka || databaseTypeCassandra || (prodDatabaseTypeMariadb && reactive)) { _%>
-      enabled: false
-<%_ } else { _%>
       enabled: true
-<%_ } _%>
       lifecycle-management: start-only
       file: ./<%- dockerServicesDir %>services.yml
   profiles:

@@ -41,3 +41,5 @@ services:
       # as configured in central-server-config/git2consul.json
       # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
       # - CONFIG_MODE=git
+    labels:
+      org.springframework.boot.ignore: true

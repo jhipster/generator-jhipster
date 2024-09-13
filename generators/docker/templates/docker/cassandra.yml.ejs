@@ -37,6 +37,8 @@ services:
       interval: 5s
       timeout: 25s
       retries: 20
+    labels:
+      org.springframework.boot.ignore: true
   cassandra-migration:
     environment:
       - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra

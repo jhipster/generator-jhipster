@@ -1,5 +1,5 @@
 import { extendMatrix, fromMatrix } from '../../../lib/testing/index.js';
-import { convertOptionsToJDL } from './jdl.js';
+import { convertOptionsToJDL } from '../support/jdl.js';
 
 // Supported containers: https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot-docker-compose/src/main/java/org/springframework/boot/docker/compose/service/connection
 export const dockerComposeMatrix = Object.fromEntries(
@@ -7,8 +7,7 @@ export const dockerComposeMatrix = Object.fromEntries(
     extendMatrix(
       {
         ...fromMatrix({
-          // cassandra is failing, may be related to cassandra loader.
-          databaseType: ['mongodb', 'neo4j'],
+          databaseType: ['cassandra', 'mongodb', 'neo4j'],
           reactive: [false, true],
         }),
         ...extendMatrix(
@@ -19,8 +18,7 @@ export const dockerComposeMatrix = Object.fromEntries(
           { cacheProvider: ['no', 'redis', 'memcached'] },
         ),
         ...fromMatrix({
-          // Don't include reactive MariaDB for now, as it's using MySQL driver.
-          prodDatabaseType: ['postgresql', 'mysql'],
+          prodDatabaseType: ['postgresql', 'mysql', 'mariadb'],
           reactive: [true],
         }),
       },
@@ -28,8 +26,8 @@ export const dockerComposeMatrix = Object.fromEntries(
         buildTool: ['maven', 'gradle'],
         searchEngine: ['no', 'elasticsearch'],
         authenticationType: ['jwt', 'oauth2'],
-        // serviceDiscoveryType: ['no', 'eureka', 'consul'],
-        // messageBroker: ['no', 'kafka'],
+        serviceDiscoveryType: ['no', 'eureka', 'consul'],
+        messageBroker: ['no', 'kafka'],
       },
     ),
   ).map(([key, value]) => [
