@@ -152,7 +152,7 @@ sonar.exclusions = src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, \\
   target/classes/static/**/*.*
 
 sonar.issue.ignore.multicriteria = \\
-  S1192,S125,S3437,S4502,S4684,S5145,UndocumentedApi
+  S6437,S1192,S125,S3437,S4502,S4684,S5145,UndocumentedApi
 
 # Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded 
 # passwords are provided for development purposes
