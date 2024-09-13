@@ -9,12 +9,12 @@ export const dockerComposeMatrix = Object.fromEntries(
         {
           ...fromMatrix({
             databaseType: ['cassandra', 'mongodb', 'neo4j'],
-            reactive: [false, true],
+            reactive: [undefined, true],
           }),
           ...extendMatrix(
             fromMatrix({
               prodDatabaseType: ['postgresql', 'mysql', 'mariadb'],
-              reactive: [false],
+              reactive: [undefined],
             }),
             { cacheProvider: ['no', 'redis', 'memcached'] },
           ),
@@ -25,10 +25,10 @@ export const dockerComposeMatrix = Object.fromEntries(
         },
         {
           buildTool: ['maven', 'gradle'],
-          searchEngine: ['no', 'elasticsearch'],
+          searchEngine: [undefined, 'elasticsearch'],
           authenticationType: ['jwt', 'oauth2'],
-          serviceDiscoveryType: ['no', 'eureka', 'consul'],
-          messageBroker: ['no', 'kafka'],
+          serviceDiscoveryType: [undefined, 'eureka', 'consul'],
+          messageBroker: [undefined, 'kafka'],
         },
       ),
     ),
