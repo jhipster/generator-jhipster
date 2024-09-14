@@ -443,14 +443,13 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
         }
       },
       prepareFilters({ application, entity }) {
-        (entity as any).entityJavaFilterableProperties = [
-          ...entity.fields.filter(field => field.filterableField),
-          ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
-        ];
-        (entity as any).entityJavaCustomFilters = sortedUniqBy(
-          entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean),
-          'type',
-        );
+        mutateData(entity, {
+          entityJavaFilterableProperties: [
+            ...entity.fields.filter(field => field.filterableField),
+            ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
+          ],
+          entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
+        });
       },
     });
   }
@@ -500,9 +499,14 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addJHipsterBomDependencies({ application, source }) {
-        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, jhipsterDependenciesVersion, messageBrokerAny } =
-          application;
-        const { serviceDiscoveryAny } = application as any;
+        const {
+          applicationTypeGateway,
+          applicationTypeMicroservice,
+          javaDependencies,
+          jhipsterDependenciesVersion,
+          messageBrokerAny,
+          serviceDiscoveryAny,
+        } = application;
 
         source.addJavaDefinitions?.(
           {

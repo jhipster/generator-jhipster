@@ -94,7 +94,7 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
             });
           }
           opts.push({
-            value: 'couchbase',
+            value: COUCHBASE,
             name: '[BETA] Couchbase',
           });
           opts.push({
