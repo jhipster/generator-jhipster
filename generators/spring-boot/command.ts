@@ -20,12 +20,10 @@ import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
 import { createBase64Secret, createSecret } from '../base/support/secret.js';
-import { applicationTypes, authenticationTypes, databaseTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
-const { CONSUL, EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
 const { GATEWAY, MICROSERVICE } = applicationTypes;
-const { SQL, NO: NO_DATABASE, MONGODB, COUCHBASE, CASSANDRA, NEO4J } = databaseTypes;
 
 const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
@@ -77,12 +75,12 @@ const command = {
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'list',
         message: 'Which service discovery server do you want to use?',
-        default: CONSUL,
+        default: 'consul',
       }),
       choices: [
-        { value: CONSUL, name: 'Consul (recommended)' },
-        { value: EUREKA, name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
-        { value: NO_SERVICE_DISCOVERY, name: 'No service discovery' },
+        { value: 'consul', name: 'Consul (recommended)' },
+        { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
+        { value: 'no', name: 'No service discovery' },
       ],
       scope: 'storage',
     },
@@ -102,9 +100,9 @@ const command = {
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),
       choices: [
-        { value: JWT, name: 'JWT authentication (stateless, with a token)' },
-        { value: OAUTH2, name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
-        { value: SESSION, name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
+        { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
+        { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
+        { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
       ],
       configure: gen => {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
@@ -148,14 +146,14 @@ const command = {
       prompt: gen => ({
         type: 'confirm',
         message: 'Do you want to allow relationships with User entity?',
-        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
+        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === OAUTH2,
       }),
       jdl: {
         type: 'boolean',
         tokenType: 'BOOLEAN',
       },
       configure: gen => {
-        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
+        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === OAUTH2) {
           if (gen.isJhipsterVersionLessThan('8.1.1')) {
             gen.jhipsterConfig.syncUserWithIdp = true;
           }
@@ -185,7 +183,7 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: [SQL, MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE],
+      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
       scope: 'storage',
     },
     messageBroker: {
