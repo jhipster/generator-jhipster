@@ -293,9 +293,6 @@ exports[`generator - mongodb gateway-jwt-gradle-enableTranslation(true)-com.myco
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -661,9 +658,6 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -999,9 +993,6 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -1329,9 +1320,6 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -1730,9 +1718,6 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -2139,9 +2124,6 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -2475,9 +2457,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -2831,9 +2810,6 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -3234,9 +3210,6 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -3606,9 +3579,6 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {

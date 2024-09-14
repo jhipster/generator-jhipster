@@ -320,9 +320,6 @@ exports[`generator - elasticsearch gateway-jwt-gradle-enableTranslation(true)-co
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -739,9 +736,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -1134,9 +1128,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/resources/config/bootstrap.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -1518,9 +1509,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -1973,9 +1961,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(false)-maven-enableTran
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -2436,9 +2421,6 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -2850,9 +2832,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(false)-maven-enableT
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -3278,9 +3257,6 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -3756,9 +3732,6 @@ exports[`generator - elasticsearch monolith-session-reactive(false)-maven-enable
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -4200,9 +4173,6 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
     "stateCleared": "modified",
   },
   "src/main/resources/config/bootstrap.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {

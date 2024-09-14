@@ -227,9 +227,6 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/tls/keystore.p12": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -518,9 +515,6 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
-    "stateCleared": "modified",
-  },
-  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
