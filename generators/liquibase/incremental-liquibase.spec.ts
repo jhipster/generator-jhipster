@@ -4,6 +4,8 @@ import { before, describe, expect, it } from 'esmocha';
 import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
 
+const exceptSourceMethods = ['addLiquibaseChangelog', 'addLiquibaseIncrementalChangelog', 'addLiquibaseConstraintsChangelog'];
+
 const incrementalFiles = [
   `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
   `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
@@ -180,7 +182,10 @@ describe('generator - app - --incremental-changelog', function () {
   this.timeout(45000);
   describe('when creating a new application', () => {
     before(async () => {
-      await helpers.runJHipster('server').withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJHipster('server')
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
     });
 
     it('should create application', () => {
@@ -198,6 +203,7 @@ describe('generator - app - --incremental-changelog', function () {
         await helpers
           .runJHipster('server')
           .withJHipsterConfig({ incrementalChangelog: true })
+          .withMockedSource({ except: exceptSourceMethods })
           .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
           .doInDir(cwd => {
             incrementalFiles.forEach(filePath => {
@@ -230,6 +236,7 @@ describe('generator - app - --incremental-changelog', function () {
       before(async () => {
         await helpers
           .runJHipster('server')
+          .withMockedSource({ except: exceptSourceMethods })
           .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
           .withJHipsterConfig({ incrementalChangelog: true })
           .withOptions({ recreateInitialChangelog: true })
@@ -263,7 +270,10 @@ describe('generator - app - --incremental-changelog', function () {
 
   describe('regenerating the application', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithRelationshipToUser).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithRelationshipToUser)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
       await runResult.create('jhipster:jdl').withOptions({
         inline: jdlApplicationWithRelationshipToUser,
         creationTimestamp: '2020-01-02',
@@ -321,6 +331,7 @@ entity Customer {
 }
 `,
         )
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -381,6 +392,7 @@ entity Customer {
 }
 `,
         )
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -441,6 +453,7 @@ entity Customer {
 }
 `,
         )
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -501,6 +514,7 @@ entity Customer {
 }
 `,
         )
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -544,10 +558,14 @@ entity Customer {
 
   describe('when adding a relationship', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndRelationship)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -591,10 +609,14 @@ entity Customer {
 
   describe('when adding a many-to-many relationship', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndAddedNewMnyToManyRelationship)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -651,10 +673,14 @@ entity Customer {
 
   describe('when adding a relationship with on handlers', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -707,10 +733,14 @@ entity Customer {
   });
   describe('when modifying a relationship with on handlers, only at these handlers', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -718,6 +748,7 @@ entity Customer {
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlers)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-03',
@@ -805,10 +836,14 @@ entity Customer {
 
   describe('when modifying an existing relationship', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -816,6 +851,7 @@ entity Customer {
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesAndRelationshipsWithChangedOnHandlersAndChangedNaming)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-03',
@@ -915,6 +951,7 @@ entity Customer {
     before(async () => {
       await helpers
         .runJDL(jdlApplicationWithEntitiesAndRelationshipsWithOnHandlers)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
     });
 
@@ -963,10 +1000,14 @@ entity Customer {
 
   describe('when removing a relationship', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntitiesAndRelationship).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntitiesAndRelationship)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -1013,10 +1054,14 @@ entity Customer {
 
   describe('when modifying fields and relationships at the same time in different entities', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntities).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntities)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithChangedEntitiesAndRelationship)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -1132,10 +1177,14 @@ entity Customer {
 
   describe('when modifying default values, fields with default values and relationships', () => {
     before(async () => {
-      await helpers.runJDL(jdlApplicationWithEntitiesWithDefaultValues).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+      await helpers
+        .runJDL(jdlApplicationWithEntitiesWithDefaultValues)
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
 
       await helpers
         .runJDLInApplication(jdlApplicationWithEntitiesWithChangedDefaultValuesAndNewRelationship)
+        .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
         .withOptions({
           creationTimestamp: '2020-01-02',
@@ -1192,7 +1241,10 @@ entity Customer {
     ].forEach(eachEntityConfig => {
       describe(`testing ${eachEntityConfig.bytesFields ? 'with' : 'without'} byte fields`, () => {
         before(async () => {
-          await helpers.runJDL(eachEntityConfig.entity).withMockedJHipsterGenerators({ except: exceptMockedGenerators });
+          await helpers
+            .runJDL(eachEntityConfig.entity)
+            .withMockedSource({ except: exceptSourceMethods })
+            .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
         });
 
         it('should create entity config file', () => {

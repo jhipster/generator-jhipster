@@ -522,7 +522,7 @@ Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, s
       },
       packageJsonE2eScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');
-        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw';
+        const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw -ntp';
 
         const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         const applicationEndpoint = application.applicationTypeMicroservice
@@ -536,9 +536,10 @@ Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, s
         if (this.jhipsterConfig.testFrameworks?.includes('cypress')) {
           scriptsStorage.set({
             'pree2e:headless': 'npm run ci:server:await',
-            'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
-            'e2e:dev': `concurrently -k -s first "./${buildCmd}" "npm run e2e"`,
-            'e2e:devserver': `concurrently -k -s first "npm run backend:start" "npm start" "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
+            'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
+            'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e:headless`,
+            'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue "./${buildCmd}" npm:e2e`,
+            'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:9000 && npm run e2e:headless -- -c baseUrl=http://localhost:9000"`,
           });
         }
       },

@@ -24,7 +24,7 @@ Options:
   --force-install                          Fail on install dependencies error (default: false)
   --ask-answered                           Show prompts for already configured options (default: false)
   --base-name <value>                      Application base name
-  --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json.
+  --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
   --prettier-tab-width <value>             Default tab width for prettier
@@ -287,7 +287,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "defaultPackaging": "jar",
   "devDatabaseExtraOptions": "",
   "devDatabaseName": "jhipster",
-  "devDatabasePassword": "",
+  "devDatabasePassword": "password",
   "devDatabaseType": "postgresql",
   "devDatabaseTypeH2Any": false,
   "devDatabaseTypeH2Disk": false,
@@ -741,7 +741,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
-  "prodDatabasePassword": "",
+  "prodDatabasePassword": "password",
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeMariadb": false,
   "prodDatabaseTypeMssql": false,
@@ -901,7 +901,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "defaultPackaging": "jar",
   "devDatabaseExtraOptions": "",
   "devDatabaseName": "jhipster",
-  "devDatabasePassword": "",
+  "devDatabasePassword": "password",
   "devDatabaseType": "postgresql",
   "devDatabaseTypeH2Any": false,
   "devDatabaseTypeH2Disk": false,
@@ -1351,7 +1351,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
-  "prodDatabasePassword": "",
+  "prodDatabasePassword": "password",
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeMariadb": false,
   "prodDatabaseTypeMssql": false,
@@ -1510,7 +1510,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "defaultPackaging": "jar",
   "devDatabaseExtraOptions": "",
   "devDatabaseName": "jhipster",
-  "devDatabasePassword": "",
+  "devDatabasePassword": "password",
   "devDatabaseType": "postgresql",
   "devDatabaseTypeH2Any": false,
   "devDatabaseTypeH2Disk": false,
@@ -1907,7 +1907,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
-  "prodDatabasePassword": "",
+  "prodDatabasePassword": "password",
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeMariadb": false,
   "prodDatabaseTypeMssql": false,

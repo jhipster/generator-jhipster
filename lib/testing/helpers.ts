@@ -1,4 +1,5 @@
 import { basename, dirname, join } from 'path';
+import { mock } from 'node:test';
 import { merge, set, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
@@ -56,18 +57,31 @@ const composedGeneratorsToCheck = allGenerators
 
 const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(key => [key, undefined]));
 
-let defaultMockFactory;
+let defaultMockFactory: (original?: any) => any;
+let defaultAccumulateMockArgs: (mocks: Record<string, any>) => Record<string, any>;
 
-export const defineDefaults = async ({ mockFactory }: { mockFactory?: any } = {}) => {
+export const defineDefaults = async ({
+  mockFactory,
+  accumulateMockArgs,
+}: { mockFactory?: any; accumulateMockArgs?: (mock: Record<string, any>) => Record<string, any> } = {}) => {
   if (mockFactory) {
     defaultMockFactory = mockFactory;
   } else if (!defaultMockFactory) {
     try {
-      const { esmocha } = await import('esmocha');
-      defaultMockFactory = esmocha.fn;
+      defaultMockFactory = (...args) => mock.fn(...args);
     } catch {
       throw new Error('loadMockFactory should be called before using mock');
     }
+  }
+  if (!defaultAccumulateMockArgs) {
+    defaultAccumulateMockArgs =
+      accumulateMockArgs ??
+      ((mocks = {}) =>
+        Object.fromEntries(
+          Object.entries(mocks)
+            .filter(([_name, fn]) => fn.mock)
+            .map(([name, fn]) => [name, fn.mock.calls.map(call => (call.arguments.length > 1 ? call.arguments : call.arguments[0]))]),
+        ));
   }
 };
 
@@ -222,7 +236,8 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
       .commitFiles();
   }
 
-  withMockedSource(): this {
+  withMockedSource(options: { except?: string[] } = {}): this {
+    const { except = [] } = options;
     this.sharedSource = new Proxy(
       {},
       {
@@ -232,7 +247,13 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
           }
           return target[name];
         },
-        set() {
+        set(target, property, value) {
+          if (except.includes(property as string)) {
+            if (target[property]) {
+              throw new Error(`Cannot set ${property as string} mock`);
+            }
+            target[property] = defaultMockFactory(value);
+          }
           return true;
         },
       },
@@ -308,22 +329,33 @@ plugins {
   async run(): Promise<RunResult<GeneratorTestType>> {
     const runResult = (await super.run()) as unknown as JHipsterRunResult;
     if (this.sharedSource) {
-      const sourceCallsArg = Object.fromEntries(
-        Object.entries(this.sharedSource).map(([name, fn]) => [name, fn.mock.calls.map(args => (args.length > 1 ? args : args[0]))]),
+      // Convert big objects to an identifier to avoid big snapshot and serialization issues.
+      const cleanupArguments = (args: any[] | any[][]) =>
+        args.map(arg => {
+          if (Array.isArray(arg)) {
+            return cleanupArguments(arg);
+          }
+          const { application, relationships, entities, entity } = arg;
+          if (application) {
+            arg = { ...arg, application: `Application[${application.baseName}]` };
+          }
+          if (entity) {
+            arg = { ...arg, entity: `Entity[${entity.name}]` };
+          }
+          for (const key of ['control', 'entities', 'source'].filter(key => arg[key])) {
+            arg = { ...arg, [key]: `TaskParameter[${key}]` };
+          }
+          if (relationships) {
+            arg = { ...arg, relationships: relationships.map(rel => `Relationship[${rel.relationshipName}]`) };
+          }
+          if (entities) {
+            arg = { ...arg, entities: entities.map(entity => `Entity[${entity.name}]`) };
+          }
+          return arg;
+        });
+      runResult.sourceCallsArg = Object.fromEntries(
+        Object.entries(defaultAccumulateMockArgs(this.sharedSource)).map(([name, args]) => [name, cleanupArguments(args)]),
       );
-      if (sourceCallsArg.addEntitiesToClient) {
-        sourceCallsArg.addEntitiesToClient = sourceCallsArg.addEntitiesToClient.map(({ application, entities }) => ({
-          application: `Application[${application.baseName}]`,
-          entities: entities.map(entity => `Entity[${entity.name}]`),
-        }));
-      }
-      if (sourceCallsArg.addEntityToCache) {
-        sourceCallsArg.addEntityToCache = sourceCallsArg.addEntityToCache.map(({ relationships, ...fields }) => ({
-          ...fields,
-          relationships: relationships.map(rel => `Relationship[${rel.relationshipName}]`),
-        }));
-      }
-      runResult.sourceCallsArg = sourceCallsArg;
     }
 
     runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.mock.callCount() > 0);

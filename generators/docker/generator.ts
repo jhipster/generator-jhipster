@@ -120,6 +120,11 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           this.mergeDestinationYaml(`${application.dockerServicesDir}services.yml`, extendedServices);
         };
 
+        source.addDockerExtendedServiceToApplication = (...services) => {
+          const extendedServices = createDockerExtendedServices(...services);
+          this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, extendedServices);
+        };
+
         source.addDockerDependencyToApplication = (...services) => {
           this.mergeDestinationYaml(`${application.dockerServicesDir}app.yml`, {
             services: {
@@ -179,8 +184,16 @@ export default class DockerGenerator extends BaseApplicationGenerator {
           );
         }
 
+        for (const serviceName of intersection(['postgresql', 'mysql', 'mariadb', 'mssql'], application.dockerServices)) {
+          // Blank profile services starts if no profile is passed.
+          const profiles = application.prodDatabaseType === application.devDatabaseType ? undefined : ['', 'prod'];
+          source.addDockerExtendedServiceToApplication({ serviceName });
+          source.addDockerExtendedServiceToServices({ serviceName, additionalConfig: { profiles } });
+          source.addDockerDependencyToApplication({ serviceName, condition: SERVICE_HEALTHY });
+        }
+
         for (const serviceName of intersection(
-          ['couchbase', 'mongodb', 'neo4j', 'postgresql', 'mysql', 'mariadb', 'mssql', 'elasticsearch', 'keycloak'],
+          ['couchbase', 'mongodb', 'neo4j', 'elasticsearch', 'keycloak'],
           application.dockerServices,
         )) {
           source.addDockerExtendedServiceToApplicationAndServices({ serviceName });

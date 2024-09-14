@@ -371,6 +371,8 @@ jhipster:
       interval: 5s
       timeout: 25s
       retries: 20
+    labels:
+      org.springframework.boot.ignore: true
   
   consul:
     image: consul-placeholder
@@ -647,7 +649,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=
+      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -736,6 +738,7 @@ jhipster:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
@@ -1040,7 +1043,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=
+      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1142,6 +1145,7 @@ jhipster:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:
@@ -1457,7 +1461,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=
+      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1792,7 +1796,7 @@ jhipster:
     image: postgresql-placeholder
     environment:
       - POSTGRES_USER=mspsql
-      - POSTGRES_PASSWORD=
+      - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test:
@@ -1884,6 +1888,7 @@ jhipster:
       - ./config/mariadb:/etc/mariadb/conf.d
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_DATABASE=msmariadb
     command: mariadbd --lower_case_table_names=1 --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     healthcheck:

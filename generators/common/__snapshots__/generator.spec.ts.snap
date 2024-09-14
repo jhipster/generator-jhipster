@@ -152,8 +152,12 @@ sonar.exclusions = src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.js, \\
   target/classes/static/**/*.*
 
 sonar.issue.ignore.multicriteria = \\
-  S1192,S125,S3437,S4502,S4684,S5145,UndocumentedApi
+  S6437,S1192,S125,S3437,S4502,S4684,S5145,UndocumentedApi
 
+# Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded 
+# passwords are provided for development purposes
+sonar.issue.ignore.multicriteria.S6437.resourceKey = src/main/resources/config/*
+sonar.issue.ignore.multicriteria.S6437.ruleKey = java:S6437
 # Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored, as a 
 # JPA-managed field cannot be transient
 sonar.issue.ignore.multicriteria.S3437.resourceKey = src/main/java/**/*

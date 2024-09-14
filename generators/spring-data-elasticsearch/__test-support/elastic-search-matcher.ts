@@ -1,3 +1,4 @@
+import { it } from 'esmocha';
 import type { RunResult } from 'yeoman-test';
 
 import { JAVA_DOCKER_DIR, SERVER_MAIN_SRC_DIR } from '../../generator-constants.js';
@@ -21,13 +22,13 @@ const desiredConfig = {
 };
 
 export const matchElasticSearchDocker = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenFiles('elasticsearch', resultGetter, expectedElasticsearchFiles, shouldMatch);
+  it(...matchWrittenFiles('elasticsearch', expectedElasticsearchFiles, shouldMatch, resultGetter()));
 };
 
 export const matchElasticSearch = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenConfig('elasticsearch', resultGetter, desiredConfig, shouldMatch);
+  it(...matchWrittenConfig('elasticsearch', desiredConfig, shouldMatch, resultGetter()));
 };
 
 export const matchElasticSearchUser = (resultGetter: () => RunResult, shouldMatch: boolean) => {
-  matchWrittenFiles('elasticsearch user', resultGetter, () => expectedElasticsearchUserFiles(resultGetter), shouldMatch);
+  it(...matchWrittenFiles('elasticsearch user', () => expectedElasticsearchUserFiles(resultGetter), shouldMatch, resultGetter()));
 };

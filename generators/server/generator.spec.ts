@@ -52,6 +52,7 @@ describe(`generator - ${generator}`, () => {
               messageBroker: 'no',
             })
             .withSkipWritingPriorities()
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
@@ -66,6 +67,7 @@ describe(`generator - ${generator}`, () => {
               messageBroker: 'kafka',
             })
             .withSkipWritingPriorities()
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
         shouldComposeWithSpringCloudStream(true, () => runResult);
@@ -79,6 +81,7 @@ describe(`generator - ${generator}`, () => {
               messageBroker: 'pulsar',
             })
             .withSkipWritingPriorities()
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
         shouldComposeWithSpringCloudStream(true, () => runResult);
@@ -94,6 +97,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'no',
               authenticationType: 'jwt',
             })
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
@@ -111,6 +115,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'no',
               authenticationType: 'session',
             })
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
@@ -128,6 +133,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'no',
               authenticationType: 'oauth2',
             })
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
 
@@ -146,6 +152,7 @@ describe(`generator - ${generator}`, () => {
               databaseType: 'couchbase',
             })
             .withSkipWritingPriorities()
+            .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
         shouldComposeWithCouchbase(true, () => runResult);
@@ -155,15 +162,18 @@ describe(`generator - ${generator}`, () => {
 
   describe('with entities', () => {
     before(async () => {
-      await helpers.runJHipster(GENERATOR_SERVER).withJHipsterConfig({ skipClient: true }, [
-        { name: 'Foo', changelogDate: '20160926101210', fields: [{ fieldName: 'name', fieldType: 'String' }] },
-        {
-          name: 'Bar',
-          changelogDate: '20160926101211',
-          dto: 'mapstruct',
-          fields: [{ fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] }],
-        },
-      ]);
+      await helpers
+        .runJHipster(GENERATOR_SERVER)
+        .withMockedSource({ except: ['addTestSpringFactory'] })
+        .withJHipsterConfig({ skipClient: true }, [
+          { name: 'Foo', changelogDate: '20160926101210', fields: [{ fieldName: 'name', fieldType: 'String' }] },
+          {
+            name: 'Bar',
+            changelogDate: '20160926101211',
+            dto: 'mapstruct',
+            fields: [{ fieldName: 'name', fieldType: 'String', fieldValidateRules: ['required'] }],
+          },
+        ]);
     });
 
     it('should match files snapshot', () => {

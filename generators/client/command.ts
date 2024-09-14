@@ -105,6 +105,10 @@ const command = {
     },
     clientTestFrameworks: {
       description: 'Client test frameworks',
+      cli: {
+        type: Array,
+        hide: true,
+      },
       prompt: ({ jhipsterConfigWithDefaults: config }) => ({
         when: answers => [ANGULAR, REACT, VUE].includes(answers.clientFramework ?? config.clientFramework),
         type: 'checkbox',

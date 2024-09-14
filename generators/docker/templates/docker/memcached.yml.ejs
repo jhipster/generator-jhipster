@@ -25,3 +25,7 @@ services:
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:11211:11211
+<%_ if (backendTypeSpringBoot) { _%>
+    labels:
+      org.springframework.boot.ignore: true
+<%_ } _%>

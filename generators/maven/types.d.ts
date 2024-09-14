@@ -43,6 +43,7 @@ export type MavenDependency = MavenArtifact & {
   type?: string;
   scope?: string;
   classifier?: string;
+  optional?: boolean;
   additionalContent?: string;
 };
 
