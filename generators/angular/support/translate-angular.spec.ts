@@ -28,10 +28,12 @@ describe('generator - angular - transform', () => {
     beforeEach(() => {
       let value = 0;
       const testImpl = (key, data) => (key === 'blank' ? '' : `translated-value-${key}-${data ? `${inspect(data)}-` : ''}${value++}`);
+      // @ts-ignore
       replaceAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: false,
       });
+      // @ts-ignore
       enabledAngularTranslations = createTranslationReplacer(esmocha.fn().mockImplementation(testImpl), {
         jhiPrefix: 'jhi',
         enableTranslation: true,

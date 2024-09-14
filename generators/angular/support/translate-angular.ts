@@ -41,18 +41,15 @@ export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
  * Replace translation key with translation values
  *
  * @param {import('../generator-base.js')} generator
+ * @param getWebappTranslation
  * @param {string} content
  * @param {string} regexSource regular expression to find keys
- * @param {object} [options]
- * @param {number} [options.keyIndex]
- * @param {number} [options.replacementIndex]
- * @param {any} [options.escape]
  * @returns {string}
  */
 function replaceTranslationKeysWithText(
-  getWebappTranslation,
-  content,
-  regexSource,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  content: string,
+  regexSource: string,
   {
     keyIndex = 1,
     replacementIndex = 1,
@@ -81,7 +78,11 @@ function replaceTranslationKeysWithText(
  * @param {string} jsKey
  * @returns string with jsKey value replaced
  */
-function replaceJSTranslation(getWebappTranslation, content, jsKey) {
+function replaceJSTranslation(
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  content: string,
+  jsKey: string,
+) {
   return replaceTranslationKeysWithText(
     getWebappTranslation,
     content,
@@ -98,14 +99,14 @@ function replaceJSTranslation(getWebappTranslation, content, jsKey) {
  * @param {string} content html content
  * @returns string with pageTitle replaced
  */
-function replacePageTitles(getWebappTranslation, content) {
+function replacePageTitles(getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string, content: string) {
   return replaceJSTranslation(getWebappTranslation, content, 'title');
 }
 
 /**
  * @type {function(import('../generator-base.js'), string): string}
  */
-function replacePlaceholders(getWebappTranslation, content) {
+function replacePlaceholders(getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string, content: string) {
   return replaceTranslationKeysWithText(getWebappTranslation, content, PLACEHOLDER_REGEX, { keyIndex: 2 });
 }
 
@@ -114,7 +115,7 @@ function replacePlaceholders(getWebappTranslation, content) {
  *
  * @type {function(import('../generator-base.js'), string): string}
  */
-function replaceErrorMessage(getWebappTranslation, content) {
+function replaceErrorMessage(getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string, content: string) {
   return replaceJSTranslation(getWebappTranslation, content, 'errorMessage');
 }
 
@@ -123,7 +124,7 @@ function replaceErrorMessage(getWebappTranslation, content) {
  * Or the translation value if translation is disabled.
  */
 const tagTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -149,7 +150,7 @@ const tagTranslation = (
  * Or the translation value if translation is disabled.
  */
 const validationTagTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -175,7 +176,7 @@ const validationTagTranslation = (
  * Or the translation value if translation is disabled.
  */
 const tagPipeTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -201,7 +202,7 @@ const tagPipeTranslation = (
  * Or the translation value if translation is disabled.
  */
 const tagEnumTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -222,7 +223,7 @@ const tagEnumTranslation = (
  * Or the translation value if translation is disabled.
  */
 const pipeTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation }: ReplacerOptions,
   { key, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -237,7 +238,7 @@ const pipeTranslation = (
  * Get translation value.
  */
 const valueTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   _replacerOptions: ReplacerOptions,
   { filePath, key, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -256,7 +257,7 @@ const valueTranslation = (
  * Or the translation value if translation is disabled.
  */
 const pipeEnumTranslation = (
-  getWebappTranslation: any,
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -274,7 +275,11 @@ const pipeEnumTranslation = (
 
 const replaceImplementations: Record<
   string,
-  (getWebappTranslation: any, replacerOpts: ReplacerOptions, translateOpts: JHITranslateConverterOptions) => string
+  (
+    getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+    replacerOpts: ReplacerOptions,
+    translateOpts: JHITranslateConverterOptions,
+  ) => string
 > = {
   Tag: tagTranslation,
   TagPipe: tagPipeTranslation,
@@ -291,7 +296,10 @@ const replaceImplementations: Record<
  * @type {import('../generator-base.js').EditFileCallback}
  * @this {import('../generator-base.js')}
  */
-export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
+export const createTranslationReplacer = (
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  opts: ReplacerOptions | boolean,
+) => {
   const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
   const htmlJhiTranslateStringifyReplacer = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
   let translationReplacer: ((content: string, filePath: string) => string) | undefined;
@@ -309,7 +317,7 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
       { prefixPattern: '>\\s*', suffixPattern: '\\s*<' },
     );
   }
-  return function replaceAngularTranslations(content, filePath) {
+  return function replaceAngularTranslations(content: string, filePath: string) {
     if (filePath.endsWith('.html')) {
       if (!enableTranslation) {
         content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
@@ -322,7 +330,7 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
       content = htmlJhiTranslateStringifyReplacer(content);
     }
     if (/(:?\.html|.ts)$/.test(filePath)) {
-      content = translationReplacer?.(content, filePath);
+      content = translationReplacer ? translationReplacer?.(content, filePath) : content;
     }
     if (!enableTranslation) {
       if (/(:?route|module)\.ts$/.test(filePath)) {
@@ -339,7 +347,10 @@ export const createTranslationReplacer = (getWebappTranslation, opts: ReplacerOp
 const minimatch = new Minimatch('**/*{.html,.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
-export const translateAngularFilesTransform = (getWebappTranslation, opts: ReplacerOptions | boolean) => {
+export const translateAngularFilesTransform = (
+  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  opts: ReplacerOptions | boolean,
+) => {
   const translate = createTranslationReplacer(getWebappTranslation, opts);
   return passthrough(file => {
     file.contents = Buffer.from(translate(file.contents.toString(), file.path));

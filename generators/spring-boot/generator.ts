@@ -52,6 +52,7 @@ import {
   APPLICATION_TYPE_MICROSERVICE,
   applicationTypes,
   cacheTypes,
+  clientFrameworkTypes,
   databaseTypes,
   fieldTypes,
   messageBrokerTypes,
@@ -72,12 +73,11 @@ const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
 const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
+const { NO: NO_CLIENT } = clientFrameworkTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
 export default class SpringBootGenerator extends BaseApplicationGenerator {
-  fakeKeytool;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -209,7 +209,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
     return this.asComposingComponentTaskGroup({
       async composing() {
         const { clientFramework, skipClient } = this.jhipsterConfigWithDefaults;
-        if (!skipClient && clientFramework !== 'no') {
+        if (!skipClient && clientFramework !== NO_CLIENT) {
           // When using prompts, clientFramework will only be known after composing priority.
           await this.composeWithJHipster('jhipster:java:node');
         }
@@ -229,7 +229,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       checksWebsocket({ application }) {
-        const { websocket } = application as any;
+        const { websocket } = application;
         if (websocket && websocket !== NO_WEBSOCKET) {
           if (application.reactive) {
             throw new Error('Spring Websocket is not supported with reactive applications.');
@@ -461,7 +461,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       },
       async generateKeyStore({ application }) {
         const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
-        if (this.fakeKeytool) {
+        if (application.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else {
           this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName! }));
