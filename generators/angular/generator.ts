@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { camelCase } from 'lodash-es';
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -33,7 +32,6 @@ import {
 } from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import type { PostWritingEntitiesTaskParam } from '../../lib/types/application/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -100,8 +98,15 @@ export default class AngularGenerator extends BaseApplicationGenerator {
       },
       addNeedles({ source, application }) {
         source.addEntitiesToClient = param => {
-          this.addEntitiesToModule(param);
-          this.addEntitiesToMenu(param);
+          const routeTemplatePath = `${param.application.clientSrcDir}app/entities/entity.routes.ts`;
+          const ignoreNonExistingRoute = chalk.yellow(`Route(s) not added to ${routeTemplatePath}.`);
+          const addRouteCallback = addEntitiesRoute(param);
+          this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
+
+          const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
+          const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
+          const editCallback = addToEntitiesMenu(param);
+          this.editFile(filePath, { ignoreNonExisting }, editCallback);
         };
 
         source.addAdminRoute = (args: Omit<Parameters<typeof addRoute>[0], 'needle'>) =>
@@ -196,7 +201,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
                 returnValue = fieldDefaultValue;
               }
             }
-
             return returnValue;
           },
         });
@@ -314,123 +318,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "vendor.scss".
-   *
-   * @param {string} style - scss to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
-   * comment = 'Message'
-   *
-   * * ==========================================================================
-   * Message
-   * ========================================================================== *
-   * .success {
-   *     @extend .message;
-   *     border-color: green;
-   * }
-   *
-   */
-  addVendorSCSSStyle(style, comment?) {
-    this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
-  }
-
-  /**
-   * @private
-   * Add a new lazy loaded module to admin routing file.
-   *
-   * @param {string} route - The route for the module. For example 'entity-audit'.
-   * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
-   * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
-   * @param {string} pageTitle - The translation key if i18n is enabled or the text if i18n is disabled for the page title in the browser.
-   *                             For example 'entityAudit.home.title' for i18n enabled or 'Entity audit' for i18n disabled.
-   *                             If undefined then application global page title is used in the browser title bar.
-   */
-  addAdminRoute(route, modulePath, moduleName, pageTitle) {
-    this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName, pageTitle);
-  }
-
-  /**
-   * @private
-   * Add a new module in the TS modules file.
-   *
-   * @param {string} appName - Angular2 application name.
-   * @param {string} angularName - The name of the new admin item.
-   * @param {string} folderName - The name of the folder.
-   * @param {string} fileName - The name of the file.
-   * @param {boolean} enableTranslation - If translations are enabled or not.
-   * @param {string} clientFramework - The name of the client framework.
-   */
-  addAngularModule(appName, angularName, folderName, fileName, enableTranslation) {
-    this.needleApi.clientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation);
-  }
-
-  /**
-   * @private
-   * Add a new icon to icon imports.
-   *
-   * @param {string} iconName - The name of the Font Awesome icon.
-   */
-  addIcon(iconName) {
-    this.needleApi.clientAngular.addIcon(iconName);
-  }
-
-  /**
-   * Add a new menu element to the admin menu.
-   *
-   * @param {string} routerName - The name of the Angular router that is added to the admin menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} translationKeyMenu - i18n key for entry in the admin menu
-   */
-  addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = camelCase(routerName), jhiPrefix?) {
-    this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu, jhiPrefix);
-  }
-
-  addEntitiesToMenu({ application, entities }: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
-    const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
-    const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
-    const editCallback = addToEntitiesMenu({ application, entities });
-
-    this.editFile(filePath, { ignoreNonExisting }, editCallback);
-  }
-
-  addEntitiesToModule(param: Pick<PostWritingEntitiesTaskParam, 'application' | 'entities'>) {
-    const filePath = `${param.application.clientSrcDir}app/entities/entity.routes.ts`;
-    const ignoreNonExisting = chalk.yellow(`Route(s) not added to ${filePath}.`);
-    const addRouteCallback = addEntitiesRoute(param);
-    this.editFile(filePath, { ignoreNonExisting }, addRouteCallback);
-  }
-
-  /**
-   * @private
-   * Add new scss style to the angular application in "global.scss
-   *
-   * @param {string} style - css to add in the file
-   * @param {string} comment - comment to add before css code
-   *
-   * example:
-   *
-   * style = '.jhipster {\n     color: #baa186;\n}'
-   * comment = 'New JHipster color'
-   *
-   * * ==========================================================================
-   * New JHipster color
-   * ========================================================================== *
-   * .jhipster {
-   *     color: #baa186;
-   * }
-   *
-   */
-  addMainSCSSStyle(style, comment?) {
-    this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
-  }
-
   /**
    * Returns the typescript import section of enums referenced by all fields of the entity.
    * @param fields returns the import of enums that are referenced by the fields
@@ -459,7 +346,6 @@ export default class AngularGenerator extends BaseApplicationGenerator {
   generateTestEntityId(primaryKey, index = 0, wrapped = true) {
     return getTestEntityId(primaryKey, index, wrapped);
   }
-
   /**
    * @private
    * Generate a test entity, for the PK references (when the PK is a composite, derived key)
@@ -492,19 +378,5 @@ export default class AngularGenerator extends BaseApplicationGenerator {
    */
   buildAngularFormPath(reference, prefix = []) {
     return angularFormPath(reference, prefix);
-  }
-
-  /**
-   * @private
-   * Add a new menu element, at the root of the menu.
-   *
-   * @param {string} routerName - The name of the router that is added to the menu.
-   * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
-   * @param {boolean} enableTranslation - If translations are enabled or not
-   * @param {string} clientFramework - The name of the client framework
-   * @param {string} translationKeyMenu - i18n key for entry in the menu
-   */
-  addElementToMenu(routerName, iconName, enableTranslation, _clientFramework?, translationKeyMenu = camelCase(routerName)) {
-    this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
   }
 }
