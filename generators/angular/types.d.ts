@@ -1,1 +1,3 @@
-export type AngularApplication = { angularLocaleId: string };
+export type AngularApplication = {
+  angularLocaleId: string;
+};
