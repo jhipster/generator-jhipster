@@ -77,20 +77,22 @@ export const generateEntityClientImports = (relationships, dto?, clientFramework
  * @param {string} clientFramework the client framework, 'angular' or 'react'.
  * @returns typeImports: Map
  */
-export const generateEntityClientEnumImports = (fields, clientFramework) => {
+export const generateEntityClientEnumImports = (fields: Field[] | undefined, clientFramework: string) => {
   const typeImports = new Map();
   const uniqueEnums = {};
-  fields.forEach(field => {
-    const { enumFileName, fieldType } = field;
-    if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues.length !== 0))) {
-      const importType = `${fieldType}`;
-      const basePath = clientFramework === VUE ? '@' : 'app';
-      const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
-      const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
-      uniqueEnums[fieldType] = field.fieldType;
-      typeImports.set(importType, importPath);
-    }
-  });
+  if (fields && fields.forEach) {
+    fields.forEach(field => {
+      const { enumFileName, fieldType } = field;
+      if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))) {
+        const importType = `${fieldType}`;
+        const basePath = clientFramework === VUE ? '@' : 'app';
+        const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
+        const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;
+        uniqueEnums[fieldType] = field.fieldType;
+        typeImports.set(importType, importPath);
+      }
+    });
+  }
   return typeImports;
 };
 
