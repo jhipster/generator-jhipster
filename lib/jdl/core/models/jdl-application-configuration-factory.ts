@@ -38,6 +38,12 @@ export default function createApplicationConfigurationFromObject(
       logger.debug(`Unrecognized application option name and value: '${optionName}' and '${optionValue}'.`);
       return;
     }
+    if (
+      (Array.isArray(optionValue) || typeof optionValue === 'string') &&
+      !runtime.applicationDefinition.doesOptionValueExist(optionName, optionValue)
+    ) {
+      throw new Error(`The value '${optionValue}' is not allowed for the option '${optionName}'.`);
+    }
     configuration.setOption(createApplicationJDLConfigurationOption(optionName, optionValue, runtime));
   });
   return configuration;
@@ -92,9 +98,6 @@ function createJDLConfigurationOption(
   value: boolean | number | string[] | string,
   runtime: JDLRuntime,
 ): JDLApplicationConfigurationOption<any> {
-  if ((Array.isArray(value) || typeof value === 'string') && !runtime.applicationDefinition.doesOptionValueExist(name, value)) {
-    throw new Error(`The value '${value}' is not allowed for the option '${name}'.`);
-  }
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value as string, runtime.applicationDefinition.shouldTheValueBeQuoted(name));
