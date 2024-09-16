@@ -18,7 +18,9 @@ export type JHipsterGeneratorOptions = BaseOptions &
     programName: string;
     positionalArguments?: unknown[];
     createEnvBuilder?: any;
+    /** @experimental */
     jdlDefinition?: JDLApplicationConfig;
+    /** @experimental */
     commandsConfigs?: JHipsterConfigs;
 
     /* yeoman options */
