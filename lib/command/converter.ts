@@ -21,9 +21,9 @@ export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs =
   Object.entries(configs)
     .filter(([_name, def]) => def.jdl)
     .map(([name, def]) => ({
-      ...(def.jdl as Omit<JHipsterOptionDefinition, 'name' | 'knownValues'>),
+      ...(def.jdl as Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>),
       name,
-      knownValues: def.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)),
+      knownChoices: def.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)),
     }))
     .sort((a, b) => (b.name.startsWith(a.name) ? 1 : a.name.localeCompare(b.name)));
 
