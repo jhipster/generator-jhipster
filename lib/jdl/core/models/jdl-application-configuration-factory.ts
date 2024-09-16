@@ -92,6 +92,9 @@ function createJDLConfigurationOption(
   value: boolean | number | string[] | string,
   runtime: JDLRuntime,
 ): JDLApplicationConfigurationOption<any> {
+  if ((Array.isArray(value) || typeof value === 'string') && !runtime.applicationDefinition.doesOptionValueExist(name, value)) {
+    throw new Error(`The value '${value}' is not allowed for the option '${name}'.`);
+  }
   switch (type) {
     case 'string':
       return new StringJDLApplicationConfigurationOption(name, value as string, runtime.applicationDefinition.shouldTheValueBeQuoted(name));

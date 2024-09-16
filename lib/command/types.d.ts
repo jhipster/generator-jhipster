@@ -69,10 +69,9 @@ export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
-export type JHipsterConfigs<ConfigContext = any> = Record<
-  string,
-  RequireAtLeastOne<ConfigSpec<ConfigContext>, 'argument' | 'cli' | 'prompt' | 'storage'>
->;
+export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<ConfigSpec<ConfigContext>, 'argument' | 'cli' | 'prompt' | 'storage'>;
+
+export type JHipsterConfigs<ConfigContext = any> = Record<string, JHipsterConfig<ConfigContext>>;
 
 export type JHipsterCommandDefinition<ConfigContext = any> = {
   readonly arguments?: JHipsterArguments;

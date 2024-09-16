@@ -32,7 +32,7 @@ export default class JDLApplicationDefinition {
    * @param {String|Boolean|Number} value - the option value.
    * @returns {Boolean} whether the option value exists for the name.
    */
-  doesOptionValueExist(name: string, value: string): boolean {
+  doesOptionValueExist(name: string, value: string | string[]): boolean {
     if (!this.doesOptionExist(name)) {
       return false;
     }
@@ -52,7 +52,7 @@ export default class JDLApplicationDefinition {
    * @returns {Boolean} the option's existence.
    */
   doesOptionExist(optionName: string): boolean {
-    return !!optionName && optionName in this.optionTypes;
+    return Boolean(optionName && optionName in this.optionTypes);
   }
 
   /**
