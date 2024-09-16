@@ -6,7 +6,22 @@ import { lookupCommandsConfigs } from './lookup-commands-configs.js';
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
 describe('jdl options', () => {
-  for (const [optionName, config] of Object.entries(jhipsterConfigsWithJDL!)) {
+  const jdlConfigs = Object.entries(jhipsterConfigsWithJDL!);
+
+  it('jdl configs names should match snapshot', () => {
+    expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
+[
+  "feignClient",
+  "syncUserWithIdp",
+  "messageBroker",
+  "databaseMigration",
+  "incrementalChangelog",
+  "routes",
+]
+`);
+  });
+
+  for (const [optionName, config] of jdlConfigs) {
     let choices: any[] | undefined = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
     const isBoolean = config.cli?.type === Boolean;
     const isArray = config.cli?.type === Array;
