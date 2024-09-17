@@ -3,7 +3,7 @@
     "dayjs": "1.11.13"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "3.12.48",
+    "@cypress/code-coverage": "3.13.1",
     "babel-loader": "9.1.3",
     "babel-plugin-istanbul": "7.0.0",
     "cypress": "13.14.2",
