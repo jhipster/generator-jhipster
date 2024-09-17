@@ -53,11 +53,6 @@ const command = {
       type: Boolean,
       scope: 'storage',
     },
-    messageBroker: {
-      description: 'message broker',
-      type: String,
-      scope: 'storage',
-    },
     searchEngine: {
       description: 'Provide search engine for the application when skipping server side generation',
       type: String,

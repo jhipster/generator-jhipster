@@ -14,12 +14,12 @@ import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '
 import BaseGenerator from '../../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
 import { getPackageRoot, isDistFolder } from '../index.js';
-import type { JSONEntity } from '../jdl/core/types/json-config.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
+import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
+import type { Entity } from '../types/base/entity.js';
 import getGenerator from './get-generator.js';
 
-type BaseEntity = { name: string } & JSONEntity;
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
 type GeneratorTestOptions = JHipsterGeneratorOptions;
 
@@ -85,7 +85,7 @@ export const defineDefaults = async ({
   }
 };
 
-const createFiles = (workspaceFolder: string, configuration: Record<string, unknown>, entities?: BaseEntity[]) => {
+const createFiles = (workspaceFolder: string, configuration: Record<string, unknown>, entities?: Entity[]): Record<string, any> => {
   if (!configuration.baseName) {
     throw new Error('baseName is required');
   }
@@ -100,7 +100,7 @@ const createFiles = (workspaceFolder: string, configuration: Record<string, unkn
   };
 };
 
-export const createJHipsterConfigFiles = (configuration: Record<string, unknown>, entities?: BaseEntity[]) =>
+export const createJHipsterConfigFiles = (configuration: Record<string, unknown>, entities?: Entity[]) =>
   createFiles('', configuration, entities);
 
 export type FakeBlueprintOptions = {
@@ -155,7 +155,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
 
   withJHipsterConfig<Config extends EmptyObject>(
     configuration?: Readonly<Partial<Config & ApplicationConfiguration>>,
-    entities?: BaseEntity[],
+    entities?: Entity[],
   ): this {
     return this.withFiles(
       createFiles('', { baseName: 'jhipster', creationTimestamp: parseCreationTimestamp('2020-01-01'), ...configuration }, entities),
@@ -174,7 +174,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     return this;
   }
 
-  withWorkspaceApplicationAtFolder(workspaceFolder: string, configuration: Record<string, unknown>, entities?: BaseEntity[]): this {
+  withWorkspaceApplicationAtFolder(workspaceFolder: string, configuration: Record<string, unknown>, entities?: Entity[]): this {
     if (this.generateApplicationsSet) {
       throw new Error('Cannot be called after withWorkspaceApplication');
     }
@@ -182,7 +182,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     return this.withFiles(createFiles(workspaceFolder, { ...configuration, ...this.commonWorkspacesConfig }, entities));
   }
 
-  withWorkspaceApplication(configuration: Record<string, unknown>, entities?: BaseEntity[]): this {
+  withWorkspaceApplication(configuration: Record<string, unknown>, entities?: Entity[]): this {
     return this.withWorkspaceApplicationAtFolder(configuration.baseName as string, configuration, entities);
   }
 
@@ -377,7 +377,12 @@ class JHipsterTest extends YeomanTest {
     settings?: RunContextSettings | undefined,
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
-    return super.run<GeneratorType>(GeneratorOrNamespace, settings, envOptions).withAdapterOptions({ log: createJHipsterLogger() }) as any;
+    return super
+      .run<GeneratorType>(GeneratorOrNamespace, settings, envOptions)
+      .withOptions({
+        jdlDefinition: getDefaultJDLApplicationConfig(),
+      } as any)
+      .withAdapterOptions({ log: createJHipsterLogger() }) as any;
   }
 
   runJHipster(

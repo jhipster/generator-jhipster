@@ -7,7 +7,6 @@ import type { OptionWithDerivedProperties } from '../base-application/applicatio
 import type { GatewayApplication } from '../spring-cloud/generators/gateway/types.js';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type { ApplicationPropertiesNeedles } from './support/needles.ts';
-import type { MessageBrokerApplicationType } from './options/message-broker.js';
 
 export type SpringEntity = {
   /* Generate entity's Entity */
@@ -117,8 +116,7 @@ export type SpringBootApplication = JavaApplication &
   BuildToolApplication &
   SearchEngine &
   DatabaseTypeApplication &
-  GatewayApplication &
-  MessageBrokerApplicationType & {
+  GatewayApplication & {
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;

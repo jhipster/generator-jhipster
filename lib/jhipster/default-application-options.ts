@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { MESSAGE_BROKER, MESSAGE_BROKER_NO } from '../../generators/server/options/message-broker.js';
+import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import applicationTypes from './application-types.js';
 import authenticationTypes from './authentication-types.js';
 import databaseTypes from './database-types.js';
@@ -76,7 +76,7 @@ const {
   GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
-const commonDefaultOptions = {
+const commonDefaultOptions: Partial<ApplicationConfiguration> = {
   [AUTHENTICATION_TYPE]: JWT,
   [BUILD_TOOL]: MAVEN,
   [DTO_SUFFIX]: OptionValues[DTO_SUFFIX],
@@ -84,7 +84,7 @@ const commonDefaultOptions = {
   [ENABLE_TRANSLATION]: OptionValues[ENABLE_TRANSLATION],
   [ENTITY_SUFFIX]: OptionValues[ENTITY_SUFFIX],
   [JHI_PREFIX]: OptionValues[JHI_PREFIX],
-  [MESSAGE_BROKER]: MESSAGE_BROKER_NO,
+  messageBroker: 'no',
   [SEARCH_ENGINE]: (OptionValues[SEARCH_ENGINE] as Record<string, string>).no,
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };

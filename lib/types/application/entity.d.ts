@@ -53,7 +53,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   builtIn?: boolean;
   builtInUser?: boolean;
   builtInAuthority?: boolean;
-  microserviceName?: string;
   adminEntity?: boolean;
   entityAuthority?: string;
   entityReadAuthority?: string;

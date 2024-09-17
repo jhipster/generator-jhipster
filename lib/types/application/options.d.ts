@@ -15,5 +15,6 @@ export type ApplicationOptions = Simplify<
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/liquibase/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/server/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-boot/command.js').default> &
+    ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-cloud/generators/gateway/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/spring-data-relational/command.js').default>
 >;

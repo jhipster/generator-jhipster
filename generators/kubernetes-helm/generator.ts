@@ -114,10 +114,10 @@ export default class KubernetesHelmGenerator extends BaseWorkspacesGenerator {
     return {
       loadFromYoRc,
       loadSharedConfig() {
-        this.appConfigs.forEach(element => {
-          loadDerivedAppConfig({ application: element });
-          loadDerivedServerConfig({ application: element });
-        });
+        for (const app of this.appConfigs) {
+          loadDerivedAppConfig({ application: app });
+          loadDerivedServerConfig({ application: app });
+        }
         loadDeploymentConfig.call(this);
         derivedKubernetesPlatformProperties(this);
       },

@@ -20,7 +20,6 @@
 import crypto from 'crypto';
 import { defaults } from 'lodash-es';
 
-import { loadFromYoRc } from '../base-workspaces/internal/docker-base.js';
 import {
   HELM_COUCHBASE_OPERATOR,
   HELM_ELASTICSEARCH,
@@ -76,7 +75,6 @@ export const checkHelm = async function () {
 };
 
 export function loadConfig() {
-  loadFromYoRc.call(this);
   if (!this.jhipsterConfig.dbRandomPassword) {
     this.jhipsterConfig.dbRandomPassword = this.options.reproducibleTests ? 'SECRET-PASSWORD' : crypto.randomBytes(30).toString('hex');
   }

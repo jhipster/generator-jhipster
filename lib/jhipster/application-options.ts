@@ -297,7 +297,8 @@ export const jhipsterQuotedOptionNames: string[] = [
 
 export const builtInJDLApplicationConfig: JDLApplicationConfig = {
   optionsTypes: jhipsterOptionTypes,
-  optionsValues: jhipsterOptionValues,
+  // Don't validate built-in options.
+  optionsValues: {},
   quotedOptionNames: jhipsterQuotedOptionNames,
   validatorConfig: builtInConfigPropsValidations,
   tokenConfigs: [],

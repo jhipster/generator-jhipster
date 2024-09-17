@@ -28,6 +28,7 @@ import { packageNameToNamespace } from '../generators/base/support/index.js';
 import command from '../generators/base/command.js';
 import { GENERATOR_APP, GENERATOR_BOOTSTRAP, GENERATOR_JDL } from '../generators/generator-list.js';
 import { extractArgumentsFromConfigs } from '../lib/command/index.js';
+import { buildJDLApplicationConfig } from '../lib/command/jdl.js';
 import logo from './logo.mjs';
 import EnvironmentBuilder from './environment-builder.mjs';
 import SUB_GENERATORS from './commands.mjs';
@@ -56,6 +57,8 @@ const buildAllDependencies = async (generatorNames, { env, blueprintNamespaces }
     const meta = await env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
     if (meta) {
       allDependencies[namespace] = { meta, blueprintNamespace };
+    } else if (!blueprintNamespace) {
+      logger.warn(`Generator ${namespace} not found.`);
     }
     return meta?.importModule();
   };
@@ -276,6 +279,8 @@ export const buildCommands = async ({
         const command = everything.pop();
         const cmdOptions = everything.pop();
         const args = everything;
+        const commandsConfigs = Object.freeze({ ...command.configs, ...command.blueprintConfigs });
+        const jdlDefinition = buildJDLApplicationConfig(commandsConfigs);
         const options = {
           ...program.opts(),
           ...cmdOptions,
@@ -284,6 +289,8 @@ export const buildCommands = async ({
           entrypointGenerator,
           blueprints: envBuilder.getBlueprintsOption(),
           positionalArguments: args,
+          jdlDefinition,
+          commandsConfigs,
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console

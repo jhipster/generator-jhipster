@@ -3,6 +3,8 @@ import type CoreGenerator from '../base-core/index.js';
 import type { ApplicationType } from '../../lib/types/application/application.js';
 import type { Entity } from '../../lib/types/application/entity.js';
 import type { ApplicationOptions } from '../../lib/types/application/options.js';
+import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.js';
+import type { JHipsterConfigs } from '../../lib/command/types.js';
 
 export type ApplicationWithConfig = {
   config: Record<string, string | boolean | number | string[]>;
@@ -16,6 +18,10 @@ export type JHipsterGeneratorOptions = BaseOptions &
     programName: string;
     positionalArguments?: unknown[];
     createEnvBuilder?: any;
+    /** @experimental */
+    jdlDefinition?: JDLApplicationConfig;
+    /** @experimental */
+    commandsConfigs?: JHipsterConfigs;
 
     /* yeoman options */
     skipYoResolve?: boolean;

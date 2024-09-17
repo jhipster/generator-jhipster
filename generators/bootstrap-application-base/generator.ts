@@ -39,7 +39,10 @@ import { GENERATOR_BOOTSTRAP, GENERATOR_COMMON, GENERATOR_PROJECT_NAME } from '.
 import { packageJson } from '../../lib/index.js';
 import { loadLanguagesConfig } from '../languages/support/index.js';
 import { loadAppConfig, loadDerivedAppConfig, loadStoredAppOptions } from '../app/support/index.js';
-import jdlDefinition from '../app/jdl/index.js';
+import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs.js';
+import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import { removeFieldsWithNullishValues } from '../base/support/index.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
@@ -80,6 +83,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           const destinationPath = this.destinationPath();
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
+          const { jdlDefinition } = this.options;
 
           this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition });
           await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition }));
@@ -142,6 +146,17 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      /**
+       * Avoid having undefined keys in the application object when redering ejs templates
+       */
+      async loadApplicationKeys({ application }) {
+        const { applyDefaults = getConfigWithDefaults, commandsConfigs = await lookupCommandsConfigs() } = this.options;
+        loadCommandConfigsIntoApplication({
+          source: applyDefaults(removeFieldsWithNullishValues(this.config.getAll())),
+          application,
+          commandsConfigs,
+        });
+      },
       prepareApplication({ application, applicationDefaults }) {
         loadDerivedAppConfig({ application });
 
@@ -406,6 +421,15 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
   get default() {
     return this.asDefaultTaskGroup({
+      /**
+       * Avoid having undefined keys in the application object when redering ejs templates
+       */
+      async loadApplicationKeys({ application }) {
+        loadCommandConfigsKeysIntoTemplatesContext({
+          templatesContext: application,
+          commandsConfigs: this.options.commandsConfigs ?? (await lookupCommandsConfigs()),
+        });
+      },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];
         if (application.clientRootDir) {

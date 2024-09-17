@@ -1,5 +1,5 @@
 {
-  "include": ["cli/**/*", "generators/**/*", "jdl/**/*", "lib/**/*", "testing/**/*", "test/**/*", ".blueprint/**/*"],
+  "include": ["cli/**/*", "generators/**/*", "lib/**/*", "test/**/*", ".blueprint/**/*"],
   "exclude": [],
   "extends": "./tsconfig.json",
   "compilerOptions": {

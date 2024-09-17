@@ -36,9 +36,7 @@ describe('generator - entity database changelogs', () => {
         await helpers
           .run(getGenerator('entity'))
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
-          .withJHipsterConfig({ applicationType: 'gateway' }, [
-            { ...entityFoo, microservicePath: 'microservice1', microserviceName: 'microservice1' },
-          ])
+          .withJHipsterConfig({ applicationType: 'gateway' }, [{ ...entityFoo, microserviceName: 'microservice1' }])
           .withArguments(['Foo'])
           .withOptions({ regenerate: true, force: true, ignoreNeedlesError: true });
       });
