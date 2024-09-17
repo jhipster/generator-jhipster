@@ -138,7 +138,7 @@ jobs:
         timeout-minutes: 15
       # Run npm install for workspaces only, as it is done in packaging for non-workspaces
       - name: 'PREPARE: npm install'
-        if: matrix.workspaces == 'true'
+        if: matrix.workspaces == 'true' && steps.compare.outputs.equals != 'true'
         run: npm install
         timeout-minutes: 7
       - name: 'TESTS: packaging'
