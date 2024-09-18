@@ -24,7 +24,7 @@ import { mutateData } from '../../../lib/utils/object.js';
 import type CoreGenerator from '../../base-core/generator.js';
 import type { Field } from '../../../lib/types/application/field.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
-import { fieldTypeValues, isBlobType, isFieldEnum } from '../../../lib/application/field-types.js';
+import { fieldTypeValues, isFieldEnumType } from '../../../lib/application/field-types.js';
 import { prepareProperty } from './prepare-property.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -283,17 +283,6 @@ function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, 
     tsType: ({ fieldType }) => getTypescriptType(fieldType),
   });
 
-  if (isBlobType(field.fieldType)) {
-    field.fieldType = 'byte[]';
-    if (field.fieldType === 'ImageBlob') {
-      field.fieldTypeBlobContent = 'image';
-    } else if (field.fieldType === 'TextBlob') {
-      field.fieldTypeBlobContent = 'text';
-    } else if (field.fieldType === 'AnyBlob') {
-      field.fieldTypeBlobContent = 'any';
-    }
-  }
-
   prepareProperty(field);
 
   defaults(field, {
@@ -301,11 +290,12 @@ function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, 
   });
   const fieldType = field.fieldType;
 
-  if (isFieldEnum(field)) {
+  const fieldIsEnum = isFieldEnumType(field);
+  field.fieldIsEnum = fieldIsEnum;
+  if (fieldIsEnum) {
     if (fieldTypeValues.includes(fieldType)) {
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }
-    field.fieldIsEnum = true;
     field.enumFileName = kebabCase(field.fieldType);
     field.enumValues = getEnumValuesWithCustomValues(field.fieldValues!);
   }

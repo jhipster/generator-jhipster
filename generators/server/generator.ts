@@ -82,13 +82,13 @@ const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 const { GRADLE, MAVEN } = buildToolTypes;
-const { CASSANDRA, SQL, NO: NO_DATABASE } = databaseTypes;
+const { SQL, NO: NO_DATABASE } = databaseTypes;
 const { GATEWAY } = applicationTypes;
 
 const { NO: NO_SEARCH_ENGINE } = searchEngineTypes;
 const { CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { INSTANT } = CommonDBTypes;
-const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
+const { BYTE_BUFFER } = RelationalOnlyDBTypes;
 const { PaginationTypes, ServiceTypes } = entityOptions;
 const {
   Validations: { MAX, MIN, MAXLENGTH, MINLENGTH, MAXBYTES, MINBYTES, PATTERN },
@@ -333,16 +333,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
       },
 
       configureFields({ application, entityConfig, entityName }) {
-        const databaseType = entityConfig.databaseType ?? application.databaseType;
         // Validate entity json field content
         const fields = entityConfig.fields;
         fields!.forEach(field => {
           // Migration from JodaTime to Java Time
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
             field.fieldType = INSTANT;
-          }
-          if (field.fieldType === BYTES && databaseType === CASSANDRA) {
-            field.fieldType = BYTE_BUFFER;
           }
 
           this._validateField(entityName, field);

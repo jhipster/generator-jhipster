@@ -1,3 +1,4 @@
+import type { SetFieldType, SetRequired } from 'type-fest';
 import type { Field } from '../types/application/field.js';
 
 const blobFieldTypes = {
@@ -34,20 +35,28 @@ export const fieldTypeValues: string[] = Object.values(fieldTypes);
 
 export type FieldType = (typeof fieldTypes)[keyof typeof fieldTypes];
 
-export const isBlobType = (fieldType: string): fieldType is (typeof blobFieldTypes)[keyof typeof blobFieldTypes] => {
-  return blobFieldTypesValues.includes(fieldType);
+type FieldBlobType = (typeof blobFieldTypes)[keyof typeof blobFieldTypes];
+
+type FieldBinaryType = (typeof blobFieldTypes)[keyof typeof blobFieldTypes] | 'byte[]';
+
+export const isBlobType = (fieldType: string): fieldType is FieldBlobType => blobFieldTypesValues.includes(fieldType);
+
+export const getBlobContentType = (fieldType: FieldBlobType) => {
+  if (fieldType === 'AnyBlob') {
+    return 'any';
+  } else if (fieldType === 'ImageBlob') {
+    return 'image';
+  } else if (fieldType === 'TextBlob') {
+    return 'text';
+  }
+  return undefined;
 };
 
-type EnumField =
-  | {
-      fieldType: string;
-      fieldIsEnum: true;
-      enumValues: { name: string; value: string }[];
-      enumFileName: string;
-    }
-  | {
-      fieldIsEnum: false;
-      fieldType: FieldType;
-    };
+export const isFieldBlobType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldBlobType> => isBlobType(field.fieldType);
 
-export const isFieldEnum = (field: Field): field is Field & EnumField => Boolean(field.fieldValues);
+export const isFieldBinaryType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldBinaryType> =>
+  isBlobType(field.fieldType) || field.fieldType === 'byte[]';
+
+export const isFieldEnumType = (field: Field): field is SetRequired<Field, 'enumFileName' | 'enumValues'> => Boolean(field.fieldValues);
+
+export const isFieldNotEnumType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldType> => !field.fieldValues;
