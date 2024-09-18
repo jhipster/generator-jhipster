@@ -3,18 +3,32 @@ import type { Field as BaseField } from '../../../lib/types/base/field.js';
 export interface Field extends BaseField {
   propertyName: string;
 
-  enumFileName?: string;
   documentation?: string;
+
+  enumFileName?: string;
+  enumValues?: { name: string; value: string }[];
   fieldIsEnum?: boolean;
 
+  // Annotations
   skipClient?: boolean;
   skipServer?: boolean;
-
-  blobContentTypeText?: string;
 
   filterableField?: boolean;
   transient?: boolean;
   columnRequired?: boolean;
+  id?: boolean;
+
+  // Validation
+  fieldValidate?: boolean;
+  unique?: boolean;
+  fieldValidateRules?: string[];
+  fieldValidateRulesPattern?: string | RegExp;
+  fieldValidateRulesMaxlength?: number;
+  maxlength?: any;
+
+  // Faker
+  uniqueValue?: any[];
+  createRandexp: () => any;
 
   // Java specific
   propertyJavaBeanName?: string;
@@ -31,6 +45,12 @@ export interface Field extends BaseField {
 
   generateFakeData?: () => any;
 
+  // Blob
+  fieldWithContentType?: boolean;
+  contentTypeFieldName?: string;
+  blobContentTypeText?: string;
+
+  // Derived properties
   fieldTypeDuration?: boolean;
   fieldTypeBoolean: boolean;
   /** @deprecated */
@@ -39,4 +59,8 @@ export interface Field extends BaseField {
   fieldTypeCharSequence: boolean;
   /** @deprecated */
   fieldTypeNumeric: boolean;
+
+  /** @deprecated */
+  reference?: any;
+  relationshipsPath?: string[];
 }

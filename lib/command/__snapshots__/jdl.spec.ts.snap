@@ -22,7 +22,16 @@ exports[`getDefaultJDLApplicationConfig() should return the default JDL applicat
       "type": "boolean",
     },
   },
-  "optionsValues": {},
+  "optionsValues": {
+    "databaseMigration": {
+      "liquibase": "liquibase",
+    },
+    "messageBroker": {
+      "kafka": "kafka",
+      "no": "no",
+      "pulsar": "pulsar",
+    },
+  },
   "quotedOptionNames": [],
   "tokenConfigs": [
     {

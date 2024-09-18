@@ -42,18 +42,15 @@ exports[`jdl - JDLImporter import when not parsing applications should return th
         },
         {
           "fieldName": "description",
-          "fieldType": "byte[]",
-          "fieldTypeBlobContent": "text",
+          "fieldType": "TextBlob",
         },
         {
           "fieldName": "advertisement",
-          "fieldType": "byte[]",
-          "fieldTypeBlobContent": "any",
+          "fieldType": "Blob",
         },
         {
           "fieldName": "logo",
-          "fieldType": "byte[]",
-          "fieldTypeBlobContent": "image",
+          "fieldType": "ImageBlob",
         },
       ],
       "fluentMethods": undefined,

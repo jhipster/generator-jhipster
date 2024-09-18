@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { FieldType } from '../../../lib/application/field-types.js';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
 import { fieldIsEnum } from '../../base-application/support/index.js';
@@ -37,7 +38,7 @@ const {
  * @param key
  * @returns {*}
  */
-export const getEntryIfTypeOrTypeAttribute = (key: string | PrimaryKey) => {
+export const getEntryIfTypeOrTypeAttribute = (key: FieldType | PrimaryKey): FieldType => {
   if (typeof key === 'object') {
     return key.type;
   }
@@ -50,7 +51,7 @@ export const getEntryIfTypeOrTypeAttribute = (key: string | PrimaryKey) => {
  * @param {string | object} primaryKey - primary key definition
  * @returns {string} primary key type in Typescript
  */
-const getTypescriptKeyType = primaryKey => {
+const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
   if ([TYPE_INTEGER, TYPE_LONG, TYPE_FLOAT, TYPE_DOUBLE, TYPE_BIG_DECIMAL].includes(getEntryIfTypeOrTypeAttribute(primaryKey))) {
     return 'number';
   }

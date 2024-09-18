@@ -224,6 +224,23 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       configureEntity({ entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
+        for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
+          // Convert fieldTypes to correct fieldTypes
+          if (field.fieldTypeBlobContent === 'image') {
+            field.fieldType = 'ImageBlob';
+            field.fieldTypeBlobContent = undefined;
+          } else if (field.fieldTypeBlobContent === 'any') {
+            field.fieldType = 'AnyBlob';
+            field.fieldTypeBlobContent = undefined;
+          } else if (field.fieldTypeBlobContent === 'text') {
+            field.fieldType = 'TextBlob';
+            field.fieldTypeBlobContent = undefined;
+          } else {
+            field.fieldType = 'Blob';
+          }
+          entityStorage.save();
+        }
+
         if (entityConfig.changelogDate) {
           entityConfig.annotations.changelogDate = entityConfig.changelogDate;
           delete entityConfig.changelogDate;

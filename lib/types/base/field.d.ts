@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { FieldType } from '../../application/field-types.ts';
 
 type FieldEnum = {
   fieldValues: string;
@@ -30,7 +31,7 @@ type FieldBlob = {
 export type Field = Partial<FieldEnum> &
   Partial<FieldBlob> & {
     fieldName: string;
-    fieldType: string;
+    fieldType: FieldType | string;
     documentation?: string;
     options?: Record<string, boolean | string | number>;
     fieldValidateRules?: string[];

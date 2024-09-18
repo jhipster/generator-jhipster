@@ -22,7 +22,9 @@ import { getTypescriptType, prepareField as prepareClientFieldForTemplates } fro
 import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
 import { mutateData } from '../../../lib/utils/object.js';
 import type CoreGenerator from '../../base-core/generator.js';
-import { fieldIsEnum } from './field-utils.js';
+import type { Field } from '../../../lib/types/application/field.js';
+import type { Entity } from '../../../lib/types/application/entity.js';
+import { fieldTypeValues, isBlobType, isFieldEnum } from '../../../lib/application/field-types.js';
 import { prepareProperty } from './prepare-property.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -268,7 +270,7 @@ export default function prepareField(entityWithConfig, field, generator) {
   return field;
 }
 
-function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
+function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, generator) {
   mutateData(field, {
     __override__: false,
     path: [field.fieldName],
@@ -281,6 +283,17 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
     tsType: ({ fieldType }) => getTypescriptType(fieldType),
   });
 
+  if (isBlobType(field.fieldType)) {
+    field.fieldType = 'byte[]';
+    if (field.fieldType === 'ImageBlob') {
+      field.fieldTypeBlobContent = 'image';
+    } else if (field.fieldType === 'TextBlob') {
+      field.fieldTypeBlobContent = 'text';
+    } else if (field.fieldType === 'AnyBlob') {
+      field.fieldTypeBlobContent = 'any';
+    }
+  }
+
   prepareProperty(field);
 
   defaults(field, {
@@ -288,10 +301,13 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   });
   const fieldType = field.fieldType;
 
-  field.fieldIsEnum = !field.id && fieldIsEnum(fieldType);
-  if (field.fieldIsEnum) {
+  if (isFieldEnum(field)) {
+    if (fieldTypeValues.includes(fieldType)) {
+      throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
+    }
+    field.fieldIsEnum = true;
     field.enumFileName = kebabCase(field.fieldType);
-    field.enumValues = getEnumValuesWithCustomValues(field.fieldValues);
+    field.enumValues = getEnumValuesWithCustomValues(field.fieldValues!);
   }
 
   field.fieldWithContentType = (fieldType === BYTES || fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
@@ -301,10 +317,10 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
 
   field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
   defaults(field, {
-    nullable: !(field.fieldValidate === true && field.fieldValidateRules.includes(REQUIRED)),
+    nullable: !(field.fieldValidate === true && field.fieldValidateRules!.includes(REQUIRED)),
   });
-  field.unique = field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE);
-  if (field.fieldValidate === true && field.fieldValidateRules.includes(MAXLENGTH)) {
+  field.unique = field.fieldValidate === true && field.fieldValidateRules!.includes(UNIQUE);
+  if (field.fieldValidate === true && field.fieldValidateRules!.includes(MAXLENGTH)) {
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
 
@@ -312,7 +328,7 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   field.createRandexp = () => {
     // check if regex is valid. If not, issue warning and we skip fake data generation.
     try {
-      new RegExp(field.fieldValidateRulesPattern);
+      new RegExp(field.fieldValidateRulesPattern!);
     } catch {
       generator.log.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
@@ -329,9 +345,9 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
   field.generateFakeData = (type = 'csv') => {
     let data = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
-    if ((field.fieldValidate === true && field.fieldValidateRules.includes(UNIQUE)) || field.id) {
+    if ((field.fieldValidate === true && field.fieldValidateRules!.includes(UNIQUE)) || field.id) {
       let i = 0;
-      while (field.uniqueValue.indexOf(data) !== -1) {
+      while (field.uniqueValue!.indexOf(data) !== -1) {
         if (i++ === 5) {
           data = undefined;
           break;
@@ -341,7 +357,7 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
       if (data === undefined) {
         generator.log.warn(`Error generating a unique value field ${field.fieldName} and type ${field.fieldType}`);
       } else {
-        field.uniqueValue.push(data);
+        field.uniqueValue!.push(data);
       }
     }
     if (data === undefined) {
@@ -361,7 +377,7 @@ function prepareCommonFieldForTemplates(entityWithConfig, field, generator) {
  * @param {String} [enumValues] - an enum's values.
  * @return {Array<String>} the formatted enum's values.
  */
-export function getEnumValuesWithCustomValues(enumValues) {
+export function getEnumValuesWithCustomValues(enumValues: string): { name: string; value: string }[] {
   if (!enumValues || enumValues === '') {
     throw new Error('Enumeration values must be passed to get the formatted values.');
   }

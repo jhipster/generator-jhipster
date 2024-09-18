@@ -74,7 +74,7 @@ describe('generator - client - support - template-utils', () => {
   describe('generateTestEntityId', () => {
     describe('when called with int', () => {
       it('return 123', () => {
-        expect(generateTestEntityId('int')).to.equal(123);
+        expect(generateTestEntityId('Integer')).to.equal(123);
       });
     });
     describe('when called with String', () => {

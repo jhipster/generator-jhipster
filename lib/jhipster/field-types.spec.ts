@@ -129,25 +129,4 @@ describe('jdl - FieldTypes', () => {
       });
     });
   });
-  describe('isBlobType', () => {
-    describe('when not passing anything', () => {
-      it('should return false', () => {
-        expect(fieldTypes.isBlobType()).to.be.false;
-      });
-    });
-    describe('when passing a type containing blob without it being one', () => {
-      it('should return false', () => {
-        expect(fieldTypes.isBlobType('NotABlob')).to.be.false;
-      });
-    });
-    Object.keys(fieldTypes.CommonDBTypes).forEach(dbTypeKey => {
-      const commonDBType = fieldTypes.CommonDBTypes[dbTypeKey];
-      describe(`when passing ${commonDBType}`, () => {
-        const typeHasBlobInItsName = commonDBType.toLowerCase().includes('blob');
-        it(`should return ${typeHasBlobInItsName}`, () => {
-          expect(fieldTypes.isBlobType(commonDBType)).to.equal(typeHasBlobInItsName);
-        });
-      });
-    });
-  });
 });

@@ -86,7 +86,6 @@ export default {
   isCommonDBType,
   hasValidation,
   getIsType,
-  isBlobType,
   BlobTypes,
 };
 
@@ -96,15 +95,6 @@ export function isCommonDBType(type): boolean {
   }
 
   return snakeCase(type).toUpperCase() in CommonDBTypes || type instanceof JDLEnum;
-}
-
-export function isBlobType(type?: any): boolean {
-  if (!type) {
-    return false;
-  }
-  return (
-    CommonDBTypes.BLOB === type || CommonDBTypes.ANY_BLOB === type || CommonDBTypes.IMAGE_BLOB === type || CommonDBTypes.TEXT_BLOB === type
-  );
 }
 
 export function hasValidation(type: any, validation, isAnEnum?: boolean): boolean {

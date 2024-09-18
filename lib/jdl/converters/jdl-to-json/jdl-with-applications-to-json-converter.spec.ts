@@ -613,23 +613,19 @@ JSONEntity {
   "fields": [
     {
       "fieldName": "anyBlobField",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any",
+      "fieldType": "AnyBlob",
     },
     {
       "fieldName": "textBlobField",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "text",
+      "fieldType": "TextBlob",
     },
     {
       "fieldName": "blobField",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any",
+      "fieldType": "Blob",
     },
     {
       "fieldName": "imageBlobField",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "image",
+      "fieldType": "ImageBlob",
     },
   ],
   "fluentMethods": undefined,
@@ -881,8 +877,7 @@ JSONEntity {
     },
     {
       "fieldName": "blobField",
-      "fieldType": "byte[]",
-      "fieldTypeBlobContent": "any",
+      "fieldType": "AnyBlob",
       "fieldValidateRules": [
         "minbytes",
         "maxbytes",

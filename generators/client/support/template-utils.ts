@@ -20,6 +20,7 @@ import path from 'path';
 
 import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
 import type { PrimaryKey } from '../../../lib/types/application/entity.js';
+import type { FieldType } from '../../../lib/application/field-types.js';
 import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
@@ -100,7 +101,7 @@ export const generateEntityClientEnumImports = (fields, clientFramework) => {
  * @param {boolean} [wrapped=true] - wrapped values for required types.
  */
 
-export const generateTestEntityId = (primaryKey: string | PrimaryKey, index: string | number = 0, wrapped = true) => {
+export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: string | number = 0, wrapped = true) => {
   primaryKey = getEntryIfTypeOrTypeAttribute(primaryKey);
   let value;
   if (primaryKey === TYPE_STRING) {
@@ -110,7 +111,7 @@ export const generateTestEntityId = (primaryKey: string | PrimaryKey, index: str
   } else {
     value = index === 0 ? 123 : 456;
   }
-  if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKey)) {
+  if (wrapped && [TYPE_UUID, TYPE_STRING].includes(primaryKey as any)) {
     return `'${value}'`;
   }
   return value;
