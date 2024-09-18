@@ -81,7 +81,7 @@ _%>
       <% if (implementsEagerLoadApis && !dtoMapstruct) { %>
         return <%= entityInstance %>Repository.findAllWithEagerRelationships()<% if (reactive) { %>.collectList()<% } %>;
       <%_ } else { _%>
-        return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
+        return <%= entityInstance %>Service.findAll(<% if (implementsEagerLoadApis) { %>eagerload<% } %>)<% if (reactive) { %>.collectList()<% } %>;
       <%_ } _%>
     <%_ } else if (dtoMapstruct) { _%>
         <%= reactive ? 'Flux' : 'List' %><<%= persistClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll();
