@@ -31,15 +31,10 @@ import { lowerFirst, upperFirst } from '../core/utils/string-utils.js';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.js';
 import { asJdlRelationshipType } from '../core/basic-types/relationship-types.js';
 import type { JSONEntity, JSONField, JSONRelationship } from '../core/types/json-config.js';
-import { fieldTypes } from '../../jhipster/index.js';
 
-const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = unaryOptions;
 const { ANGULAR_SUFFIX, CLIENT_ROOT_FOLDER, DTO, MICROSERVICE, PAGINATION, SEARCH, SERVICE } = binaryOptions.Options;
-
-const { ANY, IMAGE, TEXT } = BlobTypes;
-const { BYTES } = RelationalOnlyDBTypes;
 
 export default {
   convertEntitiesToJDL,
@@ -104,18 +99,8 @@ function convertJSONToJDLField(field: JSONField): JDLField {
     type: field.fieldType,
     comment: field.documentation,
   });
-  if (jdlField.type === BYTES) {
-    jdlField.type = getTypeForBlob(field.fieldTypeBlobContent!);
-  }
   addValidations(jdlField, field);
   return jdlField;
-}
-
-function getTypeForBlob(blobContentType: any): string {
-  if ([ANY, IMAGE, TEXT].includes(blobContentType)) {
-    return CommonDBTypes[`${blobContentType.toUpperCase()}_BLOB`];
-  }
-  throw new Error(`Unrecognised blob type: '${blobContentType}'`);
 }
 
 function addValidations(jdlField: JDLField, field: JSONField): void {

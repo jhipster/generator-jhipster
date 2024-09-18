@@ -60,3 +60,22 @@ export const isFieldBinaryType = (field: Field): field is SetFieldType<Field, 'f
 export const isFieldEnumType = (field: Field): field is SetRequired<Field, 'enumFileName' | 'enumValues'> => Boolean(field.fieldValues);
 
 export const isFieldNotEnumType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldType> => !field.fieldValues;
+
+export const convertFieldBlobType = (field: Field): Field => {
+  // Convert fieldTypes to correct fieldTypes
+  if (field.fieldTypeBlobContent === 'image') {
+    field.fieldType = 'ImageBlob';
+    field.fieldTypeBlobContent = undefined;
+  } else if (field.fieldTypeBlobContent === 'any') {
+    field.fieldType = 'AnyBlob';
+    field.fieldTypeBlobContent = undefined;
+  } else if (field.fieldTypeBlobContent === 'text') {
+    field.fieldType = 'TextBlob';
+    field.fieldTypeBlobContent = undefined;
+  } else {
+    // Unknown type is not supported.
+    // Fallback to ByteBuffer for cassandra databases.
+    field.fieldType = 'ByteBuffer';
+  }
+  return field;
+};

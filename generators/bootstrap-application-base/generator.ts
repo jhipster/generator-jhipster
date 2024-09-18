@@ -43,7 +43,7 @@ import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { removeFieldsWithNullishValues } from '../base/support/index.js';
-import { getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
+import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
@@ -226,19 +226,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
         for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
-          // Convert fieldTypes to correct fieldTypes
-          if (field.fieldTypeBlobContent === 'image') {
-            field.fieldType = 'ImageBlob';
-            field.fieldTypeBlobContent = undefined;
-          } else if (field.fieldTypeBlobContent === 'any') {
-            field.fieldType = 'AnyBlob';
-            field.fieldTypeBlobContent = undefined;
-          } else if (field.fieldTypeBlobContent === 'text') {
-            field.fieldType = 'TextBlob';
-            field.fieldTypeBlobContent = undefined;
-          } else {
-            field.fieldType = 'Blob';
-          }
+          convertFieldBlobType(field);
           entityStorage.save();
         }
 

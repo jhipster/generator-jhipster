@@ -28,6 +28,7 @@ import type { JHipsterGeneratorFeatures, JHipsterGeneratorOptions } from '../bas
 import { YO_RC_FILE } from '../generator-constants.js';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.js';
 import type { Entity } from '../../lib/types/base/entity.js';
+import { convertFieldBlobType } from '../../lib/application/field-types.js';
 import { replaceSensitiveConfig } from './support/utils.js';
 
 const isInfoCommand = commandName => commandName === 'info' || undefined;
@@ -142,8 +143,13 @@ export default class InfoGenerator extends BaseApplicationGenerator {
     let jdlObject;
     const entities = new Map<string, Entity>();
     try {
-      this.getExistingEntities().forEach(entity => {
-        entities.set(entity.name, entity.definition);
+      this.getExistingEntities().forEach(({ name, definition: entity }) => {
+        if (entity.fields) {
+          for (const field of entity.fields) {
+            convertFieldBlobType(field);
+          }
+        }
+        entities.set(name, entity);
       });
       jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL(entities);
       JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
