@@ -146,8 +146,6 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
-      - dependency-name: '@module-federation/utilities'
-        versions: ['*']
     groups:
       eslint:
         patterns:
@@ -183,8 +181,6 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
-      - dependency-name: '@module-federation/utilities'
-        versions: ['*']
     groups:
       eslint:
         patterns:
@@ -205,10 +201,6 @@ updates:
       - 'theme: dependencies'
       - 'theme: docker :whale:'
       - 'skip-changelog'
-    ignore:
-      # https://github.com/jhipster/generator-jhipster/issues/25548
-      - dependency-name: 'mongo'
-        versions: ['>=7.0.6']
 
   - package-ecosystem: 'docker'
     directory: '/test-integration/sonar-pr/'
