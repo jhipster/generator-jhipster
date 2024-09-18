@@ -120,7 +120,7 @@ export default asWritingTask(function cleanupOldFilesTask(this, { application })
     this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/login/login.component.html`);
     this.removeFile(`${application.clientSrcDir}app/core/auth/user-route-access-service.ts`);
-    if (!application.authenticationTypeSession || !(application as any).communicationSpringWebsocket) {
+    if (!application.authenticationTypeSession || !application.communicationSpringWebsocket) {
       this.removeFile(`${application.clientSrcDir}app/core/auth/csrf.service.ts`);
     }
     this.removeFolder(`${application.clientSrcDir}app/core/login`);
