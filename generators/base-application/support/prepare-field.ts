@@ -166,9 +166,9 @@ function generateFakeDataForField(this: CoreGenerator, field, faker, changelogDa
         data = data.substr(0, data.length - 3);
       }
     }
-  } else if (field.fieldType === BYTES && field.fieldTypeBlobContent !== TEXT) {
+  } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
     data = '../fake-data/blob/hipster.png';
-  } else if (field.fieldType === BYTES && field.fieldTypeBlobContent === TEXT) {
+  } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
     data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName));
