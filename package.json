@@ -212,6 +212,7 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "overrides": {
+    "@types/node": "$@types/node",
     "ejs-lint": {
       "ejs": "$ejs"
     }
