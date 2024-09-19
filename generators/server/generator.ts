@@ -395,7 +395,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asLoadingEntitiesTaskGroup({
       loadEntityConfig({ entitiesToLoad }) {
         for (const { entityName, entityBootstrap } of entitiesToLoad) {
-          for (const fields of entityBootstrap.fields) {
+          for (const field of entityBootstrap.fields) {
             if (field.fieldType === BYTE_BUFFER) {
               this.log.warn(`Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
               field.fieldValidate = false;
