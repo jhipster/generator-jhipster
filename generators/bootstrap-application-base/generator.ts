@@ -43,6 +43,7 @@ import { lookupCommandsConfigs } from '../../lib/command/lookup-commands-configs
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../lib/command/load.js';
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
 import { removeFieldsWithNullishValues } from '../base/support/index.js';
+import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../lib/application/field-types.js';
 import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from './utils.js';
 import { exportJDLTransform, importJDLTransform } from './support/index.js';
 
@@ -224,6 +225,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
       configureEntity({ entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
+        for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
+          convertFieldBlobType(field);
+          entityStorage.save();
+        }
+
         if (entityConfig.changelogDate) {
           entityConfig.annotations.changelogDate = entityConfig.changelogDate;
           delete entityConfig.changelogDate;
@@ -343,6 +349,16 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         this.validateResult(loadEntitiesOtherSide(entities, { application }));
 
         for (const entity of entities) {
+          for (const field of entity.fields) {
+            if (isFieldBinaryType(field)) {
+              field.fieldTypeBlobContent ??= getBlobContentType(field.fieldType);
+              if (application.databaseTypeCassandra || entity.databaseType === 'cassandra') {
+                field.fieldType = 'ByteBuffer';
+              } else if (isFieldBlobType(field)) {
+                field.fieldType = 'byte[]' as any;
+              }
+            }
+          }
           for (const relationship of entity.relationships) {
             if (relationship.ownerSide === undefined) {
               // ownerSide backward compatibility

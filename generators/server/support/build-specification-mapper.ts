@@ -1,3 +1,4 @@
+import type { FieldType } from '../../../lib/application/field-types.js';
 import { fieldTypes } from '../../../lib/jhipster/index.js';
 
 const {
@@ -17,7 +18,7 @@ const {
  * Return the method name which converts the filter to specification
  * @param {string} fieldType
  */
-export const getSpecificationBuildForType = (fieldType: string) => {
+export const getSpecificationBuildForType = (fieldType: FieldType) => {
   if (
     [
       TYPE_INTEGER,

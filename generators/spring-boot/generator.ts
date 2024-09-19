@@ -60,6 +60,7 @@ import {
   websocketTypes,
 } from '../../lib/jhipster/index.js';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
+import type { FieldType } from '../../lib/application/field-types.js';
 import { writeFiles as writeEntityFiles } from './entity-files.js';
 import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
@@ -346,7 +347,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareEntity({ field }) {
-        field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType);
+        field.fieldJavaBuildSpecification = getSpecificationBuildForType(field.fieldType as FieldType);
 
         field.filterableField = ![TYPE_BYTES, TYPE_BYTE_BUFFER].includes(field.fieldType) && !field.transient;
         if (field.filterableField) {

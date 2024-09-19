@@ -25,15 +25,11 @@ import type JDLObject from '../../core/models/jdl-object.js';
 import type { JSONField } from '../../core/types/json-config.js';
 import type { JDLEntity } from '../../core/models/index.js';
 import type JDLField from '../../core/models/jdl-field.js';
-import { fieldTypes } from '../../../jhipster/index.js';
+import type { FieldType } from '../../../application/field-types.js';
 
 const {
   Validations: { UNIQUE, REQUIRED },
 } = validations;
-const { isBlobType } = fieldTypes;
-const { ANY_BLOB, BLOB, IMAGE_BLOB, TEXT_BLOB } = fieldTypes.CommonDBTypes;
-const { ANY, IMAGE, TEXT } = fieldTypes.BlobTypes;
-const { BYTES } = fieldTypes.RelationalOnlyDBTypes;
 
 export default { convert };
 
@@ -59,7 +55,7 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
   jdlEntity.forEachField((jdlField: JDLField) => {
     let fieldData: JSONField = {
       fieldName: camelCase(jdlField.name),
-      fieldType: jdlField.type,
+      fieldType: jdlField.type as FieldType,
     };
     const comment = formatComment(jdlField.comment);
     if (comment) {
@@ -75,13 +71,6 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
       if (fieldValuesJavadocs && Object.keys(fieldValuesJavadocs).length > 0) {
         fieldData.fieldValuesJavadocs = fieldValuesJavadocs;
       }
-    }
-    if (fieldData.fieldType && isBlobType(fieldData.fieldType)) {
-      const blobFieldData = getBlobFieldData(fieldData.fieldType);
-      fieldData = {
-        ...fieldData,
-        ...blobFieldData,
-      };
     }
     if (jdlField.validationQuantity() !== 0) {
       const fieldValidations = getFieldValidations(jdlField);
@@ -100,27 +89,6 @@ function getConvertedFieldsForEntity(jdlEntity: JDLEntity, jdlObject: JDLObject)
     convertedEntityFields.push(fieldData);
   });
   return convertedEntityFields;
-}
-
-function getBlobFieldData(fieldType: string): { fieldType: 'bytes'; fieldTypeBlobContent: 'image' | 'any' | 'text' } {
-  const blobFieldData: any = {
-    fieldType: BYTES,
-  };
-  switch (fieldType) {
-    case IMAGE_BLOB:
-      blobFieldData.fieldTypeBlobContent = IMAGE;
-      break;
-    case BLOB:
-    case ANY_BLOB:
-      blobFieldData.fieldTypeBlobContent = ANY;
-      break;
-    case TEXT_BLOB:
-      blobFieldData.fieldTypeBlobContent = TEXT;
-      break;
-    default:
-      throw new Error(`Unrecognised Blob type: ${fieldType}.`);
-  }
-  return blobFieldData;
 }
 
 function getFieldValidations(jdlField: JDLField) {

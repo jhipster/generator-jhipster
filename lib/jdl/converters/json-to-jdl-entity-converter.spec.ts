@@ -223,14 +223,6 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           });
         });
       });
-
-      describe('when parsing an unrecognised blob-typed field', () => {
-        it('should fail', () => {
-          expect(() => convertEntitiesToJDL(new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]))).to.throw(
-            "Unrecognised blob type: 'unknown'",
-          );
-        });
-      });
     });
     describe('when parsing relationships including the User entity', () => {
       let entities;

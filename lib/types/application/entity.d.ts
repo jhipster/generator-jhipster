@@ -22,6 +22,7 @@ import type { Entity as BaseEntity } from '../base/entity.js';
 import type { SpringEntity } from '../../../generators/server/types.js';
 import type { Field as BaseField } from '../base/field.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
+import type { FieldType } from '../../application/field-types.ts';
 import type { Field } from './field.js';
 import type { Relationship } from './relationship.js';
 
@@ -34,7 +35,7 @@ export type PrimaryKey<F extends BaseField = Field> = {
   name: string;
   fields: F[];
   derivedFields: F[];
-  type: string;
+  type: FieldType;
   composite: boolean;
   derived: boolean;
   javaValueGenerator?: string;
@@ -45,6 +46,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   extends Omit<Required<BaseEntity<F>>, 'relationships'>,
     SpringEntity,
     AngularEntity {
+  changelogDateForRecent: any;
   relationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
   otherRelationships: (IsNever<R> extends true ? Relationship<Omit<Entity, 'relationships'>> : R)[];
 
@@ -144,4 +146,6 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
   dtoMapstruct: boolean;
 
   propertyJavaFilteredType?: string;
+
+  faker: any;
 }
