@@ -146,7 +146,9 @@ export default class InfoGenerator extends BaseApplicationGenerator {
       this.getExistingEntities().forEach(({ name, definition: entity }) => {
         if (entity.fields) {
           for (const field of entity.fields) {
-            convertFieldBlobType(field);
+            if (field.fieldType === 'byte[]') {
+              convertFieldBlobType(field);
+            }
           }
         }
         entities.set(name, entity);
