@@ -391,6 +391,26 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
   }
 
+  get loadingEntities() {
+    return this.asLoadingEntitiesTaskGroup({
+      loadEntityConfig({ entitiesToLoad }) {
+        for (const { entityName, entityBootstrap } of entitiesToLoad) {
+          for (const fields of entityBootstrap.fields) {
+            if (field.fieldType === BYTE_BUFFER) {
+              this.log.warn(`Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+              field.fieldValidate = false;
+              field.fieldValidateRules = [];
+            }
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.loadingEntities);
+  }
+
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
@@ -404,22 +424,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
-  }
-
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareField({ field }) {
-        if (field.fieldType === BYTE_BUFFER) {
-          this.log.warn(`Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
-          field.fieldValidate = false;
-          field.fieldValidateRules = [];
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
   get postPreparingEachEntity() {
