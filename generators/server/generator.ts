@@ -343,14 +343,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
           this._validateField(entityName, field);
 
-          if (field.fieldType === BYTE_BUFFER) {
-            this.log.warn(
-              `Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}
-Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`,
-            );
-            field.fieldValidate = false;
-            field.fieldValidateRules = [];
-          }
           if (entityConfig.pagination && entityConfig.pagination !== NO_PAGINATION && isReservedPaginationWords(field.fieldName)) {
             throw new Error(
               `Field name '${field.fieldName}' found in ${entityConfig.name} is a reserved keyword, as it is used by Spring for pagination in the URL.`,
@@ -412,6 +404,22 @@ Hibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, s
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareField({ field }) {
+        if (field.fieldType === BYTE_BUFFER) {
+          this.log.warn(`Cannot use validation in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+          field.fieldValidate = false;
+          field.fieldValidateRules = [];
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
   get postPreparingEachEntity() {
