@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import { fileURLToPath, URL } from 'node:url';
-import { existsSync } from 'node:fs';
 import { normalizePath } from 'vite'
 
 import {
@@ -36,11 +35,6 @@ const sharedAppVersion = '0.0.0';
   <%_ } _%>
 <%_ } _%>
 
-const getFileFromRepo = (file: string) =>
-  existsSync(fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url)))
-    ? fileURLToPath(new URL(`../node_modules/${file}`, import.meta.url))
-    : fileURLToPath(new URL(`./node_modules/${file}`, import.meta.url));
-
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
 
@@ -54,7 +48,7 @@ let config = defineConfig({
           src: [
             `${normalizePath(swaggerUiPath)}/*.{js,css,html,png}`,
             `!${normalizePath(swaggerUiPath)}/**/index.html`,
-            normalizePath(getFileFromRepo('axios/dist/axios.min.js')),
+            normalizePath(fileURLToPath(new URL('./dist/axios.min.js', import.meta.resolve('axios/package.json')))),
             normalizePath(fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
           ],
           dest: 'swagger-ui',
