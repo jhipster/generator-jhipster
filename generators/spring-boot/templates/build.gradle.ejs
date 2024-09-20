@@ -266,10 +266,14 @@ task cleanResources(type: Delete) {
 
 bootBuildImage {
     builder = "paketobuildpacks/builder-jammy-buildpackless-tiny"
-    buildpacks = ["paketobuildpacks/java"]
+    buildpacks = [
+        "paketobuildpacks/java",
+        "paketobuildpacks/health-checker"
+    ]
     tags = ["<%- lowercaseBaseName %>"]
     environment = [
         "BPL_SPRING_AOT_ENABLED" : "true",
+        "BP_HEALTH_CHECKER_ENABLED" : "true",
         "BP_JVM_CDS_ENABLED" : "false",
         "BP_JVM_VERSION": "<%= JAVA_VERSION %>"
     ]
