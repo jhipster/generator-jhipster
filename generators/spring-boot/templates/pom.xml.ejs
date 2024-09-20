@@ -541,6 +541,20 @@
 <%_ if (cacheProviderInfinispan) { _%>
                         <jvmArguments>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</jvmArguments>
 <%_ } _%>
+                        <image>
+                            <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
+                            <buildpacks>
+                                <buildpack>paketobuildpacks/java</buildpack>
+                            </buildpacks>
+                            <tags>
+                                <tag><%- lowercaseBaseName %></tag>
+                            </tags>
+                            <env>
+                                <BPL_SPRING_AOT_ENABLED>true</BPL_SPRING_AOT_ENABLED>
+                                <BP_JVM_CDS_ENABLED>false</BP_JVM_CDS_ENABLED>
+                                <BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
+                            </env>
+                        </image>
                     </configuration>
                 </plugin>
                 <plugin>
