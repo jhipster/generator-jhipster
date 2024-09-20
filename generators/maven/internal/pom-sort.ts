@@ -126,7 +126,8 @@ const sortArtifacts = (artifacts: MavenDependency[]) =>
 
 const sortProfiles = (profiles: MavenProfile[]) => profiles.sort((a, b) => a.id?.localeCompare(b.id) ?? 1);
 
-const sortProjectLike = (projectLike: any): any => {
+const sortProjectLike = (projectLike: any, options: { sortPlugins?: boolean } = {}): any => {
+  const { sortPlugins = true } = options;
   projectLike = sortKeys(projectLike, { compare: comparator(rootAndProfileOrder) });
   if (projectLike.properties) {
     projectLike.properties = sortProperties(projectLike.properties);
@@ -140,7 +141,7 @@ const sortProjectLike = (projectLike: any): any => {
   if (projectLike.build) {
     projectLike.build = sortSection(projectLike.build);
 
-    if (Array.isArray(projectLike.build.plugins?.plugin)) {
+    if (sortPlugins && Array.isArray(projectLike.build.plugins?.plugin)) {
       projectLike.build.plugins.plugin = sortArtifacts(projectLike.build.plugins.plugin);
     }
     if (Array.isArray(projectLike.build.pluginManagement?.plugins?.plugin)) {
@@ -153,9 +154,9 @@ const sortProjectLike = (projectLike: any): any => {
 export const sortPomProject = (project: any): any => {
   project = sortProjectLike(project);
   if (Array.isArray(project.profiles?.profile)) {
-    project.profiles.profile = sortProfiles(project.profiles.profile.map(profile => sortProjectLike(profile)));
+    project.profiles.profile = sortProfiles(project.profiles.profile.map(profile => sortProjectLike(profile, { sortPlugins: false })));
   } else if (project.profiles?.profile) {
-    project.profiles.profile = sortProjectLike(project.profiles.profile);
+    project.profiles.profile = sortProjectLike(project.profiles.profile, { sortPlugins: false });
   }
   return project;
 };
