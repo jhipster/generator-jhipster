@@ -57,7 +57,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'backend:start': `./mvnw${excludeWebapp} -ntp --batch-mode`,
             'java:jar': './mvnw -ntp verify -DskipTests --batch-mode',
             'java:war': './mvnw -ntp verify -DskipTests --batch-mode -Pwar',
-            'java:docker': './mvnw -ntp spring-boot:build-image',
+            'java:docker': './mvnw -ntp spring-boot:build-image -DskipTests',
             'java:docker:arm64': 'npm run java:docker',
             'backend:unit:test': `./mvnw -ntp${excludeWebapp} verify --batch-mode ${javaCommonLog} ${javaTestLog}`,
             'backend:build-cache': './mvnw dependency:go-offline -ntp',

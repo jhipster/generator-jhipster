@@ -275,7 +275,7 @@ bootBuildImage {
         "BPL_SPRING_AOT_ENABLED" : "true",
         "BP_HEALTH_CHECKER_ENABLED" : "true",
         "BP_JVM_CDS_ENABLED" : "false",
-        "BP_JVM_VERSION": "<%= JAVA_VERSION %>"
+        "BP_JVM_VERSION": "<%= javaVersion %>"
     ]
 }
 <%_ if ( embeddableLaunchScript || databaseTypeCouchbase ) { _%>
