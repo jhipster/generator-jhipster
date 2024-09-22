@@ -88,7 +88,7 @@ export const generatorFiles = asWriteFilesSection<any>({
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       condition(ctx) {
-        return ((this as any).options.force || !ctx.written) && ctx.priorities.find(priority => priority.name === 'writing');
+        return !ctx.written && ctx.priorities.find(priority => priority.name === 'writing');
       },
       transform: false,
       templates: [
