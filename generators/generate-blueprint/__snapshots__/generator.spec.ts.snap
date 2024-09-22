@@ -860,9 +860,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "vitest.test-setup.ts": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -902,9 +899,6 @@ exports[`generator - generate-blueprint with default config should write files a
     "stateCleared": "modified",
   },
   "vitest.config.ts": {
-    "stateCleared": "modified",
-  },
-  "vitest.test-setup.ts": {
     "stateCleared": "modified",
   },
 }
