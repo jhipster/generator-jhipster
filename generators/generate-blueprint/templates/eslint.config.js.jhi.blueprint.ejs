@@ -17,8 +17,9 @@
  limitations under the License.
 -%>
 <&_ if (fragment.importsSection) { -&>
-import jhipster from 'generator-jhipster/eslint/recommended';
+import jhipster from 'generator-jhipster/eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  jhipster,
+  { ignores: ['coverage/**'] },
+  jhipster.recommended,
 <&_ } -&>

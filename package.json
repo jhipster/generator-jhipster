@@ -46,6 +46,10 @@
     },
     "./package.json": "./package.json",
     "./eslint/recommended": {
+      "types": "./dist/lib/eslint/recommended.d.ts",
+      "default": "./dist/lib/eslint/recommended.js"
+    },
+    "./eslint": {
       "types": "./dist/lib/eslint/index.d.ts",
       "default": "./dist/lib/eslint/index.js"
     },
