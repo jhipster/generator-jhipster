@@ -65,6 +65,7 @@ Options:
   --client-root-dir <value>                Client root
   --skip-git                               Skip git repository initialization
   --force-git                              Force commit to git repository
+  --commit-msg <value>                     Commit changes (implies forceGit)
   --cypress-coverage                       Enable Cypress code coverage report generation
   --cypress-audit                          Enable cypress-audit/lighthouse report generation
   --enable-translation                     Enable translation

@@ -34,6 +34,16 @@ const command = {
       },
       scope: 'generator',
     },
+    commitMsg: {
+      description: 'Commit changes (implies forceGit)',
+      cli: {
+        type: String,
+        implies: {
+          forceGit: true,
+        },
+      },
+      scope: 'generator',
+    },
     monorepository: {
       description: 'Use monorepository',
       cli: {
