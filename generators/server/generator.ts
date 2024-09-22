@@ -19,7 +19,6 @@
  */
 
 import { existsSync } from 'fs';
-import chalk from 'chalk';
 
 import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
 import BaseApplicationGenerator from '../base-application/index.js';
@@ -214,20 +213,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get postPreparing() {
-    return this.asPostPreparingTaskGroup({
-      useNpmWrapper({ application }) {
-        if (application.useNpmWrapper) {
-          this.useNpmWrapperInstallTask();
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.postPreparing);
   }
 
   get configuringEachEntity() {
@@ -644,25 +629,6 @@ ${instructions}`,
         );
       }
     }
-  }
-
-  useNpmWrapperInstallTask() {
-    this.setFeatures({
-      customInstallTask: async function customInstallTask(preferredPm, defaultInstallTask) {
-        const buildTool = this.jhipsterConfigWithDefaults.buildTool;
-        if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== GRADLE && buildTool !== MAVEN)) {
-          return defaultInstallTask();
-        }
-
-        const npmCommand = process.platform === 'win32' ? 'npmw' : './npmw';
-        try {
-          await this.spawnCommand(npmCommand, ['install'], { preferLocal: true });
-        } catch (error) {
-          this.log.error(chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${error.shortMessage})`));
-        }
-        return true;
-      }.bind(this),
-    });
   }
 
   _validateRelationship(entityName, relationship) {
