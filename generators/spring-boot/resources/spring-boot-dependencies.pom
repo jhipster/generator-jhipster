@@ -35,7 +35,7 @@
     <zipkin-reporter.version>3.4.2</zipkin-reporter.version>
     <brave.version>6.0.3</brave.version>
     <build-helper-maven-plugin.version>3.5.0</build-helper-maven-plugin.version>
-    <byte-buddy.version>1.14.19</byte-buddy.version>
+    <byte-buddy.version>1.15.1</byte-buddy.version>
     <cache2k.version>2.6.1.Final</cache2k.version>
     <caffeine.version>3.1.8</caffeine.version>
     <cassandra-driver.version>4.18.1</cassandra-driver.version>
