@@ -277,6 +277,25 @@ export default class extends BaseGenerator {
         if (!this.application[GENERATORS]) return;
         if (!this.isJhipsterVersionLessThan('8.7.2')) return;
         for (const generator of Object.keys(this.application[GENERATORS])) {
+          const commandFile = `${this.application.blueprintsPath}${generator}/command.${application.blueprintMjsExtension}`;
+          this.editFile(commandFile, content =>
+            content
+              .replace(
+                `/**
+ * @type {import('generator-jhipster').JHipsterCommandDefinition}
+ */`,
+                `import { asCommand } from 'generator-jhipster';
+`,
+              )
+              .replace('const command = ', 'export default asCommand(')
+              .replace(
+                `
+};`,
+                '});',
+              )
+              .replace('export default command;', ''),
+          );
+
           const generatorSpec = `${this.application.blueprintsPath}${generator}/generator.spec.${application.blueprintMjsExtension}`;
           this.editFile(generatorSpec, content => content.replaceAll(/blueprint: '([\w-]*)'/g, "blueprint: ['$1']"));
         }
