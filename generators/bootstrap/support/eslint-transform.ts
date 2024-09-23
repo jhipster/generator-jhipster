@@ -75,8 +75,8 @@ export const createESLintTransform = function (
         this?.log?.warn?.(errorMessage);
       }
     },
-    () => {
-      pool.destroy();
+    async () => {
+      await pool.destroy();
     },
   );
 };

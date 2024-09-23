@@ -196,7 +196,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
         !this.options.reproducibleTests &&
         !this.jhipsterConfig.jhipsterVersion
       ) {
-        this.jhipsterConfig.jhipsterVersion = packageJson.version;
+        this.storeCurrentJHipsterVersion();
       }
     }
 
@@ -232,6 +232,10 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
    */
   usage(): string {
     return super.usage().replace('yo jhipster:', 'jhipster ');
+  }
+
+  storeCurrentJHipsterVersion(): void {
+    this.jhipsterConfig.jhipsterVersion = packageJson.version;
   }
 
   /**

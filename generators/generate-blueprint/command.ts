@@ -31,7 +31,7 @@ import {
   SUB_GENERATORS,
 } from './constants.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   configs: {
     recreatePackageLock: {
       description: 'Recreate package lock',
@@ -106,6 +106,6 @@ const command: JHipsterCommandDefinition = {
     },
   },
   import: [GENERATOR_INIT],
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

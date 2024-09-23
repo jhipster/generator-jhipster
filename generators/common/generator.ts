@@ -196,8 +196,8 @@ export default class CommonGenerator extends BaseApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application, control }) {
-        control.cleanupFiles({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
           '7.1.1': [[!application.skipCommitHook, '.huskyrc']],
           '7.6.1': [[application.skipClient, 'npmw', 'npmw.cmd']],
           '8.0.0-rc.2': [[!application.skipCommitHook, '.lintstagedrc.js']],
