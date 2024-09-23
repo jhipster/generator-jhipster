@@ -27,7 +27,10 @@ export const files = asWriteFilesSection<any>({
         '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
         { sourceFile: 'eslint.config.js.jhi.blueprint', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.blueprint` },
-        'README.md',
+        {
+          sourceFile: 'README.md',
+          override: data => !data.ignoreExistingGenerators,
+        },
         'tsconfig.json',
         'vitest.config.ts',
         '.blueprint/cli/commands.mjs',
@@ -39,7 +42,7 @@ export const files = asWriteFilesSection<any>({
       ],
     },
     {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
       templates: [
         '.blueprint/github-build-matrix/build-matrix.mjs',
         '.blueprint/github-build-matrix/generator.mjs',
@@ -59,30 +62,28 @@ export const files = asWriteFilesSection<any>({
   ],
 });
 
-export const generatorFiles = {
+export const generatorFiles = asWriteFilesSection<any>({
   generator: [
     {
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       templates: [
-        { file: 'generator.mjs.jhi', renameTo: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi') },
-        { file: 'index.mjs', renameTo: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
-      ],
-    },
-    {
-      path: 'generators/generator',
-      condition: ctx => ctx.priorities.find(priority => priority.name === 'initializing'),
-      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      templates: [{ file: 'command.mjs', renameTo: ctx => (ctx.js ? 'command.js' : 'command.mjs') }],
-    },
-    {
-      path: 'generators/generator',
-      to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
-      condition: ctx => !ctx.generator.startsWith('entity') && !ctx.application[LOCAL_BLUEPRINT_OPTION],
-      templates: [
+        { sourceFile: 'index.mjs', destinationFile: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
         {
-          file: 'generator.spec.mjs',
-          renameTo: ctx => (ctx.js ? 'generator.spec.js' : 'generator.spec.mjs'),
+          sourceFile: 'command.mjs',
+          destinationFile: ctx => (ctx.js ? 'command.js' : 'command.mjs'),
+          override: data => !data.ignoreExistingGenerators,
+        },
+        {
+          sourceFile: 'generator.mjs.jhi',
+          destinationFile: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi'),
+          override: data => !data.ignoreExistingGenerators,
+        },
+        {
+          condition: data => !data.generator.startsWith('entity') && !data.application[LOCAL_BLUEPRINT_OPTION],
+          sourceFile: 'generator.spec.mjs',
+          destinationFile: data => (data.js ? 'generator.spec.js' : 'generator.spec.mjs'),
+          override: data => !data.ignoreExistingGenerators,
         },
       ],
     },
@@ -95,10 +96,10 @@ export const generatorFiles = {
       transform: false,
       templates: [
         {
-          file: 'templates/template-file.ejs',
-          renameTo: ctx => `templates/template-file-${ctx.generator}.ejs`,
+          sourceFile: 'templates/template-file.ejs',
+          destinationFile: ctx => `templates/template-file-${ctx.generator}.ejs`,
         },
       ],
     },
   ],
-};
+});

@@ -118,16 +118,19 @@ export type CascatedEditFileCallback<Generator = CoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
 ) => CascatedEditFileCallback<Generator>;
 
+type DataCallback<Type, DataType = ApplicationType<Entity>, Generator = CoreGenerator> = Type | ((this: Generator, data: DataType) => Type);
+
 export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = CoreGenerator> =
   | string
   | ((this: Generator, data: DataType, filePath: string) => string)
   | {
+      condition?: DataCallback<boolean, DataType, Generator>;
       /** source file */
-      sourceFile?: string | ((this: Generator, data: DataType) => string);
+      sourceFile?: DataCallback<string, DataType, Generator>;
       /** destination file */
-      destinationFile?: string | ((this: Generator, destinationFile: DataType) => string);
+      destinationFile?: DataCallback<string, DataType, Generator>;
       /** @deprecated, use sourceFile instead */
-      file?: string | ((this: Generator, data: DataType) => string);
+      file?: DataCallback<string, DataType, Generator>;
       /** @deprecated, use destinationFile instead */
       renameTo?: string | ((this: Generator, data: DataType, filePath: string) => string);
       /** transforms (files processing) to be applied */
@@ -136,7 +139,7 @@ export type WriteFileTemplate<DataType = ApplicationType<Entity>, Generator = Co
       binary?: boolean;
       /** ejs options. Refer to https://ejs.co/#docs */
       options?: Record<string, object>;
-      override?: boolean | ((this: Generator, data: DataType) => boolean);
+      override?: DataCallback<boolean, DataType, Generator>;
     };
 
 export type WriteFileBlock<DataType = ApplicationType<Entity>, Generator = CoreGenerator> = {

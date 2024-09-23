@@ -862,23 +862,26 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     const normalizeEjs = file => file.replace('.ejs', '');
-    const resolveCallback = (val, fallback?) => {
-      if (val === undefined) {
+    const resolveCallback = (maybeCallback, fallback?) => {
+      if (maybeCallback === undefined) {
         if (typeof fallback === 'function') {
           return resolveCallback(fallback);
         }
         return fallback;
       }
-      if (typeof val === 'boolean' || typeof val === 'string') {
-        return val;
+      if (typeof maybeCallback === 'boolean' || typeof maybeCallback === 'string') {
+        return maybeCallback;
       }
-      if (typeof val === 'function') {
-        return val.call(this, templateData) || false;
+      if (typeof maybeCallback === 'function') {
+        return (maybeCallback as any).call(this, templateData) || false;
       }
-      throw new Error(`Type not supported ${val}`);
+      throw new Error(`Type not supported ${maybeCallback}`);
     };
 
-    const renderTemplate = async ({ sourceFile, destinationFile, options, noEjs, transform, binary }) => {
+    const renderTemplate = async ({ condition, sourceFile, destinationFile, options, noEjs, transform, binary }) => {
+      if (condition !== undefined && !resolveCallback(condition, true)) {
+        return undefined;
+      }
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
@@ -1068,7 +1071,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               return { sourceFile, destinationFile, noEjs, transform: derivedTransform };
             }
 
-            const { options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
+            const { condition, options, file, renameTo, transform: fileTransform = [], binary } = fileSpec;
             let { sourceFile, destinationFile } = fileSpec;
 
             if (typeof fileTransform === 'boolean') {
@@ -1103,6 +1106,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             }
 
             return {
+              condition,
               sourceFile,
               destinationFile,
               options,
@@ -1123,7 +1127,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       });
     }
 
-    const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)));
+    const files = await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean));
     this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
     return files.filter(file => file);
   }
