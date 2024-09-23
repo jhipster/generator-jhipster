@@ -26,7 +26,7 @@ jobs:
           npm install
           ./cli/cli.cjs github-build-matrix
   samples:
-    name: ${{ matrix.sample-name }}
+    name: ${{ matrix.job-name || matrix.sample-name }}
     runs-on: ubuntu-latest
     needs: build-matrix
     defaults:
@@ -48,11 +48,9 @@ jobs:
           maven-cache: true
           gradle-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster-<%= baseName %>/cli/
-      - name: 'Install blueprint'
-        run: npm install
+      - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-<%= baseName %>
-      - name: 'Generate Project'
-        run: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-jhipster-dependencies --force
+      - run: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-jhipster-dependencies ${{ matrix.extra-args }}
       - uses: jhipster/actions/compare-sample@v0
         id: compare
         if: >-
@@ -60,7 +58,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster-<%= baseName %>
-          cmd: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-jhipster-dependencies --force --skip-install
+          cmd: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - run: npm run ci:backend:test
         if: steps.compare.outputs.equals != 'true'
         id: backend
@@ -73,7 +71,7 @@ jobs:
       - run: npm run ci:e2e:run --if-present
         if: steps.compare.outputs.equals != 'true'
         id: e2e
-      - name: 'BACKEND: Store failure logs'
+      - name: Store backend test failure logs
         uses: actions/upload-artifact@v4
         if: always() && steps.backend.outcome == 'failure'
         with:
@@ -81,7 +79,7 @@ jobs:
           path: |
             ${{ github.workspace }}/app/build/test-results/**/*.xml
             ${{ github.workspace }}/app/target/surefire-reports
-      - name: 'E2E: Store failure screenshots'
+      - name: Store cypress screenshots
         uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
