@@ -92,8 +92,8 @@ export const createPrettierTransform = async function (
         this?.log?.warn?.(errorMessage);
       }
     },
-    () => {
-      pool?.destroy();
+    async () => {
+      await pool?.destroy();
     },
   );
 };

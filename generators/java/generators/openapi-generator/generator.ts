@@ -34,8 +34,8 @@ export default class OpenapiGeneratorGenerator extends BaseApplicationGenerator 
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ application, control }) {
-        control.cleanupFiles({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
           '8.6.1': [[application.buildToolGradle!, 'gradle/swagger.gradle']],
         });
       },

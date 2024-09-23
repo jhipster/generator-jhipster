@@ -145,8 +145,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanup({ control }) {
-        control.cleanupFiles({
+      async cleanup({ control }) {
+        await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
         });
       },

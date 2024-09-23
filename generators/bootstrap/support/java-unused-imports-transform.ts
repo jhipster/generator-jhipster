@@ -44,8 +44,8 @@ export const createRemoveUnusedImportsTransform = function (
         }
       }
     },
-    () => {
-      pool.destroy();
+    async () => {
+      await pool.destroy();
     },
   );
 };
