@@ -344,7 +344,7 @@ export default class extends BaseGenerator {
 
   get postInstall() {
     return this.asPostInstallTaskGroup({
-      async addSnapshot() {
+      async addSnapshot({ control }) {
         const { [LOCAL_BLUEPRINT_OPTION]: localBlueprint } = this.jhipsterConfig;
         const {
           skipInstall,
@@ -376,6 +376,21 @@ This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' 
             throw error;
           }
           this.log.warn('Fail to generate snapshots');
+        }
+
+        if (control.jhipsterOldVersion) {
+          // Apply prettier and eslint to fix non generated files on upgrade.
+          try {
+            await this.spawnCommand('npm', ['run', 'prettier-format']);
+          } catch {
+            // Ignore error
+          }
+
+          try {
+            await this.spawnCommand('npm', ['run', 'lint-fix']);
+          } catch {
+            // Ignore error
+          }
         }
       },
     });
