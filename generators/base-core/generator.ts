@@ -1085,7 +1085,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             }
 
             const override = resolveCallback(fileSpec.override);
-            if (override !== undefined && !override && (this as any).fs.exists(destinationFile)) {
+            if (override !== undefined && !override && (this as any).fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
