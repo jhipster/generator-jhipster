@@ -17,6 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { rm } from 'node:fs/promises';
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
@@ -53,6 +54,7 @@ const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spe
 
 export default class extends BaseGenerator {
   application!: any;
+  recreatePackageLock!: boolean;
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
@@ -351,6 +353,12 @@ export default class extends BaseGenerator {
           [GENERATE_SNAPSHOTS]: generateSnapshots = !localBlueprint && !skipInstall && !skipGit && !existed,
         } = this.options;
         if (!generateSnapshots) return;
+
+        if (this.recreatePackageLock) {
+          await rm(this.destinationPath('package-lock.json'), { force: true });
+          await rm(this.destinationPath('node_modules'), { force: true, recursive: true });
+          await this.spawnCommand('npm', ['install'], { stdio: 'inherit' });
+        }
 
         try {
           if (this.options[LINK_JHIPSTER_DEPENDENCY]) {

@@ -33,6 +33,13 @@ import {
 
 const command: JHipsterCommandDefinition = {
   configs: {
+    recreatePackageLock: {
+      description: 'Recreate package lock',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
     githubRepository: {
       cli: {
         description: 'Github Repository',
