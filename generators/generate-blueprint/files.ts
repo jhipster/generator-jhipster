@@ -42,8 +42,9 @@ export const files = asWriteFilesSection<any>({
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
       templates: [
-        '.blueprint/github-build-matrix/build-matrix.mjs',
+        '.blueprint/github-build-matrix/command.mjs',
         '.blueprint/github-build-matrix/generator.mjs',
+        '.blueprint/github-build-matrix/generator.spec.mjs',
         '.blueprint/github-build-matrix/index.mjs',
       ],
     },
