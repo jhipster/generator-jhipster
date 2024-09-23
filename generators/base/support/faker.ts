@@ -38,7 +38,7 @@ class RandexpWithFaker extends Randexp {
   }
 }
 
-class FakerWithRandexp extends Faker {
+export class FakerWithRandexp extends Faker {
   createRandexp(regexp: string | RegExp, flags?: string) {
     return new RandexpWithFaker(regexp, flags, this);
   }

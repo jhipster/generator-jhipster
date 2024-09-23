@@ -25,6 +25,7 @@ import type CoreGenerator from '../../base-core/generator.js';
 import type { Field } from '../../../lib/types/application/field.js';
 import type { Entity } from '../../../lib/types/application/entity.js';
 import { fieldTypeValues, isFieldEnumType } from '../../../lib/application/field-types.js';
+import type { FakerWithRandexp } from '../../base/support/faker.js';
 import { prepareProperty } from './prepare-property.js';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
@@ -106,10 +107,10 @@ const fakeStringTemplateForFieldName = columnName => {
  * @param {string} type csv, cypress, json-serializable, ts
  * @returns fake value
  */
-function generateFakeDataForField(this: CoreGenerator, field, faker, changelogDate, type = 'csv') {
+function generateFakeDataForField(this: CoreGenerator, field, faker: FakerWithRandexp, changelogDate, type = 'csv') {
   let data;
   if (field.fakerTemplate) {
-    data = faker.faker(field.fakerTemplate);
+    data = faker.helpers.fake(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
     const re = field.createRandexp();
     if (!re) {
@@ -323,7 +324,12 @@ function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, 
       generator.log.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
       return undefined;
     }
-    const re = faker.createRandexp(field.fieldValidateRulesPattern);
+    try {
+      return faker.helpers.fromRegExp(field.fieldValidateRulesPattern!);
+    } catch {
+      // if faker fails to generate data, we will try using RandExp.
+    }
+    const re = faker.createRandexp(field.fieldValidateRulesPattern!);
     if (!re) {
       generator.log.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
     }

@@ -23,6 +23,7 @@ import type { SpringEntity } from '../../../generators/server/types.js';
 import type { Field as BaseField } from '../base/field.js';
 import type { Relationship as BaseRelationship } from '../base/relationship.js';
 import type { FieldType } from '../../application/field-types.ts';
+import type { FakerWithRandexp } from '../../../generators/base/support/faker.ts';
 import type { Field } from './field.js';
 import type { Relationship } from './relationship.js';
 
@@ -147,5 +148,5 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
 
   propertyJavaFilteredType?: string;
 
-  faker: any;
+  faker: FakerWithRandexp;
 }
