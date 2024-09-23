@@ -331,23 +331,23 @@ if (field.fieldTypeString || field.blobContentTypeText) {
       const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
       // set infinite repetitions max range
       if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-        const value = field.generateFromPattern();
+        const value = field.generateFakeDataFromPattern();
         sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
       }
       if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-        const value = field.generateFromPattern();
+        const value = field.generateFakeDataFromPattern();
         updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
       }
     } catch (error) {
-      this.log(this.chalkRed('Error generating test value for entity "' + entityClass +
+      this.log.warn('Error generating test value for entity "' + entityClass +
         '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-        '", generating default values for this field. Detailed error message: "' + error.message + '".'));
+        '", generating default values for this field. Detailed error message: "' + error.message + '".');
     }
     if (sampleTextString === updatedTextString) {
       updatedTextString = updatedTextString + "B";
-      this.log(this.chalkRed('Randomly generated first and second test values for entity "' + entityClass +
+      this.log.warn('Randomly generated first and second test values for entity "' + entityClass +
         '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-        '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.'));
+        '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
     }
   } _%>
 

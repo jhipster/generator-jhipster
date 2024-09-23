@@ -37,7 +37,7 @@ export interface Field extends BaseField {
 
   // Temporary fields for Faker
   uniqueValue?: any[];
-  generateFromPattern?: () => string | undefined;
+  generateFakeDataFromPattern?: () => string | undefined;
   /** @deprecated */
   createRandexp: () => any;
 
