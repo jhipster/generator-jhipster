@@ -540,8 +540,11 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
   private async _configureBlueprints() {
     let argvBlueprints = this.options.blueprints || '';
     // check for old single blueprint declaration
-    const { blueprint } = this.options;
+    let { blueprint } = this.options;
     if (blueprint) {
+      if (typeof blueprint === 'string') {
+        blueprint = [blueprint];
+      }
       this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
       argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
     }

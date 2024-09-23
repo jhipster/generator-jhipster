@@ -272,6 +272,15 @@ export default class extends BaseGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      upgrade() {
+        if (!this.application[GENERATORS]) return;
+        if (!this.isJhipsterVersionLessThan('8.7.2')) return;
+        for (const generator of Object.keys(this.application[GENERATORS])) {
+          const extension = this.application.js ? 'js' : 'mjs';
+          const generatorSpec = `${this.application.blueprintsPath}${generator}/generator.spec.${extension}`;
+          this.editFile(generatorSpec, content => content.replaceAll(/blueprint: '([\w-]*)'/g, "blueprint: ['$1']"));
+        }
+      },
       packageJson() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
