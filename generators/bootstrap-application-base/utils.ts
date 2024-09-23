@@ -24,6 +24,7 @@ import { PaginationTypes } from '../../lib/jhipster/entity-options.js';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../generator-constants.js';
 import { getDatabaseTypeData } from '../server/support/database.js';
 import type BaseApplicationGenerator from '../base-application/generator.js';
+import { formatDateForChangelog } from '../base/support/timestamp.js';
 
 const { CASSANDRA } = databaseTypes;
 const { OAUTH2 } = authenticationTypes;
@@ -83,12 +84,13 @@ export function createUserEntity(this: BaseApplicationGenerator, customUserData 
     }
   }
 
+  const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
   const cassandraOrNoDatabase = application.databaseTypeNo || application.databaseTypeCassandra;
   // Create entity definition for built-in entity to make easier to deal with relationships.
   const user = {
     name: 'User',
     builtIn: true,
-    changelogDate: '00000000000100',
+    changelogDate: formatDateForChangelog(creationTimestamp),
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
     fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
@@ -206,12 +208,14 @@ export function createUserManagementEntity(this: BaseApplicationGenerator, custo
     }
   }
 
+  const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
+  creationTimestamp.setMinutes(creationTimestamp.getMinutes() + 1);
   const userManagement = {
     ...user,
     name: 'UserManagement',
     skipClient: true,
     skipServer: true,
-    changelogDate: '00000000000150',
+    changelogDate: formatDateForChangelog(creationTimestamp),
     clientRootFolder: 'admin',
     entityAngularName: 'UserManagement',
     entityApiUrl: 'admin/users',
@@ -248,13 +252,15 @@ export function createAuthorityEntity(this: BaseApplicationGenerator, customAuth
     }
   }
 
+  const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
+  creationTimestamp.setMinutes(creationTimestamp.getMinutes() + 2);
   // Create entity definition for built-in entity to make easier to deal with relationships.
   const authorityEntity = {
     name: authorityEntityName,
     entitySuffix: '',
     clientRootFolder: 'admin',
     builtIn: true,
-    changelogDate: '00000000000200',
+    changelogDate: formatDateForChangelog(creationTimestamp),
     adminEntity: true,
     entityTableName: `${application.jhiTablePrefix}_authority`,
     relationships: [],
