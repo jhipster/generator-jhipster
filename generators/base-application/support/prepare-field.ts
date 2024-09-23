@@ -107,16 +107,15 @@ const fakeStringTemplateForFieldName = columnName => {
  * @param {string} type csv, cypress, json-serializable, ts
  * @returns fake value
  */
-function generateFakeDataForField(this: CoreGenerator, field, faker: FakerWithRandexp, changelogDate, type = 'csv') {
+function generateFakeDataForField(this: CoreGenerator, field: Field, faker: FakerWithRandexp, changelogDate, type = 'csv') {
   let data;
   if (field.fakerTemplate) {
     data = faker.helpers.fake(field.fakerTemplate);
   } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
-    const re = field.createRandexp();
-    if (!re) {
+    const generated = field.generateFromPattern!();
+    if (!generated) {
       return undefined;
     }
-    const generated = re.gen();
     if (type === 'csv' || type === 'cypress') {
       data = generated.replace(/"/g, '');
     } else {
@@ -316,6 +315,26 @@ function prepareCommonFieldForTemplates(entityWithConfig: Entity, field: Field, 
   }
 
   const faker = entityWithConfig.faker;
+  field.generateFromPattern = () => {
+    // check if regex is valid. If not, issue warning and we skip fake data generation.
+    try {
+      new RegExp(field.fieldValidateRulesPattern!);
+    } catch {
+      generator.log.warn(`${field.fieldName} pattern is not valid: ${field.fieldValidateRulesPattern}. Skipping generating fake data. `);
+      return undefined;
+    }
+    try {
+      return faker.helpers.fromRegExp(field.fieldValidateRulesPattern!);
+    } catch {
+      // if faker fails to generate data, we will try using RandExp.
+    }
+    const re = faker.createRandexp(field.fieldValidateRulesPattern!);
+    if (!re) {
+      generator.log.warn(`Error creating generator for pattern ${field.fieldValidateRulesPattern}`);
+    }
+    return re?.gen();
+  };
+
   field.createRandexp = () => {
     // check if regex is valid. If not, issue warning and we skip fake data generation.
     try {

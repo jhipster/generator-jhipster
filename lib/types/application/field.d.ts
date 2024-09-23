@@ -28,6 +28,10 @@ export interface Field extends BaseField {
 
   // Faker
   uniqueValue?: any[];
+  generateFromPattern?: () => string | undefined;
+  /**
+   * @deprecated
+   */
   createRandexp: () => any;
 
   // Java specific
