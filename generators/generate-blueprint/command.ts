@@ -40,6 +40,20 @@ const command: JHipsterCommandDefinition = {
       },
       scope: 'generator',
     },
+    skipWorkflows: {
+      description: 'Skip github workflows',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
+    ignoreExistingGenerators: {
+      description: 'Ignore existing generators',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'generator',
+    },
     githubRepository: {
       cli: {
         description: 'Github Repository',

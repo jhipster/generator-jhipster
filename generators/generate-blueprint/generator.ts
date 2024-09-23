@@ -55,6 +55,8 @@ const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spe
 export default class extends BaseGenerator {
   application!: any;
   recreatePackageLock!: boolean;
+  skipWorkflows!: boolean;
+  ignoreExistingGenerators!: boolean;
 
   async _beforeQueue() {
     if (!this.fromBlueprint) {
@@ -210,16 +212,23 @@ export default class extends BaseGenerator {
           '8.7.2': ['vitest.test-setup.ts'],
         });
       },
-      async writing() {
+      async writing({ application }) {
         this.application.sampleWritten = this.jhipsterConfig.sampleWritten;
+        const { skipWorkflows, ignoreExistingGenerators } = this;
         await this.writeFiles({
           sections: files,
-          context: this.application,
+          context: {
+            ...application,
+            skipWorkflows,
+            ignoreExistingGenerators,
+            ...this.application,
+          },
         });
         this.jhipsterConfig.sampleWritten = true;
       },
       async writingGenerators() {
         if (!this.application[GENERATORS]) return;
+        const { skipWorkflows, ignoreExistingGenerators } = this;
         for (const generator of Object.keys(this.application[GENERATORS])) {
           const subGeneratorStorage = this.getSubGeneratorStorage(generator);
           const subGeneratorConfig = subGeneratorStorage.getAll();
@@ -231,6 +240,8 @@ export default class extends BaseGenerator {
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
+            skipWorkflows,
+            ignoreExistingGenerators,
             js: this.application.js,
             application: this.application,
             ...defaultSubGeneratorConfig(),
