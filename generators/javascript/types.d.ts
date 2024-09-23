@@ -14,6 +14,8 @@ export type JavaScriptSourceType = {
 export type JavaScriptApplication = JavascriptBootstrapProperties & {
   packageJsonNodeEngine?: boolean | string;
   eslintConfigFile?: string;
+  cjsExtension?: string;
+  mjsExtension?: string;
 
   addPrettierExtensions?: (extensions: string[]) => void;
 };

@@ -43,6 +43,12 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
           this.fetchFromInstalledJHipster('javascript', 'resources', 'package.json'),
         );
       },
+      jsExtensions({ applicationDefaults, application }) {
+        applicationDefaults({
+          cjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.cjs',
+          mjsExtension: application.packageJsonTypeCommonjs ? '.js' : '.mjs',
+        });
+      },
     });
   }
 
