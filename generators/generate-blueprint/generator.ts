@@ -203,7 +203,10 @@ export default class extends BaseGenerator {
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ control }) {
-        await control.cleanupFiles({ '8.5.1': ['.eslintrc.json'] });
+        await control.cleanupFiles({
+          '8.5.1': ['.eslintrc.json'],
+          '8.7.2': ['vitest.test-setup.ts'],
+        });
       },
       async writing() {
         this.application.sampleWritten = this.jhipsterConfig.sampleWritten;
