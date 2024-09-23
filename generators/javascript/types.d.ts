@@ -1,3 +1,8 @@
+import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
+import type JavascriptBootstrapCommand from './generators/bootstrap/command.ts';
+
+type JavascriptBootstrapProperties = ExportApplicationPropertiesFromCommand<typeof JavascriptBootstrapCommand>;
+
 export type JavaScriptSourceType = {
   mergePrettierConfig?: (config: Record<string, unknown>) => void;
   addPrettierIgnore?: (newContent: string) => void;
@@ -6,9 +11,8 @@ export type JavaScriptSourceType = {
   addEslintConfig?: (opts: { import?: string | string[]; config?: string | string[] }) => void;
 };
 
-export type JavaScriptApplication = {
+export type JavaScriptApplication = JavascriptBootstrapProperties & {
   packageJsonNodeEngine?: boolean | string;
-  packageJsonType?: string;
   eslintConfigFile?: string;
 
   addPrettierExtensions?: (extensions: string[]) => void;

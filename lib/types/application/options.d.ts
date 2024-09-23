@@ -9,6 +9,7 @@ export type ApplicationOptions = Simplify<
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/client/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/java/generators/bootstrap/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/java/generators/build-tool/command.js').default> &
+    ExportGeneratorOptionsFromCommand<typeof import('../../../generators/javascript/generators/bootstrap/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/javascript/generators/prettier/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/jdl/command.js').default> &
     ExportGeneratorOptionsFromCommand<typeof import('../../../generators/languages/command.js').default> &
