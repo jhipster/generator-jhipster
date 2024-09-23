@@ -31,11 +31,18 @@ export type PromptSpec = {
 
 type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: CommandConfigScope };
 
+type CliSpec = SetOptional<CliOptionSpec, 'name'> & {
+  env?: string;
+  /**
+   * Imply other options.
+   */
+  implies?: Record<string, any>;
+};
+
 export type ConfigSpec<ConfigContext> = {
   readonly description?: string;
   readonly choices?: JHispterChoices;
-
-  readonly cli?: SetOptional<CliOptionSpec, 'name'> & { env?: string };
+  readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
   readonly prompt?:
     | PromptSpec

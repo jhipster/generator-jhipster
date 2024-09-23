@@ -19,9 +19,9 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
 import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
 
-const command: JHipsterCommandDefinition = {
+const command = {
   options: {},
-  import: [GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
-};
+  import: ['jhipster:git', GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

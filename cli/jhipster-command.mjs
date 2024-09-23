@@ -225,6 +225,9 @@ export default class JHipsterCommand extends Command {
     if (optionDefinition.choices && optionDefinition.choices.length > 0) {
       option.choices(optionDefinition.choices);
     }
+    if (optionDefinition.implies) {
+      option.implies(optionDefinition.implies);
+    }
     return this.addOption(option);
   }
 }
