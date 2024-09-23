@@ -21,10 +21,6 @@ import BaseApplicationGenerator from '../../../base-application/index.js';
 import { GENERATOR_PROJECT_NAME } from '../../../generator-list.js';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
-  constructor(args, options, features) {
-    super(args, options, { queueCommandTasks: true, ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

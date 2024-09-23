@@ -28,7 +28,7 @@
 import <%= generatorClass %>Generator from 'generator-jhipster/generators/<%= jhipsterGenerator %>';
 <%_ } _%>
 <%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
-import command from './command.<%- js ? '' : 'm' %>js';
+import command from './command.<%- blueprintMjsExtension %>';
 <%_ } _%>
 
 <%_ if (application.dynamic) { _%>
