@@ -27,10 +27,7 @@ export const files = asWriteFilesSection<any>({
         '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
         { sourceFile: 'eslint.config.js.jhi.blueprint', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.blueprint` },
-        {
-          sourceFile: 'README.md',
-          override: data => !data.ignoreExistingGenerators,
-        },
+        'README.md',
         'tsconfig.json',
         'vitest.config.ts',
         '.blueprint/cli/commands.mjs',
@@ -68,21 +65,21 @@ export const generatorFiles = asWriteFilesSection<any>({
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       templates: [
-        { sourceFile: 'index.mjs', destinationFile: ctx => (ctx.js ? 'index.js' : 'index.mjs') },
+        { sourceFile: 'index.mjs', destinationFile: ctx => `index.${ctx.blueprintMjsExtension}` },
         {
           sourceFile: 'command.mjs',
-          destinationFile: ctx => (ctx.js ? 'command.js' : 'command.mjs'),
+          destinationFile: ctx => `command.${ctx.blueprintMjsExtension}`,
           override: data => !data.ignoreExistingGenerators,
         },
         {
           sourceFile: 'generator.mjs.jhi',
-          destinationFile: ctx => (ctx.js ? 'generator.js.jhi' : 'generator.mjs.jhi'),
+          destinationFile: ctx => `generator.${ctx.blueprintMjsExtension}.jhi`,
           override: data => !data.ignoreExistingGenerators,
         },
         {
           condition: data => !data.generator.startsWith('entity') && !data.application[LOCAL_BLUEPRINT_OPTION],
           sourceFile: 'generator.spec.mjs',
-          destinationFile: data => (data.js ? 'generator.spec.js' : 'generator.spec.mjs'),
+          destinationFile: data => `generator.spec.${data.blueprintMjsExtension}`,
           override: data => !data.ignoreExistingGenerators,
         },
       ],

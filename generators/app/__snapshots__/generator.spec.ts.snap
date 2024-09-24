@@ -252,6 +252,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
+  "cjsExtension": ".cjs",
   "clientDistDir": "target/classes/static/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -609,6 +610,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "messageBrokerPulsar": false,
   "microfrontend": false,
   "microfrontends": undefined,
+  "mjsExtension": ".mjs",
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -889,6 +891,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
+  "cjsExtension": ".cjs",
   "clientDistDir": "target/classes/static/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
@@ -1242,6 +1245,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "messageBrokerPulsar": false,
   "microfrontend": undefined,
   "microfrontends": undefined,
+  "mjsExtension": ".mjs",
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -1521,6 +1525,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
+  "cjsExtension": ".cjs",
   "clientDistDir": "target/classes/static/",
   "clientFramework": "no",
   "clientFrameworkAngular": false,
@@ -1879,6 +1884,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "messageBrokerPulsar": false,
   "microfrontend": false,
   "microfrontends": undefined,
+  "mjsExtension": ".mjs",
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {

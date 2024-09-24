@@ -16,5 +16,5 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export { <%- application.dynamic ? 'createGenerator' : 'default' %> } from './generator.<%- js ? '' : 'm' %>js';
-export { default as command } from './command.<%- js ? '' : 'm' %>js';
+export { <%- application.dynamic ? 'createGenerator' : 'default' %> } from './generator.<%- blueprintMjsExtension %>';
+export { default as command } from './command.<%- blueprintMjsExtension %>';

@@ -193,9 +193,10 @@ export default class extends BaseGenerator {
       preparePath() {
         this.application.blueprintsPath = this.application[LOCAL_BLUEPRINT_OPTION] ? '.blueprint/' : 'generators/';
       },
-      prepare() {
+      prepare({ application }) {
         const { cli, cliName, baseName } = this.application;
         this.application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
+        application.blueprintMjsExtension = this.application.js ? 'js' : 'mjs';
         if (cli) {
           this.application.cliName = cliName ?? `jhipster-${baseName}`;
         }
@@ -212,7 +213,7 @@ export default class extends BaseGenerator {
       async cleanup({ control }) {
         await control.cleanupFiles({
           '8.5.1': ['.eslintrc.json'],
-          '8.7.2': ['vitest.test-setup.ts'],
+          '8.7.2': ['.eslintignore', 'vitest.test-setup.ts'],
         });
       },
       async writing({ application }) {
@@ -229,7 +230,7 @@ export default class extends BaseGenerator {
         });
         this.jhipsterConfig.sampleWritten = true;
       },
-      async writingGenerators() {
+      async writingGenerators({ application }) {
         if (!this.application[GENERATORS]) return;
         const { skipWorkflows, ignoreExistingGenerators } = this;
         for (const generator of Object.keys(this.application[GENERATORS])) {
@@ -243,9 +244,9 @@ export default class extends BaseGenerator {
           const customGenerator = !Object.values(GENERATOR_LIST).includes(generator);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
+            ...application,
             skipWorkflows,
             ignoreExistingGenerators,
-            js: this.application.js,
             application: this.application,
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
@@ -272,12 +273,30 @@ export default class extends BaseGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      upgrade() {
+      upgrade({ application }) {
         if (!this.application[GENERATORS]) return;
         if (!this.isJhipsterVersionLessThan('8.7.2')) return;
         for (const generator of Object.keys(this.application[GENERATORS])) {
-          const extension = this.application.js ? 'js' : 'mjs';
-          const generatorSpec = `${this.application.blueprintsPath}${generator}/generator.spec.${extension}`;
+          const commandFile = `${this.application.blueprintsPath}${generator}/command.${application.blueprintMjsExtension}`;
+          this.editFile(commandFile, content =>
+            content
+              .replace(
+                `/**
+ * @type {import('generator-jhipster').JHipsterCommandDefinition}
+ */`,
+                `import { asCommand } from 'generator-jhipster';
+`,
+              )
+              .replace('const command = ', 'export default asCommand(')
+              .replace(
+                `
+};`,
+                '});',
+              )
+              .replace('export default command;', ''),
+          );
+
+          const generatorSpec = `${this.application.blueprintsPath}${generator}/generator.spec.${application.blueprintMjsExtension}`;
           this.editFile(generatorSpec, content => content.replaceAll(/blueprint: '([\w-]*)'/g, "blueprint: ['$1']"));
         }
       },
