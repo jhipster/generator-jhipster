@@ -22,6 +22,7 @@ import { describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,4 +36,28 @@ describe(`generator - ${generator}`, () => {
   });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('questions', () => {
+    describe('without answers', () => {
+      before(async () => {
+        await helpers
+          .runJHipster('ci-cd')
+          .withJHipsterConfig()
+          .withOptions({
+            // ciCd argument is a varargs, pass an empty array to check if ciCd prompt is asked
+            positionalArguments: [[]],
+          })
+          .withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "ciCd",
+  "ciCdIntegrations",
+]
+`);
+      });
+    });
+  });
 });

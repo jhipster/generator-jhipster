@@ -1,7 +1,9 @@
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
-import type { ConfigSpec, JHipsterArguments, JHipsterConfigs, JHipsterOption } from './types.js';
+import type { ConfigSpec, JHipsterArguments, JHipsterConfigs, JHipsterOption, JHispterChoices } from './types.js';
 
-export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined): JHipsterArguments => {
+type JHipsterArgumentsWithChoices = JHipsterArguments & { choices?: JHispterChoices };
+
+export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined): JHipsterArgumentsWithChoices => {
   if (!configs) return {};
   return Object.fromEntries(
     Object.entries(configs)
@@ -11,10 +13,11 @@ export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined
         {
           description: def.description,
           scope: def.scope,
+          choices: def.choices,
           ...def.argument,
         },
       ]),
-  ) as JHipsterArguments;
+  ) as JHipsterArgumentsWithChoices;
 };
 
 export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs = {}): JHipsterOptionDefinition[] =>
