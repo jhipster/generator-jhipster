@@ -27,10 +27,7 @@ export const files = asWriteFilesSection<any>({
         '.github/workflows/generator.yml',
         '.prettierignore.jhi.blueprint',
         { sourceFile: 'eslint.config.js.jhi.blueprint', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.blueprint` },
-        {
-          sourceFile: 'README.md',
-          override: data => !data.ignoreExistingGenerators,
-        },
+        'README.md',
         'tsconfig.json',
         'vitest.config.ts',
         '.blueprint/cli/commands.mjs',
