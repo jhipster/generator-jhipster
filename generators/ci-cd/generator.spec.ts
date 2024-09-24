@@ -37,17 +37,10 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('questions', () => {
-    describe('without answers', () => {
+  describe('cli', () => {
+    describe('without ciCd values', () => {
       before(async () => {
-        await helpers
-          .runJHipster('ci-cd')
-          .withJHipsterConfig()
-          .withOptions({
-            // ciCd argument is a varargs, pass an empty array to check if ciCd prompt is asked
-            positionalArguments: [[]],
-          })
-          .withSkipWritingPriorities();
+        await helpers.runCli('ci-cd').withJHipsterConfig().withSkipWritingPriorities();
       });
 
       it('should match order', () => {
@@ -55,6 +48,56 @@ describe(`generator - ${generator}`, () => {
 [
   "ciCd",
   "ciCdIntegrations",
+]
+`);
+      });
+    });
+
+    describe('with invalid ciCd value', () => {
+      it('should exit with error', async () => {
+        await expect(
+          helpers.runCli('ci-cd foo').withJHipsterConfig().withSkipWritingPriorities(),
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `"error: command-argument value 'foo' is invalid for argument 'ciCd'. Allowed choices are github, jenkins, gitlab, azure, travis, circle."`,
+        );
+      });
+    });
+
+    describe('with multiples values', () => {
+      before(async () => {
+        await helpers.runCli('ci-cd github jenkins gitlab azure').withJHipsterConfig().withSkipWritingPriorities();
+      });
+
+      it('should match order', () => {
+        expect(runResult.generator.context!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
+      });
+    });
+
+    describe('with github', () => {
+      before(async () => {
+        await helpers.runCli('ci-cd github').withJHipsterConfig().withSkipWritingPriorities();
+      });
+
+      it('should not ask ciCd question', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "ciCdIntegrations",
+]
+`);
+      });
+    });
+
+    describe('with jenkins', () => {
+      before(async () => {
+        await helpers.runCli('ci-cd jenkins').withJHipsterConfig().withSkipWritingPriorities();
+      });
+
+      it('should not ask ciCd question', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "ciCdIntegrations",
+  "insideDocker",
+  "sendBuildToGitlab",
 ]
 `);
       });
