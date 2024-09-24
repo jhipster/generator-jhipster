@@ -578,6 +578,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           argument = positionalArguments;
           positionalArguments = [];
         }
+        // Replace varargs empty array with undefined.
+        argument = Array.isArray(argument) && argument.length === 0 ? undefined : argument;
         if (argument !== undefined) {
           const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument);
           if (argumentDef.scope === undefined || argumentDef.scope === 'generator') {
