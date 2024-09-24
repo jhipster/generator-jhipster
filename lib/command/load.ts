@@ -4,6 +4,7 @@ import type { CommandConfigScope, JHipsterConfigs, JHispterChoices } from './typ
 const prepareChoices = (key: string, choices: JHispterChoices) =>
   choices
     .map(choice => (typeof choice === 'string' ? { value: choice } : choice))
+    .filter(choice => choice.value != null)
     .map(choice => ({ ...choice, choiceKey: `${key}${upperFirst(choice.value)}` }));
 
 const filteredScopeEntries = (commandsConfigs: JHipsterConfigs, scopes: CommandConfigScope[]) =>
