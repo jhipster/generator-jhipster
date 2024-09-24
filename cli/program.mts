@@ -51,10 +51,11 @@ type BuildCommands = {
   commands?: Record<string, CliCommand>;
   envBuilder?: EnvironmentBuilder;
   env: Environment;
-  loadCommand: (key: string) => Promise<(...args: any[]) => Promise<any>>;
+  loadCommand?: (key: string) => Promise<(...args: any[]) => Promise<any>>;
   defaultCommand?: string;
   entrypointGenerator?: string;
   printLogo?: () => void;
+  silent?: boolean;
   printBlueprintLogo?: () => void;
   createEnvBuilder: (options?: BaseEnvironmentOptions) => Promise<EnvironmentBuilder>;
 };
@@ -232,17 +233,21 @@ const rejectExtraArgs = ({ program, command, extraArgs }) => {
   logger.fatal(message);
 };
 
-export const buildCommands = async ({
+export const buildCommands = ({
   program,
   commands = {},
   envBuilder,
   env,
-  loadCommand,
+  loadCommand = async key => {
+    const { default: command } = await import(`./${key}.mjs`);
+    return command;
+  },
   defaultCommand = GENERATOR_APP,
   entrypointGenerator,
   printLogo = printJHipsterLogo,
   printBlueprintLogo = () => {},
   createEnvBuilder,
+  silent,
 }: BuildCommands) => {
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
@@ -263,6 +268,12 @@ export const buildCommands = async ({
           logger.fatal(removed);
           return;
         }
+
+        if (!silent) {
+          printLogo();
+          printBlueprintLogo();
+        }
+
         const command = this;
 
         if (cmdName === 'run') {
@@ -344,9 +355,6 @@ export const buildCommands = async ({
           return Promise.resolve();
         }
 
-        printLogo();
-        printBlueprintLogo();
-
         if (cliOnly) {
           logger.debug('Executing CLI only script');
           const cliOnlyCommand = await loadCommand(cmdName);
@@ -357,8 +365,8 @@ export const buildCommands = async ({
 
         if (cmdName === 'run') {
           return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
-            results => done(results.find(result => result)),
-            errors => done(errors.find(error => error)),
+            results => silent || done(results.find(result => result)),
+            errors => silent || done(errors.find(error => error)),
           );
         }
         if (cmdName === 'upgrade') {
@@ -367,7 +375,11 @@ export const buildCommands = async ({
         }
         const namespace = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
         const generatorCommand = getCommand(namespace, args);
-        return env.run(generatorCommand as any, options).then(done, done);
+        const promise = env.run(generatorCommand as any, options);
+        if (silent) {
+          return promise;
+        }
+        return promise.then(done, done);
       });
   });
 };
@@ -381,17 +393,9 @@ export const buildJHipster = async ({
   createEnvBuilder,
   envBuilder,
   commands,
-  printLogo,
-  printBlueprintLogo,
   devBlueprintPath,
   env,
-
-  loadCommand = async key => {
-    const { default: command } = await import(`./${key}.mjs`);
-    return command;
-  },
-  defaultCommand,
-  entrypointGenerator,
+  ...buildOptions
 }: BuildJHipsterOptions = {}) => {
   createEnvBuilder =
     createEnvBuilder ?? (async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath }));
@@ -403,16 +407,12 @@ export const buildJHipster = async ({
     commands = { ...SUB_GENERATORS, ...commands };
   }
 
-  await buildCommands({
+  buildCommands({
+    ...buildOptions,
     program,
     commands,
     envBuilder,
     env,
-    loadCommand,
-    defaultCommand,
-    entrypointGenerator,
-    printLogo,
-    printBlueprintLogo,
     createEnvBuilder,
   });
 
