@@ -100,7 +100,6 @@ describe('cli', () => {
     const { buildJHipster } = await import('./program.mjs');
 
     mockCli = async (argv: string[], opts = {}) => {
-      // @ts-expect-error
       const program = await buildJHipster({ printLogo: () => {}, ...opts, program: createProgram(), loadCommand: key => opts[`./${key}`] });
       return program.parseAsync(argv);
     };

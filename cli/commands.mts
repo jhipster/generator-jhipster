@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
+import { CliCommand } from './types.js';
 
 const removedV8 = chalk.yellow(`
 
@@ -165,6 +166,6 @@ const defaultCommands = {
   workspaces: {
     desc: 'Add workspaces configuration',
   },
-};
+} as const satisfies Record<string, CliCommand>;
 
 export default defaultCommands;
