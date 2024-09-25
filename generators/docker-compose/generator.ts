@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -45,10 +44,11 @@ const { Options: DeploymentOptions } = deploymentOptions;
  */
 export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   existingDeployment;
+  jwtSecretKey!: string;
 
   async beforeQueue() {
     this.parseJHipsterArguments(command.arguments);
-    if (this.appsFolders?.length > 0) {
+    if (this.appsFolders && this.appsFolders.length > 0) {
       this.jhipsterConfig.appsFolders = this.appsFolders;
     }
 
@@ -59,7 +59,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get initializing() {
-    return {
+    return this.asInitializingTaskGroup({
       sayHello() {
         this.log.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
         this.log.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -75,7 +75,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 `);
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.INITIALIZING]() {
@@ -83,11 +83,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get loading() {
-    return {
+    return this.asLoadingTaskGroup({
       loadWorkspacesConfig() {
         this.loadWorkspacesConfig();
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.LOADING]() {
@@ -95,7 +95,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get promptingWorkspaces() {
-    return {
+    return this.asAnyTaskGroup({
       async askForMonitoring({ workspaces }) {
         if (workspaces.existingWorkspaces && !this.options.askAnswered) return;
 
@@ -111,7 +111,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
         await this.askForServiceDiscovery({ applications });
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PROMPTING_WORKSPACES]() {
@@ -119,14 +119,15 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get configuringWorkspaces() {
-    return {
+    return this.asAnyTaskGroup({
       configureBaseDeployment({ applications }) {
-        this.jhipsterConfig.jwtSecretKey = this.jhipsterConfig.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
+        this.jhipsterConfig.jwtSecretKey =
+          this.jhipsterConfig.jwtSecretKey ?? this.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
         if (applications.some(app => app.serviceDiscoveryEureka)) {
           this.jhipsterConfig.adminPassword = this.jhipsterConfig.adminPassword ?? 'admin';
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
@@ -134,7 +135,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get loadingWorkspaces() {
-    return {
+    return this.asAnyTaskGroup({
       async loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
@@ -143,7 +144,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       loadPlatformConfig({ deployment }) {
         this.loadDeploymentConfig({ deployment });
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.LOADING_WORKSPACES]() {
@@ -151,11 +152,11 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get preparingWorkspaces() {
-    return {
+    return this.asAnyTaskGroup({
       prepareDeployment({ deployment, applications }) {
         this.prepareDeploymentDerivedProperties({ deployment, applications });
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.PREPARING_WORKSPACES]() {
@@ -163,7 +164,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get default() {
-    return {
+    return this.asAnyTaskGroup({
       async setAppsYaml({ workspaces, deployment, applications }) {
         const faker = await createFaker();
 
@@ -174,7 +175,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           const parentConfiguration = {};
           const path = this.destinationPath(workspaces.directoryPath, appConfig.appFolder);
           // Add application configuration
-          const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`));
+          const yaml = parseYaml(this.fs.read(`${path}/src/main/docker/app.yml`)!);
           const yamlConfig = yaml.services.app;
           if (yamlConfig.depends_on) {
             yamlConfig.depends_on = Object.fromEntries(
@@ -253,7 +254,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.databaseTypeAny && !appConfig.prodDatabaseTypeOracle) {
             const database = appConfig.databaseTypeSql ? appConfig.prodDatabaseType : appConfig.databaseType;
             const relativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`));
-            const databaseYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}.yml`));
+            const databaseYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}.yml`)!);
             const databaseServiceName = `${lowercaseBaseName}-${database}`;
             let databaseYamlConfig = databaseYaml.services[database];
             // Don't export database ports
@@ -261,7 +262,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
             if (appConfig.databaseTypeCassandra) {
               // migration service config
-              const cassandraMigrationYaml = parseYaml(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`));
+              const cassandraMigrationYaml = parseYaml(this.fs.read(`${path}/src/main/docker/cassandra-migration.yml`)!);
               const cassandraMigrationConfig = cassandraMigrationYaml.services[`${database}-migration`];
               cassandraMigrationConfig.build.context = relativePath;
               const cqlFilesRelativePath = normalize(pathjs.relative(this.destinationRoot(), `${path}/src/main/resources/config/cql`));
@@ -275,7 +276,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
             }
 
             if (appConfig.clusteredDb) {
-              const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`));
+              const clusterDbYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${database}-cluster.yml`)!);
               const dbNodeConfig = clusterDbYaml.services[`${database}-node`];
               dbNodeConfig.build.context = relativePath;
               databaseYamlConfig = clusterDbYaml.services[database];
@@ -294,14 +295,14 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.searchEngineElasticsearch) {
             // Add search engine configuration
             const searchEngine = appConfig.searchEngine;
-            const searchEngineYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
+            const searchEngineYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`)!);
             const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-${searchEngine}`] = searchEngineConfig;
           }
           // Add Memcached support
           if (appConfig.cacheProviderMemcached) {
-            const memcachedYaml = parseYaml(this.readDestination(`${path}/src/main/docker/memcached.yml`));
+            const memcachedYaml = parseYaml(this.readDestination(`${path}/src/main/docker/memcached.yml`)!.toString());
             const memcachedConfig = memcachedYaml.services.memcached;
             delete memcachedConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
@@ -309,7 +310,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           // Add Redis support
           if (appConfig.cacheProviderRedis) {
-            const redisYaml = parseYaml(this.readDestination(`${path}/src/main/docker/redis.yml`));
+            const redisYaml = parseYaml(this.readDestination(`${path}/src/main/docker/redis.yml`)!.toString());
             const redisConfig = redisYaml.services.redis;
             delete redisConfig.ports;
             parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
@@ -329,7 +330,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           return yamlString;
         });
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.DEFAULT]() {
@@ -345,7 +346,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
   }
 
   get end() {
-    return {
+    return this.asAnyTaskGroup({
       end({ workspaces, applications }) {
         this.checkApplicationsDockerImages({ workspaces, applications });
 
@@ -361,7 +362,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           this.log.log('\n');
         }
       },
-    };
+    });
   }
 
   get [BaseWorkspacesGenerator.END]() {

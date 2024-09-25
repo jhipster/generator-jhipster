@@ -64,9 +64,7 @@ export function checkImages() {
  * Generate Jwt Secret
  */
 export function generateJwtSecret() {
-  if (this.jwtSecretKey === undefined) {
-    this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
-  }
+  this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = this.jwtSecretKey ?? createBase64Secret(this.options.reproducibleTests);
 }
 
 /**
