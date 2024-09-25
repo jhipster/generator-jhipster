@@ -38,7 +38,7 @@ describe(`generator - ${generator}`, () => {
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.run(generatorPath);
+        await helpers.runJHipster(generator);
       });
       it('should write files and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -48,7 +48,7 @@ describe(`generator - ${generator}`, () => {
   describe('git feature', () => {
     describe('with default option', () => {
       before(async () => {
-        await helpers.run(generatorPath).withOptions({ skipGit: false });
+        await helpers.runJHipster(generator).withOptions({ skipGit: false });
       });
       it('should create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
@@ -63,7 +63,7 @@ describe(`generator - ${generator}`, () => {
     });
     describe('with skipGit option', () => {
       before(async () => {
-        await helpers.run(generatorPath).withOptions({ skipGit: true });
+        await helpers.runJHipster(generator).withOptions({ skipGit: true });
       });
       it('should not create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
@@ -71,7 +71,7 @@ describe(`generator - ${generator}`, () => {
     });
     describe('regenerating', () => {
       before(async () => {
-        await helpers.run(generatorPath).withOptions({ skipGit: false });
+        await helpers.runJHipster(generator).withOptions({ skipGit: false });
         await runResult.create(generatorPath).withOptions({ skipGit: false, baseName: 'changed' }).run();
       });
       it('should create a single commit', async () => {
@@ -81,7 +81,7 @@ describe(`generator - ${generator}`, () => {
     });
     describe('regenerating with --force-git', () => {
       before(async () => {
-        await helpers.run(generatorPath).withOptions({ skipGit: false });
+        await helpers.runJHipster(generator).withOptions({ skipGit: false });
         await runResult.create(generatorPath).withOptions({ skipGit: false, forceGit: true, baseName: 'changed' }).run();
       });
       it('should create 2 commits', async () => {

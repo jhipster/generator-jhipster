@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -31,7 +31,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -46,7 +45,7 @@ describe(`generator - ${generator}`, () => {
       describe('no', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               messageBroker: 'no',
             })
@@ -60,7 +59,7 @@ describe(`generator - ${generator}`, () => {
       describe('kafka', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               messageBroker: 'kafka',
             })
@@ -73,7 +72,7 @@ describe(`generator - ${generator}`, () => {
       describe('pulsar', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               messageBroker: 'pulsar',
             })
@@ -89,7 +88,7 @@ describe(`generator - ${generator}`, () => {
       describe('no with jwt', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'no',
               authenticationType: 'jwt',
@@ -107,7 +106,7 @@ describe(`generator - ${generator}`, () => {
       describe('no with session', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'no',
               authenticationType: 'session',
@@ -125,7 +124,7 @@ describe(`generator - ${generator}`, () => {
       describe('no with oauth2', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'no',
               authenticationType: 'oauth2',
@@ -143,7 +142,7 @@ describe(`generator - ${generator}`, () => {
       describe('couchbase', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'couchbase',
             })

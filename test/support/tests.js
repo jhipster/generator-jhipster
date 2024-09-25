@@ -231,7 +231,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     let spy;
     before(async () => {
       result = await helpers
-        .run(generatorPath)
+        .runJHipster(generatorName)
         .withMockedJHipsterGenerators({ filter: () => true })
         .withMockedGenerators([`jhipster-foo:${generatorName}`])
         .withJHipsterConfig()
@@ -255,7 +255,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
         this.skip();
       }
       const context = helpers
-        .run(generatorPath)
+        .runJHipster(generatorName)
         .withMockedJHipsterGenerators({ filter: () => true })
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withJHipsterConfig(

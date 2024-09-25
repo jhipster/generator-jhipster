@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -33,7 +33,6 @@ const {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generatorPath = join(__dirname, 'index.ts');
 const generator = basename(__dirname);
 
 const expectedField = () => ({
@@ -87,7 +86,7 @@ describe(`generator - ${generator}`, () => {
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.run(generatorPath).withJHipsterConfig({}, [
+        await helpers.runJHipster(generator).withJHipsterConfig({}, [
           {
             name: 'EntityA',
             changelogDate: '20220129025419',
@@ -1358,7 +1357,7 @@ describe(`generator - ${generator}`, () => {
 
     describe('skipUserManagement', () => {
       before(async () => {
-        await helpers.run(generatorPath).withJHipsterConfig(
+        await helpers.runJHipster(generator).withJHipsterConfig(
           {
             skipUserManagement: true,
           },

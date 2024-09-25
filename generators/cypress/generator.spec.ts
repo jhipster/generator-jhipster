@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path, { basename, dirname } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -33,8 +33,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-
-const generatorPath = path.join(__dirname, 'index.ts');
 
 const e2eMatrix = extendMatrix(
   fromMatrix({
@@ -80,7 +78,7 @@ describe(`generator - ${generator}`, () => {
   Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
       before(async () => {
-        await helpers.run(generatorPath).withJHipsterConfig(sampleConfig, entities);
+        await helpers.runJHipster(generator).withJHipsterConfig(sampleConfig, entities);
       });
 
       it('should match generated files snapshot', () => {

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -29,7 +29,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -45,7 +44,7 @@ describe(`generator - ${generator}`, () => {
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities().withMockedSource();
+        await helpers.runJHipster(generator).withJHipsterConfig().withSkipWritingPriorities().withMockedSource();
       });
 
       it('should match snapshot', () => {
@@ -62,7 +61,7 @@ describe(`generator - ${generator}`, () => {
     describe('gateway', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({
             applicationType: 'gateway',
           })
@@ -84,7 +83,7 @@ describe(`generator - ${generator}`, () => {
     describe('microservice', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({
             applicationType: 'microservice',
           })
@@ -105,7 +104,7 @@ describe(`generator - ${generator}`, () => {
     describe('with application', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({
             jdlStore: 'app.jdl',
             skipServer: true,
@@ -122,7 +121,7 @@ describe(`generator - ${generator}`, () => {
     describe('with application and entities', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig(
             {
               jdlStore: 'app.jdl',
@@ -143,7 +142,7 @@ describe(`generator - ${generator}`, () => {
     describe('with incremental changelog application and entities', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig(
             {
               jdlStore: 'app.jdl',
@@ -165,7 +164,7 @@ describe(`generator - ${generator}`, () => {
   describe('questions', () => {
     describe('without answers', () => {
       before(async () => {
-        await helpers.run(generatorPath).withSkipWritingPriorities();
+        await helpers.runJHipster(generator).withSkipWritingPriorities();
       });
 
       it('should match order', () => {
@@ -199,7 +198,7 @@ describe(`generator - ${generator}`, () => {
     describe('with gateway, gradle and no cacheProvider', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withAnswers({ applicationType: 'gateway', buildTool: 'gradle', cacheProvider: 'no' })
           .withSkipWritingPriorities();
       });
@@ -238,7 +237,7 @@ describe(`generator - ${generator}`, () => {
     describe('with microservice', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' })
           .withSkipWritingPriorities();
       });
