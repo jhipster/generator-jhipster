@@ -484,7 +484,7 @@ export function createTestHelpers(options: any = {}) {
   helper.settings = { ...DEFAULT_TEST_SETTINGS, ...options.settings };
   helper.environmentOptions = { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions };
   helper.generatorOptions = { ...DEFAULT_TEST_OPTIONS, ...options.generatorOptions };
-  helper.createEnv = (...args) => EnvironmentBuilder.createEnv(...args) as any;
+  helper.createEnv = async (...args) => EnvironmentBuilder.create(...args).getEnvironment();
   // @ts-expect-error testing types should be improved
   helper.getRunContextType = () => JHipsterRunContext;
   return helper;
