@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';
@@ -32,7 +32,7 @@ const mockBlueprintSubGen: any = class extends ReactGenerator {
 describe('needle API React: JHipster react generator with blueprint', () => {
   before(async () => {
     await helpers
-      .run(getGenerator('react'))
+      .runJHipster('react')
       .withOptions({
         build: 'maven',
         auth: 'jwt',
