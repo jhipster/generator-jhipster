@@ -22,7 +22,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { messageBrokerTypes } from '../../lib/jhipster/index.js';
 import Generator from './index.js';
 
@@ -47,10 +47,8 @@ describe(`generator - ${generator}`, () => {
 
   Object.entries(testSamples).forEach(([name, config]) => {
     describe(name, () => {
-      let runResult;
-
       before(async () => {
-        runResult = await helpers.run(generatorFile).withJHipsterConfig(config);
+        await helpers.run(generatorFile).withJHipsterConfig(config);
       });
 
       it('should match generated files snapshot', () => {

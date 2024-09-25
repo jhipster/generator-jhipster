@@ -21,7 +21,6 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import type { RunResult } from 'yeoman-test';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import * as GENERATORS from '../generator-list.js';
@@ -77,10 +76,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with valid parameters', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'entity Foo {}',
           db: 'postgresql',
           baseName: 'jhipster',
@@ -105,10 +102,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with valid config', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withMockedGenerators(mockedGenerators).withOptions({
           inline: 'entity Foo {}',
         });
       });
@@ -133,10 +128,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('for application jdl', () => {
     describe('with valid jdl', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'application { }',
         });
       });
@@ -157,10 +150,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with blueprint jdl with blueprint config', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withOptions({
           jsonOnly: true,
           inline: 'application { config { blueprints [foo, bar] } config(foo) { config fooValue } config(bar) { config barValue } }',
         });
@@ -198,10 +189,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('for one application and entity jdl', () => {
     describe('with valid jdl', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'application { entities Foo } entity Foo {}',
         });
       });
@@ -223,10 +212,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with --ignore-application option', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           ignoreApplication: true,
           inline: 'application { entities Foo } entity Foo {}',
         });
@@ -240,10 +227,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('for two applications and entity jdl', () => {
     describe('with valid jdl', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
         });
       });
@@ -268,10 +253,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with --ignore-application option', () => {
-      let runResult: RunResult;
-
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
+        await helpers.runJHipster(GENERATOR_JDL).withMockedGenerators(mockedGenerators).withOptions({
           ignoreApplication: true,
           inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
         });
@@ -297,10 +280,8 @@ describe(`generator - ${generator}`, () => {
   describe('--json-only option', () => {
     describe('for entities only jdl', () => {
       describe('with valid parameters', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'entity Foo {}',
             db: 'postgresql',
@@ -316,10 +297,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('with valid config', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withJHipsterConfig().withOptions({
             jsonOnly: true,
             inline: 'entity Foo {}',
           });
@@ -335,10 +314,8 @@ describe(`generator - ${generator}`, () => {
 
     describe('for application jdl', () => {
       describe('with valid jdl', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'application { }',
           });
@@ -354,10 +331,8 @@ describe(`generator - ${generator}`, () => {
 
     describe('for one application and entity jdl', () => {
       describe('with valid jdl', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'application { entities Foo } entity Foo {}',
           });
@@ -372,10 +347,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('with --ignore-application option', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             ignoreApplication: true,
             inline: 'application { entities Foo } entity Foo {}',
@@ -392,10 +365,8 @@ describe(`generator - ${generator}`, () => {
 
     describe('for two applications and entity jdl', () => {
       describe('with valid jdl', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',
           });
@@ -407,10 +378,8 @@ describe(`generator - ${generator}`, () => {
       });
 
       describe('with --ignore-application option', () => {
-        let runResult: RunResult;
-
         before(async () => {
-          runResult = await helpers.runJHipster(GENERATOR_JDL).withOptions({
+          await helpers.runJHipster(GENERATOR_JDL).withOptions({
             jsonOnly: true,
             ignoreApplication: true,
             inline: 'application { entities Foo } entity Foo {} application { config { baseName jhipster2 } entities Bar } entity Bar',

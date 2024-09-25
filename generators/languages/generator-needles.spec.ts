@@ -1,10 +1,10 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 import LanguagesGenerator from './index.js';
 
-const generatorPath = getGenerator('languages');
+const generator = 'languages';
 
 const mockBlueprintSubGen: any = class extends LanguagesGenerator {
   constructor(args, opts, features) {
@@ -30,7 +30,7 @@ const mockBlueprintSubGen: any = class extends LanguagesGenerator {
 describe('needle API i18n: JHipster language generator with blueprint', () => {
   before(async () => {
     await helpers
-      .run(generatorPath)
+      .runJHipster(generator)
       .withJHipsterConfig({ baseName: 'jhipster' })
       .withOptions({ ignoreNeedlesError: true })
       .withOptions({

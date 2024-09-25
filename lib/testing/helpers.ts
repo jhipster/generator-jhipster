@@ -455,6 +455,7 @@ class JHipsterTest extends YeomanTest {
     return super.create<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }
 
+  /** @deprecated */
   createJHipster(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,

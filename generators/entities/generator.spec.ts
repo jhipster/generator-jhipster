@@ -29,7 +29,6 @@ import Generator from './generator.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
-const generatorPath = `${__dirname}/index.ts`;
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -75,7 +74,7 @@ describe(`generator - ${generator}`, () => {
     describe('some entities', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({}, entities)
           .withArguments(['Foo', 'Bar'])
           .withOptions({
@@ -110,7 +109,7 @@ describe(`generator - ${generator}`, () => {
     describe('all entities', () => {
       before(async () => {
         await helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({}, entities)
           .withOptions({
             regenerate: true,

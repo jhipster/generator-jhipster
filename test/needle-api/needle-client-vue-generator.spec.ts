@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
@@ -40,7 +40,7 @@ const mockBlueprintSubGen: any = class extends VueGenerator {
 describe('needle API Vue: JHipster client generator with blueprint', () => {
   before(() =>
     helpers
-      .run(getGenerator('vue'))
+      .runJHipster('vue')
       .withOptions({
         build: 'maven',
         auth: 'jwt',

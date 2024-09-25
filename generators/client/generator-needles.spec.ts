@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import ClientGenerator from './index.js';
@@ -23,7 +23,7 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
   function generateAppWithClientFramework(clientFramework) {
     return helpers
-      .create(getGenerator('client'))
+      .runJHipster('client')
       .withOptions({
         blueprint: ['myblueprint'],
       })
@@ -38,8 +38,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]])
-      .run();
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]]);
   }
 
   describe('Angular clientFramework', () => {

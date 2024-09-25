@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import {
   applicationTypes,
   authenticationTypes,
@@ -24,9 +24,8 @@ const mockedComposedGenerators = ['jhipster:common', 'jhipster:server', 'jhipste
 describe('generator - client - prompts', () => {
   describe('clientTestFrameworks prompt', () => {
     describe('with cypress value', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_APP)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withAnswers({

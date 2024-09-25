@@ -1,5 +1,5 @@
 import { before, describe, it } from 'esmocha';
-import { getGenerator, basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 import { CLIENT_MAIN_SRC_DIR } from '../../generators/generator-constants.js';
 import BaseApplicationGenerator from '../../generators/base-application/index.js';
@@ -33,15 +33,14 @@ const mockBlueprintSubGen = class extends AngularGenerator {
 describe('needle API Angular: JHipster angular generator with blueprint', () => {
   before(async () => {
     await helpers
-      .create(getGenerator('angular'))
+      .runJHipster('angular')
       .withJHipsterConfig({
         skipServer: true,
       })
       .withOptions({
         blueprint: ['myblueprint'],
       })
-      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:angular' }]])
-      .run();
+      .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:angular' }]]);
   });
 
   it('vendor.scss contains the specific change (without comment) added by needle api', () => {

@@ -44,16 +44,15 @@ const expectedFiles = {
 
 describe('generator - Kubernetes', () => {
   describe('only gateway', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -96,16 +95,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('only gateway with eureka', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'eureka' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -147,16 +145,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('gateway and mysql microservice', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -248,16 +245,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('gateway and ingress', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -299,16 +295,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('gateway and ingressType gke', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -357,16 +352,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('gateway and ingressType nginx', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ authenticationType: 'oauth2' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -414,16 +408,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('MySQL and PostgreSQL microservices without gateway', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['02-mysql', '03-psql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -468,16 +461,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -531,16 +523,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('monolith application', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['08-monolith'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -580,16 +571,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('Kafka application', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['09-kafka'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces()
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -629,16 +619,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['02-mysql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -682,16 +671,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('gateway with istio routing', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({
@@ -733,16 +721,15 @@ describe('generator - Kubernetes', () => {
   });
 
   describe('mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning', () => {
-    let runResult;
     before(async () => {
       const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
-      runResult = await helpers
+      await helpers
         .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      runResult = await runResult
+      await runResult
         .create(getGenerator(GENERATOR_KUBERNETES))
         .withSpawnMock()
         .withOptions({

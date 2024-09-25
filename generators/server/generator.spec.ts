@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -31,7 +31,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -44,10 +43,9 @@ describe(`generator - ${generator}`, () => {
   describe('composing', () => {
     describe('messageBroker option', () => {
       describe('no', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
-            .run(generatorPath)
+          await helpers
+            .runJHipster(generator)
             .withJHipsterConfig({
               messageBroker: 'no',
             })
@@ -59,10 +57,9 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithSpringCloudStream(false, () => runResult);
       });
       describe('kafka', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
-            .run(generatorPath)
+          await helpers
+            .runJHipster(generator)
             .withJHipsterConfig({
               messageBroker: 'kafka',
             })
@@ -73,10 +70,9 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithSpringCloudStream(true, () => runResult);
       });
       describe('pulsar', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
-            .run(generatorPath)
+          await helpers
+            .runJHipster(generator)
             .withJHipsterConfig({
               messageBroker: 'pulsar',
             })
@@ -92,7 +88,7 @@ describe(`generator - ${generator}`, () => {
       describe('no with jwt', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'no',
               authenticationType: 'jwt',
@@ -110,7 +106,7 @@ describe(`generator - ${generator}`, () => {
       describe('no with session', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'no',
               authenticationType: 'session',
@@ -128,7 +124,7 @@ describe(`generator - ${generator}`, () => {
       describe('no with oauth2', () => {
         before(async () => {
           await helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'no',
               authenticationType: 'oauth2',
@@ -144,10 +140,9 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithCouchbase(false, () => runResult);
       });
       describe('couchbase', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
-            .run(generatorPath)
+          await helpers
+            .runJHipster(generator)
             .withJHipsterConfig({
               databaseType: 'couchbase',
             })

@@ -16,19 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generatorPath = join(__dirname, 'index.ts');
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
@@ -42,9 +41,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig();
+        await helpers.runJHipster(generator).withJHipsterConfig();
       });
 
       it('should succeed', () => {

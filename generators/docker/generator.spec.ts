@@ -97,11 +97,11 @@ describe(`generator - ${generator}`, () => {
       });
       describe('searchEngine', () => {
         const elasticsearch = searchEngine === ELASTICSEARCH;
-        matchElasticSearchDocker(() => runResult, elasticsearch);
+        matchElasticSearchDocker(elasticsearch);
       });
       describe('serviceDiscoveryType', () => {
-        matchEureka(() => runResult, serviceDiscoveryType === EUREKA);
-        matchConsul(() => runResult, serviceDiscoveryType === CONSUL);
+        matchEureka(serviceDiscoveryType === EUREKA);
+        matchConsul(serviceDiscoveryType === CONSUL);
       });
     });
 

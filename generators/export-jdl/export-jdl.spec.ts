@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_EXPORT_JDL } from '../generator-list.js';
 
 const files = {
@@ -368,10 +368,8 @@ const applicationConfig = {
 
 describe('generator - export-jdl', () => {
   describe('exports entities to a JDL file without argument', () => {
-    let runResult;
-
     before(async () => {
-      runResult = await helpers.runJHipster(GENERATOR_EXPORT_JDL).withJHipsterConfig<any>(applicationConfig).withFiles(files).commitFiles();
+      await helpers.runJHipster(GENERATOR_EXPORT_JDL).withJHipsterConfig<any>(applicationConfig).withFiles(files).commitFiles();
     });
 
     it('should match snapshot', () => {
@@ -383,10 +381,8 @@ describe('generator - export-jdl', () => {
   });
 
   describe('exports entities to a JDL file with file argument', () => {
-    let runResult;
-
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runJHipster(GENERATOR_EXPORT_JDL)
         .withJHipsterConfig<any>(applicationConfig)
         .withFiles(files)

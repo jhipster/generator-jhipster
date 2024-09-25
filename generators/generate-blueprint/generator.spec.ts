@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -28,7 +28,6 @@ import Generator from './index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generatorPath = join(__dirname, 'index.js');
 const generator = basename(__dirname);
 
 const mockedGenerators = ['jhipster:init'];
@@ -44,7 +43,7 @@ describe(`generator - ${generator}`, () => {
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.run(generatorPath).withJHipsterConfig().withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
         runResult.assertGeneratorComposedOnce('jhipster:init');
@@ -55,7 +54,7 @@ describe(`generator - ${generator}`, () => {
     });
     describe('all option', () => {
       before(async () => {
-        await helpers.run(generatorPath).withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster(generator).withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
         runResult.assertGeneratorComposedOnce('jhipster:init');
@@ -65,9 +64,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('local-blueprint option', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster(generator).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
       });
       it('should not compose with init generator', () => {
         runResult.assertGeneratorNotComposed('jhipster:init');
@@ -83,10 +81,9 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('local-blueprint option and app generator', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
-          .run(generatorPath)
+        await helpers
+          .runJHipster(generator)
           .withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true })
           .withMockedGenerators(mockedGenerators);
       });

@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { before, describe, expect, it } from 'esmocha';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
+import { defaultHelpers as helpers, result, runResult } from '../../../../lib/testing/index.js';
 import Generator from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -45,9 +45,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('buildTool option', () => {
     describe('maven', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(generator)
           .withJHipsterConfig({
             buildTool: 'maven',
@@ -64,9 +63,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('gradle', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(generator)
           .withJHipsterConfig({
             buildTool: 'gradle',

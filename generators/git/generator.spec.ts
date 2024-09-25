@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
 import { before, describe, expect, it } from 'esmocha';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { skipPrettierHelpers as helpers } from '../../lib/testing/index.js';
+import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_GIT } from '../generator-list.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -37,9 +37,8 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath);
+        await helpers.runJHipster(generator);
       });
       it('should write files and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
@@ -48,9 +47,8 @@ describe(`generator - ${generator}`, () => {
   });
   describe('git feature', () => {
     describe('with default option', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ skipGit: false });
+        await helpers.runJHipster(generator).withOptions({ skipGit: false });
       });
       it('should create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).resolves.toBeUndefined();
@@ -64,19 +62,17 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('with skipGit option', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ skipGit: true });
+        await helpers.runJHipster(generator).withOptions({ skipGit: true });
       });
       it('should not create .git', async () => {
         await expect(access(resolve(runResult.cwd, '.git'))).rejects.toMatchObject({ code: 'ENOENT' });
       });
     });
     describe('regenerating', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ skipGit: false });
-        runResult = await runResult.create(generatorPath).withOptions({ skipGit: false, baseName: 'changed' }).run();
+        await helpers.runJHipster(generator).withOptions({ skipGit: false });
+        await runResult.create(generatorPath).withOptions({ skipGit: false, baseName: 'changed' }).run();
       });
       it('should create a single commit', async () => {
         const git = runResult.generator.createGit();
@@ -84,10 +80,9 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('regenerating with --force-git', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ skipGit: false });
-        runResult = await runResult.create(generatorPath).withOptions({ skipGit: false, forceGit: true, baseName: 'changed' }).run();
+        await helpers.runJHipster(generator).withOptions({ skipGit: false });
+        await runResult.create(generatorPath).withOptions({ skipGit: false, forceGit: true, baseName: 'changed' }).run();
       });
       it('should create 2 commits', async () => {
         const git = runResult.generator.createGit();

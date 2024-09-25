@@ -52,9 +52,8 @@ describe('generator - entity --single-entity', () => {
     });
 
     describe('with cassandra database', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_ENTITY)
           .withGenerators([[MockedLanguagesGenerator, { namespace: 'jhipster:languages' }]])
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo, entityBar])

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
+import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/types.js';
 import type CoreGenerator from '../base-core/generator.ts';
 import type { ClientApplication } from '../client/types.js';
 import type { I18nApplication } from '../languages/types.js';
@@ -143,6 +145,7 @@ export type CommonClientServerApplication<Entity> = BaseApplication &
   AuthenticationProperties<Entity> &
   SpringBootApplication &
   ClientApplication &
+  ExportApplicationPropertiesFromCommand<typeof import('../git/command.ts').default> &
   ApplicationProperties & {
     clientRootDir: string;
     clientSrcDir: string;

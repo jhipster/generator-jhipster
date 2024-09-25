@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { before, describe, it } from 'esmocha';
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
@@ -9,6 +9,7 @@ import { supportedLanguages } from './support/index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.js');
 
 const createClientProject = (options?) =>
@@ -112,7 +113,7 @@ describe('generator - languages', () => {
       describe(`with options for ${language.name}`, () => {
         before(() =>
           helpers
-            .run(generatorPath)
+            .runJHipster(generator)
             .withArguments([language.languageTag])
             .withJHipsterConfig({ enableTranslation: true, nativeLanguage: language.languageTag })
             .withOptions({ ignoreNeedlesError: true }),
@@ -125,7 +126,7 @@ describe('generator - languages', () => {
     describe('for already generated native language', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'], baseName: 'jhipster' })
           .withOptions({ commandName: 'languages', ignoreNeedlesError: true }),
       );
@@ -134,7 +135,7 @@ describe('generator - languages', () => {
     describe('for already generated languages', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ commandName: 'languages', ignoreNeedlesError: true }),
       );
@@ -145,7 +146,7 @@ describe('generator - languages', () => {
   describe('should create default i18n files for the native language', () => {
     describe('using prompts', () => {
       before(() =>
-        helpers.run(generatorPath).withOptions({ ignoreNeedlesError: true }).withAnswers({
+        helpers.runJHipster(generator).withOptions({ ignoreNeedlesError: true }).withAnswers({
           enableTranslation: true,
           nativeLanguage: 'fr',
           languages: [],
@@ -156,7 +157,7 @@ describe('generator - languages', () => {
     describe('using arguments', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withLocalConfig({ enableTranslation: true })
           .withOptions({ ignoreNeedlesError: true })
           .withOptions({ nativeLanguage: 'fr', baseName: 'jhipster' }),
@@ -166,7 +167,7 @@ describe('generator - languages', () => {
     describe('when regenerating', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withLocalConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['fr'] })
           .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
@@ -176,13 +177,13 @@ describe('generator - languages', () => {
   });
   describe('should create default i18n files for the native language and an additional language', () => {
     describe('by default', () => {
-      before(() => helpers.run(generatorPath).withJHipsterConfig().withOptions({ ignoreNeedlesError: true }));
+      before(() => helpers.runJHipster(generator).withJHipsterConfig().withOptions({ ignoreNeedlesError: true }));
       containsLanguageFiles('en');
     });
     describe('using prompts', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withOptions({ ignoreNeedlesError: true })
           .withAnswers({
             enableTranslation: true,
@@ -205,7 +206,7 @@ describe('generator - languages', () => {
     describe('using arguments', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withLocalConfig({ enableTranslation: true })
           .withArguments(['en'])
           .withOptions({ ignoreNeedlesError: true })
@@ -217,7 +218,7 @@ describe('generator - languages', () => {
     describe('when regenerating', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'fr', languages: ['en', 'fr'] })
           .withOptions({ ignoreNeedlesError: true })
           .withOptions({ skipPrompts: true, regenerate: true, baseName: 'jhipster' }),
@@ -239,7 +240,7 @@ describe('generator - languages', () => {
     describe('with prompts', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withOptions({ ignoreNeedlesError: true })
           .withAnswers({
             enableTranslation: true,
@@ -253,7 +254,7 @@ describe('generator - languages', () => {
     describe('with options', () => {
       before(() =>
         helpers
-          .run(generatorPath)
+          .runJHipster(generator)
           .withJHipsterConfig({ enableTranslation: true, nativeLanguage: 'en' })
           .withOptions({ ignoreNeedlesError: true })
           .withArguments(['fr', 'de'])
