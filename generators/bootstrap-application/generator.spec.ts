@@ -1357,9 +1357,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('skipUserManagement', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig(
+        await helpers.run(generatorPath).withJHipsterConfig(
           {
             skipUserManagement: true,
           },

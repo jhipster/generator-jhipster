@@ -44,9 +44,8 @@ describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities().withMockedSource();
+        await helpers.run(generatorPath).withJHipsterConfig().withSkipWritingPriorities().withMockedSource();
       });
 
       it('should match snapshot', () => {
@@ -61,9 +60,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('gateway', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorPath)
           .withJHipsterConfig({
             applicationType: 'gateway',
@@ -84,9 +82,8 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('microservice', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorPath)
           .withJHipsterConfig({
             applicationType: 'microservice',

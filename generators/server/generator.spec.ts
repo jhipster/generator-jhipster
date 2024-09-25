@@ -44,9 +44,8 @@ describe(`generator - ${generator}`, () => {
   describe('composing', () => {
     describe('messageBroker option', () => {
       describe('no', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
+          await helpers
             .run(generatorPath)
             .withJHipsterConfig({
               messageBroker: 'no',
@@ -59,9 +58,8 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithSpringCloudStream(false, () => runResult);
       });
       describe('kafka', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
+          await helpers
             .run(generatorPath)
             .withJHipsterConfig({
               messageBroker: 'kafka',
@@ -73,9 +71,8 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithSpringCloudStream(true, () => runResult);
       });
       describe('pulsar', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
+          await helpers
             .run(generatorPath)
             .withJHipsterConfig({
               messageBroker: 'pulsar',
@@ -144,9 +141,8 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithCouchbase(false, () => runResult);
       });
       describe('couchbase', () => {
-        let runResult;
         before(async () => {
-          runResult = await helpers
+          await helpers
             .run(generatorPath)
             .withJHipsterConfig({
               databaseType: 'couchbase',

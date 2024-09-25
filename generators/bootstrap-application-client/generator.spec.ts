@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
 import Generator from './index.js';
 
@@ -42,9 +42,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig();
+        await helpers.run(generatorPath).withJHipsterConfig();
       });
 
       it('should succeed', () => {

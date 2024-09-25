@@ -1,9 +1,8 @@
 import type { Mock } from 'node:test';
 import { mock } from 'node:test';
 import { before, describe, expect, it } from 'esmocha';
-import type { RunResult } from 'yeoman-test';
 
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { packageJson } from '../../lib/index.js';
 import BaseGenerator from './index.js';
 
@@ -11,9 +10,8 @@ const jhipsterVersion = packageJson.version;
 
 describe('generator - base - with blueprint', () => {
   describe('generate application with a version-compatible blueprint', () => {
-    let runResult: RunResult;
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runTestBlueprintGenerator()
         .withFakeTestBlueprint('generator-jhipster-myblueprint', {
           packageJson: {
@@ -83,9 +81,8 @@ describe('generator - base - with blueprint', () => {
   });
 
   describe('generate application with a peer version-compatible blueprint', () => {
-    let runResult: RunResult;
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runTestBlueprintGenerator()
         .withFakeTestBlueprint('generator-jhipster-myblueprint', {
           packageJson: {
@@ -129,9 +126,8 @@ describe('generator - base - with blueprint', () => {
   });
 
   describe('generate application with a engines compatible blueprint', () => {
-    let runResult: RunResult;
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runTestBlueprintGenerator()
         .withFakeTestBlueprint('generator-jhipster-myblueprint', {
           packageJson: {
@@ -189,9 +185,8 @@ describe('generator - base - with blueprint', () => {
 
 describe('generator - base - with scoped blueprint', () => {
   describe('generate monolith application with scoped blueprint', () => {
-    let runResult: RunResult;
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runTestBlueprintGenerator()
         .withFakeTestBlueprint('@jhipster/generator-jhipster-scoped-blueprint')
         .withMockedGenerators(['@jhipster/jhipster-scoped-blueprint:test-blueprint'])
@@ -215,9 +210,8 @@ describe('generator - base - with scoped blueprint', () => {
 
 describe('generator - base - with blueprints disabled', () => {
   describe('should not compose with blueprint', () => {
-    let runResult: RunResult;
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runTestBlueprintGenerator()
         .withFakeTestBlueprint('@jhipster/generator-jhipster-scoped-blueprint')
         .withMockedGenerators(['@jhipster/jhipster-scoped-blueprint:test-blueprint'])
@@ -259,10 +253,8 @@ describe('generator - base - with blueprint with constructor error', () => {
 
 describe('generator - base - with multiple blueprints', () => {
   describe('generate monolith application with scoped blueprint', () => {
-    let runResult: RunResult;
-
     before(async () => {
-      runResult = await helpers
+      await helpers
         .runTestBlueprintGenerator()
         .withMockedGenerators(['jhipster-blueprint1:test-blueprint', 'jhipster-blueprint2:test-blueprint'])
         .withJHipsterConfig()
@@ -298,13 +290,8 @@ describe('generator - base - local blueprint', () => {
   `;
 
   describe('generates application', () => {
-    let runResult;
     before(async () => {
-      runResult = await helpers
-        .run(BLUEPRINT_NS)
-        .withFiles({ '.blueprint/app/index.mjs': BLUEPRINT_CONTENTS })
-        .commitFiles()
-        .withJHipsterConfig();
+      await helpers.run(BLUEPRINT_NS).withFiles({ '.blueprint/app/index.mjs': BLUEPRINT_CONTENTS }).commitFiles().withJHipsterConfig();
     });
 
     it('creates expected default files', () => {

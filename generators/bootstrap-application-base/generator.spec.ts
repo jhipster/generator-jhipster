@@ -43,9 +43,8 @@ describe(`generator - ${generator}`, () => {
 
   describe('with', () => {
     describe('default config', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig();
+        await helpers.run(generatorPath).withJHipsterConfig();
       });
 
       it('should succeed', () => {

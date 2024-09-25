@@ -65,9 +65,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('local-blueprint option', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.run(generatorPath).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
+        await helpers.run(generatorPath).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
       });
       it('should not compose with init generator', () => {
         runResult.assertGeneratorNotComposed('jhipster:init');
@@ -83,9 +82,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('local-blueprint option and app generator', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorPath)
           .withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true })
           .withMockedGenerators(mockedGenerators);

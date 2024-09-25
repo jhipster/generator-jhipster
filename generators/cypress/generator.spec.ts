@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
-import { AuthenticationTypeMatrix, extendMatrix, fromMatrix, defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { AuthenticationTypeMatrix, extendMatrix, fromMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
 import { GENERATOR_CYPRESS } from '../generator-list.js';
 import Generator from './generator.js';
@@ -79,10 +79,8 @@ describe(`generator - ${generator}`, () => {
 
   Object.entries(e2eSamples).forEach(([name, sampleConfig]) => {
     describe(name, () => {
-      let runResult;
-
       before(async () => {
-        runResult = await helpers.run(generatorPath).withJHipsterConfig(sampleConfig, entities);
+        await helpers.run(generatorPath).withJHipsterConfig(sampleConfig, entities);
       });
 
       it('should match generated files snapshot', () => {
@@ -101,7 +99,7 @@ describe(`generator - ${generator}`, () => {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
           it(adminUiRoutingTitle, () => {
             const assertion = (...args) =>
-              generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
+              generateAdminUi ? (runResult.assertFileContent as any)(...args) : (runResult.assertNoFileContent as any)(...args);
 
             assertion(
               `${clientRootDir}src/test/javascript/cypress/e2e/administration/administration.cy.ts`,

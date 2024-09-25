@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 import { snakeCase } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, result, runResult } from '../../lib/testing/index.js';
 import { testFrameworkTypes } from '../../lib/jhipster/index.js';
 import { GENERATOR_CLIENT } from '../generator-list.js';
 import Generator from './index.js';
@@ -46,10 +46,9 @@ describe(`generator - ${generator}`, () => {
     const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];
 
     describe('with translation disabled', () => {
-      let runResult;
       const options = { enableTranslation: false };
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorFile)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
@@ -66,10 +65,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with translation enabled', () => {
-      let runResult;
       const options = { enableTranslation: true };
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorFile)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
@@ -86,10 +84,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('without cypress', () => {
-      let runResult;
       const options = { testFrameworks: [] };
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorFile)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
@@ -109,10 +106,9 @@ describe(`generator - ${generator}`, () => {
     });
 
     describe('with cypress', () => {
-      let runResult;
       const options = { testFrameworks: [CYPRESS] };
       before(async () => {
-        runResult = await helpers
+        await helpers
           .run(generatorFile)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)

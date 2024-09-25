@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { getGenerator, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.js';
 
 const expectedFiles = {
@@ -98,16 +98,15 @@ const helmExpectedFiles = {
 describe('generator - Knative', () => {
   describe('Using K8s generator type', () => {
     describe('only gateway', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -144,16 +143,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway and mysql microservice', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway', '02-mysql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -190,16 +188,15 @@ describe('generator - Knative', () => {
     });
 
     describe('mysql microservice with custom namespace', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['02-mysql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -236,16 +233,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway and ingress', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -280,16 +276,15 @@ describe('generator - Knative', () => {
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['02-mysql', '03-psql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -329,16 +324,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -387,16 +381,15 @@ describe('generator - Knative', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['02-mysql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -435,16 +428,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway with istio routing files', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -483,16 +475,15 @@ describe('generator - Knative', () => {
 
   describe('Using Helm generator type', () => {
     describe('only gateway', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -529,16 +520,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway and mysql microservice', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway', '02-mysql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -577,16 +567,15 @@ describe('generator - Knative', () => {
     });
 
     describe('mysql microservice with custom namespace', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['02-mysql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -625,16 +614,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway and ingress', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -676,16 +664,15 @@ describe('generator - Knative', () => {
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['02-mysql', '03-psql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -729,16 +716,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -791,16 +777,15 @@ describe('generator - Knative', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['02-mysql'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,
@@ -842,16 +827,15 @@ describe('generator - Knative', () => {
     });
 
     describe('gateway with istio routing files', () => {
-      let runResult;
       before(async () => {
         const chosenApps = ['01-gateway'];
 
-        runResult = await helpers
+        await helpers
           .generateDeploymentWorkspaces({ serviceDiscoveryType: 'consul' })
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        runResult = await runResult
+        await runResult
           .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
           .withOptions({
             askAnswered: true,

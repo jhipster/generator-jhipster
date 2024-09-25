@@ -1,4 +1,4 @@
-import { result } from 'yeoman-test';
+import { runResult } from '../helpers.js';
 
 /**
  * Requires a global `it` function to be available.
@@ -6,12 +6,7 @@ import { result } from 'yeoman-test';
  * @example
  * it(..matchWrittenFiles('eureka', () => ['file'], true));
  */
-export const matchWrittenFiles = (
-  title: string,
-  expectedFilesGetter: () => string[],
-  shouldMatch: boolean,
-  runResult = result,
-): [string, () => void] => [
+export const matchWrittenFiles = (title: string, expectedFilesGetter: () => string[], shouldMatch: boolean): [string, () => void] => [
   shouldMatch ? `writes ${title} files` : `doesn't write ${title} files`,
   () => {
     if (shouldMatch) {
@@ -28,7 +23,7 @@ export const matchWrittenFiles = (
  * @example
  * it(..matchWrittenFiles('eureka', { 'generator-jhipster': { config: true } }, true));
  */
-export const matchWrittenConfig = (title: string, config: any, shouldMatch: boolean, runResult = result): [string, () => void] => [
+export const matchWrittenConfig = (title: string, config: any, shouldMatch: boolean): [string, () => void] => [
   shouldMatch ? `writes ${title} config` : `doesn't write ${title} config`,
   () => {
     if (shouldMatch) {

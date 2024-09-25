@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
 import { GENERATOR_CI_CD } from '../generator-list.js';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 
 const expectedFiles = {
   travis: ['.travis.yml'],
@@ -31,9 +31,8 @@ describe('generator - CI-CD', () => {
   //--------------------------------------------------
   describe('Jenkins tests', () => {
     describe('Jenkins: Maven Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -57,9 +56,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Jenkins: Gradle Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -83,9 +81,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Jenkins: Maven Angular NPM with full options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
@@ -118,9 +115,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Jenkins: Maven Angular NPM inside Docker', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
@@ -157,9 +153,8 @@ describe('generator - CI-CD', () => {
   //--------------------------------------------------
   describe('GitLab CI tests', () => {
     describe('GitLab CI: Maven Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -183,9 +178,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitLab CI: Gradle Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -208,9 +202,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitLab CI: npm skip server', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(skipServerSample)
           .withAnswers({
@@ -231,9 +224,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitLab CI: Maven Angular NPM with full options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
@@ -266,9 +258,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitLab CI: Maven Angular NPM inside Docker', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
@@ -301,9 +292,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withArguments(['gitlab'])
@@ -332,9 +322,8 @@ describe('generator - CI-CD', () => {
   //--------------------------------------------------
   describe('Travis CI tests', () => {
     describe('Travis CI: Maven Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -355,9 +344,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Travis CI: Gradle Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -382,9 +370,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Travis CI: Maven Angular NPM with full options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
@@ -425,9 +412,8 @@ describe('generator - CI-CD', () => {
   //--------------------------------------------------
   describe('Azure Pipelines tests', () => {
     describe('Azure Pipelines: Maven Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -450,9 +436,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -473,9 +458,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -495,9 +479,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -517,9 +500,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Azure Pipelines: autoconfigure', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['azure']).run();
+        await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['azure']).run();
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -535,9 +517,8 @@ describe('generator - CI-CD', () => {
   //--------------------------------------------------
   describe('GitHub Actions tests', () => {
     describe('GitHub Actions: Maven Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -554,9 +535,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitHub Actions: Gradle Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -573,9 +553,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitHub Actions: Maven Angular NPM with full options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
@@ -614,9 +593,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -647,9 +625,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('GitHub Actions: autoconfigure', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['github']).run();
+        await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['github']).run();
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -665,9 +642,8 @@ describe('generator - CI-CD', () => {
   //--------------------------------------------------
   describe('Circle CI test', () => {
     describe('Circle CI: Maven Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -691,9 +667,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Circle CI: Gradle Angular NPM', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
@@ -717,9 +692,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Circle CI: Maven with Snyk', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
@@ -739,9 +713,8 @@ describe('generator - CI-CD', () => {
       });
     });
     describe('Circle CI: Gradle with Snyk', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .createJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({

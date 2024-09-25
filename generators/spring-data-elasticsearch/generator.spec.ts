@@ -106,9 +106,8 @@ describe('generator - elasticsearch', () => {
 
       describe('searchEngine', () => {
         const elasticsearch = sampleConfig.searchEngine === ELASTICSEARCH;
-        matchElasticSearch(() => runResult, elasticsearch);
+        matchElasticSearch(elasticsearch);
         matchElasticSearchUser(
-          () => runResult,
           elasticsearch &&
             (sampleConfig.authenticationType === OAUTH2 ||
               (sampleConfig.applicationType !== MICROSERVICE && !sampleConfig.skipUserManagement)),

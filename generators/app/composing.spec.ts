@@ -1,6 +1,6 @@
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_APP } from '../generator-list.js';
 
 const allMockedComposedGenerators = [
@@ -18,9 +18,8 @@ const allMockedComposedGenerators = [
 describe('generator - app - composing', () => {
   describe('when mocking all generators', () => {
     describe('with default options', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators);
+        await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators);
       });
 
       it('should compose with bootstrap generator', () => {
@@ -50,9 +49,8 @@ describe('generator - app - composing', () => {
     });
 
     describe('with --skip-client', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_APP)
           .withJHipsterConfig({
             skipClient: true,
@@ -87,9 +85,8 @@ describe('generator - app - composing', () => {
     });
 
     describe('with --skip-server', () => {
-      let runResult;
       before(async () => {
-        runResult = await helpers
+        await helpers
           .runJHipster(GENERATOR_APP)
           .withJHipsterConfig({
             skipServer: true,
