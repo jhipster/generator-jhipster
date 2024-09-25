@@ -60,10 +60,15 @@ const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(k
 let defaultMockFactory: (original?: any) => any;
 let defaultAccumulateMockArgs: (mocks: Record<string, any>) => Record<string, any>;
 
-export const defineDefaults = async ({
-  mockFactory,
-  accumulateMockArgs,
-}: { mockFactory?: any; accumulateMockArgs?: (mock: Record<string, any>) => Record<string, any> } = {}) => {
+export const defineDefaults = async (
+  defaults: {
+    /** @deprecated mock from `node:test` is used internally */
+    mockFactory?: any;
+    /** @deprecated mock from `node:test` is used internally */
+    accumulateMockArgs?: (mock: Record<string, any>) => Record<string, any>;
+  } = {},
+) => {
+  const { mockFactory, accumulateMockArgs } = defaults;
   if (mockFactory) {
     defaultMockFactory = mockFactory;
   } else if (!defaultMockFactory) {
