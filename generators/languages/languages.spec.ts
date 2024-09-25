@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { before, describe, it } from 'esmocha';
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
@@ -9,6 +9,7 @@ import { supportedLanguages } from './support/index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const generator = basename(__dirname);
 const generatorPath = join(__dirname, 'index.js');
 
 const createClientProject = (options?) =>

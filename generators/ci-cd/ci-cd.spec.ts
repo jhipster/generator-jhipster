@@ -33,14 +33,13 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['jenkins'],
             insideDocker: false,
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -58,14 +57,13 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['jenkins'],
             insideDocker: false,
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -83,7 +81,7 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -95,8 +93,7 @@ describe('generator - CI-CD', () => {
             artifactoryReleasesId: 'releases',
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarName: 'sonarName',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -117,7 +114,7 @@ describe('generator - CI-CD', () => {
     describe('Jenkins: Maven Angular NPM inside Docker', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -129,8 +126,7 @@ describe('generator - CI-CD', () => {
             artifactoryReleasesId: 'releases',
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarName: 'sonarName',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -155,14 +151,13 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['gitlab'],
             insideDocker: false,
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -180,13 +175,12 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['gitlab'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -204,14 +198,13 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: npm skip server', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(skipServerSample)
           .withAnswers({
             ciCd: ['gitlab'],
             insideDocker: true,
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -226,7 +219,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -238,8 +231,7 @@ describe('generator - CI-CD', () => {
             artifactoryReleasesId: 'releases',
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://localhost:9000',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -260,7 +252,7 @@ describe('generator - CI-CD', () => {
     describe('GitLab CI: Maven Angular NPM inside Docker', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -272,8 +264,7 @@ describe('generator - CI-CD', () => {
             artifactoryReleasesId: 'releases',
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://localhost:9000',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -293,14 +284,9 @@ describe('generator - CI-CD', () => {
     });
     describe('GitLab CI: Maven Angular Yarn inside Docker Autoconfigure', () => {
       before(async () => {
-        await helpers
-          .createJHipster(GENERATOR_CI_CD)
-          .withJHipsterConfig(mavenSample)
-          .withArguments(['gitlab'])
-          .withAnswers({
-            insideDocker: true,
-          })
-          .run();
+        await helpers.runJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['gitlab']).withAnswers({
+          insideDocker: true,
+        });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -324,13 +310,12 @@ describe('generator - CI-CD', () => {
     describe('Travis CI: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['travis'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -346,13 +331,12 @@ describe('generator - CI-CD', () => {
     describe('Travis CI: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['travis'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -372,7 +356,7 @@ describe('generator - CI-CD', () => {
     describe('Travis CI: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -383,8 +367,7 @@ describe('generator - CI-CD', () => {
             artifactoryReleasesId: 'releases',
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://localhost:9000',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -414,13 +397,12 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['azure'],
             ciCdIntegrations: ['cypressDashboard'],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -438,13 +420,12 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['azure'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -460,13 +441,12 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Maven Angular NPM with Snyk', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['azure'],
             ciCdIntegrations: ['snyk'],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -481,13 +461,12 @@ describe('generator - CI-CD', () => {
     describe('Azure Pipelines: Gradle Angular NPM with Snyk', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['azure'],
             ciCdIntegrations: ['snyk'],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -501,7 +480,7 @@ describe('generator - CI-CD', () => {
     });
     describe('Azure Pipelines: autoconfigure', () => {
       before(async () => {
-        await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['azure']).run();
+        await helpers.runJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['azure']);
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -519,13 +498,12 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['github'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -537,13 +515,12 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['github'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -555,7 +532,7 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Maven Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withFiles({ 'pom.xml': pomFile })
           .withAnswers({
@@ -567,8 +544,7 @@ describe('generator - CI-CD', () => {
             artifactoryReleasesId: 'releases',
             artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
             sonarUrl: 'http://sonar.com:9000',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -595,15 +571,14 @@ describe('generator - CI-CD', () => {
     describe('GitHub Actions: Gradle Angular NPM with full options', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['github'],
             ciCdIntegrations: ['sonar', 'publishDocker', 'heroku', 'snyk'],
             dockerImage: 'jhipster-publish-docker',
             sonarUrl: 'http://sonar.com:9000',
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -626,7 +601,7 @@ describe('generator - CI-CD', () => {
     });
     describe('GitHub Actions: autoconfigure', () => {
       before(async () => {
-        await helpers.createJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['github']).run();
+        await helpers.runJHipster(GENERATOR_CI_CD).withJHipsterConfig(mavenSample).withArguments(['github']);
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -644,13 +619,12 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Maven Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['circle'],
             ciCdIntegrations: ['cypressDashboard'],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -669,13 +643,12 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Gradle Angular NPM', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['circle'],
             ciCdIntegrations: [],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -694,13 +667,12 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Maven with Snyk', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(mavenSample)
           .withAnswers({
             ciCd: ['circle'],
             ciCdIntegrations: ['snyk'],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -715,13 +687,12 @@ describe('generator - CI-CD', () => {
     describe('Circle CI: Gradle with Snyk', () => {
       before(async () => {
         await helpers
-          .createJHipster(GENERATOR_CI_CD)
+          .runJHipster(GENERATOR_CI_CD)
           .withJHipsterConfig(gradleSample)
           .withAnswers({
             ciCd: ['circle'],
             ciCdIntegrations: ['snyk'],
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
