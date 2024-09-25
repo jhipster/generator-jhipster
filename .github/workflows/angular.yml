@@ -107,6 +107,7 @@ jobs:
         env:
           JHI_FOLDER_APP: ${{ github.workspace }}/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Detect changes against base commit
@@ -123,6 +124,7 @@ jobs:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------

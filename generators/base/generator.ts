@@ -100,6 +100,13 @@ export default class JHipsterBaseBlueprintGenerator<TaskTypes extends BaseTaskTy
   }
 
   /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asAnyTaskGroup<const K extends string>(taskGroup: GenericTaskGroup<this, any, K>): GenericTaskGroup<any, any, K> {
+    return taskGroup;
+  }
+
+  /**
    * Priority API stub for blueprints.
    *
    * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.

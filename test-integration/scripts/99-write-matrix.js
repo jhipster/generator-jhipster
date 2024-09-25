@@ -66,6 +66,8 @@ writeFileSync(
                     ...sample,
                     'skip-backend-tests': sample['skip-backend-tests'] ? 'true' : 'false',
                     'skip-frontend-tests': sample['skip-frontend-tests'] ? 'true' : 'false',
+                    'jwt-secret-key':
+                      'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=',
                   };
                 });
             } catch (error) {

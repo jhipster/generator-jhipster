@@ -7,7 +7,15 @@ const command: JHipsterCommandDefinition = {
       description: 'Application folders',
     },
   },
-  options: {},
+  configs: {
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+      },
+      scope: 'generator',
+    },
+  },
 };
 
 export default command;

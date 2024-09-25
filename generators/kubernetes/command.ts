@@ -16,5 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as command } from './command.js';
-export { default } from './generator.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
+
+const command = {
+  configs: {
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+      },
+      scope: 'generator',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;
