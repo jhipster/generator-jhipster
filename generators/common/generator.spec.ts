@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -30,7 +30,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
 
 const mockedGenerators = ['jhipster:git'];
 
@@ -45,7 +44,7 @@ describe(`generator - ${generator}`, () => {
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.run(generatorFile).withJHipsterConfig().withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
 
       it('should succeed', () => {
@@ -59,7 +58,7 @@ describe(`generator - ${generator}`, () => {
     describe('Custom prettier', () => {
       before(async () => {
         await basicHelpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withJHipsterConfig({
             prettierTabWidth: 10,
           })
