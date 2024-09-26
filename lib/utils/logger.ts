@@ -85,7 +85,7 @@ export const createJHipsterLogger = (options: LoggerOptions & { namespace?: stri
       process.exitCode = 1;
     },
 
-    fatal(this: any, msg, trace) {
+    fatal(this: any, msg, trace?) {
       const fatalMessage = formatFatalMessageHeader(msg);
       this.console.error(...fatalMessage);
       if (trace) {

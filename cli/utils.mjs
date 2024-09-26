@@ -44,31 +44,21 @@ export const getCommand = (cmd, args = []) => {
   return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-export const doneFactory = (successMsg, sponsorMsg) => {
+export const doneFactory = (options = {}) => {
+  const { successMsg = SUCCESS_MESSAGE, sponsorMsg = SPONSOR_MESSAGE, logger: log = logger } = options;
   return errorOrMsg => {
     if (errorOrMsg instanceof Error) {
-      logger.error(`ERROR! ${errorOrMsg.message}`);
-      logger.log(errorOrMsg);
+      log.error(`ERROR! ${errorOrMsg.message}`);
+      log.log(errorOrMsg);
     } else if (errorOrMsg) {
-      logger.error(`ERROR! ${errorOrMsg}`);
+      log.error(`ERROR! ${errorOrMsg}`);
     } else if (successMsg) {
-      logger.log('');
-      logger.log(chalk.green.bold(successMsg));
-      logger.log('');
-      logger.log(chalk.cyan.bold(sponsorMsg));
+      log.log('');
+      log.log(chalk.green.bold(successMsg));
+      log.log('');
+      log.log(chalk.cyan.bold(sponsorMsg));
     }
   };
 };
 
-export const printSuccess = () => {
-  if (process.exitCode === undefined || process.exitCode === 0) {
-    logger.log('');
-    logger.log(chalk.green.bold(SUCCESS_MESSAGE));
-    logger.log('');
-    logger.log(chalk.cyan.bold(SPONSOR_MESSAGE));
-  } else {
-    logger.error(`JHipster finished with code ${process.exitCode}`);
-  }
-};
-
-export const done = doneFactory(SUCCESS_MESSAGE, SPONSOR_MESSAGE);
+export const done = doneFactory();

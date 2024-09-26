@@ -18,6 +18,7 @@ import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
 import type { Entity } from '../types/base/entity.js';
+import { buildJHipster, createProgram } from '../../cli/program.mjs';
 import getGenerator from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -60,10 +61,15 @@ const defaultSharedApplication = Object.fromEntries(['CLIENT_WEBPACK_DIR'].map(k
 let defaultMockFactory: (original?: any) => any;
 let defaultAccumulateMockArgs: (mocks: Record<string, any>) => Record<string, any>;
 
-export const defineDefaults = async ({
-  mockFactory,
-  accumulateMockArgs,
-}: { mockFactory?: any; accumulateMockArgs?: (mock: Record<string, any>) => Record<string, any> } = {}) => {
+export const defineDefaults = async (
+  defaults: {
+    /** @deprecated mock from `node:test` is used internally */
+    mockFactory?: any;
+    /** @deprecated mock from `node:test` is used internally */
+    accumulateMockArgs?: (mock: Record<string, any>) => Record<string, any>;
+  } = {},
+) => {
+  const { mockFactory, accumulateMockArgs } = defaults;
   if (mockFactory) {
     defaultMockFactory = mockFactory;
   } else if (!defaultMockFactory) {
@@ -397,6 +403,18 @@ class JHipsterTest extends YeomanTest {
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
     return this.run(getGenerator(jhipsterGenerator), settings, envOptions);
+  }
+
+  runCli(command: string | string[]): JHipsterRunContext {
+    // Use a dummy generator which will not be used to match yeoman-test requirement.
+    return this.run(this.createDummyGenerator(), { namespace: 'non-used-dummy:generator' }).withEnvironmentRun(async function (this, env) {
+      // Customize program to throw an error instead of exiting the process on cli parse error.
+      const program = createProgram().exitOverride();
+      await buildJHipster({ program, env: env as any, silent: true });
+      await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
+      // Put the rootGenerator in context to be used in result assertions.
+      this.generator = env.rootGenerator();
+    });
   }
 
   /**

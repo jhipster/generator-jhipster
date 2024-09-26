@@ -153,7 +153,7 @@ export default class JHipsterCommand extends Command {
   /**
    * Register options using generator._options structure.
    * @param {object} options
-   * @param {string} blueprintOptionDescription - description of the blueprint that adds the option
+   * @param {string} [blueprintOptionDescription] - description of the blueprint that adds the option
    * @return {JHipsterCommand} this;
    */
   addGeneratorOptions(options, blueprintOptionDescription) {

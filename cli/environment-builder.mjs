@@ -47,6 +47,8 @@ const createEnvironment = (options = {}) => {
 };
 
 export default class EnvironmentBuilder {
+  /** @type {Environment} */
+  env;
   devBlueprintPath;
   localBlueprintPath;
   localBlueprintExists;
@@ -276,7 +278,7 @@ export default class EnvironmentBuilder {
   /**
    * Get blueprints commands.
    *
-   * @return {Object[]} blueprint commands.
+   * @return {Record<string, import('./types.js').CliCommand>} blueprint commands.
    */
   async getBlueprintCommands() {
     let blueprintsPackagePath = await this._getBlueprintPackagePaths();
@@ -390,7 +392,7 @@ export default class EnvironmentBuilder {
    * @private
    * Get blueprints commands.
    *
-   * @return {Object[]} commands.
+   * @return {Record<string, import('./types.js').CliCommand>} commands.
    */
   async _getBlueprintCommands(blueprintPackagePaths) {
     if (!blueprintPackagePaths) {
