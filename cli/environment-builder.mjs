@@ -75,7 +75,7 @@ export default class EnvironmentBuilder {
    * const promise = require('yeoman-test').create('jhipster:app', {}, {createEnv: EnvironmentBuilder.createEnv}).run();
    *
    * @param {...any} args - Arguments passed to Environment.createEnv().
-   * @return {EnvironmentBuilder} envBuilder
+   * @return {Promise<Environment>} envBuilder
    */
   static async createEnv(...args) {
     const builder = await EnvironmentBuilder.createDefaultBuilder(...args);
