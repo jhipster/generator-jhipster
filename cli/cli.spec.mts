@@ -90,7 +90,7 @@ const cliSharedBlueprintFiles = {
 describe('cli', () => {
   const __filename = fileURLToPath(import.meta.url);
   const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
-  const logger = { verboseInfo: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
+  const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
   const getCommand = esmocha.fn();
   let mockCli;
   let argv;
