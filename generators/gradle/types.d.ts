@@ -45,6 +45,7 @@ export type GradleSourceType = {
   addGradleProperty?(property: GradleProperty & GradleComment): void;
   addGradleMavenRepository?(repository: GradleRepository): void;
   addGradleBuildSrcDependency?(dependency: GradleDependency): void;
+  addGradleBuildSourceBuildscriptDependency?(dependency: GradleDependency): void;
 
   addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion, options?: GradleCatalogNeedleOptions): void;
   addGradleDependencyCatalogVersions?(catalogVersion: GradleTomlVersion[], options?: GradleCatalogNeedleOptions): void;

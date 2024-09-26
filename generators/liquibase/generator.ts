@@ -264,6 +264,11 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ control, application }) {
+        await control.cleanupFiles({
+          '8.7.4': [[application.buildToolGradle!, 'gradle/liquibase.gradle']],
+        });
+      },
       async writing({ application }) {
         const context = {
           ...application,
@@ -486,6 +491,12 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
         } else {
           source.addGradleProperty?.({ property: 'liquibaseVersion', value: liquibaseVersion });
         }
+        source.addGradleBuildSourceBuildscriptDependency?.({
+          groupId: 'org.liquibase',
+          artifactId: 'liquibase-core',
+          version: liquibaseVersion ? `${liquibaseVersion}` : undefined,
+          scope: 'classpath',
+        });
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
         source.addGradleProperty?.({ property: 'liquibasePluginVersion', value: gradleLiquibaseVersion });

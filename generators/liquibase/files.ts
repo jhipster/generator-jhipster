@@ -32,7 +32,7 @@ export const liquibaseFiles: WriteFileSection = {
   gradle: [
     {
       condition: ctx => ctx.buildToolGradle,
-      templates: ['gradle/liquibase.gradle'],
+      templates: ['buildSrc/src/main/groovy/jhipster.liquibase-conventions.gradle'],
     },
   ],
   serverResource: [

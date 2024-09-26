@@ -28,6 +28,7 @@ import files from './files.js';
 import { GRADLE } from './constants.js';
 import cleanupOldServerFilesTask from './cleanup.js';
 import {
+  addGradleBuildscriptDependenciesCallback,
   addGradleDependenciesCallback,
   addGradleDependenciesCatalogVersionCallback,
   addGradleDependencyCatalogLibrariesCallback,
@@ -149,6 +150,8 @@ export default class GradleGenerator extends BaseApplicationGenerator {
 
         source.addGradleBuildSrcDependency = dependency =>
           source.addGradleDependencies!([dependency], { gradleFile: `${gradleBuildSrc}/build.gradle` });
+        source.addGradleBuildSourceBuildscriptDependency = dependency =>
+          this.editFile('buildSrc/build.gradle', addGradleBuildscriptDependenciesCallback([dependency]));
         source.addGradleBuildSrcDependencyCatalogVersion = version =>
           source.addGradleDependencyCatalogVersions!([version], {
             gradleVersionCatalogFile: `${gradleBuildSrc}/gradle/libs.versions.toml`,

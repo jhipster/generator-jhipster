@@ -116,6 +116,12 @@ export const addGradleDependenciesCallback = (dependencies: GradleDependency[]) 
     contentToAdd: dependencies.map(serializeDependency),
   });
 
+export const addGradleBuildscriptDependenciesCallback = (dependencies: GradleDependency[]) =>
+  createNeedleCallback({
+    needle: 'gradle-buildscript-dependency',
+    contentToAdd: dependencies.map(serializeDependency),
+  });
+
 /** @deprecated use addGradleDependenciesCallback */
 export const addGradleBuildSrcDependencyCallback = (dependency: GradleDependency) =>
   createNeedleCallback({
