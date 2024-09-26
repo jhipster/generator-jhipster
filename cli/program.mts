@@ -54,9 +54,9 @@ type BuildCommands = {
   loadCommand?: (key: string) => Promise<(...args: any[]) => Promise<any>>;
   defaultCommand?: string;
   entrypointGenerator?: string;
-  printLogo?: () => void;
   silent?: boolean;
-  printBlueprintLogo?: () => void;
+  printLogo?: () => void | Promise<void>;
+  printBlueprintLogo?: () => void | Promise<void>;
   createEnvBuilder: (options?: BaseEnvironmentOptions) => Promise<EnvironmentBuilder>;
 };
 
@@ -270,8 +270,8 @@ export const buildCommands = ({
         }
 
         if (!silent) {
-          printLogo();
-          printBlueprintLogo();
+          await printLogo();
+          await printBlueprintLogo();
         }
 
         const command = this;

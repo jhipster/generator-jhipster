@@ -354,26 +354,22 @@ export default class extends BaseGenerator {
       addGeneratorJHipsterDependency() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { packagejs } = this.application;
+        const exactDependency = {
+          'generator-jhipster': `${packagejs.version}`,
+        };
+        const caretDependency = {
+          'generator-jhipster': `^${packagejs.version}`,
+        };
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
-            devDependencies: {
-              'generator-jhipster': `${packagejs.version}`,
-            },
-            peerDependencies: {
-              'generator-jhipster': `^${packagejs.version}`,
-            },
-            engines: {
-              'generator-jhipster': `^${packagejs.version}`,
-            },
+            devDependencies: exactDependency,
+            peerDependencies: caretDependency,
+            engines: caretDependency,
           });
         } else {
           this.packageJson.merge({
-            dependencies: {
-              'generator-jhipster': `${packagejs.version}`,
-            },
-            engines: {
-              'generator-jhipster': `${packagejs.version}`,
-            },
+            dependencies: exactDependency,
+            engines: this.jhipsterConfig.caret ? caretDependency : exactDependency,
           });
         }
       },

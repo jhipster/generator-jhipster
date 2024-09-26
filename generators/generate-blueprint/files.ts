@@ -36,17 +36,20 @@ export const files = asWriteFilesSection<any>({
         '.blueprint/generate-sample/index.mjs',
         // Always write cli for devBlueprint usage
         'cli/cli.cjs',
+        { sourceFile: 'cli/cli-customizations.cjs', override: false },
       ],
     },
     {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
       templates: [
         '.blueprint/github-build-matrix/build-matrix.mjs',
         '.blueprint/github-build-matrix/generator.mjs',
         '.blueprint/github-build-matrix/index.mjs',
-        '.github/workflows/build-cache.yml',
-        '.github/workflows/samples.yml',
       ],
+    },
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
+      templates: ['.github/workflows/build-cache.yml', '.github/workflows/samples.yml'],
     },
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && !ctx.sampleWritten,
@@ -88,7 +91,7 @@ export const generatorFiles = asWriteFilesSection<any>({
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator}`,
       condition(ctx) {
-        return ((this as any).options.force || !ctx.written) && ctx.priorities.find(priority => priority.name === 'writing');
+        return !ctx.written && ctx.priorities.find(priority => priority.name === 'writing');
       },
       transform: false,
       templates: [
