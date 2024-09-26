@@ -36,6 +36,7 @@ export const files = asWriteFilesSection<any>({
         '.blueprint/generate-sample/index.mjs',
         // Always write cli for devBlueprint usage
         'cli/cli.cjs',
+        { sourceFile: 'cli/cli-customizations.cjs', override: false },
       ],
     },
     {

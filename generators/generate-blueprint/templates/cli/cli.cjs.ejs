@@ -27,6 +27,7 @@ const blueprint = packageFolderName.startsWith('jhipster-') ? `generator-${packa
       console.log('');
     },
     lookups: [{ packagePaths: [packagePath] }],
+    ...require('./cli-customizations.cjs'),
   }).catch(done);
 
   process.on('unhandledRejection', up => {
