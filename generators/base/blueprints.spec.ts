@@ -490,7 +490,7 @@ describe('generator - base-blueprint', () => {
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = createAllBlueprint(mockedPriorities);
-        return helpers.run(mockBlueprintSubGen);
+        return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 
       priorities.forEach((priority, idx) => {
@@ -545,7 +545,7 @@ describe('generator - base-blueprint', () => {
             return super.end;
           }
         };
-        return helpers.run(mockBlueprintSubGen);
+        return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 
       priorities.forEach(priority => {

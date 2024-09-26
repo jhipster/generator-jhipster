@@ -157,27 +157,30 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator as any).withJHipsterConfig({}, [
-        {
-          name: 'One',
-          fields: [{ fieldName: 'id', fieldType: 'Long' }],
-          relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-        },
-        {
-          name: 'Two',
-          fields: [
-            { fieldName: 'id', fieldType: 'Long' },
-            { fieldName: 'name', fieldType: 'String' },
-          ],
-          relationships: [
-            { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
-            { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
-          ],
-        },
-        {
-          name: 'Three',
-        },
-      ]);
+      await helpers
+        .run(CustomGenerator as any)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withJHipsterConfig({}, [
+          {
+            name: 'One',
+            fields: [{ fieldName: 'id', fieldType: 'Long' }],
+            relationships: [{ relationshipName: 'two', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
+          },
+          {
+            name: 'Two',
+            fields: [
+              { fieldName: 'id', fieldType: 'Long' },
+              { fieldName: 'name', fieldType: 'String' },
+            ],
+            relationships: [
+              { relationshipName: 'one', otherEntityName: 'One', relationshipType: 'many-to-one' },
+              { relationshipName: 'three', otherEntityName: 'Three', relationshipType: 'many-to-one' },
+            ],
+          },
+          {
+            name: 'Three',
+          },
+        ]);
     });
 
     it('should call priorities with correct arguments', async () => {
@@ -397,6 +400,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .run(CustomGenerator as any)
+        .withJHipsterGenerators({ useDefaultMocks: true })
         .withJHipsterConfig({}, [
           {
             name: 'One',

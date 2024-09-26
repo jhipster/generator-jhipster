@@ -15,4 +15,9 @@ export const getPackageRoot = (relativePath?: string) => {
   return relativePath ? join(packageDirectory, relativePath) : packageDirectory;
 };
 
+export const getGeneratorsParentPath = (relativePath?: string) => {
+  const sourceRoot = join(__dirname, '..');
+  return relativePath ? join(sourceRoot, relativePath) : sourceRoot;
+};
+
 export const packageJson = JSON.parse(readFileSync(getPackageRoot('package.json')).toString());
