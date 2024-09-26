@@ -40,14 +40,16 @@ export const files = asWriteFilesSection<any>({
       ],
     },
     {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
       templates: [
         '.blueprint/github-build-matrix/build-matrix.mjs',
         '.blueprint/github-build-matrix/generator.mjs',
         '.blueprint/github-build-matrix/index.mjs',
-        '.github/workflows/build-cache.yml',
-        '.github/workflows/samples.yml',
       ],
+    },
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
+      templates: ['.github/workflows/build-cache.yml', '.github/workflows/samples.yml'],
     },
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && !ctx.sampleWritten,
