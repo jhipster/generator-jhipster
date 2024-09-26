@@ -469,14 +469,16 @@ class JHipsterTest extends YeomanTest {
 
   runCli(command: string | string[]): JHipsterRunContext {
     // Use a dummy generator which will not be used to match yeoman-test requirement.
-    return this.run(this.createDummyGenerator(), { namespace: 'non-used-dummy:generator' }).withEnvironmentRun(async function (this, env) {
-      // Customize program to throw an error instead of exiting the process on cli parse error.
-      const program = createProgram().exitOverride();
-      await buildJHipster({ program, env: env as any, silent: true });
-      await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
-      // Put the rootGenerator in context to be used in result assertions.
-      this.generator = env.rootGenerator();
-    });
+    return this.run(this.createDummyGenerator(), { namespace: 'non-used-dummy:generator' })
+      .withJHipsterGenerators({ useEnvironmentBuilder: true })
+      .withEnvironmentRun(async function (this, env) {
+        // Customize program to throw an error instead of exiting the process on cli parse error.
+        const program = createProgram().exitOverride();
+        await buildJHipster({ program, env: env as any, silent: true });
+        await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
+        // Put the rootGenerator in context to be used in result assertions.
+        this.generator = env.rootGenerator();
+      });
   }
 
   /**
