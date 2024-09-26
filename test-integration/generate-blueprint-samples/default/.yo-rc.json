@@ -26,8 +26,7 @@
           "install",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "common": {
         "command": false,
@@ -50,8 +49,7 @@
           "install",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "cypress": {
         "command": false,
@@ -74,8 +72,7 @@
           "install",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "server": {
         "command": false,
@@ -98,8 +95,7 @@
           "install",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "jdl": {
         "command": true,
@@ -126,8 +122,7 @@
           "postInstall",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "spring-data-relational": {
         "command": true,
@@ -154,8 +149,7 @@
           "postInstall",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "languages": {
         "command": true,
@@ -182,8 +176,7 @@
           "postInstall",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       },
       "angular": {
         "command": true,
@@ -210,8 +203,7 @@
           "postInstall",
           "end"
         ],
-        "sbs": false,
-        "written": true
+        "sbs": false
       }
     },
     "jhipsterVersion": "7.5.0",
