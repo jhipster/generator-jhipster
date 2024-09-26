@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_KUBERNETES } from '../generator-list.js';
 
 const expectedFiles = {
@@ -52,8 +52,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -71,8 +71,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -103,8 +102,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -121,8 +120,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -153,8 +151,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -171,8 +169,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -203,8 +200,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -221,8 +218,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -253,8 +249,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -271,8 +267,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -303,8 +298,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -322,8 +317,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -360,8 +354,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -378,8 +372,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -416,8 +409,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -434,8 +427,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -469,8 +461,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -487,8 +479,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -531,8 +522,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -549,8 +540,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -579,8 +569,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -597,8 +587,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -627,8 +616,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -644,8 +633,7 @@ describe('generator - Kubernetes', () => {
           kubernetesServiceType: 'LoadBalancer',
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -679,8 +667,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -697,8 +685,7 @@ describe('generator - Kubernetes', () => {
           istio: true,
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -729,8 +716,8 @@ describe('generator - Kubernetes', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES)
         .withSpawnMock()
         .withOptions({
           askAnswered: true,
@@ -747,8 +734,7 @@ describe('generator - Kubernetes', () => {
           clusteredDbApps: [],
           kubernetesUseDynamicStorage: true,
           kubernetesStorageClassName: '',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();

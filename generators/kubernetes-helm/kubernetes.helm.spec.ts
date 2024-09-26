@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_KUBERNETES_HELM } from '../generator-list.js';
 
 const expectedFiles = {
@@ -80,8 +80,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -96,8 +96,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -124,8 +123,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -139,8 +138,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -170,8 +168,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -185,8 +183,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: true,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -216,8 +213,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -233,8 +230,7 @@ describe('generator - Kubernetes Helm', () => {
           ingressType: 'gke',
           ingressDomain: 'example.com',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -267,8 +263,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -282,8 +278,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -318,8 +313,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -334,8 +329,7 @@ describe('generator - Kubernetes Helm', () => {
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
           istio: false,
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -378,8 +372,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -393,8 +387,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -420,8 +413,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -435,8 +428,7 @@ describe('generator - Kubernetes Helm', () => {
           jhipsterConsole: false,
           kubernetesServiceType: 'LoadBalancer',
           clusteredDbApps: [],
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -461,8 +453,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -475,8 +467,7 @@ describe('generator - Kubernetes Helm', () => {
           kubernetesNamespace: 'mynamespace',
           monitoring: 'prometheus',
           kubernetesServiceType: 'LoadBalancer',
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -510,8 +501,8 @@ describe('generator - Kubernetes Helm', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_KUBERNETES_HELM))
+      await helpers
+        .runJHipsterInApplication(GENERATOR_KUBERNETES_HELM)
         .withOptions({
           askAnswered: true,
         })
@@ -525,8 +516,7 @@ describe('generator - Kubernetes Helm', () => {
           ingressDomain: 'example.com',
           clusteredDbApps: [],
           istio: true,
-        })
-        .run();
+        });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();

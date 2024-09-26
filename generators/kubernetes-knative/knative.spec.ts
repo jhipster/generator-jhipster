@@ -1,5 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { getGenerator, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 import { GENERATOR_KUBERNETES_KNATIVE } from '../generator-list.js';
 
 const expectedFiles = {
@@ -106,8 +106,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -123,8 +123,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -151,8 +150,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -167,8 +166,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -196,8 +194,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -212,8 +210,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -241,8 +238,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -258,8 +255,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -284,8 +280,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -300,8 +296,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -332,8 +327,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -348,8 +343,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -389,8 +383,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -404,8 +398,7 @@ describe('generator - Knative', () => {
             monitoring: 'prometheus',
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -436,8 +429,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -452,8 +445,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'k8s',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -483,8 +475,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -500,8 +492,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -528,8 +519,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -544,8 +535,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -575,8 +565,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -591,8 +581,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -622,8 +611,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -639,8 +628,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -672,8 +660,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -688,8 +676,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -724,8 +711,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -741,8 +728,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -785,8 +771,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -800,8 +786,7 @@ describe('generator - Knative', () => {
             monitoring: 'prometheus',
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -835,8 +820,8 @@ describe('generator - Knative', () => {
           .withWorkspacesSamples(...chosenApps)
           .withGenerateWorkspaceApplications();
 
-        await runResult
-          .create(getGenerator(GENERATOR_KUBERNETES_KNATIVE))
+        await helpers
+          .runJHipsterInApplication(GENERATOR_KUBERNETES_KNATIVE)
           .withOptions({
             askAnswered: true,
           })
@@ -851,8 +836,7 @@ describe('generator - Knative', () => {
             clusteredDbApps: [],
             generatorType: 'helm',
             istio: true,
-          })
-          .run();
+          });
       });
       it('should match files snapshot', function () {
         expect(runResult.getSnapshot()).toMatchSnapshot();

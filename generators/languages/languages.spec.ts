@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { before, describe, it } from 'esmocha';
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
@@ -10,7 +10,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
 
 const createClientProject = (options?) =>
   basicHelpers
@@ -99,14 +98,13 @@ describe('generator - languages', () => {
       describe(`with prompts for ${language.name}`, () => {
         before(() =>
           helpers
-            .create(generatorPath)
+            .runJHipster(generator)
             .withOptions({ ignoreNeedlesError: true })
             .withAnswers({
               enableTranslation: true,
               nativeLanguage: language.languageTag,
               languages: [language.languageTag],
-            })
-            .run(),
+            }),
         );
         containsLanguageFiles(language.languageTag);
       });
@@ -277,20 +275,19 @@ describe('generator - languages', () => {
   describe('Creates default i18n files for Vue applications', () => {
     describe('using prompts', () => {
       before(async () => {
-        const result = await createClientProject().withJHipsterConfig({
+        await createClientProject().withJHipsterConfig({
           clientFramework: 'vue',
           enableTranslation: true,
           nativeLanguage: 'en',
         });
-        await result
-          .create('jhipster:languages')
+        await helpers
+          .runJHipsterInApplication('jhipster:languages')
           .withAnswers({
             languages: ['fr', 'de'],
           })
           .withOptions({
             commandName: 'languages',
-          })
-          .run();
+          });
       });
       it('creates expected configuration values', () => {
         runResult.assertJsonFileContent('.yo-rc.json', {
@@ -315,18 +312,14 @@ describe('generator - languages', () => {
 
     describe('using arguments', () => {
       before(async () => {
-        const result = await createClientProject().withJHipsterConfig({
+        await createClientProject().withJHipsterConfig({
           clientFramework: 'vue',
           enableTranslation: true,
           nativeLanguage: 'en',
         });
-        await result
-          .create('jhipster:languages')
-          .withArguments(['fr', 'de'])
-          .withOptions({
-            baseName: 'jhipster',
-          })
-          .run();
+        await helpers.runJHipsterInApplication('jhipster:languages').withArguments(['fr', 'de']).withOptions({
+          baseName: 'jhipster',
+        });
       });
       it('creates expected configuration values', () => {
         runResult.assertJsonFileContent('.yo-rc.json', {

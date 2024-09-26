@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join, resolve } from 'path';
+import { basename, dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { access } from 'fs/promises';
 import { before, describe, expect, it } from 'esmocha';
@@ -28,7 +28,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.ts');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', () => {
@@ -72,7 +71,7 @@ describe(`generator - ${generator}`, () => {
     describe('regenerating', () => {
       before(async () => {
         await helpers.runJHipster(generator).withOptions({ skipGit: false });
-        await runResult.create(generatorPath).withOptions({ skipGit: false, baseName: 'changed' }).run();
+        await helpers.runJHipsterInApplication(generator).withOptions({ skipGit: false, baseName: 'changed' });
       });
       it('should create a single commit', async () => {
         const git = runResult.generator.createGit();
@@ -82,7 +81,7 @@ describe(`generator - ${generator}`, () => {
     describe('regenerating with --force-git', () => {
       before(async () => {
         await helpers.runJHipster(generator).withOptions({ skipGit: false });
-        await runResult.create(generatorPath).withOptions({ skipGit: false, forceGit: true, baseName: 'changed' }).run();
+        await helpers.runJHipsterInApplication(generator).withOptions({ skipGit: false, forceGit: true, baseName: 'changed' });
       });
       it('should create 2 commits', async () => {
         const git = runResult.generator.createGit();

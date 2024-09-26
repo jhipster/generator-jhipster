@@ -1,5 +1,4 @@
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import path from 'path';
 import { mkdirSync, writeFileSync } from 'fs';
 import { escapeRegExp } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
@@ -9,9 +8,6 @@ import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.js';
 import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
 const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 describe('generator - upgrade', function () {
   describe('default application', () => {
@@ -24,11 +20,10 @@ describe('generator - upgrade', function () {
           baseName: 'upgradeTest',
         })
         .withOptions({ skipGit: false, useVersionPlaceholders: false });
-      await runResult
-        .createJHipster(GENERATOR_UPGRADE)
+      await helpers
+        .runJHipsterInApplication(GENERATOR_UPGRADE)
         .withSpawnMock()
-        .withOptions({ useVersionPlaceholders: false } as any)
-        .run();
+        .withOptions({ useVersionPlaceholders: false } as any);
     });
 
     it('generated git commits to match snapshot', () => {
