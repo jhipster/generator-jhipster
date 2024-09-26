@@ -448,11 +448,23 @@ class JHipsterTest extends YeomanTest {
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
     envOptions?: BaseEnvironmentOptions | undefined,
+  ): JHipsterRunContext;
+  runJHipster(jhipsterGenerator: string, options?: WithJHipsterGenerators): JHipsterRunContext;
+  runJHipster(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings | WithJHipsterGenerators | undefined,
+    envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
     if (!isAbsolute(jhipsterGenerator)) {
       jhipsterGenerator = jhipsterGenerator.startsWith('jhipster:') ? jhipsterGenerator : `jhipster:${jhipsterGenerator}`;
     }
-    return this.run(jhipsterGenerator, settings, envOptions);
+    const isWithJHipsterGenerators = (opt: any): opt is WithJHipsterGenerators | undefined =>
+      opt === undefined || 'actualGeneratorsList' in opt || 'useMock' in opt || 'useDefaultMocks' in opt || 'useEnvironmentBuilder' in opt;
+    if (isWithJHipsterGenerators(settings)) {
+      const createEnv = settings?.useEnvironmentBuilder ? createEnvBuilderEnvironment : undefined;
+      return this.run(jhipsterGenerator, undefined, { createEnv }).withJHipsterGenerators(settings);
+    }
+    return this.run(getGenerator(jhipsterGenerator), settings, envOptions).withJHipsterGenerators();
   }
 
   runCli(command: string | string[]): JHipsterRunContext {
