@@ -33,6 +33,13 @@ import {
 
 const command = {
   configs: {
+    caret: {
+      cli: {
+        description: 'Use caret in package.json engines',
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
     recreatePackageLock: {
       description: 'Recreate package lock',
       cli: {
