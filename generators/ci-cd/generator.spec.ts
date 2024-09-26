@@ -43,7 +43,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runCli('ci-cd').withJHipsterConfig().withSkipWritingPriorities();
       });
 
-      it('should match order', () => {
+      it('should match prompts order', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCd",
@@ -68,7 +68,7 @@ describe(`generator - ${generator}`, () => {
         await helpers.runCli('ci-cd github jenkins gitlab azure').withJHipsterConfig().withSkipWritingPriorities();
       });
 
-      it('should match order', () => {
+      it('should populate context', () => {
         expect(runResult.generator.context!.ciCd).toEqual(['github', 'jenkins', 'gitlab', 'azure']);
       });
     });
