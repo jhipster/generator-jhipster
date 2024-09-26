@@ -461,7 +461,7 @@ class JHipsterTest extends YeomanTest {
         return {};
       }
     }
-    return this.run(blueprintNS).withGenerators([[BlueprintedGenerator, { namespace: blueprintNS }]]);
+    return this.runJHipster(blueprintNS).withGenerators([[BlueprintedGenerator, { namespace: blueprintNS }]]);
   }
 
   // @ts-expect-error testing types should be improved
