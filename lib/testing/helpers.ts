@@ -240,14 +240,9 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
     });
   }
 
+  /** @deprecated use withJHipsterGenerators */
   withJHipsterLookup(): this {
-    return this.withLookups([
-      {
-        packagePaths: [getPackageRoot()],
-        // @ts-expect-error lookups is not exported
-        lookups: [`${isDistFolder() ? 'dist/' : ''}generators`, `${isDistFolder() ? 'dist/' : ''}generators/*/generators`],
-      },
-    ]);
+    return this.withJHipsterGenerators();
   }
 
   /**
