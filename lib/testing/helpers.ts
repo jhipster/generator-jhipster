@@ -13,7 +13,7 @@ import { GENERATOR_WORKSPACES } from '../../generators/generator-list.js';
 import { createJHipsterLogger, normalizePathEnd, parseCreationTimestamp } from '../../generators/base/support/index.js';
 import BaseGenerator from '../../generators/base/index.js';
 import type { JHipsterGeneratorOptions } from '../../generators/base/api.js';
-import { getPackageRoot, isDistFolder } from '../index.js';
+import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.js';
 import type CoreGenerator from '../../generators/base-core/generator.js';
 import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
@@ -66,7 +66,8 @@ const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
 const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
-const generatorsDir = join(getPackageRoot(), 'generators');
+const toJHipsterNamespace = (ns: string) => (/^jhipster[:-]/.test(ns) ? ns : `jhipster:${ns}`);
+const generatorsDir = getSourceRoot('generators');
 const allGenerators = [
   ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
   ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
@@ -325,7 +326,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   withMockedJHipsterGenerators(options: string[] | { except?: string[]; filter?: (string) => boolean } = {}): this {
     const optionsObj = Array.isArray(options) ? { except: options } : options;
     const { except = [], filter = filterBootstrapGenerators } = optionsObj;
-    const jhipsterExceptList = except.map(gen => (gen.startsWith('jhipster:') ? gen : `jhipster:${gen}`));
+    const jhipsterExceptList = except.map(toJHipsterNamespace);
     return this.withMockedGenerators(
       allGenerators.filter(filter).filter(gen => !jhipsterExceptList.includes(gen) && (this as any).Generator !== gen),
     );
@@ -333,7 +334,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
 
   withJHipsterGenerators(options: WithJHipsterGenerators = {}): this {
     const { useDefaultMocks, actualGeneratorsList = [], useMock = useDefaultMocks ? filterBootstrapGenerators : () => false } = options;
-    const jhipsterExceptList = actualGeneratorsList.map(gen => (gen.startsWith('jhipster:') ? gen : `jhipster:${gen}`));
+    const jhipsterExceptList = actualGeneratorsList.map(toJHipsterNamespace);
     const mockedGenerators = allGenerators
       .filter(useMock)
       .filter(gen => !jhipsterExceptList.includes(gen) && (this as any).Generator !== gen);
@@ -345,6 +346,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
       // @ts-expect-error lookups is not exported
       lookups: [`${prefix}generators`, `${prefix}generators/*/generators`],
       filePatterns,
+      customizeNamespace: ns => ns?.replaceAll(':generators:', ':'),
     });
   }
 
@@ -409,7 +411,7 @@ plugins {
     runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.mock.callCount() > 0);
 
     runResult.createJHipster = (ns: string, options?: WithJHipsterGenerators) => {
-      ns = ns.startsWith('jhipster:') ? ns : `jhipster:${ns}`;
+      ns = toJHipsterNamespace(ns);
       const context = runResult.create(ns) as JHipsterRunContext;
       return context.withJHipsterGenerators(options);
     };
@@ -451,7 +453,7 @@ class JHipsterTest extends YeomanTest {
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
     if (!isAbsolute(jhipsterGenerator)) {
-      jhipsterGenerator = jhipsterGenerator.startsWith('jhipster:') ? jhipsterGenerator : `jhipster:${jhipsterGenerator}`;
+      jhipsterGenerator = toJHipsterNamespace(jhipsterGenerator);
     }
     const isWithJHipsterGenerators = (opt: any): opt is WithJHipsterGenerators | undefined =>
       opt === undefined || 'actualGeneratorsList' in opt || 'useMock' in opt || 'useDefaultMocks' in opt || 'useEnvironmentBuilder' in opt;

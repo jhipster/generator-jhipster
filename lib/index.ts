@@ -6,17 +6,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export const isDistFolder = () => {
-  return basename(join(__dirname, '..')) === 'dist';
+  return basename(dirname(__dirname)) === 'dist';
 };
 
 export const getPackageRoot = (relativePath?: string) => {
-  const sourceRoot = join(__dirname, '..');
-  const packageDirectory = isDistFolder() ? join(sourceRoot, '..') : sourceRoot;
+  const sourceRoot = dirname(__dirname);
+  const packageDirectory = isDistFolder() ? dirname(sourceRoot) : sourceRoot;
   return relativePath ? join(packageDirectory, relativePath) : packageDirectory;
 };
 
-export const getGeneratorsParentPath = (relativePath?: string) => {
-  const sourceRoot = join(__dirname, '..');
+export const getSourceRoot = (relativePath?: string) => {
+  const sourceRoot = dirname(__dirname);
   return relativePath ? join(sourceRoot, relativePath) : sourceRoot;
 };
 
