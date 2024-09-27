@@ -81,9 +81,12 @@ describe(`generator - ${generator}`, () => {
     }
 
     before(async () => {
-      await helpers.run(CustomGenerator as any).withOptions({
-        skipPriorities: ['prompting', 'writing', 'postWriting'],
-      });
+      await helpers
+        .run(CustomGenerator as any)
+        .withJHipsterGenerators({ useDefaultMocks: true })
+        .withOptions({
+          skipPriorities: ['prompting', 'writing', 'postWriting'],
+        });
     });
 
     it('should skip priorities', async () => {

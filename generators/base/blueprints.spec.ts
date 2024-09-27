@@ -291,7 +291,11 @@ describe('generator - base - local blueprint', () => {
 
   describe('generates application', () => {
     before(async () => {
-      await helpers.run(BLUEPRINT_NS).withFiles({ '.blueprint/app/index.mjs': BLUEPRINT_CONTENTS }).commitFiles().withJHipsterConfig();
+      await helpers
+        .runJHipster(BLUEPRINT_NS, { useEnvironmentBuilder: true })
+        .withFiles({ '.blueprint/app/index.mjs': BLUEPRINT_CONTENTS })
+        .commitFiles()
+        .withJHipsterConfig();
     });
 
     it('creates expected default files', () => {
@@ -486,7 +490,7 @@ describe('generator - base-blueprint', () => {
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = createAllBlueprint(mockedPriorities);
-        return helpers.run(mockBlueprintSubGen);
+        return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 
       priorities.forEach((priority, idx) => {
@@ -541,7 +545,7 @@ describe('generator - base-blueprint', () => {
             return super.end;
           }
         };
-        return helpers.create(mockBlueprintSubGen).run();
+        return helpers.run(mockBlueprintSubGen).withJHipsterGenerators({ useDefaultMocks: true });
       });
 
       priorities.forEach(priority => {

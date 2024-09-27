@@ -2,7 +2,7 @@ import { before, describe, expect, it } from 'esmocha';
 import monitoringTypes from '../../lib/jhipster/monitoring-types.js';
 import applicationTypes from '../../lib/jhipster/application-types.js';
 import { GENERATOR_DOCKER_COMPOSE } from '../generator-list.js';
-import { getGenerator, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
 
 const { PROMETHEUS } = monitoringTypes;
 const { MICROSERVICE, MONOLITH } = applicationTypes;
@@ -24,16 +24,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -59,16 +56,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -94,16 +88,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: '.',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: '.',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -124,16 +115,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -159,15 +147,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -196,15 +181,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -233,16 +215,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: PROMETHEUS,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: PROMETHEUS,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -271,15 +250,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -305,15 +281,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: ['04-mongo'],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: ['04-mongo'],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -339,15 +312,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -373,15 +343,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MONOLITH,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MONOLITH,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -404,15 +371,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot({
@@ -443,15 +407,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -477,15 +438,12 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MICROSERVICE,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: ['10-couchbase'],
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MICROSERVICE,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: ['10-couchbase'],
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();
@@ -511,16 +469,13 @@ describe('generator - Docker Compose', () => {
         .withWorkspacesSamples(...chosenApps)
         .withGenerateWorkspaceApplications();
 
-      await runResult
-        .create(getGenerator(GENERATOR_DOCKER_COMPOSE))
-        .withAnswers({
-          deploymentApplicationType: MONOLITH,
-          directoryPath: './',
-          appsFolders: chosenApps,
-          clusteredDbApps: [],
-          monitoring: NO_MONITORING,
-        })
-        .run();
+      await helpers.runJHipsterInApplication(GENERATOR_DOCKER_COMPOSE).withAnswers({
+        deploymentApplicationType: MONOLITH,
+        directoryPath: './',
+        appsFolders: chosenApps,
+        clusteredDbApps: [],
+        monitoring: NO_MONITORING,
+      });
     });
     it('should match files snapshot', function () {
       expect(runResult.getSnapshot()).toMatchSnapshot();

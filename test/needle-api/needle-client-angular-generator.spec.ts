@@ -95,8 +95,8 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
     );
   });
   it('should bail on any file change adding same needles again', async () => {
-    await runResult
-      .create('jhipster:angular')
+    await helpers
+      .runJHipsterInApplication('jhipster:angular')
       .withGenerators([[mockAngularBlueprintSubGen, { namespace: 'jhipster-myblueprint2:angular' }]])
       .withOptions({
         blueprint: ['myblueprint2'],

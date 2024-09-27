@@ -1,4 +1,4 @@
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -14,7 +14,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.ts');
 
 const { ANGULAR: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
@@ -88,7 +87,7 @@ describe(`generator - ${clientFramework}`, () => {
     describe(name, () => {
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withJHipsterConfig(sampleConfig, entities)
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withControl({ getWebappTranslation: () => 'translations' })

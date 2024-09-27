@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
 import { snakeCase } from 'lodash-es';
@@ -32,7 +32,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.ts');
 
 const commonConfig = { messageBroker: PULSAR };
 
@@ -48,7 +47,7 @@ describe(`generator - ${generator}`, () => {
   Object.entries(testSamples).forEach(([name, config]) => {
     describe(name, () => {
       before(async () => {
-        await helpers.run(generatorFile).withJHipsterConfig(config);
+        await helpers.runJHipster(generator).withJHipsterConfig(config);
       });
 
       it('should match generated files snapshot', () => {

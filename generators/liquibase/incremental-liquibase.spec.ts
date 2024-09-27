@@ -274,7 +274,7 @@ describe('generator - app - --incremental-changelog', function () {
         .runJDL(jdlApplicationWithRelationshipToUser)
         .withMockedSource({ except: exceptSourceMethods })
         .withMockedJHipsterGenerators({ except: exceptMockedGenerators });
-      await runResult.create('jhipster:jdl').withOptions({
+      await helpers.runJHipsterInApplication('jhipster:jdl').withOptions({
         inline: jdlApplicationWithRelationshipToUser,
         creationTimestamp: '2020-01-02',
       });

@@ -721,15 +721,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       if (await this.env.get(namespace)) {
         generator = namespace;
       } else {
-        // Keep test compatibility were jhipster lookup does not run.
-        const found = ['/index.js', '/index.cjs', '/index.mjs', '/index.ts', '/index.cts', '/index.mts'].find(extension => {
-          const pathToLook = join(__dirname, `../${generator}${extension}`);
-          return existsSync(pathToLook) ? pathToLook : undefined;
-        });
-        if (!found) {
-          throw new Error(`Generator ${generator} was not found`);
-        }
-        generator = join(__dirname, `../${generator}${found}`);
+        throw new Error(`Generator ${generator} was not found`);
       }
     }
 

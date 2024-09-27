@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
+import { basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { snakeCase } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
@@ -32,7 +32,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorFile = join(__dirname, 'index.js');
 
 describe(`generator - ${generator}`, () => {
   it('generator-list constant matches folder name', async () => {
@@ -49,7 +48,7 @@ describe(`generator - ${generator}`, () => {
       const options = { enableTranslation: false };
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -68,7 +67,7 @@ describe(`generator - ${generator}`, () => {
       const options = { enableTranslation: true };
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -87,7 +86,7 @@ describe(`generator - ${generator}`, () => {
       const options = { testFrameworks: [] };
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -109,7 +108,7 @@ describe(`generator - ${generator}`, () => {
       const options = { testFrameworks: [CYPRESS] };
       before(async () => {
         await helpers
-          .run(generatorFile)
+          .runJHipster(generator)
           .withControl({ getWebappTranslation: () => 'translations' })
           .withJHipsterConfig(options)
           .withSkipWritingPriorities()
@@ -139,7 +138,7 @@ describe(`generator - ${generator}`, () => {
     ];
     before(async () => {
       await helpers
-        .run(generatorFile)
+        .runJHipster(generator)
         .withControl({ getWebappTranslation: () => 'translations' })
         .withJHipsterConfig({ applicationType: 'microservice' })
         .withSkipWritingPriorities()
