@@ -31,7 +31,7 @@ export type PromptSpec = {
 
 type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & { scope?: CommandConfigScope };
 
-type CliSpec = SetOptional<CliOptionSpec, 'name'> & {
+type CliSpec = Omit<SetOptional<CliOptionSpec, 'name'>, 'storage'> & {
   env?: string;
   /**
    * Imply other options.
@@ -48,9 +48,6 @@ export type ConfigSpec<ConfigContext> = {
     | PromptSpec
     | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
   readonly jdl?: Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>;
-  readonly storage?: {
-    readonly type?: typeof Boolean | typeof String | typeof Number | typeof Array;
-  };
   readonly scope?: CommandConfigScope;
   /**
    * The callback receives the generator as input for 'generator' scope.
@@ -76,7 +73,7 @@ export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
-export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<ConfigSpec<ConfigContext>, 'argument' | 'cli' | 'prompt' | 'storage'>;
+export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<ConfigSpec<ConfigContext>, 'argument' | 'cli' | 'prompt' | 'jdl'>;
 
 export type JHipsterConfigs<ConfigContext = any> = Record<string, JHipsterConfig<ConfigContext>>;
 
