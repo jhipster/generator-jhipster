@@ -152,7 +152,10 @@ const addCommandGeneratorOptions = async (
     }
   }
   try {
-    if (root || !generatorModule.command || generatorModule.command.loadGeneratorOptions) {
+    if (
+      generatorModule.command?.loadGeneratorOptions !== false &&
+      (root || !generatorModule.command || generatorModule.command.loadGeneratorOptions)
+    ) {
       const generator = await generatorMeta.instantiateHelp();
       // Add basic yeoman generator options
       command.addGeneratorOptions(generator._options, blueprintOptionDescription);
