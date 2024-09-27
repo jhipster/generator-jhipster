@@ -19,7 +19,7 @@
     "react-router-dom": "6.26.2",
     "react-toastify": "10.0.5",
     "react-transition-group": "4.4.5",
-    "reactstrap": "9.2.2",
+    "reactstrap": "9.2.3",
     "redux": "5.0.1",
     "rxjs": "7.8.1",
     "sockjs-client": "1.6.1",
