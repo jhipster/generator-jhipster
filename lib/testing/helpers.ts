@@ -3,6 +3,7 @@ import { mock } from 'node:test';
 import { merge, set, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
+import type Environment from 'yeoman-environment';
 import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
@@ -19,6 +20,7 @@ import type { ApplicationConfiguration } from '../types/application/yo-rc.js';
 import { getDefaultJDLApplicationConfig } from '../command/jdl.js';
 import type { Entity } from '../types/base/entity.js';
 import { buildJHipster, createProgram } from '../../cli/program.mjs';
+import type { CliCommand } from '../../cli/types.js';
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.js';
 
 type GeneratorTestType = YeomanGenerator<JHipsterGeneratorOptions>;
@@ -36,6 +38,9 @@ type WithJHipsterGenerators = {
    * Filter to mock a generator.
    */
   useMock?: (ns: string) => boolean;
+};
+
+type RunJHipster = WithJHipsterGenerators & {
   /**
    * Use the EnviromentBuilder default preparation to create the environment.
    * Includes local and dev blueprints.
@@ -43,7 +48,9 @@ type WithJHipsterGenerators = {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = RunResult<GeneratorType> & {
+type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+  env: Environment;
+
   /**
    * First argument of mocked source calls.
    */
@@ -446,36 +453,51 @@ class JHipsterTest extends YeomanTest {
     settings?: RunContextSettings | undefined,
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext;
-  runJHipster(jhipsterGenerator: string, options?: WithJHipsterGenerators): JHipsterRunContext;
+  runJHipster(jhipsterGenerator: string, options?: RunJHipster): JHipsterRunContext;
   runJHipster(
     jhipsterGenerator: string,
-    settings?: RunContextSettings | WithJHipsterGenerators | undefined,
+    settings: RunContextSettings | RunJHipster | undefined,
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
     if (!isAbsolute(jhipsterGenerator)) {
       jhipsterGenerator = toJHipsterNamespace(jhipsterGenerator);
     }
-    const isWithJHipsterGenerators = (opt: any): opt is WithJHipsterGenerators | undefined =>
+    const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
       opt === undefined || 'actualGeneratorsList' in opt || 'useMock' in opt || 'useDefaultMocks' in opt || 'useEnvironmentBuilder' in opt;
-    if (isWithJHipsterGenerators(settings)) {
-      const createEnv = settings?.useEnvironmentBuilder ? createEnvBuilderEnvironment : undefined;
-      return this.run(jhipsterGenerator, undefined, { createEnv }).withJHipsterGenerators(settings);
+    if (isRunJHipster(settings)) {
+      const { useEnvironmentBuilder, ...otherOptions } = settings ?? {};
+      if (useEnvironmentBuilder) {
+        return this.run(jhipsterGenerator, undefined, { createEnv: createEnvBuilderEnvironment });
+      }
+      // If not using EnvironmentBuilder, use the default JHipster generators lookup.
+      return this.run(jhipsterGenerator).withJHipsterGenerators(otherOptions);
     }
     return this.run(getGenerator(jhipsterGenerator), settings, envOptions).withJHipsterGenerators();
   }
 
-  runCli(command: string | string[]): JHipsterRunContext {
+  runCli(
+    command: string | string[],
+    options: { commands?: Record<string, CliCommand>; useEnvironmentBuilder?: boolean; entrypointGenerator?: string } = {},
+  ): JHipsterRunContext {
+    const { useEnvironmentBuilder, ...buildJHipsterOptions } = options;
     // Use a dummy generator which will not be used to match yeoman-test requirement.
-    return this.run(this.createDummyGenerator(), { namespace: 'non-used-dummy:generator' })
-      .withJHipsterGenerators({ useEnvironmentBuilder: true })
-      .withEnvironmentRun(async function (this, env) {
-        // Customize program to throw an error instead of exiting the process on cli parse error.
-        const program = createProgram().exitOverride();
-        await buildJHipster({ program, env: env as any, silent: true });
-        await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
-        // Put the rootGenerator in context to be used in result assertions.
-        this.generator = env.rootGenerator();
-      });
+    const context = this.run(
+      this.createDummyGenerator(),
+      { namespace: 'non-used-dummy:generator' },
+      useEnvironmentBuilder ? { createEnv: createEnvBuilderEnvironment } : undefined,
+    );
+    if (!useEnvironmentBuilder) {
+      // If not using EnvironmentBuilder, use the default JHipster generators lookup.
+      context.withJHipsterGenerators();
+    }
+    return context.withEnvironmentRun(async function (this, env) {
+      // Customize program to throw an error instead of exiting the process on cli parse error.
+      const program = createProgram().exitOverride();
+      await buildJHipster({ program, env: env as any, silent: true, ...buildJHipsterOptions });
+      await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
+      // Put the rootGenerator in context to be used in result assertions.
+      this.generator = env.rootGenerator();
+    });
   }
 
   /**
