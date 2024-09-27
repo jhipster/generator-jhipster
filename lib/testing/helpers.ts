@@ -3,6 +3,7 @@ import { mock } from 'node:test';
 import { merge, set, snakeCase } from 'lodash-es';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
+import type Environment from 'yeoman-environment';
 import { globSync } from 'glob';
 
 import type { BaseEnvironmentOptions, GetGeneratorConstructor, BaseGenerator as YeomanGenerator } from '@yeoman/types';
@@ -43,7 +44,9 @@ type WithJHipsterGenerators = {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = RunResult<GeneratorType> & {
+type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+  env: Environment;
+
   /**
    * First argument of mocked source calls.
    */
