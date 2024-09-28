@@ -62,7 +62,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.ForwardedHeaderUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } else { _%>
@@ -288,7 +288,7 @@ public class UserResource {
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page ->
                 PaginationUtil.generatePaginationHttpHeaders(
-                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
+                    UriComponentsBuilder.fromUri(request.getURI()),
                     page
                 )
             )
