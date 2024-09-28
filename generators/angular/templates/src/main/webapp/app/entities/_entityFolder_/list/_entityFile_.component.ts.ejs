@@ -137,10 +137,10 @@ export class <%= componentName %> implements OnInit {
     isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 <%_ } _%>
 
-    public router = inject(Router);
-    protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
-    protected activatedRoute = inject(ActivatedRoute);
-    protected sortService = inject(SortService);
+    public readonly router = inject(Router);
+    protected readonly <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected readonly activatedRoute = inject(ActivatedRoute);
+    protected readonly sortService = inject(SortService);
 <%_ if (paginationInfiniteScroll) { _%>
     protected parseLinks = inject(ParseLinks);
 <%_ } _%>

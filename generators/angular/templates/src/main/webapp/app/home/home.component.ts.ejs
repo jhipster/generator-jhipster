@@ -49,11 +49,11 @@ export default class HomeComponent implements OnInit<% if (!authenticationTypeOa
   private readonly destroy$ = new Subject<void>();
 <%_ } _%>
 
-  private accountService = inject(AccountService);
+  private readonly accountService = inject(AccountService);
 <%_ if (!authenticationTypeOauth2) { _%>
-  private router = inject(Router);
+  private readonly router = inject(Router);
 <%_ } else { _%>
-  private loginService = inject(LoginService);
+  private readonly loginService = inject(LoginService);
 <%_ } _%>
 
   ngOnInit(): void {

@@ -25,7 +25,7 @@ import { AlertService } from 'app/core/util/alert.service';
 
 @Injectable()
 export class NotificationInterceptor implements HttpInterceptor {
-  private alertService = inject(AlertService);
+  private readonly alertService = inject(AlertService);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(

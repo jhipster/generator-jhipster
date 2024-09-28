@@ -44,14 +44,14 @@ import { Login } from './login.model';
 @Injectable({ providedIn: 'root' })
 export class LoginService {
 <%_ if (authenticationTypeSession) { _%>
-  private applicationConfigService = inject(ApplicationConfigService);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-  private location = inject(Location);
+  private readonly location = inject(Location);
 <%_ } else { _%>
-  private accountService = inject(AccountService);
+  private readonly accountService = inject(AccountService);
 <%_ } _%>
-  private authServerProvider = inject(AuthServerProvider);
+  private readonly authServerProvider = inject(AuthServerProvider);
 
 <%_ if (authenticationTypeOauth2) { _%>
   login(): void {

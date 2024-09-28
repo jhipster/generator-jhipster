@@ -33,7 +33,7 @@ export default class GatewayComponent implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];
   updatingRoutes = false;
 
-  private gatewayRoutesService = inject(GatewayRoutesService);
+  private readonly gatewayRoutesService = inject(GatewayRoutesService);
 
   ngOnInit(): void {
     this.refresh();
