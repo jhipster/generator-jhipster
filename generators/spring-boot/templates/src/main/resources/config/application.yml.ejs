@@ -398,6 +398,9 @@ spring:
       console-available: true
 
 server:
+<%_ if (applicationTypeMicroservice) { _%>
+  forward-headers-strategy: FRAMEWORK
+<%_ } _%>
   servlet:
     session:
       cookie:

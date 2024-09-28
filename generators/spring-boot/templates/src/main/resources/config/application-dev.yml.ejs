@@ -209,8 +209,10 @@ spring:
 
 server:
   port: <%= serverPort %>
+<%_ if (applicationTypeMonolith || applicationTypeGateway) { _%>
   # make sure requests the proxy uri instead of the server one
   forward-headers-strategy: native
+<%_ } _%>
 
 # ===================================================================
 # JHipster specific properties
