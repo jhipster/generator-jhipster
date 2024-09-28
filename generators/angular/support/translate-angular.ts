@@ -333,7 +333,7 @@ const minimatch = new Minimatch('**/*{.html,.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
 export const translateAngularFilesTransform = (
-  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  getWebappTranslation: (s: string, val?: Record<string, any>) => string,
   opts: ReplacerOptions | boolean,
 ) => {
   const translate = createTranslationReplacer(getWebappTranslation, opts);
