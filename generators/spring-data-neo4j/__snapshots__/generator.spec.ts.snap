@@ -550,9 +550,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -882,9 +879,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -1212,9 +1206,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
