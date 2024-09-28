@@ -271,7 +271,7 @@ spring:
 <%_ } _%>
   docker:
     compose:
-      enabled: true
+      enabled: <%- !prodDatabaseTypeMssql && !prodDatabaseTypeOracle %>
       lifecycle-management: start-only
 <%_ if (applicationTypeMicroservice) { _%>
       file: <%- dockerServicesDir %><%- databaseTypeSql ? prodDatabaseType : databaseType %>.yml
