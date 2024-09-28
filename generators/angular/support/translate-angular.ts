@@ -47,7 +47,7 @@ export type ReplacerOptions = { jhiPrefix: string; enableTranslation: boolean };
  * @returns {string}
  */
 function replaceTranslationKeysWithText(
-  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  getWebappTranslation: (s: string, val?: Record<string, any> | undefined) => string,
   content: string,
   regexSource: string,
   {
@@ -79,7 +79,7 @@ function replaceTranslationKeysWithText(
  * @returns string with jsKey value replaced
  */
 function replaceJSTranslation(
-  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  getWebappTranslation: (s: string, val?: Record<string, any> | undefined) => string,
   content: string,
   jsKey: string,
 ) {
@@ -99,14 +99,14 @@ function replaceJSTranslation(
  * @param {string} content html content
  * @returns string with pageTitle replaced
  */
-function replacePageTitles(getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string, content: string) {
+function replacePageTitles(getWebappTranslation: (s: string, val?: Record<string, any> | undefined) => string, content: string) {
   return replaceJSTranslation(getWebappTranslation, content, 'title');
 }
 
 /**
  * @type {function(import('../generator-base.js'), string): string}
  */
-function replacePlaceholders(getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string, content: string) {
+function replacePlaceholders(getWebappTranslation: (s: string, val?: Record<string, any> | undefined) => string, content: string) {
   return replaceTranslationKeysWithText(getWebappTranslation, content, PLACEHOLDER_REGEX, { keyIndex: 2 });
 }
 
@@ -115,7 +115,7 @@ function replacePlaceholders(getWebappTranslation: (key: string, val?: Record<st
  *
  * @type {function(import('../generator-base.js'), string): string}
  */
-function replaceErrorMessage(getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string, content: string) {
+function replaceErrorMessage(getWebappTranslation: (s: string, val?: Record<string, any> | undefined) => string, content: string) {
   return replaceJSTranslation(getWebappTranslation, content, 'errorMessage');
 }
 
@@ -124,7 +124,7 @@ function replaceErrorMessage(getWebappTranslation: (key: string, val?: Record<st
  * Or the translation value if translation is disabled.
  */
 const tagTranslation = (
-  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  getWebappTranslation: (s: string, val?: Record<string, any> | undefined) => string,
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
@@ -297,7 +297,7 @@ const replaceImplementations: Record<
  * @this {import('../generator-base.js')}
  */
 export const createTranslationReplacer = (
-  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  getWebappTranslation: (s: string, val?: Record<string, any>) => string,
   opts: ReplacerOptions | boolean,
 ) => {
   const htmlJhiTranslateReplacer = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
@@ -348,7 +348,7 @@ const minimatch = new Minimatch('**/*{.html,.ts}');
 export const isTranslatedAngularFile = file => minimatch.match(file.path);
 
 export const translateAngularFilesTransform = (
-  getWebappTranslation: (key: string, val?: Record<string, any> | undefined) => string,
+  getWebappTranslation: (s: string, val?: Record<string, any>) => string,
   opts: ReplacerOptions | boolean,
 ) => {
   const translate = createTranslationReplacer(getWebappTranslation, opts);
