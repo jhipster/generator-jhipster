@@ -31,8 +31,8 @@ import { ApplicationConfigService } from '../config/application-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
-  private userIdentity = signal<Account | null>(null);
-  private authenticationState = new ReplaySubject<Account | null>(1);
+  private readonly userIdentity = signal<Account | null>(null);
+  private readonly authenticationState = new ReplaySubject<Account | null>(1);
   private accountCache$?: Observable<Account> | null;
 
 <%_ if (enableTranslation) { _%>

@@ -46,12 +46,12 @@ import { TrackerService } from './core/tracker/tracker.service';
   ],
 })
 export default class AppComponent {
-  private applicationConfigService = inject(ApplicationConfigService);
-  private iconLibrary = inject(FaIconLibrary);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
+  private readonly iconLibrary = inject(FaIconLibrary);
 <%_ if (communicationSpringWebsocket) { _%>
-  private trackerService = inject(TrackerService);
+  private readonly trackerService = inject(TrackerService);
 <%_ } _%>
-  private dpConfig = inject(NgbDatepickerConfig);
+  private readonly dpConfig = inject(NgbDatepickerConfig);
 
   constructor() {
 <%_ if (communicationSpringWebsocket) { _%>

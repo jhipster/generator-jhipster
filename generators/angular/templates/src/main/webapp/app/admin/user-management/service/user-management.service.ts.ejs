@@ -33,7 +33,7 @@ export class UserManagementService {
   private readonly http = inject(HttpClient);
   private readonly applicationConfigService = inject(ApplicationConfigService);
 
-  private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
+  private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
 <%_ if (generateUserManagement) { _%>
   create(user: IUser): Observable<IUser> {
