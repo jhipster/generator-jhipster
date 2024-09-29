@@ -40,7 +40,7 @@ import PageRibbonComponent from '../profiles/page-ribbon.component';
 })
 export default class MainComponent implements OnInit {
 <%_ if (enableTranslation) { _%>
-  private renderer: Renderer2;
+  private readonly renderer: Renderer2;
 <%_ } _%>
 
   private readonly router = inject(Router);
