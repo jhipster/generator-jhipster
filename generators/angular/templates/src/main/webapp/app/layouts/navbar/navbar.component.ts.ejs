@@ -70,19 +70,19 @@ export default class NavbarComponent implements OnInit {
   <%_ } _%>
 <%_ } _%>
 
-  private loginService = inject(LoginService);
+  private readonly loginService = inject(LoginService);
 <%_ if (enableTranslation) { _%>
-  private translateService = inject(TranslateService);
-  private stateStorageService = inject(StateStorageService);
+  private readonly translateService = inject(TranslateService);
+  private readonly stateStorageService = inject(StateStorageService);
   <%_ if (applicationTypeGateway && microfrontend) { _%>
-  private injector = inject(Injector);
+  private readonly injector = inject(Injector);
   <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-  private accountService = inject(AccountService);
+  private readonly accountService = inject(AccountService);
 <%_ } _%>
-  private profileService = inject(ProfileService);
-  private router = inject(Router);
+  private readonly profileService = inject(ProfileService);
+  private readonly router = inject(Router);
 
   constructor() {
     if (VERSION) {

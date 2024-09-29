@@ -84,8 +84,8 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
-    protected http = inject(HttpClient);
-    protected applicationConfigService = inject(ApplicationConfigService);
+    protected readonly http = inject(HttpClient);
+    protected readonly applicationConfigService = inject(ApplicationConfigService);
 
     protected resourceUrl = this.applicationConfigService.getEndpointFor('api/<%= entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%= microserviceName.toLowerCase() %>'<% } %>);
 <%_ if (searchEngineAny) { _%>

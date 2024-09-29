@@ -32,8 +32,8 @@ import { Login } from 'app/login/login.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  private http = inject(HttpClient);
-  private applicationConfigService = inject(ApplicationConfigService);
+  private readonly http = inject(HttpClient);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
 
 <%_ if (!authenticationTypeOauth2) { _%>
 

@@ -60,9 +60,9 @@ export default class LogsComponent implements OnInit {
   selectedService: string | undefined = undefined;
 <%_ } _%>
 
-  private logsService = inject(LogsService);
-  private sortService = inject(SortService);
-  <%= applicationTypeGateway && gatewayServicesApiAvailable ? 'private gatewayRoutesService = inject(GatewayRoutesService);' : '' %>
+  private readonly logsService = inject(LogsService);
+  private readonly sortService = inject(SortService);
+  <%= applicationTypeGateway && gatewayServicesApiAvailable ? 'private readonly gatewayRoutesService = inject(GatewayRoutesService);' : '' %>
 
   ngOnInit(): void {
     this.findAndExtractLoggers();

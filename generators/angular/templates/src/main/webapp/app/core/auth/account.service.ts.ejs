@@ -36,12 +36,12 @@ export class AccountService {
   private accountCache$?: Observable<Account> | null;
 
 <%_ if (enableTranslation) { _%>
-  private translateService = inject(TranslateService);
+  private readonly translateService = inject(TranslateService);
 <%_ } _%>
-  private http = inject(HttpClient);
-  private stateStorageService = inject(StateStorageService);
-  private router = inject(Router);
-  private applicationConfigService = inject(ApplicationConfigService);
+  private readonly http = inject(HttpClient);
+  private readonly stateStorageService = inject(StateStorageService);
+  private readonly router = inject(Router);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
 
 <%_ if (generateUserManagement) { _%>
   save(account: Account): Observable<{}> {

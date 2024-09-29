@@ -25,8 +25,8 @@ import { GatewayRoute } from './gateway-route.model';
 
 @Injectable()
 export class GatewayRoutesService {
-  private http = inject(HttpClient);
-  private applicationConfigService = inject(ApplicationConfigService);
+  private readonly http = inject(HttpClient);
+  private readonly applicationConfigService = inject(ApplicationConfigService);
 
   findAll(): Observable<GatewayRoute[]> {
     return this.http.get<GatewayRoute[]>(this.applicationConfigService.getEndpointFor('api/gateway/routes'));

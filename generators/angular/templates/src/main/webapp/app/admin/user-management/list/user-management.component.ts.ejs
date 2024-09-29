@@ -63,13 +63,13 @@ export default class UserManagementComponent implements OnInit {
   sortState = sortStateSignal({});
 <%_ } _%>
 
-  private userService = inject(UserManagementService);
+  private readonly userService = inject(UserManagementService);
 <%_ if (!databaseTypeCassandra) { _%>
-  private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
-  private sortService = inject(SortService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly sortService = inject(SortService);
 <%_ } _%>
-  private modalService = inject(NgbModal);
+  private readonly modalService = inject(NgbModal);
 
   ngOnInit(): void {
 <%_ if (databaseTypeCassandra) { _%>

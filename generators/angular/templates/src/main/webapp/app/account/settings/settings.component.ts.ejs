@@ -64,9 +64,9 @@ export default class SettingsComponent implements OnInit {
     login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
-  private accountService = inject(AccountService);
+  private readonly accountService = inject(AccountService);
 <%_ if (enableTranslation) { _%>
-  private translateService = inject(TranslateService);
+  private readonly translateService = inject(TranslateService);
 <%_ } _%>
 
   ngOnInit(): void {
