@@ -144,7 +144,7 @@ export default class GitGenerator extends BaseGenerator {
               const bpInfo = this.jhipsterConfig.blueprints.map(bp => `${bp.name}@${bp.version}`).join(', ');
               commitMsg += ` with blueprints ${bpInfo}`;
             }
-            await git.add(['.']).commit(commitMsg, { '--allow-empty': null });
+            await git.add(['.']).commit(commitMsg, { '--allow-empty': null, '--no-verify': null });
             this.log.ok(`Application successfully committed to Git from ${repositoryRoot}.`);
           } catch (e) {
             this.log.warn(
