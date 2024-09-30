@@ -23,7 +23,7 @@ jib-spring-boot-extension-maven = { module = 'com.google.cloud.tools:jib-spring-
 [plugins]
 gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.4.2' }
 
-node-gradle = { id = 'com.github.node-gradle.node', version = '7.0.2' }
+node-gradle = { id = 'com.github.node-gradle.node', version = '7.1.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.0.1' }
 
