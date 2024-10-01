@@ -25,16 +25,18 @@ export const askForClientTheme = asPromptingTask(async function askForClientThem
   if (control.existingProject && !this.options.askAnswered) return;
 
   const config = this.jhipsterConfigWithDefaults;
+  const { clientFramework } = config;
+
   await this.prompt(
     {
       type: 'list',
       name: 'clientTheme',
-      when: () => ['angular', 'react', 'vue'].includes(config.clientFramework!),
+      when: () => ['angular', 'react', 'vue'].includes(clientFramework!),
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
       choices: async () => {
-        const bootswatchChoices = await retrieveOnlineBootswatchThemes().catch(errorMessage => {
+        const bootswatchChoices = await retrieveOnlineBootswatchThemes({ clientFramework }).catch(errorMessage => {
           this.log.warn(errorMessage);
-          return retrieveLocalBootswatchThemes();
+          return retrieveLocalBootswatchThemes({ clientFramework });
         });
         return [
           {
@@ -74,15 +76,15 @@ export const askForClientThemeVariant = asPromptingTask(async function askForCli
   );
 });
 
-async function retrieveOnlineBootswatchThemes(): Promise<Choice[]> {
-  return _retrieveBootswatchThemes(true);
+async function retrieveOnlineBootswatchThemes({ clientFramework }): Promise<Choice[]> {
+  return _retrieveBootswatchThemes({ clientFramework, useApi: true });
 }
 
-async function retrieveLocalBootswatchThemes(): Promise<Choice[]> {
-  return _retrieveBootswatchThemes(false);
+async function retrieveLocalBootswatchThemes({ clientFramework }): Promise<Choice[]> {
+  return _retrieveBootswatchThemes({ clientFramework, useApi: false });
 }
 
-async function _retrieveBootswatchThemes(useApi): Promise<Choice[]> {
+async function _retrieveBootswatchThemes({ clientFramework, useApi }): Promise<Choice[]> {
   const errorMessage = 'Could not fetch bootswatch themes from API. Using default ones.';
   if (!useApi) {
     return [
@@ -116,7 +118,7 @@ async function _retrieveBootswatchThemes(useApi): Promise<Choice[]> {
 
   return new Promise((resolve, reject) => {
     httpsGet(
-      'https://bootswatch.com/api/5.json',
+      `https://bootswatch.com/api/${clientFramework === 'vue' ? '4' : '5'}.json`,
 
       body => {
         try {
