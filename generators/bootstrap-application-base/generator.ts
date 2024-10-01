@@ -441,9 +441,17 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
        * Avoid having undefined keys in the application object when redering ejs templates
        */
       async loadApplicationKeys({ application }) {
+        if (this.options.commandsConfigs) {
+          // Load keys passed from cli
+          loadCommandConfigsKeysIntoTemplatesContext({
+            templatesContext: application,
+            commandsConfigs: this.options.commandsConfigs,
+          });
+        }
+        // Load keys from main generators
         loadCommandConfigsKeysIntoTemplatesContext({
           templatesContext: application,
-          commandsConfigs: this.options.commandsConfigs ?? (await lookupCommandsConfigs()),
+          commandsConfigs: await lookupCommandsConfigs(),
         });
       },
       task({ application }) {
