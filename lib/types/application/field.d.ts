@@ -8,6 +8,7 @@ export interface Field extends BaseField {
   enumFileName?: string;
   enumValues?: { name: string; value: string }[];
   fieldIsEnum?: boolean;
+  columnName?: string;
 
   // Annotations
   skipClient?: boolean;
@@ -17,6 +18,11 @@ export interface Field extends BaseField {
   transient?: boolean;
   columnRequired?: boolean;
   id?: boolean;
+  /**
+   * Faker template passed to `faker.helpers.fake()`.
+   * @see https://fakerjs.dev/api/helpers.html#fake
+   */
+  fakerTemplate?: string;
 
   // Validation
   fieldValidate?: boolean;
@@ -24,15 +30,18 @@ export interface Field extends BaseField {
   fieldValidateRules?: string[];
   fieldValidateRulesPattern?: string | RegExp;
   fieldValidateRulesMaxlength?: number;
-  maxlength?: any;
+  fieldValidateRulesMax?: number;
+  fieldValidateRulesMin?: number;
+  fieldValidateRulesMinlength?: number;
+  maxlength?: number;
 
-  // Faker
+  // Temporary fields for Faker
   uniqueValue?: any[];
   generateFromPattern?: () => string | undefined;
-  /**
-   * @deprecated
-   */
+  /** @deprecated */
   createRandexp: () => any;
+
+  generateFakeData?: () => any;
 
   // Java specific
   propertyJavaBeanName?: string;
@@ -47,14 +56,13 @@ export interface Field extends BaseField {
 
   propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
 
-  generateFakeData?: () => any;
-
   // Blob
   fieldWithContentType?: boolean;
   contentTypeFieldName?: string;
   blobContentTypeText?: string;
 
   // Derived properties
+  fieldTypeBinary?: boolean;
   fieldTypeDuration?: boolean;
   fieldTypeBoolean: boolean;
   /** @deprecated */

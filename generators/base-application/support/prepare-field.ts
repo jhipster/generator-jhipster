@@ -109,9 +109,19 @@ const fakeStringTemplateForFieldName = columnName => {
  */
 function generateFakeDataForField(this: CoreGenerator, field: Field, faker: FakerWithRandexp, changelogDate, type = 'csv') {
   let data;
+  for (const prop of ['fieldValidateRulesMax', 'fieldValidateRulesMin', 'fieldValidateRulesMaxlength', 'fieldValidateRulesMinlength']) {
+    if (prop in field) {
+      try {
+        field[prop] = parseInt(field[prop], 10);
+      } catch {
+        throw new Error(`Error parsing ${prop} for field ${field.fieldName}`);
+      }
+    }
+  }
+
   if (field.fakerTemplate) {
     data = faker.helpers.fake(field.fakerTemplate);
-  } else if (field.fieldValidate && field.fieldValidateRules.includes('pattern')) {
+  } else if (field.fieldValidate && field.fieldValidateRules?.includes('pattern')) {
     const generated = field.generateFromPattern!();
     if (!generated) {
       return undefined;
@@ -126,7 +136,7 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
       data = undefined;
     }
   } else if (field.fieldIsEnum) {
-    if (field.fieldValues.length !== 0) {
+    if (field.enumValues && field.enumValues.length > 0) {
       const enumValues = field.enumValues;
       data = enumValues[faker.number.int(enumValues.length - 1)].name;
     } else {
@@ -139,14 +149,14 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
     // eslint-disable-next-line no-template-curly-in-string
   } else if ([FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
     data = faker.number.float({
-      max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : 32767,
-      min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : 0,
+      max: field.fieldValidateRulesMax ?? 32767,
+      min: field.fieldValidateRulesMin ?? 0,
       multipleOf: 0.01,
     });
   } else if ([INTEGER, LONG, DURATION].includes(field.fieldType)) {
     data = faker.number.int({
-      max: field.fieldValidateRulesMax ? parseInt(field.fieldValidateRulesMax, 10) : 32767,
-      min: field.fieldValidateRulesMin ? parseInt(field.fieldValidateRulesMin, 10) : 0,
+      max: field.fieldValidateRulesMax ?? 32767,
+      min: field.fieldValidateRulesMin ?? 0,
     });
   } else if ([INSTANT, ZONED_DATE_TIME, LOCAL_DATE].includes(field.fieldType)) {
     // Iso: YYYY-MM-DDTHH:mm:ss.sssZ
@@ -171,7 +181,7 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
-    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName));
+    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName(field.columnName!));
   } else if (field.fieldType === UUID) {
     data = faker.string.uuid();
   } else if (field.fieldType === BOOLEAN) {
@@ -185,17 +195,17 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
   }
 
   // Validation rules
-  if (data !== undefined && field.fieldValidate === true) {
+  if (data !== undefined && field.fieldValidate === true && field.fieldValidateRules) {
+    const { fieldValidateRulesMinlength = 0, fieldValidateRulesMaxlength } = field;
     // manage String max length
-    if (field.fieldValidateRules.includes(MAXLENGTH)) {
+    if (field.fieldValidateRules.includes(MAXLENGTH) && fieldValidateRulesMaxlength !== undefined) {
       const maxlength = field.fieldValidateRulesMaxlength;
       data = data.substring(0, maxlength);
     }
 
     // manage String min length
-    if (field.fieldValidateRules.includes(MINLENGTH)) {
-      const minlength = field.fieldValidateRulesMinlength;
-      data = data.length > minlength ? data : data + 'X'.repeat(minlength - data.length);
+    if (field.fieldValidateRules.includes(MINLENGTH) && fieldValidateRulesMinlength !== undefined) {
+      data = data.length > fieldValidateRulesMinlength ? data : data + 'X'.repeat(fieldValidateRulesMinlength - data.length);
     }
 
     // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
@@ -207,7 +217,7 @@ function generateFakeDataForField(this: CoreGenerator, field: Field, faker: Fake
     // eslint-disable-next-line no-template-curly-in-string
     if (type === 'ts' && ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
       data = `'${typeof data === 'string' ? data.replace(/\\/g, '\\\\').replace(/'/g, "\\'") : data}'`;
-    } else if (type === 'csv' && field.fieldValidate && field.fieldValidateRules.includes(PATTERN)) {
+    } else if (type === 'csv' && field.fieldValidate && field.fieldValidateRules?.includes(PATTERN)) {
       data = `"${typeof data === 'string' ? data.replace(/"/g, '\\"') : data}"`;
     }
   }
