@@ -121,7 +121,7 @@
   },
   "dependencies": {
     "@eslint/js": "9.11.1",
-    "@faker-js/faker": "9.0.2",
+    "@faker-js/faker": "9.0.3",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
     "@types/lodash-es": "4.17.12",
