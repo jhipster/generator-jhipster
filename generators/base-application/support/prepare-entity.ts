@@ -143,7 +143,11 @@ export default function prepareEntity(entityWithConfig, generator, application) 
   mutateData(entityWithConfig, entityDefaultConfig, BASE_TEMPLATE_DATA);
 
   if (entityWithConfig.changelogDate) {
-    entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
+    try {
+      entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
+    } catch (error: unknown) {
+      throw new Error(`Error parsing changelog date for entity ${entityName}: ${(error as Error).message}`, { cause: error });
+    }
   }
 
   entityWithConfig.entityAngularJSSuffix = entityWithConfig.angularJSSuffix;

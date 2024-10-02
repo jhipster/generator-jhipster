@@ -65,11 +65,16 @@ export function parseChangelog(changelogDate: string): Date {
   if (changelogDate.length !== 14) {
     throw new Error(`changelogDate ${changelogDate} is not a valid changelogDate.`);
   }
-  const formattedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
-    6,
-    8,
-  )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
-  return new Date(Date.parse(formattedDate));
+  const zeroFallback = (val: string, fallback: string) => (/^0+$/.test(val) ? fallback : val);
+  const year = zeroFallback(changelogDate.substring(0, 4), '2024');
+  const month = zeroFallback(changelogDate.substring(4, 6), '01');
+  const day = zeroFallback(changelogDate.substring(6, 8), '01');
+  const formattedDate = `${year}-${month}-${day}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
+  const parsedTimestamp = Date.parse(formattedDate);
+  if (isNaN(parsedTimestamp)) {
+    throw new Error(`changelogDate ${changelogDate} is not a valid date.`);
+  }
+  return new Date(parsedTimestamp);
 }
 
 /**
