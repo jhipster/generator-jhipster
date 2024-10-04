@@ -269,14 +269,16 @@ spring:
           group: <%= dasherizedBaseName %>
   <%_ } _%>
 <%_ } _%>
+<%_ if ('dockerServices' in locals && dockerServices && dockerServices.length > 1) { _%>
   docker:
     compose:
       enabled: true
       lifecycle-management: start-only
-<%_ if (applicationTypeMicroservice) { _%>
+  <%_ if (applicationTypeMicroservice) { _%>
       file: <%- dockerServicesDir %><%- databaseTypeSql ? prodDatabaseType : databaseType %>.yml
-<%_ } else { _%>
+  <%_ } else { _%>
       file: <%- dockerServicesDir %>services.yml
+  <%_ } _%>
 <%_ } _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
