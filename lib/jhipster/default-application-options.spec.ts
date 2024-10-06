@@ -97,6 +97,7 @@ describe('jdl - DefaultApplicationOptions', () => {
 
       before(() => {
         options = getConfigForMonolithApplication({
+          // @ts-expect-error check invalid option
           applicationType: 'custom',
         });
       });
@@ -195,6 +196,7 @@ describe('jdl - DefaultApplicationOptions', () => {
 
       before(() => {
         options = getConfigForGatewayApplication({
+          // @ts-expect-error check invalid option
           applicationType: 'custom',
         });
       });
@@ -264,6 +266,7 @@ describe('jdl - DefaultApplicationOptions', () => {
 
       before(() => {
         options = getConfigForMicroserviceApplication({
+          // @ts-expect-error check invalid option
           applicationType: 'ignored',
           skipClient: false,
           clientFramework: 'react',
