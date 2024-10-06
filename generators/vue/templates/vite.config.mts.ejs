@@ -20,14 +20,14 @@ import { fileURLToPath, URL } from 'node:url';
 import { normalizePath } from 'vite'
 
 import {
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
   mergeConfig,
 <%_ } _%>
   defineConfig,
 } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
 import federation from "@originjs/vite-plugin-federation";
 
   <%_ if (applicationTypeGateway) { _%>
@@ -116,7 +116,7 @@ let config = defineConfig({
   },
 });
 
-<%_ if (microfrontend) { _%>
+<%_ if (microfrontend && clientBundlerVite) { _%>
 config = mergeConfig(config, {
   build: {
     modulePreload: false,
@@ -126,19 +126,19 @@ config = mergeConfig(config, {
   plugins: [
     federation({
       name: '<%= lowercaseBaseName %>',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
       remotes: {
-  <%_ for (const remote of microfrontends) { _%>
+    <%_ for (const remote of microfrontends) { _%>
         '@<%= remote.lowercaseBaseName %>': `/<%= remote.endpointPrefix %>/assets/remoteEntry.js`,
   <%_ } _%>
       },
-<%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
+  <%_ } _%>
+  <%_ if (applicationTypeMicroservice) { _%>
       exposes: {
         './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
         './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
       },
-<%_ } _%>
+  <%_ } _%>
       shared: {
         '@vuelidate/core': {},
         '@vuelidate/validators': {},
@@ -152,21 +152,21 @@ config = mergeConfig(config, {
         pinia: {},
         '@/shared/security/authority': {
           packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/security/authority',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
-<%_ } _%>
+  <%_ } _%>
         },
         '@/shared/alert/alert.service': {
           packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
-<%_ } _%>
+  <%_ } _%>
         },
         '@/locale/translation.service': {
           packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
-<%_ if (applicationTypeGateway) { _%>
+  <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
-<%_ } _%>
+  <%_ } _%>
         },
       },
     }),

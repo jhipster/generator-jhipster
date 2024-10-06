@@ -194,17 +194,13 @@ public class SecurityConfiguration {
 <%_ if (!skipClient) { _%>
                     .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"), mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
-  <%_ if (clientFrameworkVue) { _%>
+  <%_ if (clientBundlerVite) { _%>
                     .requestMatchers(mvc.pattern("/assets/**")).permitAll()
-    <%_ if (microfrontend) { _%>
-                    .requestMatchers(mvc.pattern("/app/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
-    <%_ } _%>
   <%_ } else { _%>
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
-  <%_ } _%>
                     .requestMatchers(mvc.pattern("/content/**")).permitAll()
+  <%_ } _%>
                     .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
@@ -227,6 +223,9 @@ public class SecurityConfiguration {
 <%_ if (applicationTypeGateway) { _%>
   <%_ if (microfrontend) { _%>
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
+    <%_ if (clientBundlerVite) { _%>
+                    .requestMatchers(mvc.pattern("/services/*/assets/**")).permitAll()
+    <%_ } _%>
                     .requestMatchers(mvc.pattern("/services/*/*.js")).permitAll()
                     .requestMatchers(mvc.pattern("/services/*/*.txt")).permitAll()
                     .requestMatchers(mvc.pattern("/services/*/*.json")).permitAll()

@@ -106,19 +106,19 @@ export function getConfigForClientApplication(options: ApplicationDefaults = {})
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
   }
+  const clientFramework = options[CLIENT_FRAMEWORK];
+  if (clientFramework === NO_CLIENT_FRAMEWORK) {
+    return options;
+  }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
     options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   }
-  const clientFramework = options[CLIENT_FRAMEWORK];
-  if (clientFramework !== NO_CLIENT_FRAMEWORK) {
-    if (!options[CLIENT_THEME]) {
-      options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-      options[CLIENT_THEME_VARIANT] = '';
-    } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
-      options[CLIENT_THEME_VARIANT] = 'primary';
-    }
+  if (!options[CLIENT_THEME]) {
+    options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
+    options[CLIENT_THEME_VARIANT] = '';
+  } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
+    options[CLIENT_THEME_VARIANT] = 'primary';
   }
-
   if (clientFramework === 'vue') {
     options.clientBundler = options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
   } else if (clientFramework === 'react') {

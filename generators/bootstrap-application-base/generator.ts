@@ -183,6 +183,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
           backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
+          clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework),
         });
       },
       userRelationship({ applicationDefaults }) {

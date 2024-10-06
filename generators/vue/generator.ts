@@ -89,6 +89,9 @@ export default class VueGenerator extends BaseApplicationGenerator {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
 
         source.addWebpackConfig = args => {
+          if (!application.clientBundlerWebpack) {
+            throw new Error('This application is not webpack based');
+          }
           const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
           const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
           this.editFile(
@@ -175,7 +178,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addIndexAsset({ source, application }) {
-        if (application.microfrontend) return;
+        if (!application.clientBundlerVite) return;
         source.addExternalResourceToRoot!({
           resource: '<script>const global = globalThis;</script>',
           comment: 'Workaround https://github.com/axios/axios/issues/5622',

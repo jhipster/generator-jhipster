@@ -154,7 +154,6 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
 
       prepareForTemplates({ application }) {
         application.webappLoginRegExp = LOGIN_REGEX_JS;
-        application.clientFrameworkBuiltIn = [ANGULAR, VUE, REACT].includes(application.clientFramework);
       },
 
       addExternalResource({ application, source }) {
@@ -244,7 +243,7 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
       },
 
       microfrontend({ application, source }) {
-        if (!application.microfrontend || !application.clientFrameworkBuiltIn) {
+        if (!application.microfrontend || !application.clientFrameworkBuiltIn || !application.clientBundlerWebpack) {
           return;
         }
         if (application.clientFrameworkAngular) {

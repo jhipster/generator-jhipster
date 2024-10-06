@@ -1545,6 +1545,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientFramework": "no",
   "clientFrameworkAngular": false,
   "clientFrameworkAny": false,
+  "clientFrameworkBuiltIn": false,
   "clientFrameworkNo": true,
   "clientFrameworkReact": false,
   "clientFrameworkVue": false,

@@ -87,7 +87,7 @@ function updateLanguagesInWebpackTask(this: BaseGenerator, { application, contro
 export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInConfigTask.call(this, taskParam);
-  if (taskParam.application.microfrontend) {
+  if (taskParam.application.clientBundlerWebpack) {
     updateLanguagesInWebpackTask.call(this, taskParam);
   }
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {
