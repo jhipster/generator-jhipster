@@ -144,10 +144,12 @@ jobs:
         run: npm install
         timeout-minutes: 7
       - name: 'TESTS: packaging'
+        id: packaging
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:package
         timeout-minutes: 12
       - name: 'TESTS: frontend'
+        id: frontend
         if: steps.compare.outputs.equals != 'true' && matrix.skip-frontend-tests != 'true' && needs.build-matrix.outputs.client != 'false'
         run: npm run ci:frontend:test
         timeout-minutes: 15
@@ -160,6 +162,21 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
+      - name: Store the application
+        uses: actions/upload-artifact@v4
+        if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure')
+        with:
+          name: app-${{ matrix.name }}
+          include-hidden-files: true
+          path: |
+            ${{ github.workspace }}/app/**/*
+            !**/app/build/**
+            !**/app/*/build/**
+            !**/app/.gradle/**
+            !**/app/*/.gradle/**
+            !**/app/target/**
+            !**/app/*/target/**
+            !**/node_modules/**
       - name: 'BACKEND: Store failure logs'
         uses: actions/upload-artifact@v4
         if: always() && steps.backend.outcome == 'failure'
