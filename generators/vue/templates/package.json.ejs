@@ -59,7 +59,9 @@
     "@module-federation/utilities": "<%= nodeDependencies['@module-federation/utilities'] %>",
 <%_ } _%>
 <%_ if (microfrontend) { _%>
-    "@originjs/vite-plugin-federation": "1.3.3",
+  <%_ if (clientBundlerVite) { _%>
+    "@originjs/vite-plugin-federation": "1.3.6",
+  <%_ } _%>
     "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
     "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
     "css-loader": "<%= nodeDependencies['css-loader'] %>",

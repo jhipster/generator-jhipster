@@ -76,7 +76,9 @@ const {
   GRADLE_ENTERPRISE_HOST,
 } = OptionNames;
 
-const commonDefaultOptions: Partial<ApplicationConfiguration> = {
+type ApplicationDefaults = Partial<ApplicationConfiguration>;
+
+const commonDefaultOptions: ApplicationDefaults = {
   [AUTHENTICATION_TYPE]: JWT,
   [BUILD_TOOL]: MAVEN,
   [DTO_SUFFIX]: OptionValues[DTO_SUFFIX],
@@ -89,8 +91,8 @@ const commonDefaultOptions: Partial<ApplicationConfiguration> = {
   [WEBSOCKET]: (OptionValues[WEBSOCKET] as Record<string, string>).no,
 };
 
-export function getConfigWithDefaults(customOptions: string | Record<string, any> = {}) {
-  const applicationType = typeof customOptions === 'string' ? customOptions : customOptions.applicationType;
+export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}) {
+  const applicationType = customOptions.applicationType;
   if (applicationType === GATEWAY) {
     return getConfigForGatewayApplication(customOptions);
   }
@@ -100,26 +102,34 @@ export function getConfigWithDefaults(customOptions: string | Record<string, any
   return getConfigForMonolithApplication(customOptions);
 }
 
-export function getConfigForClientApplication(options: any = {}): any {
+export function getConfigForClientApplication(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[SKIP_CLIENT]) {
     options[CLIENT_FRAMEWORK] = NO_CLIENT_FRAMEWORK;
+  }
+  const clientFramework = options[CLIENT_FRAMEWORK];
+  if (clientFramework === NO_CLIENT_FRAMEWORK) {
+    return options;
   }
   if (options[OptionNames.MICROFRONTEND] === undefined) {
     options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   }
-  const clientFramework = options[CLIENT_FRAMEWORK];
-  if (clientFramework !== NO_CLIENT_FRAMEWORK) {
-    if (!options[CLIENT_THEME]) {
-      options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
-      options[CLIENT_THEME_VARIANT] = '';
-    } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
-      options[CLIENT_THEME_VARIANT] = 'primary';
-    }
+  if (!options[CLIENT_THEME]) {
+    options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
+    options[CLIENT_THEME_VARIANT] = '';
+  } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
+    options[CLIENT_THEME_VARIANT] = 'primary';
+  }
+  if (clientFramework === 'vue') {
+    options.clientBundler = options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
+  } else if (clientFramework === 'react') {
+    options.clientBundler = 'webpack';
+  } else if (clientFramework === 'angular') {
+    options.clientBundler = 'webpack';
   }
   return options;
 }
 
-export function getConfigForAuthenticationType(options: any = {}): any {
+export function getConfigForAuthenticationType(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (typeof options[SKIP_USER_MANAGEMENT] !== 'boolean') {
     if (options[AUTHENTICATION_TYPE] === OAUTH2) {
       options[SKIP_USER_MANAGEMENT] = true;
@@ -130,7 +140,7 @@ export function getConfigForAuthenticationType(options: any = {}): any {
   return options;
 }
 
-export function getConfigForPackageName(options: any = {}): any {
+export function getConfigForPackageName(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (!options[PACKAGE_NAME] && !options[PACKAGE_FOLDER]) {
     options[PACKAGE_FOLDER] = OptionValues[PACKAGE_FOLDER];
   }
@@ -143,21 +153,21 @@ export function getConfigForPackageName(options: any = {}): any {
   return options;
 }
 
-export function getConfigForCacheProvider(options: any = {}): any {
+export function getConfigForCacheProvider(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[REACTIVE]) {
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
   return options;
 }
 
-export function getConfigForReactive(options: any = {}): any {
+export function getConfigForReactive(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[REACTIVE] === undefined) {
     options[REACTIVE] = false;
   }
   return options;
 }
 
-export function getConfigForTranslation(options: any = {}): any {
+export function getConfigForTranslation(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[ENABLE_TRANSLATION] === undefined) {
     options[ENABLE_TRANSLATION] = true;
   }
@@ -170,7 +180,7 @@ export function getConfigForTranslation(options: any = {}): any {
   return options;
 }
 
-export function getConfigForDatabaseType(options: any = {}): any {
+export function getConfigForDatabaseType(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (options[DATABASE_TYPE] === undefined) {
     options[DATABASE_TYPE] = SQL;
   }
@@ -195,7 +205,7 @@ export function getConfigForDatabaseType(options: any = {}): any {
   return options;
 }
 
-export function getServerConfigForMonolithApplication(customOptions: any = {}): any {
+export function getServerConfigForMonolithApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = {
     ...commonDefaultOptions,
     [CACHE_PROVIDER]: EHCACHE,
@@ -211,7 +221,7 @@ export function getServerConfigForMonolithApplication(customOptions: any = {}): 
   };
 }
 
-export function getConfigForMonolithApplication(customOptions: any = {}): any {
+export function getConfigForMonolithApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   let options = getServerConfigForMonolithApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -222,7 +232,7 @@ export function getConfigForMonolithApplication(customOptions: any = {}): any {
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForGatewayApplication(customOptions: any = {}): any {
+export function getServerConfigForGatewayApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = {
     ...commonDefaultOptions,
     [CLIENT_FRAMEWORK]: ANGULAR,
@@ -241,7 +251,7 @@ export function getServerConfigForGatewayApplication(customOptions: any = {}): a
   };
 }
 
-export function getConfigForGatewayApplication(customOptions: any = {}): any {
+export function getConfigForGatewayApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   let options = getServerConfigForGatewayApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -252,7 +262,7 @@ export function getConfigForGatewayApplication(customOptions: any = {}): any {
   return getConfigForAuthenticationType(options);
 }
 
-export function getServerConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getServerConfigForMicroserviceApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const DEFAULT_SERVER_PORT = 8081;
   const options = {
     ...commonDefaultOptions,
@@ -271,7 +281,7 @@ export function getServerConfigForMicroserviceApplication(customOptions: any = {
   };
 }
 
-export function getConfigForMicroserviceApplication(customOptions: any = {}): any {
+export function getConfigForMicroserviceApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   let options = getServerConfigForMicroserviceApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
@@ -282,7 +292,7 @@ export function getConfigForMicroserviceApplication(customOptions: any = {}): an
   return getConfigForAuthenticationType(options);
 }
 
-export function getDefaultConfigForNewApplication(customOptions: any = {}): any {
+export function getDefaultConfigForNewApplication(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = {
     ...commonDefaultOptions,
     [BASE_NAME]: OptionValues[BASE_NAME],

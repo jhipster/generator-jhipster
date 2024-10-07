@@ -259,7 +259,7 @@ export default class CoreGenerator extends YeomanGenerator<JHipsterGeneratorOpti
       enableGradleEnterprise: false,
       pages: [],
     });
-    return configWithDefaults;
+    return configWithDefaults as ApplicationConfiguration;
   }
 
   /**

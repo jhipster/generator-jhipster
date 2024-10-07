@@ -66,23 +66,29 @@ task webapp_test(type: NpmTask) {
     inputs.files("tsconfig.json", "tsconfig.app.json")
         .withPropertyName("tsconfig")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ if (microfrontend) { _%>
-
-    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
-    webpackDevFiles.exclude("webpack.prod.js")
-    inputs.files(webpackDevFiles)
-        .withPropertyName("webpack-dir")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } else { _%>
-
-    inputs.files("vite.config.ts")
-        .withPropertyName("vite")
-        .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
 
     inputs.files(".postcssrc")
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+  <%_ if (clientBundlerVite && clientFrameworkBuiltIn) { _%>
+
+    inputs.files("vite.config.mts")
+        .withPropertyName("vite")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
+  <%_ if (clientFrameworkVue) { _%>
+    <%_ if (clientBundlerWebpack) { _%>
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+        .withPropertyName("webpack-dir")
+    <%_ } _%>
+    <%_ if (microfrontend) { _%>
+    inputs.files("module-federation.config.cjs")
+        .withPropertyName("module-federation")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    <%_ } _%>
   <%_ } _%>
 
     outputs.dir("build/test-results/jest/")

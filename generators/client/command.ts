@@ -63,6 +63,28 @@ const command = {
       ],
       scope: 'storage',
     },
+    clientTheme: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
+    clientThemeVariant: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
+    clientBundler: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['webpack', 'vite'],
+      scope: 'storage',
+    },
     microfrontend: {
       description: 'Enable microfrontend support',
       cli: {

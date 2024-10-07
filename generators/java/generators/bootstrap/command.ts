@@ -50,6 +50,13 @@ const command = {
       scope: 'storage',
       description: 'The package name for the generated application',
     },
+    packageFolder: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      scope: 'storage',
+    },
   },
   import: [],
 } as const satisfies JHipsterCommandDefinition;

@@ -186,7 +186,7 @@ const app = createApp({
 
     provide('trackerService', useTrackerService({ authenticated }));
 <%_ } _%>
-<%_ if (applicationTypeMicroservice && microfrontend) { _%>
+<%_ if (enableTranslation && applicationTypeMicroservice && microfrontend) { _%>
     provide('microfrontendI18n', false);
 <%_ } _%>
   },

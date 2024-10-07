@@ -16,20 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<&_
- // Register sections and max allowed fragments, 0 for unlimited.
- fragments.registerSections({
-   importsSection:0,
-   configSection: 0,
-   moduleFederationSection: 0,
-   pluginsSection: 0,
- });
-_&>
+const packageJson = require('./package.json');
 
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
-<&- fragments.importsSection() &>
-<%_ if (!clientFrameworkVue) { _%>
-const packageJson = require('../package.json');
 // Microfrontend api, should match across gateway and microservices.
 const apiVersion = '0.0.1';
 
@@ -42,35 +30,24 @@ const shareDependencies = ({ skipList = [] } = {}) =>
       .filter(([dependency]) => !skipList.includes(dependency))
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
-<%_ } _%>
 
-module.exports = () => {
-  return {
-    optimization: {
-      moduleIds: 'named',
-      chunkIds: 'named',
-      runtimeChunk: false,
-    },
-<&- fragments.configSection() &>
-    plugins: [
-      new ModuleFederationPlugin(
-<%_ if (clientFrameworkVue) { _%>
-        require('../module-federation.config.cjs'),
-<%_ } else { -%>
-        {
-  <%_ if (applicationTypeMicroservice) { _%>
-        name: '<%= lowercaseBaseName %>',
-        filename: 'remoteEntry.js',
-  <%_ } _%>
-        shareScope: 'default',
-<&- fragments.moduleFederationSection() &>
-      }
-<%_ } -%>
-      ),
-<&- fragments.pluginsSection() &>
-    ],
-    output: {
-      publicPath: 'auto',
-    },
-  };
+/** @type {import('@module-federation/runtime').Options} */
+module.exports = {
+  name: '<%= lowercaseBaseName %>',
+<%_ if (applicationTypeMicroservice) { _%>
+  exposes: {
+    './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities.ts',
+    './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
+  },
+<%_ } _%>
+  filename: 'remoteEntry.js',
+  shareScope: 'default',
+  shared: {
+    ...shareDependencies(),
+    ...shareMappings(
+      '@/shared/security/authority',
+      '@/shared/alert/alert.service',
+      '@/locale/translation.service',
+    ),
+  },
 };
