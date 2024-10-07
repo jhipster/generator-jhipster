@@ -182,8 +182,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
         if (clientBundlerVite) {
           this.packageJson.merge({
             scripts: {
-              'prettier:check': `prettier --check "{,src/**/,.blueprint/**/}*.{${prettierExtensions}}"`,
-              'prettier:format': `prettier --write "{,src/**/,.blueprint/**/}*.{${prettierExtensions}}"`,
               'webapp:build:dev': `${clientPackageManager} run vite-build`,
               'webapp:build:prod': `${clientPackageManager} run vite-build`,
               'webapp:dev': `${clientPackageManager} run vite-serve`,
