@@ -238,19 +238,25 @@ export default class VueGenerator extends BaseApplicationGenerator {
           });
         }
       },
-      addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+      addMicrofrontendDependencies({ application }) {
+        const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
-          source.mergeClientPackageJson!({
+          this.packageJson.merge({
             devDependencies: {
               '@originjs/vite-plugin-federation': '1.3.6',
             },
           });
         } else if (clientBundlerWebpack) {
-          source.mergeClientPackageJson!({
+          if (applicationTypeGateway) {
+            this.packageJson.merge({
+              devDependencies: {
+                '@module-federation/utilities': null,
+              },
+            });
+          }
+          this.packageJson.merge({
             devDependencies: {
-              '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
               'css-loader': null,
