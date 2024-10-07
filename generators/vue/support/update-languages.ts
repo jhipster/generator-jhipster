@@ -70,26 +70,9 @@ function updateLanguagesInConfigTask(this: BaseGenerator, { application, control
   );
 }
 
-function updateLanguagesInWebpackTask(this: BaseGenerator, { application, control = {} }: UpdateClientLanguagesTaskParam) {
-  const { clientSrcDir, languages } = application;
-  const { ignoreNeedlesError: ignoreNonExisting } = control;
-  let newContent = 'groupBy: [\n';
-  languages?.forEach(language => {
-    newContent += `          { pattern: './${clientSrcDir}i18n/${language}/*.json', fileName: './i18n/${language}.json' },\n`;
-  });
-  newContent += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n        ]';
-
-  this.editFile('webpack/webpack.common.js', { ignoreNonExisting }, content =>
-    content.replace(/groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g, newContent),
-  );
-}
-
 export default function updateLanguagesTask(this: BaseGenerator, taskParam: UpdateClientLanguagesTaskParam) {
   updateLanguagesInPipeTask.call(this, taskParam);
   updateLanguagesInConfigTask.call(this, taskParam);
-  if (taskParam.application.clientBundlerWebpack) {
-    updateLanguagesInWebpackTask.call(this, taskParam);
-  }
   updateLanguagesInDayjsConfigurationTask.call(this, taskParam, {
     configurationFile: `${taskParam.application.clientSrcDir}app/shared/config/dayjs.ts`,
     commonjs: true,

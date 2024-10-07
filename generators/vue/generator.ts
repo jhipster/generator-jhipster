@@ -31,7 +31,6 @@ import {
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
 } from '../client/support/index.js';
-import { createNeedleCallback } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -85,24 +84,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
           webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
         });
       },
-      prepareForTemplates({ application, source }) {
+      prepareForTemplates({ application }) {
         application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
-
-        source.addWebpackConfig = args => {
-          if (!application.clientBundlerWebpack) {
-            throw new Error('This application is not webpack based');
-          }
-          const webpackPath = `${application.clientRootDir}webpack/webpack.common.js`;
-          const ignoreNonExisting = this.sharedData.getControl().ignoreNeedlesError && 'Webpack configuration file not found';
-          this.editFile(
-            webpackPath,
-            { ignoreNonExisting },
-            createNeedleCallback({
-              needle: 'jhipster-needle-add-webpack-config',
-              contentToAdd: `,${args.config}`,
-            }),
-          );
-        };
       },
     });
   }
@@ -148,9 +131,19 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ control, application }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
+          '8.7.2': [
+            [
+              application.microfrontend!,
+              'webpack/config.js',
+              'webpack/webpack.common.js',
+              'webpack/webpack.dev.js',
+              'webpack/webpack.prod.js',
+              'webpack/vue.utils.js',
+            ],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -178,7 +171,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPackageJsonScripts({ application }) {
-        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager, prettierExtensions } = application;
+        const { clientBundlerVite, clientPackageManager, prettierExtensions } = application;
         if (clientBundlerVite) {
           this.packageJson.merge({
             scripts: {
@@ -190,18 +183,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
               'vite-build': 'vite build',
             },
           });
-        } else if (clientBundlerWebpack) {
-          this.packageJson.merge({
-            scripts: {
-              'prettier:check': `prettier --check "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
-              'prettier:format': `prettier --write "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
-              'webapp:build:dev': `${clientPackageManager} run webpack -- --mode development --env stats=minimal`,
-              'webapp:build:prod': `${clientPackageManager} run webpack -- --mode production --env stats=minimal`,
-              'webapp:dev': `${clientPackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
-              'webpack-dev-server': 'webpack serve --config webpack/webpack.common.js',
-              webpack: 'webpack --config webpack/webpack.common.js',
-            },
-          });
         }
       },
       addMicrofrontendDependencies({ application }) {
@@ -211,42 +192,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
           this.packageJson.merge({
             devDependencies: {
               '@originjs/vite-plugin-federation': '1.3.6',
-            },
-          });
-        } else if (clientBundlerWebpack) {
-          if (applicationTypeGateway) {
-            this.packageJson.merge({
-              devDependencies: {
-                '@module-federation/utilities': null,
-              },
-            });
-          }
-          this.packageJson.merge({
-            devDependencies: {
-              'browser-sync-webpack-plugin': null,
-              'copy-webpack-plugin': null,
-              'css-loader': null,
-              'css-minimizer-webpack-plugin': null,
-              'html-webpack-plugin': null,
-              'mini-css-extract-plugin': null,
-              'postcss-loader': null,
-              'sass-loader': null,
-              'terser-webpack-plugin': null,
-              'ts-loader': null,
-              'vue-loader': null,
-              'vue-style-loader': null,
-              webpack: null,
-              'webpack-bundle-analyzer': null,
-              'webpack-cli': null,
-              'webpack-dev-server': null,
-              'webpack-merge': null,
-              'workbox-webpack-plugin': null,
-              ...(enableTranslation
-                ? {
-                    'folder-hash': null,
-                    'merge-jsons-webpack-plugin': null,
-                  }
-                : {}),
             },
           });
         }
@@ -284,7 +229,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
       end({ application }) {
         this.log.ok('Vue application generated successfully.');
         this.log.log(
-          chalk.green(`  Start your Webpack development server with:
+          chalk.green(`  Start your development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `),
         );
