@@ -59,14 +59,15 @@ export const vueFiles = {
     {
       condition: generator => generator.microfrontend,
       ...clientSrcTemplatesBlock(),
-      templates: [
-        'microfrontends/entities-menu.component-test.ts',
-        'microfrontends/entities-menu-test.vue',
-        'microfrontends/entities-router-test.ts',
-      ],
+      templates: ['microfrontends/entities-menu.component-test.ts', 'microfrontends/entities-router-test.ts'],
     },
     {
-      condition: generator => generator.applicationTypeMicroservice,
+      condition: generator => generator.microfrontend,
+      ...clientSrcTemplatesBlock(),
+      templates: ['microfrontends/entities-menu-test.vue'],
+    },
+    {
+      condition: generator => generator.enableTranslation && generator.applicationTypeMicroservice,
       ...clientApplicationTemplatesBlock(),
       templates: ['entities/entities-menu.spec.ts'],
     },
