@@ -3,6 +3,7 @@
     "@fortawesome/fontawesome-svg-core": "6.6.0",
     "@fortawesome/free-solid-svg-icons": "6.6.0",
     "@fortawesome/vue-fontawesome": "3.0.8",
+    "@module-federation/runtime": "0.6.9",
     "@stomp/rx-stomp": "2.0.0",
     "@vuelidate/core": "2.0.3",
     "@vuelidate/validators": "2.0.4",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@eslint/js": "9.12.0",
     "@module-federation/utilities": "3.1.15",
+    "@module-federation/vite": "1.1.1",
     "@pinia/testing": "0.1.6",
     "@tsconfig/node18": "18.2.4",
     "@types/node": "20.11.25",

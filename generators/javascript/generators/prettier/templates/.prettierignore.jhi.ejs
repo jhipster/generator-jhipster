@@ -19,5 +19,8 @@
 node_modules
 package-lock.json
 .git
+<%_ if (clientFrameworkVue && microfrontend) { _%>
+'.__mf__temp',
+<%_ } _%>
 
 <&- fragments.render({ join: '\n\n' }) &>
