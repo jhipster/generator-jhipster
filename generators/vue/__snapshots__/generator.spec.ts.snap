@@ -449,6 +449,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -973,6 +976,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/vitest.config.mts": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -1450,6 +1456,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/webpack/webpack.prod.js": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
 }

@@ -55,36 +55,6 @@
     "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
-<%_ if (applicationTypeGateway && microfrontend) { _%>
-    "@module-federation/utilities": "<%= nodeDependencies['@module-federation/utilities'] %>",
-<%_ } _%>
-<%_ if (microfrontend) { _%>
-  <%_ if (clientBundlerVite) { _%>
-    "@originjs/vite-plugin-federation": "1.3.6",
-  <%_ } _%>
-    "browser-sync-webpack-plugin": "<%= nodeDependencies['browser-sync-webpack-plugin'] %>",
-    "copy-webpack-plugin": "<%= nodeDependencies['copy-webpack-plugin'] %>",
-    "css-loader": "<%= nodeDependencies['css-loader'] %>",
-    "css-minimizer-webpack-plugin": "<%= nodeDependencies['css-minimizer-webpack-plugin'] %>",
-    "html-webpack-plugin": "<%= nodeDependencies['html-webpack-plugin'] %>",
-  <%_ if (enableTranslation) { _%>
-    "folder-hash": "<%= nodeDependencies['folder-hash'] %>",
-    "merge-jsons-webpack-plugin": "<%= nodeDependencies['merge-jsons-webpack-plugin'] %>",
-  <%_ } _%>
-    "mini-css-extract-plugin": "<%= nodeDependencies['mini-css-extract-plugin'] %>",
-    "postcss-loader": "<%= nodeDependencies['postcss-loader'] %>",
-    "sass-loader": "<%= nodeDependencies['sass-loader'] %>",
-    "terser-webpack-plugin": "<%= nodeDependencies['terser-webpack-plugin'] %>",
-    "ts-loader": "<%= nodeDependencies['ts-loader'] %>",
-    "vue-loader": "<%= nodeDependencies['vue-loader'] %>",
-    "vue-style-loader": "<%= nodeDependencies['vue-style-loader'] %>",
-    "webpack": "<%= nodeDependencies['webpack'] %>",
-    "webpack-bundle-analyzer": "<%= nodeDependencies['webpack-bundle-analyzer'] %>",
-    "webpack-cli": "<%= nodeDependencies['webpack-cli'] %>",
-    "webpack-dev-server": "<%= nodeDependencies['webpack-dev-server'] %>",
-    "webpack-merge": "<%= nodeDependencies['webpack-merge'] %>",
-    "workbox-webpack-plugin": "<%= nodeDependencies['workbox-webpack-plugin'] %>",
-<%_ } _%>
     "@eslint/js": null,
     "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
@@ -127,48 +97,26 @@
     "default_environment": "prod"
   },
   "scripts": {
-<%_ if (microfrontend) { %>
-    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-<%_ } else { %>
-    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
-<%_ } %>
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
-    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
-    "start": "<%= clientPackageManager %> run webapp:dev --",
-    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
-    "serve": "<%= clientPackageManager %> run start --",
     "build": "<%= clientPackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-    "vitest-run": "vitest --run --coverage",
-    "vitest": "vitest",
+    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier:check": "prettier --check \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "prettier:format": "prettier --write \"{,src/**/,.blueprint/**/}*.{<%= prettierExtensions %>}\"",
+    "serve": "<%= clientPackageManager %> run start --",
+    "start": "<%= clientPackageManager %> run webapp:dev --",
+    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
     "pretest": "<%= clientPackageManager %> run lint",
     "test": "<%= clientPackageManager %> run vitest-run --",
     "test:watch": "<%= clientPackageManager %> run vitest",
+    "vitest-run": "vitest --run --coverage",
+    "vitest": "vitest",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
-<%_ if (microfrontend) { %>
-    "webapp:build:dev": "<%= clientPackageManager %> run webpack -- --mode development --env stats=minimal",
-    "webapp:build:prod": "<%= clientPackageManager %> run webpack -- --mode production --env stats=minimal",
-    "webapp:dev": "<%= clientPackageManager %> run webpack-dev-server -- --mode development --env stats=normal",
-<%_ } else { %>
-    "webapp:build:dev": "<%= clientPackageManager %> run vite-build",
-    "webapp:build:prod": "<%= clientPackageManager %> run vite-build",
-    "webapp:dev": "<%= clientPackageManager %> run vite-serve",
-    "webapp:serve": "<%= clientPackageManager %> run vite-serve",
-<%_ } %>
     "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
-    "webapp:test": "<%= clientPackageManager %> run test --",
-<%_ if (microfrontend) { %>
-    "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
-    "webpack": "webpack --config webpack/webpack.common.js"
-<%_ } else { %>
-    "vite-serve": "vite",
-    "vite-build": "vite build"
-<%_ } %>
+    "webapp:test": "<%= clientPackageManager %> run test --"
   },
   "browserslist": [
     "> 1%",

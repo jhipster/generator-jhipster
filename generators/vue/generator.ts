@@ -177,6 +177,73 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addPackageJsonScripts({ application }) {
+        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager, prettierExtensions } = application;
+        if (clientBundlerVite) {
+          this.packageJson.merge({
+            scripts: {
+              'webapp:build:dev': `${clientPackageManager} run vite-build`,
+              'webapp:build:prod': `${clientPackageManager} run vite-build`,
+              'webapp:dev': `${clientPackageManager} run vite-serve`,
+              'webapp:serve': `${clientPackageManager} run vite-serve`,
+              'vite-serve': 'vite',
+              'vite-build': 'vite build',
+            },
+          });
+        } else if (clientBundlerWebpack) {
+          this.packageJson.merge({
+            scripts: {
+              'prettier:check': `prettier --check "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
+              'prettier:format': `prettier --write "{,src/**/,webpack/,.blueprint/**/}*.{${prettierExtensions}}"`,
+              'webapp:build:dev': `${clientPackageManager} run webpack -- --mode development --env stats=minimal`,
+              'webapp:build:prod': `${clientPackageManager} run webpack -- --mode production --env stats=minimal`,
+              'webapp:dev': `${clientPackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
+              'webpack-dev-server': 'webpack serve --config webpack/webpack.common.js',
+              webpack: 'webpack --config webpack/webpack.common.js',
+            },
+          });
+        }
+      },
+      addMicrofrontendDependencies({ application }) {
+        if (!application.microfrontend) return;
+        if (application.clientBundlerVite) {
+          this.packageJson.merge({
+            devDependencies: {
+              '@originjs/vite-plugin-federation': '1.3.6',
+            },
+          });
+        } else if (application.clientBundlerWebpack) {
+          this.packageJson.merge({
+            devDependencies: {
+              '@module-federation/utilities': null,
+              'browser-sync-webpack-plugin': null,
+              'copy-webpack-plugin': null,
+              'css-loader': null,
+              'css-minimizer-webpack-plugin': null,
+              'html-webpack-plugin': null,
+              'mini-css-extract-plugin': null,
+              'postcss-loader': null,
+              'sass-loader': null,
+              'terser-webpack-plugin': null,
+              'ts-loader': null,
+              'vue-loader': null,
+              'vue-style-loader': null,
+              webpack: null,
+              'webpack-bundle-analyzer': null,
+              'webpack-cli': null,
+              'webpack-dev-server': null,
+              'webpack-merge': null,
+              'workbox-webpack-plugin': null,
+              ...(application.enableTranslation
+                ? {
+                    'folder-hash': null,
+                    'merge-jsons-webpack-plugin': null,
+                  }
+                : {}),
+            },
+          });
+        }
+      },
       addIndexAsset({ source, application }) {
         if (!application.clientBundlerVite) return;
         source.addExternalResourceToRoot!({
