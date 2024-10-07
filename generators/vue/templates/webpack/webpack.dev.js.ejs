@@ -1,0 +1,70 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+'use strict';
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+
+const { styleLoaders } = require('./vue.utils');
+const config = require('./config');
+
+module.exports = (env, options) => {
+  const devConfig = {
+    module: {
+      rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }),
+    },
+    // cheap-module-eval-source-map is faster for development
+    devtool: config.dev.devtool,
+    output: {
+      filename: 'app/[name].[contenthash].bundle.js',
+      chunkFilename: 'app/[id].[chunkhash].chunk.js',
+    },
+    optimization: {
+      moduleIds: 'named',
+    },
+    plugins: [],
+  };
+  if (!options.env.WEBPACK_SERVE) return devConfig;
+  devConfig.plugins.push(
+    new BrowserSyncPlugin(
+      {
+        host: 'localhost',
+        port: 9000,
+        proxy: {
+          target: `http://localhost:${options.watch ? '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
+          ws: true,
+        },
+        socket: {
+          clients: {
+            heartbeatTimeout: 60000,
+          },
+        },
+        /*
+        ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
+          clicks: false,
+          location: false,
+          forms: false,
+          scroll: false
+        } */
+      },
+      {
+        reload: true,
+      },
+    ),
+  );
+  return devConfig;
+};

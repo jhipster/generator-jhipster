@@ -1,0 +1,126 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+'use strict';
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
+const { styleLoaders } = require('./vue.utils');
+const config = require('./config');
+
+const webpackConfig = {
+  module: {
+    rules: styleLoaders({
+      sourceMap: config.build.productionSourceMap,
+      extract: true,
+      usePostCSS: true,
+    }),
+  },
+  devtool: config.build.productionSourceMap ? config.build.devtool : false,
+  output: {
+    filename: 'app/[name].[contenthash].bundle.js',
+    chunkFilename: 'app/[id].[chunkhash].chunk.js',
+  },
+  optimization: {
+    moduleIds: 'deterministic',
+    minimizer: [
+      '...',
+      new CssMinimizerPlugin({
+        parallel: true,
+      }),
+    ],
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+  },
+  plugins: [
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          arrows: false,
+          collapse_vars: false,
+          comparisons: false,
+          computed_props: false,
+          hoist_funs: false,
+          hoist_props: false,
+          hoist_vars: false,
+          inline: false,
+          loops: false,
+          negate_iife: false,
+          properties: false,
+          reduce_funcs: false,
+          reduce_vars: false,
+          switches: false,
+          toplevel: false,
+          typeofs: false,
+          booleans: true,
+          if_return: true,
+          sequences: true,
+          unused: true,
+          conditionals: true,
+          dead_code: true,
+          evaluate: true,
+        },
+        mangle: {
+          safari10: true,
+        },
+      },
+      parallel: true,
+      extractComments: false,
+    }),
+    // extract css into its own file
+    new MiniCssExtractPlugin({
+      filename: 'content/[name].[contenthash].css',
+      chunkFilename: 'content/[id].css',
+    }),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      exclude: [/swagger-ui/],
+    }),
+  ],
+};
+
+if (config.build.productionGzip) {
+  const CompressionWebpackPlugin = require('compression-webpack-plugin');
+
+  webpackConfig.plugins.push(
+    new CompressionWebpackPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: new RegExp(`\\.(${config.build.productionGzipExtensions.join('|')})$`),
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
+  );
+}
+
+if (config.build.bundleAnalyzerReport) {
+  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+  webpackConfig.plugins.push(new BundleAnalyzerPlugin());
+}
+
+module.exports = async () => webpackConfig;

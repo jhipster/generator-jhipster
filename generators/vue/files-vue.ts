@@ -41,6 +41,16 @@ export const vueFiles = {
       condition: generator => generator.microfrontend,
       templates: ['module-federation.config.cjs'],
     }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.microfrontend && ctx.clientBundlerWebpack,
+      templates: [
+        'webpack/config.js',
+        'webpack/webpack.common.js',
+        'webpack/webpack.dev.js',
+        'webpack/webpack.prod.js',
+        'webpack/vue.utils.js',
+      ],
+    }),
     {
       condition: generator => generator.microfrontend,
       ...clientApplicationTemplatesBlock(),

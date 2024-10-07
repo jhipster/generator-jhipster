@@ -1,0 +1,48 @@
+'use strict';
+
+<%_ if (buildToolUnknown) { _%>
+const packageJson = require('./../package.json');
+<%_ } _%>
+
+module.exports = {
+  serverApiUrl: '',
+<%_ if (buildToolUnknown) { _%>
+  version: packageJson.version,
+<%_ } else { _%>
+  // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+  version: process.env.APP_VERSION || 'DEV',
+<%_ } _%>
+
+  dev: {
+    hotReload: <%= !microfrontend %>,
+
+    // https://webpack.js.org/configuration/devtool/#development
+    devtool: 'cheap-module-source-map',
+
+    // If you have problems debugging vue-files in devtools,
+    // set this to false - it *may* help
+    // https://vue-loader.vuejs.org/en/options.html#cachebusting
+    cacheBusting: true,
+
+    cssSourceMap: true,
+  },
+
+  build: {
+    productionSourceMap: true,
+    // https://webpack.js.org/configuration/devtool/#production
+    devtool: 'source-map',
+
+    // Gzip off by default as many popular static hosts such as
+    // Surge or Netlify already gzip all static assets for you.
+    // Before setting to `true`, make sure to:
+    // npm install --save-dev compression-webpack-plugin
+    productionGzip: false,
+    productionGzipExtensions: ['js', 'css'],
+
+    // Run the build command with an extra argument to
+    // View the bundle analyzer report after build finishes:
+    // `npm run build --report`
+    // Set to `true` or `false` to always turn it on or off
+    bundleAnalyzerReport: process.env.npm_config_report,
+  },
+};

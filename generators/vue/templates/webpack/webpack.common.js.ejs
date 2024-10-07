@@ -1,0 +1,185 @@
+'use strict';
+const path = require('path');
+const { merge } = require('webpack-merge');
+const { VueLoaderPlugin } = require('vue-loader');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+<%_ if (enableTranslation) { _%>
+const { hashElement } = require('folder-hash');
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+<%_ } _%>
+
+const { DefinePlugin } = require('webpack');
+const { vueLoaderConfig } = require('./vue.utils');
+const config = require('./config');
+
+function resolve(dir = '') {
+  return path.join(__dirname, '..', dir);
+}
+
+module.exports = async (env, options) => {
+  const development = options.mode === 'development';
+<%_ if (enableTranslation) { _%>
+  const languagesHash = await hashElement(resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
+    algo: 'md5',
+    encoding: 'hex',
+    files: { include: ['*.json'] },
+  });
+
+<%_ } _%>
+  return merge(
+    {
+      mode: options.mode,
+      context: resolve(),
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+      experiments: {
+        topLevelAwait: true,
+      },
+<%_ } _%>
+      entry: {
+        app: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
+      },
+      output: {
+        path: resolve('<%= this.relativeDir(clientRootDir, clientDistDir) %>'),
+      },
+      resolve: {
+        extensions: ['.ts', '.js', '.vue', '.json'],
+        alias: {
+          vue$: '@vue/compat/dist/vue.esm-bundler.js',
+          '@': resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>app'),
+        },
+      },
+      devServer: {
+<%_ if (microfrontend) { _%>
+        hot: config.dev.hotReload,
+<%_ } _%>
+        static: {
+          directory: './<%= this.relativeDir(clientRootDir, clientDistDir) %>',
+        },
+        port: <%= devServerPort %>,
+        proxy: [
+          {
+            context: [
+              '/api',
+              '/services',
+              '/management',
+              '/v3/api-docs',
+              '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
+              '/oauth2',
+              '/login',
+<%_ } _%>
+              '/auth'
+            ],
+            target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            secure: false,
+          },
+<%_ if (communicationSpringWebsocket) { _%>
+          {
+            context: [
+              '/websocket'
+            ],
+            target: 'ws://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            ws: true
+          }
+<%_ } _%>
+        ],
+        historyApiFallback: true,
+      },
+      cache: {
+        // 1. Set cache type to filesystem
+        type: 'filesystem',
+        cacheDirectory: resolve('<%= this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
+        buildDependencies: {
+          // 2. Add your config as buildDependency to get cache invalidation on config change
+          config: [
+            __filename,
+            path.resolve(__dirname, 'config.js'),
+            path.resolve(__dirname, 'vue.utils.js'),
+            path.resolve(__dirname, `webpack.${development ? 'dev' : 'prod'}.js`),
+            path.resolve(__dirname, '../.postcssrc.js'),
+            path.resolve(__dirname, '../tsconfig.json'),
+          ],
+        },
+      },
+      module: {
+        rules: [
+          {
+            test: /\.vue$/,
+            loader: 'vue-loader',
+            options: {
+              ...vueLoaderConfig(!development),
+            },
+          },
+          {
+            test: /\.ts$/,
+            use: [
+              {
+                loader: 'ts-loader',
+                options: {
+                  appendTsSuffixTo: ['\\.vue$'],
+                  happyPackMode: true,
+                  transpileOnly: true,
+                  configFile: 'tsconfig.app.json',
+                },
+              },
+            ],
+            include: [resolve('src'), resolve('test')],
+          },
+          {
+            test: /\.(png|jpe?g|gif|svg|mp4|webm|ogg|mp3|wav|flac|aac|woff2?|eot|ttf|otf)/,
+            type: 'asset/resource',
+          },
+        ],
+      },
+      plugins: [
+        new DefinePlugin({
+<%_ if (enableTranslation) { _%>
+          I18N_HASH: JSON.stringify(languagesHash.hash),
+<%_ } _%>
+          APP_VERSION: JSON.stringify(config.version),
+          SERVER_API_URL: JSON.stringify(config.serverApiUrl),
+          __VUE_PROD_DEVTOOLS__: false,
+        }),
+        new HtmlWebpackPlugin({
+          base: '/',
+          template: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
+        }),
+        new VueLoaderPlugin(),
+        new CopyWebpackPlugin({
+          patterns: [
+            {
+              // https://github.com/swagger-api/swagger-ui/blob/v4.6.1/swagger-ui-dist-package/README.md
+              context: require('swagger-ui-dist').getAbsoluteFSPath(),
+              from: '*.{js,css,html,png}',
+              to: 'swagger-ui/',
+              globOptions: { ignore: ['**/index.html'] },
+            },
+            {
+              from: path.join(path.dirname(require.resolve('axios/package.json')), 'dist/axios.min.js'),
+              to: 'swagger-ui/',
+            },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
+            {
+              from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp',
+              to: 'manifest.webapp',
+            },
+            // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' },
+          ],
+        })<% if (enableTranslation) { %>,
+        new MergeJsonWebpackPlugin({
+          output: {
+            groupBy: [
+              // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
+            ],
+          },
+        }),<% } %>
+      ],
+    },
+    await require(`./webpack.${development ? 'dev' : 'prod'}`)(env, options)
+    // jhipster-needle-add-webpack-config - JHipster will add custom config
+  );
+};

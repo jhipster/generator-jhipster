@@ -251,8 +251,10 @@ export default class JHipsterClientGenerator extends BaseApplicationGenerator {
           source.addWebpackConfig({
             config: `${conditional}require('./webpack.microfrontend')(config, options, targetOptions)`,
           });
-        } else if (application.clientFrameworkReact) {
+        } else if (application.clientFrameworkVue || application.clientFrameworkReact) {
           source.addWebpackConfig({ config: "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })" });
+        } else {
+          throw new Error(`Client framework ${application.clientFramework} doesn't support microfrontends`);
         }
       },
     });
