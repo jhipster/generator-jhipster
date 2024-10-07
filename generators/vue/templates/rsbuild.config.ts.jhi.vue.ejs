@@ -1,0 +1,85 @@
+<%#
+ Copyright 2013-2024 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_ if (fragment.importsSection) { -&>
+import { pluginVue } from '@rsbuild/plugin-vue';
+import { pluginSass } from '@rsbuild/plugin-sass';
+<%_ if (microfrontend) { _%>
+import mfConfig from './module-federation.config.cjs';
+
+console.log(mfConfig);
+<%_ } _%>
+<&_ } -&>
+
+<&_ if (fragment.pluginsSection) { -&>
+    pluginVue(),
+    pluginSass(),
+<&_ } -&>
+
+<&_ if (fragment.configSection) { -&>
+  source: {
+    entry: {
+      index: './app/<%= microfrontend ? 'index' : 'main' %>.ts',
+    },
+    define: {
+      I18N_HASH: '"generated_hash"',
+      SERVER_API_URL: '"/"',
+      APP_VERSION: `"${process.env.APP_VERSION ? process.env.APP_VERSION : 'DEV'}"`,  
+    },
+    alias: {
+      vue$: '@vue/compat/dist/vue.esm-bundler.js',
+      '@': path.resolve(__dirname, './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app'),
+    },
+  },
+  server: {
+    port: <%= devServerPort %>,
+    proxy: [
+      {
+        context: [
+          '/api',
+          '/services',
+          '/management',
+          '/v3/api-docs',
+          '/h2-console',
+<%_ if (authenticationTypeOauth2) { _%>
+          '/oauth2',
+          '/login',
+<%_ } _%>
+          '/auth'
+        ],
+        target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+        secure: false,
+      },
+<%_ if (communicationSpringWebsocket) { _%>
+      {
+        context: [
+          '/websocket'
+        ],
+        target: 'ws://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+        ws: true
+      }
+<%_ } _%>
+    ],
+    historyApiFallback: true,
+  },
+<%_ if (microfrontend) { _%>
+  moduleFederation: {
+    options: mfConfig,
+  },
+<%_ } _%>
+<&_ } -&>

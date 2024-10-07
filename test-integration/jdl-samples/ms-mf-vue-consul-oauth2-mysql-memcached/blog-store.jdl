@@ -31,6 +31,7 @@ application {
     serviceDiscoveryType consul
     testFrameworks [cypress]
     microfrontends [blog, notification]
+    enableTranslation false
   }
   entities UserData, Product
 }
@@ -51,6 +52,7 @@ application {
     serverPort 8081
     serviceDiscoveryType consul
     testFrameworks [cypress]
+    enableTranslation false
   }
   entities Blog, Post, Tag
 }
@@ -72,6 +74,7 @@ application {
     serverPort 8082
     serviceDiscoveryType consul
     testFrameworks [cypress]
+    enableTranslation false
   }
   entities Product
 }
@@ -94,6 +97,7 @@ application {
     serverPort 8083
     serviceDiscoveryType consul
     testFrameworks [cypress]
+    enableTranslation false
   }
   entities Notification
 }
