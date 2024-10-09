@@ -69,7 +69,7 @@
     "react-infinite-scroll-component": "6.1.0",
     "redux-mock-store": "1.5.4",
     "rimraf": "5.0.8",
-    "sass": "1.79.4",
+    "sass": "1.77.8",
     "sass-loader": "16.0.2",
     "simple-progress-webpack-plugin": "2.0.0",
     "sinon": "19.0.2",
