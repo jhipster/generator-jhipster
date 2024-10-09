@@ -55,7 +55,7 @@
     "sinon": "19.0.2",
     "terser-webpack-plugin": "5.3.10",
     "ts-loader": "9.5.1",
-    "typescript": "5.6.2",
+    "typescript": "5.6.3",
     "typescript-eslint": "8.8.1",
     "vite": "5.4.8",
     "vite-plugin-static-copy": "1.0.6",
