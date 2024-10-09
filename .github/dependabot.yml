@@ -146,6 +146,9 @@ updates:
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
+      # https://github.com/jhipster/generator-jhipster/issues/27464#issuecomment-2400505558, https://github.com/twbs/bootstrap/issues/40849
+      - dependency-name: 'sass'
+        versions: ['*']
     groups:
       eslint:
         patterns:
@@ -178,6 +181,9 @@ updates:
       # https://github.com/bootstrap-vue/bootstrap-vue/issues/5507
       - dependency-name: 'bootstrap'
         versions: ['>=5']
+      # Bootstrap v4 issue https://github.com/jhipster/generator-jhipster/issues/23770, https://github.com/twbs/bootstrap/issues/39028, https://github.com/jhipster/generator-jhipster/issues/27464#issuecomment-2400505558, https://github.com/twbs/bootstrap/issues/40849
+      - dependency-name: 'sass'
+        versions: ['*']
       # Should match generated project node major version.
       - dependency-name: '@types/node'
         versions: ['>=19']
