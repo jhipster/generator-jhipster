@@ -33,7 +33,6 @@ import { CLI_NAME, logger } from './utils.mjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(__dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
 const defaultLookupOptions = {
@@ -109,7 +108,7 @@ export default class EnvironmentBuilder {
     this.env = env;
   }
 
-  async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath } = {}) {
+  async prepare({ blueprints, lookups, devBlueprintPath } = {}) {
     this.devBlueprintPath = existsSync(devBlueprintPath) ? devBlueprintPath : undefined;
     this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
     this.localBlueprintExists = this.localBlueprintPath !== this.devBlueprintPath && existsSync(this.localBlueprintPath);
