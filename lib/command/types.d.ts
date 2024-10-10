@@ -44,6 +44,7 @@ export type ConfigSpec<ConfigContext> = {
   readonly choices?: JHispterChoices;
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
+  readonly internal?: true;
   readonly prompt?:
     | PromptSpec
     | ((gen: ConfigContext & { jhipsterConfigWithDefaults: Record<string, any> }, config: ConfigSpec<ConfigContext>) => PromptSpec);
@@ -73,7 +74,10 @@ export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
 
 export type JHipsterOptions = Record<string, JHipsterOption>;
 
-export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<ConfigSpec<ConfigContext>, 'argument' | 'cli' | 'prompt' | 'jdl'>;
+export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<
+  ConfigSpec<ConfigContext>,
+  'argument' | 'cli' | 'prompt' | 'jdl' | 'internal'
+>;
 
 export type JHipsterConfigs<ConfigContext = any> = Record<string, JHipsterConfig<ConfigContext>>;
 

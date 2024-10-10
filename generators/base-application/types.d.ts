@@ -146,6 +146,7 @@ export type CommonClientServerApplication<Entity> = BaseApplication &
   SpringBootApplication &
   ClientApplication &
   ExportApplicationPropertiesFromCommand<typeof import('../git/command.ts').default> &
+  ExportApplicationPropertiesFromCommand<typeof import('../project-name/command.ts').default> &
   ApplicationProperties & {
     clientRootDir: string;
     clientSrcDir: string;

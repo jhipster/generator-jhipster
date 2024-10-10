@@ -17,16 +17,32 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { BASE_NAME, BASE_NAME_DESCRIPTION } from './constants.js';
+import { BASE_NAME_DESCRIPTION } from './constants.js';
 
-const command: JHipsterCommandDefinition = {
-  options: {
-    [BASE_NAME]: {
+const command = {
+  configs: {
+    defaultBaseName: {
+      internal: true,
+      scope: 'generator',
+    },
+    validateBaseName: {
+      internal: true,
+      scope: 'generator',
+    },
+    baseName: {
       description: BASE_NAME_DESCRIPTION,
-      type: String,
+      cli: {
+        type: String,
+      },
+      prompt: gen => ({
+        type: 'input',
+        validate: input => gen.validateBaseName(input),
+        message: 'What is the base name of your application?',
+        default: () => gen.defaultBaseName(),
+      }),
       scope: 'storage',
     },
   },
-};
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;
