@@ -23,7 +23,7 @@
     "@angular-architects/module-federation-runtime": "18.0.6",
     "@angular-builders/custom-webpack": "18.0.0",
     "@angular-builders/jest": "18.0.0",
-    "@angular/cli": "18.2.7",
+    "@angular/cli": "18.2.8",
     "@types/jest": "29.5.13",
     "@types/node": "20.11.25",
     "@types/sockjs-client": "1.5.4",
