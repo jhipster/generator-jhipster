@@ -43,6 +43,7 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
           clientFrameworkBuiltIn,
           clientBundlerVite,
           clientBundlerWebpack,
+          clientBundlerRsbuild,
           microfrontend,
           srcMainWebapp,
         } = application;
@@ -69,6 +70,8 @@ export default class FrontendPluginGenerator extends BaseApplicationGenerator {
             checksumIncludedFiles.push('webpack/*.*');
           } else if (clientBundlerVite) {
             checksumIncludedFiles.push('vite.config.mts');
+          } else if (clientBundlerRsbuild) {
+            checksumIncludedFiles.push('rsbuild.config.ts');
           }
         }
         source.addMavenDefinition!({

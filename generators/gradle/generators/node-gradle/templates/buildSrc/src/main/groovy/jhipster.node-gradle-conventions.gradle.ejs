@@ -71,6 +71,12 @@ task webapp_test(type: NpmTask) {
         .withPropertyName("postcssrc")
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
+  <%_ if (clientBundlerRsbuild && clientFrameworkBuiltIn) { _%>
+
+    inputs.files('rsbuild.config.ts')
+        .withPropertyName("rsbuild")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+  <%_ } _%>
   <%_ if (clientBundlerVite && clientFrameworkBuiltIn) { _%>
 
     inputs.files("vite.config.mts")
