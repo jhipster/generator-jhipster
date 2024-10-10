@@ -17,14 +17,14 @@ services:
       - SPRING_R2DBC_URL=r2dbc:mysql://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -135,14 +135,14 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -243,12 +243,12 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle:1521:jhipster
       - SPRING_LIQUIBASE_URL=jdbc:oracle:thin:@oracle:1521:jhipster
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+      - THC_PORT=8081
+      - THC_PATH=/management/health
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -331,12 +331,12 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/jhipster
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+      - THC_PORT=8081
+      - THC_PATH=/management/health
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -455,12 +455,12 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - THC_PORT=8081
+      - THC_PATH=/management/health
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -568,12 +568,12 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+      - THC_PORT=8081
+      - THC_PATH=/management/health
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -721,14 +721,14 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://mariadb:3306/jhipster?useLegacyDatetimeCode=false
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -820,14 +820,14 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/jhipster?waitQueueMultiple=1000
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -957,14 +957,14 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1058,14 +1058,14 @@ services:
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1198,14 +1198,14 @@ services:
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1307,14 +1307,14 @@ services:
       - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=jhipster
       - JHIPSTER_SLEEP=20
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
+      - THC_PORT=8080
+      - THC_PATH=/management/health
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
       test:
         - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - /workspace/health-check
       interval: 5s
       timeout: 5s
       retries: 40
