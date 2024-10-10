@@ -6,7 +6,7 @@ import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSou
 import type { Entity } from './entity.js';
 import type { ApplicationType, BaseApplicationSource } from './application.js';
 
-type ApplicationDefaultsTaskParam = {
+type ApplicationDefaultsTaskParam<E = Entity, A = ApplicationType<E>> = {
   /**
    * Parameter properties accepts:
    * - functions: receives the application and the return value is set at the application property.
@@ -22,7 +22,9 @@ type ApplicationDefaultsTaskParam = {
    *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
    * );
    */
-  applicationDefaults: (...defaults: Record<any, any>[]) => void;
+  applicationDefaults: (
+    ...defaults: (Partial<Record<'__override__', boolean>> & { [Key in keyof A]?: A[Key] | ((ctx: A) => A[Key]) })[]
+  ) => void;
 };
 
 type TaskParamWithApplication<E = Entity, A = ApplicationType<E>> = TaskParamWithControl & {
@@ -35,7 +37,7 @@ type TaskParamWithEntities<E = Entity, A = ApplicationType<E>> = TaskParamWithAp
 
 type TaskParamWithApplicationDefaults<E = Entity, A = ApplicationType<E>> = TaskParamWithControl &
   TaskParamWithApplication<E, A> &
-  ApplicationDefaultsTaskParam;
+  ApplicationDefaultsTaskParam<Required<A>>;
 
 type PreparingTaskParam<E = Entity, A = ApplicationType<E>> = TaskParamWithApplicationDefaults<E, A> &
   TaskParamWithSource<BaseApplicationSource>;
