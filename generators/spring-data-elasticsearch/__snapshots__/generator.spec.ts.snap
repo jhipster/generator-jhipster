@@ -595,9 +595,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -993,9 +990,6 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -1374,9 +1368,6 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {

@@ -18,12 +18,7 @@
  */
 import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { addSectionsCondition, mergeSections } from '../base/support/index.js';
-import {
-  javaMainPackageTemplatesBlock,
-  moveToJavaPackageSrcDir,
-  moveToJavaPackageTestDir,
-  moveToSrcMainResourcesDir,
-} from '../java/support/index.js';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir, moveToSrcMainResourcesDir } from '../java/support/index.js';
 
 const imperativeConfigFiles = {
   imperativeFiles: [
@@ -352,10 +347,6 @@ export const baseServerFiles = {
     },
   ],
   serverMicroservice: [
-    javaMainPackageTemplatesBlock({
-      condition: generator => generator.applicationTypeMicroservice,
-      templates: ['config/SpringDocConfiguration.java'],
-    }),
     {
       condition: generator => generator.applicationTypeMicroservice,
       path: SERVER_MAIN_RES_DIR,
