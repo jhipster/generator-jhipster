@@ -235,7 +235,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             filter: file => isFileStateModified(file) && file.path.startsWith(this.destinationPath()) && isTranslatedAngularFile(file),
             refresh: false,
           },
-          translateAngularFilesTransform(control.getWebappTranslation, { enableTranslation, jhiPrefix }),
+          translateAngularFilesTransform(control.getWebappTranslation!, { enableTranslation, jhiPrefix }),
         );
       },
     });

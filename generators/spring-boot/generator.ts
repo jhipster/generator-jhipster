@@ -77,6 +77,8 @@ const { NO: NO_CLIENT } = clientFrameworkTypes;
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
 export default class SpringBootGenerator extends BaseApplicationGenerator {
+  fakeKeytool;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -473,7 +475,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
       },
       async generateKeyStore({ application }) {
         const keyStoreFile = this.destinationPath(`${application.srcMainResources}config/tls/keystore.p12`);
-        if (application.fakeKeytool) {
+        if (this.fakeKeytool) {
           this.writeDestination(keyStoreFile, 'fake key-tool');
         } else {
           this.validateResult(await generateKeyStore(keyStoreFile, { packageName: application.packageName! }));
