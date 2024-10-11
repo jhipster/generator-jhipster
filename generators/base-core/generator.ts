@@ -553,7 +553,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (optionDesc.scope !== 'none') {
             throw new Error(`Scope ${optionDesc.scope} not supported`);
           }
-        } else if (optionDesc.default && optionDesc.scope === 'generator' && this[optionName] === undefined) {
+        } else if (optionDesc.default !== undefined && optionDesc.scope === 'generator' && this[optionName] === undefined) {
           this[optionName] = optionDesc.default;
         }
       });
