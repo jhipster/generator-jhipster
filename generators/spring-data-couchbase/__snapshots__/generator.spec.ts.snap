@@ -323,6 +323,9 @@ exports[`generator - couchbase gateway-jwt-gradle-enableTranslation(true)-com.my
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -700,6 +703,9 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -1047,6 +1053,9 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -1389,6 +1398,9 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -1813,6 +1825,9 @@ exports[`generator - couchbase monolith-jwt-reactive(false)-maven-enableTranslat
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -2235,6 +2250,9 @@ exports[`generator - couchbase monolith-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -2580,6 +2598,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(false)-maven-enableTrans
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -2951,6 +2972,9 @@ exports[`generator - couchbase monolith-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -3375,6 +3399,9 @@ exports[`generator - couchbase monolith-session-reactive(false)-maven-enableTran
   "src/main/resources/config/couchmove/changelog/V20220129000200__anothersimple.n1ql": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -3762,6 +3789,9 @@ exports[`generator - couchbase monolith-session-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/resources/config/couchmove/changelog/V20220129000210__anothersimple.fts": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {

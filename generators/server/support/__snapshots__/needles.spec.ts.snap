@@ -293,6 +293,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
