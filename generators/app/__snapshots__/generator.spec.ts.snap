@@ -27,7 +27,7 @@ Options:
   --skip-jhipster-dependencies             Don't write jhipster dependencies to package.json. (env: JHI_SKIP_JHIPSTER_DEPENDENCIES)
   --creation-timestamp <value>             Project creation timestamp (used for reproducible builds)
   --jdl-store <value>                      JDL store
-  --prettier-tab-width <value>             Default tab width for prettier
+  --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
   --db <value>                             Provide DB name for the application when skipping server side generation
@@ -47,14 +47,14 @@ Options:
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
   --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
-  --feign-client                           Generate a feign client
+  --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --database-migration <value>             Database migration (choices: "liquibase")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --package-name <value>                   The package name for the generated application
-  --build <value>                          Provide build tool for the application when skipping server side generation (choices: "maven", "gradle")
-  --enable-gradle-enterprise               Enable Gradle Enterprise integration
+  --build <value>                          Provide build tool for the application when skipping server side generation (default: maven) (choices: "maven", "gradle")
+  --enable-gradle-enterprise               Enable Gradle Enterprise integration (default: false)
   --gradle-enterprise-host <value>         Gradle Enterprise Host
   --incremental-changelog                  Creates incremental database changelogs
   --dev-database-type <value>              Development database

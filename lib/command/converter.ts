@@ -35,6 +35,7 @@ export const convertConfigToOption = (name: string, config?: ConfigSpec<any>): J
   const choices = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value)) as any;
   return {
     name,
+    default: config.default,
     description: config.description,
     choices,
     scope: config.scope ?? 'storage',

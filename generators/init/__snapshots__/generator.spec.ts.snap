@@ -16,7 +16,7 @@ Options:
   --commit-msg <value>          Commit changes (implies forceGit)
   --monorepository              Use monorepository
   --base-name <value>           Application base name
-  --prettier-tab-width <value>  Default tab width for prettier
+  --prettier-tab-width <value>  Default tab width for prettier (default: 2)
   --skip-commit-hook            Skip adding husky commit hooks
   -h, --help                    display help for command
 "

@@ -70,8 +70,13 @@ const expectApplicationTestOption = () => expect(runResult.generator.sharedData.
 describe('generator commands', () => {
   for (const scope of ['generator', 'context', 'storage', 'blueprint', 'none'] as const) {
     describe(`${scope} scoped`, () => {
-      const checkOptions = (value: any, argument = false) => {
-        if (argument) {
+      const checkOptions = (
+        value: any,
+        { argument = false, expectUndefinedOption = false }: { argument?: boolean; expectUndefinedOption?: boolean } = {},
+      ) => {
+        if (expectUndefinedOption) {
+          expectGeneratorOptionsTestOption().toBe(undefined);
+        } else if (argument) {
           // Argument is passed through positionalArguments option.
           expectGeneratorOptionsTestOption().toBeUndefined();
         } else if (typeof value === 'number') {
@@ -107,7 +112,7 @@ describe('generator commands', () => {
           expectBlueprintConfigTestOption().toBe(value);
         }
 
-        if (!['application', 'storage', 'blueprint'].includes(scope)) {
+        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
           expectApplicationTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectApplicationTestOption().toEqual(value);
@@ -206,6 +211,95 @@ describe('generator commands', () => {
           });
         });
       });
+
+      if (scope === 'generator') {
+        describe('cli option with default value', () => {
+          describe('boolean', () => {
+            const config: JHipsterConfig = {
+              cli: {
+                type: Boolean,
+              },
+              default: true,
+              scope,
+            };
+
+            it('without options', async () => {
+              await runDummyCli('', config);
+              checkOptions(true, { expectUndefinedOption: true });
+            });
+            it('with true option', async () => {
+              await runDummyCli('--test-option', config);
+              checkOptions(true);
+            });
+            it('with false option', async () => {
+              await runDummyCli('--no-test-option', config);
+              checkOptions(false);
+            });
+          });
+
+          describe('string', () => {
+            const config: JHipsterConfig = {
+              cli: {
+                type: String,
+              },
+              default: 'foo',
+              scope,
+            };
+
+            it('without options', async () => {
+              await runDummyCli('', config);
+              checkOptions('foo', { expectUndefinedOption: true });
+            });
+            it('with option value', async () => {
+              await runDummyCli('--test-option 1', config);
+              checkOptions('1');
+            });
+          });
+
+          describe('number', () => {
+            const config: JHipsterConfig = {
+              cli: {
+                type: Number,
+              },
+              default: 1,
+              scope,
+            };
+
+            it('without options', async () => {
+              await runDummyCli('', config);
+              checkOptions(1, { expectUndefinedOption: true });
+            });
+            it('with option value', async () => {
+              await runDummyCli('--test-option 1', config);
+              checkOptions(1);
+            });
+          });
+
+          describe('array', () => {
+            const config: JHipsterConfig = {
+              cli: {
+                type: Array,
+              },
+              default: ['1'],
+              scope,
+            };
+
+            it('without options', async () => {
+              await runDummyCli('', config);
+              checkOptions(['1'], { expectUndefinedOption: true });
+            });
+            it('with option value', async () => {
+              await runDummyCli('--test-option 1', config);
+              checkOptions(['1']);
+            });
+            it('with option values', async () => {
+              await runDummyCli('--test-option 1 2', config);
+              checkOptions(['1', '2']);
+            });
+          });
+        });
+      }
+
       describe('cli argument', () => {
         describe('string', () => {
           const config: JHipsterConfig = {
@@ -217,11 +311,11 @@ describe('generator commands', () => {
 
           it('without argument', async () => {
             await runDummyCli('', config);
-            checkOptions(undefined, true);
+            checkOptions(undefined, { argument: true });
           });
           it('with argument value', async () => {
             await runDummyCli('1', config);
-            checkOptions('1', true);
+            checkOptions('1', { argument: true });
           });
         });
 
@@ -235,15 +329,15 @@ describe('generator commands', () => {
 
           it('without arguments', async () => {
             await runDummyCli('', config);
-            checkOptions(undefined, true);
+            checkOptions(undefined, { argument: true });
           });
           it('with argument value', async () => {
             await runDummyCli('1', config);
-            checkOptions(['1'], true);
+            checkOptions(['1'], { argument: true });
           });
           it('with arguments values', async () => {
             await runDummyCli('1 2', config);
-            checkOptions(['1', '2'], true);
+            checkOptions(['1', '2'], { argument: true });
           });
         });
       });
