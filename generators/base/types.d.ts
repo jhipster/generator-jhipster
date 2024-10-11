@@ -29,11 +29,7 @@ export type Control = BaseApplicationControlProperties & {
    * @example
    * cleanupFiles('4.0.0', { '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
    */
-<<<<<<< HEAD
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
   getWebappTranslation?: GetWebappTranslationCallback;
-=======
-  cleanupFiles: (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => Promise<void>;
-  getWebappTranslation: (s: string, data?: Record<string, any>) => string;
->>>>>>> 720ca52adc (keytool fix)
+  // getWebappTranslation: (s: string, data?: Record<string, any>) => string;
 };
