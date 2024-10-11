@@ -143,6 +143,9 @@ exports[`generator - server composing databaseType option no with jwt should mat
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -373,6 +376,9 @@ exports[`generator - server composing databaseType option no with oauth2 should 
   "src/main/resources/config/application.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/tls/keystore.p12": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
@@ -577,6 +583,9 @@ exports[`generator - server composing databaseType option no with session should
     "stateCleared": "modified",
   },
   "src/main/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
@@ -1011,6 +1020,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/master.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/tls/keystore.p12": {
     "stateCleared": "modified",
   },
   "src/main/resources/i18n/messages.properties": {
