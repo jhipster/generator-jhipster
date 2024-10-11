@@ -1,5 +1,4 @@
 import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
-import type { AngularApplication } from '../angular/types.js';
 import type { ExportApplicationPropertiesFromCommand } from '../../lib/command/index.js';
 import type { CypressApplication } from '../cypress/types.js';
 import type { JavaScriptApplication, JavaScriptSourceType } from '../javascript/types.js';
@@ -10,7 +9,6 @@ type ApplicationClientProperties = ExportApplicationPropertiesFromCommand<typeof
 
 export type ClientApplication = ApplicationClientProperties &
   JavaScriptApplication &
-  AngularApplication &
   CypressApplication & {
     webappLoginRegExp: string;
     clientWebappDir?: string;

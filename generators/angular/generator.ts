@@ -18,7 +18,7 @@
  */
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
-
+import type { Entity } from '../../lib/types/application/entity.js';
 import BaseApplicationGenerator from '../base-application/index.js';
 import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
 import { defaultLanguage } from '../languages/support/index.js';
@@ -26,6 +26,7 @@ import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
 import { createNeedleCallback, mutateData } from '../base/support/index.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
+import type { TaskTypes as DefaultTaskTypes } from '../../lib/types/application/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
 import { writeFiles } from './files-angular.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -39,10 +40,15 @@ import {
   isTranslatedAngularFile,
   translateAngularFilesTransform,
 } from './support/index.js';
+import type { AngularApplication } from './types.js';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator {
+export default class AngularGenerator extends BaseApplicationGenerator<
+  Entity,
+  AngularApplication,
+  DefaultTaskTypes<Entity, AngularApplication>
+> {
   localEntities?: any[];
 
   async beforeQueue() {
