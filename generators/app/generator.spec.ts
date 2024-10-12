@@ -217,8 +217,6 @@ describe(`generator - ${generator}`, () => {
   "databaseType",
   "prodDatabaseType",
   "devDatabaseType",
-  "cacheProvider",
-  "enableHibernateCache",
   "serverSideOptions",
   "enableGradleEnterprise",
   "clientFramework",
