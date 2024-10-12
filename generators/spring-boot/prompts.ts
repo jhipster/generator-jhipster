@@ -36,16 +36,7 @@ const { GATEWAY, MONOLITH } = applicationTypes;
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { OAUTH2 } = authenticationTypes;
 const { CASSANDRA, H2_DISK, H2_MEMORY, MONGODB, NEO4J, SQL, COUCHBASE } = databaseTypes;
-const {
-  CACHE_PROVIDER,
-  DATABASE_TYPE,
-  DEV_DATABASE_TYPE,
-  PROD_DATABASE_TYPE,
-  SERVICE_DISCOVERY_TYPE,
-  WEBSOCKET,
-  SEARCH_ENGINE,
-  ENABLE_SWAGGER_CODEGEN,
-} = OptionNames;
+const { SERVICE_DISCOVERY_TYPE, WEBSOCKET, SEARCH_ENGINE, ENABLE_SWAGGER_CODEGEN } = OptionNames;
 const NO_DATABASE = databaseTypes.NO;
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 const { GATLING, CUCUMBER } = testFrameworkTypes;
@@ -123,7 +114,7 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
         type: 'list',
         name: 'prodDatabaseType',
         message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-        choices: answers => (reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
+        choices: reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS,
         default: this.jhipsterConfigWithDefaults.prodDatabaseType,
       },
       {
