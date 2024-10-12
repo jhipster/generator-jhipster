@@ -155,7 +155,7 @@
     "minimatch": "9.0.5",
     "normalize-path": "3.0.0",
     "os-locale": "6.0.2",
-    "p-transform": "4.1.6",
+    "p-transform": "5.0.1",
     "parse-gitignore": "2.0.0",
     "piscina": "4.7.0",
     "pluralize": "8.0.0",
