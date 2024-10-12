@@ -71,17 +71,17 @@ const getOptionFromArray = (array, option) => {
 export async function askForServerSideOpts(this: CoreGenerator, { control }) {
   if (control.existingProject && !this.options.askAnswered) return;
 
-  const { applicationType } = this.jhipsterConfigWithDefaults;
+  const { applicationType, authenticationType, reactive } = this.jhipsterConfigWithDefaults;
 
   await this.prompt(
     [
       {
         type: 'list',
-        name: DATABASE_TYPE,
+        name: 'databaseType',
         message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
-        choices: answers => {
+        choices: () => {
           const opts: any[] = [];
-          if (!answers.reactive) {
+          if (!reactive) {
             opts.push({
               value: SQL,
               name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
@@ -96,7 +96,7 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
             value: MONGODB,
             name: 'MongoDB',
           });
-          if (answers.authenticationType !== OAUTH2) {
+          if (authenticationType !== OAUTH2) {
             opts.push({
               value: CASSANDRA,
               name: 'Cassandra',
@@ -121,15 +121,15 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
       {
         when: response => response.databaseType === SQL,
         type: 'list',
-        name: PROD_DATABASE_TYPE,
+        name: 'prodDatabaseType',
         message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-        choices: answers => (answers.reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
+        choices: answers => (reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS),
         default: this.jhipsterConfigWithDefaults.prodDatabaseType,
       },
       {
         when: response => response.databaseType === SQL,
         type: 'list',
-        name: DEV_DATABASE_TYPE,
+        name: 'devDatabaseType',
         message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
         choices: response =>
           [SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)].concat([
@@ -145,9 +145,9 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
         default: this.jhipsterConfigWithDefaults.devDatabaseType,
       },
       {
-        when: answers => !answers.reactive,
+        when: !reactive,
         type: 'list',
-        name: CACHE_PROVIDER,
+        name: 'cacheProvider',
         message: 'Which cache do you want to use? (Spring cache abstraction)',
         choices: [
           {
@@ -185,7 +185,7 @@ export async function askForServerSideOpts(this: CoreGenerator, { control }) {
         when: answers =>
           ((answers.cacheProvider !== NO_CACHE_PROVIDER && answers.cacheProvider !== MEMCACHED) || applicationType === GATEWAY) &&
           answers.databaseType === SQL &&
-          !answers.reactive,
+          !reactive,
         type: 'confirm',
         name: 'enableHibernateCache',
         message: 'Do you want to use Hibernate 2nd level cache?',
