@@ -462,7 +462,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
-    return this.prompt(this.prepareQuestions(generatorCommand.configs));
+    return this.prompt(this.prepareQuestions(generatorCommand.configs) as any);
   }
 
   /**

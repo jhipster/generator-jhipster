@@ -18,8 +18,8 @@
  */
 /* eslint-disable no-useless-escape */
 
-import { first, flatten, includes, values } from 'lodash-es';
-import type { ICstVisitor, TokenType } from 'chevrotain';
+import { first, flatten, includes } from 'lodash-es';
+import type { ICstVisitor, IToken, TokenType } from 'chevrotain';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 
 import type { JDLRuntime } from '../types/runtime.js';
@@ -411,7 +411,7 @@ export default function performAdditionalSyntaxChecks(cst, runtime: JDLRuntime) 
       this.visit(context.configValue, context.CONFIG_KEY[0]);
     }
 
-    configValue(context, configKey) {
+    configValue(context: Record<string, any>, configKey: IToken) {
       const configValue = first(first(Object.values(context)));
       this.checkConfigPropSyntax(configKey, configValue);
     }
@@ -420,8 +420,8 @@ export default function performAdditionalSyntaxChecks(cst, runtime: JDLRuntime) 
       this.visit(context.deploymentConfigValue, context.DEPLOYMENT_KEY[0]);
     }
 
-    deploymentConfigValue(context, configKey) {
-      const configValue = first(first(values(context)));
+    deploymentConfigValue(context: Record<string, any>, configKey: IToken) {
+      const configValue = first(first(Object.values(context)));
       this.checkDeploymentConfigPropSyntax(configKey, configValue);
     }
   }
