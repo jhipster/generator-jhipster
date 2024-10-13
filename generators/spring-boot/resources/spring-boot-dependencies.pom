@@ -46,6 +46,7 @@
     <commons-pool.version>1.6</commons-pool.version>
     <commons-pool2.version>2.12.0</commons-pool2.version>
     <couchbase-client.version>3.6.3</couchbase-client.version>
+    <couchmove.version>3.4.1</couchmove.version>
     <crac.version>1.4.0</crac.version>
     <cyclonedx-maven-plugin.version>2.8.1</cyclonedx-maven-plugin.version>
     <db2-jdbc.version>11.5.9.0</db2-jdbc.version>
@@ -425,6 +426,11 @@
         <groupId>com.couchbase.client</groupId>
         <artifactId>java-client</artifactId>
         <version>${couchbase-client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.differentway</groupId>
+        <artifactId>couchmove</artifactId>
+        <version>${couchmove.version}</version>
       </dependency>
       <dependency>
         <groupId>org.crac</groupId>
