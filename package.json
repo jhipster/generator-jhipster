@@ -170,7 +170,7 @@
     "type-fest": "4.26.1",
     "typescript": "5.5.4",
     "typescript-eslint": "8.8.1",
-    "yaml": "2.5.1",
+    "yaml": "2.6.0",
     "yeoman-environment": "4.4.2",
     "yeoman-generator": "7.3.3"
   },
