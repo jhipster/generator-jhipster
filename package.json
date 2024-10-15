@@ -189,7 +189,7 @@
     "eslint-import-resolver-typescript": "3.6.3",
     "eslint-plugin-chai-friendly": "1.0.1",
     "eslint-plugin-prettier": "5.2.1",
-    "esmocha": "2.1.1",
+    "esmocha": "2.3.0",
     "jsdoc": "4.0.3",
     "open-cli": "8.0.0",
     "prettier2": "npm:prettier@2.8.8",
