@@ -14,7 +14,7 @@
         <gatling.version>3.12.0</gatling.version>
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <mapstruct.version>1.6.2</mapstruct.version>
-        <micrometer-context-propagation.version>1.1.1</micrometer-context-propagation.version>
+        <micrometer-context-propagation.version>1.1.2</micrometer-context-propagation.version>
         <picocli.version>4.7.6</picocli.version>
 
         <!-- Plugin versions -->
