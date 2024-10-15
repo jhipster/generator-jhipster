@@ -8,7 +8,6 @@ import { execaCommandSync } from 'execa';
 import type { GeneratorMeta } from '@yeoman/types';
 import type FullEnvironment from 'yeoman-environment';
 import { coerce } from 'semver';
-import quibble from 'quibble';
 
 import { defaultHelpers as helpers, createBlueprintFiles } from '../lib/testing/index.js';
 import { getCommand as actualGetCommonand } from './utils.mjs';
@@ -96,7 +95,7 @@ describe('cli', () => {
   let argv;
 
   before(async () => {
-    await quibble.esm('./utils.mjs', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} });
+    await esmocha.mock('./utils.mjs', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
     const { buildJHipster } = await import('./program.mjs');
 
     mockCli = async (argv: string[], opts = {}) => {
@@ -105,7 +104,7 @@ describe('cli', () => {
     };
   });
   after(() => {
-    quibble.reset();
+    esmocha.reset();
   });
 
   beforeEach(async () => {
