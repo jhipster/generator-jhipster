@@ -177,7 +177,7 @@
   "devDependencies": {
     "@actions/core": "1.11.1",
     "@eslint/core": "0.6.0",
-    "@node-loaders/esbuildx": "1.4.0",
+    "@node-loaders/esbuild": "1.1.0",
     "@types/chai": "4.3.16",
     "@types/estree": "1.0.6",
     "@types/node": "20.11.25",
