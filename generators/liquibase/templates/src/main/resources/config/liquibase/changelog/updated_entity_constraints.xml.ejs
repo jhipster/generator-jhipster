@@ -105,66 +105,9 @@ if (hasFieldConstraint) { _%>
         Added the relationship constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-relationship-foreign-keys" author="jhipster">
-    <%_ for (idx in addedRelationships) {
-        const relationship = addedRelationships[idx];
-        onDelete = relationship.onDelete,
-        onUpdate = relationship.onUpdate;
-
-        if (relationship.shouldWriteRelationship) {
-            const constraintName = this.getFKConstraintName(entityTableName, relationship.columnName, prodDatabaseType);
-            let baseColumnName = relationship.columnName + '_id';
-            if (relationship.relationshipType === 'one-to-one' && relationship.id === true) {
-                baseColumnName = 'id';
-            }
-    _%>
-        <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
-                                 baseTableName="<%= entityTableName %>"
-                                 constraintName="<%= constraintName %>"
-                                 referencedColumnNames="id"
-                                 referencedTableName="<%= relationship.otherEntityTableName %>"
-            <%_ if (onDelete) { _%>                                 
-                                 onDelete="<%= onDelete %>"
-            <%_ } _%>
-            <%_ if (onUpdate) { _%>
-                                 onUpdate="<%= onUpdate %>"
-            <%_ } _%>
-                                 />
-    <%_ } else if (relationship.shouldWriteJoinTable) {
-            const constraintName = this.getFKConstraintName(relationship.joinTable.name, entityTableName, prodDatabaseType);
-            const otherEntityConstraintName = this.getFKConstraintName(relationship.joinTable.name, relationship.columnName, prodDatabaseType);
-    _%>
-
-        <addForeignKeyConstraint baseColumnNames="<%= entity.primaryKey.fields.map(field => entity.entityTableName + '_' + field.columnName).join(', ') %>"
-                                 baseTableName="<%= relationship.joinTable.name %>"
-                                 constraintName="<%= constraintName %>"
-                                 referencedColumnNames="<%= entity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
-                                 referencedTableName="<%= entityTableName %>"
-            <%_ if (onDelete) { _%>                                 
-                                 onDelete="<%= onDelete %>"
-            <%_ } _%>
-            <%_ if (onUpdate) { _%>
-                                 onUpdate="<%= onUpdate %>"
-            <%_ } _%>
-                                 />
-
-        <addForeignKeyConstraint baseColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
-                                 baseTableName="<%= relationship.joinTable.name %>"
-                                 constraintName="<%= otherEntityConstraintName %>"
-                                 referencedColumnNames="<%= relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
-                                 referencedTableName="<%= relationship.otherEntityTableName %>"
-            <%_ if (relationship.otherRelationship) { 
-                // User object is not supporting this right now
-                _%>
-                <%_ if (relationship.otherRelationship.onDelete) { _%>                                 
-                                 onDelete="<%= relationship.otherRelationship.onDelete %>"
-                <%_ } _%>
-                <%_ if (relationship.otherRelationship.onUpdate) { _%>
-                                 onUpdate="<%= relationship.otherRelationship.onUpdate %>"
-                <%_ } _%>
-            <%_ } _%>
-                                 />
-    <%_ }
-    } _%>
+    <%_ for (relationship of addedRelationships) { _%>
+<%- include('./add_relationship_constraints', { entity, relationship, prodDatabaseType }) -%>
+    <%_ } _%>
     </changeSet>
 <%_ } _%>
 </databaseChangeLog>
