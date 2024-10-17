@@ -1,7 +1,8 @@
 export const devServerMatrix = {
   angular: {
     'ng-default': {
-      args: '--entities-sample sqllight',
+      sample: 'samples/ng-default',
+      args: '--sample-yorc-folder --entities-sample sqllight',
     },
   },
   react: {
@@ -12,7 +13,8 @@ export const devServerMatrix = {
   },
   vue: {
     'vue-default': {
-      args: '--entities-sample sqllight',
+      sample: 'samples/vue-default',
+      args: '--sample-yorc-folder --entities-sample sqllight',
     },
   },
 };
