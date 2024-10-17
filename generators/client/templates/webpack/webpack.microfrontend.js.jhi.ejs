@@ -26,7 +26,7 @@
  });
 _&>
 
-const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const { ModuleFederationPlugin } = require('@module-federation/enhanced/webpack');
 <&- fragments.importsSection() &>
 <%_ if (!clientFrameworkVue) { _%>
 const packageJson = require('../package.json');
@@ -63,6 +63,8 @@ module.exports = () => {
         filename: 'remoteEntry.js',
   <%_ } _%>
         shareScope: 'default',
+        dts: false,
+        manifest: false,
 <&- fragments.moduleFederationSection() &>
       }
 <%_ } -%>
@@ -71,6 +73,7 @@ module.exports = () => {
     ],
     output: {
       publicPath: 'auto',
+      scriptType: 'text/javascript',
     },
   };
 };

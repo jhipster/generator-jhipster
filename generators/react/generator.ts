@@ -189,6 +189,18 @@ export default class ReactGenerator extends BaseApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addMicrofrontendDependencies({ application }) {
+        if (!application.microfrontend) return;
+        const { applicationTypeGateway } = application;
+        if (applicationTypeGateway) {
+          this.packageJson.merge({
+            devDependencies: { '@module-federation/utilities': null },
+          });
+        }
+        this.packageJson.merge({
+          devDependencies: { '@module-federation/enhanced': null },
+        });
+      },
       addWebsocketDependencies({ application }) {
         const { communicationSpringWebsocket, nodeDependencies } = application;
         if (communicationSpringWebsocket) {
