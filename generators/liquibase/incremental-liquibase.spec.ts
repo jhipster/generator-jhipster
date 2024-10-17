@@ -599,8 +599,16 @@ entity Customer {
       );
       runResult.assertNoFileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`, 'dropColumn');
     });
-    it('should create the entity constraint update changelog', () => {
+    it('should create the entity constraint update changelog with fitting column names', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`]);
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
+        'baseColumnNames="another_another_id"',
+      );
+      runResult.assertFileContent(
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_constraints_One.xml`,
+        'referencedColumnNames="another_id"',
+      );
     });
     it('should match snapshot', () => {
       expect(runResult.getSnapshot('**/src/main/resources/config/liquibase/**')).toMatchSnapshot();
