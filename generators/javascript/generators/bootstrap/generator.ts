@@ -77,7 +77,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
           description: projectDescription,
           license: 'UNLICENSED',
         });
-        if (packageJsonType) {
+        if (packageJsonType === 'module') {
           this.packageJson.merge({ type: packageJsonType });
         }
         if (packageJsonNodeEngine) {
