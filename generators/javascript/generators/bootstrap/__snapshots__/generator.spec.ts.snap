@@ -19,8 +19,7 @@ exports[`generator - javascript:bootstrap customVersion-commonjs should match fi
   "name": "dasherizedBaseName",
   "version": "0.0.0",
   "description": "projectDescription",
-  "license": "UNLICENSED",
-  "type": "commonjs"
+  "license": "UNLICENSED"
 }
 ",
     "stateCleared": "modified",
@@ -73,8 +72,7 @@ exports[`generator - javascript:bootstrap packageJsonNodeEngine(true) should mat
   "name": "dasherizedBaseName",
   "version": "0.0.0",
   "description": "projectDescription",
-  "license": "UNLICENSED",
-  "type": "commonjs"
+  "license": "UNLICENSED"
 }
 ",
     "stateCleared": "modified",
