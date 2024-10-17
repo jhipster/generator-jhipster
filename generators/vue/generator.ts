@@ -223,6 +223,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
           }
           this.packageJson.merge({
             devDependencies: {
+              '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
               'css-loader': null,
