@@ -8,7 +8,7 @@ export default {
         type: String,
       },
       scope: 'generator',
-      choices: ['testcontainers'],
+      choices: ['testcontainers', 'dev-server'],
     },
   },
 } as const satisfies JHipsterCommandDefinition;
