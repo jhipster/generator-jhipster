@@ -65,6 +65,7 @@ export default class extends BaseGenerator {
         const sample = await generateSample(this.sampleName, {
           destProjectFolder: this.projectFolder,
           fork: false,
+          entity: this.entitiesSample,
         });
         assert.ok(sample, `Sample ${this.sampleName} not found`);
 
