@@ -12,11 +12,16 @@ export const parseIssue = (issue: string): undefined | { owner: string; reposito
   return undefined;
 };
 
+export const getGithubOutputFile = (): string | undefined => {
+  const filePath = process.env.GITHUB_OUTPUT;
+  return filePath && existsSync(filePath) ? filePath : undefined;
+};
+
 export const setGithubTaskOutput = (name: string, value: string | boolean | number) => {
   const delimiter = `delimiter_${randomUUID()}`;
   const output = `${name}<<${delimiter}${EOL}${value}${EOL}${delimiter}${EOL}`;
-  const filePath = process.env.GITHUB_OUTPUT;
-  if (filePath && existsSync(filePath)) {
+  const filePath = getGithubOutputFile();
+  if (filePath) {
     appendFileSync(filePath, output, { encoding: 'utf8' });
   } else {
     // eslint-disable-next-line no-console

@@ -1,0 +1,801 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator - github-build-matrix with angular should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "ng-default (n20.18.0/j22)",
+      "sample": "ng-default",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-default",
+      "app-sample": "ng-default",
+      "entity": "sqlfull",
+      "sonar-analyse": "true",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-default-additional (n20.18.0/j17)",
+      "sample": "ng-default-additional",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-default-additional",
+      "entity": "none",
+      "app-sample": "ng-default",
+      "jdl-entity": "*",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-mysql-es-noi18n-mapsid (n20/j17)",
+      "sample": "ng-mysql-es-noi18n-mapsid",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-mysql-es-noi18n-mapsid",
+      "app-sample": "ng-mysql-es-noi18n-mapsid",
+      "entity": "sql",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-mongodb-kafka-cucumber (n20/j21)",
+      "sample": "ng-mongodb-kafka-cucumber",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-mongodb-kafka-cucumber",
+      "app-sample": "ng-mongodb-kafka-cucumber",
+      "entity": "mongodb",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-h2mem-ws-nol2 (n20.18.0/j21)",
+      "sample": "ng-h2mem-ws-nol2",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-h2mem-ws-nol2",
+      "app-sample": "ng-h2mem-ws-nol2",
+      "entity": "sql",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-gradle-fr (n20/j22)",
+      "sample": "ng-gradle-fr",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ng-gradle-fr",
+      "app-sample": "ng-gradle-fr",
+      "entity": "sql",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-gradle-mariadb-oauth2-infinispan (n20/j22)",
+      "sample": "ng-gradle-mariadb-oauth2-infinispan",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ng-gradle-mariadb-oauth2-infinispan",
+      "app-sample": "ng-gradle-mariadb-oauth2-infinispan",
+      "entity": "sql",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-gradle-h2disk-ws-nocache (n20/j22)",
+      "sample": "ng-gradle-h2disk-ws-nocache",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ng-gradle-h2disk-ws-nocache",
+      "app-sample": "ng-gradle-h2disk-ws-nocache",
+      "entity": "sql",
+      "generatorOptions": {
+        "defaultEnvironment": "dev",
+        "defaultPackaging": "war"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-webflux-mongodb (n20/j21)",
+      "sample": "ng-webflux-mongodb",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-webflux-mongodb",
+      "app-sample": "webflux-mongodb",
+      "entity": "mongodb",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-webflux-gradle-mongodb-oauth2 (n20/j21)",
+      "sample": "ng-webflux-gradle-mongodb-oauth2",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ng-webflux-gradle-mongodb-oauth2",
+      "app-sample": "webflux-mongodb-oauth2",
+      "entity": "mongodb",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-webflux-psql-default (n20/j22)",
+      "sample": "ng-webflux-psql-default",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-webflux-psql-default",
+      "app-sample": "webflux-psql",
+      "entity": "sql",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-webflux-psql-additional (n20/j22)",
+      "sample": "ng-webflux-psql-additional",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "ng-webflux-psql-additional",
+      "jdl-samples": "webflux-psql,custom-domain",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ng-webflux-gradle-session-h2mem-es (n18/j17)",
+      "sample": "ng-webflux-gradle-session-h2mem-es",
+      "os": "ubuntu-latest",
+      "node-version": "18",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ng-webflux-gradle-session-h2mem-es",
+      "app-sample": "webflux-gradle-session-h2mem-es",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "entity": "sqllight",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ms-ng-oauth2-mongodb-caffeine (n18/j17)",
+      "sample": "ms-ng-oauth2-mongodb-caffeine",
+      "os": "ubuntu-latest",
+      "node-version": "18",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ms-ng-oauth2-mongodb-caffeine",
+      "jdl-samples": "ms-ng-oauth2-mongodb-caffeine",
+      "generatorOptions": {
+        "workspaces": true,
+        "experimental": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    },
+    {
+      "job-name": "mf-ng-eureka-jwt-psql-ehcache (n20.18.0/j17)",
+      "sample": "mf-ng-eureka-jwt-psql-ehcache",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "mf-ng-eureka-jwt-psql-ehcache",
+      "jdl-samples": "mf-ng-eureka-jwt-psql-ehcache",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    },
+    {
+      "job-name": "ms-mf-ng-consul-oauth2-neo4j (n20.18.0/j17)",
+      "sample": "ms-mf-ng-consul-oauth2-neo4j",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ms-mf-ng-consul-oauth2-neo4j",
+      "jdl-samples": "ms-mf-ng-consul-oauth2-neo4j",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    }
+  ]
+}"
+`;
+
+exports[`generator - github-build-matrix with devserver should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "ng-default",
+      "sample": "samples/ng-default",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "args": "--sample-yorc-folder --entities-sample sqllight"
+    },
+    {
+      "job-name": "react-default",
+      "sample": "samples/react-default",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "args": "--sample-yorc-folder --entities-sample sqllight"
+    },
+    {
+      "job-name": "vue-default",
+      "sample": "samples/vue-default",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "args": "--sample-yorc-folder --entities-sample sqllight"
+    }
+  ]
+}"
+`;
+
+exports[`generator - github-build-matrix with docker-compose-integration should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "cassandra-maven-jwt",
+      "sample": "cassandra-maven-jwt",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    buildTool maven\\n    authenticationType jwt\\n  }\\n}"
+    },
+    {
+      "job-name": "cassandra-reactive(true)-gradle-elasticsearch-oauth2-consul-kafka",
+      "sample": "cassandra-reactive(true)-gradle-elasticsearch-oauth2-consul-kafka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}"
+    },
+    {
+      "job-name": "mongodb-maven-jwt-kafka",
+      "sample": "mongodb-maven-jwt-kafka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    buildTool maven\\n    authenticationType jwt\\n    messageBroker kafka\\n  }\\n}"
+    },
+    {
+      "job-name": "mongodb-reactive(true)-gradle-elasticsearch-oauth2-consul",
+      "sample": "mongodb-reactive(true)-gradle-elasticsearch-oauth2-consul",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n  }\\n}"
+    },
+    {
+      "job-name": "neo4j-maven-jwt-eureka",
+      "sample": "neo4j-maven-jwt-eureka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n  }\\n}"
+    },
+    {
+      "job-name": "neo4j-reactive(true)-gradle-elasticsearch-oauth2-eureka-kafka",
+      "sample": "neo4j-reactive(true)-gradle-elasticsearch-oauth2-eureka-kafka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}"
+    },
+    {
+      "job-name": "postgresql-cacheProvider(no)-maven-jwt-eureka-kafka",
+      "sample": "postgresql-cacheProvider(no)-maven-jwt-eureka-kafka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    cacheProvider no\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}"
+    },
+    {
+      "job-name": "mysql-memcached-gradle-elasticsearch-oauth2-eureka",
+      "sample": "mysql-memcached-gradle-elasticsearch-oauth2-eureka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    cacheProvider memcached\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n  }\\n}"
+    },
+    {
+      "job-name": "mariadb-redis-maven-jwt-consul",
+      "sample": "mariadb-redis-maven-jwt-consul",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    cacheProvider redis\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n  }\\n}"
+    },
+    {
+      "job-name": "postgresql-reactive(true)-gradle-elasticsearch-oauth2-kafka",
+      "sample": "postgresql-reactive(true)-gradle-elasticsearch-oauth2-kafka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    messageBroker kafka\\n  }\\n}"
+    },
+    {
+      "job-name": "mysql-reactive(true)-maven-jwt-consul-kafka",
+      "sample": "mysql-reactive(true)-maven-jwt-consul-kafka",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    reactive true\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}"
+    },
+    {
+      "job-name": "mariadb-reactive(true)-gradle-elasticsearch-oauth2",
+      "sample": "mariadb-reactive(true)-gradle-elasticsearch-oauth2",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n  }\\n}"
+    },
+    {
+      "job-name": "h2",
+      "sample": "h2",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "cmd-e2e": "npm run ci:e2e:dev",
+      "args": "jdl",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    devDatabaseType h2Disk\\n  }\\n}"
+    }
+  ]
+}"
+`;
+
+exports[`generator - github-build-matrix with react should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "react-default (n20/j21)",
+      "sample": "react-default",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "react-default",
+      "app-sample": "react-default",
+      "entity": "sqlfull",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "react-maven-h2mem-memcached (n20/j17)",
+      "sample": "react-maven-h2mem-memcached",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "react-maven-h2mem-memcached",
+      "app-sample": "react-maven-h2mem-memcached",
+      "entity": "sql",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "react-gradle-mysql-es-noi18n-mapsid (n20.18.0/j22)",
+      "sample": "react-gradle-mysql-es-noi18n-mapsid",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "react-gradle-mysql-es-noi18n-mapsid",
+      "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
+      "entity": "sql",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "react-gradle-cassandra-session-redis (n20/j17)",
+      "sample": "react-gradle-cassandra-session-redis",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "react-gradle-cassandra-session-redis",
+      "app-sample": "react-gradle-cassandra-session-redis",
+      "entity": "cassandra",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ms-react-consul-jwt-cassandra-redis (n20/j17)",
+      "sample": "ms-react-consul-jwt-cassandra-redis",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ms-react-consul-jwt-cassandra-redis",
+      "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    },
+    {
+      "job-name": "ms-mf-react-eureka-oauth2-mariadb-infinispan (n18/j17)",
+      "sample": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
+      "os": "ubuntu-latest",
+      "node-version": "18",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
+      "jdl-samples": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    }
+  ]
+}"
+`;
+
+exports[`generator - github-build-matrix with vue should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "vue-default (n20.18.0/j21)",
+      "sample": "vue-default",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "vue-default",
+      "app-sample": "vue-default",
+      "entity": "sqlfull",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "vue-default-additional (n20/j21)",
+      "sample": "vue-default-additional",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "vue-default-additional",
+      "app-sample": "vue-default",
+      "entity": "none",
+      "jdl-entity": "custom-id",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "vue-noi18n-mysql-ws-oauth2 (n20/j21)",
+      "sample": "vue-noi18n-mysql-ws-oauth2",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "vue-noi18n-mysql-ws-oauth2",
+      "app-sample": "vue-noi18n-ws-oauth2",
+      "entity": "sqlfull",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "vue-fulli18n-mysql-es (n20/j22)",
+      "sample": "vue-fulli18n-mysql-es",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "vue-fulli18n-mysql-es",
+      "app-sample": "vue-fulli18n-es",
+      "entity": "sql",
+      "workspaces": "false"
+    },
+    {
+      "job-name": "vue-gradle-h2mem-ws-session (n20.18.0/j17)",
+      "sample": "vue-gradle-h2mem-ws-session",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "vue-gradle-h2mem-ws-session",
+      "app-sample": "vue-gradle-ws-session",
+      "entity": "sql",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "vue-h2disk-ws-theme (n20/j17)",
+      "sample": "vue-h2disk-ws-theme",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "vue-h2disk-ws-theme",
+      "app-sample": "vue-ws-theme",
+      "entity": "sql",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "vue-session-cassandra-fr (n20.18.0/j17)",
+      "sample": "vue-session-cassandra-fr",
+      "os": "ubuntu-latest",
+      "node-version": "20.18.0",
+      "java-version": "17",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "name": "vue-session-cassandra-fr",
+      "app-sample": "vue-session-cassandra-fr",
+      "entity": "cassandra",
+      "generatorOptions": {
+        "defaultEnvironment": "dev"
+      },
+      "workspaces": "false"
+    },
+    {
+      "job-name": "ms-mf-vue-consul-oauth2-mysql-memcached (n20/j21)",
+      "sample": "ms-mf-vue-consul-oauth2-mysql-memcached",
+      "os": "ubuntu-latest",
+      "node-version": "20",
+      "java-version": "21",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "false",
+      "gradle-cache": true,
+      "name": "ms-mf-vue-consul-oauth2-mysql-memcached",
+      "jdl-samples": "ms-mf-vue-consul-oauth2-mysql-memcached",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    },
+    {
+      "job-name": "stack-vue-no-db (n18/j22)",
+      "sample": "stack-vue-no-db",
+      "os": "ubuntu-latest",
+      "node-version": "18",
+      "java-version": "22",
+      "npm-version": "10.9.0",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "skip-backend-tests": "false",
+      "skip-frontend-tests": "backend tests only",
+      "gradle-cache": true,
+      "name": "stack-vue-no-db",
+      "jdl-samples": "stack-vue-no-db",
+      "generatorOptions": {
+        "workspaces": true,
+        "monorepository": true
+      },
+      "workspaces": "true"
+    }
+  ]
+}"
+`;
