@@ -21,7 +21,7 @@ export default class extends BaseGenerator {
           const { devBlueprint, devserverCi, client, angular, react, vue } = await getGitChanges();
           const matrix = {};
           if (devBlueprint || devserverCi || client || angular) {
-            // Object.assign(matrix, devServerMatrix.angular);
+            Object.assign(matrix, devServerMatrix.angular);
           }
           if (devBlueprint || devserverCi || client || react) {
             Object.assign(matrix, devServerMatrix.react);
