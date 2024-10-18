@@ -6,6 +6,7 @@ type GitHubMatrix = {
   'java-version': string;
   'default-environment': string;
   'job-name': string;
+  sample: string;
   args: string;
 };
 
@@ -31,6 +32,7 @@ export const convertToGitHubMatrix = (matrix: Record<string, any>): GitHubMatrix
   return {
     include: Object.entries(matrix).map(([key, value]) => ({
       'job-name': key,
+      sample: key,
       ...defaultEnvironment,
       ...value,
     })),

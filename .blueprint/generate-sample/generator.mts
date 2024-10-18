@@ -65,6 +65,7 @@ export default class extends BaseGenerator {
         const sample = await generateSample(this.sampleName, {
           destProjectFolder: this.projectFolder,
           fork: false,
+          entity: this.entitiesSample,
         });
         assert.ok(sample, `Sample ${this.sampleName} not found`);
 
@@ -103,19 +104,11 @@ export default class extends BaseGenerator {
         const entitiesFiles = entitiesByType[this.entitiesSample];
         if (entitiesFiles) {
           this.jhipsterConfig.entities = entitiesFiles;
-          /*
+          this.log.info(`Copying entities ${this.entitiesSample} (${entitiesFiles})`);
           this.copyTemplate(
             entitiesFiles.map(entity => `.jhipster/${entity}.json`),
             this.projectFolder,
             { noGlob: true, fromBasePath: this.templatePath('../../../test-integration/samples/') },
-          );
-          */
-          entitiesFiles.forEach(entity =>
-            this.copyTemplate(
-              `../../../test-integration/samples/.jhipster/${entity}.json`,
-              `${this.projectFolder}/.jhipster/${entity}.json`,
-              { noGlob: true },
-            ),
           );
         }
         await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { destinationRoot: this.projectFolder } });

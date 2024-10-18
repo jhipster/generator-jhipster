@@ -31,6 +31,7 @@ on:
       - '.github/workflows/devserver.yml'
       - 'generators/angular/**'
       - 'generators/client/**'
+      - 'generators/javascript/**'
       - 'generators/react/**'
       - 'generators/vue/**'
       - 'generators/*'
@@ -49,15 +50,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: 'Build matrix'
-        id: build
-        uses: ./.github/actions/build-matrix
-        with:
-          workflow-file-prefix: devserver
+      - run: npm ci --ignore-scripts
+      - id: build
+        run: bin/jhipster.cjs github-build-matrix dev-server
   applications:
-    name: ${{ matrix.app-sample }}
+    name: ${{ matrix.job-name }}
     needs: build-matrix
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
@@ -75,44 +74,35 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
-        with:
-          application-sample: ${{ matrix.setup-application-sample }}
-          entities-sample: ${{ matrix.setup-entities-sample }}
-          jdl-entities-sample: ${{ matrix.setup-jdl-entities-sample }}
-          jdl-sample: ${{ matrix.setup-jdl-sample }}
-          application-environment: ${{ matrix.setup-application-environment }}
-          application-packaging: ${{ matrix.setup-application-packaging }}
       - uses: jhipster/actions/setup-runner@v0
         with:
-          node-version: ${{ steps.setup.outputs.node-version }}
-          java-version: ${{ steps.setup.outputs.java-version }}
+          node-version: ${{ matrix.node-version }}
+          java-version: ${{ matrix.java-version }}
+          npm-version: ${{ matrix.npm-version }}
           maven-cache: true
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - name: 'GENERATION: install JHipster'
-        run: $JHI_SCRIPTS/10-install-jhipster.sh
-      - name: 'GENERATION: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
+      - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh ${{ matrix.extra-args }} ${{ matrix.new-extra-args }}
-      - name: 'GENERATION: jhipster info'
-        run: $JHI_SCRIPTS/14-jhipster-info.sh
+        run: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.args }}
+      - run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
       - name: 'E2E: Run'
         id: e2e
-        run: ./npmw run e2e:devserver --if-present
+        run: |
+          ./npmw install
+          ./npmw run e2e:devserver --if-present
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.app-sample }}
-          path: ${{ steps.setup.outputs.application-path }}/*/cypress/screenshots
+          name: screenshots-${{ matrix.job-name }}
+          path: ${{ github.workspace }}/app/*/cypress/screenshots
   check-dev-server:
     permissions:
       contents: none

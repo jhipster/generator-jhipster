@@ -1372,8 +1372,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   /**
    * Create a simple-git instance using current destinationPath as baseDir.
    */
-  createGit() {
-    return simpleGit({ baseDir: this.destinationPath() }).env({
+  createGit(options?: Parameters<typeof simpleGit>[0]) {
+    return simpleGit({ baseDir: this.destinationPath(), ...options }).env({
       ...process.env,
       LANG: 'en',
     });
