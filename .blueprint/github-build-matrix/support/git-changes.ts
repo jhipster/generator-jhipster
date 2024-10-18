@@ -18,7 +18,7 @@ export const getGitChanges = async () => {
       hasPatternChanges('.github/{actions,workflows}/**') ||
       hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),
     devserverCi: hasPatternChanges('.github/workflows/devserver.yml'),
-    common: hasPatternChanges ('generators/{app,common,cypress,docker,languages}/**'),
+    common: hasPatternChanges('generators/{app,common,cypress,docker,languages}/**'),
     client: hasPatternChanges('generators/{client,init,javascript}/**'),
     angular: hasPatternChanges('generators/angular/**'),
     react: hasPatternChanges('generators/react/**'),
