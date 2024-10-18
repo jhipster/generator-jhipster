@@ -196,6 +196,8 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
   <%_ if (clientBundlerVite) { _%>
                     .requestMatchers(mvc.pattern("/assets/**")).permitAll()
+  <%_ } else if (clientBundlerRsbuild) { _%>
+                    .requestMatchers(mvc.pattern("/static/**")).permitAll()
   <%_ } else { _%>
                     .requestMatchers(mvc.pattern("/app/**")).permitAll()
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
@@ -225,6 +227,8 @@ public class SecurityConfiguration {
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
     <%_ if (clientBundlerVite) { _%>
                     .requestMatchers(mvc.pattern("/services/*/assets/**")).permitAll()
+    <%_ } else if (clientBundlerRsbuild) { _%>
+                    .requestMatchers(mvc.pattern("/services/*/static/**")).permitAll()
     <%_ } _%>
                     .requestMatchers(mvc.pattern("/services/*/*.js")).permitAll()
                     .requestMatchers(mvc.pattern("/services/*/*.txt")).permitAll()
