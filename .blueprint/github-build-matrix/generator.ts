@@ -18,15 +18,15 @@ export default class extends BaseGenerator {
         if (this.workflow === 'docker-compose-integration') {
           setGithubTaskOutput('matrix', JSON.stringify(convertToGitHubMatrix(dockerComposeMatrix), null, 2));
         } else if (this.workflow === 'dev-server') {
-          const { devserverCi, client, angular, react, vue } = await getGitChanges();
+          const { devBlueprint, devserverCi, client, angular, react, vue } = await getGitChanges();
           const matrix = {};
-          if (devserverCi || client || angular) {
+          if (devBlueprint || devserverCi || client || angular) {
             // Object.assign(matrix, devServerMatrix.angular);
           }
-          if (devserverCi || client || react) {
+          if (devBlueprint || devserverCi || client || react) {
             Object.assign(matrix, devServerMatrix.react);
           }
-          if (devserverCi || client || vue) {
+          if (devBlueprint || devserverCi || client || vue) {
             Object.assign(matrix, devServerMatrix.vue);
           }
           const githubMatrix = convertToGitHubMatrix(matrix);
