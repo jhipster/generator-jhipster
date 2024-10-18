@@ -27,7 +27,7 @@ export default class extends BaseGenerator {
             Object.assign(matrix, devServerMatrix.react);
           }
           if (devserverCi || client || vue) {
-            // Object.assign(matrix, devServerMatrix.vue);
+            Object.assign(matrix, devServerMatrix.vue);
           }
           const githubMatrix = convertToGitHubMatrix(matrix);
           setGithubTaskOutput('matrix', JSON.stringify(githubMatrix, null, 2));
