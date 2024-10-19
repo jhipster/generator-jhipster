@@ -101,7 +101,8 @@ export default class extends BaseGenerator {
           }
         }
 
-        this.matrix = JSON.stringify(convertToGitHubMatrix(matrix, { randomEnvironment }), null, 2);
+        const { useVersionPlaceholders } = this;
+        this.matrix = JSON.stringify(convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }), null, 2);
         const githubOutputFile = getGithubOutputFile();
         this.log.info('matrix', this.matrix);
         if (githubOutputFile) {

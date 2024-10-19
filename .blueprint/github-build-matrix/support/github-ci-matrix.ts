@@ -43,13 +43,19 @@ export const defaultEnvironmentMatrix = {
   'default-environment': ['prod'],
 };
 
-const randomReproducibleValue = <Choice = any>(seed: string, choices: Choice[]): Choice => {
-  return choices[createHash('shake256', { outputLength: 1 }).update(seed, 'utf8').digest('binary').charCodeAt(0) % choices.length];
+const randomReproducibleValue = <Choice = any>(seed: string, choices: Choice[], options?: { useVersionPlaceholders?: boolean }): Choice => {
+  const { useVersionPlaceholders } = options ?? {};
+  const index = createHash('shake256', { outputLength: 1 }).update(seed, 'utf8').digest('binary').charCodeAt(0) % choices.length;
+  if (useVersionPlaceholders) {
+    return `[${index}]` as any;
+  }
+  return choices[index];
 };
 
-const randomEnvironmentMatrix = (key: string) => {
-  const javaVersion = randomReproducibleValue(`java-${key}`, [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS]);
-  const nodeVersion = randomReproducibleValue(`node-${key}`, [NODE_VERSION, '18', '20']);
+const randomEnvironmentMatrix = (key: string, options: { useVersionPlaceholders?: boolean }) => {
+  const { useVersionPlaceholders } = options;
+  const javaVersion = randomReproducibleValue(`java-${key}`, [JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS], { useVersionPlaceholders });
+  const nodeVersion = randomReproducibleValue(`node-${key}`, [NODE_VERSION, '18', '20'], { useVersionPlaceholders });
   return {
     'job-name': `${key} (n${nodeVersion}/j${javaVersion})`,
     'java-version': javaVersion,
@@ -57,8 +63,11 @@ const randomEnvironmentMatrix = (key: string) => {
   };
 };
 
-export const convertToGitHubMatrix = (matrix: GitHubMatrixRecord, options?: { randomEnvironment?: boolean }): GitHubMatrixOutput => {
-  const { randomEnvironment } = options ?? {};
+export const convertToGitHubMatrix = (
+  matrix: GitHubMatrixRecord,
+  options?: { randomEnvironment?: boolean; useVersionPlaceholders?: boolean },
+): GitHubMatrixOutput => {
+  const { randomEnvironment, useVersionPlaceholders } = options ?? {};
   return {
     include: Object.entries(matrix)
       .filter(([_key, value]) => !value.disabled)
@@ -66,8 +75,9 @@ export const convertToGitHubMatrix = (matrix: GitHubMatrixRecord, options?: { ra
         'job-name': key,
         sample: key,
         ...defaultEnvironment,
+        ...(useVersionPlaceholders ? { 'java-version': 'JAVA-VERSION', 'node-version': 'NODE-VERSION', 'npm-version': 'NPM-VERSION' } : {}),
         ...value,
-        ...(randomEnvironment ? randomEnvironmentMatrix(key) : {}),
+        ...(randomEnvironment ? randomEnvironmentMatrix(key, { useVersionPlaceholders }) : {}),
       })),
   };
 };
