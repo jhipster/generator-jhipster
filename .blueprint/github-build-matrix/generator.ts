@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import BaseGenerator from '../../generators/base/index.js';
 import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/index.js';
 import { getPackageRoot } from '../../lib/index.js';
+import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
 import type { GitHubMatrix, GitHubMatrixRecord } from './support/github-ci-matrix.js';
 import { convertToGitHubMatrix } from './support/github-ci-matrix.js';
 import { dockerComposeMatrix } from './samples/docker-compose-integration.js';
@@ -90,6 +91,9 @@ export default class extends BaseGenerator {
                     ...sample,
                     sample: jobName,
                     workspaces,
+                    'build-jhipster-bom': BUILD_JHIPSTER_BOM,
+                    'jhipster-bom-branch': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_BRANCH : undefined,
+                    'jhipster-bom-cicd-version': BUILD_JHIPSTER_BOM ? JHIPSTER_BOM_CICD_VERSION : undefined,
                   },
                 ];
               }),
