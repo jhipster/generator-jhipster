@@ -577,9 +577,6 @@ exports[`generator - couchbase microservice-jwt-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/SecurityJwtConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/tech/jhipster/config/SpringDocConfiguration.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/tech/jhipster/config/WebConfigurer.java": {
     "stateCleared": "modified",
   },
@@ -919,9 +916,6 @@ exports[`generator - couchbase microservice-jwt-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityJwtConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
@@ -1266,9 +1260,6 @@ exports[`generator - couchbase microservice-oauth2-reactive(true)-gradle-enableT
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/SecurityConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/config/SpringDocConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/config/WebConfigurer.java": {
