@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -86,8 +85,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
           const { jdlDefinition } = this.options;
 
-          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition });
-          await this.pipeline({ refresh: true, pendingFiles: false }, importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition }));
+          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! });
+          await this.pipeline(
+            { refresh: true, pendingFiles: false },
+            importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),
+          );
         }
       },
     });
@@ -257,7 +259,9 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
 
           if (!relationship.relationshipSide) {
             // Try to create relationshipSide based on best bet.
+            // @ts-ignore deprecated property
             if (relationship.ownerSide !== undefined) {
+              // @ts-ignore deprecated property
               relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
             } else {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
@@ -352,8 +356,11 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         for (const entity of entities) {
           for (const field of entity.fields) {
             if (isFieldBinaryType(field)) {
-              field.fieldTypeBlobContent ??= getBlobContentType(field.fieldType);
+              if (isFieldBlobType(field)) {
+                field.fieldTypeBlobContent ??= getBlobContentType(field.fieldType);
+              }
               if (application.databaseTypeCassandra || entity.databaseType === 'cassandra') {
+                // @ts-expect-error set another type
                 field.fieldType = 'ByteBuffer';
               } else if (isFieldBlobType(field)) {
                 field.fieldType = 'byte[]' as any;

@@ -43,6 +43,9 @@ export type JHipsterGeneratorOptions = BaseOptions &
     jhipsterContext?: any;
     composeWithLocalBlueprint?: boolean;
 
+    /** boostrap options */
+    applyDefaults?: <const data = any>(data: data) => data;
+
     /* generate-blueprint options */
     localBlueprint?: boolean;
 

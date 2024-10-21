@@ -20,4 +20,5 @@ export type Entity<F extends Field = Field, R extends Relationship = Relationshi
   skipServer?: boolean;
 
   microserviceName?: string;
+  clientRootFolder?: string;
 };

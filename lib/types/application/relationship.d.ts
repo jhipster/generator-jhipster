@@ -25,6 +25,7 @@ export interface Relationship<E extends Entity = Entity> extends BaseRelationshi
   id?: boolean;
   ownerSide?: boolean;
   relationshipEagerLoad?: boolean;
+  relationshipRequired?: boolean;
 
   propertyJavaBeanName?: string;
   propertyDtoJavaType?: string;

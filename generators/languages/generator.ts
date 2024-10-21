@@ -45,6 +45,7 @@ const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
  */
 export default class LanguagesGenerator extends BaseApplicationGenerator {
   askForMoreLanguages!: boolean;
+  askForNativeLanguage!: boolean;
   translationData;
   supportedLanguages;
   languages;
@@ -53,7 +54,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
    * Can be incremental or every language.
    */
   languagesToApply;
-  composedBlueprints!: string[] = [];
+  composedBlueprints: string[] = [];
   languageCommand;
   writeJavaLanguageFiles;
   regenerateLanguages;
@@ -275,7 +276,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
           return;
         await Promise.all(
           this.languagesToApply.map(async lang => {
-            const language = findLanguageForTag(lang);
+            const language = findLanguageForTag(lang)!;
             if (language.javaLocaleMessageSourceSuffix) {
               await this.writeFiles({
                 sections: {
@@ -378,8 +379,8 @@ export default class LanguagesGenerator extends BaseApplicationGenerator {
 
   migrateLanguages(languagesToMigrate) {
     const { languages, nativeLanguage } = this.jhipsterConfig;
-    if (languagesToMigrate[nativeLanguage]) {
-      this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage];
+    if (languagesToMigrate[nativeLanguage!]) {
+      this.jhipsterConfig.nativeLanguage = languagesToMigrate[nativeLanguage!];
     }
     if (languages?.some(lang => languagesToMigrate[lang])) {
       this.jhipsterConfig.languages = languages.map(lang => languagesToMigrate[lang] ?? lang);
