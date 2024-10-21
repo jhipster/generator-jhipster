@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -148,20 +147,24 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
       },
-      setupServerconsts({ application }) {
+      setupServerconsts({ application, applicationDefaults }) {
         // Make constants available in templates
-        application.MAIN_DIR = MAIN_DIR;
-        application.TEST_DIR = TEST_DIR;
-        application.LOGIN_REGEX = LOGIN_REGEX;
-        application.CLIENT_WEBPACK_DIR = CLIENT_WEBPACK_DIR;
-        application.SERVER_MAIN_SRC_DIR = SERVER_MAIN_SRC_DIR;
-        application.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
-        application.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
-        application.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
-
-        application.JAVA_VERSION = this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION;
-        application.JAVA_COMPATIBLE_VERSIONS = JAVA_COMPATIBLE_VERSIONS;
-        application.javaCompatibleVersions = JAVA_COMPATIBLE_VERSIONS;
+        applicationDefaults({
+          MAIN_DIR,
+          TEST_DIR,
+          LOGIN_REGEX,
+          CLIENT_WEBPACK_DIR,
+          SERVER_MAIN_SRC_DIR,
+          SERVER_MAIN_RES_DIR,
+          SERVER_TEST_SRC_DIR,
+          SERVER_TEST_RES_DIR,
+          JAVA_VERSION: this.useVersionPlaceholders ? 'JAVA_VERSION' : JAVA_VERSION,
+          JAVA_COMPATIBLE_VERSIONS,
+          javaCompatibleVersions: JAVA_COMPATIBLE_VERSIONS,
+          ANGULAR,
+          VUE,
+          REACT,
+        });
 
         if (this.projectVersion) {
           application.projectVersion = this.projectVersion;
@@ -179,11 +182,6 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
           application.jhipsterDependenciesVersion = JHIPSTER_DEPENDENCIES_VERSION;
         }
 
-        application.ANGULAR = ANGULAR;
-        application.VUE = VUE;
-        application.REACT = REACT;
-
-        this.packagejs = packageJson;
         application.jhipsterPackageJson = packageJson;
       },
     });
@@ -362,9 +360,11 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
               )}, using ${relationship.otherEntityName} as fallback`,
             );
           }
+          // @ts-ignore deprecated property
           if (relationship.useJPADerivedIdentifier) {
             this.log.verboseInfo('Option useJPADerivedIdentifier is deprecated, use id instead');
-            relationship.id = true;
+            relationship.options ??= {};
+            relationship.options.id = true;
           }
         });
         entityConfig.relationships = relationships;
@@ -414,7 +414,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       checkForTableName({ application, entity }) {
-        const databaseType = entity.prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
+        const databaseType =
+          (entity as any).prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
         const validation = this._validateTableName(entity.entityTableName, databaseType, entity);
         if (validation !== true) {
           throw new Error(validation);
@@ -435,7 +436,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         if (entitiesWithCompositeIds.length > 0) {
           throw new Error(
             `Composite id is not supported. Defined in ${entitiesWithCompositeIds.map(
-              entity => `${entity.name} (${entity.primaryKey.fields.map(field => field.fieldName)})`,
+              entity => `${entity.name} (${entity.primaryKey!.fields.map(field => field.fieldName)})`,
             )}`,
           );
         }
@@ -451,8 +452,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
-        packageJsonConfigStorage.packaging = application.defaultPackaging;
+        (packageJsonConfigStorage as any).backend_port = application.gatewayServerPort || application.serverPort;
+        (packageJsonConfigStorage as any).packaging = application.defaultPackaging;
       },
       packageJsonBackendScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');

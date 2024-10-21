@@ -1,5 +1,6 @@
 import type { SetFieldType, SetRequired } from 'type-fest';
 import type { Field } from '../types/application/field.js';
+import type { Field as BaseField } from '../types/base/field.js';
 
 const blobFieldTypes = {
   BLOB: 'Blob',
@@ -61,7 +62,7 @@ export const isFieldEnumType = (field: Field): field is SetRequired<Field, 'enum
 
 export const isFieldNotEnumType = (field: Field): field is SetFieldType<Field, 'fieldType', FieldType> => !field.fieldValues;
 
-export const convertFieldBlobType = (field: Field): Field => {
+export const convertFieldBlobType = <const F extends BaseField = BaseField>(field: F): F => {
   // Convert fieldTypes to correct fieldTypes
   if (field.fieldTypeBlobContent === 'image') {
     field.fieldType = 'ImageBlob';

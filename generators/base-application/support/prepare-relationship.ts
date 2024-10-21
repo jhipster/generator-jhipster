@@ -44,7 +44,7 @@ function _defineOnUpdateAndOnDelete(relationship: Relationship, generator: CoreG
 
 export default function prepareRelationship(
   entityWithConfig: Entity,
-  relationship: Relationship<Entity>,
+  relationship: Relationship<Omit<Entity, 'relationships'>>,
   generator: CoreGenerator,
   ignoreMissingRequiredRelationship = false,
 ) {

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Copyright 2013-2024 the original author or authors from the JHipster project.
  *
@@ -26,12 +25,13 @@ import BaseWorkspacesGenerator from '../base-workspaces/index.js';
 import { packageJson } from '../../lib/index.js';
 
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
-  workspaces;
-  generateApplications;
-  generateWith;
-  entrypointGenerator;
+  workspaces!: boolean;
+  generateApplications!: () => Promise<undefined>;
+  generateWith!: string;
+  entrypointGenerator!: string;
+  dockerCompose!: boolean;
 
-  generateWorkspaces;
+  generateWorkspaces!: boolean;
   workspacesConfig!: Record<string, any>;
 
   async beforeQueue() {
@@ -40,7 +40,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } });
+      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES, { generatorOptions: { customWorkspacesConfig: true } as any });
     }
   }
 
@@ -71,7 +71,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         if (existsSync(this.destinationPath('docker-compose'))) {
           this.workspacesConfig.dockerCompose = true;
         }
-        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
+        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders!])];
         delete this.workspacesConfig.packages;
       },
     });
@@ -98,7 +98,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         if (typeof this.generateApplications === 'function') {
           await this.generateApplications.call(this);
         } else {
-          for (const appName of this.appsFolders) {
+          for (const appName of this.appsFolders!) {
             await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {
               generatorOptions: { destinationRoot: this.destinationPath(appName) },
             });
@@ -138,7 +138,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
-        this.env.options.nodePackageManager = this.workspacesConfig.clientPackageManager;
+        (this.env as any).options.nodePackageManager = this.workspacesConfig.clientPackageManager;
       },
     });
   }
@@ -149,10 +149,10 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async writing({ application }) {
+      async writing() {
         await this.writeFiles({
           blocks: [{ templates: ['.prettierignore.jhi.workspaces'] }],
-          context: application,
+          context: {},
         });
       },
     });
@@ -183,7 +183,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
             ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
             ...this.createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
-        });
+        } as any);
 
         if (applications.some(app => app.clientFrameworkAngular)) {
           const {
@@ -231,11 +231,11 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator {
   createConcurrentlyScript(...scripts) {
     const scriptsList = scripts
       .map(script => {
-        const packageScripts = this.appsFolders.map(packageName => [
+        const packageScripts = this.appsFolders!.map(packageName => [
           `${script}:${packageName}`,
           `npm run ${script} --workspace ${packageName} --if-present`,
         ]);
-        packageScripts.push([script, `concurrently ${this.appsFolders.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
+        packageScripts.push([script, `concurrently ${this.appsFolders!.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
         return packageScripts;
       })
       .flat();

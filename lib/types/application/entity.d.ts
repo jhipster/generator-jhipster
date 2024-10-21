@@ -55,6 +55,7 @@ export interface Entity<F extends BaseField = Field, R extends BaseRelationship 
 
   builtIn?: boolean;
   builtInUser?: boolean;
+  builtInUserManagement?: boolean;
   builtInAuthority?: boolean;
   adminEntity?: boolean;
   entityAuthority?: string;
