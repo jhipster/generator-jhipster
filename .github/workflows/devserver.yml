@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 2
       - run: npm ci --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix dev-server
+        run: bin/jhipster.cjs github-build-matrix devserver --event-name ${{ github.event_name }}
   applications:
     name: ${{ matrix.job-name }}
     needs: build-matrix
@@ -63,8 +63,8 @@ jobs:
     timeout-minutes: 40
     strategy:
       fail-fast: false
-      matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
-    if: needs.build-matrix.outputs.empty-matrix != 'true'
+      matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
+    if: fromJson(needs.build-matrix.outputs.matrix).include[0] != null
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration

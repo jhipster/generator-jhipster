@@ -459,7 +459,7 @@ class JHipsterTest extends YeomanTest {
     settings: RunContextSettings | RunJHipster | undefined,
     envOptions?: BaseEnvironmentOptions | undefined,
   ): JHipsterRunContext {
-    if (!isAbsolute(jhipsterGenerator)) {
+    if (!isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@')) {
       jhipsterGenerator = toJHipsterNamespace(jhipsterGenerator);
     }
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
@@ -467,7 +467,12 @@ class JHipsterTest extends YeomanTest {
     if (isRunJHipster(settings)) {
       const { useEnvironmentBuilder, ...otherOptions } = settings ?? {};
       if (useEnvironmentBuilder) {
-        return this.run(jhipsterGenerator, undefined, { createEnv: createEnvBuilderEnvironment });
+        return this.run(jhipsterGenerator, undefined, {
+          createEnv: async (...args) => {
+            const builder = await EnvironmentBuilder.create(...args).prepare();
+            return builder.getEnvironment();
+          },
+        });
       }
       // If not using EnvironmentBuilder, use the default JHipster generators lookup.
       return this.run(jhipsterGenerator).withJHipsterGenerators(otherOptions);

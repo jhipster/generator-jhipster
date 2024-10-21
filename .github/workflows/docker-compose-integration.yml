@@ -44,7 +44,7 @@ jobs:
           node-version: '20'
       - run: npm ci --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix docker-compose-integration
+        run: bin/jhipster.cjs github-build-matrix docker-compose-integration --event-name ${{ github.event_name }}
   applications:
     name: ${{ matrix.job-name }}
     needs: build-matrix
