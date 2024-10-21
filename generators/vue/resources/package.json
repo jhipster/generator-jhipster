@@ -39,7 +39,7 @@
     "css-minimizer-webpack-plugin": "7.0.0",
     "eslint": "9.13.0",
     "eslint-plugin-prettier": "5.2.1",
-    "eslint-plugin-vue": "9.29.0",
+    "eslint-plugin-vue": "9.29.1",
     "flush-promises": "1.0.2",
     "folder-hash": "4.0.4",
     "happy-dom": "14.12.3",
