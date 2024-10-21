@@ -557,10 +557,11 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200102000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  />
     </changeSet>
@@ -710,10 +711,11 @@ exports[`generator - app - --incremental-changelog when adding a relationship wi
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200102000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  onDelete="CASCADE"
                                  onUpdate="SET NULL"
@@ -1752,10 +1754,11 @@ exports[`generator - app - --incremental-changelog when modifying a relationship
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200103000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
@@ -1854,10 +1857,11 @@ exports[`generator - app - --incremental-changelog when modifying an existing re
         Added the relationship constraints for entity One.
     -->
     <changeSet id="20200103000100-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="another_ent_id"
+
+        <addForeignKeyConstraint baseColumnNames="another_ent_another_id"
                                  baseTableName="one"
                                  constraintName="fk_one__another_ent_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="another_id"
                                  referencedTableName="another"
                                  onDelete="SET NULL"
                                  onUpdate="CASCADE"
@@ -2155,10 +2159,11 @@ exports[`generator - app - --incremental-changelog when modifying default values
         Added the relationship constraints for entity Two.
     -->
     <changeSet id="20200102000400-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="one_id"
+
+        <addForeignKeyConstraint baseColumnNames="one_uuid"
                                  baseTableName="two"
                                  constraintName="fk_two__one_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="uuid"
                                  referencedTableName="one"
                                  />
     </changeSet>
@@ -2486,10 +2491,11 @@ exports[`generator - app - --incremental-changelog when modifying fields and rel
         Added the relationship constraints for entity Another.
     -->
     <changeSet id="20200102000400-relationship-foreign-keys" author="jhipster">
-        <addForeignKeyConstraint baseColumnNames="one_id"
+
+        <addForeignKeyConstraint baseColumnNames="one_one_id"
                                  baseTableName="another"
                                  constraintName="fk_another__one_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="one_id"
                                  referencedTableName="one"
                                  />
     </changeSet>
