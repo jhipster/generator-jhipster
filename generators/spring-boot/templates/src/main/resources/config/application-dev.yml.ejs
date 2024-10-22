@@ -155,8 +155,8 @@ spring:
 <%_ if (devDatabaseTypeH2Any) { _%>
   h2:
     console:
-      # disable spring boot built-in h2-console since we start it manually with correct configuration
-      enabled: false
+      # JHipster uses a custom h2-console initializer
+      enabled: true
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
   data:

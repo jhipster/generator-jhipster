@@ -26,6 +26,7 @@ import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 <%_ if (devDatabaseTypeH2Any) { _%>
+import tech.jhipster.config.ApplicationProperties;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
@@ -102,14 +103,15 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ } _%>
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(<% if (!reactive || (devDatabaseTypeH2Any && reactive)) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(<% if (!reactive || devDatabaseTypeH2Any) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
 <%_ if (!reactive) { _%>
         this.env = env;
 <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
 <%_ if (devDatabaseTypeH2Any && reactive) { _%>
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+        if (h2ConsoleIsEnabled(env)) {
             try {
+                LOG.info("Initialize H2 console");
                 H2ConfigurationHelper.initH2Console();
             } catch (Exception e) {
                 // Console may already be running on another app or after a refresh.
@@ -118,8 +120,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         }
 <%_ } _%>
     }
-
-
 <%_ if (!reactive) { _%>
 
     @Override
@@ -129,7 +129,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         }
 
   <%_ if (devDatabaseTypeH2Any) { _%>
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+        if (h2ConsoleIsEnabled(env)) {
             initH2Console(servletContext);
         }
   <%_ } _%>
@@ -170,7 +170,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         }
         return extractedPath.substring(0, extractionEndIndex);
     }
-
   <%_ } _%>
 <%_ } _%>
 
@@ -230,14 +229,20 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     }
   <%_ } _%>
 <%_ } _%>
-<%_ if (devDatabaseTypeH2Any && !reactive) { _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+
+    private boolean h2ConsoleIsEnabled(Environment env) {
+        return env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) && "true".equals(env.getProperty("spring.h2.console.enabled"));
+    }
+  <%_ if (!reactive) { _%>
 
     /**
      * Initializes H2 console.
      */
     private void initH2Console(ServletContext servletContext) {
-        LOG.debug("Initialize H2 console");
+        LOG.info("Initialize H2 console");
         H2ConfigurationHelper.initH2Console(servletContext);
     }
+  <%_ } _%>
 <%_ } _%>
 }
