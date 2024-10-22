@@ -49,8 +49,8 @@ exports[`generator - maven - needles prod profile should match generated pom 1`]
                         <groupId>dependencyManagementGroupId</groupId>
                         <artifactId>dependencyManagementArtifactId</artifactId>
                         <version>version</version>
-                        <type>type</type>
-                        <scope>scope</scope>
+                        <type>jar</type>
+                        <scope>test</scope>
                         <exclusions>
                             <exclusion>
                                 <groupId>exclusionGroupId</groupId>

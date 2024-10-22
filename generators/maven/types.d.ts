@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-export type MavenArtifact = {
-  groupId?: string;
-  artifactId: string;
+import type { JavaArtifact } from '../java/types.js';
+
+export type MavenArtifact = JavaArtifact & {
   version?: string;
   inProfile?: string;
 };
@@ -40,9 +40,6 @@ export type MavenRepository = {
 };
 
 export type MavenDependency = MavenArtifact & {
-  type?: string;
-  scope?: string;
-  classifier?: string;
   optional?: boolean;
   additionalContent?: string;
 };

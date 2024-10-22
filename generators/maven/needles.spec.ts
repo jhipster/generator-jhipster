@@ -23,8 +23,8 @@ class mockBlueprintSubGen extends BaseApplicationGenerator {
             groupId: 'dependencyManagementGroupId',
             artifactId: 'dependencyManagementArtifactId',
             version: 'version',
-            type: 'type',
-            scope: 'scope',
+            type: 'jar',
+            scope: 'test',
             additionalContent: `
                 <exclusions>
                     <exclusion>
@@ -139,8 +139,8 @@ describe('generator - maven - needles', () => {
                 <groupId>dependencyManagementGroupId</groupId>
                 <artifactId>dependencyManagementArtifactId</artifactId>
                 <version>version</version>
-                <type>type</type>
-                <scope>scope</scope>
+                <type>jar</type>
+                <scope>test</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>exclusionGroupId</groupId>
@@ -266,8 +266,8 @@ describe('generator - maven - needles', () => {
                         <groupId>dependencyManagementGroupId</groupId>
                         <artifactId>dependencyManagementArtifactId</artifactId>
                         <version>version</version>
-                        <type>type</type>
-                        <scope>scope</scope>
+                        <type>jar</type>
+                        <scope>test</scope>
                         <exclusions>
                             <exclusion>
                                 <groupId>exclusionGroupId</groupId>

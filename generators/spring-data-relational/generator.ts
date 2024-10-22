@@ -26,7 +26,12 @@ import writeTask from './files.js';
 import cleanupTask from './cleanup.js';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.js';
-import { getDatabaseDriverForDatabase, getDatabaseTypeMavenDefinition, getH2MavenDefinition } from './internal/dependencies.js';
+import {
+  getDatabaseDriverForDatabase,
+  getDatabaseTypeMavenDefinition,
+  getH2MavenDefinition,
+  javaSqlDatabaseArtifacts,
+} from './internal/dependencies.js';
 
 const { SQL } = databaseTypes;
 
@@ -191,6 +196,20 @@ export default class SqlGenerator extends BaseApplicationGenerator {
             mavenDefinition: h2Definitions?.r2dbc,
           },
         );
+
+        if (application.buildToolGradle) {
+          const artifacts = javaSqlDatabaseArtifacts[prodDatabaseType];
+          source.addJavaDefinition!(
+            { dependencies: [artifacts.jdbc, artifacts.testContainer, ...(reactive && artifacts.r2dbc ? [artifacts.r2dbc] : [])] },
+            { gradleFile: devDatabaseTypeH2Any ? 'gradle/profile_prod.gradle' : 'build.gradle' },
+          );
+          if (devDatabaseTypeH2Any) {
+            source.addJavaDefinition!(
+              { dependencies: [javaSqlDatabaseArtifacts.h2.jdbc, ...(reactive ? [javaSqlDatabaseArtifacts.h2.r2dbc] : [])] },
+              { gradleFile: 'gradle/profile_dev.gradle' },
+            );
+          }
+        }
       },
     });
   }

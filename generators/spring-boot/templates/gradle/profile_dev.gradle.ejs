@@ -27,44 +27,9 @@ sourceSets {
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 
-configurations {
-  all {
-    resolutionStrategy {
-  <%_ if (!devDatabaseTypeH2Any && prodDatabaseDriver?.r2dbc?.version) { _%>
-      force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
-  <%_ } _%>
-  <%_ if (prodDatabaseDriver?.jdbc?.version) { _%>
-      force "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>:<%- prodDatabaseDriver.jdbc.version %>"
-  <%_ } _%>
-    }
-  }
-}
-
 dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools"
-  <%_ if (devDatabaseTypeH2Any) { _%>
-    <%_ if (reactive) { _%>
-    implementation "io.r2dbc:r2dbc-h2"
-    <%_ } else { _%>
-    implementation "com.h2database:h2"
-    <%_ } _%>
-  <%_ } else { _%>
-    <%_ if (prodDatabaseTypeOracle) { _%>
-    implementation "com.oracle.database.jdbc:ojdbc8"
-    testImplementation "org.testcontainers:oracle-xe"
-    <%_ } else if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgresql || prodDatabaseTypeMysql) { _%>
-      <%_ if (reactive) { _%>
-    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
-      <%_ } _%>
-    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>"
-    <%_ } _%>
-    <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql || prodDatabaseTypePostgresql) { _%>
-    testImplementation "org.testcontainers:<%- prodDatabaseType %>"
-    <%_ } _%>
-    <%_ if (prodDatabaseTypeMssql) { _%>
-    testImplementation "org.testcontainers:mssqlserver"
-    <%_ } _%>
-  <%_ } _%>
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 <%_ } _%>
 
