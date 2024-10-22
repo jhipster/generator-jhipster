@@ -52,7 +52,7 @@ dependencies {
     <%_ if (prodDatabaseTypeOracle) { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"
     testImplementation "org.testcontainers:oracle-xe"
-    <%_ } else if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres || prodDatabaseTypeMysql) { _%>
+    <%_ } else if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgresql || prodDatabaseTypeMysql) { _%>
       <%_ if (reactive) { _%>
     implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
       <%_ } _%>
