@@ -24,14 +24,12 @@ sourceSets {
         }
     }
 }
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
 
+<%_ } _%>
 dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools"
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
-<%_ } _%>
 
 ext {
     springProfiles = "dev" + springProfiles
