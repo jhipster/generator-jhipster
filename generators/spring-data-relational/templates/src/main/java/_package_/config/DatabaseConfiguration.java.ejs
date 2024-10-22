@@ -43,6 +43,10 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any) { _%>
+import java.sql.SQLException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
 import org.springframework.core.env.Environment;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -64,9 +68,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 <%_ } _%>
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-<%_ if (devDatabaseTypeH2Any) { _%>
-import java.sql.SQLException;
-<%_ } _%>
 <%_ if (reactive) { _%>
 import java.time.Duration;
 import java.time.Instant;
@@ -94,6 +95,9 @@ import java.util.UUID;
 <%_ if (searchEngineElasticsearch) { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
+<%_ if (devDatabaseTypeH2Any) { _%>
+@EnableConfigurationProperties(H2ConsoleProperties.class)
+<%_ } _%>
 public class DatabaseConfiguration {
 
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -113,6 +117,7 @@ public class DatabaseConfiguration {
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
+    @ConditionalOnProperty(prefix = "spring.h2.console", name = "enabled", havingValue = "true")
     public Object h2TCPServer() throws SQLException {
         String port = getValidPortForH2();
         LOG.debug("H2 database is available on port {}", port);
