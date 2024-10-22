@@ -30,7 +30,7 @@ sourceSets {
 configurations {
   all {
     resolutionStrategy {
-  <%_ if (prodDatabaseDriver?.r2dbc?.version) { _%>
+  <%_ if (!devDatabaseTypeH2Any && prodDatabaseDriver?.r2dbc?.version) { _%>
       force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
   <%_ } _%>
   <%_ if (prodDatabaseDriver?.jdbc?.version) { _%>
@@ -42,35 +42,28 @@ configurations {
 
 dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools"
-  <%_ if (devDatabaseTypeH2Any && !reactive) { _%>
-    implementation "com.h2database:h2"
-  <%_ } _%>
-  <%_ if (devDatabaseTypeOracle) { _%>
-    implementation "com.oracle.database.jdbc:ojdbc8"
-  <%_ } _%>
-  <%_ if (devDatabaseTypeH2Any && reactive) { _%>
-    implementation "io.r2dbc:r2dbc-h2"
-  <%_ } _%>
-  <%_ if (devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypePostgres || devDatabaseTypeMysql) { _%>
+  <%_ if (devDatabaseTypeH2Any) { _%>
     <%_ if (reactive) { _%>
-    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
+    implementation "io.r2dbc:r2dbc-h2"
+    <%_ } else { _%>
+    implementation "com.h2database:h2"
     <%_ } _%>
-    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb) { _%>
-    testImplementation "org.testcontainers:mariadb"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMssql) { _%>
-    testImplementation "org.testcontainers:mssqlserver"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-    testImplementation "org.testcontainers:mysql"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeOracle) { _%>
+  <%_ } else { _%>
+    <%_ if (prodDatabaseTypeOracle) { _%>
+    implementation "com.oracle.database.jdbc:ojdbc8"
     testImplementation "org.testcontainers:oracle-xe"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypePostgresql) { _%>
-    testImplementation "org.testcontainers:postgresql"
+    <%_ } else if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypePostgres || prodDatabaseTypeMysql) { _%>
+      <%_ if (reactive) { _%>
+    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
+      <%_ } _%>
+    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>"
+    <%_ } _%>
+    <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMysql || prodDatabaseTypePostgresql) { _%>
+    testImplementation "org.testcontainers:<%- prodDatabaseType %>"
+    <%_ } _%>
+    <%_ if (prodDatabaseTypeMssql) { _%>
+    testImplementation "org.testcontainers:mssqlserver"
+    <%_ } _%>
   <%_ } _%>
 }
 <%_ } _%>
