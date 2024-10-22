@@ -763,6 +763,11 @@ exports[`generator - app with default config should match snapshot 1`] = `
       "artifactId": "r2dbc-postgresql",
       "groupId": "org.postgresql",
     },
+    "testContainer": {
+      "artifactId": "postgresql",
+      "groupId": "org.testcontainers",
+      "scope": "test",
+    },
   },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
@@ -1403,6 +1408,11 @@ exports[`generator - app with gateway should match snapshot 1`] = `
       "artifactId": "r2dbc-postgresql",
       "groupId": "org.postgresql",
     },
+    "testContainer": {
+      "artifactId": "postgresql",
+      "groupId": "org.testcontainers",
+      "scope": "test",
+    },
   },
   "prodDatabaseExtraOptions": "",
   "prodDatabaseName": "jhipster",
@@ -1988,6 +1998,11 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "r2dbc": {
       "artifactId": "r2dbc-postgresql",
       "groupId": "org.postgresql",
+    },
+    "testContainer": {
+      "artifactId": "postgresql",
+      "groupId": "org.testcontainers",
+      "scope": "test",
     },
   },
   "prodDatabaseExtraOptions": "",

@@ -75,7 +75,7 @@ export default class BuildToolGenerator extends BaseApplicationGenerator {
               dependencies: [
                 ...commonDependencies.map(convertVersionToRef),
                 // Add a provided scope for annotation processors so that version is not required in annotationProcessor dependencies
-                ...annotationProcessors.filter(dep => !dep.version).map(artifact => ({ ...artifact, scope: 'provided' })),
+                ...annotationProcessors.filter(dep => !dep.version).map(artifact => ({ ...artifact, scope: 'provided' as const })),
               ],
               dependencyManagement: importDependencies.map(convertVersionToRef),
               annotationProcessors: annotationProcessors.map(convertVersionToRef).map(removeScope),

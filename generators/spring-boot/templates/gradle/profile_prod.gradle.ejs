@@ -16,55 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (devDatabaseType !== prodDatabaseType && (devDatabaseTypeMariadb || devDatabaseTypeMssql || devDatabaseTypeMysql || devDatabaseTypePostgres)) { _%>
-sourceSets {
-    test {
-        java {
-            exclude '<%= packageFolder %>/config/<% if (devDatabaseTypeMariadb) { %>Mariadb<% } else if (devDatabaseTypeMssql) { %>MsSql<% } else if (devDatabaseTypeMysql) { %>Mysql<% } else if (devDatabaseTypePostgres) { %>PostgreSql<% } %>TestContainer.java'
-        }
-    }
-}
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-
-configurations {
-  all {
-    resolutionStrategy {
-  <%_ if (prodDatabaseDriver?.r2dbc?.version) { _%>
-      force "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>:<%- prodDatabaseDriver.r2dbc.version %>"
-  <%_ } _%>
-  <%_ if (prodDatabaseDriver?.jdbc?.version) { _%>
-      force "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>:<%- prodDatabaseDriver.jdbc.version %>"
-  <%_ } _%>
-    }
-  }
-}
-
 dependencies {
-  <%_ if (prodDatabaseTypeMariadb || prodDatabaseTypeMssql || prodDatabaseTypeMysql || prodDatabaseTypePostgresql) { _%>
-    <%_ if (reactive) { _%>
-    implementation "<%- prodDatabaseDriver.r2dbc.groupId %>:<%- prodDatabaseDriver.r2dbc.artifactId %>"
-    <%_ } _%>
-    implementation "<%- prodDatabaseDriver.jdbc.groupId %>:<%- prodDatabaseDriver.jdbc.artifactId %>"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMariadb) { _%>
-    testImplementation "org.testcontainers:mariadb"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMssql) { _%>
-    testImplementation "org.testcontainers:mssqlserver"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeMysql) { _%>
-    testImplementation "org.testcontainers:mysql"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypeOracle) { _%>
-    implementation "com.oracle.database.jdbc:ojdbc8"
-    testImplementation "org.testcontainers:oracle-xe"
-  <%_ } _%>
-  <%_ if (prodDatabaseTypePostgresql) { _%>
-    testImplementation "org.testcontainers:postgresql"
-  <%_ } _%>
+    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
-<%_ } _%>
 
 ext {
     springProfiles = "prod" + springProfiles
