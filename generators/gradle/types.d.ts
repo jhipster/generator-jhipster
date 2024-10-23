@@ -6,9 +6,10 @@ export type GradleScript = { script: string };
 
 export type GradleLibraryDependency = { libraryName: string; scope?: string };
 
-export type GradleDependency =
+export type GradleDependency = (
   | { groupId: string; artifactId: string; version?: string; scope: string; classifier?: string }
-  | Required<GradleLibraryDependency>;
+  | Required<GradleLibraryDependency>
+) & { closure?: string[] };
 
 export type GradlePlugin = { id: string; version?: string };
 

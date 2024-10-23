@@ -47,20 +47,25 @@ const scopeSortOrder = {
   testRuntimeOnly: 6,
 };
 
-const wrapScope = (scope: string, dependency: string) =>
-  `${scope}${scope === 'implementation platform' ? '(' : ' '}${dependency}${scope === 'implementation platform' ? ')' : ''}`;
+const wrapScope = (scope: string, dependency: string, closure?: string[]) => {
+  if (closure?.length || scope === 'implementation platform') {
+    return `${scope}(${dependency})${closure?.length ? ` {\n${closure.join('\n')}\n}` : ''}`;
+  }
+  return `${scope} ${dependency}`;
+};
 
 const serializeDependency = (dependency: GradleDependency) => {
   if ('libraryName' in dependency) {
-    return wrapScope(dependency.scope, `libs.${gradleNameToReference(dependency.libraryName)}`);
+    return wrapScope(dependency.scope, `libs.${gradleNameToReference(dependency.libraryName)}`, dependency.closure);
   }
 
-  const { groupId, artifactId, version, classifier, scope } = dependency;
+  const { groupId, artifactId, version, classifier, scope, closure } = dependency;
   return wrapScope(
     scope,
     classifier && !version
       ? `group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
       : `"${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
+    closure,
   );
 };
 
@@ -124,10 +129,10 @@ export const addGradleDependenciesCatalogVersionCallback = (versions: GradleToml
     contentToAdd: versions.map(({ name, version }) => `${name} = "${version}"`),
   });
 
-export const addGradleDependencyCatalogLibrariesCallback = (libraries: GradleLibraryDependency[]) =>
+export const addGradleDependencyCatalogLibrariesCallback = (libraries: (GradleLibraryDependency & { closure?: string[] })[]) =>
   createNeedleCallback({
     needle: 'gradle-dependency-catalog-libraries',
-    contentToAdd: libraries.map(({ libraryName, scope: _scope, ...others }) =>
+    contentToAdd: libraries.map(({ libraryName, scope: _scope, closure: _closure, ...others }) =>
       'library' in others ? `${libraryName} = "${others.library}"` : `${libraryName} = ${tomlItemToString(others)}`,
     ),
   });

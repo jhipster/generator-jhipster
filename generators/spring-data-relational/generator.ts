@@ -158,7 +158,12 @@ export default class SqlGenerator extends BaseApplicationGenerator {
           {
             condition: reactive,
             dependencies: [
-              { groupId: 'commons-beanutils', artifactId: 'commons-beanutils', version: javaDependencies['commons-beanutils'] },
+              {
+                groupId: 'commons-beanutils',
+                artifactId: 'commons-beanutils',
+                version: javaDependencies['commons-beanutils'],
+                exclusions: [{ groupId: 'commons-logging', artifactId: 'commons-logging' }],
+              },
               { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
               { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
             ],

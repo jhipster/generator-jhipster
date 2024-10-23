@@ -28,7 +28,10 @@ export type JavaArtifact = {
 
 export type JavaArtifactVersion = RequireOneOrNone<{ version?: string; versionRef?: string }, 'version' | 'versionRef'>;
 
-export type JavaDependency = JavaArtifact & JavaArtifactVersion;
+export type JavaDependency = JavaArtifact &
+  JavaArtifactVersion & {
+    exclusions?: JavaArtifact[];
+  };
 
 export type JavaDefinition = {
   versions?: JavaDependencyVersion[];
