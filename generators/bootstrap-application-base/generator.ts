@@ -126,6 +126,7 @@ export default class BootstrapApplicationBase extends BaseApplicationGenerator {
         applicationDefaults({
           backendType: this.jhipsterConfig.backendType ?? 'Java',
           syncUserWithIdp: this.jhipsterConfig.syncUserWithIdp,
+          packageJsonScripts: {},
         });
       },
       loadNodeDependencies({ application }) {

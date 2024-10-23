@@ -16,6 +16,7 @@ export type JavaScriptApplication = JavascriptBootstrapProperties & {
   eslintConfigFile?: string;
   cjsExtension?: string;
   mjsExtension?: string;
+  packageJsonScripts: Record<string, string>;
 
   addPrettierExtensions?: (extensions: string[]) => void;
 };
