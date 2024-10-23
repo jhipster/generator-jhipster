@@ -518,7 +518,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator {
         const scriptsStorage = this.packageJson.createStorage('scripts');
         const buildCmd = application.buildToolGradle ? 'gradlew' : 'mvnw -ntp';
 
-        const applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
+        let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
+        applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
         const applicationEndpoint = application.applicationTypeMicroservice
           ? `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
           : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
