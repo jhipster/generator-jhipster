@@ -10,7 +10,8 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     const git = simpleGit({ baseDir: fileURLToPath(new URL('../../', import.meta.url).href) });
     const summary = await git.diffSummary({ '@~1': null });
     const files = summary.files.map(({ file }) => file);
-    hasPatternChanges = (pattern: string) => files.some(file => minimatch(file, pattern, { dot: true }));
+    hasPatternChanges = (pattern: string, ignore?: string) =>
+      files.some(file => minimatch(file, pattern, { dot: true }) && (!ignore || !minimatch(file, ignore, { dot: true })));
   }
 
   const hasClientWorkflowChanges = (client: 'angular' | 'react' | 'vue') =>
@@ -29,7 +30,11 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     common: hasPatternChanges('generators/{app,common,docker,languages}/**'),
     client: hasPatternChanges('generators/{client,init,javascript}/**'),
     e2e: hasPatternChanges('generators/cypress/**'),
-    java: hasPatternChanges('generators/{cucumber,feign-client,gatling,gradle,java,liquibase,maven,server,spring*}/**'),
+    java: hasPatternChanges(
+      'generators/{cucumber,feign-client,gatling,gradle,java,liquibase,maven,server,spring*}/**',
+      'generators/java/generators/graalvm/**',
+    ),
+    graalvm: hasPatternChanges('generators/java/generators/graalvm/**'),
     react: hasPatternChanges('generators/react/**'),
     reactWorkflow: hasClientWorkflowChanges('react'),
     workspaces: hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),
