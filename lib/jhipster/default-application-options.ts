@@ -29,8 +29,7 @@ import buildToolTypes from './build-tool-types.js';
 
 const { MONOLITH, MICROSERVICE, GATEWAY } = applicationTypes;
 const { CONSUL } = serviceDiscoveryTypes;
-const { COUCHBASE, CASSANDRA, MONGODB, NEO4J, SQL, POSTGRESQL } = databaseTypes;
-const NO_DATABASE_TYPE = databaseTypes.NO;
+const { SQL, POSTGRESQL } = databaseTypes;
 const { OptionNames, OptionValues } = applicationOptions;
 const { JWT, OAUTH2 } = authenticationTypes;
 const { ANGULAR, NO: NO_CLIENT_FRAMEWORK } = clientFrameworkTypes;
@@ -154,9 +153,10 @@ export function getConfigForPackageName(options: ApplicationDefaults = {}): Appl
 }
 
 export function getConfigForCacheProvider(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[REACTIVE]) {
+  if (options[REACTIVE] || options[CACHE_PROVIDER] === undefined) {
     options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
   }
+  options[ENABLE_HIBERNATE_CACHE] ??= options[DATABASE_TYPE] === SQL && !options[REACTIVE] && options[CACHE_PROVIDER] !== NO_CACHE_PROVIDER;
   return options;
 }
 
@@ -191,16 +191,6 @@ export function getConfigForDatabaseType(options: ApplicationDefaults = {}): App
     if (options[DEV_DATABASE_TYPE] === undefined) {
       options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
     }
-  } else if ([MONGODB, COUCHBASE, CASSANDRA, NEO4J, NO_DATABASE_TYPE].includes(options[DATABASE_TYPE])) {
-    if (NO_DATABASE_TYPE !== options[DATABASE_TYPE]) {
-      options[ENABLE_HIBERNATE_CACHE] = false;
-    }
-  }
-  if (options[REACTIVE]) {
-    options[ENABLE_HIBERNATE_CACHE] = false;
-  }
-  if (options[ENABLE_HIBERNATE_CACHE] === undefined) {
-    options[ENABLE_HIBERNATE_CACHE] = true;
   }
   return options;
 }
@@ -225,8 +215,8 @@ export function getConfigForMonolithApplication(customOptions: ApplicationDefaul
   let options = getServerConfigForMonolithApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
-  options = getConfigForCacheProvider(options);
   options = getConfigForDatabaseType(options);
+  options = getConfigForCacheProvider(options);
   options = getConfigForReactive(options);
   options = getConfigForTranslation(options);
   return getConfigForAuthenticationType(options);
@@ -255,8 +245,8 @@ export function getConfigForGatewayApplication(customOptions: ApplicationDefault
   let options = getServerConfigForGatewayApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
-  options = getConfigForCacheProvider(options);
   options = getConfigForDatabaseType(options);
+  options = getConfigForCacheProvider(options);
   options = getConfigForReactive(options);
   options = getConfigForTranslation(options);
   return getConfigForAuthenticationType(options);
@@ -285,8 +275,8 @@ export function getConfigForMicroserviceApplication(customOptions: ApplicationDe
   let options = getServerConfigForMicroserviceApplication(customOptions);
   options = getConfigForClientApplication(options);
   options = getConfigForPackageName(options);
-  options = getConfigForCacheProvider(options);
   options = getConfigForDatabaseType(options);
+  options = getConfigForCacheProvider(options);
   options = getConfigForReactive(options);
   options = getConfigForTranslation(options);
   return getConfigForAuthenticationType(options);
