@@ -216,11 +216,61 @@ export default class SqlGenerator extends BaseApplicationGenerator {
           }
         }
       },
+      nativeHints({ application, source }) {
+        if (application.reactive || !application.graalvmSupport) return;
+
+        // Latest hibernate-core version supported by Reachability Repository is 6.5.0.Final
+        // Hints may be dropped if newer version is supported
+        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.hibernate.orm/hibernate-core/index.json
+        source.addNativeHint!({
+          publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
+        });
+      },
+      async nativeGradleBuildTool({ application, source }) {
+        if (!application.buildToolGradle || !application.graalvmSupport) return;
+
+        const { reactive, javaManagedProperties, buildToolMaven } = application;
+        if (buildToolMaven) {
+          source.addMavenProperty!({ property: 'spring.h2.console.enabled', value: 'true' });
+        }
+        if (!reactive) {
+          source.addGradleDependencyCatalogVersion!({ name: 'hibernate', version: javaManagedProperties!['hibernate.version']! });
+          source.addGradleDependencyCatalogPlugin!({
+            addToBuild: true,
+            pluginName: 'hibernate',
+            id: 'org.hibernate.orm',
+            'version.ref': 'hibernate',
+          });
+        }
+      },
     });
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get postWritingEntities() {
+    return this.asPostWritingEntitiesTaskGroup({
+      async jsonFilter({ application, entities, source }) {
+        if (application.reactive || !application.graalvmSupport) return;
+        for (const entity of entities.filter(({ builtIn, builtInUser, embedded }) => builtInUser || (!builtIn && !embedded))) {
+          source.editJavaFile!(`${application.srcMainJava}/${entity.entityAbsoluteFolder}/domain/${entity.entityClass}.java`, {
+            annotations: [
+              {
+                package: 'com.fasterxml.jackson.annotation',
+                annotation: 'JsonFilter',
+                parameters: () => '"lazyPropertyFilter"',
+              },
+            ],
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
   /**

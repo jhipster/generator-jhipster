@@ -14,6 +14,7 @@ export type GitHubMatrix = {
   sample: string;
   args?: string;
   'jwt-secret-key'?: string;
+  jdl?: string;
 };
 
 export type GitHubMatrixRecord = Record<string, Partial<Omit<GitHubMatrix, 'job-name'>> & { disabled?: boolean }>;

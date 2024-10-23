@@ -72,6 +72,12 @@ export const sqlFiles = {
       templates: ['config/application-testprod.yml'],
     },
   ],
+  graalvm: [
+    javaMainPackageTemplatesBlock({
+      condition: ctx => !ctx.reactive && ctx.graalvmSupport,
+      templates: ['config/JacksonNativeConfiguration.java'],
+    }),
+  ],
 };
 
 export const h2Files = {

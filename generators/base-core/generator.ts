@@ -1171,13 +1171,13 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     if (!originalContent) {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
-      if (ignoreNonExisting || (!create && this.ignoreNeedlesError)) {
-        this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
-        // return a noop.
-        const noop = () => noop;
-        return noop;
-      }
       if (!create || transformCallbacks.length === 0) {
+        if (ignoreNonExisting || this.ignoreNeedlesError) {
+          this.log(`${chalk.yellow('\nUnable to find ')}${filePath}.${chalk.yellow(errorMessage)}\n`);
+          // return a noop.
+          const noop = () => noop;
+          return noop;
+        }
         throw new Error(`Unable to find ${filePath}. ${errorMessage}`);
       }
       // allow to edit non existing files
@@ -1278,6 +1278,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * @param javaDependencies
    * @param gradleCatalog Gradle catalog file path, true for generator-jhipster's generator catalog of falsy for blueprint catalog
    */
+  loadJavaDependenciesFromGradleCatalog(javaDependencies: Record<string, string>, gradleCatalogFile?: string): void;
+  loadJavaDependenciesFromGradleCatalog(javaDependencies: Record<string, string>, mainGenerator: boolean): void;
   loadJavaDependenciesFromGradleCatalog(javaDependencies: Record<string, string>, gradleCatalog?: string | boolean): void {
     if (typeof gradleCatalog !== 'string') {
       const tomlFile = '../resources/gradle/libs.versions.toml';

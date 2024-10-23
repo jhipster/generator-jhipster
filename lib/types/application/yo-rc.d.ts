@@ -19,6 +19,7 @@ export type ApplicationConfiguration = Simplify<
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/git/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/java/generators/bootstrap/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/java/generators/build-tool/command.js').default> &
+    ExportStoragePropertiesFromCommand<typeof import('../../../generators/java/generators/graalvm/command.ts').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/javascript/generators/bootstrap/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/javascript/generators/prettier/command.js').default> &
     ExportStoragePropertiesFromCommand<typeof import('../../../generators/jdl/command.js').default> &

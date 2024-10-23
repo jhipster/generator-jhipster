@@ -84,6 +84,14 @@ const command = {
       ],
       scope: 'storage',
     },
+    jwtSecretKey: {
+      cli: {
+        type: String,
+        env: 'JHI_JWT_SECRET_KEY',
+        hide: true,
+      },
+      scope: 'storage',
+    },
     authenticationType: {
       cli: {
         name: 'auth',
@@ -210,6 +218,17 @@ const command = {
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       choices: ['liquibase'],
+      scope: 'storage',
+    },
+    graalvmSupport: {
+      description: 'Experimental GraalVM Native support',
+      cli: {
+        type: Boolean,
+      },
+      jdl: {
+        type: 'boolean',
+        tokenType: 'BOOLEAN',
+      },
       scope: 'storage',
     },
   },

@@ -33,6 +33,12 @@ export type SpringBootSourceType = JavaSourceType &
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
+    addNativeHint?(hints: {
+      advanced?: string[];
+      declaredConstructors?: string[];
+      resources?: string[];
+      publicConstructors?: string[];
+    }): void;
   };
 
 type CacheProviderApplication = OptionWithDerivedProperties<

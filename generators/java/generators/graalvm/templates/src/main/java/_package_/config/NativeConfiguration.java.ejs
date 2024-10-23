@@ -1,0 +1,14 @@
+package <%=packageName%>.config;
+
+import org.springframework.aot.hint.RuntimeHints;
+import org.springframework.aot.hint.RuntimeHintsRegistrar;
+
+public class NativeConfiguration {
+
+    public static class JHipsterNativeRuntimeHints implements RuntimeHintsRegistrar {
+        @Override
+        public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
+            // jhipster-needle-add-native-hints - JHipster will add native hints here
+        }
+    }
+}

@@ -143,6 +143,7 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         const {
           applicationType,
           databaseType,
+          graalvmSupport,
           messageBroker,
           searchEngine,
           websocket,
@@ -155,6 +156,10 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
         await this.composeWithJHipster(GENERATOR_DOCKER);
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
+
+        if (graalvmSupport) {
+          await this.composeWithJHipster('jhipster:java:graalvm');
+        }
 
         if (enableSwaggerCodegen) {
           await this.composeWithJHipster('jhipster:java:openapi-generator');
