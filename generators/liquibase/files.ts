@@ -61,4 +61,12 @@ export const liquibaseFiles: WriteFileSection = {
       templates: ['config/liquibase/data/authority.csv'],
     },
   ],
+  graalvm: [
+    {
+      condition: ctx => ctx.graalvmSupport,
+      transform: false,
+      path: SERVER_MAIN_RES_DIR,
+      templates: ['META-INF/native-image/liquibase/reflect-config.json'],
+    },
+  ],
 };

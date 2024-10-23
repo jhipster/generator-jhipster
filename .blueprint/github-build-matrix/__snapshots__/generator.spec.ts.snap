@@ -562,6 +562,61 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
 }"
 `;
 
+exports[`generator - github-build-matrix with graalvm should match matrix value 1`] = `
+"{
+  "include": [
+    {
+      "job-name": "maven",
+      "sample": "maven",
+      "os": "ubuntu-latest",
+      "node-version": "NODE-VERSION",
+      "java-version": "21",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "jdl-base": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    cacheProvider no\\n  }\\n}",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    graalvmSupport true\\n  }\\n}"
+    },
+    {
+      "job-name": "maven-reactive(true)",
+      "sample": "maven-reactive(true)",
+      "os": "ubuntu-latest",
+      "node-version": "NODE-VERSION",
+      "java-version": "21",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "jdl-base": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    reactive true\\n    cacheProvider no\\n  }\\n}",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    reactive true\\n    graalvmSupport true\\n  }\\n}"
+    },
+    {
+      "job-name": "gradle",
+      "sample": "gradle",
+      "os": "ubuntu-latest",
+      "node-version": "NODE-VERSION",
+      "java-version": "21",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "jdl-base": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    cacheProvider no\\n  }\\n}",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    graalvmSupport true\\n  }\\n}"
+    },
+    {
+      "job-name": "gradle-reactive(true)",
+      "sample": "gradle-reactive(true)",
+      "os": "ubuntu-latest",
+      "node-version": "NODE-VERSION",
+      "java-version": "21",
+      "npm-version": "NPM-VERSION",
+      "default-environment": "prod",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "jdl-base": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    reactive true\\n    cacheProvider no\\n  }\\n}",
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    reactive true\\n    graalvmSupport true\\n  }\\n}"
+    }
+  ]
+}"
+`;
+
 exports[`generator - github-build-matrix with react should match matrix value 1`] = `
 "{
   "include": [

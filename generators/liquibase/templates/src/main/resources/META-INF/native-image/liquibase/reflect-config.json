@@ -1,0 +1,145 @@
+[
+  {
+    "name": "liquibase.logging.mdc.MdcManagerFactory",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.change.core.LoadDataColumnConfig",
+    "queryAllPublicMethods": true,
+    "allDeclaredMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.command.CommandFactory",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },  
+  {
+    "name": "liquibase.changelog.ChangeLogHistoryServiceFactory",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.BigIntType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.BlobType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.BooleanType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.CharType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.ClobType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.CurrencyType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.DatabaseFunctionType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.DateTimeType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.DateType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.DecimalType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.DoubleType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.FloatType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.IntType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.MediumIntType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.NCharType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.NumberType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.NVarcharType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.SmallIntType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.TimestampType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.TimeType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.TinyIntType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.UnknownType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.UUIDType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.VarcharType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.datatype.core.XMLType",
+    "allPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  }
+]

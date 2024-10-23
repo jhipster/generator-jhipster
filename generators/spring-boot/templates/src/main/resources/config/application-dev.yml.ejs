@@ -156,7 +156,11 @@ spring:
   h2:
     console:
       # JHipster uses a custom h2-console initializer
+  <%_ if (graalvmSupport) { _%>
+      enabled: '@spring.h2.console.enabled@'
+  <%_ } else { _%>
       enabled: true
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
   data:

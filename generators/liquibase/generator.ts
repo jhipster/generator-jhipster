@@ -511,6 +511,21 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator {
           );
         }
       },
+      nativeHints({ source, application }) {
+        if (!application.graalvmSupport) return;
+        // Latest liquibase version supported by Reachability Repository is 4.23.0
+        // Hints may be dropped if newer version is supported
+        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.liquibase/liquibase-core/index.json
+        source.addNativeHint!({
+          advanced: ['hints.resources().registerPattern("");'],
+          resources: ['config/liquibase/*'],
+          declaredConstructors: [
+            'liquibase.database.LiquibaseTableNamesFactory.class',
+            'liquibase.report.ShowSummaryGeneratorFactory.class',
+          ],
+          publicConstructors: ['liquibase.ui.LoggerUIService.class'],
+        });
+      },
     });
   }
 

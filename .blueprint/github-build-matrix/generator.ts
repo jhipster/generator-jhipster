@@ -10,6 +10,7 @@ import { dockerComposeMatrix } from './samples/docker-compose-integration.js';
 import { getGitChanges } from './support/git-changes.js';
 import { devServerMatrix } from './samples/dev-server.js';
 import type { eventNameChoices, workflowChoices } from './command.js';
+import { graalvmMatrix } from './samples/graalvm.js';
 
 type JHipsterGitHubMatrix = GitHubMatrix & {
   name: string;
@@ -50,6 +51,10 @@ export default class extends BaseGenerator {
         let randomEnvironment = false;
         if (this.workflow === 'docker-compose-integration') {
           matrix = dockerComposeMatrix;
+        } else if (this.workflow === 'graalvm') {
+          if (hasWorkflowChanges || java) {
+            matrix = graalvmMatrix;
+          }
         } else if (this.workflow === 'devserver') {
           if (devBlueprint || hasWorkflowChanges || client) {
             matrix = { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue };

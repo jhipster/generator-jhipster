@@ -263,3 +263,13 @@ updates:
       - 'theme: github_actions'
       - 'theme: CI builds'
       - 'skip-changelog'
+
+  - package-ecosystem: 'gradle'
+    directory: '/generators/spring-boot/generators/graalvm/resources/'
+    schedule:
+      interval: 'daily'
+      time: '08:30'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'skip-changelog'

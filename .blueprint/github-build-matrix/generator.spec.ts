@@ -13,7 +13,7 @@ const generator = basename(__dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
-  for (const workflow of ['angular', 'devserver', 'react', 'docker-compose-integration', 'vue']) {
+  for (const workflow of ['angular', 'devserver', 'graalvm', 'react', 'docker-compose-integration', 'vue']) {
     describe(`with ${workflow}`, () => {
       before(async () => {
         await helpers.runJHipster(join(__dirname, 'index.ts'), { useEnvironmentBuilder: true }).withArguments(workflow);
