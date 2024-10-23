@@ -53,6 +53,12 @@ export const cypressFiles: WriteFileSection = {
       ],
     },
     {
+      condition: generator => !generator.applicationTypeMicroservice,
+      path: CYPRESS_TEMPLATE_SOURCE_DIR,
+      renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
+      templates: ['e2e/account/logout.cy.ts'],
+    },
+    {
       condition: generator => !generator.authenticationTypeOauth2,
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
