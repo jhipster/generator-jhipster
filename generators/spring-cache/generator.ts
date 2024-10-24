@@ -33,6 +33,21 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
     }
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      configure() {
+        const { databaseType, reactive } = this.jhipsterConfigWithDefaults;
+        if (this.jhipsterConfig.enableHibernateCache && (reactive || databaseType !== 'sql')) {
+          this.jhipsterConfig.enableHibernateCache = undefined;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       cancel() {
