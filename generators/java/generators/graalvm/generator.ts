@@ -237,6 +237,19 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
                 ),
         );
       },
+      nativeHints({ source, application }) {
+        if (!application.backendTypeSpringBoot) return;
+
+        source.addNativeHint!({
+          advanced: [
+            // Undertow
+            'hints.reflection().registerType(sun.misc.Unsafe.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));',
+            // Thymeleaf template
+            'hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));',
+          ],
+          resources: ['i18n/*'],
+        });
+      },
     });
   }
 
