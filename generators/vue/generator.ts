@@ -148,9 +148,17 @@ export default class VueGenerator extends BaseApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ control, application }) {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
+          '8.7.2': [
+            [
+              application.microfrontend!,
+              `${application.srcMainWebapp}microfrontends/entities-menu-test.vue`,
+              `${application.srcMainWebapp}microfrontends/entities-menu-component-test.ts`,
+              `${application.srcMainWebapp}microfrontends/entities-router-test.ts`,
+            ],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -205,7 +213,7 @@ export default class VueGenerator extends BaseApplicationGenerator {
         }
       },
       addMicrofrontendDependencies({ application }) {
-        const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           this.packageJson.merge({
@@ -214,13 +222,6 @@ export default class VueGenerator extends BaseApplicationGenerator {
             },
           });
         } else if (clientBundlerWebpack) {
-          if (applicationTypeGateway) {
-            this.packageJson.merge({
-              devDependencies: {
-                '@module-federation/utilities': null,
-              },
-            });
-          }
           this.packageJson.merge({
             devDependencies: {
               '@module-federation/enhanced': null,
