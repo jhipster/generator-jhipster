@@ -105,6 +105,7 @@ export default class SharedData<ApplicationType extends BaseApplication = BaseAp
       removeFiles,
       customizeRemoveFiles: [],
       cleanupFiles: async (cleanup: Record<string, (string | [boolean, ...string[]])[]>) => {
+        if (!jhipsterOldVersion) return;
         await Promise.all(
           Object.entries(cleanup).map(async ([version, files]) => {
             const stringFiles: string[] = [];

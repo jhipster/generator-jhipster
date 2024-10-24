@@ -44,7 +44,7 @@ export default class extends BaseGenerator {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         const useChanges = this.eventName === 'pull_request';
         const changes = await getGitChanges({ allTrue: !useChanges });
-        const { base, common, devBlueprint, client, e2e, java, workspaces } = changes;
+        const { base, common, devBlueprint, client, e2e, graalvm, java, workspaces } = changes;
         const hasWorkflowChanges = changes[`${this.workflow}Workflow`];
 
         let matrix: GitHubMatrixRecord = {};
@@ -52,7 +52,7 @@ export default class extends BaseGenerator {
         if (this.workflow === 'docker-compose-integration') {
           matrix = dockerComposeMatrix;
         } else if (this.workflow === 'graalvm') {
-          if (hasWorkflowChanges || java) {
+          if (hasWorkflowChanges || java || graalvm) {
             matrix = graalvmMatrix;
           }
         } else if (this.workflow === 'devserver') {

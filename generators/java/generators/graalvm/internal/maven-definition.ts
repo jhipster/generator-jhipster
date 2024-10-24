@@ -5,10 +5,14 @@ export const mavenDefinition = ({
   reactive,
   nativeBuildToolsVersion,
   databaseTypeSql,
+  userLanguage,
+  languages,
 }: {
   reactive?: boolean;
   nativeBuildToolsVersion?: string;
   databaseTypeSql?: boolean;
+  userLanguage: string;
+  languages: string[];
 }): MavenDefinition => ({
   properties: [
     { property: 'repackage.classifier' },
@@ -29,7 +33,12 @@ export const mavenDefinition = ({
             </metadataRepository>
             <imageName>\${native-image-name}</imageName>
             <verbose>true</verbose>
+            <buildArgs>
+                <buildArg>-Duser.language=${userLanguage}</buildArg>
+                <buildArg>-H:IncludeLocales=${languages.join(',')}</buildArg>
+            </buildArgs>
             <jvmArgs>
+                <arg>-Xms4g</arg>
                 <arg>-Xmx10g</arg>
             </jvmArgs>
         </configuration>`,

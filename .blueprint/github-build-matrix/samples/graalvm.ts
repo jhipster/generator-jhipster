@@ -16,7 +16,6 @@ export const graalvmMatrix = Object.fromEntries(
     key,
     {
       'java-version': '21',
-      'jdl-base': convertOptionsToJDL({ ...value, cacheProvider: 'no' }),
       jdl: convertOptionsToJDL({ ...value, graalvmSupport: true }),
     },
   ]),

@@ -179,11 +179,17 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
       },
 
       async customizeMaven({ application, source }) {
-        const { buildToolMaven, reactive, databaseTypeSql, javaDependencies } = application;
+        const { buildToolMaven, reactive, databaseTypeSql, javaDependencies, nativeLanguageDefinition, languagesDefinition } = application;
         if (!buildToolMaven) return;
 
         source.addMavenDefinition!(
-          mavenDefinition({ reactive, nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!, databaseTypeSql }),
+          mavenDefinition({
+            reactive,
+            nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!,
+            databaseTypeSql,
+            userLanguage: nativeLanguageDefinition.languageTag,
+            languages: languagesDefinition.map(def => def.languageTag),
+          }),
         );
       },
 
@@ -236,6 +242,19 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
     .ignoreDependency(belongToAnyOf`,
                 ),
         );
+      },
+      nativeHints({ source, application }) {
+        if (!application.backendTypeSpringBoot) return;
+
+        source.addNativeHint!({
+          advanced: [
+            // Undertow
+            'hints.reflection().registerType(sun.misc.Unsafe.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));',
+            // Thymeleaf template
+            'hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));',
+          ],
+          resources: ['i18n/*'],
+        });
       },
     });
   }
