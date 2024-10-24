@@ -203,7 +203,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "JAVA_COMPATIBLE_VERSIONS": [
     "17",
     "21",
-    "22",
+    "23",
   ],
   "JAVA_VERSION": "JAVA_VERSION",
   "LOGIN_REGEX": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
@@ -508,7 +508,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "javaCompatibleVersions": [
     "17",
     "21",
-    "22",
+    "23",
   ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
@@ -854,7 +854,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "JAVA_COMPATIBLE_VERSIONS": [
     "17",
     "21",
-    "22",
+    "23",
   ],
   "JAVA_VERSION": "JAVA_VERSION",
   "LOGIN_REGEX": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
@@ -1161,7 +1161,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "javaCompatibleVersions": [
     "17",
     "21",
-    "22",
+    "23",
   ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
@@ -1502,7 +1502,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "JAVA_COMPATIBLE_VERSIONS": [
     "17",
     "21",
-    "22",
+    "23",
   ],
   "JAVA_VERSION": "JAVA_VERSION",
   "LOGIN_REGEX": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
@@ -1807,7 +1807,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "javaCompatibleVersions": [
     "17",
     "21",
-    "22",
+    "23",
   ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
