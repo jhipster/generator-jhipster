@@ -35,6 +35,8 @@ on:
     types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
+env:
+  FORCE_COLOR: 2
 jobs:
   build-matrix:
     runs-on: ubuntu-20.04

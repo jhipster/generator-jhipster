@@ -32,7 +32,8 @@ on:
       - '*'
 permissions:
   contents: read
-
+env:
+  FORCE_COLOR: 2
 jobs:
   check-npm-test:
     if: >-
