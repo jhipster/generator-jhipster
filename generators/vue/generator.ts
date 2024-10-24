@@ -31,7 +31,7 @@ import {
   getTypescriptKeyType as getTSKeyType,
   generateTestEntityId as getTestEntityId,
 } from '../client/support/index.js';
-import { createNeedleCallback } from '../base/support/index.js';
+import { createNeedleCallback } from '../base/support/needles.js';
 import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
 import cleanupOldFilesTask from './cleanup.js';
@@ -52,6 +52,20 @@ export default class VueGenerator extends BaseApplicationGenerator {
       await this.dependsOnJHipster(GENERATOR_CLIENT);
       await this.dependsOnJHipster(GENERATOR_LANGUAGES);
     }
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        if (this.jhipsterConfigWithDefaults.clientBundler === 'rsbuild') {
+          await this.composeWithJHipster('jhipster:javascript:rsbuild');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -205,7 +219,8 @@ export default class VueGenerator extends BaseApplicationGenerator {
         }
       },
       addMicrofrontendDependencies({ application }) {
-        const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+        const { applicationTypeGateway, clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } =
+          application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           this.packageJson.merge({
@@ -243,6 +258,27 @@ export default class VueGenerator extends BaseApplicationGenerator {
               'webpack-merge': null,
               'workbox-webpack-plugin': null,
               ...(enableTranslation
+                ? {
+                    'folder-hash': null,
+                    'merge-jsons-webpack-plugin': null,
+                  }
+                : {}),
+            },
+          });
+        } else if (clientBundlerRsbuild) {
+          this.packageJson.merge({
+            devDependencies: {
+              ...(applicationTypeGateway
+                ? {
+                    '@module-federation/utilities': null,
+                  }
+                : undefined),
+              '@module-federation/enhanced': null,
+              '@rsbuild/plugin-sass': 'latest',
+              '@rsbuild/plugin-vue': 'latest',
+              'vue-loader': null,
+              'vue-style-loader': null,
+              ...(application.enableTranslation
                 ? {
                     'folder-hash': null,
                     'merge-jsons-webpack-plugin': null,
