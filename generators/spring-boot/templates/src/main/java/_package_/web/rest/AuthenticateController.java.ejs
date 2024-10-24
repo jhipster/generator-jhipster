@@ -117,15 +117,15 @@ public class AuthenticateController {
 <%_ } _%>
 
     /**
-     * {@code GET /authenticate} : check if the user is authenticated, and return its login.
+     * {@code GET /authenticate} : check if the user is authenticated, and return a boolean value.
      *
      * @param principal the authentication principal.
-     * @return the login if the user is authenticated.
+     * @return a boolean indicating if the user is authenticated.
      */
-    @GetMapping(value = "/authenticate", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String isAuthenticated(Principal principal) {
+    @GetMapping(value = "/authenticate")
+    public Boolean isAuthenticated(Principal principal) {
         LOG.debug("REST request to check if the current user is authenticated");
-        return principal == null ? null : principal.getName();
+        return principal != null;
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
