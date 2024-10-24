@@ -23,7 +23,7 @@ import { createBase64Secret, createSecret } from '../base/support/secret.js';
 import { applicationTypes, authenticationTypes } from '../../lib/jhipster/index.js';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
-const { GATEWAY, MICROSERVICE } = applicationTypes;
+const { GATEWAY, MICROSERVICE, MONOLITH } = applicationTypes;
 
 const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
@@ -72,7 +72,7 @@ const command = {
         type: String,
       },
       prompt: gen => ({
-        when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
+        when: () => [GATEWAY, MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'list',
         message: 'Which service discovery server do you want to use?',
         default: 'consul',
@@ -102,8 +102,8 @@ const command = {
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
-          gen.jhipsterConfigWithDefaults.applicationType !== 'monolith'
-            ? (config.choices as any).filter(({ value }) => value !== 'session')
+          gen.jhipsterConfigWithDefaults.applicationType !== MONOLITH
+            ? (config.choices as any).filter(({ value }) => value !== SESSION)
             : config.choices,
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),
@@ -154,14 +154,14 @@ const command = {
       prompt: gen => ({
         type: 'confirm',
         message: 'Do you want to allow relationships with User entity?',
-        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === 'oauth2',
+        when: ({ authenticationType }) => (authenticationType ?? gen.jhipsterConfigWithDefaults.authenticationType) === OAUTH2,
       }),
       jdl: {
         type: 'boolean',
         tokenType: 'BOOLEAN',
       },
       configure: gen => {
-        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
+        if (gen.jhipsterConfig.syncUserWithIdp === undefined && gen.jhipsterConfigWithDefaults.authenticationType === OAUTH2) {
           if (gen.isJhipsterVersionLessThan('8.1.1')) {
             gen.jhipsterConfig.syncUserWithIdp = true;
           }
