@@ -190,7 +190,7 @@ jobs:
       - name: Dump docker logs
         if: always()
         uses: jwalton/gh-docker-logs@v2
-  check-react:
+  check-vue:
     permissions:
       contents: none
     runs-on: ubuntu-latest
