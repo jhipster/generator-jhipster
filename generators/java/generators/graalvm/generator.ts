@@ -179,11 +179,17 @@ export default class GraalvmGenerator extends BaseApplicationGenerator {
       },
 
       async customizeMaven({ application, source }) {
-        const { buildToolMaven, reactive, databaseTypeSql, javaDependencies } = application;
+        const { buildToolMaven, reactive, databaseTypeSql, javaDependencies, nativeLanguageDefinition, languagesDefinition } = application;
         if (!buildToolMaven) return;
 
         source.addMavenDefinition!(
-          mavenDefinition({ reactive, nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!, databaseTypeSql }),
+          mavenDefinition({
+            reactive,
+            nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!,
+            databaseTypeSql,
+            userLanguage: nativeLanguageDefinition.languageTag,
+            languages: languagesDefinition.map(def => def.languageTag),
+          }),
         );
       },
 

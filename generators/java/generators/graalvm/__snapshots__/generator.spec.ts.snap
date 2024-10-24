@@ -15,7 +15,12 @@ exports[`generator - java:graalvm with default options should call source snapsh
             </metadataRepository>
             <imageName>\${native-image-name}</imageName>
             <verbose>true</verbose>
+            <buildArgs>
+                <buildArg>-Duser.language=en</buildArg>
+                <buildArg>-H:IncludeLocales=</buildArg>
+            </buildArgs>
             <jvmArgs>
+                <arg>-Xms4g</arg>
                 <arg>-Xmx10g</arg>
             </jvmArgs>
         </configuration>",
