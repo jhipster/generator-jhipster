@@ -241,7 +241,7 @@ type OnlyChoices<D, C extends boolean> = D extends { choices: JHispterChoices } 
  *
  * @example
  * ```ts
- * type ConfigsWithChoice = OnlyCofigsWithChoice<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
+ * type ConfigsWithChoice = OnlyConfigsWithChoice<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
  * ```
  */
 type OnlyConfigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
@@ -258,10 +258,10 @@ export type ExportApplicationPropertiesFromCommand<C extends ParseableCommand> =
   MergeConfigsOptions<C, 'storage'> extends infer Merged
     ? Merged extends ParseableConfigs
       ? // Add value inference to properties with choices
-        // ? PrepareConfigsWithType<OnlyCofigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyCofigsWithChoice<F, true>>>
+        // ? PrepareConfigsWithType<OnlyConfigsWithChoice<F, false>> & ValueOf<ExplodeCommandChoicesWithInference<OnlyConfigsWithChoice<F, true>>>
         Simplify<
-          PrepareConfigsWithType<OnlyCofigsWithChoice<Merged, false>> &
-            MergeUnion<ValueOf<ExplodeCommandChoicesNoInference<OnlyCofigsWithChoice<Merged, true>>>>
+          PrepareConfigsWithType<OnlyConfigsWithChoice<Merged, false>> &
+            MergeUnion<ValueOf<ExplodeCommandChoicesNoInference<OnlyConfigsWithChoice<Merged, true>>>>
         >
       : never
     : never;
