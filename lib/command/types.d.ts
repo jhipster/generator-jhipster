@@ -241,10 +241,10 @@ type OnlyChoices<D, C extends boolean> = D extends { choices: JHispterChoices } 
  *
  * @example
  * ```ts
- * type CofigsWithChoice = OnlyCofigsWithChoice<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
+ * type ConfigsWithChoice = OnlyCofigsWithChoice<{ clientFramework: { choices: ['angular', 'no'], scope: 'storage' }, clientTestFramework: { choices: ['cypress', 'no'], scope: 'storage' } }>
  * ```
  */
-type OnlyCofigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
+type OnlyConfigsWithChoice<D extends ParseableConfigs, C extends boolean> = {
   [K in keyof D as OnlyChoices<D[K], C> extends never ? never : K]: D[K];
 };
 
