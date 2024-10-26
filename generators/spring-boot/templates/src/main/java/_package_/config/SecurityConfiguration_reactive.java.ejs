@@ -491,7 +491,8 @@ public class SecurityConfiguration {
     }
 <%_ } _%>
 <%_ if (applicationTypeGateway) { _%>
-    <!-- Fix for Spring Boot 3.3.5: https://github.com/spring-cloud/spring-cloud-gateway/issues/3568 -->
+
+    // Fix for Spring Boot 3.3.5: https://github.com/spring-cloud/spring-cloud-gateway/issues/3568
     @Bean
     BeanPostProcessor beanPostProcessor() {
         return new BeanPostProcessor() {
