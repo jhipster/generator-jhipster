@@ -331,9 +331,9 @@ For more information, refer to the [Code quality page][].
 
 ### Docker Compose support
 
-JHipster provides a number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
+JHipster generates a number of docker-compose configuration files in the [<%- dockerServicesDir %>](<%- dockerServicesDir %>) folder to launch required third party services.
 
-For example, to start require services in docker containers, run:
+For example, to start required services in docker containers, run:
 
 ```
 docker compose -f src/main/docker/services.yml up -d
