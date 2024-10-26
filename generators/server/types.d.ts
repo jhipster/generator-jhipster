@@ -1,3 +1,4 @@
+import type { PackageJson } from 'type-fest';
 import type { JavaApplication, JavaSourceType } from '../java/types.js';
 import type { GradleSourceType } from '../gradle/types.js';
 import type { MavenSourceType } from '../maven/types.js';
@@ -123,6 +124,7 @@ export type SpringBootApplication = JavaApplication &
   SearchEngine &
   DatabaseTypeApplication &
   GatewayApplication & {
+    jhipsterPackageJson: PackageJson;
     jhipsterDependenciesVersion: string;
     springBootDependencies: Record<string, string>;
     dockerContainers: Record<string, string>;

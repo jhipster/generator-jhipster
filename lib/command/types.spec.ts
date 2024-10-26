@@ -1,43 +1,48 @@
+import type { IsNever } from 'type-fest';
 import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from './types.js';
 
-type TestCommand = {
+type AssertType<Expected extends true | false, _T2 extends Expected, _T3 extends Expected = Expected> = void;
+
+const _testCommand = {
   options: {
     arrayOptionsType: {
-      type: ArrayConstructor;
-      scope: 'storage';
-    };
-  };
+      type: Array,
+      scope: 'storage',
+    },
+  },
   configs: {
     stringRootType: {
-      cli: { type: StringConstructor };
-      scope: 'storage';
-    };
+      cli: { type: String },
+      scope: 'storage',
+    },
     booleanCliType: {
-      cli: { type: BooleanConstructor };
-      scope: 'storage';
-    };
+      cli: { type: Boolean },
+      scope: 'storage',
+    },
     none: {
-      scope: 'none';
-    };
+      scope: 'none',
+    },
     choiceType: {
       cli: {
-        type: StringConstructor;
-      };
-      choices: ['foo', 'no'];
-      scope: 'storage';
-    };
+        type: String,
+      },
+      choices: ['foo', 'no'],
+      scope: 'storage',
+    },
     unknownType: {
       cli: {
-        type: () => any;
-      };
-      scope: 'storage';
-    };
-  };
-};
+        type: () => {},
+      },
+      scope: 'storage',
+    },
+  },
+} as const;
+
+type TestCommand = typeof _testCommand;
 
 type StorageProperties = ExportStoragePropertiesFromCommand<TestCommand>;
 
@@ -123,3 +128,40 @@ const _applicationOptionsError = {
   // @ts-expect-error unknow field
   foo: 'bar',
 } satisfies ApplicationOptions;
+
+const _dummyCommand = {
+  options: {},
+  configs: {},
+} as const;
+
+// Check if the type allows any property.
+// @ts-expect-error unknown field
+(() => {})(({} as ExportApplicationPropertiesFromCommand<typeof _dummyCommand>).nonExisting);
+// @ts-expect-error unknown field
+(() => {})(({} as ExportStoragePropertiesFromCommand<typeof _dummyCommand>).nonExisting);
+
+type _DummyCommandAssertions = AssertType<false, IsNever<ExportApplicationPropertiesFromCommand<typeof _dummyCommand>>>;
+
+const _simpleConfig = {
+  options: {},
+  configs: {
+    stringOption: {
+      cli: { type: String },
+      scope: 'storage',
+    },
+  },
+} as const;
+
+type _SimpleConfigAssertions = AssertType<false, IsNever<ExportApplicationPropertiesFromCommand<typeof _simpleConfig>>>;
+
+const _choiceConfig = {
+  options: {},
+  configs: {
+    stringOption: {
+      choices: ['foo', 'bar'],
+      scope: 'storage',
+    },
+  },
+} as const;
+
+type _ChoiceConfigAssertions = AssertType<false, IsNever<ExportApplicationPropertiesFromCommand<typeof _choiceConfig>>>;
