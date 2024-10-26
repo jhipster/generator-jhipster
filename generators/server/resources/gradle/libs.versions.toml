@@ -16,6 +16,9 @@ neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j
 # Cassandra
 lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
 
+# Couchbase
+couchmove = { module = 'com.github.differentway:couchmove', version = '3.4.1' }
+
 # jib
 jib-maven-plugin = { module = 'com.google.cloud.tools:jib-maven-plugin', version = '3.4.4' }
 jib-spring-boot-extension-maven = { module = 'com.google.cloud.tools:jib-spring-boot-extension-maven', version = '0.1.0' }
