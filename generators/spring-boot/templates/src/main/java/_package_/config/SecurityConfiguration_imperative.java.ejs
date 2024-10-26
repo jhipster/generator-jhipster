@@ -51,6 +51,10 @@ import tech.jhipster.web.filter.CookieCsrfFilter;
 <%_ if (!skipClient) { _%>
 import <%= packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+<%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -112,6 +116,10 @@ import <%= packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
 <%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+import org.springframework.security.web.server.WebFilterChainProxy;
+import org.springframework.security.web.server.firewall.ServerWebExchangeFirewall;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import org.springframework.util.StringUtils;
@@ -414,6 +422,22 @@ public class SecurityConfiguration {
              */
             return this.delegate.resolveCsrfTokenValue(request, csrfToken);
         }
+    }
+<%_ } _%>
+<%_ if (applicationTypeGateway) { _%>
+
+    // Fix for Spring Boot 3.3.5: https://github.com/spring-cloud/spring-cloud-gateway/issues/3568
+    @Bean
+    BeanPostProcessor beanPostProcessor() {
+        return new BeanPostProcessor() {
+            @Override
+            public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+                if (bean instanceof WebFilterChainProxy springSecurity) {
+                    springSecurity.setFirewall(ServerWebExchangeFirewall.INSECURE_NOOP);
+                }
+                return bean;
+            }
+        };
     }
 <%_ } _%>
 }
