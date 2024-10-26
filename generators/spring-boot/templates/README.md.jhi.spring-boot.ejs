@@ -345,9 +345,14 @@ To stop it and remove the containers, run:
 docker compose -f <%- dockerServicesDir %>services.yml down
 ```
 
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enable by default. To disable it set:
+[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enable by default. Is possible to disable it in application.yml:
 
 ```yaml
+spring:
+  ...
+  docker:
+    compose:
+      enabled: false
 ```
 
 You can also fully dockerize your application and all the services that it depends on.
