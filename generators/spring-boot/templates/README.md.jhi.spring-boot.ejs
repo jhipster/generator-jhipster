@@ -336,13 +336,13 @@ JHipster generates a number of docker-compose configuration files in the [<%- do
 For example, to start required services in docker containers, run:
 
 ```
-docker compose -f src/main/docker/services.yml up -d
+docker compose -f <%- dockerServicesDir %>services.yml up -d
 ```
 
 To stop it and remove the containers, run:
 
 ```
-docker compose -f src/main/docker/services.yml down
+docker compose -f <%- dockerServicesDir %>services.yml down
 ```
 
 [Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enable by default. To disable it set:
