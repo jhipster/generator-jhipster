@@ -1,7 +1,8 @@
+import type { GitHubMatrixGroup } from '../../../lib/testing/index.js';
 import { extendMatrix, fromMatrix } from '../../../lib/testing/index.js';
 import { convertOptionsToJDL } from '../support/jdl.js';
 
-export const graalvmMatrix = Object.fromEntries(
+export default Object.fromEntries(
   [
     ...Object.entries(
       extendMatrix(
@@ -19,4 +20,4 @@ export const graalvmMatrix = Object.fromEntries(
       jdl: convertOptionsToJDL({ ...value, graalvmSupport: true }),
     },
   ]),
-);
+) satisfies GitHubMatrixGroup;

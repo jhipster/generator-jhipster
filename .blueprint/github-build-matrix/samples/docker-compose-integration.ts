@@ -1,8 +1,9 @@
+import type { GitHubMatrixGroup } from '../../../lib/testing/index.js';
 import { extendMatrix, fromMatrix } from '../../../lib/testing/index.js';
 import { convertOptionsToJDL } from '../support/jdl.js';
 
 // Supported containers: https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot-docker-compose/src/main/java/org/springframework/boot/docker/compose/service/connection
-export const dockerComposeMatrix = Object.fromEntries(
+export default Object.fromEntries(
   [
     ...Object.entries(
       extendMatrix(
@@ -41,4 +42,4 @@ export const dockerComposeMatrix = Object.fromEntries(
       jdl: convertOptionsToJDL(value),
     },
   ]),
-);
+) satisfies GitHubMatrixGroup;
