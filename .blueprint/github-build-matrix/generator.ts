@@ -1,16 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import BaseGenerator from '../../generators/base/index.js';
-import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/index.js';
+import type { GitHubMatrix, GitHubMatrixGroup } from '../../lib/testing/index.js';
+import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/testing/index.js';
 import { getPackageRoot } from '../../lib/index.js';
 import { BUILD_JHIPSTER_BOM, JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../../test-integration/integration-test-constants.js';
-import type { GitHubMatrix, GitHubMatrixRecord } from './support/github-ci-matrix.js';
-import { convertToGitHubMatrix } from './support/github-ci-matrix.js';
-import { dockerComposeMatrix } from './samples/docker-compose-integration.js';
 import { getGitChanges } from './support/git-changes.js';
 import { devServerMatrix } from './samples/dev-server.js';
 import type { eventNameChoices, workflowChoices } from './command.js';
-import { graalvmMatrix } from './samples/graalvm.js';
 
 type JHipsterGitHubMatrix = GitHubMatrix & {
   name: string;
@@ -47,13 +44,21 @@ export default class extends BaseGenerator {
         const { base, common, devBlueprint, client, e2e, graalvm, java, workspaces } = changes;
         const hasWorkflowChanges = changes[`${this.workflow}Workflow`];
 
-        let matrix: GitHubMatrixRecord = {};
+        let matrix: GitHubMatrixGroup = {};
         let randomEnvironment = false;
         if (this.workflow === 'docker-compose-integration') {
-          matrix = dockerComposeMatrix;
+          const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
+          matrix = samples;
+          if (warnings.length) {
+            this.log.warn(warnings.join('\n'));
+          }
         } else if (this.workflow === 'graalvm') {
           if (hasWorkflowChanges || java || graalvm) {
-            matrix = graalvmMatrix;
+            const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
+            matrix = samples;
+            if (warnings.length) {
+              this.log.warn(warnings.join('\n'));
+            }
           }
         } else if (this.workflow === 'devserver') {
           if (devBlueprint || hasWorkflowChanges || client) {

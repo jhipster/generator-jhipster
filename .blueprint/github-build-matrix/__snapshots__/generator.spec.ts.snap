@@ -400,7 +400,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    buildTool maven\\n    authenticationType jwt\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    buildTool maven\\n    authenticationType jwt\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "cassandra-reactive(true)-gradle-elasticsearch-oauth2-consul-kafka",
@@ -413,7 +414,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "mongodb-maven-jwt-kafka",
@@ -426,7 +428,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    buildTool maven\\n    authenticationType jwt\\n    messageBroker kafka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    buildTool maven\\n    authenticationType jwt\\n    messageBroker kafka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "mongodb-reactive(true)-gradle-elasticsearch-oauth2-consul",
@@ -439,7 +442,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "neo4j-maven-jwt-eureka",
@@ -452,7 +456,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "neo4j-reactive(true)-gradle-elasticsearch-oauth2-eureka-kafka",
@@ -465,7 +470,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "postgresql-cacheProvider(no)-maven-jwt-eureka-kafka",
@@ -478,7 +484,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    cacheProvider no\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    cacheProvider no\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "mysql-memcached-gradle-elasticsearch-oauth2-eureka",
@@ -491,7 +498,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    cacheProvider memcached\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    cacheProvider memcached\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "mariadb-redis-maven-jwt-consul",
@@ -504,7 +512,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    cacheProvider redis\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    cacheProvider redis\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "postgresql-reactive(true)-gradle-elasticsearch-oauth2-kafka",
@@ -517,7 +526,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    messageBroker kafka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    messageBroker kafka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "mysql-reactive(true)-maven-jwt-consul-kafka",
@@ -530,7 +540,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    reactive true\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    reactive true\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "mariadb-reactive(true)-gradle-elasticsearch-oauth2",
@@ -543,7 +554,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     },
     {
       "job-name": "h2",
@@ -556,7 +568,8 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "cmd-e2e": "npm run ci:e2e:dev",
       "args": "jdl",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    devDatabaseType h2Disk\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    devDatabaseType h2Disk\\n  }\\n}",
+      "samples-group": "docker-compose-integration"
     }
   ]
 }"
@@ -574,7 +587,8 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    graalvmSupport true\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    graalvmSupport true\\n  }\\n}",
+      "samples-group": "graalvm"
     },
     {
       "job-name": "maven-reactive(true)",
@@ -585,7 +599,8 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    reactive true\\n    graalvmSupport true\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    reactive true\\n    graalvmSupport true\\n  }\\n}",
+      "samples-group": "graalvm"
     },
     {
       "job-name": "gradle",
@@ -596,7 +611,8 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    graalvmSupport true\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    graalvmSupport true\\n  }\\n}",
+      "samples-group": "graalvm"
     },
     {
       "job-name": "gradle-reactive(true)",
@@ -607,7 +623,8 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
-      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    reactive true\\n    graalvmSupport true\\n  }\\n}"
+      "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    reactive true\\n    graalvmSupport true\\n  }\\n}",
+      "samples-group": "graalvm"
     }
   ]
 }"

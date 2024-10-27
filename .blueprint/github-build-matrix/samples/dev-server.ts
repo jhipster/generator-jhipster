@@ -1,3 +1,5 @@
+import type { GitHubMatrixGroup } from '../../../lib/testing/index.js';
+
 export const devServerMatrix = {
   angular: {
     'ng-default': {
@@ -17,4 +19,4 @@ export const devServerMatrix = {
       args: '--sample-yorc-folder --entities-sample sqllight',
     },
   },
-};
+} satisfies Record<string, GitHubMatrixGroup>;
