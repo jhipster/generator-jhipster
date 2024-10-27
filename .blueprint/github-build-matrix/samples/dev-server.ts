@@ -1,4 +1,4 @@
-import type { GitHubMatrixGroup } from '../../../lib/testing';
+import type { GitHubMatrixGroup } from '../../../lib/testing/index.js';
 
 export const devServerMatrix = {
   angular: {
