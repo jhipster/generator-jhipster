@@ -23,6 +23,10 @@ describe('public api', () => {
     expect(await import('generator-jhipster/generators')).toMatchSnapshot();
   });
 
+  it('generator-jhipster/generators should match snapshot', async () => {
+    expect(Object.keys(await import('generator-jhipster/testing'))).toMatchSnapshot();
+  });
+
   it('should import neasted sub-generators', async () => {
     expect(await import('generator-jhipster/generators/spring-cloud-stream/generators/kafka')).toBeDefined();
   });
