@@ -36,7 +36,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <&_ } -&>
 
 <&_ if (fragment.classAdditionalFieldsSection) { -&>
+    @org.springframework.data.annotation.Transient
+<%_ if (!reactive) { _%>
     @Transient
+<%_ } _%>
     private boolean isPersisted;
 <&_ } -&>
 
@@ -48,7 +51,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
     }
  <%_ } -%>
 
+    @org.springframework.data.annotation.Transient
+<%_ if (!reactive) { _%>
     @Transient
+<%_ } _%>
     @Override
     public boolean isNew() {
         return !this.isPersisted;
