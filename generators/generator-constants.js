@@ -35,7 +35,7 @@ export const NODE_VERSION = readFileSync(join(fileURLToPath(import.meta.url), '.
 export const OPENAPI_GENERATOR_CLI_VERSION = '2.13.1';
 
 // The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.10.4';
+export const ELASTICSEARCH_TAG = '8.13.4';
 export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
 
 /**
