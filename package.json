@@ -89,6 +89,7 @@
   },
   "files": [
     "dist",
+    "generators",
     "!**/__*",
     "!**/*.snap",
     "!**/*.spec.?(c|m)js"
