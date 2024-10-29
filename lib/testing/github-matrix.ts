@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { RECOMMENDED_JAVA_VERSION, RECOMMENDED_NODE_VERSION } from '../../generators/index.js';
-import { getPackageRoot } from '../index.js';
+import { getSourceRoot } from '../index.js';
 import { JAVA_COMPATIBLE_VERSIONS, JAVA_VERSION, NODE_VERSION } from '../../generators/generator-constants.js';
 
 const knwonGitHubMatrixProperties = [
@@ -51,7 +51,7 @@ export const getUnknownGitHubMatrixGroupProperties = (matrixRecord: GitHubMatrix
   return unknownProperties;
 };
 
-const NPM_VERSION = JSON.parse(readFileSync(join(getPackageRoot(), 'generators/common/resources/package.json'), 'utf-8')).devDependencies
+const NPM_VERSION = JSON.parse(readFileSync(join(getSourceRoot(), 'generators/common/resources/package.json'), 'utf-8')).devDependencies
   .npm;
 
 export const defaultGithubEnvironment = {
