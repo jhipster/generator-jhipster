@@ -447,5 +447,23 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(cacheProviderOption).to.equal('no');
       });
     });
+    describe('when the cache option is set to ehcache', () => {
+      it('should set the enableHibernateCache option to true', () => {
+        expect(
+          getDefaultConfigForNewApplication({
+            cacheProvider: 'ehcache',
+          }).enableHibernateCache,
+        ).to.equal(true);
+      });
+    });
+    describe('when the cache option is set to memcached', () => {
+      it('should set the enableHibernateCache option to false', () => {
+        expect(
+          getDefaultConfigForNewApplication({
+            cacheProvider: 'memcached',
+          }).enableHibernateCache,
+        ).to.equal(false);
+      });
+    });
   });
 });

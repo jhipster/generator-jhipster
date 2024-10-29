@@ -36,9 +36,13 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator {
   get configuring() {
     return this.asConfiguringTaskGroup({
       configure() {
-        const { databaseType, reactive } = this.jhipsterConfigWithDefaults;
+        const { databaseType, reactive, cacheProvider } = this.jhipsterConfigWithDefaults;
         if (this.jhipsterConfig.enableHibernateCache && (reactive || databaseType !== 'sql')) {
+          this.log.verboseInfo(`Disabling hibernate cache for ${reactive ? 'reactive application' : 'non-SQL databases'}`);
           this.jhipsterConfig.enableHibernateCache = undefined;
+        }
+        if (reactive && cacheProvider !== 'no') {
+          this.log.error(`Cache provider is not supported in reactive application`);
         }
       },
     });
