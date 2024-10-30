@@ -66,7 +66,7 @@ import cleanupTask from './cleanup.js';
 import { serverFiles } from './files.js';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
 
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS, NO: NO_CACHE } = cacheTypes;
+const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MICROSERVICE, GATEWAY } = applicationTypes;
@@ -104,13 +104,6 @@ export default class SpringBootGenerator extends BaseApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      checks() {
-        const config = this.jhipsterConfigWithDefaults;
-        if (config.enableHibernateCache && [NO_CACHE, MEMCACHED].includes(config.cacheProvider!)) {
-          this.log.verboseInfo(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
-          this.jhipsterConfig.enableHibernateCache = false;
-        }
-      },
       feignMigration() {
         const { reactive, applicationType, feignClient } = this.jhipsterConfigWithDefaults;
         if (feignClient) {
