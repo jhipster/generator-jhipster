@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "8.7.2",
+  "version": "8.7.3",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
